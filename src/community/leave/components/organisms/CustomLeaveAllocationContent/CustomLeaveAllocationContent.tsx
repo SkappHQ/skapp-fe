@@ -1,0 +1,126 @@
+import {
+  Box,
+  Container,
+  Stack,
+  Theme,
+  Typography,
+  useTheme
+} from "@mui/material";
+import { FC, useEffect, useState } from "react";
+
+import Button from "~community/common/components/atoms/Button/Button";
+import Icon from "~community/common/components/atoms/Icon/Icon";
+import SearchBox from "~community/common/components/molecules/SearchBox/SearchBox";
+import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { IconName } from "~community/common/types/IconTypes";
+import { useGetCustomLeaves } from "~community/leave/api/LeaveApi";
+import CustomLeaveAllocationsTable from "~community/leave/components/molecules/CustomLeaveAllocationsTable/CustomLeaveAllocationsTable";
+import CustomLeaveModalController from "~community/leave/components/organisms/CustomLeaveModalController/CustomLeaveModalController";
+import { useLeaveStore } from "~community/leave/store/store";
+import { CustomLeaveAllocationModalTypes } from "~community/leave/types/CustomLeaveAllocationTypes";
+
+import styles from "./styles";
+
+const CustomLeaveAllocationContent: FC = () => {
+  const translateText = useTranslator("leaveModule", "customLeave");
+  const { setCustomLeaveAllocationModalType, setIsLeaveAllocationModalOpen } =
+    useLeaveStore((state) => state);
+
+  const [customLeaveAllocationSearchTerm, setCustomLeaveAllocationSearchTerm] =
+    useState<string | undefined>(undefined);
+
+  const theme: Theme = useTheme();
+  const classes = styles(theme);
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const { selectedYear } = useLeaveStore((state) => state);
+
+  const { data: customLeaveData, isLoading } = useGetCustomLeaves(
+    currentPage,
+    5,
+    customLeaveAllocationSearchTerm,
+    Number(selectedYear)
+  );
+
+  const [showSearchAndAddButton, setShowSearchAndAddButton] = useState(false);
+
+  useEffect(() => {
+    const hasData = customLeaveData?.items && customLeaveData.items.length > 0;
+    const hasSearchTerm =
+      customLeaveAllocationSearchTerm !== undefined &&
+      customLeaveAllocationSearchTerm.trim() !== "";
+
+    setShowSearchAndAddButton(hasData || hasSearchTerm);
+  }, [customLeaveData, customLeaveAllocationSearchTerm]);
+
+  const handleAddAllocation = () => {
+    setIsLeaveAllocationModalOpen(true);
+    setCustomLeaveAllocationModalType(
+      CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION
+    );
+  };
+
+  const handleSearchTermChange = (term: string) => {
+    setCustomLeaveAllocationSearchTerm(term);
+    if (term.trim() !== "") {
+      setShowSearchAndAddButton(true);
+    }
+  };
+
+  return (
+    <Container disableGutters maxWidth={false}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 2 }}
+      >
+        <Stack direction="row" alignItems="center" sx={{ flex: 1 }}>
+          <Typography sx={classes.titleText} variant="h1">
+            {translateText(["CustomLeaveAllocationsSectionTitle"])}
+          </Typography>
+        </Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          sx={{ flex: 1, justifyContent: "flex-end" }}
+        >
+          {showSearchAndAddButton && (
+            <Button
+              buttonStyle={ButtonStyle.PRIMARY}
+              label={translateText(["addLeaveAllocationBtn"])}
+              endIcon={<Icon name={IconName.ADD_ICON} />}
+              styles={{
+                ...classes.primaryButtonStyles,
+                minWidth: "auto",
+                padding: "0.5rem 1rem"
+              }}
+              onClick={() => handleAddAllocation()}
+            />
+          )}
+        </Stack>
+      </Stack>
+
+      <Box>
+        {showSearchAndAddButton && (
+          <SearchBox
+            value={customLeaveAllocationSearchTerm}
+            setSearchTerm={handleSearchTermChange}
+            placeHolder={translateText([
+              "CustomLeaveAllocationsSectionSearchBarPlaceholder"
+            ])}
+          />
+        )}
+        <Box sx={{ marginTop: 2 }}>
+          <CustomLeaveAllocationsTable
+            searchTerm={customLeaveAllocationSearchTerm}
+          />
+        </Box>
+        <CustomLeaveModalController />
+      </Box>
+    </Container>
+  );
+};
+
+export default CustomLeaveAllocationContent;

@@ -1,0 +1,12 @@
+[
+  {
+    "date": "2024-04-14",
+    "name": "New year",
+    "holidayDuration": "FULL_DAY"
+  },
+  {
+    "date": "2024-04-15",
+    "name": "New year EVE",
+    "holidayDuration": "HALF_DAY_EVENING"
+  }
+]

@@ -1,0 +1,98 @@
+import { Box, useTheme } from "@mui/material";
+import { useRouter } from "next/router";
+import { JSX, useMemo } from "react";
+
+import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
+import Table from "~community/common/components/molecules/Table/Table";
+import ROUTES from "~community/common/constants/routes";
+import { Modules } from "~community/common/enums/CommonEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useGetAllUserRoles } from "~community/configurations/api/userRolesApi";
+import {
+  AllUserRolesResponseType,
+  AllUserRolesType,
+  UserRoleTableType
+} from "~community/configurations/types/UserRolesTypes";
+
+import styles from "./styles";
+
+const UserRolesTable = (): JSX.Element => {
+  const theme = useTheme();
+  const classes = styles(theme);
+
+  const router = useRouter();
+
+  const translateText = useTranslator("configurations", "userRoles");
+
+  const { data: allUserRoles, isPending: isUserRolesPending } =
+    useGetAllUserRoles();
+
+  const formattedUserRoles = useMemo(() => {
+    if (allUserRoles !== undefined && allUserRoles?.length > 0) {
+      const formattedUserRoles = allUserRoles?.map(
+        (role: AllUserRolesResponseType) => {
+          if (role.module.toUpperCase() === Modules.ATTENDANCE) {
+            return { ...role, name: translateText(["timeAndAttendance"]) };
+          } else {
+            return { ...role, name: role.module };
+          }
+        }
+      );
+      return formattedUserRoles;
+    } else {
+      return [];
+    }
+  }, [allUserRoles, translateText]);
+
+  const transformToTableRows = (): UserRoleTableType[] => {
+    return (
+      formattedUserRoles?.map((userRoleData: AllUserRolesType) => ({
+        id: userRoleData.module.toLowerCase(),
+        module: (
+          <BasicChip
+            key={userRoleData.module}
+            label={userRoleData.name}
+            chipStyles={classes.moduleChipStyles}
+          />
+        ),
+        roles: userRoleData.roles?.map((role, index) => (
+          <BasicChip
+            key={role}
+            label={role}
+            chipStyles={classes.roleChipStyles(
+              index,
+              userRoleData.roles.length - 1
+            )}
+          />
+        ))
+      })) || []
+    );
+  };
+
+  const columns = [
+    { field: "module", headerName: translateText(["moduleHeader"]) },
+    { field: "roles", headerName: translateText(["roleHeader"]) }
+  ];
+
+  const tableHeaders = columns.map((col) => ({
+    id: col.field,
+    label: col.headerName
+  }));
+
+  return (
+    <Box sx={classes.container}>
+      <Table
+        isLoading={isUserRolesPending}
+        isPaginationEnabled={false}
+        tableHeaders={tableHeaders}
+        tableRows={transformToTableRows()}
+        tableRowStyles={classes.tableRowStyles}
+        onRowClick={(row) =>
+          router.push(ROUTES.CONFIGURATIONS.USER_ROLES_MODULE(row.id))
+        }
+      />
+    </Box>
+  );
+};
+
+export default UserRolesTable;

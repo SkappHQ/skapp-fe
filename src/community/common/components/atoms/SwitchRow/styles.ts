@@ -1,0 +1,16 @@
+import { Theme } from "@mui/material";
+
+import { StyleProps } from "~community/common/types/CommonTypes";
+
+const styles = (theme: Theme): StyleProps => ({
+  wrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    gap: "1.25rem"
+  },
+  error: { color: theme.palette.error.contrastText }
+});
+
+export default styles;

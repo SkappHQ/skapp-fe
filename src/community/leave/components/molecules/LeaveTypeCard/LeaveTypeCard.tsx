@@ -1,0 +1,148 @@
+import { Stack, Typography } from "@mui/material";
+import { type Theme, useTheme } from "@mui/material/styles";
+import { FC, useMemo, useState } from "react";
+
+import Button from "~community/common/components/atoms/Button/Button";
+import {
+  ButtonSizes,
+  ButtonStyle,
+  ToastType
+} from "~community/common/enums/ComponentEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
+import { IconName } from "~community/common/types/IconTypes";
+import { getEmoji, mergeSx } from "~community/common/utils/commonUtil";
+import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
+import { useLeaveStore } from "~community/leave/store/store";
+import { LeaveAllocationDataTypes } from "~community/leave/types/MyRequests";
+import { useCheckIfUserHasManagers } from "~community/people/api/PeopleApi";
+
+import styles from "./styles";
+
+interface Props {
+  entitlement: LeaveAllocationDataTypes;
+}
+
+const LeaveTypeCard: FC<Props> = ({ entitlement }: Props) => {
+  const {
+    validTo,
+    totalDaysAllocated,
+    balanceInDays,
+    leaveType: { name, emojiCode }
+  } = entitlement;
+
+  const theme: Theme = useTheme();
+  const classes = styles(theme);
+
+  const translateText = useTranslator(
+    "leaveModule",
+    "myRequests",
+    "leaveAllocation"
+  );
+
+  const { setToastMessage } = useToast();
+
+  const { setMyLeaveRequestModalType, setSelectedLeaveAllocationData } =
+    useLeaveStore((state) => state);
+
+  const [isMouseOn, setMouseOn] = useState(false);
+
+  const { data: managers } = useCheckIfUserHasManagers();
+
+  const validUntil = useMemo(
+    () => (validTo ? new Date(validTo).getTime() : 0),
+    [validTo]
+  );
+
+  const isExpired = useMemo(
+    () => validUntil > 0 && validUntil <= Date.now(),
+    [validUntil]
+  );
+
+  const handleClick = (): void => {
+    const showToast = (
+      titleKey: string,
+      descriptionKey: string,
+      type: ToastType
+    ) => {
+      setToastMessage({
+        open: true,
+        title: translateText([titleKey], { leaveType: name }),
+        description: translateText([descriptionKey]),
+        toastType: type
+      });
+    };
+
+    if (!balanceInDays) {
+      showToast(
+        "noLeaveError.title",
+        "noLeaveError.description",
+        ToastType.ERROR
+      );
+    } else if (isExpired) {
+      showToast(
+        "allocationExpiredError.title",
+        "allocationExpiredError.description",
+        ToastType.ERROR
+      );
+    } else if (!managers) {
+      showToast(
+        "noSupervisorError.title",
+        "noSupervisorError.description",
+        ToastType.ERROR
+      );
+    } else {
+      setSelectedLeaveAllocationData(entitlement);
+      setMyLeaveRequestModalType(MyRequestModalEnums.APPLY_LEAVE);
+    }
+  };
+
+  return (
+    <Stack
+      sx={
+        !balanceInDays || !managers || isExpired
+          ? mergeSx([classes.activeCard, classes.disabledCard])
+          : classes.activeCard
+      }
+      onMouseEnter={() => setMouseOn(true)}
+      onMouseLeave={() => setMouseOn(false)}
+      onClick={handleClick}
+    >
+      <Stack sx={classes.leftContent}>
+        <Typography variant="body1">
+          {name} &nbsp;
+          {isMouseOn &&
+            !!balanceInDays &&
+            managers &&
+            !isExpired &&
+            getEmoji(emojiCode)}
+        </Typography>
+        <Stack>
+          <Stack sx={classes.amount}>
+            <Typography sx={classes.heading}>{balanceInDays}</Typography>
+            <Typography variant="body2">/ {totalDaysAllocated}</Typography>
+          </Stack>
+          <Typography component="div" variant="caption">
+            {translateText(["available"])}
+          </Typography>
+        </Stack>
+      </Stack>
+      <Stack sx={classes.rightContent}>
+        {(!isMouseOn || !balanceInDays || !managers || isExpired) &&
+          getEmoji(emojiCode)}
+        {isMouseOn && !!balanceInDays && managers && !isExpired && (
+          <Button
+            label={translateText(["applyBtn"])}
+            onClick={handleClick}
+            disabled={!balanceInDays}
+            buttonStyle={ButtonStyle.PRIMARY}
+            size={ButtonSizes.MEDIUM}
+            endIcon={IconName.RIGHT_ARROW_ICON}
+          />
+        )}
+      </Stack>
+    </Stack>
+  );
+};
+
+export default LeaveTypeCard;

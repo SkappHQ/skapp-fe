@@ -1,0 +1,150 @@
+name: Non Prd Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: "Select deploy environment"
+        required: true
+        options:
+          - dev
+          - qa
+          - e2e
+
+env:
+  AWS_REGION: ap-southeast-1
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: non-prd
+
+    outputs:
+      commit-hash: ${{ steps.get-commit-hash.outputs.commit-hash }}
+      timestamp: ${{ steps.get-timestamp.outputs.timestamp }}
+      ecr-repository: ${{ steps.get-ecr-repository.outputs.ecr-repository }}
+      api-url: ${{ steps.get-api-url.outputs.api-url }}
+      next-auth-url: ${{ steps.get-next-auth-url.outputs.next-auth-url }}
+      image-tag: ${{ steps.get-image-tag.outputs.image-tag }}
+
+    steps:
+      - name: Set node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.17.0"
+
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      #        with:
+      #          submodules: "recursive"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.COMMUNITY_AWS_ECR_USER_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.COMMUNITY_AWS_ECR_USER_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Get commit hash
+        id: get-commit-hash
+        run: echo "commit-hash=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Get timestamp
+        id: get-timestamp
+        run: echo "timestamp=$(date +'%Y-%m-%d-%H-%M')" >> "$GITHUB_OUTPUT"
+
+      - name: Get ECR Repository
+        id: get-ecr-repository
+        run: echo "ecr-repository=skapp/fe-${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+
+      - name: Get API URL
+        id: get-api-url
+        run: |
+          if [ "${{github.event.inputs.environment}}" == "dev" ]; then
+            echo "api-url=${{ vars.API_URL_DEV }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{github.event.inputs.environment}}" == "qa" ]; then
+            echo "api-url=${{ vars.API_URL_QA }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{github.event.inputs.environment}}" == "e2e" ]; then
+            echo "api-url=${{ vars.API_URL_E2E }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Get NEXT AUTH URL
+        id: get-next-auth-url
+        run: |
+          if [ "${{github.event.inputs.environment}}" == "dev" ]; then
+            echo "next-auth-url=${{ vars.NEXTAUTH_URL_DEV }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{github.event.inputs.environment}}" == "qa" ]; then
+            echo "next-auth-url=${{ vars.NEXTAUTH_URL_QA }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{github.event.inputs.environment}}" == "e2e" ]; then
+            echo "next-auth-url=${{ vars.NEXTAUTH_URL_E2E }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Get image tag
+        id: get-image-tag
+        run: echo "image-tag=fe-${{ steps.get-commit-hash.outputs.commit-hash }}-${{ steps.get-timestamp.outputs.timestamp }}" >> "$GITHUB_OUTPUT"
+
+      - name: Create env file
+        id: create-env-file
+
+        run: |
+          touch .env
+          echo NEXT_PUBLIC_API_URL="${{ steps.get-api-url.outputs.api-url }}" >> .env
+          echo NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" >> .env
+          echo NEXTAUTH_URL="${{ steps.get-next-auth-url.outputs.next-auth-url }}" >> .env
+          cat .env
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ steps.get-ecr-repository.outputs.ecr-repository }}
+          IMAGE_TAG: ${{ steps.get-image-tag.outputs.image-tag }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ${{ github.event.inputs.environment }}-ec2
+    environment: non-prd
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: stop all containers and delete all images
+        run: |
+          docker run hello-world
+          docker stop $(docker ps -a -q)
+          docker rmi -f $(docker images -aq)
+          docker system prune -a -f
+
+      - name: Pull image from ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ needs.build.outputs.ecr-repository }}
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+        run: docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Run docker container
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ needs.build.outputs.ecr-repository }}
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+        run: docker run -d -p 80:3000 --name nextjs-app-container --restart always $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

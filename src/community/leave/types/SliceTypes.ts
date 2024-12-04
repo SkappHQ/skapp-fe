@@ -1,0 +1,164 @@
+import { LeaveStore } from "./StoreTypes";
+
+export interface LeaveAllocationModalSliceType
+  extends Pick<
+    LeaveStore,
+    | "isLeaveAllocationModalOpen"
+    | "customLeaveAllocationModalType"
+    | "currentEditingLeaveAllocation"
+    | "currentDeletingLeaveAllocation"
+    | "leaveDays"
+    | "leaveType"
+    | "effectiveDate"
+    | "expirationDate"
+    | "setIsLeaveAllocationModalOpen"
+    | "setCustomLeaveAllocationModalType"
+    | "setCurrentEditingLeaveAllocation"
+    | "setCurrentDeletingLeaveAllocation"
+    | "setLeaveDays"
+    | "setLeaveType"
+    | "setEffectiveDate"
+    | "setExpirationDate"
+  > {}
+
+export interface LeaveTypeSliceType
+  extends Pick<
+    LeaveStore,
+    | "allLeaveTypes"
+    | "isLeaveTypeModalOpen"
+    | "leaveTypeModalType"
+    | "editingLeaveType"
+    | "isLeaveTypeFormDirty"
+    | "setAllLeaveTypes"
+    | "setIsLeaveTypeModalOpen"
+    | "setLeaveTypeModalType"
+    | "setEditingLeaveType"
+    | "setLeaveTypeFormDirty"
+    | "resetEditingLeaveType"
+  > {}
+
+export interface LeaveEntitlementSliceType
+  extends Pick<
+    LeaveStore,
+    | "isLeaveEntitlementModalOpen"
+    | "leaveEntitlementModalType"
+    | "setLeaveEntitlementModalType"
+    | "setIsLeaveEntitlementModalOpen"
+    | "selectedYear"
+    | "setSelectedYear"
+    | "page"
+    | "setPage"
+  > {}
+export interface LeaveCarryForwardModalSliceType
+  extends Pick<
+    LeaveStore,
+    | "isLeaveCarryForwardModalOpen"
+    | "leaveCarryForwardModalType"
+    | "setIsLeaveCarryForwardModalOpen"
+    | "setLeaveCarryForwardModalType"
+  > {}
+
+export interface NewPendingLeaveCountSliceType
+  extends Pick<
+    LeaveStore,
+    | "viewedPendingLeaveCount"
+    | "pendingLeaveCount"
+    | "setViewedPendingLeaveCount"
+    | "setPendingLeaveCount"
+  > {}
+
+export interface addNewEntitlementsSliceType
+  extends Pick<
+    LeaveStore,
+    | "leaveTypes"
+    | "setLeaveTypes"
+    | "carryForwardLeaveTypes"
+    | "setCarryForwardLeaveTypes"
+    | "leaveCarryForwardId"
+    | "setLeaveCarryForwardId"
+    | "carryForwardPagination"
+    | "setCarryForwardPagination"
+    | "leaveCarryForwardModalData"
+    | "setLeaveCarryForwardModalData"
+  > {}
+
+export interface MyRequestSliceType
+  extends Pick<
+    LeaveStore,
+    | "selectedLeaveAllocationData"
+    | "selectedDates"
+    | "selectedMonth"
+    | "selectedTeam"
+    | "comment"
+    | "attachments"
+    | "formErrors"
+    | "selectedDuration"
+    | "teamAvailabilityData"
+    | "isMyRequestModalOpen"
+    | "myRequestModalType"
+    | "setSelectedLeaveAllocationData"
+    | "setSelectedDates"
+    | "setSelectedMonth"
+    | "setSelectedTeam"
+    | "setIsMyRequestModalOpen"
+    | "setMyLeaveRequestModalType"
+    | "setTeamAvailabilityData"
+    | "setComment"
+    | "setSelectedDuration"
+    | "setAttachments"
+    | "setFormErrors"
+  > {}
+
+export interface LeaveRequestFiltersSliceTypes
+  extends Pick<
+    LeaveStore,
+    | "leaveRequestsFilter"
+    | "leaveRequestFilterOrder"
+    | "leaveRequestParams"
+    | "handleLeaveRequestsSort"
+    | "setLeaveRequestsFilter"
+    | "setLeaveRequestParams"
+    | "resetLeaveRequestParams"
+    | "setLeaveRequestFilterOrder"
+    | "setPagination"
+  > {}
+
+export interface LeaveRequestDataSliceTypes
+  extends Pick<
+    LeaveStore,
+    "leaveRequestData" | "setLeaveRequestData" | "removeLeaveRequestRowData"
+  > {}
+
+export interface LeaveRequestModalSliceTypes
+  extends Pick<
+    LeaveStore,
+    | "isManagerModalOpen"
+    | "isEmployeeModalOpen"
+    | "setIsManagerModal"
+    | "setIsEmployeeModal"
+  > {}
+
+export interface NewLeaveIdSliceTypes
+  extends Pick<
+    LeaveStore,
+    "newLeaveId" | "setNewLeaveId" | "removeNewLeaveId"
+  > {}
+
+export interface EmployeeLeaveRequestDataSliceTypes
+  extends Pick<
+    LeaveStore,
+    | "employeeLeaveRequestData"
+    | "setEmployeeLeaveRequestData"
+    | "removeEmployeeLeaveRequestData"
+  > {}
+
+export interface TeamLeaveAnalyticSliceTypes
+  extends Pick<
+    LeaveStore,
+    | "teamLeaveAnalyticSelectedDates"
+    | "teamLeaveAnalyticParams"
+    | "setTeamLeaveAnalyticsParams"
+    | "resetTeamLeaveAnalyticsParams"
+    | "setTeamLeaveAnalyticsPagination"
+    | "setTeamLeaveAnalyticSelectedDates"
+  > {}
