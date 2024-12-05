@@ -15,7 +15,8 @@ const ROUTES = {
     BASE: "/timesheet",
     MY_TIMESHEET: "/timesheet/my-timesheet",
     ALL_TIMESHEETS: "/timesheet/all-timesheets",
-    TIMESHEET_REQUESTS: "/timesheet/timesheet-requests"
+    TIMESHEET_REQUESTS: "/timesheet/timesheet-requests",
+    TIMESHEET_ANALYTICS: "/timesheet/analytics"
   },
   LEAVE: {
     BASE: "/leave",

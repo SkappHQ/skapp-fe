@@ -39,7 +39,7 @@ const SystemCredentials: React.FC = () => {
   const { data: employeeData } = useGetEmployeeById(employeeId);
 
   const isFirstPasswordChange =
-    employeeData?.accountStatus !== AccountSignIn.ACTIVE;
+    employeeData?.accountStatus !== AccountSignIn.PENDING;
 
   const setSharedCredentialData = usePeopleStore(
     (state) => state.setSharedCredentialData
