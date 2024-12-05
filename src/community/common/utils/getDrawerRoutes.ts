@@ -61,11 +61,14 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
       }
 
       if (route.name === "Leave") {
-        const isOnlyEmployee = userRoles?.every((role) =>
-          Object.values(EmployeeTypes).includes(role as EmployeeTypes)
+        const isNotLeaveManagerOrAdmin = userRoles?.every(
+          (role) =>
+            ![ManagerTypes.LEAVE_MANAGER, AdminTypes.LEAVE_ADMIN].includes(
+              role as ManagerTypes | AdminTypes
+            )
         );
 
-        if (isOnlyEmployee) {
+        if (isNotLeaveManagerOrAdmin) {
           return {
             id: route.id,
             name: "Leave Requests",
