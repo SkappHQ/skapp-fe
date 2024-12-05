@@ -175,7 +175,10 @@
     "deletionConfirmLeaveAnywayBtn": "Leave anyway",
     "uploadSuccessfully": "Upload Successfully",
     "uploadFailed": "Upload Failed",
-    "uploadFailedDes": "Please review the error log and upload again"
+    "uploadFailedDes": "Please review the error log and upload again",
+    "FULLDAY": "FULLDAY",
+    "HALFDAY_EVENING": "HALFDAY_EVENING",
+    "HALFDAY_MORNING": "HALFDAY_MORNING"
   },
 
   "editAllInfo": {

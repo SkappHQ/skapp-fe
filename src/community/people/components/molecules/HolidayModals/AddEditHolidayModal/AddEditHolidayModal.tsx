@@ -248,11 +248,11 @@ const AddEditHolidayModal = ({
 
   const handleDuration = (selectedDuration: string): void => {
     setDuration && setDuration(selectedDuration);
-    if (selectedDuration === translateText(["fullDay"])) {
+    if (selectedDuration === translateText(["FULLDAY"])) {
       setHolidayDetails({
         ...newHolidayDetails,
         duration:
-          selectedDuration === translateText(["fullDay"])
+          selectedDuration === translateText(["FULLDAY"])
             ? HolidayDurationType.FULLDAY
             : HolidayDurationType.HALFDAY,
         halfDayState: ""
@@ -261,7 +261,7 @@ const AddEditHolidayModal = ({
       setHolidayDetails({
         ...newHolidayDetails,
         duration:
-          selectedDuration === translateText(["morning"])
+          selectedDuration === translateText(["HALFDAY_MORNING"])
             ? HolidayDurationType.HALFDAY_MORNING
             : HolidayDurationType.HALFDAY_EVENING,
         halfDayState: selectedDuration
