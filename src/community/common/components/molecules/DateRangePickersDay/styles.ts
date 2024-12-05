@@ -17,10 +17,66 @@ const styles = (theme: Theme): StyleProps => ({
       border: `0.125rem solid ${theme.palette.error.contrastText}`
     },
     "&.Mui-half-day-morning-leave": {
-      borderLeft: `0.125rem solid ${theme.palette.error.contrastText}`
+      position: "relative",
+      width: "2.25rem",
+      height: "2.25rem",
+      borderRadius: "50%",
+      backgroundColor: "transparent",
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        border: `0.125rem solid ${theme.palette.error.contrastText}`,
+        clipPath: "polygon(0 0, 50% 0, 50% 100%, 0% 100%)",
+        boxSizing: "border-box"
+      },
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        border: `0.125rem solid ${theme.palette.error.contrastText}`,
+        clipPath: "polygon(0 0, 50% 0, 50% 100%, 0% 100%)",
+        boxSizing: "border-box"
+      }
     },
     "&.Mui-half-day-evening-leave": {
-      borderRight: `0.125rem solid ${theme.palette.error.contrastText}`
+      position: "relative",
+      width: "2.25rem",
+      height: "2.25rem",
+      borderRadius: "50%",
+      backgroundColor: "transparent",
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        border: `0.125rem solid ${theme.palette.error.contrastText}`,
+        clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)",
+        boxSizing: "border-box"
+      },
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        border: `0.125rem solid ${theme.palette.error.contrastText}`,
+        clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)",
+        boxSizing: "border-box"
+      }
     },
     "&.Mui-user-selection": {
       backgroundColor: theme.palette.primary.dark

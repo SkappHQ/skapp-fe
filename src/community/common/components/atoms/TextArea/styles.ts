@@ -20,11 +20,7 @@ const styles = (theme: Theme): StyleProps => ({
     borderRadius: "0.5rem",
     padding: "0.75rem",
     gap: "0.5rem",
-    width: "calc(100% - 0.0625rem)", // TODO: Remove this when the issue is fixed
-    "&:focus-within": {
-      outline: `0.0625rem solid ${theme.palette.primary.main}`,
-      backgroundColor: theme.palette.secondary.main
-    }
+    width: "100%"
   },
   error: { color: theme.palette.error.contrastText }
 });
