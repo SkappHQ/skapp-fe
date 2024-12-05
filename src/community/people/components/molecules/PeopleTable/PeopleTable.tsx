@@ -204,31 +204,38 @@ const PeopleTable: FC<Props> = ({
           <Stack
             sx={{
               gap: 1,
-              flexDirection: "row"
+              flexDirection: "row",
+              width: "100%"
             }}
           >
             {refactorTeamListData(employee?.teams as TeamResultsType[])
               ?.firstTeamName && (
-              <BasicChip
-                label={
-                  refactorTeamListData(employee?.teams as TeamResultsType[])
-                    .firstTeamName
-                }
-              />
+              <Box width="100%">
+                <BasicChip
+                  label={
+                    refactorTeamListData(employee?.teams as TeamResultsType[])
+                      .firstTeamName
+                  }
+                  isResponsive={true}
+                />
+              </Box>
             )}
 
             {refactorTeamListData(employee?.teams as TeamResultsType[])
               .otherTeamCount >= 1 && (
-              <BasicChip
-                chipStyles={{
-                  color: theme.palette.primary.dark
-                }}
-                label={
-                  (`+ ` +
-                    refactorTeamListData(employee?.teams as TeamResultsType[])
-                      .otherTeamCount) as unknown as string
-                }
-              />
+              <Box width="100%">
+                <BasicChip
+                  chipStyles={{
+                    color: theme.palette.primary.dark
+                  }}
+                  label={
+                    (`+ ` +
+                      refactorTeamListData(employee?.teams as TeamResultsType[])
+                        .otherTeamCount) as unknown as string
+                  }
+                  isResponsive={true}
+                />
+              </Box>
             )}
           </Stack>
         ),

@@ -19,7 +19,10 @@ const styles = (theme: Theme): StyleProps => ({
     backgroundColor: theme.palette.grey[100],
     color: "common.black",
     height: "2.5rem",
-    mb: ".1875rem"
+    mb: ".1875rem",
+    display: "flex",
+    justifyContent: "start",
+    maxWidth: "fit-content"
   },
   avatarGroup: {
     ".MuiAvatarGroup-avatar": {
