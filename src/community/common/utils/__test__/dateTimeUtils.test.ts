@@ -181,10 +181,10 @@ describe("dateTimeUtils", () => {
   });
 
   test("addHours should add hours to initial time", () => {
-    const initialTime = "12:00:00";
-    const format = "HH:mm:ss";
+    const initialTime = "12:00";
+    const format = "HH:mm";
     const hours = 2;
-    expect(addHours(initialTime, format, hours)).toBe("14:00:00");
+    expect(addHours(initialTime, format, hours)).toBe("14:00");
   });
 
   test("getCurrentMonth should return current month", () => {

@@ -52,5 +52,9 @@ export const notificationsEndpoints = {
 
 export const applicationVersionEndpoints = {
   GET_APPLICATION_VERSION_UPDATES: (language: string) =>
-    `/default/update-notification-trigger?language=${language}`
+    `/check-updates?language=${language}`
+};
+
+export const storageAvailabilityEndpoints = {
+  GET_STORAGE_AVAILABILITY: `/file/storage/availability`
 };

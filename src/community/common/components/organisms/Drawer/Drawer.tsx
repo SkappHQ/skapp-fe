@@ -114,6 +114,7 @@ const Drawer = (): JSX.Element => {
       setOrgData(organizationDetails?.results[0]);
     }
   }, [organizationDetails, orgLoading]);
+
   return (
     <StyledDrawer
       variant="permanent"

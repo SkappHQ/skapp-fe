@@ -3,7 +3,7 @@ import { DateTime, Duration } from "luxon";
 import { TimeSlotsType } from "~community/attendance/types/timeSheetTypes";
 
 export const convertTo24HourByDateString = (date: string) => {
-  const dateTime = DateTime.fromISO(date, { zone: "Asia/Colombo" });
+  const dateTime = DateTime.fromISO(date, { zone: getCurrentTimeZone() });
   return dateTime.toFormat("HH:mm");
 };
 
@@ -87,7 +87,7 @@ export const convertToDateTime = (date: string, time: string) => {
 
 export const convertToTimeZoneISO = (isoTime: string) => {
   const dateTime = DateTime.fromISO(isoTime, { zone: "utc" });
-  const localDateTime = dateTime.setZone("Asia/Colombo");
+  const localDateTime = dateTime.setZone(getCurrentTimeZone());
   return localDateTime.toISO();
 };
 

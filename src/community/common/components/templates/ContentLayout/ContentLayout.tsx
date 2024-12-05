@@ -12,6 +12,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, memo } from "react";
 
+import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
@@ -27,6 +28,7 @@ import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeS
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
@@ -87,6 +89,9 @@ const ContentLayout = ({
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
     (state) => state
   );
+
+  const { data: StorageAvailabilityData } = useStorageAvailability();
+
   return (
     <>
       <Head>
@@ -97,6 +102,14 @@ const ContentLayout = ({
           !isDailyNotifyDisplayed &&
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) && (
             <VersionUpgradeBanner />
+          )}
+        {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
+          StorageAvailabilityData &&
+          StorageAvailabilityData.availableSpace >= EIGHTY_PERCENT && (
+            <VersionUpgradeBanner
+              isStorageBanner
+              availableSpace={StorageAvailabilityData.availableSpace}
+            />
           )}
         <Stack sx={classes.header}>
           <Stack sx={classes.leftContent}>

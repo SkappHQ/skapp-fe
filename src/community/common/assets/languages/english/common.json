@@ -216,5 +216,15 @@
   },
   "noData": {
     "title": "No data available"
+  },
+  "storageAvailability": {
+    "storageUsageReached": "Your storage usage has reached its limit.",
+    "increaseStorageText": "Increase your storage to handle your growing needs.",
+    "considerText": "Consider increasing your storage capacity to stay ahead of your usage needs",
+    "availableSpaceText": "   Your storage usage has reached {{availableSpace}}% limit."
+  },
+  "StorageToastMessage": {
+    "storageTitle": "Storage Limit Reached",
+    "contactAdminText": "Please contact your administrator."
   }
 }

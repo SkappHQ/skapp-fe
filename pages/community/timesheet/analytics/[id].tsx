@@ -1,4 +1,4 @@
-// TODO: Can move this page and time sheet analytics page to a single page and handle logic from one component. need to be refactored later
+// TODO: Can move this page and leave analytics page to a single page and handle logic from one component. need to be refactored later
 import { Box, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { type Theme, useTheme } from "@mui/material/styles";
@@ -45,7 +45,7 @@ const TeamTimeSheetAnalytics: NextPage = () => {
   const router = useRouter();
   const translateText = useTranslator("attendanceModule", "dashboards");
 
-  const [activeStep, setActiveStep] = useState("leaveAnalytics");
+  const [activeStep, setActiveStep] = useState("timeSheetAnalytics");
 
   const { data } = useSession();
 
