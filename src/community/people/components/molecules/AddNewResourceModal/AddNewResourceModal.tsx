@@ -10,7 +10,10 @@ import DropdownList from "~community/common/components/molecules/DropdownList/Dr
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import ROUTES from "~community/common/constants/routes";
 import { peopleDirectoryTestId } from "~community/common/constants/testIds";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetAllowedGrantablePermissions } from "~community/configurations/api/userRolesApi";
@@ -161,12 +164,20 @@ const AddNewResourceModal = () => {
       />
 
       <Button
+        isFullWidth={false}
+        size={ButtonSizes.MEDIUM}
         buttonStyle={ButtonStyle.TERTIARY}
         label={"Add full profile"}
         styles={{
           marginTop: 2
         }}
-        endIcon={IconName.FORWARD_ARROW}
+        endIcon={
+          <Icon
+            name={IconName.FORWARD_ARROW}
+            width="0.75rem"
+            height="0.625rem"
+          />
+        }
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
           setIsDirectoryModalOpen(false);
