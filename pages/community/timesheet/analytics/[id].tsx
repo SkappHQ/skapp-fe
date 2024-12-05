@@ -1,3 +1,4 @@
+// TODO: Can be moved this component and leave analysis component to a single page and handle logic from one component. need to be refactored later
 import { Box, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { type Theme, useTheme } from "@mui/material/styles";
