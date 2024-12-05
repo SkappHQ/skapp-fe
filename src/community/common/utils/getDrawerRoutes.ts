@@ -61,12 +61,15 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
       }
 
       if (route.name === "Leave") {
-        const isNotLeaveManagerOrAdmin = userRoles?.every(
-          (role) =>
-            ![ManagerTypes.LEAVE_MANAGER, AdminTypes.LEAVE_ADMIN].includes(
-              role as ManagerTypes | AdminTypes
-            )
-        );
+        const isNotLeaveManagerOrAdmin =
+          userRoles !== undefined &&
+          userRoles?.length > 0 &&
+          userRoles?.every(
+            (role) =>
+              ![ManagerTypes.LEAVE_MANAGER, AdminTypes.LEAVE_ADMIN].includes(
+                role as ManagerTypes | AdminTypes
+              )
+          );
 
         if (isNotLeaveManagerOrAdmin) {
           return {
