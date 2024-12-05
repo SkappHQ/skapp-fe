@@ -21,12 +21,12 @@ const LeaveTypeActivationToggleButton = () => {
       <SwitchRow
         label={translateText(["activate"])}
         checked={editingLeaveType?.isActive ?? true}
-        onChange={(e) =>
+        onChange={() => {
           setEditingLeaveType({
             ...editingLeaveType,
-            isActive: e.target.checked
-          })
-        }
+            isActive: !editingLeaveType.isActive
+          });
+        }}
       />
       <Tooltip
         id="activate-leave-tooltip"

@@ -24,7 +24,12 @@ const ConfirmLeaveTypeStatusUpdateModal = ({ values, mutate }: Props) => {
   } = useLeaveStore((state) => state);
 
   const onSaveBtnClick = () => {
-    const { typeId, ...payload } = values;
+    const { typeId, ...rest } = values;
+
+    const payload = {
+      ...rest,
+      isActive: editingLeaveType.isActive
+    };
 
     mutate({
       leaveType: payload,
@@ -36,22 +41,22 @@ const ConfirmLeaveTypeStatusUpdateModal = ({ values, mutate }: Props) => {
   const onCancelBtnClick = () => {
     setEditingLeaveType({
       ...editingLeaveType,
-      isActive: !values.isActive
+      isActive: !editingLeaveType.isActive
     });
     setLeaveTypeModalType(LeaveTypeModalEnums.NONE);
   };
 
   const title = useMemo(() => {
-    return values.isActive
+    return editingLeaveType.isActive
       ? translateText(["activateLeaveTypeModalTitle"])
       : translateText(["inactivateLeaveTypeModalTitle"]);
-  }, [values.isActive, translateText]);
+  }, [editingLeaveType.isActive, translateText]);
 
   const description = useMemo(() => {
-    return values.isActive
+    return editingLeaveType.isActive
       ? translateText(["activateLeaveTypeModalDescription"])
       : translateText(["inactivateLeaveTypeModalDescription"]);
-  }, [values.isActive, translateText]);
+  }, [editingLeaveType.isActive, translateText]);
 
   const isModalOpen =
     leaveTypeModalType === LeaveTypeModalEnums.INACTIVATE_LEAVE_TYPE ||
