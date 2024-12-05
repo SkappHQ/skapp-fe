@@ -70,7 +70,7 @@ const HolidayTable: FC<Props> = ({
   );
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
-  const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
+
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [sortEl, setSortEl] = useState<null | HTMLElement>(null);
   const translateText = useTranslator("peopleModule", "holidays");
@@ -87,6 +87,11 @@ const HolidayTable: FC<Props> = ({
     setSelectedYear,
     selectedYear
   } = usePeopleStore((state) => state);
+  const [selectedOption, setSelectedOption] = useState<OptionType>({
+    id: 1,
+    name: selectedYear
+  });
+
   const columns = [
     { field: "date", headerName: translateText(["tableDateColumnTitle"]) },
     {
