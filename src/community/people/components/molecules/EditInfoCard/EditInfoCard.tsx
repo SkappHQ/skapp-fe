@@ -11,6 +11,7 @@ import {
 } from "react";
 import { useDropzone } from "react-dropzone";
 
+import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import LocalPhoneIcon from "~community/common/assets/Icons/LocalPhoneIcon";
 import MailIcon from "~community/common/assets/Icons/MailIcon";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
@@ -21,6 +22,7 @@ import BasicChipGroup from "~community/common/components/molecules/BasicChipGrou
 import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMenu";
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { ROLE_SUPER_ADMIN } from "~community/common/types/AuthTypes";
 import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -28,6 +30,7 @@ import {
   formatDateWithOrdinalIndicator,
   getTimeElapsedSinceDate
 } from "~community/common/utils/dateTimeUtils";
+import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import { AccountStatusEnums } from "~community/people/enums/editResourceEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
@@ -62,9 +65,12 @@ const EditInfoCard = ({
   } = useScreenSizeRange();
   const translateText = useTranslator("peopleModule", "editAllInfo");
   const translateTerminationText = useTranslator("peopleModule", "termination");
-
+  const translateStorageText = useTranslator("StorageToastMessage");
   const { data } = useSession();
 
+  const { setToastMessage } = useToast();
+
+  const { data: storageAvailableData } = useStorageAvailability();
   const hasTerminationAbility =
     data?.user.roles?.includes(ROLE_SUPER_ADMIN) &&
     data?.user?.employee?.employeeId.toString() !==
@@ -203,12 +209,22 @@ const EditInfoCard = ({
 
   const onDrop: (acceptedFiles: File[]) => void = useCallback(
     (acceptedFiles: File[]) => {
-      const profilePic = acceptedFiles.map((file: File) =>
-        Object.assign(file, { preview: URL.createObjectURL(file) })
-      );
-      setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+      if (storageAvailableData?.availableSpace <= EIGHTY_PERCENT) {
+        const profilePic = acceptedFiles.map((file: File) =>
+          Object.assign(file, { preview: URL.createObjectURL(file) })
+        );
+        setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+      } else {
+        setToastMessage({
+          open: true,
+          toastType: "error",
+          title: translateStorageText(["storageTitle"]),
+          description: translateStorageText(["contactAdminText"]),
+          isIcon: true
+        });
+      }
     },
-    [setEmployeeGeneralDetails]
+    [storageAvailableData.availableSpace, setEmployeeGeneralDetails]
   );
 
   const { open, getInputProps } = useDropzone({
@@ -235,6 +251,21 @@ const EditInfoCard = ({
 
     setSupervisor(supervisor as EmployeeManagerType);
   }, [selectedEmployee]);
+
+  const openFileBrowser = () => {
+    if (storageAvailableData?.availableSpace <= EIGHTY_PERCENT) {
+      open();
+    } else {
+      null;
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: translateStorageText(["storageTitle"]),
+        description: translateStorageText(["contactAdminText"]),
+        isIcon: true
+      });
+    }
+  };
 
   return (
     <Stack
@@ -277,7 +308,7 @@ const EditInfoCard = ({
           lastName={cardData?.lastName ?? ("" as string)}
           getInputProps={getInputProps}
           handleUnSelectPhoto={handleUnSelectPhoto}
-          open={open}
+          open={openFileBrowser}
           enableEdit
           imageUploaded={
             cardData?.authPic !==

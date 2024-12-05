@@ -54,3 +54,7 @@ export const applicationVersionEndpoints = {
   GET_APPLICATION_VERSION_UPDATES: (language: string) =>
     `/check-updates?language=${language}`
 };
+
+export const storageAvailabilityEndpoints = {
+  GET_STORAGE_AVAILABILITY: `/file/storage/availability`
+};

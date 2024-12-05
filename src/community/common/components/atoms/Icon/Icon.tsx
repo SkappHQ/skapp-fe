@@ -86,6 +86,7 @@ import UpArrowIcon from "~community/common/assets/Icons/UpArrowIcon";
 import UpgradeInfoIcon from "~community/common/assets/Icons/UpgradeInfoIcon";
 import UserUploadIcon from "~community/common/assets/Icons/UserUploadIcon";
 import WarningIcon from "~community/common/assets/Icons/WarningIcon";
+import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
 import { IconName, IconProps } from "~community/common/types/IconTypes";
 
@@ -183,7 +184,8 @@ export const IconMapping: Partial<
   [IconName.REVOKED_STATUS_ICON]: RevokedStatusIcon,
   [IconName.SIGNOUT_ICON]: SignoutIcon,
   [IconName.NUDGE_BELL_ICON]: NudgeBellIcon,
-  [IconName.UPGRADE_INFO_ICON]: UpgradeInfoIcon
+  [IconName.UPGRADE_INFO_ICON]: UpgradeInfoIcon,
+  [IconName.WARNING_SIGN_ICON]: WarningSignIcon
   // Add more icons here as needed
 };
 

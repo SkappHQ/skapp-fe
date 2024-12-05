@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { useUploadImages } from "~community/common/api/FileHandleApi";
+import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import TextArea from "~community/common/components/atoms/TextArea/TextArea";
 import CalendarDateRangePicker from "~community/common/components/molecules/CalendarDateRangePicker/CalendarDateRangePicker";
@@ -19,6 +20,7 @@ import {
   getMaxDateOfYear,
   getMonthStartAndEndDates
 } from "~community/common/utils/dateTimeUtils";
+import { NINETY_PERCENT } from "~community/common/utils/getConstants";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 import {
   useApplyLeave,
@@ -50,7 +52,7 @@ const ApplyLeaveModal = () => {
   const classes = styles();
 
   const { setToastMessage } = useToast();
-
+  const translateStorageText = useTranslator("StorageToastMessage");
   const translateText = useTranslator(
     "leaveModule",
     "myRequests",
@@ -93,6 +95,8 @@ const ApplyLeaveModal = () => {
   const { data: leaveEntitlementBalance } = useGetLeaveEntitlementBalance(
     selectedLeaveAllocationData.leaveType.typeId
   );
+
+  const { data: storageAvailabilityData } = useStorageAvailability();
 
   const onSuccess = () => {
     handleApplyLeaveApiResponse({
@@ -301,9 +305,19 @@ const ApplyLeaveModal = () => {
                 ? IconName.ATTACHMENT_ICON
                 : undefined
             }
-            onIconClick={() =>
-              setMyLeaveRequestModalType(MyRequestModalEnums.ADD_ATTACHMENT)
-            }
+            onIconClick={() => {
+              storageAvailabilityData?.availableSpace >= NINETY_PERCENT
+                ? setToastMessage({
+                    open: true,
+                    toastType: "error",
+                    title: translateStorageText(["storageTitle"]),
+                    description: translateStorageText(["contactAdminText"]),
+                    isIcon: true
+                  })
+                : setMyLeaveRequestModalType(
+                    MyRequestModalEnums.ADD_ATTACHMENT
+                  );
+            }}
             error={{
               comment: formErrors?.comment,
               attachment: formErrors?.attachment
