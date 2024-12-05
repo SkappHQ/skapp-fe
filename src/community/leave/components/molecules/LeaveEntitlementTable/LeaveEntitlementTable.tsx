@@ -61,14 +61,16 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
         const userColumnData = {
           id: leaveEntitlement?.employeeId,
           employee: (
-            <AvatarChip
-              key={leaveEntitlement?.employeeId}
-              firstName={leaveEntitlement?.firstName}
-              lastName={leaveEntitlement?.lastName}
-              avatarUrl={leaveEntitlement?.avatarUrl}
-              isResponsiveLayout={false}
-              chipStyles={classes.avatarChip}
-            />
+            <Box width="100%">
+              <AvatarChip
+                key={leaveEntitlement?.employeeId}
+                firstName={leaveEntitlement?.firstName}
+                lastName={leaveEntitlement?.lastName}
+                avatarUrl={leaveEntitlement?.avatarUrl}
+                isResponsiveLayout={true}
+                chipStyles={classes.avatarChip}
+              />
+            </Box>
           )
         };
 

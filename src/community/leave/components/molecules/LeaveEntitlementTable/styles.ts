@@ -24,6 +24,11 @@ const styles = (theme: Theme): StyleProps => ({
     backgroundColor: theme.palette.grey[100],
     borderRadius: "0.625rem",
     mt: "1rem"
+  },
+  avatarChip: {
+    display: "flex",
+    justifyContent: "start",
+    maxWidth: "fit-content"
   }
 });
 

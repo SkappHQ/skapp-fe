@@ -334,7 +334,7 @@
     },
     "filters": {
       "demographics": "Demographics",
-      "employements": "Employement",
+      "employements": "Employment",
       "jobFamilies": "Job families",
       "teams": "Teams",
       "userRoles": "User roles",
@@ -351,7 +351,7 @@
       },
       "employementFilters": {
         "intern": "Intern",
-        "permenant": "Permenant",
+        "permenant": "Permanent",
         "contract": "Contract",
         "fullTime": "Full time",
         "partTime": "Part time",
@@ -372,7 +372,7 @@
         "female": "Female",
         "other": "Other",
         "intern": "Intern",
-        "permanent": "Permenant",
+        "permanent": "Permanent",
         "contract": "Contract",
         "full_time": "Full time",
         "part_time": "Part time",
