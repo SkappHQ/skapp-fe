@@ -1,12 +1,13 @@
 import { Box } from "@mui/material";
 import { Theme, useTheme } from "@mui/material/styles";
-import { JSX, MouseEvent, useState } from "react";
+import { JSX, MouseEvent, useEffect, useState } from "react";
 
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
 import Button from "~community/common/components/atoms/Button/Button";
 import SortRow from "~community/common/components/atoms/SortRow/SortRow";
 import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { usePeopleStore } from "~community/people/store/store";
 
 interface OptionType {
   id: number;
@@ -32,6 +33,8 @@ const ItemSelector = ({
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
+  const { selectedYear } = usePeopleStore((state) => state);
+
   const closeMenu = (): void => {
     setAnchorEl(null);
     setShowOverlay(false);
@@ -42,6 +45,16 @@ const ItemSelector = ({
     setOptionName(option.name);
     closeMenu();
   };
+
+  useEffect(() => {
+    const matchingOption = options.find(
+      (option) => option.name === selectedYear
+    );
+
+    if (matchingOption) {
+      setSelectedOption(matchingOption);
+    }
+  }, [selectedYear, options, setSelectedOption]);
 
   return (
     <>
