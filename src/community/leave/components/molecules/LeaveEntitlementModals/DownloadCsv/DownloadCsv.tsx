@@ -1,5 +1,5 @@
-import { Box, Divider, Theme, Typography, useTheme } from "@mui/material";
-import { useEffect } from "react";
+import { Box, Divider, Typography } from "@mui/material";
+import { useEffect, useMemo } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -16,7 +16,6 @@ import { EmployeeDataType } from "~community/people/types/EmployeeTypes";
 import styles from "./styles";
 
 const DownloadCsv = () => {
-  const theme: Theme = useTheme();
   const classes = styles();
 
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
@@ -33,9 +32,13 @@ const DownloadCsv = () => {
     setEmployeeDataParams("isExport", true);
   }, [setEmployeeDataParams]);
 
+  const activeLeaveTypes = useMemo(() => {
+    return leaveTypes?.filter((leaveType) => leaveType.isActive);
+  }, [leaveTypes]);
+
   const handleDownloadBtnClick = () => {
     downloadLeaveEntitlementBulkUploadTemplate(
-      leaveTypes ?? [],
+      activeLeaveTypes ?? [],
       employeeData as unknown as EmployeeDataType[]
     );
   };
