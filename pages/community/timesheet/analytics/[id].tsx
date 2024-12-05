@@ -250,7 +250,10 @@ const TeamTimeSheetAnalytics: NextPage = () => {
               max={6}
             />
             <Typography variant="body1">
-              {teamMemberCount} {teamMemberCount > 1 ? "Members" : "Member"}
+              {teamMemberCount}{" "}
+              {teamMemberCount > 1
+                ? translateText(["members"])
+                : translateText(["members"])}
             </Typography>
           </Box>
           <BoxStepper
