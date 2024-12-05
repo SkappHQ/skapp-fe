@@ -59,7 +59,7 @@ const AllTimesheetsPage: NextPage = () => {
     } else {
       const teamId = (result as TeamSearchResultType)?.teamId;
       await router.push(
-        `${ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS}/${teamId}?teamName=${encodeURIComponent((result as TeamSearchResultType)?.teamName)}`
+        `${ROUTES.TIMESHEET.TIMESHEET_ANALYTICS}/${teamId}?teamName=${encodeURIComponent((result as TeamSearchResultType)?.teamName)}`
       );
       setSelectedTeamName((result as TeamSearchResultType)?.teamName);
       setSelectedUserName("");

@@ -44,7 +44,7 @@ const TeamTimeSheetAnalytics: NextPage = () => {
   const router = useRouter();
   const translateText = useTranslator("attendanceModule", "dashboards");
 
-  const [activeStep, setActiveStep] = useState("leaveAnalytics");
+  const [activeStep, setActiveStep] = useState("timeSheetAnalytics");
 
   const { data } = useSession();
 
