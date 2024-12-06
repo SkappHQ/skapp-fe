@@ -1,6 +1,6 @@
 import { Divider } from "@mui/material";
 import { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import LeaveCarryForward from "~community/common/components/molecules/LeaveCarryForward/LeaveCarryForward";
 import SearchBox from "~community/common/components/molecules/SearchBox/SearchBox";
@@ -21,18 +21,20 @@ const LeaveEntitlements: NextPage = () => {
 
   const { data: leaveTypesList } = useGetLeaveTypes(false, true);
 
-  const { setLeaveTypes } = useLeaveStore((state) => state);
-
-  useEffect(() => {
-    setLeaveTypes(leaveTypesList ?? []);
-  }, [leaveTypesList, setLeaveTypes]);
-
   const { page, selectedYear, setLeaveEntitlementModalType } = useLeaveStore(
     (state) => state
   );
 
+  const { setLeaveTypes } = useLeaveStore((state) => state);
+
+  const [keyword, setKeyword] = useState<string>("");
+
   const { data: leaveEntitlementTableData, isFetching } =
-    useGetLeaveEntitlements(selectedYear, page);
+    useGetLeaveEntitlements(selectedYear, page, keyword);
+
+  useEffect(() => {
+    setLeaveTypes(leaveTypesList ?? []);
+  }, [leaveTypesList, setLeaveTypes]);
 
   return (
     <>
@@ -60,6 +62,8 @@ const LeaveEntitlements: NextPage = () => {
             leaveEntitlementTableData?.items.length > 0 && (
               <SearchBox
                 placeHolder={translateText(["searchBoxPlaceholder"])}
+                setSearchTerm={setKeyword}
+                value={keyword}
               />
             )}
           <LeaveEntitlementTable
