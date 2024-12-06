@@ -8,6 +8,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import styles from "~community/common/components/molecules/FilterButton/styles";
 import Popper from "~community/common/components/molecules/Popper/Popper";
 import {
+  ButtonSizes,
   ButtonStyle,
   ButtonTypes
 } from "~community/common/enums/ComponentEnums";
@@ -87,6 +88,7 @@ const FilterButton = ({
           onClick={(event: MouseEvent<HTMLElement>) =>
             handleFilterBtnClick(event)
           }
+          size={ButtonSizes.MEDIUM}
         />
       </Stack>
       <Popper
@@ -106,6 +108,7 @@ const FilterButton = ({
             label={translateText(["applyBtn"])}
             styles={classes.popperButtons}
             onClick={onApplyBtnClick}
+            size={ButtonSizes.MEDIUM}
           />
           <Button
             type={ButtonTypes.RESET}
@@ -114,6 +117,7 @@ const FilterButton = ({
             label={translateText(["resetBtn"])}
             styles={classes.popperButtons}
             onClick={onResetBtnClick}
+            size={ButtonSizes.MEDIUM}
           />
         </Stack>
       </Popper>

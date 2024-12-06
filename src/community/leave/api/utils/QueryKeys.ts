@@ -8,7 +8,8 @@ export const leaveQueryKeys = {
     page?: number,
     size?: number,
     keyword?: string,
-    year?: number
+    year?: number,
+    selectedLeaveTypes?: string[]
   ) {
     return [
       ...(this?.ALL || []),
@@ -16,7 +17,8 @@ export const leaveQueryKeys = {
       page,
       size,
       keyword,
-      year
+      year,
+      selectedLeaveTypes
     ].filter((val) => val !== undefined);
   },
   useGetPreProcessedLeaveTypes: function (
