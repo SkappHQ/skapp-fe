@@ -47,11 +47,13 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   const { selectedYear, setSelectedYear } = useLeaveStore((state) => state);
 
   const [selectedLeaveTypes, setSelectedLeaveTypes] = useState<string[]>([]);
+  const leaveTypesString = selectedLeaveTypes.join(","); // Join the array into a comma-separated string
   const { data: customLeaveData, isLoading } = useGetCustomLeaves(
     currentPage,
     5,
     searchTerm,
-    Number(selectedYear)
+    Number(selectedYear),
+    leaveTypesString // Pass the comma-separated string here
   );
 
   const handleEdit = useCallback(
@@ -86,14 +88,25 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     ]
   );
 
-  const handleApplyFilters = (types: string[]) => {
-    setSelectedLeaveTypes(types);
+  const handleApplyFilters = () => {
     setCurrentPage(0);
   };
 
   const handleResetFilters = () => {
     setSelectedLeaveTypes([]);
     setCurrentPage(0);
+  };
+
+  const handleRemoveFilters = (leaveType: { id: string; text: string }) => {
+    setSelectedLeaveTypes((prev) => prev.filter((i) => i !== leaveType.id));
+  };
+
+  const handleLeaveTypeFilter = (leaveType: { id: string; text: string }) => {
+    setSelectedLeaveTypes((prev) =>
+      prev.includes(leaveType.id)
+        ? prev.filter((i) => i !== leaveType.id)
+        : [...prev, leaveType.id]
+    );
   };
 
   const columns = useMemo(
@@ -173,47 +186,54 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   const { data: leaveTypesData } = useGetLeaveTypes();
 
   const leaveTypeOptions = useMemo(
-    () => leaveTypesData?.map((leaveType) => leaveType.name) || [],
+    () =>
+      leaveTypesData?.map((leaveType) => ({
+        id: leaveType.typeId,
+        name: leaveType.name
+      })) || [],
     [leaveTypesData]
   );
 
   const filterButton = (
     <FilterButton
-      handleApplyBtnClick={() => handleApplyFilters(selectedLeaveTypes)}
+      handleApplyBtnClick={handleApplyFilters}
       handleResetBtnClick={handleResetFilters}
-      selectedFilters={[
-        {
-          filter: selectedLeaveTypes,
-          handleFilterDelete: (item) => {
-            setSelectedLeaveTypes((prev) => prev.filter((i) => i !== item));
-          }
+      selectedFilters={selectedLeaveTypes.map((type) => ({
+        filter: [type],
+        handleFilterDelete: () => {
+          handleRemoveFilters({
+            id:
+              leaveTypeOptions
+                .find((btn) => btn.id.toString() === type)
+                ?.id.toString() || "",
+            text:
+              leaveTypeOptions.find(
+                (btn) => btn.id.toString() === type.toString()
+              )?.name || ""
+          });
         }
-      ]}
+      }))}
       position={"bottom-end"}
       id={"filter-types"}
-      isResetBtnDisabled={false}
+      isResetBtnDisabled={selectedLeaveTypes.length === 0}
     >
       <Typography variant="h5" sx={typographyStyles(theme)}>
         {translateText(["filterButtonTitle"])}
       </Typography>
-      <Stack direction="row" spacing={1}>
+      <Box display="flex" flexWrap="wrap" gap={1}>
         {leaveTypeOptions.map((leaveType) => (
           <Chip
-            key={leaveType}
-            label={leaveType}
-            onClick={() => {
-              setSelectedLeaveTypes((prev) =>
-                prev.includes(leaveType)
-                  ? prev.filter((i) => i !== leaveType)
-                  : [...prev, leaveType]
-              );
-            }}
+            key={leaveType.id}
+            label={leaveType.name}
+            onClick={() =>
+              handleLeaveTypeFilter({ id: leaveType.id, text: leaveType.name })
+            }
             color={
-              selectedLeaveTypes.includes(leaveType) ? "primary" : "default"
+              selectedLeaveTypes.includes(leaveType.id) ? "primary" : "default"
             }
           />
         ))}
-      </Stack>
+      </Box>
     </FilterButton>
   );
 

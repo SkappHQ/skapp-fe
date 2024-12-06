@@ -102,7 +102,7 @@
       "emptyLeaveRequestTitle": "No leave requests available",
       "emptyLeaveRequestDes": "You haven't applied for a leave request yet. Once you apply for a request, it will be displayed here.",
       "filterButtonStatus": "Leave Status",
-      "filterButtonType": "Leave Type",
+      "filterButtonType": "Leave Types",
       "sortBy": "Sort by : {{sortBy}}",
       "fullDay": "Full Day",
       "halfDay": "Half Day",
