@@ -139,7 +139,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     return (
       customLeaveData?.items?.map((leaveAllocation) => {
         return {
-          id: leaveAllocation.employee?.employeeId,
+          id: leaveAllocation.entitlementId,
           employee: (
             <AvatarChip
               firstName={leaveAllocation.employee?.firstName}
