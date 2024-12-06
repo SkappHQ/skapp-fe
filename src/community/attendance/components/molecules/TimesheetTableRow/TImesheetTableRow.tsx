@@ -64,7 +64,7 @@ const TimesheetTableRow: FC<Props> = ({
             avatarUrl={employee?.avatarUrl}
             isResponsiveLayout={true}
             chipStyles={{
-              maxWidth: "100%",
+              maxWidth: "fit-content",
               justifyContent: "flex-start"
             }}
             mediumScreenWidth={1024}

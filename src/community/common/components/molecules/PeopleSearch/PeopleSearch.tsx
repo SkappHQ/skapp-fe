@@ -273,7 +273,10 @@ const PeopleSearch: FC<Props> = ({
                         firstName={user?.firstName}
                         lastName={user?.lastName}
                         avatarUrl={user?.avatarUrl}
-                        chipStyles={{ cursor: "pointer" }}
+                        chipStyles={{
+                          cursor: "pointer",
+                          maxWidth: "fit-content"
+                        }}
                       />
                     </Box>
                   );

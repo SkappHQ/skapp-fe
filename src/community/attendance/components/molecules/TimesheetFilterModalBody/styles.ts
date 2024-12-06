@@ -8,7 +8,7 @@ const styles = () => ({
     mb: "0.8rem"
   },
   stackStyles: {
-    pt: "1.25rem"
+    pt: "0.75rem"
   },
   buttonStyles: {
     paddingTop: "0.75rem",

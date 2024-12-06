@@ -62,7 +62,8 @@ const styles = (theme: Theme): StyleProps => ({
     gap: "0.75rem"
   },
   popperButtons: {
-    paddingY: "0.5rem",
+    paddingY: "0.75rem",
+    paddingX: "1.25rem",
     fontSize: "0.75rem"
   }
 });
