@@ -1,11 +1,14 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Divider, Stack, Typography } from "@mui/material";
 import { JSX, useEffect, useState } from "react";
 
 import { useAttendanceStore } from "~community/attendance/store/attendanceStore";
 import { FilterChipType } from "~community/attendance/types/timeSheetTypes";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 
@@ -101,27 +104,31 @@ const TimesheetFilterModalBody = ({
         <Typography variant="h5" mb={"1.25rem"}>
           {translateText(["statusFilterTitle"])}
         </Typography>
-        {filterValues?.status?.map((status: FilterChipType) => (
-          <Button
-            key={status?.value}
-            isFullWidth={false}
-            dataAttr={{ [dataAttributeKey]: status?.value }}
-            label={status?.label}
-            buttonStyle={
-              selectedFilterLabels.includes(status?.label)
-                ? ButtonStyle.SECONDARY
-                : ButtonStyle.TERTIARY
-            }
-            onClick={() => onClickFilter("status", status)}
-            startIcon={
-              selectedFilterLabels.includes(status?.label) ? (
-                <Icon name={IconName.CHECK_CIRCLE_ICON} />
-              ) : null
-            }
-            styles={classes.filterChipButtonStyles}
-          />
-        ))}
+        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+          {filterValues?.status?.map((status: FilterChipType) => (
+            <Button
+              key={status?.value}
+              isFullWidth={false}
+              dataAttr={{ [dataAttributeKey]: status?.value }}
+              label={status?.label}
+              buttonStyle={
+                selectedFilterLabels.includes(status?.label)
+                  ? ButtonStyle.SECONDARY
+                  : ButtonStyle.TERTIARY
+              }
+              size={ButtonSizes.MEDIUM}
+              onClick={() => onClickFilter("status", status)}
+              startIcon={
+                selectedFilterLabels.includes(status?.label) ? (
+                  <Icon name={IconName.CHECK_CIRCLE_ICON} />
+                ) : null
+              }
+              styles={classes.filterChipButtonStyles}
+            />
+          ))}
+        </Box>
       </Box>
+      <Divider />
       <Stack direction="row" spacing="0.75rem" sx={classes.stackStyles}>
         <Button
           styles={classes.buttonStyles}
