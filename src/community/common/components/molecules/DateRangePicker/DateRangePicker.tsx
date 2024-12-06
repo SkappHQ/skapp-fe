@@ -93,6 +93,17 @@ const DateRangePicker: FC<Props> = ({
         placement="bottom"
         disablePortal
         sx={mergeSx([classes.popper, popperStyles])}
+        modifiers={[
+          {
+            name: "flip",
+            enabled: false,
+            options: {
+              altBoundary: true,
+              rootBoundary: "document",
+              padding: 8
+            }
+          }
+        ]}
         tabIndex={0}
       >
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
