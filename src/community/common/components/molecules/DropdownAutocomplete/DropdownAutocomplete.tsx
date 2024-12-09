@@ -94,8 +94,7 @@ const DropdownAutocomplete: FC<Props> = ({
     >
       <Stack direction="row" justifyContent="space-between">
         <Typography
-          component="label"
-          variant="label"
+          variant="placeholder"
           sx={{
             color: isDisabled
               ? theme.palette.text.disabled
