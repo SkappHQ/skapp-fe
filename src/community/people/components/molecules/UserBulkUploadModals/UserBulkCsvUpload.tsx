@@ -56,7 +56,7 @@ const UserBulkCsvUpload: FC<Props> = ({
     if (acceptedFiles?.[0]?.file) {
       parse(acceptedFiles?.[0]?.file, {
         header: true,
-        skipEmptyLines: true,
+        skipEmptyLines: "greedy",
         transformHeader: convertUserBulkCsvHeaders,
         complete: function (results: any) {
           if (results?.data?.length === 0) {
