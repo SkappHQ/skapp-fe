@@ -55,6 +55,8 @@ interface actionsTypes {
   setLeaveType: (type: string) => void;
   setEffectiveDate: (date: Date | undefined) => void;
   setExpirationDate: (date: Date | undefined) => void;
+  setCurrentPage: (page: number) => void;
+  setCustomLeaveAllocations: (allocations: CustomLeaveAllocationType[]) => void;
 
   //leaveEntitlementSlice
   setIsLeaveEntitlementModalOpen: (status: boolean) => void;
@@ -140,6 +142,8 @@ export interface LeaveStore extends actionsTypes {
   leaveType: string;
   effectiveDate?: Date;
   expirationDate?: Date;
+  currentPage: number;
+  customLeaveAllocations: CustomLeaveAllocationType[];
 
   //leaveEntitlementSlice
   isLeaveEntitlementModalOpen: boolean;

@@ -10,7 +10,7 @@ const styles = (theme: Theme): Props => ({
     borderRadius: "3.125rem",
     padding: "0.75rem 1.25rem",
     height: "2.8125rem",
-    width: "16.69rem"
+    width: "13.9375rem"
   },
   titleText: {
     color: theme.palette.common.black

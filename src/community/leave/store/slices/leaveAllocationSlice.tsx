@@ -16,6 +16,9 @@ export const leaveAllocationSlice = (
   leaveType: "",
   effectiveDate: undefined,
   expirationDate: undefined,
+  currentPage: 0,
+  customLeaveAllocations: [],
+
   setIsLeaveAllocationModalOpen: (status: boolean) =>
     set((state) => ({ ...state, isLeaveAllocationModalOpen: status })),
   setCustomLeaveAllocationModalType: (
@@ -43,5 +46,9 @@ export const leaveAllocationSlice = (
   setEffectiveDate: (date: Date | undefined) =>
     set((state) => ({ ...state, effectiveDate: date })),
   setExpirationDate: (date: Date | undefined) =>
-    set((state) => ({ ...state, expirationDate: date }))
+    set((state) => ({ ...state, expirationDate: date })),
+  setCurrentPage: (page: number) =>
+    set((state) => ({ ...state, currentPage: page })),
+  setCustomLeaveAllocations: (allocations: CustomLeaveAllocationType[]) =>
+    set((state) => ({ ...state, customLeaveAllocations: allocations }))
 });

@@ -255,7 +255,7 @@
     "deleteBtnText": "Delete custom allocation",
     "effectiveDate": "Effective From",
     "expirationDate": "Expiration Date",
-    "filterButtonTitle": "Leave type",
+    "filterButtonTitle": "Leave Types",
     "unsavedAddLeaveAllocationModalTitle": "Are you sure?",
     "unsavedChangesAddModalDes": "You are about to leave your current task, and any unsaved changes will be lost. Do you wish to resume your task or leave anyway?",
     "resumeTask": "Resume Task",
@@ -277,7 +277,8 @@
     "day": "Day",
     "days": "Days",
     "validNoOfDaysFullDayError": "Selected leave type only allows full-day leaves",
-    "validNoOfDaysIncrementError": "Please enter a value in increments of 0.5"
+    "validNoOfDaysIncrementError": "Please enter a value in increments of 0.5",
+    "fromDateMustBeBeforeToDate": "The expiration date must be later than the effective date"
   },
 
   "leaveEntitlements": {

@@ -204,14 +204,64 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
     }
   }, [values.validFromDate, values.validToDate]);
 
+  const validateDateRange = (
+    validFromDate: string | undefined,
+    validToDate: string | undefined
+  ): boolean => {
+    if (!validFromDate || !validToDate) return true;
+    const validFrom = DateTime.fromISO(validFromDate);
+    const validTo = DateTime.fromISO(validToDate);
+    return validFrom.isValid && validTo.isValid && validFrom <= validTo;
+  };
+
   const handleFromDateChange = async (newValue: string) => {
     const datePart = formatDateToISO(newValue);
     await setFieldValue("validFromDate", datePart);
+
+    const validFrom = DateTime.fromISO(datePart);
+    if (!validFrom.isValid) {
+      setFieldError("validFromDate", translateText(["invalidDateFormat"]));
+      return;
+    }
+
+    if (values.validToDate) {
+      if (!validateDateRange(datePart, values.validToDate)) {
+        setFieldError(
+          "validFromDate",
+          translateText(["fromDateMustBeBeforeToDate"])
+        );
+        return;
+      }
+    }
+
+    setFieldError("validFromDate", undefined);
+    setFieldError("validToDate", undefined);
+    setSelectedValidFromDate(validFrom);
   };
 
   const handleToDateChange = async (newValue: string) => {
     const datePart = formatDateToISO(newValue);
     await setFieldValue("validToDate", datePart);
+
+    const to = DateTime.fromISO(datePart);
+    if (!to.isValid) {
+      setFieldError("validToDate", translateText(["invalidDateFormat"]));
+      return;
+    }
+
+    if (values.validFromDate) {
+      if (!validateDateRange(values.validFromDate, datePart)) {
+        setFieldError(
+          "validToDate",
+          translateText(["toDateMustBeAfterFromDate"])
+        );
+        return;
+      }
+    }
+
+    setFieldError("validFromDate", undefined);
+    setFieldError("validToDate", undefined);
+    setSelectedValidToDate(to);
   };
 
   const isLeaveTypeSelected = !values.typeId;
@@ -302,7 +352,11 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
           error={errors.validFromDate}
           placeholder={translateText(["validFromDate"])}
           minDate={getMinDateOfYear()}
-          maxDate={getMaxDateOfYear()}
+          maxDate={
+            values.validToDate
+              ? DateTime.fromISO(values.validToDate)
+              : getMaxDateOfYear()
+          }
           inputFormat="dd/MM/yyyy"
           disableMaskedInput
           isPreviousHolidayDisabled
@@ -315,7 +369,11 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
           isWithHolidays
           error={errors.validToDate}
           placeholder={translateText(["validToDate"])}
-          minDate={getMinDateOfYear()}
+          minDate={
+            values.validFromDate
+              ? DateTime.fromISO(values.validFromDate)
+              : getMinDateOfYear()
+          }
           maxDate={getMaxDateOfYear()}
           inputFormat="dd/MM/yyyy"
           disableMaskedInput

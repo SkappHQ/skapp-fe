@@ -24,7 +24,7 @@ export const useGetLeaveEntitlements = (
 ): UseQueryResult<LeaveEntitlementResponseType> => {
   const pageParams = {
     page: page - 1,
-    size: 9,
+    size: 5,
     year: selectedYear,
     isExport: false,
     sortOrder: SortOrderTypes.ASC,
