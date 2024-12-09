@@ -11,6 +11,8 @@ export interface LeaveAllocationModalSliceType
     | "leaveType"
     | "effectiveDate"
     | "expirationDate"
+    | "currentPage"
+    | "customLeaveAllocations"
     | "setIsLeaveAllocationModalOpen"
     | "setCustomLeaveAllocationModalType"
     | "setCurrentEditingLeaveAllocation"
@@ -19,6 +21,8 @@ export interface LeaveAllocationModalSliceType
     | "setLeaveType"
     | "setEffectiveDate"
     | "setExpirationDate"
+    | "setCurrentPage"
+    | "setCustomLeaveAllocations"
   > {}
 
 export interface LeaveTypeSliceType

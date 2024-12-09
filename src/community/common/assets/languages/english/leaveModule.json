@@ -277,7 +277,8 @@
     "day": "Day",
     "days": "Days",
     "validNoOfDaysFullDayError": "Selected leave type only allows full-day leaves",
-    "validNoOfDaysIncrementError": "Please enter a value in increments of 0.5"
+    "validNoOfDaysIncrementError": "Please enter a value in increments of 0.5",
+    "fromDateMustBeBeforeToDate": "The expiration date must be later than the effective date"
   },
 
   "leaveEntitlements": {

@@ -48,12 +48,9 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   const {
     setCustomLeaveAllocationModalType,
     setIsLeaveAllocationModalOpen,
-    currentEditingLeaveAllocation
-  } = useLeaveStore((state) => ({
-    setCustomLeaveAllocationModalType: state.setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen: state.setIsLeaveAllocationModalOpen,
-    currentEditingLeaveAllocation: state.currentEditingLeaveAllocation
-  }));
+    currentEditingLeaveAllocation,
+    setCurrentPage
+  } = useLeaveStore();
 
   const onUpdateSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
@@ -119,6 +116,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
           description: translateText(["deleteSuccessDescription"]),
           isIcon: true
         });
+        setCurrentPage(0);
       },
       onError: () => {
         setToastMessage({
@@ -135,7 +133,8 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     currentEditingLeaveAllocation,
     setIsLeaveAllocationModalOpen,
     setToastMessage,
-    translateText
+    translateText,
+    setCurrentPage
   ]);
 
   const form = useFormik({

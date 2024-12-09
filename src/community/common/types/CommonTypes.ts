@@ -197,11 +197,9 @@ export interface CustomLeaveTypes {
     typeId: number;
     name: string;
     emojiCode: string;
-    color: string;
-    calculationType: string;
-    leaveDuration: string;
   };
   totalDaysAllocated: number;
+  totalDaysUsed: number;
   employee: {
     employeeId: string;
     firstName: string;

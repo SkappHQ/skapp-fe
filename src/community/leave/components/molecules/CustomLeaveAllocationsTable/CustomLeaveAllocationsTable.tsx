@@ -1,5 +1,5 @@
 import { Box, Chip, Theme, Typography, useTheme } from "@mui/material";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
@@ -17,7 +17,8 @@ import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
   CustomLeaveAllocationModalTypes,
-  CustomLeaveAllocationType
+  CustomLeaveAllocationType,
+  LeaveAllocation
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 
 import {
@@ -38,13 +39,15 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   const theme: Theme = useTheme();
 
   const {
+    selectedYear,
+    currentPage,
     setCurrentEditingLeaveAllocation,
     setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen
+    setIsLeaveAllocationModalOpen,
+    setSelectedYear,
+    setCurrentPage,
+    setCustomLeaveAllocations
   } = useLeaveStore((state) => state);
-
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const { selectedYear, setSelectedYear } = useLeaveStore((state) => state);
 
   const [selectedLeaveTypes, setSelectedLeaveTypes] = useState<string[]>([]);
   const leaveTypes = selectedLeaveTypes.join(",");
@@ -56,8 +59,14 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     leaveTypes
   );
 
+  useEffect(() => {
+    if (customLeaveData?.items) {
+      setCustomLeaveAllocations(customLeaveData.items);
+    }
+  }, [customLeaveData?.items, setCustomLeaveAllocations]);
+
   const handleEdit = useCallback(
-    (leaveAllocation: any) => {
+    (leaveAllocation: LeaveAllocation) => {
       const updatedLeaveAllocation: CustomLeaveAllocationType = {
         entitlementId: leaveAllocation.entitlementId,
         employeeId: leaveAllocation.employee.employeeId,
