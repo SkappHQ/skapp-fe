@@ -181,6 +181,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     !values.employeeId ||
     !values.typeId ||
     !values.numberOfDaysOff ||
+    isSubmitting ||
     isPending;
 
   return (
