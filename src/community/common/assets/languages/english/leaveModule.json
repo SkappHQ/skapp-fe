@@ -255,7 +255,7 @@
     "deleteBtnText": "Delete custom allocation",
     "effectiveDate": "Effective From",
     "expirationDate": "Expiration Date",
-    "filterButtonTitle": "Leave type",
+    "filterButtonTitle": "Leave Types",
     "unsavedAddLeaveAllocationModalTitle": "Are you sure?",
     "unsavedChangesAddModalDes": "You are about to leave your current task, and any unsaved changes will be lost. Do you wish to resume your task or leave anyway?",
     "resumeTask": "Resume Task",

@@ -208,6 +208,9 @@ export interface CustomLeaveTypes {
   };
   validFrom?: string;
   validTo?: string;
+  employeeId: number;
+  numberOfDaysOff: number;
+  typeId: number;
 }
 
 export interface ManagerTeamEmployeeType {
