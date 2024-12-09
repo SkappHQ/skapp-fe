@@ -317,20 +317,12 @@ const EditInfoCard = ({
         />
         <Stack direction="column" alignItems="flex-start" gap="1rem">
           <Stack direction="column" alignItems="flex-start" gap="0.125rem">
-            <Typography
-              sx={{
-                fontWeight: 700,
-                fontSize: "1.25rem",
-                lineHeight: "1.875rem"
-              }}
-            >
+            <Typography variant="h2">
               {`${cardData?.firstName} ${cardData?.lastName}`}
             </Typography>
             <Typography
+              variant="placeholder"
               sx={{
-                fontWeight: 400,
-                fontSize: "1rem",
-                lineHeight: "1.5rem",
                 color: theme.palette.text.secondary
               }}
             >
@@ -362,15 +354,7 @@ const EditInfoCard = ({
                 }}
               >
                 <MailIcon />
-                <Typography
-                  sx={{
-                    fontWeight: 400,
-                    fontSize: "0.75rem",
-                    lineHeight: "1.125rem"
-                  }}
-                >
-                  {cardData?.email}
-                </Typography>
+                <Typography variant="caption">{cardData?.email}</Typography>
               </Stack>
             )}
             {getTelNo() !== "+" && (
@@ -381,15 +365,7 @@ const EditInfoCard = ({
                 justifyContent={"flex-start"}
               >
                 <LocalPhoneIcon />
-                <Typography
-                  sx={{
-                    fontWeight: 400,
-                    fontSize: "0.75rem",
-                    lineHeight: "1.125rem"
-                  }}
-                >
-                  {getTelNo()}
-                </Typography>
+                <Typography variant="caption">{getTelNo()}</Typography>
               </Stack>
             )}
           </Stack>
@@ -412,6 +388,43 @@ const EditInfoCard = ({
         }
       >
         <Stack direction="column" alignItems="flex-start" gap="1rem">
+          {cardData?.joinedDate && (
+            <Stack
+              direction="column"
+              alignItems="flex-start"
+              gap="0.25rem"
+              justifyContent={"flex-start"}
+            >
+              <Typography variant="caption">
+                {translateText(["joinedDate"])}
+              </Typography>
+              <Stack
+                direction={
+                  isPhoneScreen || isSmallPhoneScreen ? "column" : "row"
+                }
+                gap={
+                  isPhoneScreen || isSmallPhoneScreen ? "0.25rem" : "0.625rem"
+                }
+                alignItems={
+                  isPhoneScreen || isSmallPhoneScreen ? "flex-start" : "center"
+                }
+              >
+                <Typography variant="body2">{getDate()}</Typography>
+                <BasicChip
+                  label={getTimeElapsedSinceDate(cardData?.joinedDate)}
+                  chipStyles={{
+                    color: "common.black",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: "1rem",
+                    padding: "0.25rem 0.5rem",
+                    backgroundColor: theme.palette.grey[200],
+                    borderRadius: "4rem"
+                  }}
+                />
+              </Stack>
+            </Stack>
+          )}
           {cardData?.teams?.length > 0 && (
             <Stack
               direction="column"
@@ -419,13 +432,7 @@ const EditInfoCard = ({
               gap="0.25rem"
               justifyContent={"flex-start"}
             >
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontSize: "0.75rem",
-                  lineHeight: "1.125rem"
-                }}
-              >
+              <Typography variant="caption">
                 {translateText(["teams"])}
               </Typography>
               <BasicChipGroup
@@ -445,57 +452,6 @@ const EditInfoCard = ({
               />
             </Stack>
           )}
-          {cardData?.joinedDate && (
-            <Stack
-              direction="column"
-              alignItems="flex-start"
-              gap="0.25rem"
-              justifyContent={"flex-start"}
-            >
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontSize: "0.75rem",
-                  lineHeight: "1.125rem"
-                }}
-              >
-                {translateText(["joinedDate"])}
-              </Typography>
-              <Stack
-                direction={
-                  isPhoneScreen || isSmallPhoneScreen ? "column" : "row"
-                }
-                gap={
-                  isPhoneScreen || isSmallPhoneScreen ? "0.25rem" : "0.625rem"
-                }
-                alignItems={
-                  isPhoneScreen || isSmallPhoneScreen ? "flex-start" : "center"
-                }
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 400,
-                    fontSize: "0.875rem",
-                    lineHeight: "1.3125rem"
-                  }}
-                >
-                  {getDate()}
-                </Typography>
-                <BasicChip
-                  label={getTimeElapsedSinceDate(cardData?.joinedDate)}
-                  chipStyles={{
-                    color: "common.black",
-                    fontWeight: 400,
-                    fontSize: "0.75rem",
-                    lineHeight: "1rem",
-                    padding: "0.25rem 0.5rem",
-                    backgroundColor: theme.palette.grey[200],
-                    borderRadius: "4rem"
-                  }}
-                />
-              </Stack>
-            </Stack>
-          )}
         </Stack>
 
         <Stack direction="column" justifyContent={"space-between"} gap="1rem">
@@ -513,7 +469,7 @@ const EditInfoCard = ({
                 width="100%"
               >
                 <Typography variant="caption">
-                  {translateTerminationText(["status"])}
+                  {translateTerminationText(["status"])} :
                 </Typography>
                 {employmentStatus !==
                   AccountStatusEnums.TERMINATED.toUpperCase() &&
@@ -555,7 +511,7 @@ const EditInfoCard = ({
                   {translateText(["primarySupervisor"])}
                 </Typography>
                 <AvatarChip
-                  firstName={supervisor?.manager?.name ?? ""}
+                  firstName={supervisor?.manager?.firstName ?? ""}
                   lastName={supervisor?.manager?.lastName ?? ""}
                   avatarUrl={supervisor?.manager?.authPic ?? ""}
                   chipStyles={{
