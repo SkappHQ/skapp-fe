@@ -50,6 +50,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   } = useLeaveStore((state) => state);
 
   const [selectedLeaveTypes, setSelectedLeaveTypes] = useState<string[]>([]);
+  const [tempSelectedLeaveTypes, setTempSelectedLeaveTypes] = useState<
+    string[]
+  >([]);
+
   const leaveTypes = selectedLeaveTypes.join(",");
   const { data: customLeaveData, isLoading } = useGetCustomLeaves(
     currentPage,
@@ -97,25 +101,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     ]
   );
 
-  const handleApplyFilters = () => {
-    setCurrentPage(0);
-  };
-
-  const handleResetFilters = () => {
-    setSelectedLeaveTypes([]);
-    setCurrentPage(0);
-  };
-
   const handleRemoveFilters = (leaveType: { id: string; text: string }) => {
     setSelectedLeaveTypes((prev) => prev.filter((i) => i !== leaveType.id));
-  };
-
-  const handleLeaveTypeFilter = (leaveType: { id: string; text: string }) => {
-    setSelectedLeaveTypes((prev) =>
-      prev.includes(leaveType.id)
-        ? prev.filter((i) => i !== leaveType.id)
-        : [...prev, leaveType.id]
-    );
   };
 
   const columns = useMemo(
@@ -192,6 +179,25 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     );
   }, [customLeaveData?.items, handleEdit, translateText, theme]);
 
+  const handleApplyFilters = () => {
+    setSelectedLeaveTypes(tempSelectedLeaveTypes);
+    setCurrentPage(0);
+  };
+
+  const handleResetFilters = () => {
+    setTempSelectedLeaveTypes([]);
+    setSelectedLeaveTypes([]);
+    setCurrentPage(0);
+  };
+
+  const handleLeaveTypeFilter = (leaveType: { id: string; text: string }) => {
+    setTempSelectedLeaveTypes((prev) =>
+      prev.includes(leaveType.id)
+        ? prev.filter((i) => i !== leaveType.id)
+        : [...prev, leaveType.id]
+    );
+  };
+
   const { data: leaveTypesData } = useGetLeaveTypes();
 
   const leaveTypeOptions = useMemo(
@@ -212,17 +218,13 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
           leaveTypeOptions.find((btn) => btn.id === Number(type))?.name ?? ""
         ],
         handleFilterDelete: () => {
-          handleRemoveFilters({
-            id: type,
-            text:
-              leaveTypeOptions.find((btn) => btn.id === Number(type))?.name ||
-              ""
-          });
+          setTempSelectedLeaveTypes((prev) => prev.filter((i) => i !== type));
+          setSelectedLeaveTypes((prev) => prev.filter((i) => i !== type));
         }
       }))}
       position={"bottom-end"}
       id={"filter-types"}
-      isResetBtnDisabled={selectedLeaveTypes.length === 0}
+      isResetBtnDisabled={tempSelectedLeaveTypes.length === 0}
     >
       <Typography variant="h5" sx={typographyStyles(theme)}>
         {translateText(["filterButtonTitle"])}
@@ -239,7 +241,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
               })
             }
             color={
-              selectedLeaveTypes.includes(leaveType.id.toString())
+              tempSelectedLeaveTypes.includes(leaveType.id.toString())
                 ? "primary"
                 : "default"
             }
