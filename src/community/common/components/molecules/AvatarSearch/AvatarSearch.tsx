@@ -88,10 +88,9 @@ const AvatarSearch = ({
         }}
       >
         <Typography
-          variant="h5"
+          variant="placeholder"
           gutterBottom
           sx={{
-            fontWeight: "500",
             fontSize: "1rem",
             color:
               (errors ?? "")
