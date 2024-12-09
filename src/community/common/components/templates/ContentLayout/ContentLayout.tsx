@@ -166,7 +166,7 @@ const ContentLayout = ({
                 endIcon={primaryBtnIconName}
                 isLoading={isPrimaryBtnLoading}
                 onClick={onPrimaryButtonClick}
-                data-testid={contentLayoutTestId.buttons.primaryButton}
+                dataTestId={contentLayoutTestId.buttons.primaryButton}
               />
             )}
             {customRightContent}
