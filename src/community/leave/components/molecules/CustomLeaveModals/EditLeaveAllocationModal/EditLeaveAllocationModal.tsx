@@ -66,12 +66,12 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     });
   }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
 
-  const updateLeaveAllocationMutation = useUpdateLeaveAllocation();
+  const { mutate, isPending } = useUpdateLeaveAllocation();
   const deleteLeaveAllocation = useDeleteLeaveAllocation();
 
   const onSubmit = useCallback(
     (values: CustomLeaveAllocationType) => {
-      updateLeaveAllocationMutation.mutate(
+      mutate(
         {
           employeeId: currentEditingLeaveAllocation?.employeeId ?? 0,
           typeId: Number(values.typeId),
@@ -87,11 +87,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
         }
       );
     },
-    [
-      updateLeaveAllocationMutation,
-      currentEditingLeaveAllocation,
-      onUpdateSuccess
-    ]
+    [mutate, currentEditingLeaveAllocation, onUpdateSuccess]
   );
 
   const onDelete = useCallback(() => {
@@ -185,7 +181,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     !values.employeeId ||
     !values.typeId ||
     !values.numberOfDaysOff ||
-    isSubmitting;
+    isPending;
 
   return (
     <>
