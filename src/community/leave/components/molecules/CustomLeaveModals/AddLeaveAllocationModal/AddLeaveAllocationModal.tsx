@@ -97,7 +97,14 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     validateOnChange: false
   });
 
-  const { values, errors, handleSubmit, setFieldValue, setFieldError } = form;
+  const {
+    values,
+    errors,
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    isSubmitting
+  } = form;
 
   const handleCancel = useCallback(() => {
     if (isEditingLeaveAllocationChanged) {
@@ -124,7 +131,10 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
   }, [values, setCurrentLeaveAllocationFormData]);
 
   const isSaveDisabled =
-    !values.employeeId || !values.typeId || !values.numberOfDaysOff;
+    !values.employeeId ||
+    !values.typeId ||
+    !values.numberOfDaysOff ||
+    isSubmitting;
 
   return (
     <>

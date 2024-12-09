@@ -164,7 +164,14 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     onSubmit,
     enableReinitialize: true
   });
-  const { values, errors, handleSubmit, setFieldValue, setFieldError } = form;
+  const {
+    values,
+    errors,
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    isSubmitting
+  } = form;
 
   const handleDelete = useCallback(() => {
     setDeleteConfirmOpen(true);
@@ -175,6 +182,12 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   }, [values, setCurrentLeaveAllocationFormData]);
 
   const isDeleteDisabled = currentEditingLeaveAllocation?.totalDaysUsed != 0;
+  const isSaveDisabled =
+    !values.employeeId ||
+    !values.typeId ||
+    !values.numberOfDaysOff ||
+    isSubmitting;
+
   return (
     <>
       <CustomLeaveAllocationForm
@@ -192,6 +205,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
           buttonStyle={ButtonStyle.PRIMARY}
           endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
           onClick={() => onSubmit(values)}
+          disabled={isSaveDisabled}
         />
         <Button
           label={translateText(["deleteBtnText"])}
