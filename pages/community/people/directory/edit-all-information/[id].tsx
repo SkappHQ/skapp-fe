@@ -526,6 +526,10 @@ const EditAllInformation: NextPage = () => {
         onBackClick={handleBackBtnClick}
         pageHead={""}
         isBackButtonVisible
+        isDividerVisible={false}
+        containerStyles={{
+          gap: "0.75rem"
+        }}
       >
         <Stack direction={"column"}>
           {employee ? (
