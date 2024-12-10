@@ -1,6 +1,0 @@
-[submodule "pages/enterprise"]
-	path = pages/enterprise
-	url = https://github.com/SkappHQ/skapp-ep-fe-pages
-[submodule "src/enterprise"]
-	path = src/enterprise
-	url = https://github.com/SkappHQ/skapp-ep-fe-src
