@@ -182,7 +182,11 @@ const nextConfig = {
       {
         source: "/leave/analytics/:id",
         destination: "/community/leave/analytics/:id"
-      }
+      },
+      {
+        source: "/organization",
+        destination: "/enterprise/setup-organization"
+      },
     ];
   },
   eslint: {
