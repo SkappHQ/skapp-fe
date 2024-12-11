@@ -7,6 +7,7 @@ import App, { AppContext } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { hotjar } from "react-hotjar";
 import { I18nextProvider, useSSR } from "react-i18next";
 
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
@@ -32,6 +33,12 @@ function MyApp({
   const [queryClient] = useState(() => new QueryClient());
   useSSR(initialI18nStore, initialLanguage);
 
+  // added for testing purpose, should be removed once the MT setup is done
+  const getRandomTenant = () => {
+    const items = ["tenant1", "tenant2", "tenant3"];
+    return items[Math.floor(Math.random() * items?.length)];
+  };
+
   useEffect(() => {
     if (getDataFromLocalStorage("brandingData")) {
       const selectedTheme = themeSelector(
@@ -40,6 +47,21 @@ function MyApp({
       setNewTheme(selectedTheme);
     } else {
       setNewTheme(theme);
+    }
+
+    if (process.env.NODE_ENV === "production") {
+      hotjar.initialize({
+        id: Number(process.env.NEXT_PUBLIC_HOTJAR_SITE_ID),
+        sv: Number(process.env.NEXT_PUBLIC_HOTJAR_VERSION)
+      });
+
+      // Retrieve tenant ID from the random function temporarily
+      const tenantId = getRandomTenant() ?? "default-tenant";
+
+      // Record tenant information in Hotjar
+      if (hotjar.initialized()) {
+        hotjar.identify(`tenant`, { tenantId });
+      }
     }
   }, []);
 
