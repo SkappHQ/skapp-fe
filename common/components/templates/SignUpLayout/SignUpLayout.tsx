@@ -20,6 +20,8 @@ import OnboardingSplash from "~public/image/onboarding-splash.svg";
 
 import { styles } from "./styles";
 
+//test
+
 interface SignUpLayoutProps {
   heading: string;
   subheading?: string;
