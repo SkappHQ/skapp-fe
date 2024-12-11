@@ -7,7 +7,6 @@ import Checkbox from "~community/common/components/atoms/Checkbox/Checkbox";
 import Form from "~community/common/components/molecules/Form/Form";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PasswordStrengthMeter from "~community/common/components/molecules/PasswordStrengthMeter/PasswordStrengthMeter";
-import { characterLengths } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   emailValidation,
