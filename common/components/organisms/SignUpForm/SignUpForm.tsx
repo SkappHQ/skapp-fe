@@ -2,6 +2,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, IconButton, InputAdornment, Typography } from "@mui/material";
 import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import Checkbox from "~community/common/components/atoms/Checkbox/Checkbox";
 import Form from "~community/common/components/molecules/Form/Form";
@@ -42,6 +43,11 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+  };
 
   const togglePasswordVisibility = (
     field: keyof typeof passwordVisibility,
@@ -69,15 +75,19 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    const error = validateField(name, value);
 
-    onInputChange({
-      ...e,
-      target: {
-        ...e.target,
-        validationError: error
-      }
-    });
+    onInputChange(e);
+
+    const error = validateField(name, value);
+    if (error) {
+      onInputChange({
+        ...e,
+        target: {
+          ...e.target,
+          validationError: error
+        }
+      });
+    }
   };
 
   const getErrorMessage = (field: keyof FormValues) => errors?.[field] || "";
@@ -246,6 +256,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
                 {translateText(["privacyPolicyLink"])}
               </Link>
             </Typography>
+          </Box>
+          <Box sx={{ marginY: 2 }}>
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+              onChange={handleRecaptchaChange}
+            />
           </Box>
         </Box>
       </Form>
