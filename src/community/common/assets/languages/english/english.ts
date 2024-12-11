@@ -4,6 +4,7 @@ import configurations from "~community/common/assets/languages/english/configura
 import leaveModule from "~community/common/assets/languages/english/leaveModule.json";
 import onboarding from "~community/common/assets/languages/english/onboarding.json";
 import peopleModule from "~community/common/assets/languages/english/peopleModule.json";
+import enterpriseOnboarding from "~enterprise/common/assets/languages/english/enterpriseOnboarding.json";
 
 export const english = {
   ...common,
@@ -11,6 +12,7 @@ export const english = {
   configurations,
   peopleModule,
   leaveModule,
-  attendanceModule
+  attendanceModule,
+  enterpriseOnboarding
   // add other modules here
 };
