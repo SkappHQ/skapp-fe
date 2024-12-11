@@ -10,6 +10,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { I18nextProvider, useSSR } from "react-i18next";
 
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
+import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
@@ -17,6 +18,7 @@ import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
+import { initializeHotjar } from "~enterprise/common/utils/monitoring";
 import i18n from "~i18n";
 import "~styles/global.css";
 
@@ -40,6 +42,10 @@ function MyApp({
       setNewTheme(selectedTheme);
     } else {
       setNewTheme(theme);
+    }
+
+    if (process.env.MODE === appModes.ENTERPRISE) {
+      initializeHotjar();
     }
   }, []);
 
