@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { FC } from "react";
 
@@ -69,14 +69,16 @@ const TeamsTable: FC<Props> = ({
           (teamDetails?.supervisors?.length < 3 ? (
             teamDetails?.supervisors?.map((supervisor: EmployeeType) => {
               return (
-                <AvatarChip
-                  key={supervisor?.employeeId}
-                  firstName={supervisor?.firstName}
-                  lastName={supervisor?.lastName}
-                  avatarUrl={supervisor?.authPic}
-                  isResponsiveLayout={true}
-                  chipStyles={classes.avatarChip}
-                />
+                <Stack key={supervisor?.employeeId} width="100%">
+                  <AvatarChip
+                    key={supervisor?.employeeId}
+                    firstName={supervisor?.firstName}
+                    lastName={supervisor?.lastName}
+                    avatarUrl={supervisor?.authPic}
+                    isResponsiveLayout={true}
+                    chipStyles={classes.avatarChip}
+                  />
+                </Stack>
               );
             })
           ) : (

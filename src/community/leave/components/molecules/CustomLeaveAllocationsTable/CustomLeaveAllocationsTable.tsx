@@ -128,11 +128,18 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
         return {
           id: leaveAllocation.employee?.employeeId,
           employee: (
-            <AvatarChip
-              firstName={leaveAllocation.employee?.firstName}
-              lastName={leaveAllocation.employee?.lastName}
-              avatarUrl={leaveAllocation.employee?.authPic}
-            />
+            <Box width="100%">
+              <AvatarChip
+                firstName={leaveAllocation.employee?.firstName}
+                lastName={leaveAllocation.employee?.lastName}
+                avatarUrl={leaveAllocation.employee?.authPic}
+                chipStyles={{
+                  display: "flex",
+                  justifyContent: "start",
+                  maxWidth: "fit-content"
+                }}
+              />
+            </Box>
           ),
           duration: (
             <BasicChip
@@ -154,6 +161,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
                 leaveAllocation.leaveType?.name
               }
               label={leaveAllocation.leaveType?.name}
+              isTruncated={false}
             />
           ),
           actions: (

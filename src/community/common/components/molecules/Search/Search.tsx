@@ -362,12 +362,14 @@ const Search: FC<Props> = ({
                       onSelectMember ? () => onSelectMember(user) : undefined
                     }
                   >
-                    <AvatarChip
-                      firstName={user?.firstName}
-                      lastName={user?.lastName}
-                      avatarUrl={user?.avatarUrl}
-                      chipStyles={{ cursor: "pointer" }}
-                    />
+                    <Box width="100%">
+                      <AvatarChip
+                        firstName={user?.firstName}
+                        lastName={user?.lastName}
+                        avatarUrl={user?.avatarUrl}
+                        chipStyles={{ cursor: "pointer" }}
+                      />
+                    </Box>
                   </Box>
                 );
               })}

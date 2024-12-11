@@ -1,8 +1,8 @@
-## I have read the [CONTRIBUTING.md](https://github.com/rootcodelabs/skapp-fe/blob/community-dev/CONTRIBUTING.md) file - YES/NO
+## I have read the [CONTRIBUTING.md](https://github.com/skappHQ/skapp-fe/blob/main/CONTRIBUTING.md) file - YES/NO
 
 ## PR checklist
 
-### Issue ID: [#](https://github.com/rootcodelabs/skapp/issues/)
+### Issue ID: [#](https://github.com/SkappHQ/skapp-fe/issues)
 
 ### Summary
 
