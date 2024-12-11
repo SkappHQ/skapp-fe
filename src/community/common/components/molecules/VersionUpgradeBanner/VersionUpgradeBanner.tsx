@@ -17,11 +17,11 @@ import Icon from "../../atoms/Icon/Icon";
 
 interface Props {
   isStorageBanner?: boolean;
-  availableSpace?: number;
+  usedSpace?: number;
 }
 const VersionUpgradeBanner = ({
   isStorageBanner = false,
-  availableSpace
+  usedSpace
 }: Props) => {
   const { pathname } = useRouter();
   const {
@@ -40,12 +40,9 @@ const VersionUpgradeBanner = ({
   const handleButtonClick = () => {
     window.open(versionUpgradeInfo?.redirectUrl, "_blank");
   };
-  const getBannerMessage = (
-    isStorageBanner: boolean,
-    availableSpace?: number
-  ) => {
-    if (isStorageBanner && availableSpace) {
-      if (availableSpace >= NINETY_PERCENT) {
+  const getBannerMessage = (isStorageBanner: boolean, usedSpace?: number) => {
+    if (isStorageBanner && usedSpace) {
+      if (usedSpace >= NINETY_PERCENT) {
         return (
           <>
             <Typography
@@ -66,7 +63,7 @@ const VersionUpgradeBanner = ({
         );
       }
 
-      if (availableSpace >= EIGHTY_PERCENT) {
+      if (usedSpace >= EIGHTY_PERCENT) {
         return (
           <>
             <Typography
@@ -75,7 +72,7 @@ const VersionUpgradeBanner = ({
               sx={{ fontWeight: "bold", color: theme.palette.text.darkerText }}
             >
               {translateText(["availableSpaceText"], {
-                availableSpace: availableSpace
+                availableSpace: usedSpace
               })}
             </Typography>{" "}
             <Typography
@@ -130,7 +127,7 @@ const VersionUpgradeBanner = ({
           }}
         >
           {isStorageBanner
-            ? getBannerMessage(isStorageBanner, availableSpace)
+            ? getBannerMessage(isStorageBanner, usedSpace)
             : versionUpgradeInfo?.bannerDescription}
         </Typography>
       </Stack>
