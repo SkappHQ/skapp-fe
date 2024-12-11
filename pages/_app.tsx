@@ -49,7 +49,7 @@ function MyApp({
       setNewTheme(theme);
     }
 
-    if (process.env.NEXT_PUBLIC_HOTJAR_ENABLED === "true") {
+    if (process.env.NODE_ENV === "production") {
       hotjar.initialize({
         id: Number(process.env.NEXT_PUBLIC_HOTJAR_SITE_ID),
         sv: Number(process.env.NEXT_PUBLIC_HOTJAR_VERSION)
