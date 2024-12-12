@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
+    const isEnterpriseMode = process.env.MODE === 'enterprise';
     return [
       {
         source: "/welcome",
@@ -13,7 +14,7 @@ const nextConfig = {
       },
       {
         source: "/setup-organization",
-        destination: "/community/setup-organization"
+        destination: isEnterpriseMode ? "/enterprise/setup-organization": "/community/setup-organization"
       },
       {
         source: "/dashboard",
@@ -182,10 +183,6 @@ const nextConfig = {
       {
         source: "/leave/analytics/:id",
         destination: "/community/leave/analytics/:id"
-      },
-      {
-        source: "/organization",
-        destination: "/enterprise/setup-organization"
       },
     ];
   },
