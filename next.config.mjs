@@ -34,7 +34,7 @@ const nextConfig = {
       },
       {
         source: "/signin",
-        destination: "/community/signin"
+        destination: isEnterpriseMode ? "/enterprise/signin" : "/community/signin"
       },
       {
         source: "/settings",

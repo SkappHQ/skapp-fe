@@ -87,9 +87,29 @@ function MyApp({
     );
   }
 
+  const shouldUseWebSocketProvider = process.env.MODE !== appModes.ENTERPRISE;
+
   return (
     <SessionProvider session={session}>
-      <WebSocketProvider>
+      {shouldUseWebSocketProvider ? (
+        <WebSocketProvider>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={newTheme}>
+              <I18nextProvider i18n={i18n}>
+                <ToastProvider>
+                  <ErrorBoundary FallbackComponent={Error}>
+                    <RouteChangeLoader />
+                    <BaseLayout>
+                      <Component {...pageProps} />
+                    </BaseLayout>
+                  </ErrorBoundary>
+                </ToastProvider>
+                <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+              </I18nextProvider>
+            </ThemeProvider>
+          </QueryClientProvider>
+        </WebSocketProvider>
+      ) : (
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={newTheme}>
             <I18nextProvider i18n={i18n}>
@@ -105,7 +125,7 @@ function MyApp({
             </I18nextProvider>
           </ThemeProvider>
         </QueryClientProvider>
-      </WebSocketProvider>
+      )}
     </SessionProvider>
   );
 }
