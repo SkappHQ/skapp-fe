@@ -125,7 +125,7 @@ export const config = {
     // Super admin routes
     "/setup-organization/:path*",
     // Common routes
-    "/dashboard/:path*",
+    // "/dashboard/:path*",
     "/configurations/:path*",
     "/settings",
     "/notifications",
