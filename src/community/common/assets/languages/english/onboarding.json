@@ -82,7 +82,11 @@
     "emailNotExistError": "No account found.",
     "emailResetRequiredError": "Please enter the work email",
     "passwordChangeRequestSuccessTitle": "Request Sent",
-    "passwordChangeRequestSuccessDescription": "Password reset request sent successfully. Admin will review and contact you soon."
+    "passwordChangeRequestSuccessDescription": "Password reset request sent successfully. Admin will review and contact you soon.",
+    "domainVerification": "Please enter the company domain of your account to access your workspace",
+    "proceed": "Proceed to sign in",
+    "domain": "Company domain",
+    "domainTooltip": "Enter your company domain"
   },
   "resetPassword": {
     "pageHeading": "Reset Password",

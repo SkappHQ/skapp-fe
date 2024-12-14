@@ -2,6 +2,7 @@ const ROUTES = {
   AUTH: {
     SIGNUP: "/signup",
     SIGNIN: "/signin",
+    ENTERPRISE_SIGNIN: "/enterprise/signin",
     RESET_PASSWORD: "/reset-password",
     UNAUTHORIZED: "/unauthorized",
     ERROR: "/_error"
