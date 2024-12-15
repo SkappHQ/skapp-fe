@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { getSession } from "next-auth/react";
 
@@ -23,6 +24,7 @@ authFetch.interceptors.request.use(
     return config;
   },
   async (error) => {
+    Sentry.captureException(error);
     return await Promise.reject(error);
   }
 );
@@ -34,6 +36,19 @@ authFetch.interceptors.response.use(
   },
 
   async (error) => {
+    Sentry.captureException(error, {
+      extra: {
+        request: {
+          url: error.config?.url,
+          method: error.config?.method,
+          data: error.config?.data
+        },
+        response: {
+          status: error.response?.status,
+          data: error.response?.data
+        }
+      }
+    });
     return await Promise.reject(error);
   }
 );

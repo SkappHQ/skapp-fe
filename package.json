@@ -25,6 +25,7 @@
   "dependencies": {
     "@mui/base": "^5.0.0-beta.58",
     "@mui/x-date-pickers": "^7.18.0",
+    "@sentry/nextjs": "^8.45.0",
     "@tanstack/react-query": "^5.55.4",
     "@tanstack/react-query-devtools": "^5.55.4",
     "axios": "^1.7.7",
