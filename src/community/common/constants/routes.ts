@@ -4,7 +4,9 @@ const ROUTES = {
     SIGNIN: "/signin",
     RESET_PASSWORD: "/reset-password",
     UNAUTHORIZED: "/unauthorized",
-    ERROR: "/_error"
+    ERROR: "/_error",
+    VERIFY: "/verify-email",
+    VERIFY_SUCCESS: "/verify-success"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization"
