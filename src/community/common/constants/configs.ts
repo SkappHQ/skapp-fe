@@ -19,4 +19,4 @@ export enum unitConversion {
 
 export const DEFAULT_COUNTRY_CODE = "94";
 
-export const domain = ".skapp.com";
+export const DOMAIN = ".skapp.com";
