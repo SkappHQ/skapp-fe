@@ -45,12 +45,22 @@ import {
   contractStates
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { FileCategories } from "~enterprise/common/types/s3Types";
+import {
+  deleteFileFromS3,
+  uploadFileToS3ByUrl
+} from "~enterprise/common/utils/awsS3ServiceFunctions";
+
+import { useGetEnviornment } from "../../../../../src/enterprise/common/hooks/useGetEnviornment";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
   const { setToastMessage, toastMessage } = useToast();
   const translateText = useTranslator("peopleModule");
   const { data } = useSession();
+
+  const enviornment = useGetEnviornment();
 
   const isPeopleAdmin = data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 
@@ -316,22 +326,35 @@ const EditAllInformation: NextPage = () => {
     ) {
       try {
         setHasUploadStarted(true);
-        const formData = new FormData();
-        formData.append("file", employeeGeneralDetails?.authPic[0]);
 
-        formData.append("type", "USER_IMAGE");
+        if (enviornment === ProfileModes.COMMUNITY) {
+          const formData = new FormData();
+          formData.append("file", employeeGeneralDetails?.authPic[0]);
 
-        await imageUploadMutate(formData).then((response) => {
-          const filePath = response.message?.split(
-            "File uploaded successfully: "
-          )[1];
-          if (filePath) {
-            const fileName = filePath.split("/").pop();
-            if (fileName) {
-              newAuthPicURL = fileName;
+          formData.append("type", "USER_IMAGE");
+
+          await imageUploadMutate(formData).then((response) => {
+            const filePath = response.message?.split(
+              "File uploaded successfully: "
+            )[1];
+            if (filePath) {
+              const fileName = filePath.split("/").pop();
+              if (fileName) {
+                newAuthPicURL = fileName;
+              }
             }
+          });
+        } else {
+          newAuthPicURL = await uploadFileToS3ByUrl(
+            employeeGeneralDetails?.authPic[0],
+            FileCategories.PROFILE_PICTURES
+          );
+
+          if (employee?.authPic) {
+            deleteFileFromS3(employee?.authPic as string);
           }
-        });
+        }
+
         setHasUploadStarted(false);
       } catch (error) {
         onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);

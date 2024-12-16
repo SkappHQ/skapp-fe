@@ -22,8 +22,8 @@ const s3GetSignedUrl = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { folderPath, type, action } = req.body as RequestBody;
     const bucketName = process.env.BUCKET_NAME;
-    const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const path = `${env === "PROD" ? "leaveapp" : bucketName}/${folderPath}`;
+
+    const path = `${bucketName}/${folderPath}`;
     let url = "";
 
     const fileParams = {
