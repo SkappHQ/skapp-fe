@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         source: "/signup",
-        destination: "/community/signup"
+        destination: isEnterpriseMode ? "/enterprise/signup" : "/community/signup"
       },
       {
         source: "/setup-organization",
@@ -184,6 +184,14 @@ const nextConfig = {
         source: "/leave/analytics/:id",
         destination: "/community/leave/analytics/:id"
       },
+      {
+        source: "/verify-email",
+        destination: "/enterprise/verify-email"
+      },
+      {
+        source: "/verify-success",
+        destination: "/enterprise/verify-success"
+      }
     ];
   },
   eslint: {
