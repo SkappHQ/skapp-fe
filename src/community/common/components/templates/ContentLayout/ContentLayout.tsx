@@ -10,7 +10,7 @@ import { type SxProps } from "@mui/system";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { JSX, memo } from "react";
+import { JSX, memo, useEffect } from "react";
 
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
@@ -29,6 +29,9 @@ import { AdminTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
+import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
+import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
@@ -90,7 +93,22 @@ const ContentLayout = ({
     (state) => state
   );
 
+  const {
+    setShowUserLimitBanner,
+    showUserLimitBanner,
+    setIsUserLimitExceeded
+  } = useUserLimitStore((state) => state);
+
   const { data: StorageAvailabilityData } = useStorageAvailability();
+  const { data: checkUserLimit, isSuccess: isCheckUserLimitSuccess } =
+    useCheckUserLimit();
+
+  useEffect(() => {
+    if (isCheckUserLimitSuccess && checkUserLimit === true) {
+      setIsUserLimitExceeded(true);
+      setShowUserLimitBanner(true);
+    }
+  }, [isCheckUserLimitSuccess, checkUserLimit]);
 
   return (
     <>
@@ -111,6 +129,13 @@ const ContentLayout = ({
               availableSpace={StorageAvailabilityData.availableSpace}
             />
           )}
+
+        {showUserLimitBanner &&
+          (data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) ||
+            data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN)) && (
+            <UserLimitBanner />
+          )}
+
         <Stack sx={classes.header}>
           <Stack sx={classes.leftContent}>
             {isBackButtonVisible && (
