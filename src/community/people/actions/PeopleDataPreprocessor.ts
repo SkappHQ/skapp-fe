@@ -96,7 +96,7 @@ export const employeeCreatePreProcessor = (
     middleName: formatEmptyString(employee?.generalDetails?.middleName ?? ""),
     address: employee?.contactDetails?.addressLine1,
     addressLine2: employee?.contactDetails?.addressLine2,
-    authPic: employee?.generalDetails?.authPicUrl,
+    authPic: employee?.generalDetails?.authPic,
     country: employee?.contactDetails?.country,
     personalEmail: employee?.contactDetails?.personalEmail,
     workEmail: employee?.employmentDetails?.workEmail,
