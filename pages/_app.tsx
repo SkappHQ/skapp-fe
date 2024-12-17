@@ -44,7 +44,7 @@ function MyApp({
       setNewTheme(theme);
     }
 
-    if (process.env.MODE === appModes.ENTERPRISE) {
+    if (process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE) {
       initializeHotjar();
     }
   }, []);
@@ -87,7 +87,7 @@ function MyApp({
     );
   }
 
-  const shouldUseWebSocketProvider = process.env.MODE !== appModes.ENTERPRISE;
+  const shouldUseWebSocketProvider = process.env.NEXT_PUBLIC_MODE !== appModes.ENTERPRISE;
 
   return (
     <SessionProvider session={session}>

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
-    const isEnterpriseMode = process.env.MODE === "enterprise";
+    const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
     return [
       {
         source: "/welcome",

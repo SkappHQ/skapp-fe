@@ -4,7 +4,7 @@ import { communityAuthOptions } from "../../community/auth/communityAuthOptions"
 import { enterpriseAuthOptions } from "../../enterprise/auth/enterpriseAuthOptions";
 
 const authOptions =
-  process.env.MODE === "enterprise"
+  process.env.NEXT_PUBLIC_MODE === "enterprise"
     ? enterpriseAuthOptions
     : communityAuthOptions;
 
