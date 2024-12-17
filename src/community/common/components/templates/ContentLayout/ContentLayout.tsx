@@ -80,6 +80,7 @@ const ContentLayout = ({
   isPrimaryBtnLoading = false
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
+  const isEnterpriseMode = process.env.MODE === "enterprise";
 
   const isBelow600 = useMediaQuery()(MediaQueries.BELOW_600);
 
@@ -101,14 +102,22 @@ const ContentLayout = ({
 
   const { data: StorageAvailabilityData } = useStorageAvailability();
   const { data: checkUserLimit, isSuccess: isCheckUserLimitSuccess } =
-    useCheckUserLimit();
+    useCheckUserLimit(isEnterpriseMode);
 
   useEffect(() => {
-    if (isCheckUserLimitSuccess && checkUserLimit === true) {
-      setIsUserLimitExceeded(true);
-      setShowUserLimitBanner(true);
+    if (isEnterpriseMode) {
+      if (isCheckUserLimitSuccess && checkUserLimit === true) {
+        setIsUserLimitExceeded(true);
+        setShowUserLimitBanner(true);
+      }
     }
-  }, [isCheckUserLimitSuccess, checkUserLimit]);
+  }, [
+    isEnterpriseMode,
+    isCheckUserLimitSuccess,
+    checkUserLimit,
+    setIsUserLimitExceeded,
+    setShowUserLimitBanner
+  ]);
 
   return (
     <>
