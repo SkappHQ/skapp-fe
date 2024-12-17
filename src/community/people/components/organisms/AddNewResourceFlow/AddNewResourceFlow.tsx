@@ -22,6 +22,10 @@ import {
   ModifiedFileType
 } from "~community/people/types/AddNewResourceTypes";
 import { DiscardChangeModalType } from "~community/people/types/EditEmployeeInfoTypes";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { FileCategories } from "~enterprise/common/types/s3Types";
+import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 import useCreateEmployeeObject from "../../../hooks/useCreateEmployeeObject";
 import DiscardChangeApprovalModal from "../../molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
@@ -38,6 +42,8 @@ const AddNewResourceFlow = () => {
   const { getEmployeeObject } = useCreateEmployeeObject({
     replaceDefaultValuesWithEmptyStrings: true
   });
+
+  const enviornment = useGetEnviornment();
 
   const {
     employeeGeneralDetails,
@@ -136,23 +142,30 @@ const AddNewResourceFlow = () => {
       employeeGeneralDetails?.authPic?.length > 0
     ) {
       try {
-        const formData = new FormData();
-        formData.append(
-          "file",
-          employeeGeneralDetails?.authPic[0] as ModifiedFileType
-        );
-        formData.append("type", "USER_IMAGE");
-        await imageUploadMutate(formData).then((response) => {
-          const filePath = response.message?.split(
-            "File uploaded successfully: "
-          )[1];
-          if (filePath) {
-            const fileName = filePath.split("/").pop();
-            if (fileName) {
-              newAuthPicURL = fileName;
+        if (enviornment === ProfileModes.COMMUNITY) {
+          const formData = new FormData();
+          formData.append(
+            "file",
+            employeeGeneralDetails?.authPic[0] as ModifiedFileType
+          );
+          formData.append("type", "USER_IMAGE");
+          await imageUploadMutate(formData).then((response) => {
+            const filePath = response.message?.split(
+              "File uploaded successfully: "
+            )[1];
+            if (filePath) {
+              const fileName = filePath.split("/").pop();
+              if (fileName) {
+                newAuthPicURL = fileName;
+              }
             }
-          }
-        });
+          });
+        } else {
+          newAuthPicURL = await uploadFileToS3ByUrl(
+            employeeGeneralDetails?.authPic[0] as File,
+            FileCategories.PROFILE_PICTURES
+          );
+        }
       } catch (error) {
         handleError(translateError(["uploadError"]));
       }
