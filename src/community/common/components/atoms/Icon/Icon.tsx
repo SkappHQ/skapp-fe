@@ -38,6 +38,7 @@ import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import ForwardArrow from "~community/common/assets/Icons/ForwardArrow";
+import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
 import LeaveIcon from "~community/common/assets/Icons/LeaveIcon";
@@ -185,7 +186,8 @@ export const IconMapping: Partial<
   [IconName.SIGNOUT_ICON]: SignoutIcon,
   [IconName.NUDGE_BELL_ICON]: NudgeBellIcon,
   [IconName.UPGRADE_INFO_ICON]: UpgradeInfoIcon,
-  [IconName.WARNING_SIGN_ICON]: WarningSignIcon
+  [IconName.WARNING_SIGN_ICON]: WarningSignIcon,
+  [IconName.GOOGLE_ICON]: GoogleIcon
   // Add more icons here as needed
 };
 

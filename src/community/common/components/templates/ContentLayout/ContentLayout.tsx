@@ -10,7 +10,7 @@ import { type SxProps } from "@mui/system";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { JSX, memo, useEffect } from "react";
+import { JSX, memo, useEffect, useMemo } from "react";
 
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
@@ -100,6 +100,11 @@ const ContentLayout = ({
     setIsUserLimitExceeded
   } = useUserLimitStore((state) => state);
 
+  const { data: storageAvailabilityData } = useStorageAvailability();
+
+  const usedStoragePercentage = useMemo(() => {
+    return 100 - storageAvailabilityData?.availableSpace;
+  }, [storageAvailabilityData]);
   const { data: StorageAvailabilityData } = useStorageAvailability();
   const { data: checkUserLimit, isSuccess: isCheckUserLimitSuccess } =
     useCheckUserLimit(isEnterpriseMode);
@@ -131,11 +136,11 @@ const ContentLayout = ({
             <VersionUpgradeBanner />
           )}
         {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
-          StorageAvailabilityData &&
-          StorageAvailabilityData.availableSpace >= EIGHTY_PERCENT && (
+          usedStoragePercentage &&
+          usedStoragePercentage >= EIGHTY_PERCENT && (
             <VersionUpgradeBanner
               isStorageBanner
-              availableSpace={StorageAvailabilityData.availableSpace}
+              usedSpace={usedStoragePercentage}
             />
           )}
 
