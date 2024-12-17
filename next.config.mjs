@@ -192,6 +192,10 @@ const nextConfig = {
         source: "/verify-success",
         destination: "/enterprise/verify-success"
       },
+      {
+        source: "/redirect",
+        destination: "/enterprise/redirect"
+      }
     ];
   },
   eslint: {

@@ -81,7 +81,7 @@ export default withAuth(
       token?.isPasswordChangedForTheFirstTime;
     if (
       !(
-        isPasswordChangedForTheFirstTime ||
+        !isPasswordChangedForTheFirstTime ||
         request.nextUrl.pathname === ROUTES.AUTH.RESET_PASSWORD
       )
     ) {
@@ -89,7 +89,7 @@ export default withAuth(
         new URL(ROUTES.AUTH.RESET_PASSWORD, request.url)
       );
     } else if (
-      isPasswordChangedForTheFirstTime &&
+      !isPasswordChangedForTheFirstTime &&
       request.nextUrl.pathname === ROUTES.AUTH.RESET_PASSWORD
     ) {
       return NextResponse.redirect(new URL(ROUTES.DASHBOARD.BASE, request.url));

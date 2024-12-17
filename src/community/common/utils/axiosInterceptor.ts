@@ -20,6 +20,8 @@ authFetch.interceptors.request.use(
       config.headers.Authorization = `Bearer ${session?.user.accessToken}`;
     }
 
+    config.headers["X-Tenant-ID"] = "abcd";
+
     return config;
   },
   async (error) => {
