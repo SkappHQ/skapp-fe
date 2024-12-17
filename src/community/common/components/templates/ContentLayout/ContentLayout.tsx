@@ -80,8 +80,7 @@ const ContentLayout = ({
   isPrimaryBtnLoading = false
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
-  const isEnterpriseMode = process.env.MODE === "enterprise";
-
+  const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
   const isBelow600 = useMediaQuery()(MediaQueries.BELOW_600);
 
   const classes = styles(theme);
@@ -105,7 +104,7 @@ const ContentLayout = ({
   const usedStoragePercentage = useMemo(() => {
     return 100 - storageAvailabilityData?.availableSpace;
   }, [storageAvailabilityData]);
-  const { data: StorageAvailabilityData } = useStorageAvailability();
+
   const { data: checkUserLimit, isSuccess: isCheckUserLimitSuccess } =
     useCheckUserLimit(isEnterpriseMode);
 
