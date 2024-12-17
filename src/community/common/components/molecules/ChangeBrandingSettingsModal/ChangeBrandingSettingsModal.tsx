@@ -16,6 +16,10 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { FileUploadType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { FileCategories } from "~enterprise/common/types/s3Types";
+import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 import Button from "../../atoms/Button/Button";
 import Icon from "../../atoms/Icon/Icon";
@@ -42,6 +46,7 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
   const translateText = useTranslator("settings");
 
   const { setToastMessage } = useToast();
+  const enviornment = useGetEnviornment();
 
   const [formValues, setFormValues] = useState<FormValues>({
     organizationLogo: logo,
@@ -105,17 +110,29 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
     }
 
     if (companyLogo.length > 0 && companyLogo[0].file) {
-      const formData = new FormData();
-      formData.append("file", companyLogo[0].file);
-      formData.append("type", FileTypes.ORGANIZATION_LOGOS);
-      await uploadImage(formData, {
-        onSuccess: () => {
-          updateBranding({
-            organizationLogo: fileName,
-            themeColor: formValues.themeColor
-          });
-        }
-      });
+      if (enviornment === ProfileModes.COMMUNITY) {
+        const formData = new FormData();
+        formData.append("file", companyLogo[0].file);
+        formData.append("type", FileTypes.ORGANIZATION_LOGOS);
+        await uploadImage(formData, {
+          onSuccess: () => {
+            updateBranding({
+              organizationLogo: fileName,
+              themeColor: formValues.themeColor
+            });
+          }
+        });
+      } else {
+        const brandPic = await uploadFileToS3ByUrl(
+          companyLogo[0].file,
+          FileCategories.ORGANIZATION_LOGO
+        );
+
+        updateBranding({
+          organizationLogo: brandPic,
+          themeColor: formValues.themeColor
+        });
+      }
     } else {
       updateBranding({
         organizationLogo:
