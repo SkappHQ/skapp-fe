@@ -13,7 +13,6 @@ import {
   useTheme
 } from "@mui/material";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { JSX, useEffect, useMemo, useState } from "react";
 
