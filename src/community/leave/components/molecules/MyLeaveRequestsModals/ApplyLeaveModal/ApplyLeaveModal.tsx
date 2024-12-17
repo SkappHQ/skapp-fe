@@ -45,6 +45,10 @@ import {
   getDurationSelectorDisabledOptions
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { FileCategories } from "~enterprise/common/types/s3Types";
+import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 import styles from "./styles";
 
@@ -53,6 +57,7 @@ const ApplyLeaveModal = () => {
 
   const { setToastMessage } = useToast();
   const translateStorageText = useTranslator("StorageToastMessage");
+  const enviornment = useGetEnviornment();
   const translateText = useTranslator(
     "leaveModule",
     "myRequests",
@@ -195,7 +200,7 @@ const ApplyLeaveModal = () => {
     }
   }, [selectedDates, comment, attachments]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const isValid = checkValidationStatus();
     if (isValid) {
       const fileNames = attachments.map((attachment) => attachment.name ?? "");
@@ -212,21 +217,46 @@ const ApplyLeaveModal = () => {
       };
 
       if (attachments && attachments.length > 0) {
-        const formData = new FormData();
+        if (enviornment === ProfileModes.COMMUNITY) {
+          const formData = new FormData();
 
-        attachments.forEach((attachment) => {
-          if (attachment.file) {
-            formData.append("file", attachment.file);
+          attachments.forEach((attachment) => {
+            if (attachment.file) {
+              formData.append("file", attachment.file);
+            }
+          });
+
+          formData.append("type", FileTypes.LEAVE_ATTACHMENTS);
+
+          uploadAttachments(formData, {
+            onSuccess: () => {
+              applyLeaveMutate(payload);
+            }
+          });
+        } else {
+          try {
+            const uploadPromises = attachments.map((attachment) => {
+              if (attachment.file) {
+                return uploadFileToS3ByUrl(
+                  attachment.file as File,
+                  FileCategories.LEAVE_REQUEST
+                );
+              }
+              return Promise.resolve(null);
+            });
+
+            const attachmentUrls = (await Promise.all(uploadPromises)).filter(
+              (url) => url !== null
+            ) as string[];
+
+            applyLeaveMutate({
+              ...payload,
+              attachments: attachmentUrls
+            });
+          } catch (error) {
+            console.error("Error uploading files: ", error);
           }
-        });
-
-        formData.append("type", FileTypes.LEAVE_ATTACHMENTS);
-
-        uploadAttachments(formData, {
-          onSuccess: () => {
-            applyLeaveMutate(payload);
-          }
-        });
+        }
       } else {
         applyLeaveMutate(payload);
       }

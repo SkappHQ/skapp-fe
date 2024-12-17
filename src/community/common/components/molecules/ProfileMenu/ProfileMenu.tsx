@@ -4,10 +4,8 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { JSX } from "react";
 
-import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
 import ROUTES from "~community/common/constants/routes";
 import { appBarTestId } from "~community/common/constants/testIds";
-import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
@@ -50,12 +48,6 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
     await signOut({ redirect: true });
   };
 
-  const { data: logoUrl } = useGetUploadedImage(
-    FileTypes.USER_IMAGE,
-    employee?.authPic,
-    true
-  );
-
   return (
     <Box>
       <Stack
@@ -75,7 +67,7 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
               firstName={session?.user?.employee?.firstName || ""}
               lastName={session?.user?.employee?.lastName || ""}
               alt={`${session?.user?.employee?.firstName} ${session?.user?.employee?.lastName}`}
-              src={logoUrl || ""}
+              src={employee?.authPic || ""}
             />
           </Box>
           <Stack>
