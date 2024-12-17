@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  images: {
+    domains: ["dev-app-storage-bucket.s3.ap-south-1.amazonaws.com"]
+  },
   async rewrites() {
     return [
       {

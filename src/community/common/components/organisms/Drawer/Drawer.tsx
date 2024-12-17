@@ -38,6 +38,9 @@ import { CommonStoreTypes } from "~community/common/types/zustand/StoreTypes";
 import getDrawerRoutes from "~community/common/utils/getDrawerRoutes";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import { StyledDrawer } from "./StyledDrawer";
 import { getSelectedDrawerItemColor, styles } from "./styles";
@@ -45,7 +48,10 @@ import { getSelectedDrawerItemColor, styles } from "./styles";
 const Drawer = (): JSX.Element => {
   const translateText = useTranslator("commonComponents", "drawer");
 
+  const [orgLogo, setOrgLogo] = useState<string | null>(null);
   const router = useRouter();
+  const enviornment = useGetEnviornment();
+  const { s3FileUrls, downloadS3File } = useS3Download();
 
   const theme: Theme = useTheme();
   const classes = styles({ theme });
@@ -79,6 +85,20 @@ const Drawer = (): JSX.Element => {
     organizationLogo,
     false
   );
+
+  useEffect(() => {
+    if (enviornment === ProfileModes.COMMUNITY) {
+      if (logoUrl) setOrgLogo(logoUrl);
+    } else if (enviornment === ProfileModes.ENTERPRICE) {
+      setOrgLogo(s3FileUrls[organizationLogo]);
+    }
+  }, [logoUrl, organizationLogo, s3FileUrls, enviornment]);
+
+  useEffect(() => {
+    if (organizationLogo || !s3FileUrls[organizationLogo]) {
+      downloadS3File(organizationLogo);
+    }
+  }, [organizationLogo]);
 
   const {
     isDrawerExpanded,
@@ -139,7 +159,7 @@ const Drawer = (): JSX.Element => {
         <Box sx={classes.imageWrapper}>
           {!isLoading && (
             <Image
-              src={logoUrl || "/logo/logo.png"}
+              src={orgLogo || "/logo/logo.png"}
               alt={organizationName ?? "Organization Logo"}
               priority={true}
               width={logoUrl ? 0 : 208}

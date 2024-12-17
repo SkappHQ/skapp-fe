@@ -482,8 +482,8 @@ const EditAllInformation: NextPage = () => {
         return (
           <IndividualEmployeeLeaveReportSection
             selectedUser={Number(id)}
-            employeeLastName={employee?.lastName}
-            employeeFirstName={employee?.firstName}
+            employeeLastName={employee?.lastName ?? ""}
+            employeeFirstName={employee?.firstName ?? ""}
           />
         );
       case EditAllInformationType.timesheeet:

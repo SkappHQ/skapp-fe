@@ -11,6 +11,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 import { usePeopleStore } from "~community/people/store/store";
 
 import Button from "../../atoms/Button/Button";
@@ -25,7 +26,7 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   const router = useRouter();
   const translateText = useTranslator("appBar");
   const { data: session } = useSession();
-  const employee = session?.user?.employee;
+  const { data: employee } = useGetUserPersonalDetails();
   const isPeopleManagerOrSuperAdmin = session?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
