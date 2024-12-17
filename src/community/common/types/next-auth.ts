@@ -21,6 +21,9 @@ declare module "next-auth" {
       isPasswordChangedForTheFirstTime?: boolean;
       email?: string;
       employee?: AuthEmployeeType;
+      provider?: string;
+      authPic?: string;
+      idToken?: string;
     } & DefaultSession;
   }
 
@@ -36,6 +39,9 @@ declare module "next-auth" {
     email?: string;
     employee?: AuthEmployeeType;
     isPasswordChangedForTheFirstTime?: boolean;
+    provider?: string;
+    authPic?: string;
+    idToken?: string;
   }
 }
 
@@ -48,5 +54,8 @@ declare module "next-auth/jwt" {
     isPasswordChangedForTheFirstTime?: boolean;
     employee?: AuthEmployeeType;
     email?: string;
+    provider?: string;
+    authPic?: string;
+    idToken?: string;
   }
 }
