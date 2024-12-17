@@ -158,10 +158,9 @@ const Drawer = (): JSX.Element => {
       >
         <Box sx={classes.imageWrapper}>
           {!isLoading && (
-            <Image
+            <img
               src={orgLogo || "/logo/logo.png"}
               alt={organizationName ?? "Organization Logo"}
-              priority={true}
               width={logoUrl ? 0 : 208}
               height={logoUrl ? 0 : 77}
               style={classes.logoImage}

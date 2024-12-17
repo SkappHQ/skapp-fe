@@ -29,7 +29,7 @@ const s3GetSignedUrl = async (req: NextApiRequest, res: NextApiResponse) => {
     const fileParams = {
       Bucket: bucketName,
       Key: path,
-      Expires: 120
+      Expires: 300
     };
 
     if (action === S3ActionTypes.UPLOAD) {
