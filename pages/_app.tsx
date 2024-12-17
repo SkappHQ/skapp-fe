@@ -10,6 +10,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { I18nextProvider, useSSR } from "react-i18next";
 
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
+import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
@@ -17,6 +18,7 @@ import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
+import { initializeHotjar } from "~enterprise/common/utils/monitoring";
 import i18n from "~i18n";
 import "~styles/global.css";
 
@@ -40,6 +42,10 @@ function MyApp({
       setNewTheme(selectedTheme);
     } else {
       setNewTheme(theme);
+    }
+
+    if (process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE) {
+      initializeHotjar();
     }
   }, []);
 
@@ -81,9 +87,30 @@ function MyApp({
     );
   }
 
+  const shouldUseWebSocketProvider =
+    process.env.NEXT_PUBLIC_MODE !== appModes.ENTERPRISE;
+
   return (
     <SessionProvider session={session}>
-      <WebSocketProvider>
+      {shouldUseWebSocketProvider ? (
+        <WebSocketProvider>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={newTheme}>
+              <I18nextProvider i18n={i18n}>
+                <ToastProvider>
+                  <ErrorBoundary FallbackComponent={Error}>
+                    <RouteChangeLoader />
+                    <BaseLayout>
+                      <Component {...pageProps} />
+                    </BaseLayout>
+                  </ErrorBoundary>
+                </ToastProvider>
+                <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+              </I18nextProvider>
+            </ThemeProvider>
+          </QueryClientProvider>
+        </WebSocketProvider>
+      ) : (
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={newTheme}>
             <I18nextProvider i18n={i18n}>
@@ -99,7 +126,7 @@ function MyApp({
             </I18nextProvider>
           </ThemeProvider>
         </QueryClientProvider>
-      </WebSocketProvider>
+      )}
     </SessionProvider>
   );
 }

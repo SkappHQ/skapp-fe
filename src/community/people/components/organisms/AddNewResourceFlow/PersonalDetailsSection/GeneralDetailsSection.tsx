@@ -20,6 +20,7 @@ import {
 } from "react";
 import { useDropzone } from "react-dropzone";
 
+import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -32,10 +33,12 @@ import PeopleLayout from "~community/common/components/templates/PeopleLayout/Pe
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
 import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { isValidAlphaNumericName } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import { NINETY_PERCENT } from "~community/common/utils/getConstants";
 import { isValidNamePattern } from "~community/common/utils/validation";
 import {
   NAME_MAX_CHARACTER_LENGTH,
@@ -68,11 +71,16 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     ref
   ) => {
     const theme: Theme = useTheme();
+    const { setToastMessage } = useToast();
+
+    const translateStorageText = useTranslator("StorageToastMessage");
     const translateText = useTranslator(
       "peopleModule",
       "addResource",
       "generalDetails"
     );
+
+    const { data: storageAvailabilityData } = useStorageAvailability();
 
     const {
       employeeContactDetails,
@@ -101,6 +109,10 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [employeeDataChanges]
     );
+
+    const usedStoragePercentage = useMemo(() => {
+      return 100 - storageAvailabilityData?.availableSpace;
+    }, [storageAvailabilityData]);
 
     useImperativeHandle(ref, () => ({
       validateForm: async () => {
@@ -224,6 +236,22 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       }
     }, [values.birthDate]);
 
+    const handleImageClick = () => {
+      if (employeeGeneralDetails?.authPic?.length) {
+        handleUnSelectPhoto();
+      } else if (usedStoragePercentage >= NINETY_PERCENT) {
+        setToastMessage({
+          open: true,
+          toastType: "error",
+          title: translateStorageText(["storageTitle"]),
+          description: translateStorageText(["contactAdminText"]),
+          isIcon: true
+        });
+      } else {
+        open();
+      }
+    };
+
     return (
       <PeopleLayout
         title={translateText(["title"])}
@@ -284,11 +312,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                       cursor: "pointer",
                       zIndex: 1
                     }}
-                    onClick={
-                      employeeGeneralDetails?.authPic?.length
-                        ? handleUnSelectPhoto
-                        : open
-                    }
+                    onClick={handleImageClick}
                   >
                     {employeeGeneralDetails?.authPic?.length ? (
                       <RequestCancelCrossIcon
