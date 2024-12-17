@@ -7,6 +7,7 @@ const ROUTES = {
     RESET_PASSWORD: "/reset-password",
     UNAUTHORIZED: "/unauthorized",
     ERROR: "/_error",
+    FORGOT_PASSWORD: "/forgot-password",
     VERIFY: "/verify-email",
     VERIFY_SUCCESS: "/verify-success"
   },

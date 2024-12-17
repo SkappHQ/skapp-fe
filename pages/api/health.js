@@ -1,3 +1,4 @@
+/* eslint-disable */
 import packageJson from "../../package.json";
 
 export default function handler(req, res) {
