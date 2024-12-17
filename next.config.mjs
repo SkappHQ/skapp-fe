@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
-    const isEnterpriseMode = process.env.MODE === 'enterprise';
+    const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
     return [
       {
         source: "/welcome",
@@ -10,7 +10,9 @@ const nextConfig = {
       },
       {
         source: "/signup",
-        destination: "/community/signup"
+        destination: isEnterpriseMode
+          ? "/enterprise/signup"
+          : "/community/signup"
       },
       {
         source: "/setup-organization",
@@ -34,7 +36,9 @@ const nextConfig = {
       },
       {
         source: "/signin",
-        destination: "/community/signin"
+        destination: isEnterpriseMode
+          ? "/enterprise/signin"
+          : "/community/signin"
       },
       {
         source: "/settings",
@@ -184,6 +188,14 @@ const nextConfig = {
         source: "/leave/analytics/:id",
         destination: "/community/leave/analytics/:id"
       },
+      {
+        source: "/verify-email",
+        destination: "/enterprise/verify-email"
+      },
+      {
+        source: "/verify-success",
+        destination: "/enterprise/verify-success"
+      }
     ];
   },
   eslint: {

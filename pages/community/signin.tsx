@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { FormikHelpers, useFormik } from "formik";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -22,7 +22,7 @@ import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeS
 import authFetch from "~community/common/utils/axiosInterceptor";
 import { decodeBase64 } from "~community/common/utils/commonUtil";
 import { getCurrentWeekNumber } from "~community/common/utils/dateTimeUtils";
-import { redirectHandler } from "~community/common/utils/redirectionHandler";
+import { useRedirectHandler } from "~community/common/utils/hooks/useRedirectHandler";
 import { signInValidation } from "~community/common/utils/validation";
 import i18n from "~i18n";
 
@@ -33,12 +33,6 @@ interface SignInValues {
   password: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return await redirectHandler(context, {
-    isSignInPage: true
-  });
-};
-
 const SignIn: NextPage = () => {
   const translateText = useTranslator("onboarding", "signIn");
   const router = useRouter();
@@ -46,6 +40,7 @@ const SignIn: NextPage = () => {
   const theme: Theme = useTheme();
   const { setToastMessage } = useToast();
   const getLanguage = () => i18n.language;
+  useRedirectHandler({ isSignInPage: true });
 
   const {
     setIsDailyNotifyDisplayed,

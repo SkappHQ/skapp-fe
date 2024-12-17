@@ -36,6 +36,7 @@ export interface StyledButtonProps {
   onClick?: ButtonProps["onClick"];
   onMouseEnter?: ButtonProps["onMouseEnter"];
   onMouseLeave?: ButtonProps["onMouseLeave"];
+  isDefaultIconColor?: boolean;
 }
 
 const Button = ({
@@ -55,7 +56,8 @@ const Button = ({
   styles,
   onClick,
   onMouseEnter,
-  onMouseLeave
+  onMouseLeave,
+  isDefaultIconColor = false
 }: StyledButtonProps): JSX.Element => {
   const theme = useTheme();
 
@@ -152,6 +154,7 @@ const Button = ({
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      isDefaultIconColor={isDefaultIconColor}
     >
       {label && (
         <Typography variant={typographyVariant} component="span">
