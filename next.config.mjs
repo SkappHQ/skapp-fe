@@ -10,11 +10,11 @@ const nextConfig = {
       },
       {
         source: "/signup",
-        destination: "/community/signup"
+        destination: isEnterpriseMode ? "/enterprise/signup " : "/community/signup"
       },
       {
         source: "/setup-organization",
-        destination: isEnterpriseMode ? "/enterprise/setup-organization": "/community/setup-organization"
+        destination: isEnterpriseMode ? "/enterprise/setup-organization" : "/community/setup-organization"
       },
       {
         source: "/dashboard",
@@ -34,7 +34,7 @@ const nextConfig = {
       },
       {
         source: "/signin",
-        destination: "/community/signin"
+        destination: isEnterpriseMode ? "/enterprise/signin " : "/community/signin"
       },
       {
         source: "/settings",

@@ -6,7 +6,8 @@ const ROUTES = {
     DOMAIN_VERIFICATION: "/enterprise/domain-verification",
     RESET_PASSWORD: "/reset-password",
     UNAUTHORIZED: "/unauthorized",
-    ERROR: "/_error"
+    ERROR: "/_error",
+    FORGOT_PASSWORD: "/forgot-password"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization"
