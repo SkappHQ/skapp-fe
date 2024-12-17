@@ -87,7 +87,8 @@ function MyApp({
     );
   }
 
-  const shouldUseWebSocketProvider = process.env.NEXT_PUBLIC_MODE !== appModes.ENTERPRISE;
+  const shouldUseWebSocketProvider =
+    process.env.NEXT_PUBLIC_MODE !== appModes.ENTERPRISE;
 
   return (
     <SessionProvider session={session}>
