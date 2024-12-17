@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 
-import { communityAuthOptions } from "../../community/auth/communityAuthOptions";
-import { enterpriseAuthOptions } from "../../enterprise/auth/enterpriseAuthOptions";
+import { enterpriseAuthOptions } from "~enterprise/auth/enterpriseAuthOptions";
+
+import { communityAuthOptions } from "./communityAuthOptions";
 
 const authOptions =
   process.env.NEXT_PUBLIC_MODE === "enterprise"
