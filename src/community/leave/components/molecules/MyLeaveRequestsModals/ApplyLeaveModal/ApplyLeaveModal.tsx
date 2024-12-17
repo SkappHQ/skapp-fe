@@ -125,6 +125,10 @@ const ApplyLeaveModal = () => {
   const { mutate: applyLeaveMutate, isPending: isLeaveApplyPending } =
     useApplyLeave(selectedYear, onSuccess, onError);
 
+  const usedStoragePercentage = useMemo(() => {
+    return 100 - storageAvailabilityData?.availableSpace;
+  }, [storageAvailabilityData]);
+
   const pendingAndApprovedLeaveRequests = useMemo(() => {
     return (
       myLeaveRequests?.filter(
@@ -336,7 +340,7 @@ const ApplyLeaveModal = () => {
                 : undefined
             }
             onIconClick={() => {
-              storageAvailabilityData?.availableSpace >= NINETY_PERCENT
+              usedStoragePercentage >= NINETY_PERCENT
                 ? setToastMessage({
                     open: true,
                     toastType: "error",

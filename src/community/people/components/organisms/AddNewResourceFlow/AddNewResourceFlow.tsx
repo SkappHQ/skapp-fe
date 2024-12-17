@@ -170,6 +170,7 @@ const AddNewResourceFlow = () => {
         handleError(translateError(["uploadError"]));
       }
     }
+
     const data: EmployeeType = {
       generalDetails: {
         ...employeeGeneralDetails,
