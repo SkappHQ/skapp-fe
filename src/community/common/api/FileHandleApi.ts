@@ -40,3 +40,27 @@ export const useGetUploadedImage = (
     enabled: Boolean(type && file)
   });
 };
+
+export const useGetUploadedLeaveAttachments = (
+  type?: string,
+  file?: string | null,
+  isThumbnail?: boolean
+) => {
+  return useQuery({
+    queryKey: ["download-file", type, file, isThumbnail],
+    queryFn: async () => {
+      if (!type || !file) return null;
+      const response = await authFetch.get(
+        fileUploadEndpoints.DOWNLOAD_IMAGES(type, file, isThumbnail ?? false),
+        {
+          responseType: "blob"
+        }
+      );
+
+      const fileBlob = await response.data;
+
+      return fileBlob;
+    },
+    enabled: Boolean(type && file)
+  });
+};

@@ -417,7 +417,8 @@
       "revokeLeaveFailTitle": "Oops! Something Went Wrong",
       "revokeLeaveFailDesc": "Failed to revoke the request. Please try again.",
       "revokeLeaveSuccessTitle": "Request Revoked",
-      "revokeLeaveSuccessDesc": "Request has been revoked successfully."
+      "revokeLeaveSuccessDesc": "Request has been revoked successfully.",
+      "attachments": "Attachments:"
     }
   },
   "leaveReports": {
