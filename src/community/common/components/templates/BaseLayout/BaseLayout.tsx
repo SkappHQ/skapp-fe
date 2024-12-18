@@ -12,7 +12,7 @@ import {
 } from "~community/common/providers/ToastProvider";
 import { IsProtectedUrl } from "~community/common/utils/authUtils";
 import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
-import { setDeviceToken } from "~enterprise/common/api/setDeviceToken";
+import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
 import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 
 import styles from "./styles";
