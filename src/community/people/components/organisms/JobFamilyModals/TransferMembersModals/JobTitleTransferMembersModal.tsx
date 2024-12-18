@@ -2,7 +2,10 @@ import { useMemo } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { useTransferMembersWithJobTitle } from "~community/people/api/JobFamilyApi";
+import {
+  useDeleteJobTitle,
+  useTransferMembersWithJobTitle
+} from "~community/people/api/JobFamilyApi";
 import TransferMembersModal from "~community/people/components/molecules/TransferMembersModal/TransferMembersModal";
 import { JobFamilyToastEnums } from "~community/people/enums/JobFamilyEnums";
 import { usePeopleStore } from "~community/people/store/store";
@@ -55,7 +58,11 @@ const JobTitleTransferMembersModal = () => {
     }));
   }, [jobFamily, employees]);
 
-  const onSuccess = () => {
+  const onTransferSuccess = () => {
+    deleteJobTitleMutate(previousJobTitleData?.jobTitleId ?? 0);
+  };
+
+  const onDeleteSuccess = () => {
     handleJobFamilyApiResponse({
       type: JobFamilyToastEnums.JOB_TITLE_TRANSFER_MEMBERS_SUCCESS,
       setToastMessage,
@@ -74,7 +81,12 @@ const JobTitleTransferMembersModal = () => {
   };
 
   const { mutate: transferMembersWithJobTitle } =
-    useTransferMembersWithJobTitle(onSuccess, onError);
+    useTransferMembersWithJobTitle(onTransferSuccess, onError);
+
+  const { mutate: deleteJobTitleMutate } = useDeleteJobTitle(
+    onDeleteSuccess,
+    onError
+  );
 
   return (
     <TransferMembersModal

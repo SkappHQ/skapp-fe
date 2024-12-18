@@ -2,7 +2,10 @@ import { useMemo } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { useTransferMembersWithJobFamily } from "~community/people/api/JobFamilyApi";
+import {
+  useDeleteJobFamily,
+  useTransferMembersWithJobFamily
+} from "~community/people/api/JobFamilyApi";
 import TransferMembersModal from "~community/people/components/molecules/TransferMembersModal/TransferMembersModal";
 import { JobFamilyToastEnums } from "~community/people/enums/JobFamilyEnums";
 import { usePeopleStore } from "~community/people/store/store";
@@ -50,7 +53,11 @@ const JobFamilyTransferMembersModal = () => {
     return currentDeletingJobFamily?.employees;
   }, [currentDeletingJobFamily]);
 
-  const onSuccess = () => {
+  const onTransferSuccess = () => {
+    deleteJobFamilyMutate(currentDeletingJobFamily?.jobFamilyId ?? 0);
+  };
+
+  const onDeleteSuccess = () => {
     handleJobFamilyApiResponse({
       type: JobFamilyToastEnums.JOB_FAMILY_TRANSFER_MEMBERS_SUCCESS,
       setJobFamilyModalType,
@@ -69,7 +76,12 @@ const JobFamilyTransferMembersModal = () => {
   };
 
   const { mutate: transferMembersWithJobFamily } =
-    useTransferMembersWithJobFamily(onSuccess, onError);
+    useTransferMembersWithJobFamily(onTransferSuccess, onError);
+
+  const { mutate: deleteJobFamilyMutate } = useDeleteJobFamily(
+    onDeleteSuccess,
+    onError
+  );
 
   return (
     <TransferMembersModal
