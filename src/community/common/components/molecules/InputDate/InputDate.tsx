@@ -87,7 +87,8 @@ const InputDate: FC<Props> = ({
   placeholder,
   popperStyles,
   selectedDate,
-  setSelectedDate
+  setSelectedDate,
+  inputFormat
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
@@ -240,7 +241,10 @@ const InputDate: FC<Props> = ({
           }}
         >
           {selectedDate
-            ? convertDateToFormat(selectedDate.toJSDate(), REVERSE_DATE_FORMAT)
+            ? convertDateToFormat(
+                selectedDate.toJSDate(),
+                inputFormat ? inputFormat : REVERSE_DATE_FORMAT
+              )
             : placeholder}
         </Typography>
         <Box onClick={(e) => !disabled && handleClick(e)}>
