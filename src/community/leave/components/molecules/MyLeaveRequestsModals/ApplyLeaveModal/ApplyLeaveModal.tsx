@@ -8,6 +8,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import TextArea from "~community/common/components/atoms/TextArea/TextArea";
 import CalendarDateRangePicker from "~community/common/components/molecules/CalendarDateRangePicker/CalendarDateRangePicker";
 import DurationSelector from "~community/common/components/molecules/DurationSelector/DurationSelector";
+import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -353,6 +354,7 @@ const ApplyLeaveModal = () => {
                 : undefined
             }
             onIconClick={() => {
+              process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
               usedStoragePercentage >= NINETY_PERCENT
                 ? setToastMessage({
                     open: true,
