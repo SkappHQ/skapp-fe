@@ -1,4 +1,5 @@
-import { Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import { type Theme, useTheme } from "@mui/material/styles";
 import { useFormik } from "formik";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 
@@ -7,13 +8,17 @@ import { useUpdateOrganizationDetails } from "~community/common/api/settingsApi"
 import DropdownSearch from "~community/common/components/molecules/DropDownSearch/DropDownSearch";
 import Form from "~community/common/components/molecules/Form/Form";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import { DOMAIN, appModes } from "~community/common/constants/configs";
 import { characterLengths } from "~community/common/constants/stringConstants";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
+import { tenantID } from "~community/common/utils/axiosInterceptor";
+import { generateTimezoneList } from "~community/common/utils/dateTimeUtils";
 import { organizationSetupValidation } from "~community/common/utils/validation";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
+import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 
 import Button from "../../atoms/Button/Button";
 import Icon from "../../atoms/Icon/Icon";
@@ -28,6 +33,9 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
   isOpen,
   onClose
 }) => {
+  const theme: Theme = useTheme();
+  const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE;
+
   const translateText = useTranslator("settings");
 
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
@@ -39,12 +47,20 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
 
   const { data: organizationDetails } = useGetOrganization();
 
+  const { data: globalLogin } = useGetGlobalLoginMethod(
+    isEnterpriseMode,
+    tenantID as string
+  );
+
   const { setToastMessage } = useToast();
 
   const [initialValues, setInitialValues] = useState({
     organizationName: "",
     organizationWebsite: "",
-    country: ""
+    country: "",
+    organizationTimeZone: "",
+    companyDomain: "",
+    organizationGlobalLogin: ""
   });
 
   useEffect(() => {
@@ -53,11 +69,15 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
         organizationName: organizationDetails.results[0].organizationName || "",
         organizationWebsite:
           organizationDetails.results[0].organizationWebsite || "",
-        country: organizationDetails.results[0].country || ""
+        country: organizationDetails.results[0].country || "",
+        organizationTimeZone:
+          organizationDetails.results[0].organizationTimeZone || "",
+        companyDomain: tenantID as string,
+        organizationGlobalLogin: globalLogin
       });
       setIsInitialLoadComplete(true);
     }
-  }, [organizationDetails]);
+  }, [organizationDetails, globalLogin]);
 
   const onSuccess = () => {
     setToastMessage({
@@ -104,10 +124,16 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
     await OrganisationForm.setFieldValue("country", newValue);
   };
 
+  const handleTimezoneSelect = async (newValue: string): Promise<void> => {
+    await OrganisationForm.setFieldValue("organizationTimeZone", newValue);
+  };
+
   const handleCancel = () => {
     OrganisationForm.resetForm();
     onClose();
   };
+
+  const timeZoneList = generateTimezoneList();
 
   return (
     <Modal
@@ -160,6 +186,52 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
             }}
             componentStyle={{ mt: "0rem" }}
           />
+          {isEnterpriseMode && (
+            <>
+              <DropdownSearch
+                label={translateText(["timezoneLabel"])}
+                inputName={"organizationTimeZone"}
+                itemList={timeZoneList}
+                value={values.organizationTimeZone}
+                error={errors.organizationTimeZone ?? ""}
+                isDisabled={true}
+                onChange={(value) => {
+                  handleTimezoneSelect?.(value as string);
+                }}
+              />
+              <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <Box sx={{ flex: 5 }}>
+                  <InputField
+                    label={translateText(["companyDomainLabel"])}
+                    inputName="companyDomain"
+                    inputType="text"
+                    value={values.companyDomain}
+                    isDisabled={true}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    marginTop: "1.5rem",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Typography color={theme.palette.text.secondary}>
+                    {DOMAIN}
+                  </Typography>
+                </Box>
+              </Box>
+              <InputField
+                label={translateText(["globalLogin"])}
+                inputName="organizationGlobalLogin"
+                inputType="text"
+                value={values.organizationGlobalLogin}
+                isDisabled={true}
+              />
+            </>
+          )}
           <Button
             label={translateText(["saveChangesBtnText"])}
             styles={{ mt: "1rem" }}

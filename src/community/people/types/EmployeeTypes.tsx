@@ -423,6 +423,7 @@ export interface EmployeeRoleType {
 export interface EmployeeDataExists {
   isIdentificationNoExists: boolean;
   isWorkEmailExists: boolean;
+  isGoogleDomain: boolean;
 }
 
 export interface QuickAddEmployeePayload {
