@@ -5,9 +5,11 @@ import { appModes } from "~community/common/constants/configs";
 import { firebaseConfig } from "~enterprise/common/configs/firebase";
 
 const app =
-  process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE && getApps().length === 0
-    ? initializeApp(firebaseConfig)
-    : getApp();
+  process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE
+    ? getApps().length === 0
+      ? initializeApp(firebaseConfig)
+      : getApp()
+    : undefined;
 
 const messaging = async () => {
   const supported = await isSupported();
