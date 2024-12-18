@@ -33,12 +33,14 @@ interface Props {
   >;
   isEditingLeaveAllocationChanged: boolean;
   initialValues: CustomLeaveAllocationType;
+  onCancel: (values: CustomLeaveAllocationType) => void;
 }
 const AddLeaveAllocationModal: React.FC<Props> = ({
   setTempLeaveAllocationDetails,
   setCurrentLeaveAllocationFormData,
   isEditingLeaveAllocationChanged,
-  initialValues
+  initialValues,
+  onCancel
 }) => {
   const translateText = useTranslator("leaveModule", "customLeave");
   const { setCustomLeaveAllocationModalType, setIsLeaveAllocationModalOpen } =
@@ -150,7 +152,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
           styles={{ mt: "1rem" }}
           buttonStyle={ButtonStyle.TERTIARY}
           endIcon={<Icon name={IconName.CLOSE_ICON} />}
-          onClick={handleCancel}
+          onClick={() => onCancel(values)}
         />
       </Box>
     </>
