@@ -120,7 +120,7 @@ const ApplyLeaveModal = () => {
     });
   };
 
-  const { mutate: uploadAttachments } = useUploadImages();
+  const { mutateAsync: uploadAttachments } = useUploadImages();
 
   const { mutate: applyLeaveMutate, isPending: isLeaveApplyPending } =
     useApplyLeave(selectedYear, onSuccess, onError);
@@ -222,21 +222,34 @@ const ApplyLeaveModal = () => {
 
       if (attachments && attachments.length > 0) {
         if (enviornment === ProfileModes.COMMUNITY) {
-          const formData = new FormData();
+          try {
+            const uploadPromises = attachments.map((attachment) => {
+              if (attachment.file) {
+                const formData = new FormData();
+                formData.append("file", attachment.file);
+                formData.append("type", FileTypes.LEAVE_ATTACHMENTS);
+                return uploadAttachments(formData).then((response) => {
+                  const filePath = response.message?.split(
+                    "File uploaded successfully: "
+                  )[1];
+                  return filePath?.split("/").pop() ?? null;
+                });
+              }
+              return Promise.resolve(null);
+            });
 
-          attachments.forEach((attachment) => {
-            if (attachment.file) {
-              formData.append("file", attachment.file);
-            }
-          });
+            const attachmentList = (await Promise.all(uploadPromises)).filter(
+              (fileName) => fileName !== null
+            ) as string[];
 
-          formData.append("type", FileTypes.LEAVE_ATTACHMENTS);
-
-          uploadAttachments(formData, {
-            onSuccess: () => {
-              applyLeaveMutate(payload);
-            }
-          });
+            const updatedPayload = {
+              ...payload,
+              attachments: attachmentList
+            };
+            applyLeaveMutate(updatedPayload);
+          } catch (error) {
+            console.error("Error uploading files: ", error);
+          }
         } else {
           try {
             const uploadPromises = attachments.map((attachment) => {

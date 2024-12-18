@@ -18,8 +18,8 @@ const handleDelete = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { folderPath } = req.body as RequestBody;
     const bucketName = process.env.BUCKET_NAME;
-    const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const path = `${env === "PROD" ? "leaveapp" : bucketName}/${folderPath}`;
+
+    const path = `${bucketName}/${folderPath}`;
     const fileParams = {
       Bucket: bucketName ?? "",
       Key: path ?? ""

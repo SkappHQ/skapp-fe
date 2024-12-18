@@ -134,5 +134,4 @@ const SignUp: NextPage = () => {
     </Box>
   );
 };
-
 export default SignUp;
