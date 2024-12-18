@@ -101,26 +101,6 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
 
   const { values, errors, handleSubmit, setFieldValue, setFieldError } = form;
 
-  const handleCancel = useCallback(() => {
-    if (isEditingLeaveAllocationChanged) {
-      setTempLeaveAllocationDetails(values);
-      setCustomLeaveAllocationModalType(
-        CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION
-      );
-    } else {
-      setIsLeaveAllocationModalOpen(false);
-      setCustomLeaveAllocationModalType(
-        CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION
-      );
-    }
-  }, [
-    isEditingLeaveAllocationChanged,
-    setTempLeaveAllocationDetails,
-    setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen,
-    values
-  ]);
-
   useEffect(() => {
     setCurrentLeaveAllocationFormData(values);
   }, [values, setCurrentLeaveAllocationFormData]);
