@@ -52,7 +52,7 @@ export const getEmployeesWithJobTitle = (
 
   const employees = jobFamilyData?.employees.filter(
     (employee: JobFamilyEmployeeDataType) =>
-      employee.jobTitle?.name === jobTitleName
+      employee.jobTitle?.name.toLowerCase() === jobTitleName.toLowerCase()
   );
 
   return employees;
@@ -215,7 +215,7 @@ export const jobTitleTransferMembersModalSubmitBtnClick = (
     );
 
     transferMembersWithJobTitle({
-      jobTitleId: previousJobTitleData.jobTitleId ?? 0,
+      jobTitleId: currentTransferMembersData[0]?.jobFamily?.jobFamilyId ?? 0,
       payload: payload as TransferMembersWithJobTitlePayloadType[]
     });
   } else {
