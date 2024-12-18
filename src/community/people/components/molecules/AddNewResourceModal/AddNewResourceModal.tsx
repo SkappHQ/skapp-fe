@@ -16,6 +16,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { tenantID } from "~community/common/utils/axiosInterceptor";
 import { useGetAllowedGrantablePermissions } from "~community/configurations/api/userRolesApi";
 import {
   useCheckEmailAndIdentificationNoForQuickAdd,
@@ -28,9 +29,11 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
+import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 
 const AddNewResourceModal = () => {
   const theme: Theme = useTheme();
+  const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
 
   const translateText = useTranslator(
     "peopleModule",
@@ -110,17 +113,38 @@ const AddNewResourceModal = () => {
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
 
-  useEffect(() => {
-    const updatedData = checkEmailAndIdentificationNo;
+  const { data: globalLogin } = useGetGlobalLoginMethod(
+    isEnterpriseMode,
+    tenantID as string
+  );
 
-    if (updatedData && updatedData.isWorkEmailExists !== null && isSuccess) {
-      if (updatedData.isWorkEmailExists) {
-        formik.setFieldError("workEmail", translateText(["uniqueEmailError"]));
-      } else if (!updatedData.isWorkEmailExists) {
+  const validateWorkEmail = () => {
+    const updatedData = checkEmailAndIdentificationNo;
+    if (updatedData?.isWorkEmailExists) {
+      formik.setFieldError("workEmail", translateText(["uniqueEmailError"]));
+      return false;
+    }
+
+    if (isEnterpriseMode) {
+      if (globalLogin == "GOOGLE" && !updatedData?.isGoogleDomain) {
+        formik.setFieldError("workEmail", translateText(["workEmailGoogle"]));
+        return false;
+      }
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (
+      checkEmailAndIdentificationNo &&
+      checkEmailAndIdentificationNo.isWorkEmailExists !== null &&
+      isSuccess
+    ) {
+      if (validateWorkEmail()) {
         handleSubmit();
       }
     }
-  }, [checkEmailAndIdentificationNo, isSuccess]);
+  }, [isEnterpriseMode, checkEmailAndIdentificationNo, isSuccess]);
 
   return (
     <Stack>
