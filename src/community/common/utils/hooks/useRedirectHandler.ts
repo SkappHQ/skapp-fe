@@ -20,23 +20,25 @@ export const useRedirectHandler = (options: SessionPropsOptions) => {
       const session = await getSession();
 
       try {
-        const response = await authFetch.get(
-          organizationCreateEndpoints.CHECK_ORG_SETUP_STATUS
-        );
+        if (process.env.NEXT_PUBLIC_MODE !== "enterprise") {
+          const response = await authFetch.get(
+            organizationCreateEndpoints.CHECK_ORG_SETUP_STATUS
+          );
 
-        if (response.status === HTTP_OK) {
-          const orgSetupStatus = await response.data;
+          if (response.status === HTTP_OK) {
+            const orgSetupStatus = await response.data;
 
-          if (orgSetupStatus?.results[0]) {
-            if (!orgSetupStatus?.results[0]?.isSignUpCompleted) {
-              router.replace(ROUTES.AUTH.SIGNUP);
-              return;
-            } else if (
-              !orgSetupStatus?.results[0]?.isOrganizationSetupCompleted &&
-              session
-            ) {
-              router.replace(ROUTES.ORGANIZATION.SETUP);
-              return;
+            if (orgSetupStatus?.results[0]) {
+              if (!orgSetupStatus?.results[0]?.isSignUpCompleted) {
+                router.replace(ROUTES.AUTH.SIGNUP);
+                return;
+              } else if (
+                !orgSetupStatus?.results[0]?.isOrganizationSetupCompleted &&
+                session
+              ) {
+                router.replace(ROUTES.ORGANIZATION.SETUP);
+                return;
+              }
             }
           }
         }
