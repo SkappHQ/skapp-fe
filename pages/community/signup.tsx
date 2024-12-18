@@ -97,8 +97,8 @@ const SignUp: NextPage = () => {
     if (result?.ok) {
       if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
         sendGTMEvent({
-          event: GoogleAnalyticsTypes.LOGIN_BUTTON_CLICK,
-          value: GoogleAnalyticsValues.LOGIN_BUTTON_CLICK,
+          event: GoogleAnalyticsTypes.SIGNIN_BUTTON_CLICKED,
+          value: GoogleAnalyticsValues.SIGNIN_BUTTON_CLICKED,
           timestamp: new Date().toISOString()
         });
       }

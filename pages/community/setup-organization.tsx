@@ -61,8 +61,8 @@ const SetupOrganization: NextPage = () => {
 
     if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
       sendGTMEvent({
-        event: GoogleAnalyticsTypes.LOGIN_BUTTON_CLICK,
-        value: GoogleAnalyticsValues.LOGIN_BUTTON_CLICK,
+        event: GoogleAnalyticsTypes.ORGANIZATION_CREATE_BUTTON_CLICKED,
+        value: GoogleAnalyticsValues.ORGANIZATION_CREATE_BUTTON_CLICKED,
         timestamp: new Date().toISOString()
       });
     }
