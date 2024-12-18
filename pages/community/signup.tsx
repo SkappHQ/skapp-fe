@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { useFormik } from "formik";
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
@@ -13,6 +14,8 @@ import { MAX_PASSWORD_STRENGTH } from "~community/common/constants/stringConstan
 import useOrgSetupRedirect from "~community/common/hooks/useOrgSetupRedirect";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
+import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsValues";
 import { getPasswordStrength } from "~community/common/utils/organizationCreateUtil";
 import { signUpValidation } from "~community/common/utils/validation";
 
@@ -92,6 +95,13 @@ const SignUp: NextPage = () => {
     setIsLoading(false);
 
     if (result?.ok) {
+      if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
+        sendGTMEvent({
+          event: GoogleAnalyticsTypes.SIGNIN_BUTTON_CLICKED,
+          value: GoogleAnalyticsValues.SIGNIN_BUTTON_CLICKED,
+          timestamp: new Date().toISOString()
+        });
+      }
       router.push(ROUTES.ORGANIZATION.SETUP);
     }
   };
