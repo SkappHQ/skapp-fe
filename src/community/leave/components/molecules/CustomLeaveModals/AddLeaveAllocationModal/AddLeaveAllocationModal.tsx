@@ -36,9 +36,7 @@ interface Props {
   onCancel: (values: CustomLeaveAllocationType) => void;
 }
 const AddLeaveAllocationModal: React.FC<Props> = ({
-  setTempLeaveAllocationDetails,
   setCurrentLeaveAllocationFormData,
-  isEditingLeaveAllocationChanged,
   initialValues,
   onCancel
 }) => {
@@ -46,7 +44,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
   const { setCustomLeaveAllocationModalType, setIsLeaveAllocationModalOpen } =
     useLeaveStore();
 
-  const { toastMessage, setToastMessage } = useToast();
+  const { setToastMessage } = useToast();
 
   const onAddSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
