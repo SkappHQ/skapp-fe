@@ -28,10 +28,10 @@ authFetch.interceptors.request.use(
       config.headers.Authorization = `Bearer ${session?.user.accessToken}`;
     }
 
-    const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
-    if (isEnterpriseMode && tenantID) {
-      config.headers["X-Tenant-ID"] = tenantID;
-    }
+    // const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
+    // if (isEnterpriseMode && tenantID) {
+    //   config.headers["X-Tenant-ID"] = tenantID;
+    // }
     return config;
   },
   async (error) => {
