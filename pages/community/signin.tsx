@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { FormikHelpers, useFormik } from "formik";
 import { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
@@ -19,6 +20,8 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { useWebSocket } from "~community/common/providers/WebSocketProvider";
 import { base64Pattern } from "~community/common/regex/regexPatterns";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
+import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsValues";
 import authFetch from "~community/common/utils/axiosInterceptor";
 import { decodeBase64 } from "~community/common/utils/commonUtil";
 import { getCurrentWeekNumber } from "~community/common/utils/dateTimeUtils";
@@ -115,6 +118,13 @@ const SignIn: NextPage = () => {
           isIcon: true
         });
       } else {
+        if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
+          sendGTMEvent({
+            event: GoogleAnalyticsTypes.SIGNIN_BUTTON_CLICKED,
+            value: GoogleAnalyticsValues.SIGNIN_BUTTON_CLICKED,
+            timestamp: new Date().toISOString()
+          });
+        }
         handleRedirect();
       }
     } catch (error) {
