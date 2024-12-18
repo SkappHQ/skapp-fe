@@ -16,7 +16,9 @@ const nextConfig = {
       },
       {
         source: "/setup-organization",
-        destination: isEnterpriseMode ? "/enterprise/setup-organization" : "/community/setup-organization"
+        destination: isEnterpriseMode
+          ? "/enterprise/setup-organization"
+          : "/community/setup-organization"
       },
       {
         source: "/dashboard",
@@ -195,6 +197,10 @@ const nextConfig = {
       {
         source: "/verify-success",
         destination: "/enterprise/verify-success"
+      },
+      {
+        source: "/redirect",
+        destination: "/enterprise/redirect"
       }
     ];
   },
