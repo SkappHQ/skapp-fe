@@ -8,6 +8,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import { appModes } from "~community/common/constants/configs";
 import ROUTES from "~community/common/constants/routes";
 import { peopleDirectoryTestId } from "~community/common/constants/testIds";
 import {
@@ -33,7 +34,7 @@ import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMetho
 
 const AddNewResourceModal = () => {
   const theme: Theme = useTheme();
-  const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
+  const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE;
 
   const translateText = useTranslator(
     "peopleModule",

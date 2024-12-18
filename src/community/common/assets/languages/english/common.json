@@ -175,7 +175,10 @@
     "brandingSuccessDescription": "Branding settings have been updated successfully.",
     "passwordChangeSuccessTitle": "Password Changed",
     "passwordChangeSuccessDescription": "Password has been changed successfully.",
-    "uploadLogoLabel": "Upload company logo/brandmark"
+    "uploadLogoLabel": "Upload company logo/brandmark",
+    "timezoneLabel": "Timezone",
+    "companyDomainLabel": "Company domain",
+    "globalLogin": "Global login method"
   },
   "unauthorized": {
     "pageHead": "Access Denied | Skapp",
