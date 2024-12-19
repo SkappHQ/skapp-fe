@@ -204,6 +204,7 @@ const CustomAllocationsReportTable: FC = () => {
                   firstName={leaveAllocation?.firstName}
                   lastName={leaveAllocation?.lastName}
                   avatarUrl={leaveAllocation?.authPic}
+                  chipStyles={{ maxWidth: "fit-content" }}
                 />
               </Box>
             ),
