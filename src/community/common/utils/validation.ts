@@ -83,7 +83,7 @@ export const RequestPasswordChangeValidationSchema = (
 ) => {
   return Yup.object().shape({
     email: Yup.string()
-      .email(translateText(["invalidEmailError"]))
+      .email(translateText(["emailValidError"]))
       .required(translateText(["emailResetRequiredError"]))
       .test(
         "checkEmailExists",

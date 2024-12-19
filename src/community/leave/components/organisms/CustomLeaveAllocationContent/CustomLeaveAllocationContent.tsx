@@ -14,7 +14,6 @@ import SearchBox from "~community/common/components/molecules/SearchBox/SearchBo
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { useGetCustomLeaves } from "~community/leave/api/LeaveApi";
 import CustomLeaveAllocationsTable from "~community/leave/components/molecules/CustomLeaveAllocationsTable/CustomLeaveAllocationsTable";
 import CustomLeaveModalController from "~community/leave/components/organisms/CustomLeaveModalController/CustomLeaveModalController";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -24,8 +23,11 @@ import styles from "./styles";
 
 const CustomLeaveAllocationContent: FC = () => {
   const translateText = useTranslator("leaveModule", "customLeave");
-  const { setCustomLeaveAllocationModalType, setIsLeaveAllocationModalOpen } =
-    useLeaveStore((state) => state);
+  const {
+    setCustomLeaveAllocationModalType,
+    setIsLeaveAllocationModalOpen,
+    customLeaveAllocations
+  } = useLeaveStore((state) => state);
 
   const [customLeaveAllocationSearchTerm, setCustomLeaveAllocationSearchTerm] =
     useState<string | undefined>(undefined);
@@ -33,33 +35,23 @@ const CustomLeaveAllocationContent: FC = () => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const { selectedYear } = useLeaveStore((state) => state);
-
-  const { data: customLeaveData, isLoading } = useGetCustomLeaves(
-    currentPage,
-    5,
-    customLeaveAllocationSearchTerm,
-    Number(selectedYear)
-  );
-
-  const [showSearchAndAddButton, setShowSearchAndAddButton] = useState(false);
-
-  useEffect(() => {
-    const hasData = customLeaveData?.items && customLeaveData.items.length > 0;
-    const hasSearchTerm =
-      customLeaveAllocationSearchTerm !== undefined &&
-      customLeaveAllocationSearchTerm.trim() !== "";
-
-    setShowSearchAndAddButton(hasData || hasSearchTerm);
-  }, [customLeaveData, customLeaveAllocationSearchTerm]);
-
   const handleAddAllocation = () => {
     setIsLeaveAllocationModalOpen(true);
     setCustomLeaveAllocationModalType(
       CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION
     );
   };
+
+  const [showSearchAndAddButton, setShowSearchAndAddButton] = useState(false);
+
+  useEffect(() => {
+    const hasData = customLeaveAllocations && customLeaveAllocations.length > 0;
+    const hasSearchTerm =
+      customLeaveAllocationSearchTerm !== undefined &&
+      customLeaveAllocationSearchTerm.trim() !== "";
+
+    setShowSearchAndAddButton(hasData || hasSearchTerm);
+  }, [customLeaveAllocations, customLeaveAllocationSearchTerm]);
 
   const handleSearchTermChange = (term: string) => {
     setCustomLeaveAllocationSearchTerm(term);
@@ -96,7 +88,7 @@ const CustomLeaveAllocationContent: FC = () => {
                 minWidth: "auto",
                 padding: "0.5rem 1rem"
               }}
-              onClick={() => handleAddAllocation()}
+              onClick={handleAddAllocation}
             />
           )}
         </Stack>
