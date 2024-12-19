@@ -33,18 +33,18 @@ interface Props {
   >;
   isEditingLeaveAllocationChanged: boolean;
   initialValues: CustomLeaveAllocationType;
+  onCancel: (values: CustomLeaveAllocationType) => void;
 }
 const AddLeaveAllocationModal: React.FC<Props> = ({
-  setTempLeaveAllocationDetails,
   setCurrentLeaveAllocationFormData,
-  isEditingLeaveAllocationChanged,
-  initialValues
+  initialValues,
+  onCancel
 }) => {
   const translateText = useTranslator("leaveModule", "customLeave");
   const { setCustomLeaveAllocationModalType, setIsLeaveAllocationModalOpen } =
     useLeaveStore();
 
-  const { toastMessage, setToastMessage } = useToast();
+  const { setToastMessage } = useToast();
 
   const onAddSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
@@ -107,26 +107,6 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     isSubmitting
   } = form;
 
-  const handleCancel = useCallback(() => {
-    if (isEditingLeaveAllocationChanged) {
-      setTempLeaveAllocationDetails(values);
-      setCustomLeaveAllocationModalType(
-        CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION
-      );
-    } else {
-      setIsLeaveAllocationModalOpen(false);
-      setCustomLeaveAllocationModalType(
-        CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION
-      );
-    }
-  }, [
-    isEditingLeaveAllocationChanged,
-    setTempLeaveAllocationDetails,
-    setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen,
-    values
-  ]);
-
   useEffect(() => {
     setCurrentLeaveAllocationFormData(values);
   }, [values, setCurrentLeaveAllocationFormData]);
@@ -161,7 +141,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
           styles={{ mt: "1rem" }}
           buttonStyle={ButtonStyle.TERTIARY}
           endIcon={<Icon name={IconName.CLOSE_ICON} />}
-          onClick={handleCancel}
+          onClick={() => onCancel(values)}
         />
       </Box>
     </>
