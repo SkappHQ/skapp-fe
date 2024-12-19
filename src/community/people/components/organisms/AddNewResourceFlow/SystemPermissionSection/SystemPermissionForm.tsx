@@ -1,5 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
@@ -29,8 +30,10 @@ import {
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
+import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 import SystemCredentials from "../../SystemCredentials/SystemCrendetials";
 import styles from "./styles";
@@ -81,6 +84,9 @@ const SystemPermissionForm = ({
     "commonText"
   );
 
+  const roleLimitationTexts = useTranslator("peopleModule", "roleLimitation");
+  const router = useRouter();
+
   const { data } = useGetSuperAdminCount();
   const { setUserRoles, userRoles } = usePeopleStore((state) => state);
   const { setToastMessage } = useToast();
@@ -106,6 +112,31 @@ const SystemPermissionForm = ({
   });
 
   const { values, setFieldValue } = formik;
+
+  const env = useGetEnviornment();
+
+  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
+    leaveAdminLimitExceeded: false,
+    attendanceAdminLimitExceeded: false,
+    peopleAdminLimitExceeded: false,
+    leaveManagerLimitExceeded: false,
+    attendanceManagerLimitExceeded: false,
+    peopleManagerLimitExceeded: false,
+    superAdminLimitExceeded: false
+  });
+
+  const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
+    (response) => setRoleLimits(response),
+    () => {
+      router.push("/_error");
+    }
+  );
+
+  useEffect(() => {
+    if (env === "enterprise") {
+      checkRoleLimits();
+    }
+  }, [env]);
 
   useEffect(() => {
     if (updateEmployeeStatus === EditAllInformationFormStatus.TRIGGERED) {
@@ -172,7 +203,111 @@ const SystemPermissionForm = ({
     }
   };
 
-  const handleCustomChange = (name: string, value: any) => {
+  const handleCustomChangeEnterprise = (
+    name: keyof EmployeeRoleType,
+    value: any
+  ) => {
+    if (
+      name === "peopleRole" &&
+      value === Role.PEOPLE_ADMIN &&
+      roleLimits.peopleAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
+        description: roleLimitationTexts(["peopleAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "leaveRole" &&
+      value === Role.LEAVE_ADMIN &&
+      roleLimits.leaveAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
+        description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "attendanceRole" &&
+      value === Role.ATTENDANCE_ADMIN &&
+      roleLimits.attendanceAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
+        description: roleLimitationTexts([
+          "attendanceAdminLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "peopleRole" &&
+      value === Role.PEOPLE_MANAGER &&
+      roleLimits.peopleManagerLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
+        description: roleLimitationTexts([
+          "peopleManagerLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "leaveRole" &&
+      value === Role.LEAVE_MANAGER &&
+      roleLimits.leaveManagerLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
+        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "attendanceRole" &&
+      value === Role.ATTENDANCE_MANAGER &&
+      roleLimits.attendanceManagerLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
+        description: roleLimitationTexts([
+          "attendanceManagerLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
+    setFieldValue(name, value);
+    setUserRoles(name, value);
+  };
+
+  const handleCustomChangeDefault = (name: string, value: any) => {
     setFieldValue(name, value);
 
     if (name === "isSuperAdmin") {
@@ -185,6 +320,82 @@ const SystemPermissionForm = ({
       setUserRoles("attendanceRole", value);
     }
   };
+
+  const handleSuperAdminChangeEnterprise = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const isChecked = e.target.checked;
+
+    if (!isChecked && data?.superAdminCount === 1) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["superAdminRequiredTitle"]),
+        description: roleLimitationTexts(["superAdminRequiredDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (isChecked && roleLimits.superAdminLimitExceeded) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["superAdminLimitationTitle"]),
+        description: roleLimitationTexts(["superAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    void setFieldValue("isSuperAdmin", isChecked);
+    setUserRoles("isSuperAdmin", isChecked);
+
+    const peopleRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
+    const leaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
+    const attendanceRole = isChecked
+      ? Role.ATTENDANCE_ADMIN
+      : Role.ATTENDANCE_EMPLOYEE;
+
+    void setFieldValue("peopleRole", peopleRole);
+    void setFieldValue("leaveRole", leaveRole);
+    void setFieldValue("attendanceRole", attendanceRole);
+
+    setUserRoles("attendanceRole", attendanceRole);
+    setUserRoles("peopleRole", peopleRole);
+    setUserRoles("leaveRole", leaveRole);
+  };
+
+  const handleSuperAdminChangeDefault = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const isChecked = e.target.checked;
+    void setFieldValue("isSuperAdmin", isChecked);
+    setUserRoles("isSuperAdmin", isChecked);
+
+    const peopleRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
+    const leaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
+    const attendanceRole = isChecked
+      ? Role.ATTENDANCE_ADMIN
+      : Role.ATTENDANCE_EMPLOYEE;
+
+    void setFieldValue("peopleRole", peopleRole);
+    void setFieldValue("leaveRole", leaveRole);
+    void setFieldValue("attendanceRole", attendanceRole);
+
+    setUserRoles("attendanceRole", attendanceRole);
+    setUserRoles("peopleRole", peopleRole);
+    setUserRoles("leaveRole", leaveRole);
+  };
+
+  const handleCustomChange =
+    env === "enterprise"
+      ? handleCustomChangeEnterprise
+      : handleCustomChangeDefault;
+  const handleSuperAdminChange =
+    env === "enterprise"
+      ? handleSuperAdminChangeEnterprise
+      : handleSuperAdminChangeDefault;
 
   const handleModalClose = () => {
     if (employee) {
@@ -229,30 +440,7 @@ const SystemPermissionForm = ({
             <SwitchRow
               disabled={isProfileView || isInputsDisabled}
               checked={values.isSuperAdmin}
-              onChange={(e) => {
-                const isChecked = e.target.checked;
-                void setFieldValue("isSuperAdmin", isChecked);
-                setUserRoles("isSuperAdmin", isChecked);
-
-                const peopleRole = isChecked
-                  ? Role.PEOPLE_ADMIN
-                  : Role.PEOPLE_EMPLOYEE;
-                const leaveRole = isChecked
-                  ? Role.LEAVE_ADMIN
-                  : Role.LEAVE_EMPLOYEE;
-                const attendanceRole = isChecked
-                  ? Role.ATTENDANCE_ADMIN
-                  : Role.ATTENDANCE_EMPLOYEE;
-
-                void setFieldValue("peopleRole", peopleRole);
-                void setFieldValue("leaveRole", leaveRole);
-                void setFieldValue("attendanceRole", attendanceRole);
-
-                setUserRoles("isSuperAdmin", isChecked);
-                setUserRoles("attendanceRole", attendanceRole);
-                setUserRoles("peopleRole", peopleRole);
-                setUserRoles("leaveRole", leaveRole);
-              }}
+              onChange={handleSuperAdminChange}
             />
           </Stack>
         </Stack>
