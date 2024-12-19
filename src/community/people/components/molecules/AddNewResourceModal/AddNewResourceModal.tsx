@@ -18,6 +18,7 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
+import { tenantID } from "~community/common/utils/axiosInterceptor";
 import { useGetAllowedGrantablePermissions } from "~community/configurations/api/userRolesApi";
 import {
   useCheckEmailAndIdentificationNoForQuickAdd,
@@ -32,6 +33,7 @@ import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
@@ -127,19 +129,42 @@ const AddNewResourceModal = () => {
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
 
-  useEffect(() => {
-    const updatedData = checkEmailAndIdentificationNo;
+  const env = useGetEnviornment();
 
-    if (updatedData && updatedData.isWorkEmailExists !== null && isSuccess) {
-      if (updatedData.isWorkEmailExists) {
-        formik.setFieldError("workEmail", translateText(["uniqueEmailError"]));
-      } else if (!updatedData.isWorkEmailExists) {
+  const isEnterpriseMode = env === "enterprise";
+
+  const { data: globalLogin } = useGetGlobalLoginMethod(
+    isEnterpriseMode,
+    tenantID as string
+  );
+
+  const validateWorkEmail = () => {
+    const updatedData = checkEmailAndIdentificationNo;
+    if (updatedData?.isWorkEmailExists) {
+      formik.setFieldError("workEmail", translateText(["uniqueEmailError"]));
+      return false;
+    }
+
+    if (isEnterpriseMode) {
+      if (globalLogin == "GOOGLE" && !updatedData?.isGoogleDomain) {
+        formik.setFieldError("workEmail", translateText(["workEmailGoogle"]));
+        return false;
+      }
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (
+      checkEmailAndIdentificationNo &&
+      checkEmailAndIdentificationNo.isWorkEmailExists !== null &&
+      isSuccess
+    ) {
+      if (validateWorkEmail()) {
         handleSubmit();
       }
     }
-  }, [checkEmailAndIdentificationNo, isSuccess]);
-
-  const env = useGetEnviornment();
+  }, [isEnterpriseMode, checkEmailAndIdentificationNo, isSuccess]);
 
   const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
     (response) => setRoleLimits(response),
