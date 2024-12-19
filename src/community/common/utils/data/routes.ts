@@ -252,18 +252,7 @@ const routes = [
         name: "Billing",
         url: ROUTES.SETTINGS.BILLING,
         hasSubTree: false,
-        requiredAuthLevel: [
-          AdminTypes.SUPER_ADMIN,
-          AdminTypes.PEOPLE_ADMIN,
-          AdminTypes.LEAVE_ADMIN,
-          AdminTypes.ATTENDANCE_ADMIN,
-          ManagerTypes.PEOPLE_MANAGER,
-          ManagerTypes.LEAVE_MANAGER,
-          ManagerTypes.ATTENDANCE_MANAGER,
-          EmployeeTypes.PEOPLE_EMPLOYEE,
-          EmployeeTypes.LEAVE_EMPLOYEE,
-          EmployeeTypes.ATTENDANCE_EMPLOYEE
-        ]
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
       },
       {
         id: "5B",
