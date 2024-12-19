@@ -173,7 +173,7 @@ export const useTransferMembersWithJobTitle = (
   return useMutation({
     mutationFn: (data: TransferMembersWithJobTitleMutationType) => {
       return authFetch.patch(
-        jobFamilyEndpoints.TRANSFER_EMPLOYEES_WITH_JOB_FAMILY_ID(
+        jobFamilyEndpoints.TRANSFER_EMPLOYEES_WITH_JOB_TITLE_ID(
           data.jobTitleId
         ),
         data.payload

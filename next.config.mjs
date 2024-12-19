@@ -47,6 +47,10 @@ const nextConfig = {
         destination: "/community/settings"
       },
       {
+        source: "/settings/billing",
+        destination: "/enterprise/settings/billing"
+      },
+      {
         source: "/notifications",
         destination: "/community/notifications"
       },
@@ -72,7 +76,9 @@ const nextConfig = {
       },
       {
         source: "/reset-password",
-        destination: "/community/reset-password"
+        destination: isEnterpriseMode
+          ? "/enterprise/reset-password"
+          : "/community/reset-password"
       },
       {
         source: "/leave/leave-analytics",
@@ -80,7 +86,9 @@ const nextConfig = {
       },
       {
         source: "/people/directory",
-        destination: isEnterpriseMode ? "/enterprise/people/directory" : "/community/people/directory"
+        destination: isEnterpriseMode
+          ? "/enterprise/people/directory"
+          : "/community/people/directory"
       },
       {
         source: "/people/job-family",
@@ -201,7 +209,15 @@ const nextConfig = {
       {
         source: "/redirect",
         destination: "/enterprise/redirect"
-      }
+      },
+      {
+        source: "/verify-account-reset-password",
+        destination: "/enterprise/verify-account-reset-password"
+      },
+      {
+        source: "/forget-password",
+        destination: "/enterprise/forget-password"
+      },
     ];
   },
   eslint: {

@@ -45,7 +45,6 @@ function decrementUnreadMessageCount() {
 }
 
 messaging.onBackgroundMessage((payload) => {
-
   const notificationTitle = payload.notification.title;
 
   const notificationOptions = {
@@ -58,19 +57,6 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-messaging.onForegroundMessage((payload) => {
-
-  const notificationTitle = payload.notification.title;
-
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "./favicon/favicon-48x48.png",
-  };
-
-  incrementUnreadMessageCount();
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
 
 self.addEventListener("notificationclick", function (event) {
   decrementUnreadMessageCount();

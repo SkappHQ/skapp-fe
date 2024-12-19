@@ -493,6 +493,8 @@
       "requireEmailError": "Please enter the work email",
       "validEmailError": "Please enter a valid email",
       "head": "Directory | Skapp",
+      "quickAddSuccessTitle": "User Added",
+      "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully.",
       "workEmailGoogle": "Work email must be a Google account."
     },
     "contactDetails": {
@@ -951,5 +953,23 @@
     "systemCredentialsHeading": "System Credentials",
     "resetPasswordBtn": "Reset Password",
     "shareCredentialsBtn": "Share Credentials"
+  },
+  "roleLimitation": {
+    "superAdminLimitationTitle": "Super Admin Limit Reached",
+    "superAdminLimitationDescription": "Only three super admin accounts are allowed.",
+    "superAdminRequiredTitle": "Super Admin Required",
+    "superAdminRequiredDescription": "Please assign another Super Admin before changing the user role",
+    "leaveAdminLimitationTitle": "Leave Admin Limit Reached",
+    "leaveAdminLimitationDescription": "Only one Leave Admin account is allowed.",
+    "leaveManagerLimitationTitle": "Leave Manager Limit Reached",
+    "leaveManagerLimitationDescription": "Only one Leave Manager account is allowed.",
+    "attendanceAdminLimitationTitle": "Attendance Admin Limit Reached",
+    "attendanceAdminLimitationDescription": "Only one Attendance Admin account is allowed.",
+    "attendanceManagerLimitationTitle": "Attendance Manager Limit Reached",
+    "attendanceManagerLimitationDescription": "Only one Attendance Manager account is allowed.",
+    "peopleAdminLimitationTitle": "People Admin Limit Reached",
+    "peopleAdminLimitationDescription": "Only one People Admin account is allowed.",
+    "peopleManagerLimitationTitle": "People Manager Limit Reached",
+    "peopleManagerLimitationDescription": "Only one People Manager account is allowed."
   }
 }

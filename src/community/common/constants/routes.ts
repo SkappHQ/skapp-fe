@@ -9,13 +9,18 @@ const ROUTES = {
     ERROR: "/_error",
     FORGOT_PASSWORD: "/forgot-password",
     VERIFY: "/verify-email",
-    VERIFY_SUCCESS: "/verify-success"
+    VERIFY_SUCCESS: "/verify-success",
+    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify-account-reset-password",
+    FORGET_PASSWORD: "/forget-password"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization"
   },
   NOTIFICATIONS: "/notifications",
-  SETTINGS: "/settings",
+  SETTINGS: {
+    BASE: "/settings",
+    BILLING: "/settings/billing"
+  },
   TIMESHEET: {
     BASE: "/timesheet",
     MY_TIMESHEET: "/timesheet/my-timesheet",

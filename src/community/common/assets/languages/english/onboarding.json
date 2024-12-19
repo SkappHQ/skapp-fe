@@ -61,7 +61,12 @@
     "invalidOtp": "Invalid validation code",
     "verificationSuccess": "Verification Success",
     "resendUnsuccess": "Failed to resend code. Please try again later.",
-    "verificationError": "Verification failed. Please try again."
+    "verificationError": "Verification failed. Please try again.",
+    "domainTooltip": "Enter your company domain",
+    "ssoLoginDescription": "Sign into your organization account using your G-suite account Single Sign-On",
+    "credentialsDescription": "Enter your username and password to sign in to the system",
+    "domainDescription": "Please enter the company domain of your account to access your workspace.",
+    "domainLabel": "Company domain"
   },
   "signIn": {
     "pageHeading": "Log in",
@@ -91,8 +96,7 @@
     "passwordChangeRequestSuccessDescription": "Password reset request sent successfully. Admin will review and contact you soon.",
     "domainVerification": "Please enter the company domain of your account to access your workspace",
     "proceed": "Proceed to sign in",
-    "domain": "Company domain",
-    "domainTooltip": "Enter your company domain"
+    "domain": "Company domain"
   },
   "resetPassword": {
     "pageHeading": "Reset Password",

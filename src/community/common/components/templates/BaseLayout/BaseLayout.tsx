@@ -46,7 +46,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
     if (isProtected && token) {
       setDeviceToken(token);
     }
-  }, [token]);
+  }, [isProtected, token]);
 
   if (isProtected) {
     return (
