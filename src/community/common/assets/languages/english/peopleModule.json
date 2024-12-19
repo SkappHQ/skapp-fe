@@ -492,7 +492,9 @@
       "uniqueEmailError": "Work email already exists",
       "requireEmailError": "Please enter the work email",
       "validEmailError": "Please enter a valid email",
-      "head": "Directory | Skapp"
+      "head": "Directory | Skapp",
+      "quickAddSuccessTitle": "User Added",
+      "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully."
     },
     "contactDetails": {
       "title": "Contact Details",

@@ -31,7 +31,7 @@ const DeleteConfirmModal = () => {
     });
   };
 
-  const handleError = (error: any) => {
+  const handleError = () => {
     setToastMessage({
       open: true,
       toastType: "error",

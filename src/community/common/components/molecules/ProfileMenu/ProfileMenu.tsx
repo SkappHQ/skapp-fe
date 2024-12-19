@@ -65,16 +65,15 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
         >
           <Box>
             <Avatar
-              firstName={session?.user?.employee?.firstName || ""}
-              lastName={session?.user?.employee?.lastName || ""}
-              alt={`${session?.user?.employee?.firstName} ${session?.user?.employee?.lastName}`}
+              firstName={employee?.firstName || ""}
+              lastName={employee?.lastName || ""}
+              alt={`${employee?.firstName} ${employee?.lastName}`}
               src={employee?.authPic || ""}
             />
           </Box>
           <Stack>
             <Typography variant="h3">
-              {session?.user?.employee?.firstName}{" "}
-              {session?.user?.employee?.lastName}
+              {employee?.firstName} {employee?.lastName}
             </Typography>
             <Typography
               variant="body2"

@@ -29,6 +29,8 @@ import {
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
 
 import SystemCredentials from "../../SystemCredentials/SystemCrendetials";
 import styles from "./styles";
@@ -66,6 +68,7 @@ const SystemPermissionForm = ({
   const classes = styles();
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
+  const enviornment = useGetEnviornment();
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -300,7 +303,9 @@ const SystemPermissionForm = ({
             }
           />
         </Stack>
-        {isUpdate && !isInputsDisabled && <SystemCredentials />}
+        {isUpdate &&
+          !isInputsDisabled &&
+          enviornment === ProfileModes.COMMUNITY && <SystemCredentials />}
 
         {!isInputsDisabled && (
           <Stack

@@ -9,7 +9,10 @@ import {
 import { rejects } from "assert";
 import { AxiosResponse } from "axios";
 
+import { ToastType } from "~community/common/enums/ComponentEnums";
 import useDebounce from "~community/common/hooks/useDebounce";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { BulkUploadResponse } from "~community/common/types/BulkUploadTypes";
 import {
   ErrorResponse,
@@ -47,6 +50,8 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
 
 const getBannerData = async (): Promise<number> => {
   const url = peoplesEndpoints.GET_PENDING_EMPLOYEE_COUNT;
@@ -248,8 +253,18 @@ export const useGetPreprocessedRoles = (): UseQueryResult<JobFamilies[]> => {
 
 export const useQuickAddEmployeeMutation = () => {
   const queryClient = useQueryClient();
-  const { setSharedCredentialData, setDirectoryModalType } = usePeopleStore(
-    (state) => state
+  const {
+    setSharedCredentialData,
+    setDirectoryModalType,
+    setIsDirectoryModalOpen
+  } = usePeopleStore((state) => state);
+
+  const { setToastMessage } = useToast();
+  const enviornment = useGetEnviornment();
+  const translateText = useTranslator(
+    "peopleModule",
+    "addResource",
+    "generalDetails"
   );
   return useMutation({
     mutationFn: async (payload: QuickAddEmployeePayload) => {
@@ -260,8 +275,19 @@ export const useQuickAddEmployeeMutation = () => {
       return response?.data?.results[0] as QuickAddEmployeeResponse;
     },
     onSuccess: (data: QuickAddEmployeeResponse) => {
-      setSharedCredentialData(data);
-      setDirectoryModalType(DirectoryModalTypes.USER_CREDENTIALS);
+      if (enviornment === ProfileModes.COMMUNITY) {
+        setSharedCredentialData(data);
+        setDirectoryModalType(DirectoryModalTypes.USER_CREDENTIALS);
+      } else {
+        setDirectoryModalType(DirectoryModalTypes.NONE);
+        setIsDirectoryModalOpen(false);
+        setToastMessage({
+          toastType: ToastType.SUCCESS,
+          title: translateText(["quickAddSuccessTitle"]),
+          description: translateText(["quickAddSuccessDescription"]),
+          open: true
+        });
+      }
       queryClient
         .invalidateQueries({
           queryKey: peopleQueryKeys.EMPLOYEE_COUNT()

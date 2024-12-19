@@ -26,15 +26,17 @@ const LoginCredentialsModal = () => {
   const loginUrl = `${baseUrl}/signin`;
 
   const handleCopyText = () => {
-    const textToCopy = `
-      ${translateText(["sectionOne"])}
-      ${translateText(["sectionTwo"], { name: userName() })}
-      ${translateText(["sectionThree"])}
-      ${translateText(["loginUrl"], { link: loginUrl })}
-      ${translateText(["username"], { username: employeeCredentials.email })}
-      ${translateText(["password"], { password: employeeCredentials.tempPassword })}
-      ${translateText(["sectionFive"])}
-    `;
+    const textToCopy = [
+      translateText(["sectionOne"]),
+      translateText(["sectionTwo"], { name: userName() }),
+      translateText(["sectionThree"]),
+      translateText(["loginUrl"], { link: loginUrl }),
+      translateText(["username"], { username: employeeCredentials.email }),
+      translateText(["password"], {
+        password: employeeCredentials.tempPassword
+      }),
+      translateText(["sectionFive"])
+    ].join("\n");
 
     navigator.clipboard.writeText(textToCopy).catch((err) => {
       console.error("Failed to copy text", err);

@@ -47,6 +47,10 @@ const nextConfig = {
         destination: "/community/settings"
       },
       {
+        source: "/settings/billing",
+        destination: "/enterprise/settings/billing"
+      },
+      {
         source: "/notifications",
         destination: "/community/notifications"
       },
@@ -80,7 +84,9 @@ const nextConfig = {
       },
       {
         source: "/people/directory",
-        destination: isEnterpriseMode ? "/enterprise/people/directory" : "/community/people/directory"
+        destination: isEnterpriseMode
+          ? "/enterprise/people/directory"
+          : "/community/people/directory"
       },
       {
         source: "/people/job-family",
