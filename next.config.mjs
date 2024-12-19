@@ -201,7 +201,15 @@ const nextConfig = {
       {
         source: "/redirect",
         destination: "/enterprise/redirect"
-      }
+      },
+      {
+        source: "/verify-account-reset-password",
+        destination: "/enterprise/verify-account-reset-password"
+      },
+      {
+        source: "/reset-password-enterprise",
+        destination: "/enterprise/reset-password"
+      },
     ];
   },
   eslint: {

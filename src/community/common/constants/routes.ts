@@ -9,7 +9,9 @@ const ROUTES = {
     ERROR: "/_error",
     FORGOT_PASSWORD: "/forgot-password",
     VERIFY: "/verify-email",
-    VERIFY_SUCCESS: "/verify-success"
+    VERIFY_SUCCESS: "/verify-success",
+    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify-account-reset-password",
+    RESET_PASSWORD_ENTERPRISE: "/reset-password-enterprise"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization"
