@@ -1,7 +1,13 @@
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useState
+} from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
