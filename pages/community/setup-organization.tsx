@@ -7,6 +7,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 
 import { useUploadImages } from "~community/common/api/FileHandleApi";
 import { useCreateOrganization } from "~community/common/api/OrganizationCreateApi";
+import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
 import SetupOrganizationForm from "~community/common/components/organisms/Forms/SignUpForm/SetupOrganizationForm/SetupOrganizationForm";
 import OnboardingLayout from "~community/common/components/templates/OnboardingLayout/OnboardingLayout";
 import ROUTES from "~community/common/constants/routes";
@@ -110,6 +111,10 @@ const SetupOrganization: NextPage = () => {
     setFileName(newFileName);
     OrganisationForm.setFieldValue("organizationLogo", newFileName);
   };
+
+  if (isPending) {
+    return <FullScreenLoader />;
+  }
 
   return (
     <Box

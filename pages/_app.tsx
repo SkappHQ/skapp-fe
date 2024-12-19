@@ -1,4 +1,3 @@
-import { Backdrop, CircularProgress } from "@mui/material";
 import { Theme, ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -9,9 +8,9 @@ import { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { I18nextProvider, useSSR } from "react-i18next";
 
+import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
 import { appModes } from "~community/common/constants/configs";
-import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
 import { theme } from "~community/common/theme/theme";
@@ -74,17 +73,7 @@ function MyApp({
       };
     }, [router.asPath, router.events]);
 
-    return (
-      <Backdrop
-        sx={(theme) => ({
-          color: theme.palette.text.whiteText,
-          zIndex: ZIndexEnums.MAX
-        })}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
+    return <>{loading && <FullScreenLoader />}</>;
   }
 
   const shouldUseWebSocketProvider =
