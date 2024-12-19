@@ -191,11 +191,23 @@ const AddNewResourceModal = () => {
       return;
     }
 
-    setFieldValue("isSuperAdmin", isChecked);
+    handleIsSuperAdminPermission(isChecked);
   };
 
-  const handleSuperAdminChangeDefault = (isChecked: boolean) => {
+  const handleSuperAdminChangeDefault = (isChecked: boolean) =>
+    handleIsSuperAdminPermission(isChecked);
+
+  const handleIsSuperAdminPermission = (isChecked: boolean) => {
     setFieldValue("isSuperAdmin", isChecked);
+    const updatedRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
+    const updatedLeaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
+    const updatedAttendanceRole = isChecked
+      ? Role.ATTENDANCE_ADMIN
+      : Role.ATTENDANCE_EMPLOYEE;
+
+    setFieldValue("peopleRole", updatedRole);
+    setFieldValue("leaveRole", updatedLeaveRole);
+    setFieldValue("attendanceRole", updatedAttendanceRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
