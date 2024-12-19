@@ -76,7 +76,9 @@ const nextConfig = {
       },
       {
         source: "/reset-password",
-        destination: "/community/reset-password"
+        destination: isEnterpriseMode
+          ? "/enterprise/reset-password"
+          : "/community/reset-password"
       },
       {
         source: "/leave/leave-analytics",
@@ -207,7 +209,15 @@ const nextConfig = {
       {
         source: "/redirect",
         destination: "/enterprise/redirect"
-      }
+      },
+      {
+        source: "/verify-account-reset-password",
+        destination: "/enterprise/verify-account-reset-password"
+      },
+      {
+        source: "/forget-password",
+        destination: "/enterprise/forget-password"
+      },
     ];
   },
   eslint: {

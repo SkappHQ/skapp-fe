@@ -103,14 +103,16 @@ const TeamsTable: FC<Props> = ({
           (teamDetails?.teamMembers?.length < 2 ? (
             teamDetails?.teamMembers?.map((teamMember: EmployeeType) => {
               return (
-                <AvatarChip
-                  key={teamMember?.employeeId}
-                  firstName={teamMember?.firstName}
-                  lastName={teamMember?.lastName}
-                  avatarUrl={teamMember?.authPic}
-                  isResponsiveLayout={true}
-                  chipStyles={classes.avatarChip}
-                />
+                <Box key={teamMember?.employeeId} width="100%">
+                  <AvatarChip
+                    key={teamMember?.employeeId}
+                    firstName={teamMember?.firstName}
+                    lastName={teamMember?.lastName}
+                    avatarUrl={teamMember?.authPic}
+                    isResponsiveLayout={true}
+                    chipStyles={classes.avatarChip}
+                  />
+                </Box>
               );
             })
           ) : (

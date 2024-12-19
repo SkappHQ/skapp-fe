@@ -124,14 +124,17 @@ const AddTeamMemberRow: FC<Props> = ({
         alignItems="center"
         maxWidth="72%"
       >
-        <AvatarChip
-          firstName={employeeData?.firstName}
-          lastName={employeeData?.lastName}
-          avatarUrl={employeeData?.authPic}
-          chipStyles={{
-            color: "common.black"
-          }}
-        />
+        <Box width="100%">
+          <AvatarChip
+            firstName={employeeData?.firstName}
+            lastName={employeeData?.lastName}
+            avatarUrl={employeeData?.authPic}
+            chipStyles={{
+              color: "common.black",
+              maxWidth: "fit-content"
+            }}
+          />
+        </Box>
         <Typography sx={classes.jobTitle}>
           {`${employeeData?.jobLevel?.name ?? ""} ${employeeData?.jobRole?.name ?? ""}`}
         </Typography>

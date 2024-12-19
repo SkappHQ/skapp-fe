@@ -121,11 +121,14 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
   const tableRows = leaveRequests.map((request: LeaveRequest) => ({
     id: request.leaveRequestId,
     employee: (
-      <AvatarChip
-        firstName={request.employee.firstName}
-        lastName={request.employee.lastName}
-        avatarUrl={request.employee.authPic || ""}
-      />
+      <Box width="100%">
+        <AvatarChip
+          firstName={request.employee.firstName}
+          lastName={request.employee.lastName}
+          avatarUrl={request.employee.authPic || ""}
+          chipStyles={{ maxWidth: "fit-content" }}
+        />
+      </Box>
     ),
     leaveDuration: (
       <Box sx={{ color: "black" }}>

@@ -494,7 +494,8 @@
       "validEmailError": "Please enter a valid email",
       "head": "Directory | Skapp",
       "quickAddSuccessTitle": "User Added",
-      "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully."
+      "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully.",
+      "workEmailGoogle": "Work email must be a Google account."
     },
     "contactDetails": {
       "title": "Contact Details",
