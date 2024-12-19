@@ -8,6 +8,7 @@ import PasswordStrengthMeter from "~community/common/components/molecules/Passwo
 import { characterLengths } from "~community/common/constants/stringConstants";
 import { inputFieldTestIds } from "~community/common/constants/testIds";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { isValidNamePattern } from "~community/common/utils/validation";
 
 import { styles } from "./styles";
 
@@ -41,6 +42,18 @@ const SetupSuperAdminForm: React.FC<Props> = ({
     }));
   };
 
+  const handleValidatedChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    formikHandleChange: (e: ChangeEvent<HTMLInputElement>) => void
+  ) => {
+    const { value, name } = event.target;
+    const isValidInput = isValidNamePattern(value);
+
+    if ((name === "firstName" || name === "lastName") && isValidInput) {
+      formikHandleChange(event);
+    }
+  };
+
   return (
     <Box sx={classes.container}>
       <Form>
@@ -59,7 +72,7 @@ const SetupSuperAdminForm: React.FC<Props> = ({
             required={true}
             value={values.firstName}
             placeHolder="Enter first name"
-            onChange={handleChange}
+            onChange={(e) => handleValidatedChange(e, handleChange)}
             onInput={handleInput}
             error={errors.firstName ?? ""}
             isDisabled={false}
@@ -73,7 +86,7 @@ const SetupSuperAdminForm: React.FC<Props> = ({
             inputType="text"
             required
             value={values.lastName}
-            onChange={handleChange}
+            onChange={(e) => handleValidatedChange(e, handleChange)}
             placeHolder="Enter last name"
             onInput={handleInput}
             error={errors.lastName ?? ""}

@@ -30,6 +30,7 @@ import InputDate from "~community/common/components/molecules/InputDate/InputDat
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import InputPhoneNumber from "~community/common/components/molecules/InputPhoneNumber/InputPhoneNumber";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import { appModes } from "~community/common/constants/configs";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
 import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -239,7 +240,10 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     const handleImageClick = () => {
       if (employeeGeneralDetails?.authPic?.length) {
         handleUnSelectPhoto();
-      } else if (usedStoragePercentage >= NINETY_PERCENT) {
+      } else if (
+        process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+        usedStoragePercentage >= NINETY_PERCENT
+      ) {
         setToastMessage({
           open: true,
           toastType: "error",

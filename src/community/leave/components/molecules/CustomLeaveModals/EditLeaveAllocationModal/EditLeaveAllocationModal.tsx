@@ -48,12 +48,9 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   const {
     setCustomLeaveAllocationModalType,
     setIsLeaveAllocationModalOpen,
-    currentEditingLeaveAllocation
-  } = useLeaveStore((state) => ({
-    setCustomLeaveAllocationModalType: state.setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen: state.setIsLeaveAllocationModalOpen,
-    currentEditingLeaveAllocation: state.currentEditingLeaveAllocation
-  }));
+    currentEditingLeaveAllocation,
+    setCurrentPage
+  } = useLeaveStore();
 
   const onUpdateSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
@@ -69,12 +66,12 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     });
   }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
 
-  const updateLeaveAllocationMutation = useUpdateLeaveAllocation();
+  const { mutate, isPending } = useUpdateLeaveAllocation();
   const deleteLeaveAllocation = useDeleteLeaveAllocation();
 
   const onSubmit = useCallback(
     (values: CustomLeaveAllocationType) => {
-      updateLeaveAllocationMutation.mutate(
+      mutate(
         {
           employeeId: currentEditingLeaveAllocation?.employeeId ?? 0,
           typeId: Number(values.typeId),
@@ -90,11 +87,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
         }
       );
     },
-    [
-      updateLeaveAllocationMutation,
-      currentEditingLeaveAllocation,
-      onUpdateSuccess
-    ]
+    [mutate, currentEditingLeaveAllocation, onUpdateSuccess]
   );
 
   const onDelete = useCallback(() => {
@@ -119,6 +112,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
           description: translateText(["deleteSuccessDescription"]),
           isIcon: true
         });
+        setCurrentPage(0);
       },
       onError: () => {
         setToastMessage({
@@ -135,7 +129,8 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     currentEditingLeaveAllocation,
     setIsLeaveAllocationModalOpen,
     setToastMessage,
-    translateText
+    translateText,
+    setCurrentPage
   ]);
 
   const form = useFormik({
@@ -164,7 +159,14 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     onSubmit,
     enableReinitialize: true
   });
-  const { values, errors, handleSubmit, setFieldValue, setFieldError } = form;
+  const {
+    values,
+    errors,
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    isSubmitting
+  } = form;
 
   const handleDelete = useCallback(() => {
     setDeleteConfirmOpen(true);
@@ -175,6 +177,13 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   }, [values, setCurrentLeaveAllocationFormData]);
 
   const isDeleteDisabled = currentEditingLeaveAllocation?.totalDaysUsed != 0;
+  const isSaveDisabled =
+    !values.employeeId ||
+    !values.typeId ||
+    !values.numberOfDaysOff ||
+    isSubmitting ||
+    isPending;
+
   return (
     <>
       <CustomLeaveAllocationForm
@@ -192,6 +201,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
           buttonStyle={ButtonStyle.PRIMARY}
           endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
           onClick={() => onSubmit(values)}
+          disabled={isSaveDisabled}
         />
         <Button
           label={translateText(["deleteBtnText"])}

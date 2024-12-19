@@ -15,6 +15,25 @@ export interface CustomLeaveAllocationType {
   totalDaysUsed?: number;
 }
 
+export interface LeaveAllocation {
+  entitlementId: number;
+  employee: {
+    employeeId: number;
+    firstName: string;
+    lastName: string;
+    authPic: string;
+  };
+  totalDaysAllocated: number;
+  leaveType: {
+    typeId: number;
+    emojiCode?: string;
+    name: string;
+  };
+  validTo: string;
+  validFrom: string;
+  totalDaysUsed?: number;
+}
+
 export enum CustomLeaveAllocationModalTypes {
   NONE = "NONE",
   UNSAVED_ADD_LEAVE_ALLOCATION = "UNSAVED_ADD_LEAVE_ALLOCATION",
