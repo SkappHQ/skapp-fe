@@ -47,6 +47,10 @@ const nextConfig = {
         destination: "/community/settings"
       },
       {
+        source: "/settings/billing",
+        destination: "/enterprise/settings/billing"
+      },
+      {
         source: "/notifications",
         destination: "/community/notifications"
       },
