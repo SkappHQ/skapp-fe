@@ -70,6 +70,7 @@ interface Props {
   showAsterisk?: boolean;
   "data-testid"?: string;
   "validation-testid"?: string;
+  keepHelperTextColor?: boolean;
 }
 
 const InputField = ({
@@ -114,6 +115,7 @@ const InputField = ({
   required,
   inputMode,
   showAsterisk = true,
+  keepHelperTextColor = false,
   "data-testid": testId,
   "validation-testid": validationTestId
 }: Props): JSX.Element => {
@@ -254,9 +256,10 @@ const InputField = ({
           variant="body2"
           sx={mergeSx([
             {
-              color: error
-                ? theme.palette.error.contrastText
-                : theme.palette.text.darkText
+              color:
+                error && !keepHelperTextColor
+                  ? theme.palette.error.contrastText
+                  : theme.palette.text.darkText
             },
             classes.defaultHelperTextStyles,
             helperTxtStyles
