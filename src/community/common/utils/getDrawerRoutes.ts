@@ -61,24 +61,37 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
       }
 
       if (route.name === "Leave") {
-        const isNotLeaveManagerOrAdmin =
-          userRoles !== undefined &&
-          userRoles?.length > 0 &&
-          userRoles?.every(
-            (role) =>
-              ![ManagerTypes.LEAVE_MANAGER, AdminTypes.LEAVE_ADMIN].includes(
-                role as ManagerTypes | AdminTypes
-              )
+        const isLeaveEmployeeWithoutManagerOrAdminRole =
+          userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
+          !userRoles?.some((role) =>
+            [ManagerTypes.LEAVE_MANAGER, AdminTypes.LEAVE_ADMIN].includes(
+              role as ManagerTypes | AdminTypes
+            )
           );
 
-        if (isNotLeaveManagerOrAdmin) {
-          return {
-            id: route.id,
-            name: "Leave Requests",
-            url: ROUTES.LEAVE.MY_REQUESTS,
-            icon: route.icon,
-            hasSubTree: false
-          };
+        if (isLeaveEmployeeWithoutManagerOrAdminRole) {
+          const hasAdditionalRolesForLeaveEmployee =
+            userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
+            userRoles?.some((role) =>
+              [
+                ManagerTypes.PEOPLE_MANAGER,
+                ManagerTypes.ATTENDANCE_MANAGER,
+                AdminTypes.PEOPLE_ADMIN,
+                AdminTypes.ATTENDANCE_ADMIN
+              ].includes(role as ManagerTypes | AdminTypes)
+            );
+
+          if (hasAdditionalRolesForLeaveEmployee) {
+            return {
+              id: route.id,
+              name: "Leave Requests",
+              url: ROUTES.LEAVE.MY_REQUESTS,
+              icon: route.icon,
+              hasSubTree: false
+            };
+          }
+
+          return;
         }
       }
 

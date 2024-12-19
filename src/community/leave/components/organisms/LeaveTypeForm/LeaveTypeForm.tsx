@@ -16,6 +16,7 @@ import InputDate from "~community/common/components/molecules/InputDate/InputDat
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import ROUTES from "~community/common/constants/routes";
 import { characterLengths } from "~community/common/constants/stringConstants";
+import { MONTH_DATE_FORMAT } from "~community/common/constants/timeConstants";
 import {
   ButtonStyle,
   ButtonTypes
@@ -25,10 +26,7 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { specialCharacters } from "~community/common/regex/regexPatterns";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
-import {
-  currentYear,
-  getLocalDate
-} from "~community/common/utils/dateTimeUtils";
+import { getLocalDate, nextYear } from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveCycle } from "~community/leave/api/LeaveApi";
 import {
   useAddLeaveType,
@@ -447,12 +445,12 @@ const LeaveTypeForm = () => {
               }}
               error={errors?.carryForwardExpirationDate}
               minDate={DateTime.fromObject({
-                year: currentYear,
+                year: nextYear,
                 month: leaveCycle?.startMonth,
                 day: leaveCycle?.startDate
               })}
               maxDate={DateTime.fromObject({
-                year: currentYear,
+                year: nextYear,
                 month: leaveCycle?.endMonth,
                 day: leaveCycle?.endDate
               })}
@@ -460,7 +458,7 @@ const LeaveTypeForm = () => {
                 "carryForwardExpirationDatePlaceholder"
               ])}
               disabled={!values?.isCarryForwardEnabled}
-              inputFormat="dd/MM/YYYY"
+              inputFormat={MONTH_DATE_FORMAT}
               tooltip={
                 translateText(["carryForwardExpirationDateTooltip"]) ?? ""
               }

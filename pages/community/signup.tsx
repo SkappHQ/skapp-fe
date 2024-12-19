@@ -37,24 +37,26 @@ const SignUp: NextPage = () => {
     password: ""
   };
 
-  const onSubmit = (values: typeof initialValues) => {
+  const onSubmit = async (values: typeof initialValues) => {
     const passwordStrength = getPasswordStrength(values.password);
     const trueValueCount: number = Object.values(passwordStrength).filter(
       (val: boolean) => {
         return val;
       }
     ).length;
-
-    if (trueValueCount === MAX_PASSWORD_STRENGTH) {
-      handleSubmit();
-    } else {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: translateToastText(["passwordIsNotValidTitle"]),
-        description: translateToastText(["passwordIsNotValidDescription"]),
-        isIcon: true
-      });
+    const errors = await signUpForm.validateForm();
+    if (!errors) {
+      if (trueValueCount === MAX_PASSWORD_STRENGTH) {
+        handleSubmit();
+      } else {
+        setToastMessage({
+          open: true,
+          toastType: "error",
+          title: translateToastText(["passwordIsNotValidTitle"]),
+          description: translateToastText(["passwordIsNotValidDescription"]),
+          isIcon: true
+        });
+      }
     }
   };
 
@@ -62,10 +64,11 @@ const SignUp: NextPage = () => {
     initialValues,
     validationSchema: signUpValidation(translateText),
     onSubmit,
-    validateOnChange: false
+    validateOnChange: true,
+    validateOnBlur: true
   });
 
-  const { values, errors, handleChange } = signUpForm;
+  const { values, errors, setFieldValue, handleChange } = signUpForm;
 
   const handleInput = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {

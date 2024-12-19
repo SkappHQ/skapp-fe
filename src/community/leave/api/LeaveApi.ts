@@ -132,26 +132,35 @@ export const useGetCustomLeaves = (
   page: number,
   size: number,
   keyword?: string,
-  year?: number
+  year?: number,
+  selectedLeaveTypes?: string
 ): UseQueryResult<CustomLeavesTypes> => {
   return useQuery({
-    queryKey: leaveQueryKeys.CUSTOM_LEAVES(page, size, keyword, year),
+    queryKey: leaveQueryKeys.CUSTOM_LEAVES(
+      page,
+      size,
+      keyword,
+      year,
+      selectedLeaveTypes
+    ),
     queryFn: async () => {
+      const params: any = {
+        page,
+        size,
+        sortOrder: SortOrderTypes.ASC,
+        keyword,
+        sortKey: SortKeyTypes.CREATION_DATE,
+        year,
+        leaveTypeId: selectedLeaveTypes
+      };
+
       const results = await authFetch.get(leaveEndPoints.GET_CUSTOM_LEAVES, {
-        params: {
-          page,
-          size,
-          sortOrder: SortOrderTypes.ASC,
-          keyword,
-          sortKey: SortKeyTypes.CREATION_DATE,
-          year
-        }
+        params
       });
       return results?.data?.results[0];
     }
   });
 };
-
 export const useGetLeaveCycle = () => {
   return useQuery({
     queryKey: [leaveQueryKeys.LEAVE_CYCLE],

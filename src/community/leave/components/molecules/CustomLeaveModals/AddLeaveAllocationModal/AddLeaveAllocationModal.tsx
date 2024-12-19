@@ -70,20 +70,21 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     });
   }, []);
 
-  const createLeaveAllocationMutation = useCreateLeaveAllocation(
+  const { mutate, isPending } = useCreateLeaveAllocation(
     onAddSuccess,
     onAddError
   );
 
   const onSubmit = useCallback(
     (values: CustomLeaveAllocationType) => {
-      createLeaveAllocationMutation.mutate(values, {
+      mutate(values, {
         onSuccess: onAddSuccess,
         onError: onAddError
       });
     },
-    [createLeaveAllocationMutation, onAddSuccess, onAddError]
+    [mutate, onAddSuccess, onAddError]
   );
+
   const validationSchema = useMemo(
     () => customLeaveAllocationValidation(translateText),
     [translateText]
@@ -97,7 +98,14 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     validateOnChange: false
   });
 
-  const { values, errors, handleSubmit, setFieldValue, setFieldError } = form;
+  const {
+    values,
+    errors,
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    isSubmitting
+  } = form;
 
   const handleCancel = useCallback(() => {
     if (isEditingLeaveAllocationChanged) {
@@ -124,7 +132,10 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
   }, [values, setCurrentLeaveAllocationFormData]);
 
   const isSaveDisabled =
-    !values.employeeId || !values.typeId || !values.numberOfDaysOff;
+    !values.employeeId ||
+    !values.typeId ||
+    !values.numberOfDaysOff ||
+    isPending;
 
   return (
     <>
