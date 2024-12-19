@@ -77,8 +77,16 @@ export default withAuth(
       | SuperAdminType
     )[] = token?.roles || [];
 
-    const isPasswordChangedForTheFirstTime =
-      token?.isPasswordChangedForTheFirstTime;
+    let isPasswordChangedForTheFirstTime;
+
+    if (typeof token?.isPasswordChangedForTheFirstTime === "string") {
+      isPasswordChangedForTheFirstTime =
+        token?.isPasswordChangedForTheFirstTime === "true" ? true : false;
+    } else {
+      isPasswordChangedForTheFirstTime =
+        token?.isPasswordChangedForTheFirstTime;
+    }
+
     if (
       !(
         isPasswordChangedForTheFirstTime ||
