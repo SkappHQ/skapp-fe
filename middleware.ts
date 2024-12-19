@@ -13,7 +13,7 @@ import {
 // Define common routes shared by all roles
 const commonRoutes = [
   ROUTES.DASHBOARD.BASE,
-  ROUTES.SETTINGS,
+  ROUTES.SETTINGS.BASE,
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
@@ -22,7 +22,11 @@ const commonRoutes = [
 
 // Specific role-based routes
 const superAdminRoutes = {
-  [ROLE_SUPER_ADMIN]: [ROUTES.ORGANIZATION.SETUP, ROUTES.CONFIGURATIONS.BASE]
+  [ROLE_SUPER_ADMIN]: [
+    ROUTES.ORGANIZATION.SETUP,
+    ROUTES.CONFIGURATIONS.BASE,
+    ROUTES.SETTINGS.BILLING
+  ]
 };
 
 const adminRoutes = {
@@ -127,7 +131,7 @@ export const config = {
     // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
-    "/settings",
+    "/settings/:path*",
     "/notifications",
     "/account",
     "/reset-password",

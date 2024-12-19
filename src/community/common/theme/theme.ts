@@ -27,6 +27,8 @@ declare module "@mui/material/styles" {
       main: string;
       light: string;
       chipText: string;
+      chipDark: string;
+      text: string;
     };
     trendChart: {
       available: string;
@@ -94,6 +96,8 @@ declare module "@mui/material/styles" {
       main: string;
       light: string;
       chipText: string;
+      chipDark: string;
+      text: string;
     };
     trendChart: {
       available: string;
@@ -265,7 +269,9 @@ export const theme = createTheme({
       dark: "#B45309",
       light: "#FFFBEB",
       main: "#EEA92E",
-      chipText: "#78350F"
+      chipText: "#78350F",
+      chipDark: "#FCD34D",
+      text: "#92400E"
     },
     trendChart: {
       available: "#15803D",
