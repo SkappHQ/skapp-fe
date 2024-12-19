@@ -196,7 +196,7 @@ const InputDate: FC<Props> = ({
           component="label"
           lineHeight={1.5}
           sx={{
-            fontWeight: 500,
+            fontWeight: 400,
             color: disabled
               ? theme.palette.text.disabled
               : error
