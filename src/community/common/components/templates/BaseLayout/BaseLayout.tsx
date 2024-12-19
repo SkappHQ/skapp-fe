@@ -43,8 +43,6 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
   }, [asPath, isClient]);
 
   useEffect(() => {
-    console.log("token", token);
-
     if (isProtected && token) {
       setDeviceToken(token);
     }
