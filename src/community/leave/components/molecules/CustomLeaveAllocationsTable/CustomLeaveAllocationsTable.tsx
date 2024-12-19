@@ -1,5 +1,5 @@
-import { Box, Chip, Stack, Theme, Typography, useTheme } from "@mui/material";
-import React, { useCallback, useMemo, useState } from "react";
+import { Box, Chip, Theme, Typography, useTheme } from "@mui/material";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
@@ -17,7 +17,8 @@ import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
   CustomLeaveAllocationModalTypes,
-  CustomLeaveAllocationType
+  CustomLeaveAllocationType,
+  LeaveAllocation
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 
 import {
@@ -38,24 +39,38 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   const theme: Theme = useTheme();
 
   const {
+    selectedYear,
+    currentPage,
     setCurrentEditingLeaveAllocation,
     setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen
+    setIsLeaveAllocationModalOpen,
+    setSelectedYear,
+    setCurrentPage,
+    setCustomLeaveAllocations
   } = useLeaveStore((state) => state);
 
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const { selectedYear, setSelectedYear } = useLeaveStore((state) => state);
-
   const [selectedLeaveTypes, setSelectedLeaveTypes] = useState<string[]>([]);
+  const [tempSelectedLeaveTypes, setTempSelectedLeaveTypes] = useState<
+    string[]
+  >([]);
+
+  const leaveTypes = selectedLeaveTypes.join(",");
   const { data: customLeaveData, isLoading } = useGetCustomLeaves(
     currentPage,
     5,
     searchTerm,
-    Number(selectedYear)
+    Number(selectedYear),
+    leaveTypes
   );
 
+  useEffect(() => {
+    if (customLeaveData?.items) {
+      setCustomLeaveAllocations(customLeaveData.items);
+    }
+  }, [customLeaveData?.items, setCustomLeaveAllocations]);
+
   const handleEdit = useCallback(
-    (leaveAllocation: any) => {
+    (leaveAllocation: LeaveAllocation) => {
       const updatedLeaveAllocation: CustomLeaveAllocationType = {
         entitlementId: leaveAllocation.entitlementId,
         employeeId: leaveAllocation.employee.employeeId,
@@ -86,14 +101,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     ]
   );
 
-  const handleApplyFilters = (types: string[]) => {
-    setSelectedLeaveTypes(types);
-    setCurrentPage(0);
-  };
-
-  const handleResetFilters = () => {
-    setSelectedLeaveTypes([]);
-    setCurrentPage(0);
+  const handleRemoveFilters = (leaveType: { id: string; text: string }) => {
+    setSelectedLeaveTypes((prev) => prev.filter((i) => i !== leaveType.id));
   };
 
   const columns = useMemo(
@@ -126,7 +135,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     return (
       customLeaveData?.items?.map((leaveAllocation) => {
         return {
-          id: leaveAllocation.employee?.employeeId,
+          id: leaveAllocation.entitlementId,
           employee: (
             <Box width="100%">
               <AvatarChip
@@ -178,50 +187,75 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
     );
   }, [customLeaveData?.items, handleEdit, translateText, theme]);
 
+  const handleApplyFilters = () => {
+    setSelectedLeaveTypes(tempSelectedLeaveTypes);
+    setCurrentPage(0);
+  };
+
+  const handleResetFilters = () => {
+    setTempSelectedLeaveTypes([]);
+    setSelectedLeaveTypes([]);
+    setCurrentPage(0);
+  };
+
+  const handleLeaveTypeFilter = (leaveType: { id: string; text: string }) => {
+    setTempSelectedLeaveTypes((prev) =>
+      prev.includes(leaveType.id)
+        ? prev.filter((i) => i !== leaveType.id)
+        : [...prev, leaveType.id]
+    );
+  };
+
   const { data: leaveTypesData } = useGetLeaveTypes();
 
   const leaveTypeOptions = useMemo(
-    () => leaveTypesData?.map((leaveType) => leaveType.name) || [],
+    () =>
+      leaveTypesData?.map((leaveType) => ({
+        id: leaveType.typeId,
+        name: leaveType.name
+      })) || [],
     [leaveTypesData]
   );
 
   const filterButton = (
     <FilterButton
-      handleApplyBtnClick={() => handleApplyFilters(selectedLeaveTypes)}
+      handleApplyBtnClick={handleApplyFilters}
       handleResetBtnClick={handleResetFilters}
-      selectedFilters={[
-        {
-          filter: selectedLeaveTypes,
-          handleFilterDelete: (item) => {
-            setSelectedLeaveTypes((prev) => prev.filter((i) => i !== item));
-          }
+      selectedFilters={selectedLeaveTypes.map((type) => ({
+        filter: [
+          leaveTypeOptions.find((btn) => btn.id === Number(type))?.name ?? ""
+        ],
+        handleFilterDelete: () => {
+          setTempSelectedLeaveTypes((prev) => prev.filter((i) => i !== type));
+          setSelectedLeaveTypes((prev) => prev.filter((i) => i !== type));
         }
-      ]}
+      }))}
       position={"bottom-end"}
       id={"filter-types"}
-      isResetBtnDisabled={false}
+      isResetBtnDisabled={tempSelectedLeaveTypes.length === 0}
     >
       <Typography variant="h5" sx={typographyStyles(theme)}>
         {translateText(["filterButtonTitle"])}
       </Typography>
-      <Stack direction="row" spacing={1}>
+      <Box display="flex" flexWrap="wrap" gap={1}>
         {leaveTypeOptions.map((leaveType) => (
           <Chip
-            key={leaveType}
-            label={leaveType}
-            onClick={() => {
-              setSelectedLeaveTypes((prev) =>
-                prev.includes(leaveType)
-                  ? prev.filter((i) => i !== leaveType)
-                  : [...prev, leaveType]
-              );
-            }}
+            key={leaveType.id}
+            label={leaveType.name}
+            onClick={() =>
+              handleLeaveTypeFilter({
+                id: leaveType.id.toString(),
+                text: leaveType.name
+              })
+            }
             color={
-              selectedLeaveTypes.includes(leaveType) ? "primary" : "default"
+              tempSelectedLeaveTypes.includes(leaveType.id.toString())
+                ? "primary"
+                : "default"
             }
           />
         ))}
-      </Stack>
+      </Box>
     </FilterButton>
   );
 

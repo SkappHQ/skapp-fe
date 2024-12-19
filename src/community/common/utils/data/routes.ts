@@ -232,7 +232,7 @@ const routes = [
     name: "Settings",
     url: ROUTES.SETTINGS,
     icon: IconName.SETTINGS_ICON,
-    hasSubTree: false,
+    hasSubTree: true,
     requiredAuthLevel: [
       AdminTypes.SUPER_ADMIN,
       AdminTypes.PEOPLE_ADMIN,
@@ -244,6 +244,45 @@ const routes = [
       EmployeeTypes.PEOPLE_EMPLOYEE,
       EmployeeTypes.LEAVE_EMPLOYEE,
       EmployeeTypes.ATTENDANCE_EMPLOYEE
+    ],
+
+    subTree: [
+      {
+        id: "5A",
+        name: "Billing",
+        url: ROUTES.SETTINGS.BILLING,
+        hasSubTree: false,
+        requiredAuthLevel: [
+          AdminTypes.SUPER_ADMIN,
+          AdminTypes.PEOPLE_ADMIN,
+          AdminTypes.LEAVE_ADMIN,
+          AdminTypes.ATTENDANCE_ADMIN,
+          ManagerTypes.PEOPLE_MANAGER,
+          ManagerTypes.LEAVE_MANAGER,
+          ManagerTypes.ATTENDANCE_MANAGER,
+          EmployeeTypes.PEOPLE_EMPLOYEE,
+          EmployeeTypes.LEAVE_EMPLOYEE,
+          EmployeeTypes.ATTENDANCE_EMPLOYEE
+        ]
+      },
+      {
+        id: "5B",
+        name: "Account Settings",
+        url: ROUTES.SETTINGS.BASE,
+        hasSubTree: false,
+        requiredAuthLevel: [
+          AdminTypes.SUPER_ADMIN,
+          AdminTypes.PEOPLE_ADMIN,
+          AdminTypes.LEAVE_ADMIN,
+          AdminTypes.ATTENDANCE_ADMIN,
+          ManagerTypes.PEOPLE_MANAGER,
+          ManagerTypes.LEAVE_MANAGER,
+          ManagerTypes.ATTENDANCE_MANAGER,
+          EmployeeTypes.PEOPLE_EMPLOYEE,
+          EmployeeTypes.LEAVE_EMPLOYEE,
+          EmployeeTypes.ATTENDANCE_EMPLOYEE
+        ]
+      }
     ]
   }
 ];

@@ -13,7 +13,7 @@ import {
 // Define common routes shared by all roles
 const commonRoutes = [
   ROUTES.DASHBOARD.BASE,
-  ROUTES.SETTINGS,
+  ROUTES.SETTINGS.BASE,
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
@@ -22,7 +22,11 @@ const commonRoutes = [
 
 // Specific role-based routes
 const superAdminRoutes = {
-  [ROLE_SUPER_ADMIN]: [ROUTES.ORGANIZATION.SETUP, ROUTES.CONFIGURATIONS.BASE]
+  [ROLE_SUPER_ADMIN]: [
+    ROUTES.ORGANIZATION.SETUP,
+    ROUTES.CONFIGURATIONS.BASE,
+    ROUTES.SETTINGS.BILLING
+  ]
 };
 
 const adminRoutes = {
@@ -38,11 +42,13 @@ const managerRoutes = {
   [ManagerTypes.PEOPLE_MANAGER]: [ROUTES.PEOPLE.BASE],
   [ManagerTypes.LEAVE_MANAGER]: [
     ROUTES.LEAVE.LEAVE_REQUESTS,
-    ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS
+    ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS,
+    ROUTES.PEOPLE.INDIVIDUAL
   ],
   [ManagerTypes.ATTENDANCE_MANAGER]: [
     ROUTES.TIMESHEET.ALL_TIMESHEETS,
-    ROUTES.TIMESHEET.TIMESHEET_ANALYTICS
+    ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
+    ROUTES.PEOPLE.INDIVIDUAL
   ]
 };
 
@@ -77,8 +83,16 @@ export default withAuth(
       | SuperAdminType
     )[] = token?.roles || [];
 
-    const isPasswordChangedForTheFirstTime =
-      token?.isPasswordChangedForTheFirstTime;
+    let isPasswordChangedForTheFirstTime;
+
+    if (typeof token?.isPasswordChangedForTheFirstTime === "string") {
+      isPasswordChangedForTheFirstTime =
+        token?.isPasswordChangedForTheFirstTime === "true" ? true : false;
+    } else {
+      isPasswordChangedForTheFirstTime =
+        token?.isPasswordChangedForTheFirstTime;
+    }
+
     if (
       !(
         isPasswordChangedForTheFirstTime ||
@@ -127,7 +141,7 @@ export const config = {
     // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
-    "/settings",
+    "/settings/:path*",
     "/notifications",
     "/account",
     "/reset-password",
