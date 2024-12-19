@@ -6,7 +6,6 @@ import {
   alphaNumericNamePatternWithSpecialCharacters,
   datePatternReverse,
   emailPattern,
-  hasSpecialCharacter,
   isValidEmail,
   onlyLettersAndSpaces
 } from "~community/common/regex/regexPatterns";
@@ -27,10 +26,6 @@ export const signUpValidation = (translateText: TranslatorFunctionType) =>
     firstName: Yup.string()
       .required(translateText(["firstNameRequiredError"]))
       .matches(
-        hasSpecialCharacter(),
-        translateText(["firstNameCharacterError"])
-      )
-      .matches(
         onlyLettersAndSpaces(),
         translateText(["firstNameCharacterError"])
       )
@@ -40,7 +35,6 @@ export const signUpValidation = (translateText: TranslatorFunctionType) =>
       ),
     lastName: Yup.string()
       .required(translateText(["lastNameRequiredError"]))
-      .matches(hasSpecialCharacter(), translateText(["lastNameCharacterError"]))
       .matches(
         onlyLettersAndSpaces(),
         translateText(["lastNameCharacterError"])

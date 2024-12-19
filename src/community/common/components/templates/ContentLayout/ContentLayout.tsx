@@ -15,6 +15,7 @@ import { JSX, memo, useEffect, useMemo } from "react";
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import { appModes } from "~community/common/constants/configs";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
   ButtonSizes,
@@ -134,7 +135,8 @@ const ContentLayout = ({
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) && (
             <VersionUpgradeBanner />
           )}
-        {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
+        {process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+          data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
           usedStoragePercentage &&
           usedStoragePercentage >= EIGHTY_PERCENT && (
             <VersionUpgradeBanner
