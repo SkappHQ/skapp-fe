@@ -25,8 +25,7 @@ const styles = (theme: Theme): StyleProps => ({
     alignItems: "center",
     fontWeight: "400",
     fontSize: "0.875rem",
-    color: theme.palette.common.black,
-    height: "2.625rem"
+    color: theme.palette.common.black
   },
   popperContainer: {
     display: "flex",
@@ -62,9 +61,8 @@ const styles = (theme: Theme): StyleProps => ({
     gap: "0.75rem"
   },
   popperButtons: {
-    paddingY: "0.75rem",
-    paddingX: "1.25rem",
-    fontSize: "0.75rem"
+    width: "20.5rem",
+    height: "2.625rem"
   }
 });
 

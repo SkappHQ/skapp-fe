@@ -24,7 +24,8 @@
       "~styles/*": ["./styles/*"],
       "~public/*": ["./public/*"],
       "~i18n": ["./i18n"],
-      "~middleware": ["./middleware"]
+      "~middleware": ["./middleware"],
+      "~firebase": ["./firebase"]
     },
     "target": "es6",
     "forceConsistentCasingInFileNames": true,
@@ -36,7 +37,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".storybook/**/*"
+    ".storybook/**/*",
+    "pages/api/health.js"
   ],
   "exclude": [
     "node_modules",

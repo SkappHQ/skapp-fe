@@ -11,6 +11,7 @@ interface StyledButtonProps {
   buttonstyle: ButtonStyle;
   width: string;
   textcolor: string;
+  isDefaultIconColor: boolean;
 }
 
 const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
@@ -19,7 +20,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
   buttonsize,
   buttonstyle,
   width,
-  textcolor
+  textcolor,
+  isDefaultIconColor
 }) => {
   const padding = () => {
     switch (buttonsize) {
@@ -117,7 +119,11 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     ".MuiButton-startIcon, .MuiButton-endIcon": {
       margin: "0rem",
       "svg path": {
-        fill: disabled ? theme.palette.grey[800] : textcolor
+        fill: disabled
+          ? theme.palette.grey[800]
+          : isDefaultIconColor
+            ? ""
+            : textcolor
       }
     },
     ".MuiCircularProgress-root": {

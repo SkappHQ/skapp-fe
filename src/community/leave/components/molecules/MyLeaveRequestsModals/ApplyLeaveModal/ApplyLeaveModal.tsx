@@ -8,6 +8,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import TextArea from "~community/common/components/atoms/TextArea/TextArea";
 import CalendarDateRangePicker from "~community/common/components/molecules/CalendarDateRangePicker/CalendarDateRangePicker";
 import DurationSelector from "~community/common/components/molecules/DurationSelector/DurationSelector";
+import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -45,6 +46,10 @@ import {
   getDurationSelectorDisabledOptions
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
+import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { FileCategories } from "~enterprise/common/types/s3Types";
+import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 import styles from "./styles";
 
@@ -53,6 +58,7 @@ const ApplyLeaveModal = () => {
 
   const { setToastMessage } = useToast();
   const translateStorageText = useTranslator("StorageToastMessage");
+  const enviornment = useGetEnviornment();
   const translateText = useTranslator(
     "leaveModule",
     "myRequests",
@@ -115,7 +121,7 @@ const ApplyLeaveModal = () => {
     });
   };
 
-  const { mutate: uploadAttachments } = useUploadImages();
+  const { mutateAsync: uploadAttachments } = useUploadImages();
 
   const { mutate: applyLeaveMutate, isPending: isLeaveApplyPending } =
     useApplyLeave(selectedYear, onSuccess, onError);
@@ -199,7 +205,7 @@ const ApplyLeaveModal = () => {
     }
   }, [selectedDates, comment, attachments]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const isValid = checkValidationStatus();
     if (isValid) {
       const fileNames = attachments.map((attachment) => attachment.name ?? "");
@@ -216,21 +222,59 @@ const ApplyLeaveModal = () => {
       };
 
       if (attachments && attachments.length > 0) {
-        const formData = new FormData();
+        if (enviornment === ProfileModes.COMMUNITY) {
+          try {
+            const uploadPromises = attachments.map((attachment) => {
+              if (attachment.file) {
+                const formData = new FormData();
+                formData.append("file", attachment.file);
+                formData.append("type", FileTypes.LEAVE_ATTACHMENTS);
+                return uploadAttachments(formData).then((response) => {
+                  const filePath = response.message?.split(
+                    "File uploaded successfully: "
+                  )[1];
+                  return filePath?.split("/").pop() ?? null;
+                });
+              }
+              return Promise.resolve(null);
+            });
 
-        attachments.forEach((attachment) => {
-          if (attachment.file) {
-            formData.append("file", attachment.file);
+            const attachmentList = (await Promise.all(uploadPromises)).filter(
+              (fileName) => fileName !== null
+            ) as string[];
+
+            const updatedPayload = {
+              ...payload,
+              attachments: attachmentList
+            };
+            applyLeaveMutate(updatedPayload);
+          } catch (error) {
+            console.error("Error uploading files: ", error);
           }
-        });
+        } else {
+          try {
+            const uploadPromises = attachments.map((attachment) => {
+              if (attachment.file) {
+                return uploadFileToS3ByUrl(
+                  attachment.file as File,
+                  FileCategories.LEAVE_REQUEST
+                );
+              }
+              return Promise.resolve(null);
+            });
 
-        formData.append("type", FileTypes.LEAVE_ATTACHMENTS);
+            const attachmentUrls = (await Promise.all(uploadPromises)).filter(
+              (url) => url !== null
+            ) as string[];
 
-        uploadAttachments(formData, {
-          onSuccess: () => {
-            applyLeaveMutate(payload);
+            applyLeaveMutate({
+              ...payload,
+              attachments: attachmentUrls
+            });
+          } catch (error) {
+            console.error("Error uploading files: ", error);
           }
-        });
+        }
       } else {
         applyLeaveMutate(payload);
       }
@@ -310,6 +354,7 @@ const ApplyLeaveModal = () => {
                 : undefined
             }
             onIconClick={() => {
+              process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
               usedStoragePercentage >= NINETY_PERCENT
                 ? setToastMessage({
                     open: true,

@@ -30,7 +30,7 @@ const styles = (theme: Theme) => ({
       whiteSpace: "nowrap",
       overflow: isNotEllipsis ? "visible" : "hidden !important",
       textOverflow: isNotEllipsis ? "clip" : "ellipsis",
-      maxWidth: "10rem"
+      maxWidth: "100%"
     }
   }),
   avatarImage: {

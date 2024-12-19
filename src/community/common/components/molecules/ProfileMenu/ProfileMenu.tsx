@@ -4,15 +4,14 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { JSX } from "react";
 
-import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
 import ROUTES from "~community/common/constants/routes";
 import { appBarTestId } from "~community/common/constants/testIds";
-import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 import { usePeopleStore } from "~community/people/store/store";
 
 import Button from "../../atoms/Button/Button";
@@ -27,7 +26,7 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   const router = useRouter();
   const translateText = useTranslator("appBar");
   const { data: session } = useSession();
-  const employee = session?.user?.employee;
+  const { data: employee } = useGetUserPersonalDetails();
   const isPeopleManagerOrSuperAdmin = session?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
@@ -50,12 +49,6 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
     await signOut({ redirect: true });
   };
 
-  const { data: logoUrl } = useGetUploadedImage(
-    FileTypes.USER_IMAGE,
-    employee?.authPic,
-    true
-  );
-
   return (
     <Box>
       <Stack
@@ -72,16 +65,15 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
         >
           <Box>
             <Avatar
-              firstName={session?.user?.employee?.firstName || ""}
-              lastName={session?.user?.employee?.lastName || ""}
-              alt={`${session?.user?.employee?.firstName} ${session?.user?.employee?.lastName}`}
-              src={logoUrl || ""}
+              firstName={employee?.firstName || ""}
+              lastName={employee?.lastName || ""}
+              alt={`${employee?.firstName} ${employee?.lastName}`}
+              src={employee?.authPic || ""}
             />
           </Box>
           <Stack>
             <Typography variant="h3">
-              {session?.user?.employee?.firstName}{" "}
-              {session?.user?.employee?.lastName}
+              {employee?.firstName} {employee?.lastName}
             </Typography>
             <Typography
               variant="body2"

@@ -1,5 +1,7 @@
+import { sendGTMEvent } from "@next/third-parties/google";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 import AttendanceDashboard from "~community/attendance/components/organisms/AttendanceDashboard/AttendanceDashboard";
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
@@ -12,6 +14,8 @@ import {
   ManagerTypes
 } from "~community/common/types/AuthTypes";
 import { ModuleTypes } from "~community/common/types/CommonTypes";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
+import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsValues";
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
@@ -19,6 +23,16 @@ import PeopleDashboard from "~community/people/components/organisms/PeopleDashbo
 type RoleTypes = AdminTypes | ManagerTypes | EmployeeTypes;
 
 const Dashboard: NextPage = () => {
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
+      sendGTMEvent({
+        event: GoogleAnalyticsTypes.DASHBOARD_VIEWED,
+        value: GoogleAnalyticsValues.DASHBOARD_VIEWED,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }, []);
+
   const translateText = useTranslator("dashboard");
   const { data } = useSession();
 

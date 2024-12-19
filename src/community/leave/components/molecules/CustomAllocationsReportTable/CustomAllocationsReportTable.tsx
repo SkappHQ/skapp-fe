@@ -199,12 +199,14 @@ const CustomAllocationsReportTable: FC = () => {
           return {
             id: leaveAllocation?.employeeName,
             member: (
-              <AvatarChip
-                firstName={leaveAllocation?.firstName}
-                lastName={leaveAllocation?.lastName}
-                avatarUrl={leaveAllocation?.authPic}
-                chipStyles={{ maxWidth: "fit-content" }}
-              />
+              <Box width="100%">
+                <AvatarChip
+                  firstName={leaveAllocation?.firstName}
+                  lastName={leaveAllocation?.lastName}
+                  avatarUrl={leaveAllocation?.authPic}
+                  chipStyles={{ maxWidth: "fit-content" }}
+                />
+              </Box>
             ),
             team: (
               <Typography variant="body1">

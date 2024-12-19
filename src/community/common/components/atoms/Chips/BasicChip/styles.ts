@@ -18,7 +18,7 @@ const styles = (theme: Theme): StyleProps => ({
       whiteSpace: "nowrap",
       overflow: "hidden !important",
       textOverflow: "ellipsis",
-      maxWidth: "8.75rem"
+      maxWidth: "100%"
     },
     "& .MuiChip-deleteIcon": {
       m: 0

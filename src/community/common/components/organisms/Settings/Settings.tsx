@@ -56,56 +56,64 @@ const SettingsSection: FC = () => {
 
       {session?.user?.roles?.includes(ROLE_SUPER_ADMIN) && (
         <>
-          <Box sx={{ py: "1.5rem" }}>
-            <Typography variant="h2" sx={{ pb: "0.75rem" }}>
-              {translatedText(["emailServerSettingsTitle"])}
-            </Typography>
+          {process.env.NEXT_PUBLIC_MODE !== "enterprise" && (
+            <>
+              <Box sx={{ py: "1.5rem" }}>
+                <Typography variant="h2" sx={{ pb: "0.75rem" }}>
+                  {translatedText(["emailServerSettingsTitle"])}
+                </Typography>
 
-            <Typography variant="body1">
-              {translatedText(["emailServerSettingsDescription"])}
-            </Typography>
+                <Typography variant="body1">
+                  {translatedText(["emailServerSettingsDescription"])}
+                </Typography>
 
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-                flexDirection: isLargeScreen ? "column" : "row",
-                gap: "0.75rem",
-                mt: "1.25rem"
-              }}
-            >
-              <Button
-                label={translatedText(["setupEmailServerButtonText"])}
-                startIcon={<MailOutlineIcon />}
-                isFullWidth={false}
-                styles={{ mt: "1.25rem", px: "1.75rem", width: "max-content" }}
-                buttonStyle={ButtonStyle.TERTIARY}
-                onClick={() => {
-                  setModalType(SettingsModalTypes.SETUP_EMAIL_SERVER);
-                  setModalOpen(true);
-                }}
-              />
-              {config?.emailServiceProvider !== null && (
-                <Button
-                  label={translatedText(["testEmailServerButtonText"])}
-                  startIcon={<DraftsOutlinedIcon />}
-                  isFullWidth={false}
-                  styles={{
-                    mt: "1.25rem",
-                    px: "1.75rem",
-                    width: "max-content"
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: isLargeScreen ? "column" : "row",
+                    gap: "0.75rem",
+                    mt: "1.25rem"
                   }}
-                  buttonStyle={ButtonStyle.TERTIARY}
-                  onClick={() => {
-                    setModalType(SettingsModalTypes.TEST_EMAIL_SERVER);
-                    setModalOpen(true);
-                  }}
-                />
-              )}
-            </Box>
-          </Box>
+                >
+                  <Button
+                    label={translatedText(["setupEmailServerButtonText"])}
+                    startIcon={<MailOutlineIcon />}
+                    isFullWidth={false}
+                    styles={{
+                      mt: "1.25rem",
+                      px: "1.75rem",
+                      width: "max-content"
+                    }}
+                    buttonStyle={ButtonStyle.TERTIARY}
+                    onClick={() => {
+                      setModalType(SettingsModalTypes.SETUP_EMAIL_SERVER);
+                      setModalOpen(true);
+                    }}
+                  />
+                  {config?.emailServiceProvider !== null && (
+                    <Button
+                      label={translatedText(["testEmailServerButtonText"])}
+                      startIcon={<DraftsOutlinedIcon />}
+                      isFullWidth={false}
+                      styles={{
+                        mt: "1.25rem",
+                        px: "1.75rem",
+                        width: "max-content"
+                      }}
+                      buttonStyle={ButtonStyle.TERTIARY}
+                      onClick={() => {
+                        setModalType(SettingsModalTypes.TEST_EMAIL_SERVER);
+                        setModalOpen(true);
+                      }}
+                    />
+                  )}
+                </Box>
+              </Box>
 
-          <Divider />
+              <Divider />
+            </>
+          )}
 
           <Box sx={{ py: "1.5rem" }}>
             <Typography variant="h2" sx={{ pb: "0.75rem" }}>

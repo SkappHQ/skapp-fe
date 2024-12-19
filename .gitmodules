@@ -1,6 +1,6 @@
-; [submodule "pages/enterprise"]
-; 	path = pages/enterprise
-; 	url = git@github.com:rootcodelabs/Skapp-enterprise-FE-pages.git
-; [submodule "src/enterprise"]
-; 	path = src/enterprise
-; 	url = git@github.com:rootcodelabs/Skapp-enterprise-FE.git
+[submodule "pages/enterprise"]
+	path = pages/enterprise
+	url = https://github.com/SkappHQ/skapp-ep-fe-pages.git
+[submodule "src/enterprise"]
+	path = src/enterprise
+	url = https://github.com/SkappHQ/skapp-ep-fe-src.git

@@ -119,16 +119,20 @@ const LeaveRequests: FC = () => {
         />
       ),
       type: (
-        <IconChip
-          label={employeeLeaveRequest.leaveType.name}
-          icon={employeeLeaveRequest.leaveType.emojiCode}
-          chipStyles={{
-            "&:hover": {
-              backgroundColor: "inherit",
-              cursor: "default"
-            }
-          }}
-        />
+        <Box width="100%">
+          <IconChip
+            label={employeeLeaveRequest.leaveType.name}
+            icon={employeeLeaveRequest.leaveType.emojiCode}
+            isTruncated={false}
+            chipStyles={{
+              maxWidth: "100%",
+              "&:hover": {
+                backgroundColor: "inherit",
+                cursor: "default"
+              }
+            }}
+          />
+        </Box>
       ),
       status: (
         <IconChip

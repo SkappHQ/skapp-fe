@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
+    const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
     return [
       {
         source: "/welcome",
@@ -9,11 +10,15 @@ const nextConfig = {
       },
       {
         source: "/signup",
-        destination: "/community/signup"
+        destination: isEnterpriseMode
+          ? "/enterprise/signup"
+          : "/community/signup"
       },
       {
         source: "/setup-organization",
-        destination: "/community/setup-organization"
+        destination: isEnterpriseMode
+          ? "/enterprise/setup-organization"
+          : "/community/setup-organization"
       },
       {
         source: "/dashboard",
@@ -33,11 +38,17 @@ const nextConfig = {
       },
       {
         source: "/signin",
-        destination: "/community/signin"
+        destination: isEnterpriseMode
+          ? "/enterprise/signin"
+          : "/community/signin"
       },
       {
         source: "/settings",
         destination: "/community/settings"
+      },
+      {
+        source: "/settings/billing",
+        destination: "/enterprise/settings/billing"
       },
       {
         source: "/notifications",
@@ -73,7 +84,9 @@ const nextConfig = {
       },
       {
         source: "/people/directory",
-        destination: "/community/people/directory"
+        destination: isEnterpriseMode
+          ? "/enterprise/people/directory"
+          : "/community/people/directory"
       },
       {
         source: "/people/job-family",
@@ -182,6 +195,18 @@ const nextConfig = {
       {
         source: "/leave/analytics/:id",
         destination: "/community/leave/analytics/:id"
+      },
+      {
+        source: "/verify-email",
+        destination: "/enterprise/verify-email"
+      },
+      {
+        source: "/verify-success",
+        destination: "/enterprise/verify-success"
+      },
+      {
+        source: "/redirect",
+        destination: "/enterprise/redirect"
       }
     ];
   },

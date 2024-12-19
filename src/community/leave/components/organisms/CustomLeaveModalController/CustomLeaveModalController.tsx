@@ -112,6 +112,31 @@ const CustomLeaveModalController: FC = () => {
     setIsDeleteConfirmationOpen(false);
   }, []);
 
+  const handleCancelLeaveAllocation = useCallback(
+    (values: CustomLeaveAllocationType): void => {
+      if (hasUnsavedChanges()) {
+        setPreviousModalType(customLeaveAllocationModalType);
+        setTempLeaveAllocationDetails(values);
+        setCustomLeaveAllocationModalType(
+          CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION
+        );
+      } else {
+        setIsLeaveAllocationModalOpen(false);
+        setCustomLeaveAllocationModalType(CustomLeaveAllocationModalTypes.NONE);
+        setCurrentLeaveAllocationFormData(undefined);
+        setTempLeaveAllocationDetails(undefined);
+      }
+    },
+    [
+      hasUnsavedChanges,
+      customLeaveAllocationModalType,
+      setCustomLeaveAllocationModalType,
+      setIsLeaveAllocationModalOpen,
+      setTempLeaveAllocationDetails,
+      setCurrentLeaveAllocationFormData
+    ]
+  );
+
   const getModalTitle = useCallback((): string => {
     switch (customLeaveAllocationModalType) {
       case CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION:
@@ -164,6 +189,7 @@ const CustomLeaveModalController: FC = () => {
             initialValues={
               tempLeaveAllocationDetails || ({} as CustomLeaveAllocationType)
             }
+            onCancel={handleCancelLeaveAllocation}
           />
         )}
         {customLeaveAllocationModalType ===

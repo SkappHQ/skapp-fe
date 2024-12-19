@@ -2,15 +2,23 @@ const ROUTES = {
   AUTH: {
     SIGNUP: "/signup",
     SIGNIN: "/signin",
+    ENTERPRISE_SIGNIN: "/enterprise/signin",
+    DOMAIN_VERIFICATION: "/enterprise/domain-verification",
     RESET_PASSWORD: "/reset-password",
     UNAUTHORIZED: "/unauthorized",
-    ERROR: "/_error"
+    ERROR: "/_error",
+    FORGOT_PASSWORD: "/forgot-password",
+    VERIFY: "/verify-email",
+    VERIFY_SUCCESS: "/verify-success"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization"
   },
   NOTIFICATIONS: "/notifications",
-  SETTINGS: "/settings",
+  SETTINGS: {
+    BASE: "/settings",
+    BILLING: "/settings/billing"
+  },
   TIMESHEET: {
     BASE: "/timesheet",
     MY_TIMESHEET: "/timesheet/my-timesheet",

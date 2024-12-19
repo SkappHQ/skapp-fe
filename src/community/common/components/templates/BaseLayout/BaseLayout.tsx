@@ -12,6 +12,8 @@ import {
 } from "~community/common/providers/ToastProvider";
 import { IsProtectedUrl } from "~community/common/utils/authUtils";
 import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
+import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
+import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 
 import styles from "./styles";
 
@@ -20,10 +22,16 @@ interface BaseLayoutProps {
 }
 
 const BaseLayout = ({ children }: BaseLayoutProps) => {
+  const classes = styles();
+
+  const { toastMessage, setToastMessage } = useToast();
   const { asPath } = useRouter();
+
+  const { token } = useFcmToken();
 
   const [isClient, setIsClient] = useState(false);
   const [isProtected, setIsProtected] = useState(false);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -34,9 +42,13 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
     }
   }, [asPath, isClient]);
 
-  const classes = styles();
+  useEffect(() => {
+    console.log("token", token);
 
-  const { toastMessage, setToastMessage } = useToast();
+    if (isProtected && token) {
+      setDeviceToken(token);
+    }
+  }, [isProtected, token]);
 
   if (isProtected) {
     return (

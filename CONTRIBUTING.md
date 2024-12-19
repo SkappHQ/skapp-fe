@@ -11,7 +11,7 @@ Thank you for investing your time in contributing to Skapp! We’re excited to h
 
 ## Getting Started
 
-To ensure a positive and inclusive environment, please read our [code of conduct](code of conduct url if available goes here) before contributing. For help setting up the code in this repo, please follow our [Documentation](skapp-docs url goes here). For contributing to the [docs](skapp-docs url goes here) site, follow this [CONTRIBUTING.md](skapp-docs contributing.md url goes here) guide.
+To ensure a positive and inclusive environment, please read our [code of conduct](https://github.com/SkappHQ/skapp-fe?tab=coc-ov-file) before contributing. For help setting up the code in this repo, please follow our [Documentation](https://docs.skapp.com/).
 
 ## Issues
 
@@ -19,7 +19,7 @@ To ensure a positive and inclusive environment, please read our [code of conduc
 
 If you find a bug, please create an Issue and we’ll triage it.
 
-- Please search [existing Issues](skapp issues URL goes here) before creating a new one.
+- Please search [existing Issues](https://github.com/SkappHQ/skapp-fe/issues) before creating a new one.
 - Please clearly describe the problem and steps to reproduce it. Exact steps with screenshots and URLs will help make things clear.
 
 #### Solve an issue
@@ -32,8 +32,8 @@ We actively welcome your Pull Requests! A couple of things to keep in mind befor
 
 - If you’re fixing an issue, make sure someone else hasn’t already created a PR fixing the same issue. Likewise, make sure to link your PR to the related Issue(s).
 - We will always try to accept the first viable PR that resolves the Issue.
-- If you're new, we encourage you to take a look at issues tagged with [good first issue](add good first issue labeled issues url).
-- If you’re submitting a new feature, make sure you have opened a [Discussion](skapp new discussion URL goes here) to discuss the new feature before opening a PR. We’d love to accept your hard work, but unfortunately, if a feature hasn’t gone through a proper design process, your PR will be closed.
+- If you're new, we encourage you to take a look at issues tagged with [good first issue](https://github.com/SkappHQ/skapp-fe/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+- If you’re submitting a new feature, make sure you have opened a [Discussion](https://github.com/orgs/SkappHQ/discussions) to discuss the new feature before opening a PR. We’d love to accept your hard work, but unfortunately, if a feature hasn’t gone through a proper design process, your PR will be closed.
 - Please use the PR message template and provide detailed context for quicker review. PRs without clear problem statements will be closed.
 - We use labels to keep track of the state of the opened PRs. If your PR is ready to be reviewed please add the "Ready for review" label.
 - We may ask for changes to be made before a PR can be merged, if so please apply the requested changes and update your PR.
@@ -46,7 +46,7 @@ We actively welcome your Pull Requests! A couple of things to keep in mind befor
 
 #### Gitflow
 
-- Describe gitflow if needed here!
+- Describe git-flow here!
 
 #### Branch Naming Conventions
 
@@ -54,7 +54,7 @@ Ex: `feat/123-signup-page`
 
 1. Add the suitable branch prefix (Ex: `feat/`)
 2. Add the GitHub issue number (Ex: `123`)
-3. Add a short description using lower case letters and dash as the separator. Avoid long descriptive names. (Ex: `signup-page`)
+3. Add a short description using lowercase letters and dash as the separator. Avoid long descriptive names. (Ex: `signup-page`)
 
 | Prefix      | Usage                                                                                                                                                                                                                  |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -119,4 +119,3 @@ Must be one of the following:
 - Please use proper types and generics throughout your code.
 - Follow the [Atomic design](https://atomicdesign.bradfrost.com/)
 - Avoid using hardcoded English strings to display text on the screen, rather, update the JSON files in the [`english`](./src/community/common/assets/languages/english) directory and read the value using the `useTranslator` hook.
--

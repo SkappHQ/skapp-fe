@@ -14,9 +14,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import styles from "./styles";
 
 const PlayButton = (): JSX.Element => {
-  const { attendanceParams, setSlotType } = useAttendanceStore(
-    (state) => state
-  );
+  const { attendanceParams } = useAttendanceStore((state) => state);
   const classes = styles();
   const status = attendanceParams.slotType;
   const translateText = useTranslator("attendanceModule", "timeWidget");
@@ -33,9 +31,9 @@ const PlayButton = (): JSX.Element => {
       status === AttendanceSlotType.RESUME ||
       status === AttendanceSlotType.START
     ) {
-      mutate(setSlotType(AttendanceSlotType.PAUSE));
+      mutate(AttendanceSlotType.PAUSE);
     } else {
-      mutate(setSlotType(AttendanceSlotType.RESUME));
+      mutate(AttendanceSlotType.RESUME);
     }
   };
 
