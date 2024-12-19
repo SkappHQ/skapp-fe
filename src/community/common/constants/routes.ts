@@ -11,7 +11,7 @@ const ROUTES = {
     VERIFY: "/verify-email",
     VERIFY_SUCCESS: "/verify-success",
     VERIFY_ACCOUNT_RESET_PASSWORD: "/verify-account-reset-password",
-    RESET_PASSWORD_ENTERPRISE: "/reset-password-enterprise"
+    FORGET_PASSWORD: "/forget-password"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization"
