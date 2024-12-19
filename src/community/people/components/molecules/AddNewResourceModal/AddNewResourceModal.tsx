@@ -1,7 +1,7 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -12,9 +12,11 @@ import ROUTES from "~community/common/constants/routes";
 import { peopleDirectoryTestId } from "~community/common/constants/testIds";
 import {
   ButtonSizes,
-  ButtonStyle
+  ButtonStyle,
+  ToastType
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetAllowedGrantablePermissions } from "~community/configurations/api/userRolesApi";
 import {
@@ -28,8 +30,23 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
+import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
+import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
+  const { setToastMessage } = useToast();
+
+  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
+    leaveAdminLimitExceeded: false,
+    attendanceAdminLimitExceeded: false,
+    peopleAdminLimitExceeded: false,
+    leaveManagerLimitExceeded: false,
+    attendanceManagerLimitExceeded: false,
+    peopleManagerLimitExceeded: false,
+    superAdminLimitExceeded: false
+  });
+
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -53,6 +70,8 @@ const AddNewResourceModal = () => {
     "addResource",
     "systemPermissions"
   );
+
+  const roleLimitationTexts = useTranslator("peopleModule", "roleLimitation");
 
   const router = useRouter();
   const initialValues = {
@@ -119,6 +138,151 @@ const AddNewResourceModal = () => {
       }
     }
   }, [checkEmailAndIdentificationNo, isSuccess]);
+
+  const env = useGetEnviornment();
+
+  const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
+    (response) => setRoleLimits(response),
+    () => {
+      router.push("/_error");
+    }
+  );
+
+  useEffect(() => {
+    if (env === "enterprise") {
+      checkRoleLimits();
+    }
+  }, [env]);
+
+  const handleSuperAdminChangeEnterprise = (isChecked: boolean) => {
+    if (isChecked && roleLimits.superAdminLimitExceeded) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["superAdminLimitationTitle"]),
+        description: roleLimitationTexts(["superAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    setFieldValue("isSuperAdmin", isChecked);
+  };
+
+  const handleSuperAdminChangeDefault = (isChecked: boolean) => {
+    setFieldValue("isSuperAdmin", isChecked);
+  };
+
+  const handleRoleChangeEnterprise = (name: string, value: any) => {
+    if (
+      name === "peopleRole" &&
+      value === Role.PEOPLE_ADMIN &&
+      roleLimits.peopleAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
+        description: roleLimitationTexts(["peopleAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "leaveRole" &&
+      value === Role.LEAVE_ADMIN &&
+      roleLimits.leaveAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
+        description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "attendanceRole" &&
+      value === Role.ATTENDANCE_ADMIN &&
+      roleLimits.attendanceAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
+        description: roleLimitationTexts([
+          "attendanceAdminLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "peopleRole" &&
+      value === Role.PEOPLE_MANAGER &&
+      roleLimits.peopleManagerLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
+        description: roleLimitationTexts([
+          "peopleManagerLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "leaveRole" &&
+      value === Role.LEAVE_MANAGER &&
+      roleLimits.leaveManagerLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
+        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "attendanceRole" &&
+      value === Role.ATTENDANCE_MANAGER &&
+      roleLimits.attendanceManagerLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
+        description: roleLimitationTexts([
+          "attendanceManagerLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
+    setFieldValue(name, value);
+  };
+
+  const handleRoleChangeDefault = (name: string, value: any) => {
+    setFieldValue(name, value);
+  };
+
+  const handleSuperAdminChange =
+    env === "enterprise"
+      ? handleSuperAdminChangeEnterprise
+      : handleSuperAdminChangeDefault;
+  const handleRoleChange =
+    env === "enterprise" ? handleRoleChangeEnterprise : handleRoleChangeDefault;
 
   return (
     <Stack>
@@ -223,24 +387,7 @@ const AddNewResourceModal = () => {
             <Stack>
               <SwitchRow
                 checked={values.isSuperAdmin}
-                onChange={(e) => {
-                  const isChecked = e.target.checked;
-                  setFieldValue("isSuperAdmin", isChecked);
-
-                  const updatedRole = isChecked
-                    ? Role.PEOPLE_ADMIN
-                    : Role.PEOPLE_EMPLOYEE;
-                  const updatedLeaveRole = isChecked
-                    ? Role.LEAVE_ADMIN
-                    : Role.LEAVE_EMPLOYEE;
-                  const updatedAttendanceRole = isChecked
-                    ? Role.ATTENDANCE_ADMIN
-                    : Role.ATTENDANCE_EMPLOYEE;
-
-                  setFieldValue("peopleRole", updatedRole);
-                  setFieldValue("leaveRole", updatedLeaveRole);
-                  setFieldValue("attendanceRole", updatedAttendanceRole);
-                }}
+                onChange={(e) => handleSuperAdminChange(e.target.checked)}
               />
             </Stack>
           </Stack>
@@ -271,7 +418,9 @@ const AddNewResourceModal = () => {
                   width: "200px",
                   borderRadius: "100px"
                 }}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleRoleChange(e.target.name, e.target.value)
+                }
                 isDisabled={values.isSuperAdmin}
               />
             </Stack>
@@ -301,7 +450,9 @@ const AddNewResourceModal = () => {
                   width: "200px",
                   borderRadius: "100px"
                 }}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleRoleChange(e.target.name, e.target.value)
+                }
                 isDisabled={values.isSuperAdmin}
               />
             </Stack>
@@ -331,7 +482,9 @@ const AddNewResourceModal = () => {
                   width: "200px",
                   borderRadius: "100px"
                 }}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleRoleChange(e.target.name, e.target.value)
+                }
                 isDisabled={values.isSuperAdmin}
               />
             </Stack>
