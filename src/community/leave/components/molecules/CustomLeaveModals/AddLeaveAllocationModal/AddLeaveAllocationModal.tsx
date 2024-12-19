@@ -33,18 +33,18 @@ interface Props {
   >;
   isEditingLeaveAllocationChanged: boolean;
   initialValues: CustomLeaveAllocationType;
+  onCancel: (values: CustomLeaveAllocationType) => void;
 }
 const AddLeaveAllocationModal: React.FC<Props> = ({
-  setTempLeaveAllocationDetails,
   setCurrentLeaveAllocationFormData,
-  isEditingLeaveAllocationChanged,
-  initialValues
+  initialValues,
+  onCancel
 }) => {
   const translateText = useTranslator("leaveModule", "customLeave");
   const { setCustomLeaveAllocationModalType, setIsLeaveAllocationModalOpen } =
     useLeaveStore();
 
-  const { toastMessage, setToastMessage } = useToast();
+  const { setToastMessage } = useToast();
 
   const onAddSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
@@ -70,20 +70,21 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     });
   }, []);
 
-  const createLeaveAllocationMutation = useCreateLeaveAllocation(
+  const { mutate, isPending } = useCreateLeaveAllocation(
     onAddSuccess,
     onAddError
   );
 
   const onSubmit = useCallback(
     (values: CustomLeaveAllocationType) => {
-      createLeaveAllocationMutation.mutate(values, {
+      mutate(values, {
         onSuccess: onAddSuccess,
         onError: onAddError
       });
     },
-    [createLeaveAllocationMutation, onAddSuccess, onAddError]
+    [mutate, onAddSuccess, onAddError]
   );
+
   const validationSchema = useMemo(
     () => customLeaveAllocationValidation(translateText),
     [translateText]
@@ -97,34 +98,24 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     validateOnChange: false
   });
 
-  const { values, errors, handleSubmit, setFieldValue, setFieldError } = form;
-
-  const handleCancel = useCallback(() => {
-    if (isEditingLeaveAllocationChanged) {
-      setTempLeaveAllocationDetails(values);
-      setCustomLeaveAllocationModalType(
-        CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION
-      );
-    } else {
-      setIsLeaveAllocationModalOpen(false);
-      setCustomLeaveAllocationModalType(
-        CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION
-      );
-    }
-  }, [
-    isEditingLeaveAllocationChanged,
-    setTempLeaveAllocationDetails,
-    setCustomLeaveAllocationModalType,
-    setIsLeaveAllocationModalOpen,
-    values
-  ]);
+  const {
+    values,
+    errors,
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    isSubmitting
+  } = form;
 
   useEffect(() => {
     setCurrentLeaveAllocationFormData(values);
   }, [values, setCurrentLeaveAllocationFormData]);
 
   const isSaveDisabled =
-    !values.employeeId || !values.typeId || !values.numberOfDaysOff;
+    !values.employeeId ||
+    !values.typeId ||
+    !values.numberOfDaysOff ||
+    isPending;
 
   return (
     <>
@@ -150,7 +141,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
           styles={{ mt: "1rem" }}
           buttonStyle={ButtonStyle.TERTIARY}
           endIcon={<Icon name={IconName.CLOSE_ICON} />}
-          onClick={handleCancel}
+          onClick={() => onCancel(values)}
         />
       </Box>
     </>

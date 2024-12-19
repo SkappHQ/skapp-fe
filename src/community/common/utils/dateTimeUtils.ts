@@ -131,6 +131,8 @@ export const getAdjacentYearsWithCurrent = () => {
 
 export const currentYear = new Date().getFullYear();
 
+export const nextYear = new Date().getFullYear() + 1;
+
 export const options: OptionType[] = [
   { id: 1, name: currentYear.toString() },
   { id: 2, name: (currentYear + 1).toString() }

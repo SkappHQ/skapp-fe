@@ -42,11 +42,13 @@ const managerRoutes = {
   [ManagerTypes.PEOPLE_MANAGER]: [ROUTES.PEOPLE.BASE],
   [ManagerTypes.LEAVE_MANAGER]: [
     ROUTES.LEAVE.LEAVE_REQUESTS,
-    ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS
+    ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS,
+    ROUTES.PEOPLE.INDIVIDUAL
   ],
   [ManagerTypes.ATTENDANCE_MANAGER]: [
     ROUTES.TIMESHEET.ALL_TIMESHEETS,
-    ROUTES.TIMESHEET.TIMESHEET_ANALYTICS
+    ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
+    ROUTES.PEOPLE.INDIVIDUAL
   ]
 };
 
@@ -81,8 +83,16 @@ export default withAuth(
       | SuperAdminType
     )[] = token?.roles || [];
 
-    const isPasswordChangedForTheFirstTime =
-      token?.isPasswordChangedForTheFirstTime;
+    let isPasswordChangedForTheFirstTime;
+
+    if (typeof token?.isPasswordChangedForTheFirstTime === "string") {
+      isPasswordChangedForTheFirstTime =
+        token?.isPasswordChangedForTheFirstTime === "true" ? true : false;
+    } else {
+      isPasswordChangedForTheFirstTime =
+        token?.isPasswordChangedForTheFirstTime;
+    }
+
     if (
       !(
         isPasswordChangedForTheFirstTime ||
