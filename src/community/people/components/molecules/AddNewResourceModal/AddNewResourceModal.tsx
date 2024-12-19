@@ -1,4 +1,4 @@
-import { Divider, Stack, Theme, Typography, useTheme } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -30,8 +30,6 @@ import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 
 const AddNewResourceModal = () => {
-  const theme: Theme = useTheme();
-
   const translateText = useTranslator(
     "peopleModule",
     "addResource",

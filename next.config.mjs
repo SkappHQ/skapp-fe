@@ -80,7 +80,9 @@ const nextConfig = {
       },
       {
         source: "/people/directory",
-        destination: isEnterpriseMode ? "/enterprise/people/directory" : "/community/people/directory"
+        destination: isEnterpriseMode
+          ? "/enterprise/people/directory"
+          : "/community/people/directory"
       },
       {
         source: "/people/job-family",
