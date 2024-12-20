@@ -20,19 +20,28 @@ firebase.initializeApp(self.firebaseConfig || defaultConfig);
 
 const messaging = firebase.messaging();
 
-function incrementUnreadMessageCount() {
-  self.registration.sync.register('incrementUnreadCount').then(() => {
-    self.clients.matchAll().then(clients => {
-      clients.forEach(client => {
-        client.postMessage({
-          type: 'INCREMENT_UNREAD_COUNT'
-        });
+const incrementUnreadCount = async () => {
+  const windowClients = await self.clients.matchAll({
+    type: "window",
+    includeUncontrolled: true,
+  });
+
+  if (windowClients.length > 0) {
+    windowClients.forEach((client) => {
+      client.postMessage({
+        type: "BACKGROUND_MESSAGE",
       });
     });
-  });
-}
+  } else {
+    const broadcast = new BroadcastChannel("unread-messages");
+    broadcast.postMessage({
+      type: "INCREMENT_COUNT",
+    });
+  }
+};
 
-messaging.onBackgroundMessage((payload) => {
+
+messaging.onBackgroundMessage(async(payload) => {
   const notificationTitle = payload.notification.title;
 
   const notificationOptions = {
@@ -40,7 +49,12 @@ messaging.onBackgroundMessage((payload) => {
     icon: "./favicon/favicon-48x48.png",
   };
 
-  incrementUnreadMessageCount();
+  await incrementUnreadCount();
 
   self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
 });
