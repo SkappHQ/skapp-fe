@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import useFcmToken from "~enterprise/common/hooks/useFCMToken";
+
+import { appModes } from "../constants/configs";
 import { useCommonStore } from "../stores/commonStore";
 import { SortKeyTypes, SortOrderTypes } from "../types/CommonTypes";
 import { NotifyFilterButtonTypes } from "../types/notificationTypes";
@@ -50,6 +53,8 @@ export const useGetNotifications = (
 
 export const useMarkAllNotificationsAsRead = () => {
   const queryClient = useQueryClient();
+
+  const { resetUnreadCount } = useFcmToken();
   const { setNotifyData } = useCommonStore((state) => state);
 
   return useMutation({
@@ -65,6 +70,7 @@ export const useMarkAllNotificationsAsRead = () => {
       setNotifyData({
         unreadCount: 0
       });
+      resetUnreadCount();
     }
   });
 };
@@ -85,6 +91,16 @@ export const useMarkNotificationAsRead = () => {
       });
 
       if (notifyData.unreadCount > 0) {
+        if (appModes.ENTERPRISE === process.env.APP_MODE) {
+          const currentUnreadCount = parseInt(
+            localStorage.getItem("unReadMsgCount") || "0"
+          );
+
+          const newUnreadCount = currentUnreadCount - 1;
+
+          localStorage.setItem("unReadMsgCount", newUnreadCount.toString());
+        }
+
         setNotifyData({
           unreadCount: notifyData.unreadCount - 1
         });

@@ -32,18 +32,6 @@ function incrementUnreadMessageCount() {
   });
 }
 
-function decrementUnreadMessageCount() {
-  self.registration.sync.register('decrementUnreadCount').then(() => {
-    self.clients.matchAll().then(clients => {
-      clients.forEach(client => {
-        client.postMessage({
-          type: 'DECREMENT_UNREAD_COUNT'
-        });
-      });
-    });
-  });
-}
-
 messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
 
@@ -55,11 +43,4 @@ messaging.onBackgroundMessage((payload) => {
   incrementUnreadMessageCount();
 
   self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
-
-self.addEventListener("notificationclick", function (event) {
-  decrementUnreadMessageCount();
-
-  event.notification.close();
 });
