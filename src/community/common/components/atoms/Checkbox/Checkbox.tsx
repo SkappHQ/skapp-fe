@@ -1,16 +1,19 @@
 import {
   FormControlLabel,
   Checkbox as MuiCheckbox,
+  SxProps,
   useTheme
 } from "@mui/material";
+import { JSX } from "react";
 
 interface Props {
   checked: boolean;
   name: string;
   onChange: () => void;
   disabled?: boolean;
-  label: string;
+  label: string | JSX.Element;
   size?: "small" | "medium" | "large";
+  labelStyles?: SxProps;
 }
 
 const Checkbox = ({
@@ -19,7 +22,8 @@ const Checkbox = ({
   name,
   disabled = false,
   label,
-  size = "medium"
+  size = "medium",
+  labelStyles
 }: Props) => {
   const theme = useTheme();
 
@@ -38,6 +42,7 @@ const Checkbox = ({
         />
       }
       label={label}
+      sx={labelStyles}
     />
   );
 };
