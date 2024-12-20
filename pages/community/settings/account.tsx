@@ -5,7 +5,7 @@ import SettingsModalController from "~community/common/components/organisms/Sett
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 
-const Settings: NextPage = () => {
+const Account: NextPage = () => {
   const translateText = useTranslator("settings");
 
   return (
@@ -22,4 +22,4 @@ const Settings: NextPage = () => {
   );
 };
 
-export default Settings;
+export default Account;

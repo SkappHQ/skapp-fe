@@ -230,7 +230,7 @@ const routes = [
   {
     id: "5",
     name: "Settings",
-    url: ROUTES.SETTINGS,
+    url: ROUTES.SETTINGS.BASE,
     icon: IconName.SETTINGS_ICON,
     hasSubTree: true,
     requiredAuthLevel: [
@@ -245,7 +245,6 @@ const routes = [
       EmployeeTypes.LEAVE_EMPLOYEE,
       EmployeeTypes.ATTENDANCE_EMPLOYEE
     ],
-
     subTree: [
       {
         id: "5A",
@@ -257,7 +256,7 @@ const routes = [
       {
         id: "5B",
         name: "Account Settings",
-        url: ROUTES.SETTINGS.BASE,
+        url: ROUTES.SETTINGS.ACCOUNT,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,

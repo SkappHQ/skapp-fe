@@ -43,8 +43,8 @@ const nextConfig = {
           : "/community/signin"
       },
       {
-        source: "/settings",
-        destination: "/community/settings"
+        source: "/settings/account",
+        destination: "/community/settings/account"
       },
       {
         source: "/settings/billing",
@@ -217,7 +217,7 @@ const nextConfig = {
       {
         source: "/forget-password",
         destination: "/enterprise/forget-password"
-      },
+      }
     ];
   },
   eslint: {

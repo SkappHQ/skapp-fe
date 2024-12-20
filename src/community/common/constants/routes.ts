@@ -19,7 +19,8 @@ const ROUTES = {
   NOTIFICATIONS: "/notifications",
   SETTINGS: {
     BASE: "/settings",
-    BILLING: "/settings/billing"
+    BILLING: "/settings/billing",
+    ACCOUNT: "/settings/account"
   },
   TIMESHEET: {
     BASE: "/timesheet",
