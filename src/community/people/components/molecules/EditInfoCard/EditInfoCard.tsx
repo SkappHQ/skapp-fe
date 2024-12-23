@@ -1,4 +1,4 @@
-import { Stack, type SxProps, Typography } from "@mui/material";
+import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { JSX } from "react";
@@ -280,6 +280,7 @@ const EditInfoCard = ({
         pr: "2.625rem",
         borderRadius: "0.75rem",
         gap: "1rem",
+        position: "relative",
         ...styles
       }}
       onClick={onClick}
@@ -459,6 +460,7 @@ const EditInfoCard = ({
             <Stack
               direction="column"
               alignItems="flex-start"
+              gap="0.25rem"
               justifyContent={"flex-start"}
             >
               <Stack
@@ -473,16 +475,24 @@ const EditInfoCard = ({
                 {employmentStatus !==
                   AccountStatusEnums.TERMINATED.toUpperCase() &&
                   hasTerminationAbility && (
-                    <KebabMenu
-                      id="add-team-kebab-menu"
-                      menuItems={kebabMenuOptions}
-                      icon={<Icon name={IconName.THREE_DOTS_ICON} />}
-                      customStyles={{
-                        menuItemText: {
-                          color: theme.palette.error.contrastText
-                        }
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "1.5rem",
+                        right: "1rem"
                       }}
-                    />
+                    >
+                      <KebabMenu
+                        id="add-team-kebab-menu"
+                        menuItems={kebabMenuOptions}
+                        icon={<Icon name={IconName.THREE_DOTS_ICON} />}
+                        customStyles={{
+                          menuItemText: {
+                            color: theme.palette.error.contrastText
+                          }
+                        }}
+                      />
+                    </Box>
                   )}
               </Stack>
               <BasicChip
