@@ -374,7 +374,7 @@ const EditInfoCard = ({
 
       <Stack
         direction={
-          isPhoneScreen || isSmallPhoneScreen || getAvailableFieldCount() === 2
+          isPhoneScreen || isSmallPhoneScreen || getAvailableFieldCount() === 3
             ? "column"
             : "row"
         }
@@ -382,7 +382,7 @@ const EditInfoCard = ({
           isTabScreen ||
           isPhoneScreen ||
           isSmallPhoneScreen ||
-          getAvailableFieldCount() === 2
+          getAvailableFieldCount() === 3
             ? "1rem"
             : "2.25rem"
         }
@@ -459,7 +459,6 @@ const EditInfoCard = ({
             <Stack
               direction="column"
               alignItems="flex-start"
-              gap="0.25rem"
               justifyContent={"flex-start"}
             >
               <Stack
