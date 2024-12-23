@@ -326,7 +326,7 @@ const EditInfoCard = ({
                 color: theme.palette.text.secondary
               }}
             >
-              {cardData?.jobTitle} {cardData?.jobFamily}
+              {cardData?.jobTitle}
             </Typography>
           </Stack>
 
