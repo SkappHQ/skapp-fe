@@ -32,7 +32,7 @@ export function alphaNumericNamePatternWithSpecialCharacters(): RegExp {
 }
 
 export function emailPattern(): RegExp {
-  return /^[a-zA-Z0-9._%+-@]+$/;
+  return /^[a-zA-Z0-9._@-]*$/;
 }
 
 export function isValidAlphaNumericName(): RegExp {
