@@ -328,8 +328,8 @@
     "search": "Search with employee name or team",
     "leaveRequestTable": {
       "name": "NAME",
-      "duration": "DURATION",
-      "type": "TYPE",
+      "duration": "LEAVE DURATION",
+      "type": "LEAVE TYPE",
       "status": "STATUS",
       "reviewer": "APPROVED BY",
       "noLeaveRequests": "No leave requests",
