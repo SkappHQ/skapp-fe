@@ -3,6 +3,7 @@ import React from "react";
 
 import UserPromptModal from "~community/common/components/molecules/UserPromptModal/UserPromptModal";
 import Modal from "~community/common/components/organisms/Modal/Modal";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 
@@ -25,6 +26,9 @@ const UnsavedTimeConfigChangesModal: React.FC<
       onCloseModal={onResume}
       title={title}
       isClosable={false}
+      modalWrapperStyles={{
+        zIndex: ZIndexEnums.MAX
+      }}
     >
       <Stack spacing={2}>
         <UserPromptModal
