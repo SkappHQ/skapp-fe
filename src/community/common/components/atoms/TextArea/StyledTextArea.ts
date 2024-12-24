@@ -14,7 +14,6 @@ const StyledTextArea = styled("textarea")(({ theme }) => ({
   resize: "none",
   "&:focus": {
     color: theme.palette.primary.dark,
-    backgroundColor: theme.palette.secondary.main,
     border: "none",
     outline: "none"
   }

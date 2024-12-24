@@ -38,7 +38,6 @@ const TextArea = <T,>({
   onIconClick
 }: Props<T>) => {
   const theme: Theme = useTheme();
-
   const classes = styles(theme);
 
   return (
