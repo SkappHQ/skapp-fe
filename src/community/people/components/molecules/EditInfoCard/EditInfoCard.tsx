@@ -266,14 +266,13 @@ const EditInfoCard = ({
       });
     }
   };
-
   return (
     <Stack
       sx={{
         mb: "2rem",
         display: "flex",
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: getAvailableFieldCount() >= 3 ? "center" : "flex-start",
         justifyContent: "space-between",
         background: theme.palette.grey[100],
         padding: "1.5rem 1rem",
@@ -289,6 +288,7 @@ const EditInfoCard = ({
         direction="row"
         gap="1rem"
         sx={{
+          justifyContent: "center",
           alignItems: "center"
         }}
       >
