@@ -44,9 +44,9 @@ describe("handleApplyLeaveApiResponse", () => {
     });
   });
 
-  it("should handle INSUFFICIENT_BALANCE_ERROR", () => {
+  it("should handle LEAVE_ERROR_LEAVE_ENTITLEMENT_NOT_SUFFICIENT", () => {
     handleApplyLeaveApiResponse({
-      type: ApplyLeaveToastEnums.INSUFFICIENT_BALANCE_ERROR,
+      type: ApplyLeaveToastEnums.LEAVE_ERROR_LEAVE_ENTITLEMENT_NOT_SUFFICIENT,
       setToastMessage,
       translateText
     });

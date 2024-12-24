@@ -39,7 +39,7 @@ export const handleApplyLeaveApiResponse = ({
         ])
       });
       break;
-    case ApplyLeaveToastEnums.INSUFFICIENT_BALANCE_ERROR:
+    case ApplyLeaveToastEnums.LEAVE_ERROR_LEAVE_ENTITLEMENT_NOT_SUFFICIENT:
       setToastMessage({
         key: MyRequestsToastMsgKeyEnums.INSUFFICIENT_BALANCE_ERROR,
         open: true,
@@ -47,6 +47,17 @@ export const handleApplyLeaveApiResponse = ({
         title: translateText(["toastMessages.insufficientBalance.title"]),
         description: translateText([
           "toastMessages.insufficientBalance.description"
+        ])
+      });
+      break;
+    case ApplyLeaveToastEnums.LEAVE_ERROR_LEAVE_ENTITLEMENT_NOT_APPLICABLE:
+      setToastMessage({
+        key: MyRequestsToastMsgKeyEnums.NO_LEAVE_ENTITLEMENT_ERROR,
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["toastMessages.noLeaveEntitlement.title"]),
+        description: translateText([
+          "toastMessages.noLeaveEntitlement.description"
         ])
       });
       break;

@@ -21,7 +21,7 @@ const styles = (theme: Theme): StyleProps => ({
   },
   chip: {
     position: "absolute",
-    left: "1.875rem",
+    right: "-2.5rem",
     bottom: "0rem",
     backgroundColor: theme.palette.error.main,
     color: theme.palette.error.contrastText,
