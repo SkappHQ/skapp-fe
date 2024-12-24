@@ -334,7 +334,9 @@
       "reviewer": "APPROVED BY",
       "noLeaveRequests": "No leave requests",
       "noLeaveRequestsManagerDetails": "When you get a leave request from an employee under your supervision, that will show up here",
-      "allAvailable": "All employees are available"
+      "allAvailable": "All employees are available",
+      "halfDay": "Half Day",
+      "fullDay": "Full Day"
     },
     "leaveRequestFilters": {
       "leaveStatusTitle": "Leave Status",

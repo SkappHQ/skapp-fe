@@ -11,6 +11,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveRequestStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { LeaveRequest } from "~community/leave/types/ResourceAvailabilityTypes";
+import { getLeaveRequestState } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
 interface OnLeaveModalProps {
   isOpen: boolean;
@@ -83,12 +84,19 @@ const OnLeaveModal: React.FC<OnLeaveModalProps> = ({
           isTruncated={!theme.breakpoints.up("xl")}
         />
       ),
-      duration: <BasicChip label={employeeLeaveRequest.leaveState} />,
+      duration: (
+        <BasicChip
+          label={getLeaveRequestState(
+            employeeLeaveRequest.leaveState,
+            translateText
+          )}
+        />
+      ),
       reviewer: employeeLeaveRequest.reviewer ? (
         <AvatarChip
-          firstName={employeeLeaveRequest?.employee?.firstName ?? ""}
-          lastName={employeeLeaveRequest?.employee?.lastName ?? ""}
-          avatarUrl={employeeLeaveRequest?.employee?.authPic ?? ""}
+          firstName={employeeLeaveRequest?.reviewer?.firstName ?? ""}
+          lastName={employeeLeaveRequest?.reviewer?.lastName ?? ""}
+          avatarUrl={employeeLeaveRequest?.reviewer?.authPic ?? ""}
           isResponsiveLayout
           chipStyles={{
             maxWidth: "15.625rem"
