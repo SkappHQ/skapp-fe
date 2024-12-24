@@ -160,6 +160,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
         leaveDuration === LeaveDurationTypes.FULL_DAY &&
         value.includes(".")
       ) {
+        setFieldValue("numberOfDaysOff", value);
         setFieldError(
           "numberOfDaysOff",
           translateText(["validNoOfDaysFullDayError"])
