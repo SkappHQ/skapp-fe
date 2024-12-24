@@ -100,7 +100,7 @@
       "type": "Type",
       "status": "Status",
       "emptyLeaveRequestTitle": "No leave requests available",
-      "emptyLeaveRequestDes": "You haven't applied for a leave request yet. Once you apply for a request, it will be displayed here.",
+      "emptyLeaveRequestDes": "You haven't applied for any leave requests yet. Once you submit a request, it will be displayed here.",
       "filterButtonStatus": "Leave Status",
       "filterButtonType": "Leave Type",
       "sortBy": "Sort by : {{sortBy}}",
