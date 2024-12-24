@@ -374,16 +374,12 @@ const EditInfoCard = ({
       </Stack>
 
       <Stack
-        direction={
-          isPhoneScreen || isSmallPhoneScreen || getAvailableFieldCount() === 3
-            ? "column"
-            : "row"
-        }
+        direction={isPhoneScreen || isSmallPhoneScreen ? "column" : "row"}
         gap={
           isTabScreen ||
           isPhoneScreen ||
           isSmallPhoneScreen ||
-          getAvailableFieldCount() === 3
+          getAvailableFieldCount() === 1
             ? "1rem"
             : "2.25rem"
         }
