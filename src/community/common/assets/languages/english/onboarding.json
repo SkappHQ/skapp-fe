@@ -79,6 +79,10 @@
     "loginBtnText": "Login",
     "forgotPasswordText": "Forgot password?",
     "resetPasswordLinkText": "Send Reset Request",
+    "signInFailed": {
+      "title": "Sign-In Failed",
+      "description": "Please contact your super administrator for support."
+    },
     "loginFailedTitle": "Login Failed",
     "loginFailedDescription": "Incorrect username or password",
     "passwordChangeTitle": "Password change failed",
