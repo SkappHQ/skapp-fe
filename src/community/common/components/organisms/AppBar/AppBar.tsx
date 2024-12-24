@@ -1,4 +1,11 @@
-import { Badge, Box, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Badge,
+  Box,
+  IconButton,
+  Skeleton,
+  Stack,
+  Typography
+} from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
@@ -68,42 +75,52 @@ const AppBar = () => {
           <Stack sx={classes.clockInWrapper}>
             <ClockWidget />
           </Stack>
-          <Stack sx={classes.userInfoPanelWrapper} ref={userInfoRef}>
-            <Box
-              sx={{ cursor: "pointer", mr: "0.25rem" }}
-              onClick={() => handleOpenMenu(AppBarItemTypes.NOTIFICATION)}
-            >
-              <Badge
-                color="notifyBadge"
-                badgeContent={notifyData.unreadCount}
-                invisible={false}
-                max={100}
-                aria-atomic={true}
+          {employee ? (
+            <Stack sx={classes.userInfoPanelWrapper} ref={userInfoRef}>
+              <Box
+                sx={{ cursor: "pointer", mr: "0.25rem" }}
+                onClick={() => handleOpenMenu(AppBarItemTypes.NOTIFICATION)}
               >
-                <Icon name={IconName.BELL_ICON} width="2rem" height="2rem" />
-              </Badge>
-            </Box>
-            <Box
-              sx={{ cursor: "pointer" }}
-              onClick={() => handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS)}
-              data-testid={appBarTestId.appBar.profileAvatar}
-            >
-              <Avatar
-                firstName={employee?.firstName || ""}
-                lastName={employee?.lastName || ""}
-                alt={`${employee?.firstName} ${employee?.lastName}`}
-                src={employee?.authPic || ""}
-              />
-            </Box>
-            <Stack sx={classes.userInfo}>
-              <Typography sx={classes.name}>
-                {employee ? `${employee?.firstName} ${employee?.lastName}` : ""}
-              </Typography>
-              <Typography sx={classes.userRole}>
-                {employee?.jobTitle?.name}
-              </Typography>
+                <Badge
+                  color="notifyBadge"
+                  badgeContent={notifyData.unreadCount}
+                  invisible={false}
+                  max={100}
+                  aria-atomic={true}
+                >
+                  <Icon name={IconName.BELL_ICON} width="2rem" height="2rem" />
+                </Badge>
+              </Box>
+              <Box
+                sx={{ cursor: "pointer" }}
+                onClick={() => handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS)}
+                data-testid={appBarTestId.appBar.profileAvatar}
+              >
+                <Avatar
+                  firstName={employee?.firstName || ""}
+                  lastName={employee?.lastName || ""}
+                  alt={`${employee?.firstName} ${employee?.lastName}`}
+                  src={employee?.authPic || ""}
+                />
+              </Box>
+              <Stack sx={classes.userInfo}>
+                <Typography sx={classes.name}>
+                  {status !== "loading" &&
+                    `${employee?.firstName} ${employee?.lastName}`}
+                </Typography>
+                <Typography sx={classes.userRole}>
+                  {employee?.jobTitle?.name}
+                </Typography>
+              </Stack>
             </Stack>
-          </Stack>
+          ) : (
+            <Skeleton
+              variant="rounded"
+              height="4.5rem"
+              sx={classes.userInfoPanelWrapper}
+              animation={"wave"}
+            />
+          )}
         </Stack>
         <IconButton onClick={handleDrawer} sx={classes.menuIconBtn}>
           <Icon name={IconName.MENU_ICON} />
