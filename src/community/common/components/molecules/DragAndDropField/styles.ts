@@ -26,11 +26,7 @@ export const styles = (
     paddingTop: "2.4375rem",
     paddingBottom: "2.25rem",
     width: "100%",
-    background: isDisableColor
-      ? "transparent"
-      : validationError || customError
-        ? theme.palette.error.main
-        : "transparent",
+    background: "transparent",
     color:
       validationError || customError
         ? theme.palette.error.contrastText

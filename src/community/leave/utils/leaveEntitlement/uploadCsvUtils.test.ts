@@ -28,7 +28,7 @@ describe("setAttachment", () => {
     leaveTypes: [] as LeaveTypeType[],
     selectedYear: "2023",
     setCustomError: mockDispatch,
-    setIsInvalid: mockDispatch,
+    setValid: mockDispatch,
     setLeaveEntitlementBulk: mockDispatch,
     setBulkUserAttachment: mockDispatch,
     translateText: mockTranslateText

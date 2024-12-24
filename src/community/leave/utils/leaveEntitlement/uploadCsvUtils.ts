@@ -16,7 +16,7 @@ interface SetAttachmentProps {
   leaveTypes: LeaveTypeType[];
   selectedYear: string;
   setCustomError: Dispatch<SetStateAction<string>>;
-  setIsInvalid: Dispatch<SetStateAction<boolean>>;
+  setValid: Dispatch<SetStateAction<boolean>>;
   setLeaveEntitlementBulk: Dispatch<
     SetStateAction<LeaveEntitlementBulkUploadType[]>
   >;
@@ -29,14 +29,14 @@ export const setAttachment = async ({
   leaveTypes,
   selectedYear,
   setCustomError,
-  setIsInvalid,
+  setValid,
   setLeaveEntitlementBulk,
   setBulkUserAttachment,
   translateText
 }: SetAttachmentProps): Promise<void> => {
   setBulkUserAttachment(acceptedFiles);
   setCustomError("");
-  setIsInvalid(false);
+  setValid(false);
 
   if (acceptedFiles?.length > 0) {
     const areHeadersValid = await validateHeaders(
@@ -51,7 +51,6 @@ export const setAttachment = async ({
         transformHeader: transformCSVHeaders,
         complete: function (recordDetails) {
           if (recordDetails?.data?.length === 0) {
-            setIsInvalid(true);
             setCustomError(translateText(["emptyFileError"]));
           } else {
             const preProcessedEntitlements =
@@ -60,12 +59,12 @@ export const setAttachment = async ({
                 leaveTypes ?? [],
                 selectedYear ?? ""
               );
+            setValid(true);
             setLeaveEntitlementBulk(preProcessedEntitlements);
           }
         }
       });
     } else {
-      setIsInvalid(true);
       setCustomError(translateText(["invalidTemplateError"]));
     }
   } else {
