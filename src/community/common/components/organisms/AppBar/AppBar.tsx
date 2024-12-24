@@ -97,8 +97,7 @@ const AppBar = () => {
             </Box>
             <Stack sx={classes.userInfo}>
               <Typography sx={classes.name}>
-                {status !== "loading" &&
-                  `${employee?.firstName} ${employee?.lastName}`}
+                {employee ? `${employee?.firstName} ${employee?.lastName}` : ""}
               </Typography>
               <Typography sx={classes.userRole}>
                 {employee?.jobTitle?.name}
