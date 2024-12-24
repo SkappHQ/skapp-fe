@@ -74,15 +74,23 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           )
         };
 
-        const leaveEntitlementData = leaveEntitlement?.entitlements?.map(
-          (entitlement) => ({
-            [entitlement?.name?.toLowerCase()]: formatToFiveDecimalPlaces(
-              parseFloat(entitlement?.totalDaysAllocated)
-            )
-          })
-        );
+        const leaveEntitlementData = leaveTypes?.map((leaveType) => {
+          const entitlement = leaveEntitlement?.entitlements?.find(
+            (entitlement) =>
+              entitlement?.name?.toLowerCase() ===
+              leaveType?.name?.toLowerCase()
+          );
 
-        return Object.assign(userColumnData, ...leaveEntitlementData);
+          return {
+            [leaveType?.name?.toLowerCase()]: entitlement
+              ? formatToFiveDecimalPlaces(
+                  parseFloat(entitlement?.totalDaysAllocated)
+                )
+              : "-"
+          };
+        });
+
+        return Object.assign(userColumnData, ...(leaveEntitlementData || []));
       }) || []
     );
   };
