@@ -120,10 +120,7 @@ const OnLeaveModal: React.FC<OnLeaveModalProps> = ({
       onCloseModal={onClose}
       title={title}
       isClosable={true}
-      modalWrapperStyles={{ maxWidth: "64rem" }}
-      modalStyles={{
-        maxWidth: { xs: "calc(100dvw - 1.25rem)", sm: "60.5625rem" }
-      }}
+      modalContentStyles={{ maxWidth: { md: "64rem" } }}
     >
       <Box sx={{ pt: 1 }}>
         <Table
