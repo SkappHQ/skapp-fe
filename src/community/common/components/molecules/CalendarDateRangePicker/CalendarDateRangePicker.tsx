@@ -70,6 +70,15 @@ const CalendarDateRangePicker: FC<Props> = ({
     });
   }, [selectedDates]);
 
+  const onDayClick = (date: DateTime<boolean>) => {
+    handleDateChange({
+      date,
+      isRangePicker,
+      selectedDates,
+      setSelectedDates
+    });
+  };
+
   return (
     <Stack sx={classes.wrapper}>
       <Typography variant="body1" sx={error ? classes.error : {}}>
@@ -92,6 +101,7 @@ const CalendarDateRangePicker: FC<Props> = ({
               PickersDay({
                 pickerDaysProps: props,
                 selectedDates,
+                onDayClick,
                 isRangePicker,
                 myLeaveRequests,
                 workingDays,
@@ -105,14 +115,6 @@ const CalendarDateRangePicker: FC<Props> = ({
             rightArrowIcon: {
               sx: classes.rightArrowIcon
             }
-          }}
-          onChange={(date: DateTime | null) => {
-            handleDateChange({
-              date,
-              isRangePicker,
-              selectedDates,
-              setSelectedDates
-            });
           }}
           minDate={minDate ? DateTime.fromJSDate(minDate) : undefined}
           maxDate={maxDate ? DateTime.fromJSDate(maxDate) : undefined}

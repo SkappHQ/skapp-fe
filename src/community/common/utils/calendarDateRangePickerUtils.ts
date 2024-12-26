@@ -70,22 +70,18 @@ export const handleDateChange = ({
   if (!date) return;
 
   if (isRangePicker) {
-    // Range selection logic
     if (selectedDates.length === 2) {
-      setSelectedDates([date]); // Start a new range
-    } else {
-      if (selectedDates.length === 1) {
-        if (date > selectedDates[0]) {
-          setSelectedDates([selectedDates[0], date]);
-        } else {
-          setSelectedDates([date, selectedDates[0]]);
-        }
+      setSelectedDates([date]);
+    } else if (selectedDates.length === 1) {
+      if (date > selectedDates[0]) {
+        setSelectedDates([selectedDates[0], date]);
       } else {
-        setSelectedDates([date]);
+        setSelectedDates([date, selectedDates[0]]);
       }
+    } else {
+      setSelectedDates([date]);
     }
   } else {
-    // Single date selection logic
     setSelectedDates([date]);
   }
 };

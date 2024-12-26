@@ -22,6 +22,7 @@ import { Holiday } from "~community/people/types/HolidayTypes";
 interface Props {
   pickerDaysProps: PickersDayProps<DateTime>;
   selectedDates: DateTime[];
+  onDayClick: (date: DateTime<boolean>) => void;
   isRangePicker: boolean;
   myLeaveRequests?: MyLeaveRequestPayloadType[];
   workingDays?: string[] | undefined;
@@ -31,6 +32,7 @@ interface Props {
 const CalendarDateRangePickersDay = ({
   pickerDaysProps,
   selectedDates,
+  onDayClick,
   isRangePicker,
   myLeaveRequests,
   workingDays,
@@ -93,6 +95,7 @@ const CalendarDateRangePickersDay = ({
       outsideCurrentMonth={outsideCurrentMonth}
       day={day}
       sx={classes.pickersDay}
+      onClick={() => onDayClick(day)}
       {...other}
     />
   );
