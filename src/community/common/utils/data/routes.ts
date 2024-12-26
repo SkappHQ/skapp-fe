@@ -107,7 +107,7 @@ const routes = [
       },
       {
         id: "2B",
-        name: "All Requests",
+        name: "All Leave Requests",
         url: ROUTES.LEAVE.LEAVE_REQUESTS,
         hasSubTree: false,
         requiredAuthLevel: [

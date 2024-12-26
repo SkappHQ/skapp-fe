@@ -10,6 +10,8 @@ export const styles = ({ theme }: stylesProps) => ({
     position: "absolute",
     top: { xs: "3.25rem", lg: "3.25rem" },
     right: { xs: "2.25rem", lg: "-1.3125rem" },
+    height: "2.5rem",
+    width: "2.5rem",
     zIndex: 1201,
     backgroundColor: theme.palette.grey[100],
     borderRadius: "100%",
