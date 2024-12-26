@@ -514,7 +514,7 @@ const SystemPermissionForm = ({
                 isUpdate ? translateTexts(["cancel"]) : translateTexts(["back"])
               }
               buttonStyle={ButtonStyle.TERTIARY}
-              startIcon={
+              endIcon={
                 isUpdate ? IconName.CLOSE_ICON : IconName.LEFT_ARROW_ICON
               }
               isFullWidth={false}

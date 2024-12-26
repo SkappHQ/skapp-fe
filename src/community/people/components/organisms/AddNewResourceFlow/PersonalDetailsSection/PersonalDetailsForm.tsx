@@ -201,7 +201,7 @@ const PersonalDetailsForm = ({
             <Button
               label={translateText(["cancel"])}
               buttonStyle={ButtonStyle.TERTIARY}
-              startIcon={IconName.CLOSE_ICON}
+              endIcon={IconName.CLOSE_ICON}
               isFullWidth={false}
               onClick={onBack}
               disabled={isSubmitDisabled || isLoading || isInputsDisabled}
