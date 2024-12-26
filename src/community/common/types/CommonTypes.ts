@@ -37,7 +37,7 @@ export interface DropdownListType {
 export interface ErrorResponse {
   response: {
     data: {
-      results: { message?: string; code?: number }[];
+      results: { message?: string; code?: number; messageKey?: string }[];
     };
     status?: number;
   };

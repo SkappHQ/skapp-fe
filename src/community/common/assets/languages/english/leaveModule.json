@@ -58,6 +58,10 @@
         "insufficientBalance": {
           "title": "Insufficient Balance",
           "description": "Not enough balance to apply for leave on the selected date/s."
+        },
+        "noLeaveEntitlement": {
+          "title": "No Leave Entitlement",
+          "description": "You have no leave entitlements available for the selected date(s)"
         }
       }
     },

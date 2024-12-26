@@ -7,6 +7,7 @@ import {
 import { rejects } from "assert";
 
 import { getAttendanceQueryKeys } from "~community/attendance/api/utils/queryKeys";
+import { ErrorResponse } from "~community/common/types/CommonTypes";
 import authFetch from "~community/common/utils/axiosInterceptor";
 import { getYearStartAndEndDates } from "~community/common/utils/dateTimeUtils";
 import {
@@ -112,7 +113,7 @@ export const useGetLeaveEntitlementBalance = (
 export const useApplyLeave = (
   selectedYear: string,
   onSuccess: () => void,
-  onError: () => void
+  onError: (error: string) => void
 ) => {
   const queryClient = useQueryClient();
 
@@ -129,7 +130,9 @@ export const useApplyLeave = (
       });
       onSuccess();
     },
-    onError
+    onError: (error: ErrorResponse) => {
+      onError(error.response.data.results[0]?.messageKey || "");
+    }
   });
 };
 

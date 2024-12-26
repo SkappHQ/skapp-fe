@@ -41,7 +41,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
   );
 
   const [customError, setCustomError] = useState<string>("");
-  const [isInvalid, setIsInvalid] = useState<boolean>(false);
+  const [isValid, setValid] = useState<boolean>(false);
   const [bulkLeaveAttachment, setBulkUserAttachment] = useState<
     FileUploadType[]
   >([]);
@@ -56,21 +56,26 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
   }, [leaveTypesData, setLeaveTypes]);
 
   const onSuccess = (errorLogs: BulkUploadResponse) => {
-    handleLeaveEntitlementApiResponse({
-      type:
-        errorLogs?.bulkStatusSummary?.failedCount === 0
-          ? LeaveEntitlementToastEnums.BULK_UPLOAD_COMPLETE_SUCCESS
-          : LeaveEntitlementToastEnums.BULK_UPLOAD_PARTIAL_SUCCESS,
-      setToastMessage,
-      translateText,
-      selectedYear,
-      noOfRecords: errorLogs?.bulkStatusSummary?.successCount
-    });
+    const toastType =
+      errorLogs?.bulkStatusSummary?.failedCount === 0
+        ? LeaveEntitlementToastEnums.BULK_UPLOAD_COMPLETE_SUCCESS
+        : errorLogs?.bulkStatusSummary?.successCount !== 0
+          ? LeaveEntitlementToastEnums.BULK_UPLOAD_PARTIAL_SUCCESS
+          : "";
+    if (toastType !== "") {
+      handleLeaveEntitlementApiResponse({
+        type: toastType,
+        setToastMessage,
+        translateText,
+        selectedYear,
+        noOfRecords: errorLogs?.bulkStatusSummary?.successCount
+      });
+    }
     setErrorLog(errorLogs);
     setLeaveEntitlementBulk([]);
     setBulkUserAttachment([]);
     setCustomError("");
-    setIsInvalid(false);
+    setValid(false);
     setLeaveEntitlementModalType(
       errorLogs?.bulkStatusSummary?.failedCount === 0
         ? LeaveEntitlementModelTypes.NONE
@@ -104,7 +109,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
 
   return (
     <Stack sx={classes.wrapper}>
-      <Typography variant="body1">
+      <Typography variant="body1" sx={classes.description}>
         {translateText(["uploadCsvModalDes"])}
       </Typography>
       <DragAndDropField
@@ -114,7 +119,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
             leaveTypes,
             selectedYear,
             setCustomError,
-            setIsInvalid,
+            setValid,
             setLeaveEntitlementBulk,
             setBulkUserAttachment,
             translateText
@@ -135,7 +140,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
         buttonStyle={ButtonStyle.PRIMARY}
         styles={classes.uploadButton}
         onClick={handleUploadBtnClick}
-        disabled={isInvalid}
+        disabled={!isValid}
       />
       <Button
         label={translateText(["goBackButton"])}

@@ -113,9 +113,20 @@ const ApplyLeaveModal = () => {
     setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
   };
 
-  const onError = () => {
+  const onError = (error: string) => {
+    let errorType;
+
+    switch (error) {
+      case ApplyLeaveToastEnums.LEAVE_ERROR_LEAVE_ENTITLEMENT_NOT_SUFFICIENT:
+      case ApplyLeaveToastEnums.LEAVE_ERROR_LEAVE_ENTITLEMENT_NOT_APPLICABLE:
+        errorType = error;
+        break;
+      default:
+        errorType = ApplyLeaveToastEnums.APPLY_LEAVE_ERROR;
+    }
+
     handleApplyLeaveApiResponse({
-      type: ApplyLeaveToastEnums.APPLY_LEAVE_ERROR,
+      type: errorType,
       setToastMessage,
       translateText
     });

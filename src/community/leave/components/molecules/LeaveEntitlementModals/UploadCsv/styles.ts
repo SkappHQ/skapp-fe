@@ -2,8 +2,10 @@ import { StyleProps } from "~community/common/types/CommonTypes";
 
 const styles = (): StyleProps => ({
   wrapper: {
-    paddingTop: "1rem",
     marginBottom: "1rem"
+  },
+  description: {
+    paddingBottom: "1rem"
   },
   divider: {
     marginY: "1.5rem"
