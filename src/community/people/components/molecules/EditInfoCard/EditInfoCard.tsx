@@ -66,6 +66,9 @@ const EditInfoCard = ({
   const translateText = useTranslator("peopleModule", "editAllInfo");
   const translateTerminationText = useTranslator("peopleModule", "termination");
   const translateStorageText = useTranslator("StorageToastMessage");
+
+  const AVAILABLE_FIELD_COUNT = 2;
+
   const { data } = useSession();
 
   const { setToastMessage } = useToast();
@@ -167,7 +170,7 @@ const EditInfoCard = ({
           " ",
           selectedEmployee?.lastName as string
         ) || "",
-      email: selectedEmployee?.personalEmail || "",
+      email: selectedEmployee?.email || "",
       phone:
         selectedEmployee?.phone?.split(" ")?.[1] ??
         (selectedEmployee?.phone || ""),
@@ -186,9 +189,8 @@ const EditInfoCard = ({
 
   const getAvailableFieldCount = (): number => {
     let count = 0;
-    if (cardData?.teams) count++;
+    if (cardData?.teams.length > 0) count++;
     if (cardData?.joinedDate) count++;
-    if (cardData?.jobFamily) count++;
     if (supervisor) count++;
     return count;
   };
@@ -266,14 +268,16 @@ const EditInfoCard = ({
       });
     }
   };
-
   return (
     <Stack
       sx={{
         mb: "2rem",
         display: "flex",
         flexDirection: "row",
-        alignItems: "center",
+        alignItems:
+          getAvailableFieldCount() >= AVAILABLE_FIELD_COUNT || supervisor
+            ? "center"
+            : "flex-start",
         justifyContent: "space-between",
         background: theme.palette.grey[100],
         padding: "1.5rem 1rem",
@@ -289,6 +293,7 @@ const EditInfoCard = ({
         direction="row"
         gap="1rem"
         sx={{
+          justifyContent: "center",
           alignItems: "center"
         }}
       >

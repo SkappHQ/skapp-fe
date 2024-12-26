@@ -137,6 +137,8 @@ const Individual: NextPage = () => {
   useEffect(() => {
     if (tab && tab === "timesheet") {
       setFormType(EditAllInformationType.timesheeet);
+    } else if (tab === "leave") {
+      setFormType(EditAllInformationType.leave);
     }
   }, [tab]);
 

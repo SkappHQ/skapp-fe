@@ -184,7 +184,7 @@ const EntitlementsDetailsForm = ({
           <Button
             label="Back"
             buttonStyle={ButtonStyle.TERTIARY}
-            startIcon={IconName.LEFT_ARROW_ICON}
+            endIcon={IconName.LEFT_ARROW_ICON}
             isFullWidth={false}
             onClick={onBack}
             dataTestId={entitlementsDetailsFormTestId.buttons.backBtn}

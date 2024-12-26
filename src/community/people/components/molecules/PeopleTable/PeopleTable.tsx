@@ -195,7 +195,7 @@ const PeopleTable: FC<Props> = ({
           )}
         </Stack>
       ),
-      jobTitle: employee?.jobRole,
+      jobTitle: employee?.jobLevel,
       email: employee?.email,
       team:
         employee?.teams?.length === 0 ? (

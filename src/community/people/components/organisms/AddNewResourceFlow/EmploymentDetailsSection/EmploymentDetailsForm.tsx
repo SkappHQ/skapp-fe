@@ -206,7 +206,7 @@ const EmploymentDetailsForm = ({
                 isUpdate ? translateText(["cancel"]) : translateText(["back"])
               }
               buttonStyle={ButtonStyle.TERTIARY}
-              startIcon={
+              endIcon={
                 isUpdate ? IconName.CLOSE_ICON : IconName.LEFT_ARROW_ICON
               }
               isFullWidth={false}
