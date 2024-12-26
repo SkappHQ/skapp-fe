@@ -167,7 +167,7 @@ const EditInfoCard = ({
           " ",
           selectedEmployee?.lastName as string
         ) || "",
-      email: selectedEmployee?.personalEmail || "",
+      email: selectedEmployee?.email || "",
       phone:
         selectedEmployee?.phone?.split(" ")?.[1] ??
         (selectedEmployee?.phone || ""),
