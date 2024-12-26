@@ -117,6 +117,7 @@ const AppBar = () => {
             <Skeleton
               variant="rounded"
               height="4.5rem"
+              width="7.5rem"
               sx={classes.userInfoPanelWrapper}
               animation={"wave"}
             />
