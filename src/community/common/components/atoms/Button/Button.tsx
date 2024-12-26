@@ -121,6 +121,7 @@ const Button = ({
       variant="contained"
       buttonstyle={buttonStyle}
       buttonsize={size}
+      isdefaulticoncolor={isDefaultIconColor.toString()}
       width={isFullWidth ? "100%" : "max-content"}
       startIcon={
         startIcon && typeof startIcon === "object" && "type" in startIcon ? (
@@ -154,7 +155,6 @@ const Button = ({
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      isDefaultIconColor={isDefaultIconColor}
     >
       {label && (
         <Typography variant={typographyVariant} component="span">

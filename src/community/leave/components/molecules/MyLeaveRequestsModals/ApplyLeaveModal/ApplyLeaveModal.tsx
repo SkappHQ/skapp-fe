@@ -17,6 +17,7 @@ import { LeaveStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   convertToYYYYMMDDFromDateTime,
+  currentYear,
   getFirstDateOfYear,
   getMaxDateOfYear,
   getMonthStartAndEndDates
@@ -45,6 +46,7 @@ import {
   getDurationInitialValue,
   getDurationSelectorDisabledOptions
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
+import { useGetAllHolidays } from "~community/people/api/HolidayApi";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
@@ -57,8 +59,11 @@ const ApplyLeaveModal = () => {
   const classes = styles();
 
   const { setToastMessage } = useToast();
+
   const translateStorageText = useTranslator("StorageToastMessage");
+
   const environment = useGetEnvironment();
+
   const translateText = useTranslator(
     "leaveModule",
     "myRequests",
@@ -97,6 +102,8 @@ const ApplyLeaveModal = () => {
   const { data: myTeams } = useGetMyTeams();
 
   const { data: myLeaveRequests } = useGetMyRequests();
+
+  const { data: allHolidays } = useGetAllHolidays(currentYear.toString());
 
   const { data: leaveEntitlementBalance } = useGetLeaveEntitlementBalance(
     selectedLeaveAllocationData.leaveType.typeId
@@ -303,7 +310,7 @@ const ApplyLeaveModal = () => {
             allowedDuration={
               selectedLeaveAllocationData.leaveType.leaveDuration
             }
-            resourceAvailability={resourceAvailability}
+            allHolidays={allHolidays}
             minDate={firstDateOfYear}
             maxDate={lastDateOfYear}
             workingDays={workingDays}

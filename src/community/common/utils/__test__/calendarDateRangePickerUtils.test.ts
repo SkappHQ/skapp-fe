@@ -2,10 +2,10 @@ import { DateTime } from "luxon";
 
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import {
+  getHolidaysForDay,
   getHolidaysWithinDateRange,
   getLeaveRequestsWithinDateRange,
   getMyLeaveRequestForDay,
-  getResourceAvailabilityDataForDate,
   handleDateChange,
   handleDateValidation,
   isNotAWorkingDate
@@ -14,11 +14,10 @@ import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { MyRequestsToastMsgKeyEnums } from "~community/leave/enums/ToastMsgKeyEnums";
 
 import {
+  allHolidays,
   endDate,
-  holidays,
   myLeaveRequests,
   nonWorkingDate,
-  resourceAvailability,
   selectedDates,
   selectedDatesTwo,
   startDate,
@@ -96,7 +95,7 @@ describe("calendarDateRangePickerUtils", () => {
       handleDateValidation({
         allowedDuration: LeaveDurationTypes.HALF_DAY,
         selectedDates,
-        resourceAvailability: undefined,
+        allHolidays: undefined,
         myLeaveRequests: undefined,
         setToastMessage,
         translateText
@@ -111,21 +110,21 @@ describe("calendarDateRangePickerUtils", () => {
     });
   });
 
-  describe("getResourceAvailabilityDataForDate", () => {
-    it("should return resource availability data for the given date", () => {
-      const result = getResourceAvailabilityDataForDate({
-        resourceAvailability,
+  describe("getHolidaysForDay", () => {
+    it("should return holiday data for the given date", () => {
+      const result = getHolidaysForDay({
+        allHolidays,
         date: workingDate
       });
-      expect(result).toEqual(resourceAvailability[0]);
+      expect(result).toEqual([allHolidays[0]]);
     });
 
-    it("should return null if no resource availability data is found for the given date", () => {
-      const result = getResourceAvailabilityDataForDate({
-        resourceAvailability,
+    it("should return null if no holiday data is found for the given date", () => {
+      const result = getHolidaysForDay({
+        allHolidays,
         date: nonWorkingDate
       });
-      expect(result).toBeNull();
+      expect(result).toEqual([]);
     });
   });
 
@@ -133,15 +132,15 @@ describe("calendarDateRangePickerUtils", () => {
     it("should return holidays within the selected date range", () => {
       const result = getHolidaysWithinDateRange({
         selectedDates: selectedDatesTwo,
-        resourceAvailability
+        allHolidays
       });
-      expect(result).toEqual(holidays);
+      expect(result).toEqual(allHolidays);
     });
 
     it("should return an empty array if no holidays are found within the selected date range", () => {
       const result = getHolidaysWithinDateRange({
         selectedDates,
-        resourceAvailability
+        allHolidays
       });
       expect(result).toEqual([]);
     });

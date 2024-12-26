@@ -46,13 +46,12 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import {
   deleteFileFromS3,
   uploadFileToS3ByUrl
 } from "~enterprise/common/utils/awsS3ServiceFunctions";
-
-import { useGetEnvironment } from "../../../../../src/enterprise/common/hooks/useGetEnvironment";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();

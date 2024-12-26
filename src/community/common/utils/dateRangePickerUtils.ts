@@ -8,8 +8,10 @@ import {
   getStartAndEndOfYear,
   isDateTimeSimilar
 } from "~community/common/utils/dateTimeUtils";
-import { HolidayType } from "~community/leave/types/MyRequests";
-import { HolidayDurationType } from "~community/people/types/HolidayTypes";
+import {
+  Holiday,
+  HolidayDurationType
+} from "~community/people/types/HolidayTypes";
 
 interface HandleDateChangeProps {
   date: DateTime | null;
@@ -122,7 +124,7 @@ interface GetSelectionClassesProps {
   day: DateTime;
   selectedDates: Date[] | DateTime[];
   workingDays?: string[] | undefined;
-  holidaysForDay?: HolidayType[] | undefined;
+  holidaysForDay?: Holiday[] | null;
 }
 
 export const getSelectionClasses = ({

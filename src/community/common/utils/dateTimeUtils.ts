@@ -333,6 +333,10 @@ export const convertToYYYYMMDDFromDateTime = (dateTime: DateTime) => {
   return "";
 };
 
+export const convertYYYYMMDDToDateTime = (dateString: string): DateTime => {
+  return DateTime.fromFormat(dateString, "yyyy-MM-dd");
+};
+
 export const getMonthStartAndEndDates = (month: number) => {
   const startDate = DateTime.local(DateTime.now().year, month, 1).startOf(
     "month"
