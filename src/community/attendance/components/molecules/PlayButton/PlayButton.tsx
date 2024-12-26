@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { JSX } from "react";
 
 import { useUpdateEmployeeStatus } from "~community/attendance/api/AttendanceApi";
@@ -77,9 +77,11 @@ const PlayButton = (): JSX.Element => {
           status === AttendanceSlotType.LEAVE_DAY
         }
       >
-        {status === AttendanceSlotType.RESUME ||
-        status === AttendanceSlotType.START ||
-        status === AttendanceSlotType.END ? (
+        {isPending ? (
+          <CircularProgress size={"1rem"} />
+        ) : status === AttendanceSlotType.RESUME ||
+          status === AttendanceSlotType.START ||
+          status === AttendanceSlotType.END ? (
           <Icon name={IconName.PAUSE_ICON} />
         ) : (
           <Icon name={IconName.PLAY_ICON} />
