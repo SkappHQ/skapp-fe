@@ -52,7 +52,7 @@ import {
   uploadFileToS3ByUrl
 } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
-import { useGetEnviornment } from "../../../../../src/enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "../../../../../src/enterprise/common/hooks/useGetEnvironment";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
@@ -60,7 +60,7 @@ const EditAllInformation: NextPage = () => {
   const translateText = useTranslator("peopleModule");
   const { data } = useSession();
 
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
 
   const isPeopleAdmin = data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 
@@ -327,7 +327,7 @@ const EditAllInformation: NextPage = () => {
       try {
         setHasUploadStarted(true);
 
-        if (enviornment === ProfileModes.COMMUNITY) {
+        if (environment === ProfileModes.COMMUNITY) {
           const formData = new FormData();
           formData.append("file", employeeGeneralDetails?.authPic[0]);
 

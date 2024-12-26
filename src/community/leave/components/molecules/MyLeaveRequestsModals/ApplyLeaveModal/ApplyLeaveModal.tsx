@@ -47,7 +47,7 @@ import {
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
@@ -58,7 +58,7 @@ const ApplyLeaveModal = () => {
 
   const { setToastMessage } = useToast();
   const translateStorageText = useTranslator("StorageToastMessage");
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
   const translateText = useTranslator(
     "leaveModule",
     "myRequests",
@@ -222,7 +222,7 @@ const ApplyLeaveModal = () => {
       };
 
       if (attachments && attachments.length > 0) {
-        if (enviornment === ProfileModes.COMMUNITY) {
+        if (environment === ProfileModes.COMMUNITY) {
           try {
             const uploadPromises = attachments.map((attachment) => {
               if (attachment.file) {

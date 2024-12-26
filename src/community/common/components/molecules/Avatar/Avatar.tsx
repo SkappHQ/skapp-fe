@@ -16,7 +16,7 @@ import { FileTypes } from "~community/common/enums/CommonEnums";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import styles from "./styles";
@@ -58,7 +58,7 @@ const Avatar: FC<AvatarProps> = ({
   const [image, setImage] = useState<string | null>(null);
   const { s3FileUrls, downloadS3File } = useS3Download();
 
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
 
   const { data: logoUrl } = useGetUploadedImage(
     FileTypes.USER_IMAGE,
@@ -67,13 +67,13 @@ const Avatar: FC<AvatarProps> = ({
   );
 
   useEffect(() => {
-    if (enviornment === ProfileModes.COMMUNITY) {
+    if (environment === ProfileModes.COMMUNITY) {
       if (logoUrl) setImage(logoUrl);
       else if (src) setImage(src);
-    } else if (enviornment === ProfileModes.ENTERPRICE) {
+    } else if (environment === ProfileModes.ENTERPRICE) {
       setImage(s3FileUrls[src]);
     }
-  }, [logoUrl, src, s3FileUrls, enviornment]);
+  }, [logoUrl, src, s3FileUrls, environment]);
 
   useEffect(() => {
     if (src || !s3FileUrls[src]) {

@@ -32,7 +32,7 @@ import {
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
@@ -129,7 +129,7 @@ const AddNewResourceModal = () => {
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
 
-  const env = useGetEnviornment();
+  const env = useGetEnvironment();
 
   const isEnterpriseMode = env === "enterprise";
 

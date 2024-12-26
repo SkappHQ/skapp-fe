@@ -38,7 +38,7 @@ import {
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 import SystemCredentials from "../../SystemCredentials/SystemCrendetials";
@@ -77,7 +77,7 @@ const SystemPermissionForm = ({
   const classes = styles();
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -119,7 +119,7 @@ const SystemPermissionForm = ({
 
   const { values, setFieldValue } = formik;
 
-  const env = useGetEnviornment();
+  const env = useGetEnvironment();
 
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
@@ -499,7 +499,7 @@ const SystemPermissionForm = ({
         </Stack>
         {isUpdate &&
           !isInputsDisabled &&
-          enviornment === ProfileModes.COMMUNITY && <SystemCredentials />}
+          environment === ProfileModes.COMMUNITY && <SystemCredentials />}
 
         {!isInputsDisabled && (
           <Stack
