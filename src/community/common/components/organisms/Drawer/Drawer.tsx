@@ -147,7 +147,10 @@ const Drawer = (): JSX.Element => {
         onClick={handleDrawer}
         data-testid={appDrawerTestId.buttons.drawerToggleBtn}
       >
-        <Icon name={IconName.RIGHT_ARROW_ICON} />
+        <Icon
+          name={IconName.CHEVRON_RIGHT_ICON}
+          fill={theme.palette.common.black}
+        />
       </IconButton>
       <Stack
         sx={{

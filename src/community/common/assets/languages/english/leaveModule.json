@@ -328,7 +328,7 @@
   },
   "leaveRequests": {
     "pageHead": "All Requests | Skapp",
-    "title": "All Requests",
+    "title": "All Leave Requests",
     "search": "Search with employee name or team",
     "leaveRequestTable": {
       "name": "NAME",
