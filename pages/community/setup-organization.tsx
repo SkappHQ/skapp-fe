@@ -1,5 +1,4 @@
 import { Box, Theme, useTheme } from "@mui/material";
-import { sendGTMEvent } from "@next/third-parties/google";
 import { useFormik } from "formik";
 import { NextPage } from "next";
 import { NextRouter, useRouter } from "next/router";
@@ -19,8 +18,6 @@ import {
   FileRejectionType,
   FileUploadType
 } from "~community/common/types/CommonTypes";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
-import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsValues";
 import { organizationSetupValidation } from "~community/common/utils/validation";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
 
@@ -58,14 +55,6 @@ const SetupOrganization: NextPage = () => {
       formData.append("file", companyLogo[0].file);
       formData.append("type", FileTypes.ORGANIZATION_LOGOS);
       await uploadImage(formData);
-    }
-
-    if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
-      sendGTMEvent({
-        event: GoogleAnalyticsTypes.ORGANIZATION_CREATE_BUTTON_CLICKED,
-        value: GoogleAnalyticsValues.ORGANIZATION_CREATE_BUTTON_CLICKED,
-        timestamp: new Date().toISOString()
-      });
     }
 
     createOrganization({
