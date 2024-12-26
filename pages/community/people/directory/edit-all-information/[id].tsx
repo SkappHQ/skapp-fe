@@ -46,13 +46,12 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import {
   deleteFileFromS3,
   uploadFileToS3ByUrl
 } from "~enterprise/common/utils/awsS3ServiceFunctions";
-
-import { useGetEnviornment } from "../../../../../src/enterprise/common/hooks/useGetEnviornment";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
@@ -60,7 +59,7 @@ const EditAllInformation: NextPage = () => {
   const translateText = useTranslator("peopleModule");
   const { data } = useSession();
 
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
 
   const isPeopleAdmin = data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 
@@ -327,7 +326,7 @@ const EditAllInformation: NextPage = () => {
       try {
         setHasUploadStarted(true);
 
-        if (enviornment === ProfileModes.COMMUNITY) {
+        if (environment === ProfileModes.COMMUNITY) {
           const formData = new FormData();
           formData.append("file", employeeGeneralDetails?.authPic[0]);
 

@@ -51,7 +51,7 @@ import {
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 const getBannerData = async (): Promise<number> => {
   const url = peoplesEndpoints.GET_PENDING_EMPLOYEE_COUNT;
@@ -260,7 +260,7 @@ export const useQuickAddEmployeeMutation = () => {
   } = usePeopleStore((state) => state);
 
   const { setToastMessage } = useToast();
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -275,7 +275,7 @@ export const useQuickAddEmployeeMutation = () => {
       return response?.data?.results[0] as QuickAddEmployeeResponse;
     },
     onSuccess: (data: QuickAddEmployeeResponse) => {
-      if (enviornment === ProfileModes.COMMUNITY) {
+      if (environment === ProfileModes.COMMUNITY) {
         setSharedCredentialData(data);
         setDirectoryModalType(DirectoryModalTypes.USER_CREDENTIALS);
       } else {
