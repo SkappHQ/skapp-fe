@@ -73,3 +73,19 @@ export const handleLeaveStatus = (status: string): string => {
       return "";
   }
 };
+
+export const getLeaveRequestState = (
+  leaveState: string,
+  translateText: (keys: string[]) => string
+) => {
+  if (
+    leaveState === LeaveState.HALF_DAY_MORNING ||
+    leaveState === LeaveState.HALF_DAY_EVENING
+  ) {
+    return translateText(["halfDay"]);
+  } else if (leaveState === LeaveState.FULL_DAY) {
+    return translateText(["fullDay"]);
+  } else {
+    return "";
+  }
+};
