@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import UnsavedChangesModal from "~community/common/components/molecules/UnsavedChangesModal/UnsavedChangesModal";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import ROUTES from "~community/common/constants/routes";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveTypeModalEnums } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -28,6 +29,9 @@ const ExitModal = () => {
       title={translateText(["title"])}
       isClosable={false}
       isDividerVisible={true}
+      modalWrapperStyles={{
+        zIndex: ZIndexEnums.MAX
+      }}
     >
       <UnsavedChangesModal
         onPrimaryBtnClick={() =>
