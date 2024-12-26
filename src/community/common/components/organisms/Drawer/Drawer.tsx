@@ -38,7 +38,7 @@ import getDrawerRoutes from "~community/common/utils/getDrawerRoutes";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import { StyledDrawer } from "./StyledDrawer";
@@ -49,7 +49,7 @@ const Drawer = (): JSX.Element => {
 
   const [orgLogo, setOrgLogo] = useState<string | null>(null);
   const router = useRouter();
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
   const { s3FileUrls, downloadS3File } = useS3Download();
 
   const theme: Theme = useTheme();
@@ -86,12 +86,12 @@ const Drawer = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (enviornment === ProfileModes.COMMUNITY) {
+    if (environment === ProfileModes.COMMUNITY) {
       if (logoUrl) setOrgLogo(logoUrl);
-    } else if (enviornment === ProfileModes.ENTERPRICE) {
+    } else if (environment === ProfileModes.ENTERPRICE) {
       setOrgLogo(s3FileUrls[organizationLogo]);
     }
-  }, [logoUrl, organizationLogo, s3FileUrls, enviornment]);
+  }, [logoUrl, organizationLogo, s3FileUrls, environment]);
 
   useEffect(() => {
     if (organizationLogo || !s3FileUrls[organizationLogo]) {

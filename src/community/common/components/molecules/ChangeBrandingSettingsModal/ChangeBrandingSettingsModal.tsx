@@ -17,7 +17,7 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { FileUploadType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
@@ -46,7 +46,7 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
   const translateText = useTranslator("settings");
 
   const { setToastMessage } = useToast();
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
 
   const [formValues, setFormValues] = useState<FormValues>({
     organizationLogo: logo,
@@ -110,7 +110,7 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
     }
 
     if (companyLogo.length > 0 && companyLogo[0].file) {
-      if (enviornment === ProfileModes.COMMUNITY) {
+      if (environment === ProfileModes.COMMUNITY) {
         const formData = new FormData();
         formData.append("file", companyLogo[0].file);
         formData.append("type", FileTypes.ORGANIZATION_LOGOS);

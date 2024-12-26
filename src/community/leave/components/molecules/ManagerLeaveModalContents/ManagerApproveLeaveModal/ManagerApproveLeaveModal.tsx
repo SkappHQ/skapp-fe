@@ -20,7 +20,7 @@ import {
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
 import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnviornment } from "~enterprise/common/hooks/useGetEnviornment";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import LeaveStatusPopupColumn from "../LeaveStatusPopupColumn/LeaveStatusPopupColumn";
@@ -33,7 +33,7 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
   const leaveRequestData = useLeaveStore((state) => state.leaveRequestData);
   const { mutate, isSuccess, error: leaveError } = useHandelLeaves();
   const { setToastMessage } = useToast();
-  const enviornment = useGetEnviornment();
+  const environment = useGetEnvironment();
 
   const [attachment, setAttachment] = useState<string | null>(null);
   const [currentAttachmentFormat, setCurrentAttachmentFormat] = useState<
@@ -142,26 +142,26 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
 
   useEffect(() => {
     if (attachment) {
-      if (enviornment === ProfileModes.COMMUNITY) {
+      if (environment === ProfileModes.COMMUNITY) {
         refetch();
-      } else if (enviornment === ProfileModes.ENTERPRICE) {
+      } else if (environment === ProfileModes.ENTERPRICE) {
         downloadS3File(attachment);
       }
     }
   }, [attachment]);
 
   useEffect(() => {
-    if (enviornment === ProfileModes.COMMUNITY && leaveAttachment) {
+    if (environment === ProfileModes.COMMUNITY && leaveAttachment) {
       downloadFileToDevice(leaveAttachment);
     }
     setAttachment(null);
-  }, [leaveAttachment, enviornment]);
+  }, [leaveAttachment, environment]);
 
   useEffect(() => {
-    if (enviornment === ProfileModes.ENTERPRICE) {
+    if (environment === ProfileModes.ENTERPRICE) {
       downloadFileFromS3(s3FileUrls[attachment as string]);
     }
-  }, [s3FileUrls, enviornment]);
+  }, [s3FileUrls, environment]);
   return (
     <Box>
       <Stack
