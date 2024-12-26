@@ -59,16 +59,20 @@ const LeaveAllocation: FC = () => {
         {entitlement?.length === 0 ? (
           <LeaveAllocationEmptyScreen />
         ) : (
-          currentAllocations?.map((entitlement: LeaveAllocationDataTypes) => {
-            return (
-              <Grid
-                key={entitlement?.leaveType?.typeId}
-                size={{ xs: 6, md: 4 }}
-              >
-                <LeaveTypeCard entitlement={entitlement} />
-              </Grid>
-            );
-          })
+          currentAllocations
+            ?.filter(
+              (entitlement: LeaveAllocationDataTypes) => entitlement?.isActive
+            )
+            .map((entitlement: LeaveAllocationDataTypes) => {
+              return (
+                <Grid
+                  key={entitlement?.leaveType?.typeId}
+                  size={{ xs: 6, md: 4 }}
+                >
+                  <LeaveTypeCard entitlement={entitlement} />
+                </Grid>
+              );
+            })
         )}
         {isLoading && <LeaveAllocationSkeleton />}
       </Grid>

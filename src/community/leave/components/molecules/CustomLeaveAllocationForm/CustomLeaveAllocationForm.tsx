@@ -92,13 +92,15 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
 
   const leaveTypesDropDownList = useMemo(() => {
     return leaveTypesData !== undefined
-      ? leaveTypesData.map((leaveType) => {
-          const emoji = getEmoji(leaveType.emojiCode);
-          return {
-            value: leaveType.typeId,
-            label: `${emoji} ${leaveType.name}`
-          };
-        })
+      ? leaveTypesData
+          .filter((leaveType) => leaveType.isActive)
+          .map((leaveType) => {
+            const emoji = getEmoji(leaveType.emojiCode);
+            return {
+              value: leaveType.typeId,
+              label: `${emoji} ${leaveType.name}`
+            };
+          })
       : [];
   }, [leaveTypesData]);
 
