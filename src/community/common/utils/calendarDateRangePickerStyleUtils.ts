@@ -1,9 +1,11 @@
 import { LeaveStates } from "~community/common/types/CommonTypes";
-import { HolidayType } from "~community/leave/types/MyRequests";
-import { HolidayDurationType } from "~community/people/types/HolidayTypes";
+import {
+  Holiday,
+  HolidayDurationType
+} from "~community/people/types/HolidayTypes";
 
-export const getHolidayClasses = (holidays: HolidayType[]): string => {
-  const holidayClasses = holidays.map((holiday) => {
+export const getHolidayClasses = (holidays: Holiday[] | null): string => {
+  const holidayClasses = holidays?.map((holiday) => {
     switch (holiday?.holidayDuration) {
       case HolidayDurationType.FULLDAY:
         return "Mui-full-day-holiday";

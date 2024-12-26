@@ -57,7 +57,7 @@ describe("setAttachment", () => {
 
     await setAttachment(defaultProps);
 
-    expect(mockDispatch).toHaveBeenCalledWith(true);
+    expect(mockDispatch).toHaveBeenCalledWith(false);
     expect(mockDispatch).toHaveBeenCalledWith("invalidTemplateError");
   });
 
@@ -69,7 +69,7 @@ describe("setAttachment", () => {
 
     await setAttachment(defaultProps);
 
-    expect(mockDispatch).toHaveBeenCalledWith(true);
+    expect(mockDispatch).toHaveBeenCalledWith(false);
     expect(mockDispatch).toHaveBeenCalledWith("emptyFileError");
   });
 

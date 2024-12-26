@@ -17,10 +17,8 @@ import {
   getCurrentDateAtMidnight
 } from "~community/common/utils/dateTimeUtils";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
-import {
-  MyLeaveRequestPayloadType,
-  ResourceAvailabilityPayload
-} from "~community/leave/types/MyRequests";
+import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
+import { Holiday } from "~community/people/types/HolidayTypes";
 
 import styles from "./styles";
 
@@ -34,8 +32,8 @@ interface Props {
   maxDate: Date;
   isRangePicker?: boolean;
   workingDays: string[];
-  resourceAvailability: ResourceAvailabilityPayload[] | undefined;
   myLeaveRequests: MyLeaveRequestPayloadType[] | undefined;
+  allHolidays: Holiday[] | undefined;
 }
 
 const CalendarDateRangePicker: FC<Props> = ({
@@ -48,8 +46,8 @@ const CalendarDateRangePicker: FC<Props> = ({
   maxDate,
   isRangePicker = true,
   workingDays = [],
-  resourceAvailability,
-  myLeaveRequests
+  myLeaveRequests,
+  allHolidays
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -65,10 +63,10 @@ const CalendarDateRangePicker: FC<Props> = ({
     handleDateValidation({
       allowedDuration,
       selectedDates,
-      resourceAvailability,
       myLeaveRequests,
       setToastMessage,
-      translateText
+      translateText,
+      allHolidays
     });
   }, [selectedDates]);
 
@@ -95,9 +93,9 @@ const CalendarDateRangePicker: FC<Props> = ({
                 pickerDaysProps: props,
                 selectedDates,
                 isRangePicker,
-                resourceAvailability,
                 myLeaveRequests,
-                workingDays
+                workingDays,
+                allHolidays
               })
           }}
           slotProps={{

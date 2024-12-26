@@ -1,13 +1,12 @@
 import { DateTime } from "luxon";
 
-import { DayOfWeek } from "~community/common/enums/CommonEnums";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { LeaveStatusEnums } from "~community/leave/enums/MyRequestEnums";
+import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
 import {
-  MyLeaveRequestPayloadType,
-  ResourceAvailabilityPayload
-} from "~community/leave/types/MyRequests";
-import { HolidayDurationType } from "~community/people/types/HolidayTypes";
+  Holiday,
+  HolidayDurationType
+} from "~community/people/types/HolidayTypes";
 
 export const workingDate: DateTime = DateTime.fromISO("2024-04-01");
 
@@ -31,19 +30,6 @@ export const workingDays = [
   "WEDNESDAY",
   "THURSDAY",
   "FRIDAY"
-];
-
-export const holidays = [
-  {
-    holidayDuration: HolidayDurationType.FULLDAY,
-    id: 1,
-    name: "Independence Day"
-  },
-  {
-    holidayDuration: HolidayDurationType.HALFDAY,
-    id: 2,
-    name: "Spring Festival"
-  }
 ];
 
 export const myLeaveRequests: MyLeaveRequestPayloadType[] = [
@@ -100,158 +86,17 @@ export const myLeaveRequests: MyLeaveRequestPayloadType[] = [
   }
 ];
 
-export const resourceAvailability: ResourceAvailabilityPayload[] = [
+export const allHolidays: Holiday[] = [
   {
-    date: "1ST APR",
-    dayOfWeek: DayOfWeek.MON,
-    leaveCount: 2,
-    availableCount: 8,
-    leaveRequests: [
-      {
-        employee: {
-          employeeId: 101,
-          firstName: "John",
-          lastName: "Doe",
-          middleName: "A",
-          authPic: "https://example.com/john-doe.jpg"
-        },
-        endDate: "2024-04-01",
-        leaveRequestId: 1,
-        leaveState: LeaveStates.FULL_DAY,
-        leaveType: {
-          typeId: 1,
-          name: "Annual Leave",
-          emojiCode: "🏖️",
-          colorCode: "#4CAF50"
-        },
-        reviewer: {
-          employeeId: 201,
-          firstName: "Sarah",
-          lastName: "Smith",
-          middleName: "M",
-          authPic: "https://example.com/sarah-smith.jpg"
-        },
-        startDate: "2024-04-02",
-        status: LeaveStatusEnums.APPROVED
-      },
-      {
-        employee: {
-          employeeId: 102,
-          firstName: "Emily",
-          lastName: "Johnson",
-          middleName: "B",
-          authPic: "https://example.com/emily-johnson.jpg"
-        },
-        leaveRequestId: 2,
-        leaveState: LeaveStates.MORNING,
-        leaveType: {
-          typeId: 2,
-          name: "Sick Leave",
-          emojiCode: "🤒",
-          colorCode: "#FF5722"
-        },
-        reviewer: null,
-        startDate: "2024-03-29",
-        endDate: "2024-04-01",
-        status: LeaveStatusEnums.PENDING
-      }
-    ],
-    holidays: [
-      {
-        id: 1,
-        name: "Independence Day",
-        holidayDuration: HolidayDurationType.FULLDAY
-      }
-    ]
+    id: 1,
+    date: "2024-04-01",
+    name: "Independence Day",
+    holidayDuration: HolidayDurationType.FULLDAY
   },
   {
-    date: "2ND APR",
-    dayOfWeek: DayOfWeek.TUE,
-    leaveCount: 3,
-    availableCount: 7,
-    leaveRequests: [
-      {
-        employee: {
-          employeeId: 103,
-          firstName: "Michael",
-          lastName: "Brown",
-          middleName: "C",
-          authPic: "https://example.com/michael-brown.jpg"
-        },
-        endDate: "",
-        leaveRequestId: 3,
-        leaveState: LeaveStates.FULL_DAY,
-        leaveType: {
-          typeId: 3,
-          name: "Personal Leave",
-          emojiCode: "🏡",
-          colorCode: "#2196F3"
-        },
-        reviewer: {
-          employeeId: 202,
-          firstName: "David",
-          lastName: "Wilson",
-          middleName: "K",
-          authPic: "https://example.com/david-wilson.jpg"
-        },
-        startDate: "2024-04-02",
-        status: LeaveStatusEnums.APPROVED
-      },
-      {
-        employee: {
-          employeeId: 104,
-          firstName: "Jessica",
-          lastName: "Davis",
-          middleName: "L",
-          authPic: "https://example.com/jessica-davis.jpg"
-        },
-        endDate: "",
-        leaveRequestId: 4,
-        leaveState: LeaveStates.EVENING,
-        leaveType: {
-          typeId: 4,
-          name: "Comp Off",
-          emojiCode: "💼",
-          colorCode: "#9C27B0"
-        },
-        reviewer: null,
-        startDate: "2024-04-02",
-        status: LeaveStatusEnums.PENDING
-      },
-      {
-        employee: {
-          employeeId: 105,
-          firstName: "Robert",
-          lastName: "Miller",
-          middleName: "E",
-          authPic: "https://example.com/robert-miller.jpg"
-        },
-        endDate: "",
-        leaveRequestId: 5,
-        leaveState: LeaveStates.MORNING,
-        leaveType: {
-          typeId: 2,
-          name: "Sick Leave",
-          emojiCode: "🤒",
-          colorCode: "#FF5722"
-        },
-        reviewer: {
-          employeeId: 201,
-          firstName: "Sarah",
-          lastName: "Smith",
-          middleName: "M",
-          authPic: "https://example.com/sarah-smith.jpg"
-        },
-        startDate: "2024-04-02",
-        status: LeaveStatusEnums.APPROVED
-      }
-    ],
-    holidays: [
-      {
-        id: 2,
-        name: "Spring Festival",
-        holidayDuration: HolidayDurationType.HALFDAY
-      }
-    ]
+    id: 2,
+    date: "2024-04-02",
+    name: "Spring Festival",
+    holidayDuration: HolidayDurationType.HALFDAY_MORNING
   }
 ];

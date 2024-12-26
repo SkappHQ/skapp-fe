@@ -12,31 +12,29 @@ import {
   getLeaveRequestClasses
 } from "~community/common/utils/calendarDateRangePickerStyleUtils";
 import {
-  getMyLeaveRequestForDay,
-  getResourceAvailabilityDataForDate
+  getHolidaysForDay,
+  getMyLeaveRequestForDay
 } from "~community/common/utils/calendarDateRangePickerUtils";
 import { getSelectionClasses } from "~community/common/utils/dateRangePickerUtils";
-import {
-  MyLeaveRequestPayloadType,
-  ResourceAvailabilityPayload
-} from "~community/leave/types/MyRequests";
+import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
+import { Holiday } from "~community/people/types/HolidayTypes";
 
 interface Props {
   pickerDaysProps: PickersDayProps<DateTime>;
   selectedDates: DateTime[];
   isRangePicker: boolean;
-  resourceAvailability?: ResourceAvailabilityPayload[];
   myLeaveRequests?: MyLeaveRequestPayloadType[];
   workingDays?: string[] | undefined;
+  allHolidays: Holiday[] | undefined;
 }
 
 const CalendarDateRangePickersDay = ({
   pickerDaysProps,
   selectedDates,
   isRangePicker,
-  resourceAvailability,
   myLeaveRequests,
-  workingDays
+  workingDays,
+  allHolidays
 }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -44,11 +42,11 @@ const CalendarDateRangePickersDay = ({
   const { day, outsideCurrentMonth, ...other } = pickerDaysProps;
 
   const holidaysForDay = useMemo(() => {
-    return getResourceAvailabilityDataForDate({
-      resourceAvailability,
+    return getHolidaysForDay({
+      allHolidays,
       date: day
-    })?.holidays;
-  }, [day, resourceAvailability]);
+    });
+  }, [day, allHolidays]);
 
   const myLeaveRequestForDay = useMemo(() => {
     return getMyLeaveRequestForDay({

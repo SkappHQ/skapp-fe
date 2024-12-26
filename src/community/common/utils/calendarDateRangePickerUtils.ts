@@ -4,16 +4,13 @@ import { SetStateAction } from "react";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import {
-  currentYear,
-  formatDateTimeWithOrdinalIndicator,
-  parseStringWithCurrentYearAndConvertToDateTime
+  convertToYYYYMMDDFromDateTime,
+  convertYYYYMMDDToDateTime
 } from "~community/common/utils/dateTimeUtils";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { MyRequestsToastMsgKeyEnums } from "~community/leave/enums/ToastMsgKeyEnums";
-import {
-  MyLeaveRequestPayloadType,
-  ResourceAvailabilityPayload
-} from "~community/leave/types/MyRequests";
+import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
+import { Holiday } from "~community/people/types/HolidayTypes";
 
 interface IsNotAWorkingDateProps {
   date: DateTime;
@@ -96,7 +93,7 @@ export const handleDateChange = ({
 interface HandleDateValidationProps {
   allowedDuration: LeaveDurationTypes;
   selectedDates: DateTime[];
-  resourceAvailability: ResourceAvailabilityPayload[] | undefined;
+  allHolidays: Holiday[] | undefined;
   myLeaveRequests: MyLeaveRequestPayloadType[] | undefined;
   setToastMessage: (value: SetStateAction<ToastProps>) => void;
   translateText: (key: string[], data?: Record<string, unknown>) => string;
@@ -105,7 +102,7 @@ interface HandleDateValidationProps {
 export const handleDateValidation = ({
   allowedDuration,
   selectedDates,
-  resourceAvailability,
+  allHolidays,
   myLeaveRequests,
   setToastMessage,
   translateText
@@ -127,10 +124,10 @@ export const handleDateValidation = ({
     }
   }
 
-  if (resourceAvailability !== undefined) {
+  if (allHolidays !== undefined) {
     const holidays = getHolidaysWithinDateRange({
       selectedDates,
-      resourceAvailability
+      allHolidays
     });
 
     if (holidays !== undefined) {
@@ -202,24 +199,21 @@ export const handleDateValidation = ({
   }
 };
 
-interface GetResourceAvailabilityDataForDateProps {
-  resourceAvailability: ResourceAvailabilityPayload[] | undefined;
+interface GetHolidaysForDayProps {
+  allHolidays: Holiday[] | undefined;
   date: DateTime;
 }
 
-export const getResourceAvailabilityDataForDate = ({
-  resourceAvailability,
+export const getHolidaysForDay = ({
+  allHolidays,
   date
-}: GetResourceAvailabilityDataForDateProps): ResourceAvailabilityPayload | null => {
-  if (resourceAvailability !== undefined) {
-    const dataForDate = resourceAvailability.find((availabilityData) => {
-      const availabilityDate = `${availabilityData.date} ${currentYear}`;
-      const calendarDate = formatDateTimeWithOrdinalIndicator(date);
-
-      return availabilityDate.toLowerCase() === calendarDate.toLowerCase();
+}: GetHolidaysForDayProps): Holiday[] | null => {
+  if (allHolidays) {
+    const holidaysForDay = allHolidays.filter((holiday) => {
+      return holiday.date === convertToYYYYMMDDFromDateTime(date);
     });
 
-    return dataForDate ?? null;
+    return holidaysForDay ?? null;
   }
 
   return null;
@@ -227,27 +221,23 @@ export const getResourceAvailabilityDataForDate = ({
 
 interface GetHolidaysWithinDateRangeProps {
   selectedDates: DateTime[];
-  resourceAvailability: ResourceAvailabilityPayload[] | undefined;
+  allHolidays: Holiday[] | undefined;
 }
 
 export const getHolidaysWithinDateRange = ({
   selectedDates,
-  resourceAvailability
+  allHolidays
 }: GetHolidaysWithinDateRangeProps) => {
-  if (!resourceAvailability) return [];
+  if (!allHolidays) return [];
 
   const startDate = selectedDates[0];
   const endDate = selectedDates[1] ?? selectedDates[0];
 
-  const holidaysWithinRange = resourceAvailability
-    .filter((availabilityData) => {
-      const availabilityDate = parseStringWithCurrentYearAndConvertToDateTime(
-        availabilityData.date
-      );
+  const holidaysWithinRange = allHolidays.filter((holiday) => {
+    const holidayDate = convertYYYYMMDDToDateTime(holiday.date);
 
-      return startDate <= availabilityDate && availabilityDate <= endDate;
-    })
-    .flatMap((availabilityData) => availabilityData.holidays || []);
+    return startDate <= holidayDate && holidayDate <= endDate;
+  });
 
   return holidaysWithinRange;
 };
