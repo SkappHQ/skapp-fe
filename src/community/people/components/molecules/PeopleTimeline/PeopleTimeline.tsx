@@ -146,16 +146,24 @@ const PeopleTimeline: FC<Props> = ({ id }) => {
                           </Typography>
                         </Stack>
                         <Stack sx={classes.eventDataStack}>
-                          <Typography
+                          <Stack sx={{ flex: isExtraLargeScreen ? 1 : "none" }}>
+                            <Typography
+                              sx={{
+                                ...classes.eventTitleTypography,
+                                display: isExtraLargeScreen ? "block" : "none"
+                              }}
+                            >
+                              {event?.title}
+                            </Typography>
+                          </Stack>
+                          <Stack
                             sx={{
-                              ...classes.eventTitleTypography,
-                              display: isExtraLargeScreen ? "block" : "none"
+                              ...classes.eventNameStack,
+                              justifyContent: isExtraLargeScreen
+                                ? "center"
+                                : "flex-start"
                             }}
                           >
-                            {event?.title}
-                          </Typography>
-
-                          <Stack sx={classes.eventNameStack}>
                             {event?.previousValue && (
                               <BasicChip
                                 label={event?.previousValue}
