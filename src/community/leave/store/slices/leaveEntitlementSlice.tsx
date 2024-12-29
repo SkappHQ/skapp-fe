@@ -10,9 +10,12 @@ export const leaveEntitlementSlice = (
 ): LeaveEntitlementSliceType => ({
   page: 1,
   selectedYear: yearsList[1].toString(),
+  leaveEntitlementTableSelectedYear: yearsList[1].toString(),
   isLeaveEntitlementModalOpen: false,
   leaveEntitlementModalType: LeaveEntitlementModelTypes.NONE,
   setPage: (page: number) => set(() => ({ page })),
+  setLeaveEntitlementTableSelectedYear: (year: string) =>
+    set(() => ({ leaveEntitlementTableSelectedYear: year })),
   setSelectedYear: (year: string) => set(() => ({ selectedYear: year })),
   setIsLeaveEntitlementModalOpen: (status: boolean) =>
     set(() => ({ isLeaveEntitlementModalOpen: status })),

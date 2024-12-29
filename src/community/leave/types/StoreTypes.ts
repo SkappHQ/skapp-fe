@@ -62,6 +62,7 @@ interface actionsTypes {
   setIsLeaveEntitlementModalOpen: (status: boolean) => void;
   setLeaveEntitlementModalType: (value: LeaveEntitlementModelTypes) => void;
   setSelectedYear: (value: string) => void;
+  setLeaveEntitlementTableSelectedYear: (value: string) => void;
   setLeaveCarryForwardModalType: (value: LeaveCarryForwardModalTypes) => void;
   setIsLeaveCarryForwardModalOpen: (status: boolean) => void;
   setLeaveTypes: (value: LeaveTypeType[]) => void;
@@ -149,6 +150,7 @@ export interface LeaveStore extends actionsTypes {
   isLeaveEntitlementModalOpen: boolean;
   leaveEntitlementModalType: LeaveEntitlementModelTypes;
   selectedYear: string;
+  leaveEntitlementTableSelectedYear: string;
   isLeaveCarryForwardModalOpen: boolean;
   leaveCarryForwardModalType: LeaveCarryForwardModalTypes;
   leaveTypes: LeaveTypeType[];

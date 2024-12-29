@@ -30,8 +30,8 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
 
   const {
-    selectedYear,
-    setSelectedYear,
+    leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementTableSelectedYear,
     page,
     setPage,
     setLeaveEntitlementModalType
@@ -113,7 +113,7 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           "description"
         ])}
         emptyDataTitle={translateText(["emptyScreen", "title"], {
-          selectedYear: selectedYear
+          selectedYear: leaveEntitlementTableSelectedYear
         })}
         emptyDataDescription={translateText(["emptyScreen", "description"])}
         emptyScreenButtonText={translateText(["emptyScreen", "buttonText"])}
@@ -122,7 +122,10 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
         skeletonRows={3}
         exportButtonText={translateText(["exportBtnTxt"])}
         onExportButtonClick={() =>
-          exportLeaveBulkList(tableData?.items ?? [], selectedYear)
+          exportLeaveBulkList(
+            tableData?.items ?? [],
+            leaveEntitlementTableSelectedYear
+          )
         }
         onEmptyScreenBtnClick={() => {
           setLeaveEntitlementModalType(
@@ -134,10 +137,12 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
         actionRowOneLeftButton={
           <Dropdown
             onItemClick={(event) =>
-              setSelectedYear(event?.currentTarget?.innerText)
+              setLeaveEntitlementTableSelectedYear(
+                event?.currentTarget?.innerText
+              )
             }
-            selectedItem={selectedYear}
-            title={selectedYear}
+            selectedItem={leaveEntitlementTableSelectedYear}
+            title={leaveEntitlementTableSelectedYear}
             items={getAdjacentYearsWithCurrent()}
           />
         }
