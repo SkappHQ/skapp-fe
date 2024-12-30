@@ -12,7 +12,7 @@ interface Props {
 
 const LeaveEntitlementTableHeader: FC<Props> = ({ headerLabels }) => {
   const theme: Theme = useTheme();
-  const translateText = useTranslator("leaveModule", "leaveReports");
+  const translateText = useTranslator("leaveModule", "leaveEntitlements");
   const styles = tableHeaderStyles(theme);
 
   return (
@@ -23,7 +23,7 @@ const LeaveEntitlementTableHeader: FC<Props> = ({ headerLabels }) => {
       sx={styles.headerContainer}
     >
       <Box sx={styles.stickyColumn}>
-        <Typography variant="body2">{"NAME"}</Typography>
+        <Typography variant="body2">{translateText(["name"])}</Typography>
       </Box>
       {headerLabels?.map((header, index) => (
         <Box key={index} sx={styles.headerCell}>

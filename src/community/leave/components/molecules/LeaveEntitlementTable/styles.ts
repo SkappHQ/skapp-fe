@@ -37,23 +37,8 @@ export const styles = (theme: Theme) => ({
     my: "1rem"
   },
   buttonStyles: {
-    mt: "1rem",
     mr: "1rem",
-    p: "0.75rem 1rem",
-    width: "12rem",
-    fontSize: "1rem",
-    fontWeight: 400,
-    backgroundColor: "white",
-    [theme.breakpoints.down("lg")]: {
-      p: ".9375rem",
-      width: "9.563rem",
-      fontSize: ".875rem"
-    },
-    ".MuiButton-endIcon": {
-      "svg path": {
-        fill: "none"
-      }
-    }
+    p: "0.75rem 1rem"
   },
   headerStack: {
     mt: "1rem",
