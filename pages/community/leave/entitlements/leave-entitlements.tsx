@@ -27,12 +27,14 @@ const LeaveEntitlements: NextPage = () => {
     setLeaveTypes(leaveTypesList ?? []);
   }, [leaveTypesList, setLeaveTypes]);
 
-  const { page, selectedYear, setLeaveEntitlementModalType } = useLeaveStore(
-    (state) => state
-  );
+  const {
+    page,
+    leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementModalType
+  } = useLeaveStore((state) => state);
 
   const { data: leaveEntitlementTableData, isFetching } =
-    useGetLeaveEntitlements(selectedYear, page);
+    useGetLeaveEntitlements(leaveEntitlementTableSelectedYear, page);
 
   return (
     <>
