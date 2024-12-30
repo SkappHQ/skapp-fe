@@ -57,6 +57,7 @@ export interface BulkUploadUser {
   permission: string | null;
   contractState: string | null;
   employmentStatus: string | null;
+  passportNo: string | null;
 }
 
 export interface bulkUploadResponce {
