@@ -63,7 +63,7 @@ const TableEmptyScreen: FC<Props> = ({
         </Box>
         <Typography
           component="div"
-          variant="body1"
+          variant="body2"
           sx={mergeSx([classes.description, descriptionStyles])}
         >
           {description}

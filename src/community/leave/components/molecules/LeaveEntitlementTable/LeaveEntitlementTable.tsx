@@ -43,8 +43,8 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
 
   const {
-    selectedYear,
-    setSelectedYear,
+    leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementTableSelectedYear,
     page,
     setPage,
     setLeaveEntitlementModalType
@@ -71,10 +71,12 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
         <Box>
           <Dropdown
             onItemClick={(event) =>
-              setSelectedYear(event?.currentTarget?.innerText)
+              setLeaveEntitlementTableSelectedYear(
+                event?.currentTarget?.innerText
+              )
             }
-            selectedItem={selectedYear}
-            title={selectedYear}
+            selectedItem={leaveEntitlementTableSelectedYear}
+            title={leaveEntitlementTableSelectedYear}
             items={getAdjacentYearsWithCurrent()}
           />
         </Box>

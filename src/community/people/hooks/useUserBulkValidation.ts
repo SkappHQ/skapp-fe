@@ -67,7 +67,8 @@ const useUserBulkValidation = () => {
       (!user?.primaryManager || isEmailInputValid(user?.primaryManager)) &&
       (!user?.secondaryManager || isEmailInputValid(user?.secondaryManager)) &&
       (!user?.startDate || dateValidation(user?.startDate)) &&
-      (!user?.endDate || dateValidation(user?.endDate))
+      (!user?.endDate || dateValidation(user?.endDate)) &&
+      user?.passportNo
     );
   };
 

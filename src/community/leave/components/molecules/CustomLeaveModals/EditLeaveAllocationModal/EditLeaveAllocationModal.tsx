@@ -1,12 +1,6 @@
 import { Box } from "@mui/material";
 import { useFormik } from "formik";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState
-} from "react";
+import React, { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -14,10 +8,7 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
-import {
-  useDeleteLeaveAllocation,
-  useUpdateLeaveAllocation
-} from "~community/leave/api/LeaveApi";
+import { useUpdateLeaveAllocation } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
   CustomLeaveAllocationModalTypes,
@@ -26,7 +17,6 @@ import {
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
 
 import CustomLeaveAllocationForm from "../../CustomLeaveAllocationForm/CustomLeaveAllocationForm";
-import DeleteConfirmationModal from "../DeleteConfirmModal/DeleteConfirmModal";
 
 interface Props {
   setCurrentLeaveAllocationFormData: Dispatch<
@@ -38,9 +28,9 @@ interface Props {
 
 const EditLeaveAllocationModal: React.FC<Props> = ({
   setCurrentLeaveAllocationFormData,
-  initialValues
+  initialValues,
+  onDelete
 }) => {
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const translateText = useTranslator("leaveModule", "customLeave");
 
   const { setToastMessage } = useToast();
@@ -48,8 +38,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   const {
     setCustomLeaveAllocationModalType,
     setIsLeaveAllocationModalOpen,
-    currentEditingLeaveAllocation,
-    setCurrentPage
+    currentEditingLeaveAllocation
   } = useLeaveStore();
 
   const onUpdateSuccess = useCallback(() => {
@@ -67,7 +56,6 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
 
   const { mutate, isPending } = useUpdateLeaveAllocation();
-  const deleteLeaveAllocation = useDeleteLeaveAllocation();
 
   const onSubmit = useCallback(
     (values: CustomLeaveAllocationType) => {
@@ -89,49 +77,6 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     },
     [mutate, currentEditingLeaveAllocation, onUpdateSuccess]
   );
-
-  const onDelete = useCallback(() => {
-    if (!currentEditingLeaveAllocation?.entitlementId) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: translateText(["deleteErrorTitle"]),
-        description: translateText(["deleteErrorDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    deleteLeaveAllocation.mutate(currentEditingLeaveAllocation.entitlementId, {
-      onSuccess: () => {
-        setIsLeaveAllocationModalOpen(false);
-        setToastMessage({
-          open: true,
-          toastType: "success",
-          title: translateText(["deleteSuccessTitle"]),
-          description: translateText(["deleteSuccessDescription"]),
-          isIcon: true
-        });
-        setCurrentPage(0);
-      },
-      onError: () => {
-        setToastMessage({
-          open: true,
-          toastType: "error",
-          title: translateText(["deleteFailToastTitle"]),
-          description: translateText(["deleteFailDescription"]),
-          isIcon: true
-        });
-      }
-    });
-  }, [
-    deleteLeaveAllocation,
-    currentEditingLeaveAllocation,
-    setIsLeaveAllocationModalOpen,
-    setToastMessage,
-    translateText,
-    setCurrentPage
-  ]);
 
   const form = useFormik({
     initialValues: {
@@ -167,10 +112,6 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     setFieldError,
     isSubmitting
   } = form;
-
-  const handleDelete = useCallback(() => {
-    setDeleteConfirmOpen(true);
-  }, []);
 
   useEffect(() => {
     setCurrentLeaveAllocationFormData(values);
@@ -208,17 +149,10 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
           styles={{ mt: "1rem" }}
           buttonStyle={ButtonStyle.ERROR}
           endIcon={<Icon name={IconName.DELETE_BUTTON_ICON} />}
-          onClick={handleDelete}
+          onClick={onDelete}
           disabled={isDeleteDisabled}
         />
       </Box>
-      <DeleteConfirmationModal
-        open={deleteConfirmOpen}
-        onClose={() => setDeleteConfirmOpen(false)}
-        onConfirm={onDelete}
-        title={translateText(["deleteLeaveAllocationModalTitle"])}
-        content={translateText(["deleteLeaveAllocationModalDescription"])}
-      />
     </>
   );
 };

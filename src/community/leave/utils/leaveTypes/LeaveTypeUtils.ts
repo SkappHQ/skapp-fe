@@ -1,7 +1,11 @@
+import { NextRouter } from "next/router";
 import * as React from "react";
 
 import { hasNumber } from "~community/common/regex/regexPatterns";
-import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
+import {
+  LeaveDurationTypes,
+  LeaveTypeModalEnums
+} from "~community/leave/enums/LeaveTypeEnums";
 import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 
 export const leaveTypeDurationSelector = (leaveType: LeaveDurationTypes) => {
@@ -132,4 +136,23 @@ export const getIsActiveFieldDirtyStatus = (
       (leaveType) => leaveType.typeId === editingLeaveType.typeId
     )?.isActive !== editingLeaveType.isActive
   );
+};
+
+export const handleBackBtnClick = ({
+  router,
+  isLeaveTypeFormDirty,
+  resetEditingLeaveType,
+  setLeaveTypeModalType
+}: {
+  router: NextRouter;
+  isLeaveTypeFormDirty: boolean;
+  resetEditingLeaveType: () => void;
+  setLeaveTypeModalType: (value: LeaveTypeModalEnums) => void;
+}) => {
+  if (isLeaveTypeFormDirty) {
+    setLeaveTypeModalType(LeaveTypeModalEnums.UNSAVED_CHANGES_MODAL);
+  } else {
+    resetEditingLeaveType();
+    router.back();
+  }
 };
