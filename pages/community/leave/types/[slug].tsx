@@ -22,7 +22,11 @@ const LeaveType: NextPage = () => {
   return (
     <>
       <ContentLayout
-        title={translateText(["title"])}
+        title={
+          slug === LeaveTypeFormTypes.EDIT
+            ? translateText(["editLeaveType"])
+            : translateText(["addLeaveType"])
+        }
         pageHead={translateText(["pageHead"])}
         isDividerVisible
         isBackButtonVisible

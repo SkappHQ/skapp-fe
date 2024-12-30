@@ -154,6 +154,8 @@
     "actionsHeader": "ACTIONS",
     "activate": "Activate",
     "activateLeaveTooltipText": "Activate or inactivate the leave type, when inactivated, employees cannot request leaves of this type",
+    "addLeaveType": "Add Leave Type",
+    "editLeaveType": "Edit Leave Type",
     "name": "Leave type name",
     "leaveTypeNamePlaceholder": "Enter leave type name",
     "emoji": "Emoji",
@@ -209,10 +211,9 @@
     "inactivateLeaveTypeModalTitle": "Confirm Inactivation",
     "inactivateLeaveTypeModalDescription": "All leave entitlements for employees under this leave type will not be visible once inactivated. Remaining balances will be retained and will become visible again if you reactivate. Would you like to proceed?"
   },
-
   "customLeave": {
     "tabTitle": "Leave Configuration | Skapp",
-    "CustomLeaveAllocationsSectionTitle": "Custom Leave Allocations",
+    "CustomLeaveAllocationsSectionTitle": "Custom leave allocations",
     "CustomLeaveAllocationsSectionSearchBarPlaceholder": "Search with employee name",
     "CustomLeaveAllocationsSectionBtn": "Add allocation",
     "leaveEntitlementSectionBtn": "Add entitlements",
@@ -284,7 +285,6 @@
     "validNoOfDaysIncrementError": "Please enter a value in increments of 0.5",
     "fromDateMustBeBeforeToDate": "The expiration date must be later than the effective date"
   },
-
   "leaveEntitlements": {
     "pageHead": "Leave Entitlements | Skapp",
     "title": "Leave Entitlements",
@@ -457,7 +457,7 @@
     "selectTeam": "Team:"
   },
   "leaveCarryForward": {
-    "leaveCarryForwardSectionTitle": "Leave Carry forward",
+    "leaveCarryForwardSectionTitle": "Leave carry forward",
     "leaveCarryForwardSectionDescription": "Sync eligible carried forward leave balances of the entire organization to the next leave cycle.",
     "leaveCarryForwardSectionBtn": "Start the sync",
     "leaveCarryForwardSuccessToastTitle": "Sync Successful",

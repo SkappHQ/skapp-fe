@@ -21,6 +21,7 @@ interface Props {
   exportTooltipText?: string;
   paginationContainerStyles?: SxProps;
   exportButtonStyles?: SxProps;
+  isDataAvailable?: boolean;
 }
 
 const TablePagination = ({
@@ -31,7 +32,8 @@ const TablePagination = ({
   exportButtonStyles,
   onExportButtonClick,
   exportTooltipText,
-  paginationContainerStyles
+  paginationContainerStyles,
+  isDataAvailable
 }: Props) => {
   const theme = useTheme();
   const classes = styles(theme);
@@ -45,7 +47,7 @@ const TablePagination = ({
         paginationStyles={classes.paginationStyles}
       />
       <Stack sx={classes.exportButtonWrapperStyles}>
-        {exportButtonText && (
+        {isDataAvailable && exportButtonText && (
           <Button
             buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
             size={ButtonSizes.MEDIUM}
