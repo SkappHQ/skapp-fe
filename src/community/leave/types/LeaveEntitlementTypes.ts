@@ -19,7 +19,7 @@ export interface LeaveAllocationType {
 export interface LeaveEntitlementType {
   firstName: string;
   lastName: string;
-  avatarUrl: string;
+  authPic: string;
   email: string;
   employeeId: number;
   entitlements: LeaveAllocationType[];
