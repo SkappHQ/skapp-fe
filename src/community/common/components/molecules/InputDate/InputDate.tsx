@@ -1,3 +1,4 @@
+import { PopperPlacementType } from "@mui/base";
 import {
   ClickAwayListener,
   Paper,
@@ -21,6 +22,7 @@ import {
   FC,
   MouseEvent,
   SetStateAction,
+  useCallback,
   useEffect,
   useState
 } from "react";
@@ -97,6 +99,7 @@ const InputDate: FC<Props> = ({
   >([]);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const open: boolean = Boolean(anchorEl);
 
   useEffect(() => {
@@ -160,7 +163,21 @@ const InputDate: FC<Props> = ({
     );
   };
 
+  const calculatePlacement = useCallback((event: MouseEvent<HTMLElement>) => {
+    if (!event.currentTarget) return;
+
+    const targetRect = event.currentTarget.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const bottomSpace = viewportHeight - targetRect.bottom;
+    const topSpace = targetRect.top;
+
+    setPlacement(
+      bottomSpace < 300 && bottomSpace < topSpace ? "top" : "bottom"
+    );
+  }, []);
+
   const handleClick = (event: MouseEvent<HTMLElement>): void => {
+    calculatePlacement(event);
     setAnchorEl(event.currentTarget);
   };
 
@@ -260,7 +277,7 @@ const InputDate: FC<Props> = ({
         id="custom-date-picker"
         open={open}
         anchorEl={anchorEl}
-        placement="bottom"
+        placement={placement}
         disablePortal
         sx={mergeSx([classes.popper, popperStyles])}
         tabIndex={0}
