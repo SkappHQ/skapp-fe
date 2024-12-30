@@ -86,7 +86,7 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           <Box sx={classes.emptyScreenContainer}>
             <TableEmptyScreen
               title={translateText(["emptyScreen", "title"], {
-                selectedYear: selectedYear
+                selectedYear: leaveEntitlementTableSelectedYear
               })}
               description={translateText(["emptyScreen", "description"])}
               buttonText={translateText(["emptyScreen", "buttonText"])}
@@ -172,7 +172,10 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
             isFullWidth={false}
             styles={classes.buttonStyles}
             onClick={() =>
-              exportLeaveBulkList(tableData?.items ?? [], selectedYear)
+              exportLeaveBulkList(
+                tableData?.items ?? [],
+                leaveEntitlementTableSelectedYear
+              )
             }
           />
         </Stack>
