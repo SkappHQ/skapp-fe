@@ -390,7 +390,8 @@
         "leave_employee": "Leave Employee",
         "attendance_admin": "Attendance Admin",
         "attendance_manager": "Attendance Manager",
-        "attendance_employee": "Attendance Employee"
+        "attendance_employee": "Attendance Employee",
+        "super_admin": "Super Admin"
       }
     }
   },
