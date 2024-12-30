@@ -155,7 +155,7 @@ export const passwordValidationSchema = (
       .matches(/[A-Z]/, translateText(["passwordUppercaseError"]))
       .matches(/[0-9]/, translateText(["passwordNumberError"]))
       .matches(
-        /[!@#$%^&*(),.?":{}|<>]/,
+        /[!@#$%^&*(),.?":{}|<>~'\-_=+\\[\];]/,
         translateText(["passwordSpecialCharError"])
       )
       .required(translateText(["passwordRequiredError"])),
