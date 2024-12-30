@@ -97,7 +97,8 @@ const useUserBulkConvert = () => {
               bloodGroup: user?.bloodGroup
                 ? BloodGroupSelector[user?.bloodGroup]
                 : null
-            }
+            },
+            passportNo: user?.passportNo
           },
           employeePeriod: {
             startDate: user?.startDate,

@@ -1,11 +1,12 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { IconButton, InputAdornment, Stack } from "@mui/material";
+import { IconButton, InputAdornment, Stack, SxProps } from "@mui/material";
 import React, { FocusEvent, useState } from "react";
 
 import Form from "~community/common/components/molecules/Form/Form";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PasswordStrengthMeter from "~community/common/components/molecules/PasswordStrengthMeter/PasswordStrengthMeter";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { mergeSx } from "~community/common/utils/commonUtil";
 
 import { styles } from "./styles";
 
@@ -26,6 +27,7 @@ interface Props {
     password: boolean;
     confirmPassword: boolean;
   }>;
+  containerStyles?: SxProps;
 }
 
 const classes = styles();
@@ -35,7 +37,8 @@ const ResetPasswordForm: React.FC<Props> = ({
   handleBlur,
   values,
   errors = {},
-  touched = {}
+  touched = {},
+  containerStyles
 }) => {
   const translateText = useTranslator("onboarding", "resetPassword");
 
@@ -55,7 +58,7 @@ const ResetPasswordForm: React.FC<Props> = ({
   };
 
   return (
-    <Stack sx={classes.container}>
+    <Stack sx={mergeSx([classes.container, containerStyles])}>
       <Form>
         <Stack sx={{ margin: "auto" }}>
           <InputField

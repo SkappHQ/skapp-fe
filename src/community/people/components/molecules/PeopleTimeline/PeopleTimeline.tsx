@@ -11,6 +11,7 @@ import { monthAbbreviations } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import { useGetEmployeeTimeline } from "~community/people/api/PeopleApi";
 import { TimelineDataType } from "~community/people/types/TimelineTypes";
+import { getTimelineValues } from "~community/people/utils/peopleTimelineUtils";
 
 import styles from "./styles";
 
@@ -21,6 +22,12 @@ interface Props {
 const PeopleTimeline: FC<Props> = ({ id }) => {
   const classes = styles(theme);
   const translateText = useTranslator("peopleModule", "editAllInfo");
+  const translateTimelineText = useTranslator(
+    "peopleModule",
+    "peoples",
+    "filters",
+    "selectedFiltersFilterItems"
+  );
   const isExtraLargeScreen: boolean = useMediaQuery(theme.breakpoints.up("xl"));
   const isXXLScreen: boolean = useMediaQuery(theme.breakpoints.up("2xl"));
 
@@ -146,19 +153,30 @@ const PeopleTimeline: FC<Props> = ({ id }) => {
                           </Typography>
                         </Stack>
                         <Stack sx={classes.eventDataStack}>
-                          <Typography
+                          <Stack sx={{ flex: isExtraLargeScreen ? 1 : "none" }}>
+                            <Typography
+                              sx={{
+                                ...classes.eventTitleTypography,
+                                display: isExtraLargeScreen ? "block" : "none"
+                              }}
+                            >
+                              {event?.title}
+                            </Typography>
+                          </Stack>
+                          <Stack
                             sx={{
-                              ...classes.eventTitleTypography,
-                              display: isExtraLargeScreen ? "block" : "none"
+                              ...classes.eventNameStack,
+                              justifyContent: isExtraLargeScreen
+                                ? "center"
+                                : "flex-start"
                             }}
                           >
-                            {event?.title}
-                          </Typography>
-
-                          <Stack sx={classes.eventNameStack}>
                             {event?.previousValue && (
                               <BasicChip
-                                label={event?.previousValue}
+                                label={getTimelineValues(
+                                  event?.previousValue,
+                                  translateTimelineText
+                                )}
                                 chipStyles={classes.basicChip}
                               />
                             )}
@@ -168,7 +186,10 @@ const PeopleTimeline: FC<Props> = ({ id }) => {
                                   {event?.previousValue && <RightArrowIcon />}
                                 </Box>
                                 <BasicChip
-                                  label={event?.newValue}
+                                  label={getTimelineValues(
+                                    event?.newValue,
+                                    translateTimelineText
+                                  )}
                                   chipStyles={{
                                     ...classes.basicChip,
                                     ...(event?.previousValue === null && {

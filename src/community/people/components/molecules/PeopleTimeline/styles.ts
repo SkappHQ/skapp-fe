@@ -82,8 +82,8 @@ const styles = (theme: Theme) => ({
   },
   eventNameStack: {
     flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: "1rem"
+    gap: "1rem",
+    flex: 2
   },
   rightArrowBox: {
     display: "flex",

@@ -14,7 +14,6 @@ import EmojiPicker from "~community/common/components/molecules/EmojiPicker/Emoj
 import Form from "~community/common/components/molecules/Form/Form";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import ROUTES from "~community/common/constants/routes";
 import { characterLengths } from "~community/common/constants/stringConstants";
 import { MONTH_DATE_FORMAT } from "~community/common/constants/timeConstants";
 import {
@@ -47,6 +46,7 @@ import {
   carryForwardKeyDownRestriction,
   carryForwardPasteRestriction,
   getIsActiveFieldDirtyStatus,
+  handleBackBtnClick,
   handleColorClick,
   handleLeaveDurationClick
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
@@ -70,6 +70,7 @@ const LeaveTypeForm = () => {
     allLeaveTypes,
     editingLeaveType,
     setLeaveTypeFormDirty,
+    resetEditingLeaveType,
     setLeaveTypeModalType
   } = useLeaveStore((state) => state);
 
@@ -190,7 +191,7 @@ const LeaveTypeForm = () => {
 
   useEffect(() => {
     setLeaveTypeFormDirty(dirty);
-  }, [dirty, setLeaveTypeFormDirty]);
+  }, [dirty]);
 
   useEffect(() => {
     if (values.carryForwardExpirationDate) {
@@ -474,9 +475,15 @@ const LeaveTypeForm = () => {
               isFullWidth={false}
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
-              onClick={() => router.replace(ROUTES.LEAVE.LEAVE_TYPES)}
+              onClick={() =>
+                handleBackBtnClick({
+                  router,
+                  isLeaveTypeFormDirty: dirty,
+                  resetEditingLeaveType,
+                  setLeaveTypeModalType
+                })
+              }
             />
-
             <Button
               type={ButtonTypes.SUBMIT}
               label={translateText(["saveBtn"])}

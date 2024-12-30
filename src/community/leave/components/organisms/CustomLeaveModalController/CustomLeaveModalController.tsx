@@ -1,7 +1,10 @@
 import { FC, useCallback, useEffect, useState } from "react";
 
 import ModalController from "~community/common/components/organisms/ModalController/ModalController";
+import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
+import { useDeleteLeaveAllocation } from "~community/leave/api/LeaveApi";
 import AddLeaveAllocationModal from "~community/leave/components/molecules/CustomLeaveModals/AddLeaveAllocationModal/AddLeaveAllocationModal";
 import DeleteConfirmationModal from "~community/leave/components/molecules/CustomLeaveModals/DeleteConfirmModal/DeleteConfirmModal";
 import EditLeaveAllocationModal from "~community/leave/components/molecules/CustomLeaveModals/EditLeaveAllocationModal/EditLeaveAllocationModal";
@@ -15,13 +18,15 @@ import UnsavedLeaveAllocationModal from "../UnsavedLeaveAllocationModal/UnsavedL
 
 const CustomLeaveModalController: FC = () => {
   const translateText = useTranslator("leaveModule", "customLeave");
+  const { setToastMessage } = useToast();
 
   const {
     isLeaveAllocationModalOpen,
     setIsLeaveAllocationModalOpen,
     customLeaveAllocationModalType,
     setCustomLeaveAllocationModalType,
-    currentEditingLeaveAllocation
+    currentEditingLeaveAllocation,
+    setCurrentPage
   } = useLeaveStore((state) => state);
 
   const [tempLeaveAllocationDetails, setTempLeaveAllocationDetails] = useState<
@@ -35,6 +40,8 @@ const CustomLeaveModalController: FC = () => {
     useState<CustomLeaveAllocationModalTypes>(
       CustomLeaveAllocationModalTypes.NONE
     );
+
+  const { mutate: deleteLeaveAllocation } = useDeleteLeaveAllocation();
 
   const isEditingLeaveAllocationChanged = useCallback((): boolean => {
     if (!currentLeaveAllocationFormData || !currentEditingLeaveAllocation) {
@@ -96,21 +103,45 @@ const CustomLeaveModalController: FC = () => {
     setIsLeaveAllocationModalOpen
   ]);
 
-  const handleDelete = useCallback((): void => {
+  const handleDelete = useCallback(() => {
     setIsDeleteConfirmationOpen(true);
-  }, []);
-
-  const handleConfirmDelete = useCallback((): void => {
     setIsLeaveAllocationModalOpen(false);
-    setCustomLeaveAllocationModalType(CustomLeaveAllocationModalTypes.NONE);
-    setIsDeleteConfirmationOpen(false);
-    setCurrentLeaveAllocationFormData(undefined);
-    setTempLeaveAllocationDetails(undefined);
-  }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
-
-  const handleCancelDelete = useCallback((): void => {
-    setIsDeleteConfirmationOpen(false);
   }, []);
+
+  const handleDeleteCancel = useCallback(() => {
+    setIsDeleteConfirmationOpen(false);
+    setIsLeaveAllocationModalOpen(true);
+  }, []);
+
+  const handleDeleteConfirm = useCallback(() => {
+    if (currentEditingLeaveAllocation?.entitlementId) {
+      deleteLeaveAllocation(currentEditingLeaveAllocation.entitlementId, {
+        onSuccess: () => {
+          setIsDeleteConfirmationOpen(false);
+          setCustomLeaveAllocationModalType(
+            CustomLeaveAllocationModalTypes.NONE
+          );
+          setToastMessage({
+            open: true,
+            toastType: ToastType.SUCCESS,
+            title: translateText(["deleteSuccessTitle"]),
+            description: translateText(["deleteSuccessDescription"]),
+            isIcon: true
+          });
+          setCurrentPage(0);
+        },
+        onError: () => {
+          setToastMessage({
+            open: true,
+            toastType: ToastType.ERROR,
+            title: translateText(["deleteFailToastTitle"]),
+            description: translateText(["deleteFailDescription"]),
+            isIcon: true
+          });
+        }
+      });
+    }
+  }, [currentEditingLeaveAllocation, deleteLeaveAllocation, setToastMessage]);
 
   const handleCancelLeaveAllocation = useCallback(
     (values: CustomLeaveAllocationType): void => {
@@ -168,58 +199,61 @@ const CustomLeaveModalController: FC = () => {
   ]);
 
   return (
-    <ModalController
-      isModalOpen={isLeaveAllocationModalOpen}
-      handleCloseModal={handleCloseModal}
-      modalTitle={getModalTitle()}
-      isClosable={
-        customLeaveAllocationModalType !==
-        CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION
-      }
-    >
-      <>
-        {customLeaveAllocationModalType ===
-          CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION && (
-          <AddLeaveAllocationModal
-            setTempLeaveAllocationDetails={setTempLeaveAllocationDetails}
-            setCurrentLeaveAllocationFormData={
-              setCurrentLeaveAllocationFormData
-            }
-            isEditingLeaveAllocationChanged={hasUnsavedChanges()}
-            initialValues={
-              tempLeaveAllocationDetails || ({} as CustomLeaveAllocationType)
-            }
-            onCancel={handleCancelLeaveAllocation}
-          />
-        )}
-        {customLeaveAllocationModalType ===
-          CustomLeaveAllocationModalTypes.EDIT_LEAVE_ALLOCATION && (
-          <EditLeaveAllocationModal
-            setCurrentLeaveAllocationFormData={
-              setCurrentLeaveAllocationFormData
-            }
-            onDelete={handleDelete}
-            initialValues={
-              tempLeaveAllocationDetails || ({} as CustomLeaveAllocationType)
-            }
-          />
-        )}
-        {customLeaveAllocationModalType ===
-          CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION && (
-          <UnsavedLeaveAllocationModal
-            setTempLeaveAllocationDetails={setTempLeaveAllocationDetails}
-            onResume={handleResumeEdit}
-          />
-        )}
-        <DeleteConfirmationModal
-          open={isDeleteConfirmationOpen}
-          onClose={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-          title={translateText(["deleteLeaveAllocationModalTitle"])}
-          content={translateText(["deleteLeaveAllocationModalDescription"])}
-        />
-      </>
-    </ModalController>
+    <>
+      <ModalController
+        isModalOpen={isLeaveAllocationModalOpen}
+        handleCloseModal={handleCloseModal}
+        modalTitle={getModalTitle()}
+        isClosable={
+          customLeaveAllocationModalType !==
+          CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION
+        }
+      >
+        <>
+          {customLeaveAllocationModalType ===
+            CustomLeaveAllocationModalTypes.ADD_LEAVE_ALLOCATION && (
+            <AddLeaveAllocationModal
+              setTempLeaveAllocationDetails={setTempLeaveAllocationDetails}
+              setCurrentLeaveAllocationFormData={
+                setCurrentLeaveAllocationFormData
+              }
+              isEditingLeaveAllocationChanged={hasUnsavedChanges()}
+              initialValues={
+                tempLeaveAllocationDetails || ({} as CustomLeaveAllocationType)
+              }
+              onCancel={handleCancelLeaveAllocation}
+            />
+          )}
+          {customLeaveAllocationModalType ===
+            CustomLeaveAllocationModalTypes.EDIT_LEAVE_ALLOCATION && (
+            <EditLeaveAllocationModal
+              setCurrentLeaveAllocationFormData={
+                setCurrentLeaveAllocationFormData
+              }
+              onDelete={handleDelete}
+              initialValues={
+                tempLeaveAllocationDetails || ({} as CustomLeaveAllocationType)
+              }
+            />
+          )}
+          {customLeaveAllocationModalType ===
+            CustomLeaveAllocationModalTypes.UNSAVED_ADD_LEAVE_ALLOCATION && (
+            <UnsavedLeaveAllocationModal
+              setTempLeaveAllocationDetails={setTempLeaveAllocationDetails}
+              onResume={handleResumeEdit}
+            />
+          )}
+        </>
+      </ModalController>
+
+      <DeleteConfirmationModal
+        open={isDeleteConfirmationOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={translateText(["deleteLeaveAllocationModalTitle"])}
+        content={translateText(["deleteLeaveAllocationModalDescription"])}
+      />
+    </>
   );
 };
 
