@@ -15,7 +15,7 @@ import {
 } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
 interface Props {
-  handleRequestStatusPopup: (condition: boolean) => void;
+  handleRequestStatusPopup: () => void;
 }
 
 const EmployeeCancelLeaveStatusPopup = ({
@@ -67,7 +67,7 @@ const EmployeeCancelLeaveStatusPopup = ({
         label={translateText(["myLeaveRequests", "proceedToHome"])}
         endIcon={IconName.RIGHT_ARROW_ICON}
         buttonStyle={ButtonStyle.PRIMARY}
-        onClick={() => handleRequestStatusPopup(false)}
+        onClick={() => handleRequestStatusPopup()}
       />
     </Box>
   );

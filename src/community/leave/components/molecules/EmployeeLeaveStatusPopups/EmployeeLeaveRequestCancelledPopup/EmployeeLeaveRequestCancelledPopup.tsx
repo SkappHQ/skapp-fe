@@ -16,7 +16,7 @@ import {
 } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
 interface Props {
-  handleRequestStatusPopup: (condition: boolean) => void;
+  handleRequestStatusPopup: () => void;
 }
 
 const EmployeeLeaveRequestCancelledPopup: FC<Props> = ({
@@ -27,7 +27,7 @@ const EmployeeLeaveRequestCancelledPopup: FC<Props> = ({
   const { employeeLeaveRequestData } = useLeaveStore((state) => state);
 
   const handelProceedToHome = (): void => {
-    handleRequestStatusPopup(false);
+    handleRequestStatusPopup();
   };
 
   return (

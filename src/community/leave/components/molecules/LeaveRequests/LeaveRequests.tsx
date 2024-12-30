@@ -26,6 +26,7 @@ import {
   useGetLeaveAllocation
 } from "~community/leave/api/MyRequestApi";
 import { useLeaveStore } from "~community/leave/store/store";
+import { LeaveRequestDataType } from "~community/leave/types/EmployeeLeaveRequestTypes";
 import { LeaveStatusTypes } from "~community/leave/types/LeaveTypes";
 import { leaveStatusIconSelector } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
@@ -70,13 +71,8 @@ const LeaveRequests: FC = () => {
   useEffect(() => {
     if (isSuccess && leaveData) {
       setEmployeeLeaveRequestData(leaveData);
-      handleModals();
     }
   }, [isSuccess, leaveData]);
-
-  const handleModals = () => {
-    setIsEmployeeModal(true);
-  };
 
   const columns = [
     {
@@ -325,12 +321,18 @@ const LeaveRequests: FC = () => {
   );
 
   const handleRowClick = (leaveRequest: any): void => {
+    setIsEmployeeModal(false);
+    setEmployeeLeaveRequestData({} as LeaveRequestDataType);
     setNewLeaveId(leaveRequest.id);
   };
 
   useEffect(() => {
     if (newLeaveId) {
-      refetch().catch(console.error);
+      refetch()
+        .then(() => {
+          setIsEmployeeModal(true);
+        })
+        .catch(console.error);
     }
   }, [newLeaveId]);
 
