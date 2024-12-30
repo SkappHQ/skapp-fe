@@ -213,7 +213,7 @@
   },
   "customLeave": {
     "tabTitle": "Leave Configuration | Skapp",
-    "CustomLeaveAllocationsSectionTitle": "Custom Leave Allocations",
+    "CustomLeaveAllocationsSectionTitle": "Custom leave allocations",
     "CustomLeaveAllocationsSectionSearchBarPlaceholder": "Search with employee name",
     "CustomLeaveAllocationsSectionBtn": "Add allocation",
     "leaveEntitlementSectionBtn": "Add entitlements",
@@ -457,7 +457,7 @@
     "selectTeam": "Team:"
   },
   "leaveCarryForward": {
-    "leaveCarryForwardSectionTitle": "Leave Carry forward",
+    "leaveCarryForwardSectionTitle": "Leave carry forward",
     "leaveCarryForwardSectionDescription": "Sync eligible carried forward leave balances of the entire organization to the next leave cycle.",
     "leaveCarryForwardSectionBtn": "Start the sync",
     "leaveCarryForwardSuccessToastTitle": "Sync Successful",
