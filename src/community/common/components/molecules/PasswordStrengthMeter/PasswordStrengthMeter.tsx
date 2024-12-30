@@ -30,7 +30,7 @@ const PasswordStrengthMeter: React.FC<Props> = ({ password }) => {
     lowercase: /[a-z]/.test(password),
     uppercase: /[A-Z]/.test(password),
     number: /[0-9]/.test(password),
-    specialChar: /[!@#$%^&*(),.?":{}|<>~'\-_=+\\[\];]/.test(password),
+    specialChar: /[!@#$%^&*(),.?":{}|<>~'`\-_=+\\[\];]/.test(password),
     length: password.length >= 8
   });
 

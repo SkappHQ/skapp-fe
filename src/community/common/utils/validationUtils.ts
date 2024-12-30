@@ -22,7 +22,7 @@ export const passwordValidation = (translateText: TranslatorFunctionType) => {
     .matches(/[A-Z]/, translateText(["passwordUppercaseError"]))
     .matches(/[0-9]/, translateText(["passwordNumberError"]))
     .matches(
-      /[!@#$%^&*(),.?":{}|<>~'\-_=+\\[\];]/,
+      /[!@#$%^&*(),.?":{}|<>~'`\-_=+\\[\];]/,
       translateText(["passwordSpecialCharError"])
     )
     .required(translateText(["passwordRequiredError"]));
