@@ -12,6 +12,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, memo, useEffect, useMemo } from "react";
 
+import { useGetOrganization } from "~community/common/api/OrganizationCreateApi";
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -26,7 +27,9 @@ import {
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
+import { themeSelector } from "~community/common/theme/themeSelector";
 import { AdminTypes } from "~community/common/types/AuthTypes";
+import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
@@ -94,6 +97,14 @@ const ContentLayout = ({
     (state) => state
   );
 
+  const { data: organizationDetails } = useGetOrganization();
+
+  const updatedTheme = themeSelector(
+    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
+  );
+
+  theme.palette = updatedTheme.palette;
+
   const {
     setShowUserLimitBanner,
     showUserLimitBanner,
@@ -137,7 +148,8 @@ const ContentLayout = ({
           )}
         {process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
-          usedStoragePercentage &&
+          usedStoragePercentage !== undefined &&
+          usedStoragePercentage !== null &&
           usedStoragePercentage >= EIGHTY_PERCENT && (
             <VersionUpgradeBanner
               isStorageBanner
