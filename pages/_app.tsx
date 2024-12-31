@@ -58,8 +58,8 @@ function MyApp({
         url !== router.asPath && setLoading(true);
       };
 
-      const handleComplete = (url: string): void => {
-        url === router.asPath && setLoading(false);
+      const handleComplete = (): void => {
+        setLoading(false);
       };
 
       router.events.on("routeChangeStart", handleStart);

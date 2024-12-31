@@ -46,7 +46,6 @@ import {
   carryForwardKeyDownRestriction,
   carryForwardPasteRestriction,
   getIsActiveFieldDirtyStatus,
-  handleBackBtnClick,
   handleColorClick,
   handleLeaveDurationClick
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
@@ -70,7 +69,6 @@ const LeaveTypeForm = () => {
     allLeaveTypes,
     editingLeaveType,
     setLeaveTypeFormDirty,
-    resetEditingLeaveType,
     setLeaveTypeModalType
   } = useLeaveStore((state) => state);
 
@@ -88,7 +86,7 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.replace
+        redirect: router.push
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR,
@@ -104,7 +102,7 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.replace
+        redirect: router.push
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.EDIT_LEAVE_TYPE_ERROR,
@@ -475,14 +473,7 @@ const LeaveTypeForm = () => {
               isFullWidth={false}
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
-              onClick={() =>
-                handleBackBtnClick({
-                  router,
-                  isLeaveTypeFormDirty: dirty,
-                  resetEditingLeaveType,
-                  setLeaveTypeModalType
-                })
-              }
+              onClick={async () => await router.back()}
             />
             <Button
               type={ButtonTypes.SUBMIT}

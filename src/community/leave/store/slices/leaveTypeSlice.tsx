@@ -76,7 +76,6 @@ export const leaveTypeSlice = (
     set((state) => ({
       ...state,
       editingLeaveType: initialLeaveType,
-      isLeaveTypeFormDirty: false,
-      isLeaveTypeModalOpen: false
+      isLeaveTypeFormDirty: false
     }))
 });

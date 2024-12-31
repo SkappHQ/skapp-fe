@@ -78,7 +78,7 @@ const LeaveTypesTable = () => {
 
   const handleEditTeam = (leaveType: LeaveTypeType): void => {
     setEditingLeaveType(leaveType);
-    router.replace(ROUTES.LEAVE.ADD_EDIT_LEAVE_TYPES(LeaveTypeFormTypes.EDIT));
+    router.push(ROUTES.LEAVE.ADD_EDIT_LEAVE_TYPES(LeaveTypeFormTypes.EDIT));
   };
 
   useEffect(() => {
