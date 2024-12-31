@@ -43,6 +43,7 @@ const CustomLeaveAllocationContent: FC = () => {
   };
 
   const [showSearchAndAddButton, setShowSearchAndAddButton] = useState(false);
+  const [hasFilteredData, setHasFilteredData] = useState(true);
 
   useEffect(() => {
     const hasData = customLeaveAllocations && customLeaveAllocations.length > 0;
@@ -51,6 +52,7 @@ const CustomLeaveAllocationContent: FC = () => {
       customLeaveAllocationSearchTerm.trim() !== "";
 
     setShowSearchAndAddButton(hasData || hasSearchTerm);
+    setHasFilteredData(hasData);
   }, [customLeaveAllocations, customLeaveAllocationSearchTerm]);
 
   const handleSearchTermChange = (term: string) => {
@@ -78,7 +80,7 @@ const CustomLeaveAllocationContent: FC = () => {
           alignItems="center"
           sx={{ flex: 1, justifyContent: "flex-end" }}
         >
-          {showSearchAndAddButton && (
+          {(!hasFilteredData || showSearchAndAddButton) && (
             <Button
               buttonStyle={ButtonStyle.PRIMARY}
               label={translateText(["addLeaveAllocationBtn"])}
@@ -95,18 +97,17 @@ const CustomLeaveAllocationContent: FC = () => {
       </Stack>
 
       <Box>
-        {showSearchAndAddButton && (
-          <SearchBox
-            value={customLeaveAllocationSearchTerm}
-            setSearchTerm={handleSearchTermChange}
-            placeHolder={translateText([
-              "CustomLeaveAllocationsSectionSearchBarPlaceholder"
-            ])}
-          />
-        )}
+        <SearchBox
+          value={customLeaveAllocationSearchTerm}
+          setSearchTerm={handleSearchTermChange}
+          placeHolder={translateText([
+            "CustomLeaveAllocationsSectionSearchBarPlaceholder"
+          ])}
+        />
         <Box sx={{ marginTop: 2 }}>
           <CustomLeaveAllocationsTable
             searchTerm={customLeaveAllocationSearchTerm}
+            setHasFilteredData={setHasFilteredData}
           />
         </Box>
         <CustomLeaveModalController />

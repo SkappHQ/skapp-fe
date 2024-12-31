@@ -32,9 +32,13 @@ import {
 
 interface Props {
   searchTerm?: string;
+  setHasFilteredData: (hasData: boolean) => void;
 }
 
-const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
+const CustomLeaveAllocationsTable: React.FC<Props> = ({
+  searchTerm,
+  setHasFilteredData
+}) => {
   const translateText = useTranslator("leaveModule", "customLeave");
   const theme: Theme = useTheme();
 
@@ -66,8 +70,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   useEffect(() => {
     if (customLeaveData?.items) {
       setCustomLeaveAllocations(customLeaveData.items);
+      setHasFilteredData(customLeaveData.items.length > 0);
+    } else {
+      setHasFilteredData(false);
     }
-  }, [customLeaveData?.items, setCustomLeaveAllocations]);
+  }, [customLeaveData?.items, setCustomLeaveAllocations, setHasFilteredData]);
 
   const handleEdit = useCallback(
     (leaveAllocation: LeaveAllocation) => {
@@ -293,7 +300,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
         emptyScreenButtonText={translateText([
           "CustomLeaveAllocationsSectionBtn"
         ])}
-        isDataAvailable={!!customLeaveData?.items?.length}
+        isDataAvailable={
+          !!customLeaveData?.items?.length ||
+          !!searchTerm ||
+          !!selectedLeaveTypes.length
+        }
         actionRowOneLeftButton={yearFilter}
         actionRowOneRightButton={filterButton}
         onEmptyScreenBtnClick={handleAddLeaveAllocation}
