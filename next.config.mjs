@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
+  images: {
+    domains: ["xdevgarmin.localhost"]
+  },
   async rewrites() {
     const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
     return [
