@@ -30,6 +30,7 @@ const ItemSelector = ({
   popperStyles
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
+
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -57,6 +58,7 @@ const ItemSelector = ({
   }, [selectedYear, options, setSelectedOption]);
 
   return (
+    // TODO: move styles to styles.ts
     <>
       <Box>
         <Button
@@ -81,7 +83,7 @@ const ItemSelector = ({
       <Popper
         anchorEl={anchorEl}
         open={Boolean(showOverlay)}
-        position="bottom-end"
+        position="bottom-end" // TODO: Use enums
         handleClose={closeMenu}
         id="popper"
         ariaLabel="Team Selector"

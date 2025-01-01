@@ -99,12 +99,13 @@ const InputDate: FC<Props> = ({
   >([]);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
+  const [placement, setPlacement] = useState<PopperPlacementType>("bottom"); // TODO: Use enums
   const open: boolean = Boolean(anchorEl);
 
   useEffect(() => {
     if (holidays) {
       const appliedHolidays = holidays?.pages[0]?.items?.map(
+        // TODO: fix type issue
         (item: holidayType) => ({
           date: item.date,
           name: item.name,
@@ -115,6 +116,7 @@ const InputDate: FC<Props> = ({
     }
   }, [holidays]);
 
+  // TODO: Move the isHoliday function to a separate file and write tests for it
   const isHoliday = (day: DateTime) => {
     return alreadyAppliedHolidays?.find((holiday) => {
       const holidayDate = DateTime.fromISO(holiday?.date);
@@ -125,6 +127,8 @@ const InputDate: FC<Props> = ({
       return holidayDate.hasSame(day, "day");
     });
   };
+
+  // TODO: Move the HolidayPickersDay to a separate file and fix the type issues
   const HolidayPickersDay = (props: PickersDayProps<DateTime>) => {
     const { day, outsideCurrentMonth, ...other } = props;
     let backgroundStyle = {};
@@ -172,7 +176,7 @@ const InputDate: FC<Props> = ({
     const topSpace = targetRect.top;
 
     setPlacement(
-      bottomSpace < 300 && bottomSpace < topSpace ? "top" : "bottom"
+      bottomSpace < 300 && bottomSpace < topSpace ? "top" : "bottom" // TODO: Use enums
     );
   }, []);
 
@@ -194,7 +198,10 @@ const InputDate: FC<Props> = ({
   const onAccept = (date: DateTime | null) => {
     if (date) handleClose();
   };
+
   return (
+    // TODO: Move the styles to the styles file, and remove the inline styles except for the styles that are dynamic
+    // TODO: Use Stack instead of Box when display is flex
     <Box
       sx={{
         width: "100%",
@@ -267,8 +274,8 @@ const InputDate: FC<Props> = ({
         <Box onClick={(e) => !disabled && handleClick(e)}>
           <Icon
             name={IconName.CALENDAR_ICON}
-            width="100px"
-            height="100px"
+            width="6.25rem"
+            height="6.25rem"
             fill={disabled ? theme.palette.grey[600] : "black"}
           />
         </Box>

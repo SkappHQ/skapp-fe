@@ -50,6 +50,7 @@ interface Props {
   isCheckSelected?: boolean;
 }
 
+// TODO: fix name
 const MultivalueDropdownList: FC<Props> = ({
   label,
   placeholder,
@@ -82,6 +83,7 @@ const MultivalueDropdownList: FC<Props> = ({
   const classes = styles(theme);
   const [open, setOpen] = useState(false);
 
+  // TODO: move to separate file and write unit test cases for this
   const handleChange = (event: SelectChangeEvent<(string | number)[]>) => {
     const selectedValues = event.target.value as unknown as (string | number)[];
     onChange?.(selectedValues.filter((value) => value !== undefined));
@@ -93,6 +95,7 @@ const MultivalueDropdownList: FC<Props> = ({
     onAddNewClickBtn?.();
   };
 
+  // TODO: create a separate component for this
   const renderSelectedValues = (selectedValues: (string | number)[]) => {
     if (selectedValues.length === 0) return placeholder || "";
     const sortedSelected = [...selectedValues].sort();
@@ -113,6 +116,7 @@ const MultivalueDropdownList: FC<Props> = ({
   return (
     <Box sx={{ ...classes.componentStyle, ...componentStyle } as SxProps}>
       {label && (
+        // TODO: move styles to styles.ts
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -125,6 +129,7 @@ const MultivalueDropdownList: FC<Props> = ({
             {label}
             &nbsp;
             {required && (
+              // TODO: move styles to styles.ts
               <Typography
                 component="span"
                 style={{ color: theme.palette.error.light }}
@@ -148,6 +153,7 @@ const MultivalueDropdownList: FC<Props> = ({
         }}
       >
         {itemList.length > 0 ? (
+          // TODO: create a separate component for this
           <Select
             id={id}
             multiple
@@ -175,6 +181,7 @@ const MultivalueDropdownList: FC<Props> = ({
               <MenuItem
                 key={index}
                 value={menuItemValue}
+                // TODO: move styles to styles.ts
                 sx={{
                   ...classes.menuItemStyle,
                   display: "flex",
@@ -189,6 +196,7 @@ const MultivalueDropdownList: FC<Props> = ({
                 <Stack direction={"row"}>
                   {emojiWithText && emoji && getEmoji(emoji)}
                   <Typography
+                    // TODO: move styles to styles.ts
                     sx={{ paddingLeft: emojiWithText ? "0.25rem" : "0" }}
                   >
                     {label}
@@ -218,6 +226,7 @@ const MultivalueDropdownList: FC<Props> = ({
             )}
           </Select>
         ) : (
+          // TODO: move styles to styles.ts
           <Box display="flex" justifyContent="center">
             <CircularProgress size={20} style={{ color: "black" }} />
           </Box>

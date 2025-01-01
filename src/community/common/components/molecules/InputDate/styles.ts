@@ -6,7 +6,6 @@ const styles = (): StyleProps => ({
     paddingRight: "0.875rem",
     justifyContent: "space-between"
   },
-
   errorText: {
     marginTop: "0.3rem"
   },

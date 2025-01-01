@@ -40,6 +40,7 @@ const InteractiveInputTrigger = ({
   const theme: Theme = useTheme();
 
   return (
+    // TODO: move styles to styles.ts
     <Box sx={{ ...componentStyle }}>
       <Stack
         direction="row"

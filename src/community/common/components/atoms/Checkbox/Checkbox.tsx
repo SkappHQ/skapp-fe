@@ -12,7 +12,7 @@ interface Props {
   onChange: () => void;
   disabled?: boolean;
   label: string | JSX.Element;
-  size?: "small" | "medium" | "large";
+  size?: "small" | "medium" | "large"; // TODO: create an enum for this
   labelStyles?: SxProps;
 }
 

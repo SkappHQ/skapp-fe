@@ -45,7 +45,9 @@ const InputPhoneNumber: FC<Props> = ({
   readOnly
 }) => {
   const theme: Theme = useTheme();
+
   return (
+    // TODO: move styles to styles.ts
     <>
       <Stack
         direction="row"
@@ -154,6 +156,7 @@ const InputPhoneNumber: FC<Props> = ({
           maxLength={14}
           inputMode="numeric"
           onKeyDown={(e) => {
+            // TODO: move this to a separate file and write unit test cases
             if (
               !numberPattern().test(e.key) &&
               e.key !== "Backspace" &&
@@ -163,6 +166,7 @@ const InputPhoneNumber: FC<Props> = ({
             }
           }}
           onPaste={(e) => {
+            // TODO: move this to a separate file and write unit test cases
             if (!numberPattern().test(e.clipboardData.getData("Text"))) {
               e.preventDefault();
             }

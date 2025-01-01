@@ -1,4 +1,6 @@
-const styles = () => ({
+import { StyleProps } from "~community/common/types/CommonTypes";
+
+const styles = (): StyleProps => ({
   wrapper: {
     width: "100%",
     display: "flex",
