@@ -36,7 +36,7 @@ const NotificationsFilter = ({
       direction={isSmallPhoneScreen ? "column" : "row"}
       justifyContent="space-between"
       alignItems={isSmallPhoneScreen ? "flex-start" : "center"}
-      py={isSmallPhoneScreen ? "1rem" : "1.5rem"}
+      pb={isSmallPhoneScreen ? "1rem" : "1.5rem"}
       gap={isSmallPhoneScreen ? 2 : 0}
       component="div"
     >
