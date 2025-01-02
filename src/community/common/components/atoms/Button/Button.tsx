@@ -98,7 +98,12 @@ const Button = ({
       default:
         return theme.palette.common.black;
     }
-  }, [buttonStyle]);
+  }, [
+    buttonStyle,
+    theme.palette.common.black,
+    theme.palette.primary.dark,
+    theme.palette.text.error
+  ]);
 
   const handleClick = (
     event: ReactMouseEvent<HTMLButtonElement, MouseEvent>
