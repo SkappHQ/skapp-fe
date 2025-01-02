@@ -15,6 +15,7 @@ import LeaveTypeCard from "~community/leave/components/molecules/LeaveTypeCard/L
 import { ALLOCATION_PER_PAGE } from "~community/leave/constants/stringConstants";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveAllocationDataTypes } from "~community/leave/types/MyRequests";
+import { useCheckIfUserHasManagers } from "~community/people/api/PeopleApi";
 
 import LeaveAllocationEmptyScreen from "./LeaveAllocationEmptyScreen";
 import LeaveAllocationSkeleton from "./LeaveAllocationSkeleton";
@@ -33,6 +34,9 @@ const LeaveAllocation: FC = () => {
     useState(ALLOCATION_PER_PAGE);
 
   const { data: entitlement, isLoading } = useGetLeaveAllocation(selectedYear);
+
+  const { data: managerAvailability, isLoading: isManagerAvailabilityLoading } =
+    useCheckIfUserHasManagers();
 
   useEffect(() => {
     setAllocationsPerPage(isBelow600 ? 4 : ALLOCATION_PER_PAGE);
@@ -65,12 +69,17 @@ const LeaveAllocation: FC = () => {
                 key={entitlement?.leaveType?.typeId}
                 size={{ xs: 6, md: 4 }}
               >
-                <LeaveTypeCard entitlement={entitlement} />
+                <LeaveTypeCard
+                  entitlement={entitlement}
+                  managers={managerAvailability ?? false}
+                />
               </Grid>
             );
           })
         )}
-        {isLoading && <LeaveAllocationSkeleton />}
+        {(isLoading || isManagerAvailabilityLoading) && (
+          <LeaveAllocationSkeleton />
+        )}
       </Grid>
       {entitlement?.length > ALLOCATION_PER_PAGE && (
         <Stack sx={classes.buttonFooter}>
