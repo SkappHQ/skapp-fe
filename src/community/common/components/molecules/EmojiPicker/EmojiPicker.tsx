@@ -68,11 +68,11 @@ const EmojiPicker = ({
     <Stack sx={componentStyle}>
       <Stack sx={classes.labelWrapper}>
         <Typography
-          variant="label"
+          component="label"
           sx={{
             color: error
               ? theme.palette.error.contrastText
-              : theme.palette.text.secondary
+              : theme.palette.common.black
           }}
         >
           {label}

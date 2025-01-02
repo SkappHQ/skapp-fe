@@ -94,12 +94,13 @@ const InputDate: FC<Props> = ({
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     holidayType[]
   >([]);
 
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const open: boolean = Boolean(anchorEl);
 
   useEffect(() => {
@@ -125,6 +126,7 @@ const InputDate: FC<Props> = ({
       return holidayDate.hasSame(day, "day");
     });
   };
+
   const HolidayPickersDay = (props: PickersDayProps<DateTime>) => {
     const { day, outsideCurrentMonth, ...other } = props;
     let backgroundStyle = {};
@@ -194,6 +196,7 @@ const InputDate: FC<Props> = ({
   const onAccept = (date: DateTime | null) => {
     if (date) handleClose();
   };
+
   return (
     <Box
       sx={{
@@ -215,7 +218,7 @@ const InputDate: FC<Props> = ({
           sx={{
             fontWeight: 400,
             color: disabled
-              ? theme.palette.text.disabled
+              ? theme.palette.grey[700]
               : error
                 ? theme.palette.error.contrastText
                 : theme.palette.common.black
@@ -253,7 +256,6 @@ const InputDate: FC<Props> = ({
             color: selectedDate
               ? theme.palette.common.black
               : theme.palette.grey[600],
-
             opacity: 1
           }}
         >
@@ -273,6 +275,7 @@ const InputDate: FC<Props> = ({
           />
         </Box>
       </Box>
+
       <Popper
         id="custom-date-picker"
         open={open}
