@@ -1,35 +1,63 @@
-import { type Theme } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 
-import { StyleProps } from "~community/common/types/CommonTypes";
-
-const styles = (theme: Theme): StyleProps => ({
-  tableHead: {
-    borderTopLeftRadius: "0.625rem",
-    borderTopRightRadius: "0.625rem"
+export const styles = (theme: Theme) => ({
+  stackContainer: {
+    width: "100%",
+    overflowX: "auto",
+    position: "relative",
+    "&::-webkit-scrollbar": {
+      height: "0.4em",
+      backgroundColor: "transparent",
+      outline: "none"
+    },
+    "&::-webkit-scrollbar-track": {
+      marginLeft: "15rem",
+      backgroundColor: "rgba(0,0,0,.1)"
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(0,0,0,.2)",
+      borderRadius: "2px"
+    }
   },
-  tableHeaderCell: {
-    border: "none"
+  boxContainer: {
+    maxWidth: "900px"
   },
-  tableContainer: {
-    borderRadius: "0.625rem",
-    maxHeight: "27.5rem",
-    overflow: "auto"
-  },
-  editIconBtn: {
-    backgroundColor: theme.palette.grey[100],
-    height: "2.25rem",
-    p: "0.75rem 1.125rem"
-  },
-  tableWrapper: {
-    backgroundColor: theme.palette.grey[100],
-    borderRadius: "0.625rem",
-    mt: "1rem"
-  },
-  avatarChip: {
+  emptyScreenContainer: {
     display: "flex",
-    justifyContent: "start",
-    maxWidth: "fit-content"
+    justifyContent: "center",
+    backgroundColor: theme.palette.grey[100]
+  },
+  paginationContainer: {
+    pb: "0.938rem",
+    backgroundColor: theme.palette.grey[100],
+    borderRadius: "0rem 0rem 0.5rem 0.5rem"
+  },
+  divider: {
+    color: theme.palette.grey.A100,
+    my: "1rem"
+  },
+  buttonStyles: {
+    mr: "1rem",
+    p: "0.75rem 1rem"
+  },
+  headerStack: {
+    mt: "1rem",
+    paddingTop: "1rem",
+    paddingLeft: "0.5rem",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    backgroundColor: theme.palette.grey[100],
+    borderTopLeftRadius: "0.5rem",
+    borderTopRightRadius: "0.5rem",
+    width: "100%"
+  },
+  filterButton: {
+    p: "0.5rem 0.75rem",
+    textTransform: "capitalize",
+    lineHeight: "1.3125rem",
+    height: "2rem",
+    ml: "0.4rem",
+    mb: "0.8rem"
   }
 });
-
-export default styles;

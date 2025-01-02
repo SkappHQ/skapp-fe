@@ -48,6 +48,8 @@ export interface LeaveEntitlementSliceType
     | "leaveEntitlementModalType"
     | "setLeaveEntitlementModalType"
     | "setIsLeaveEntitlementModalOpen"
+    | "setLeaveEntitlementTableSelectedYear"
+    | "leaveEntitlementTableSelectedYear"
     | "selectedYear"
     | "setSelectedYear"
     | "page"

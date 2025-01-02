@@ -211,6 +211,7 @@ const Table: FC<Props> = ({
           onExportButtonClick={onExportButtonClick}
           exportTooltipText={exportTooltipText}
           exportButtonStyles={exportButtonStyles}
+          isDataAvailable={isDataAvailable}
         />
       )}
     </Stack>

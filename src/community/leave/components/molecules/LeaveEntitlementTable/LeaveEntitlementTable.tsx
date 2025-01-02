@@ -1,12 +1,18 @@
-import { Box } from "@mui/material";
-import { type Theme, useTheme } from "@mui/material/styles";
+import { Box, Divider, Stack, Theme, useTheme } from "@mui/material";
+import { useMemo, useState } from "react";
 
-import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import TableHeaderFill from "~community/attendance/components/molecules/TimesheetTableHeader/TableHeaderFill";
+import TImesheetTableRowFill from "~community/attendance/components/molecules/TimesheetTableRow/TImesheetTableRowFill";
+import Button from "~community/common/components/atoms/Button/Button";
+import Icon from "~community/common/components/atoms/Icon/Icon";
+import Pagination from "~community/common/components/atoms/Pagination/Pagination";
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
-import Table from "~community/common/components/molecules/Table/Table";
+import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
+import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useCommonStore } from "~community/common/stores/commonStore";
+import { IconName } from "~community/common/types/IconTypes";
 import { getAdjacentYearsWithCurrent } from "~community/common/utils/dateTimeUtils";
-import { formatToFiveDecimalPlaces } from "~community/common/utils/numberUtils";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -16,7 +22,9 @@ import {
 } from "~community/leave/types/LeaveEntitlementTypes";
 import { exportLeaveBulkList } from "~community/leave/utils/leaveEntitlement/leaveEntitlementUtils";
 
-import styles from "./styles";
+import LeaveEntitlementTableHeader from "../LeaveEntitlementTableHeader/LeaveEntitlementTableHeader";
+import LeaveEntitlementTableRow from "../LeaveEntitlementTableRow/LeaveEntitlementTableRow";
+import { styles } from "./styles";
 
 interface Props {
   tableData: LeaveEntitlementResponseType | undefined;
@@ -27,122 +35,152 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const { data: leaveTypes } = useGetLeaveTypes();
+  const { isDrawerToggled } = useCommonStore((state) => ({
+    isDrawerToggled: state.isDrawerExpanded
+  }));
+
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
 
   const {
-    selectedYear,
-    setSelectedYear,
+    leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementTableSelectedYear,
     page,
     setPage,
     setLeaveEntitlementModalType
   } = useLeaveStore((state) => state);
 
-  const { data: leaveTypes } = useGetLeaveTypes();
+  const [headerLabels, setHeaderLabels] = useState<string[]>([]);
 
-  const leaveTypesColumns =
-    leaveTypes?.map((leaveType) => ({
-      field: leaveType?.name?.toLowerCase(),
-      headerName: leaveType?.name?.toUpperCase()
-    })) || [];
+  useMemo(() => {
+    if (leaveTypes) {
+      const columns = leaveTypes?.map((leaveType) => ({
+        field: leaveType?.name?.toLowerCase(),
+        headerName: leaveType?.name?.toUpperCase()
+      }));
 
-  const columns = [
-    { field: "employee", headerName: translateText(["employeeNameHeader"]) },
-    ...leaveTypesColumns
-  ];
+      const tableHeaders = columns.map((col) => col.headerName);
 
-  const tableHeaders = columns.map((col) => ({
-    id: col.field,
-    label: col.headerName
-  }));
-
-  const transformToTableRows = () => {
-    return (
-      tableData?.items?.map((leaveEntitlement: LeaveEntitlementType) => {
-        const userColumnData = {
-          id: leaveEntitlement?.employeeId,
-          employee: (
-            <Box width="100%">
-              <AvatarChip
-                key={leaveEntitlement?.employeeId}
-                firstName={leaveEntitlement?.firstName}
-                lastName={leaveEntitlement?.lastName}
-                avatarUrl={leaveEntitlement?.avatarUrl}
-                isResponsiveLayout={true}
-                chipStyles={classes.avatarChip}
-              />
-            </Box>
-          )
-        };
-
-        const leaveEntitlementData = leaveTypes?.map((leaveType) => {
-          const entitlement = leaveEntitlement?.entitlements?.find(
-            (entitlement) =>
-              entitlement?.name?.toLowerCase() ===
-              leaveType?.name?.toLowerCase()
-          );
-
-          return {
-            [leaveType?.name?.toLowerCase()]: entitlement
-              ? formatToFiveDecimalPlaces(
-                  parseFloat(entitlement?.totalDaysAllocated)
-                )
-              : "-"
-          };
-        });
-
-        return Object.assign(userColumnData, ...(leaveEntitlementData || []));
-      }) || []
-    );
-  };
+      setHeaderLabels(tableHeaders);
+    }
+  }, [leaveTypes]);
 
   return (
-    <Box sx={classes.tableWrapper}>
-      <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={classes.tableHead}
-        tableContainerStyles={classes.tableContainer}
-        isPaginationEnabled={true}
-        totalPages={tableData?.totalPages}
-        currentPage={page - 1}
-        onPaginationChange={(_event, value) => setPage(value)}
-        tableHeaderCellStyles={classes.tableHeaderCell}
-        emptySearchTitle={translateText(["emptySearchResult", "title"])}
-        emptySearchDescription={translateText([
-          "emptySearchResult",
-          "description"
-        ])}
-        emptyDataTitle={translateText(["emptyScreen", "title"], {
-          selectedYear: selectedYear
-        })}
-        emptyDataDescription={translateText(["emptyScreen", "description"])}
-        emptyScreenButtonText={translateText(["emptyScreen", "buttonText"])}
-        isDataAvailable={tableData?.items && tableData?.items?.length > 0}
-        isLoading={isFetching}
-        skeletonRows={3}
-        exportButtonText={translateText(["exportBtnTxt"])}
-        onExportButtonClick={() =>
-          exportLeaveBulkList(tableData?.items ?? [], selectedYear)
-        }
-        onEmptyScreenBtnClick={() => {
-          setLeaveEntitlementModalType(
-            tableData?.items?.length === 0
-              ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
-              : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
-          );
-        }}
-        actionRowOneLeftButton={
+    <>
+      <Stack sx={classes.headerStack}>
+        <Box>
           <Dropdown
             onItemClick={(event) =>
-              setSelectedYear(event?.currentTarget?.innerText)
+              setLeaveEntitlementTableSelectedYear(
+                event?.currentTarget?.innerText
+              )
             }
-            selectedItem={selectedYear}
-            title={selectedYear}
+            selectedItem={leaveEntitlementTableSelectedYear}
+            title={leaveEntitlementTableSelectedYear}
             items={getAdjacentYearsWithCurrent()}
           />
-        }
-      />
-    </Box>
+        </Box>
+      </Stack>
+      <Stack sx={classes.stackContainer}>
+        {tableData?.items?.length === 0 ? (
+          <Box sx={classes.emptyScreenContainer}>
+            <TableEmptyScreen
+              title={translateText(["emptyScreen", "title"], {
+                selectedYear: leaveEntitlementTableSelectedYear
+              })}
+              description={translateText(["emptyScreen", "description"])}
+              buttonText={translateText(["emptyScreen", "buttonText"])}
+              onButtonClick={() => {
+                setLeaveEntitlementModalType(
+                  tableData?.items?.length === 0
+                    ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
+                    : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
+                );
+              }}
+            />
+          </Box>
+        ) : (
+          <>
+            {!isDrawerToggled ? (
+              <LeaveEntitlementTableHeader headerLabels={headerLabels} />
+            ) : (
+              <Box sx={classes.boxContainer}>
+                <LeaveEntitlementTableHeader headerLabels={headerLabels} />
+              </Box>
+            )}
+            <TableHeaderFill />
+            {tableData?.items?.map(
+              (leaveEntitlement: LeaveEntitlementType, index: number) => (
+                <>
+                  {!isDrawerToggled ? (
+                    <>
+                      <TImesheetTableRowFill
+                        noOfRows={tableData.items.length}
+                      />
+                      <LeaveEntitlementTableRow
+                        key={index}
+                        employee={{
+                          employeeId: leaveEntitlement?.employeeId,
+                          firstName: leaveEntitlement?.firstName,
+                          lastName: leaveEntitlement?.lastName,
+                          authPic: leaveEntitlement?.authPic
+                        }}
+                        totalAllocations={leaveEntitlement.entitlements}
+                        leaveTypes={leaveTypes}
+                      />
+                    </>
+                  ) : (
+                    <Box sx={classes.boxContainer}>
+                      <TImesheetTableRowFill
+                        noOfRows={tableData.items.length}
+                      />
+                      <LeaveEntitlementTableRow
+                        key={index}
+                        employee={{
+                          employeeId: leaveEntitlement?.employeeId,
+                          firstName: leaveEntitlement?.firstName,
+                          lastName: leaveEntitlement?.lastName,
+                          authPic: leaveEntitlement?.authPic
+                        }}
+                        totalAllocations={leaveEntitlement.entitlements}
+                        leaveTypes={leaveTypes}
+                      />
+                    </Box>
+                  )}
+                </>
+              )
+            )}
+          </>
+        )}
+      </Stack>
+      <Stack sx={classes.paginationContainer}>
+        <Divider sx={classes.divider} />
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Pagination
+            totalPages={tableData?.totalPages ?? 0}
+            currentPage={page - 1}
+            onChange={(_event, value) => setPage(value)}
+          />
+          <Button
+            buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+            label={translateText(["exportBtnTxt"])}
+            endIcon={<Icon name={IconName.DOWNLOAD_ICON} />}
+            isFullWidth={false}
+            styles={classes.buttonStyles}
+            onClick={() =>
+              exportLeaveBulkList(
+                tableData?.items ?? [],
+                leaveEntitlementTableSelectedYear
+              )
+            }
+          />
+        </Stack>
+      </Stack>
+    </>
   );
 };
 
