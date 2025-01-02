@@ -50,12 +50,12 @@ const LeaveTypeCard: FC<Props> = ({ entitlement }: Props) => {
   const { data: managers } = useCheckIfUserHasManagers();
 
   const validUntil = useMemo(
-    () => (validTo ? new Date(validTo).getTime() : 0),
+    () => (validTo ? new Date(validTo).setHours(23, 59, 59) : 0),
     [validTo]
   );
 
   const isExpired = useMemo(
-    () => validUntil > 0 && validUntil <= Date.now(),
+    () => validUntil > 0 && validUntil < Date.now(),
     [validUntil]
   );
 

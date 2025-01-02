@@ -97,13 +97,13 @@ const LeaveStatusPopupController = (): JSX.Element => {
 
             {popupType === LeaveStatusTypes.SUPERVISOR_NUDGED && (
               <EmployeeNudgeSupervisorPopup
-                handleRequestStatusPopup={setIsEmployeeModal}
+                handleRequestStatusPopup={handleCloseModal}
               />
             )}
 
             {popupType === LeaveStatusTypes.CANCELLED && (
               <EmployeeCancelLeaveStatusPopup
-                handleRequestStatusPopup={setIsEmployeeModal}
+                handleRequestStatusPopup={handleCloseModal}
               />
             )}
 
@@ -114,25 +114,25 @@ const LeaveStatusPopupController = (): JSX.Element => {
 
             {popupType === EmployeeLeaveStatusPopupTypes.CANCELLED_SUMMARY && (
               <EmployeeLeaveRequestCancelledPopup
-                handleRequestStatusPopup={setIsEmployeeModal}
+                handleRequestStatusPopup={handleCloseModal}
               />
             )}
 
             {popupType === LeaveStatusTypes.APPROVED && (
               <EmployeeLeaveApprovedStatusPopup
-                handleRequestStatusPopup={setIsEmployeeModal}
+                handleRequestStatusPopup={handleCloseModal}
               />
             )}
 
             {popupType === LeaveStatusTypes.REVOKED && (
               <EmployeeLeaveRevokedStatusPopup
-                handleRequestStatusPopup={setIsEmployeeModal}
+                handleRequestStatusPopup={handleCloseModal}
               />
             )}
 
             {popupType === LeaveStatusTypes.DENIED && (
               <EmployeeLeaveDeniedStatusPopup
-                handleRequestStatusPopup={setIsEmployeeModal}
+                handleRequestStatusPopup={handleCloseModal}
               />
             )}
           </>
