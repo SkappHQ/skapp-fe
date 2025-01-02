@@ -25,6 +25,7 @@ interface Props {
   buttonStartIcon?: JSX.Element;
   onButtonClick?: () => void;
   buttonStyle?: ButtonStyle;
+  wrapperStyles?: SxProps;
 }
 const TableEmptyScreen: FC<Props> = ({
   title,
@@ -36,14 +37,15 @@ const TableEmptyScreen: FC<Props> = ({
   buttonText = "",
   buttonStartIcon,
   onButtonClick,
-  buttonStyle = ButtonStyle.PRIMARY
+  buttonStyle = ButtonStyle.PRIMARY,
+  wrapperStyles
 }) => {
   const theme: Theme = useTheme();
 
   const classes = styles(theme);
 
   return (
-    <Stack sx={classes.wrapper}>
+    <Stack sx={{ ...classes.wrapper, ...wrapperStyles }}>
       <Stack
         spacing={spacing}
         sx={classes.container}
