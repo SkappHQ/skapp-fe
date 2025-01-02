@@ -66,7 +66,8 @@
     "ssoLoginDescription": "Sign into your organization account using your G-suite account Single Sign-On",
     "credentialsDescription": "Enter your username and password to sign in to the system",
     "domainDescription": "Please enter the company domain of your account to access your workspace.",
-    "domainLabel": "Company domain"
+    "domainLabel": "Company domain",
+    "verificationCodeLabel": "Verification code"
   },
   "signIn": {
     "pageHeading": "Log in",
