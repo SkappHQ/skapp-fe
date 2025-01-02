@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 
 import UnsavedChangesModal from "~community/common/components/molecules/UnsavedChangesModal/UnsavedChangesModal";
 import Modal from "~community/common/components/organisms/Modal/Modal";
-import ROUTES from "~community/common/constants/routes";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveTypeModalEnums } from "~community/leave/enums/LeaveTypeEnums";
@@ -37,9 +36,9 @@ const ExitModal = () => {
         onPrimaryBtnClick={() =>
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE)
         }
-        onSecondaryBtnClick={() => {
+        onSecondaryBtnClick={async () => {
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE);
-          router.replace(ROUTES.LEAVE.LEAVE_TYPES);
+          await router.back();
           resetEditingLeaveType();
         }}
       />

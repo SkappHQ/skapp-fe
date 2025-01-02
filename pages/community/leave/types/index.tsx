@@ -18,9 +18,7 @@ const LeaveTypes: NextPage = () => {
         pageHead={translateText(["pageHead"])}
         primaryButtonText={translateText(["addLeaveBtnTxt"])}
         onPrimaryButtonClick={() =>
-          router.replace(
-            ROUTES.LEAVE.ADD_EDIT_LEAVE_TYPES(LeaveTypeFormTypes.ADD)
-          )
+          router.push(ROUTES.LEAVE.ADD_EDIT_LEAVE_TYPES(LeaveTypeFormTypes.ADD))
         }
         isDividerVisible
       >

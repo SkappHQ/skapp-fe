@@ -165,10 +165,10 @@ export const getSelectedDrawerItemColor = (
   const isHovered = hoveredItemUrl === itemUrl;
   const isSelected = currentPageUrl.includes(itemUrl);
 
-  if (isHovered) {
-    return theme.palette.primary.main;
-  } else if (isSelected) {
+  if (isSelected) {
     return theme.palette.primary.dark;
+  } else if (isHovered) {
+    return theme.palette.primary.main;
   } else {
     return theme.palette.common.black;
   }
