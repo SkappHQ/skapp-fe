@@ -54,7 +54,11 @@ const managerRoutes = {
 };
 
 const employeeRoutes = {
-  [EmployeeTypes.PEOPLE_EMPLOYEE]: [ROUTES.PEOPLE.DIRECTORY, ...commonRoutes],
+  [EmployeeTypes.PEOPLE_EMPLOYEE]: [
+    ROUTES.PEOPLE.DIRECTORY,
+    ROUTES.PEOPLE.INDIVIDUAL,
+    ...commonRoutes
+  ],
   [EmployeeTypes.LEAVE_EMPLOYEE]: [ROUTES.LEAVE.MY_REQUESTS, ...commonRoutes],
   [EmployeeTypes.ATTENDANCE_EMPLOYEE]: [
     ROUTES.TIMESHEET.MY_TIMESHEET,
