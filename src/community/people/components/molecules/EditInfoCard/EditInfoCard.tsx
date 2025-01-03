@@ -23,7 +23,10 @@ import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMen
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { ROLE_SUPER_ADMIN } from "~community/common/types/AuthTypes";
+import {
+  AdminTypes,
+  ROLE_SUPER_ADMIN
+} from "~community/common/types/AuthTypes";
 import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
@@ -75,7 +78,7 @@ const EditInfoCard = ({
 
   const { data: storageAvailableData } = useStorageAvailability();
   const hasTerminationAbility =
-    data?.user.roles?.includes(ROLE_SUPER_ADMIN) &&
+    data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN) &&
     data?.user?.employee?.employeeId.toString() !==
       selectedEmployee?.employeeId;
 
