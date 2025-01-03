@@ -1,32 +1,18 @@
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
-import {
-  FC,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import Button from "~community/common/components/atoms/Button/Button";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
-import Icon from "~community/common/components/atoms/Icon/Icon";
-import ItemSelector from "~community/common/components/molecules/ItemSelector/ItemSelector";
 import Table from "~community/common/components/molecules/Table/Table";
-import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes } from "~community/common/types/AuthTypes";
-import { OptionType } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
-import { MenuTypes } from "~community/common/types/MoleculeTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
-import { options } from "~community/common/utils/dateTimeUtils";
-import HolidayDataMenu from "~community/people/components/molecules/HolidayDataMenu/HolidayDataMenu";
+import SortByDropDown from "~community/people/components/molecules/SortByDropDown/SortByDropDown";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   HolidayDataType,
@@ -35,6 +21,8 @@ import {
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
 import { getFormattedDate } from "~community/people/utils/holidayUtils/commonUtils";
+
+import { styles } from "./styles";
 
 interface Props {
   holidayData?: holiday[];
@@ -57,9 +45,7 @@ const HolidayTable: FC<Props> = ({
   isFetching
 }) => {
   const theme: Theme = useTheme();
-  const holidayDataSort = usePeopleStore(
-    (state) => state.holidayDataParams.sortOrder
-  );
+  const classes = styles(theme);
 
   const { data: session } = useSession();
 
@@ -71,26 +57,13 @@ const HolidayTable: FC<Props> = ({
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
 
-  const [sortOpen, setSortOpen] = useState<boolean>(false);
-  const [sortEl, setSortEl] = useState<null | HTMLElement>(null);
   const translateText = useTranslator("peopleModule", "holidays");
-  const sortByOpen = sortOpen && Boolean(sortEl);
-  const sortId = sortByOpen ? "sortBy-popper" : undefined;
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();
 
-  const {
-    setIndividualDeleteId,
-    selectedDeleteIds,
-    setSelectedDeleteIds,
-    setSelectedYear,
-    selectedYear
-  } = usePeopleStore((state) => state);
-  const [selectedOption, setSelectedOption] = useState<OptionType>({
-    id: 1,
-    name: selectedYear
-  });
+  const { setIndividualDeleteId, selectedDeleteIds, setSelectedDeleteIds } =
+    usePeopleStore((state) => state);
 
   const columns = [
     { field: "date", headerName: translateText(["tableDateColumnTitle"]) },
@@ -118,22 +91,6 @@ const HolidayTable: FC<Props> = ({
     }
   };
 
-  const handleSortClose = (): void => {
-    setSortOpen(false);
-  };
-
-  const handleSortClick = (event: MouseEvent<HTMLElement>): void => {
-    setSortEl(event.currentTarget);
-    setSortOpen((previousOpen) => !previousOpen);
-  };
-  const setOptionName = (year: string): void => {
-    setSelectedYear(year);
-  };
-  const scrollToTop = () => {
-    if (listInnerRef.current) {
-      listInnerRef.current.scrollTop = 0;
-    }
-  };
   const onScroll = () => {
     if (listInnerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
@@ -166,6 +123,7 @@ const HolidayTable: FC<Props> = ({
       };
     }
   }, [isFetchingNextPage, hasNextPage]);
+
   const transformToTableRows = () => {
     return (
       (Array.isArray(holidayData) &&
@@ -196,59 +154,6 @@ const HolidayTable: FC<Props> = ({
           actionData: holiday?.id
         }))) ||
       []
-    );
-  };
-  const renderSortBy = () => {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "0.625rem"
-        }}
-      >
-        <Box>
-          <Button
-            label={`Sort : ${
-              holidayDataSort === "ASC" ? "Jan to Dec" : "Dec to Jan"
-            }`}
-            buttonStyle={ButtonStyle.TERTIARY}
-            styles={{
-              border: "0.0625rem solid",
-              borderColor: "grey.500",
-              fontWeight: "400",
-              fontSize: "0.875rem",
-              py: "0.5rem",
-              px: "1rem"
-            }}
-            endIcon={
-              holidayData?.length !== 0 ? (
-                <Icon name={IconName.DROPDOWN_ARROW_ICON} />
-              ) : null
-            }
-            onClick={handleSortClick}
-            disabled={holidayData?.length === 0}
-            aria-describedby={sortId}
-          />
-          <HolidayDataMenu
-            anchorEl={sortEl}
-            handleClose={handleSortClose}
-            position="bottom-start"
-            menuType={MenuTypes.SORT}
-            id={sortId}
-            open={sortOpen}
-            scrollToTop={scrollToTop}
-          />
-        </Box>
-
-        <ItemSelector
-          options={options}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          setOptionName={setOptionName}
-          popperStyles={{ width: "150px" }}
-        />
-      </Box>
     );
   };
 
@@ -293,6 +198,7 @@ const HolidayTable: FC<Props> = ({
       }
     }
   };
+
   const handleCheckBoxClick = (holidayId: number) => () => {
     setSelectedHolidays((prevSelectedHolidays) => {
       if (!prevSelectedHolidays.includes(holidayId)) {
@@ -345,22 +251,17 @@ const HolidayTable: FC<Props> = ({
   };
 
   return (
-    <Box
-      sx={{
-        mt: "1.5rem",
-        backgroundColor: theme.palette.grey[100],
-        display: "flex",
-        flexDirection: "column",
-        borderRadius: "0.5rem",
-        border: "none",
-        gap: "0.125rem"
-      }}
-    >
-      <Box sx={{ zIndex: ZIndexEnums.MIN }} ref={listInnerRef}>
+    <Stack sx={classes.wrapper}>
+      <Box sx={classes.container} ref={listInnerRef}>
         <Table
           tableHeaders={tableHeaders}
           tableRows={transformToTableRows()}
-          actionRowOneLeftButton={renderSortBy()}
+          actionRowOneLeftButton={
+            <SortByDropDown
+              listInnerRef={listInnerRef}
+              holidayData={holidayData}
+            />
+          }
           actionRowOneRightButton={
             holidayData && holidayData?.length > 0 && isAdmin
               ? renderDeleteAllButton()
@@ -401,10 +302,10 @@ const HolidayTable: FC<Props> = ({
               : theme.palette.primary.main,
             marginRight: "0rem"
           }}
-          tableHeaderCellStyles={{ paddingLeft: "0rem" }}
+          tableHeaderCellStyles={classes.tableHeaderCellStyles}
         />
       </Box>
-    </Box>
+    </Stack>
   );
 };
 
