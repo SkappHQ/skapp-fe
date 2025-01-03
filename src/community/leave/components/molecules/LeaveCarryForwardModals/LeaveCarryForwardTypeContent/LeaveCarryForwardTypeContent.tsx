@@ -14,17 +14,15 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { getEmoji } from "~community/common/utils/commonUtil";
 import {
   useGetLeaveTypes,
   useGetUseCarryForwardLeaveEntitlements
 } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
-import { LeaveType } from "~community/leave/types/CustomLeaveAllocationTypes";
+import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
-import {
-  getEmoji,
-  getTruncatedLabel
-} from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
+import { getTruncatedLabel } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 
 interface Props {
   handleClose?: () => void;
@@ -32,7 +30,7 @@ interface Props {
 
 const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
   const [checkedList, setCheckedList] = useState<number[]>([]);
-  const [leaveTypess, setLeaveTypess] = useState<LeaveType[]>([]);
+  const [leaveTypess, setLeaveTypess] = useState<LeaveTypeType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
@@ -140,7 +138,7 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
   return (
     <Stack
       sx={{
-        padding: "1rem 0.25rem 1rem 0.25rem",
+        padding: "0rem 0.25rem 1rem 0.25rem",
         minWidth: "31.25rem"
       }}
     >
@@ -162,7 +160,8 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
           width: "100%",
           flexWrap: "wrap",
           maxHeight: "13.125rem",
-          overflowY: "auto"
+          overflowY: "auto",
+          marginTop: "0.5rem"
         }}
       >
         <Box
