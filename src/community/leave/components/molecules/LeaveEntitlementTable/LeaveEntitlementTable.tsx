@@ -7,6 +7,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Pagination from "~community/common/components/atoms/Pagination/Pagination";
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
+import TableSkeleton from "~community/common/components/molecules/Table/TableSkeleton";
 import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -64,6 +65,10 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
       setHeaderLabels(tableHeaders);
     }
   }, [leaveTypes]);
+
+  if (isFetching) {
+    return <TableSkeleton rows={4} />;
+  }
 
   return (
     <>
