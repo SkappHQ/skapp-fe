@@ -63,7 +63,8 @@ const Avatar: FC<AvatarProps> = ({
   const { data: logoUrl } = useGetUploadedImage(
     FileTypes.USER_IMAGE,
     src,
-    true
+    true,
+    environment !== ProfileModes.ENTERPRICE
   );
 
   useEffect(() => {

@@ -122,7 +122,9 @@ const useDetectProfileChange = () => {
       ({
         name: primaryEmergencyContactResponse?.name,
         relationship: primaryEmergencyContactResponse?.emergencyRelationship,
-        countryCode: primaryEmergencyContactResponse?.contactNo?.split(" ")[0],
+        countryCode:
+          primaryEmergencyContactResponse?.contactNo?.split(" ")[0] ||
+          countryCode,
         phone: primaryEmergencyContactResponse?.contactNo?.split(" ")[1],
         emergencyId: primaryEmergencyContactResponse?.emergencyId
       } as EmergencyContactDetailsType);
@@ -133,7 +135,8 @@ const useDetectProfileChange = () => {
         name: secondaryEmergencyContactResponse?.name,
         relationship: secondaryEmergencyContactResponse?.emergencyRelationship,
         countryCode:
-          secondaryEmergencyContactResponse?.contactNo?.split(" ")[0],
+          secondaryEmergencyContactResponse?.contactNo?.split(" ")[0] ||
+          countryCode,
         phone: secondaryEmergencyContactResponse?.contactNo?.split(" ")[1],
         emergencyId: secondaryEmergencyContactResponse?.emergencyId
       } as EmergencyContactDetailsType);
@@ -185,18 +188,18 @@ const useDetectProfileChange = () => {
         educationalDetails
       },
       socialMediaDetails: {
-        linkedIn: employee?.personalInfo?.socialMediaDetails?.linkedIn ?? "",
-        facebook: employee?.personalInfo?.socialMediaDetails?.facebook ?? "",
-        instagram: employee?.personalInfo?.socialMediaDetails?.instagram ?? "",
-        x: employee?.personalInfo?.socialMediaDetails?.x ?? ""
+        linkedIn: employee?.personalInfo?.socialMediaDetails?.linkedIn,
+        facebook: employee?.personalInfo?.socialMediaDetails?.facebook,
+        instagram: employee?.personalInfo?.socialMediaDetails?.instagram,
+        x: employee?.personalInfo?.socialMediaDetails?.x
       },
       healthAndOtherDetails: {
         bloodGroup: employee?.personalInfo?.extraInfo
           ?.bloodGroup as BloodGroupTypes,
-        allergies: employee?.personalInfo?.extraInfo?.allergies ?? "",
+        allergies: employee?.personalInfo?.extraInfo?.allergies,
         dietaryRestrictions:
-          employee?.personalInfo?.extraInfo?.dietaryRestrictions ?? "",
-        tshirtSize: employee?.personalInfo?.extraInfo?.tshirtSize ?? ""
+          employee?.personalInfo?.extraInfo?.dietaryRestrictions,
+        tshirtSize: employee?.personalInfo?.extraInfo?.tshirtSize
       },
       emergencyDetails: {
         primaryEmergencyContact: primaryEmployeeEmergencyContact,
