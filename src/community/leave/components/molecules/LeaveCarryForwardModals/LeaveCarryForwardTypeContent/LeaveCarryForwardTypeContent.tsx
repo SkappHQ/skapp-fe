@@ -164,22 +164,24 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
           marginTop: "0.5rem"
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            flexBasis: "33.3333%",
-            flexWrap: "wrap",
-            width: "100%"
-          }}
-        >
-          <Checkbox
-            label={translateTexts(["selectAllText"])}
-            name={translateTexts(["selectAllText"])}
-            checked={checkedList?.length === leaveTypess?.length}
-            onChange={handleCheckAll}
-          />
-        </Box>
+        {leaveTypess?.length >= 2 && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexBasis: "33.3333%",
+              flexWrap: "wrap",
+              width: "100%"
+            }}
+          >
+            <Checkbox
+              label={translateTexts(["selectAllText"])}
+              name={translateTexts(["selectAllText"])}
+              checked={checkedList?.length === leaveTypess?.length}
+              onChange={handleCheckAll}
+            />
+          </Box>
+        )}
         {leaveTypess?.map((leaveType) => (
           <Box
             key={leaveType.typeId}
