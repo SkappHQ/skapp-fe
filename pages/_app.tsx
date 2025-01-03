@@ -19,7 +19,10 @@ import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
-import { isMaintenanceMode } from "~enterprise/common/constants/dbKeys";
+import {
+  isNonProdMaintenanceMode,
+  isProdMaintenanceMode
+} from "~enterprise/common/constants/dbKeys";
 import { initializeHotjar } from "~enterprise/common/utils/monitoring";
 import { database } from "~firebase";
 import i18n from "~i18n";
@@ -40,6 +43,11 @@ function MyApp({
 
   useEffect(() => {
     if (!database) return;
+
+    const isMaintenanceMode =
+      process.env.NEXT_PUBLIC_ENTERPRISE_MODE === "prod"
+        ? isProdMaintenanceMode
+        : isNonProdMaintenanceMode;
 
     const maintenanceRef = ref(database, isMaintenanceMode);
 
