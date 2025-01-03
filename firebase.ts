@@ -15,7 +15,10 @@ const app =
 let database: Database | undefined;
 
 if (typeof window !== "undefined") {
-  database = getDatabase(app);
+  database =
+    process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE
+      ? getDatabase(app)
+      : undefined;
 }
 
 export { database };
