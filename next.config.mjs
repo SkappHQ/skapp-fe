@@ -217,6 +217,10 @@ const nextConfig = {
       {
         source: "/forget-password",
         destination: "/enterprise/forget-password"
+      },
+      {
+        source: "/maintenance",
+        destination: "/enterprise/maintenance"
       }
     ];
   },
