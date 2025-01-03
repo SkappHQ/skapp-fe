@@ -6,7 +6,7 @@ export interface LeaveTypePayloadType {
   colorCode: string;
   calculationType: string;
   leaveDuration: LeaveDurationTypes;
-  maxCarryForwardDays: number;
+  maxCarryForwardDays: number | undefined;
   carryForwardExpirationDays: number;
   carryForwardExpirationDate: string | null;
   isAttachment: boolean;

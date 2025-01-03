@@ -15,7 +15,7 @@ const initialLeaveType: LeaveTypeType = {
   colorCode: leaveTypeColors[0],
   calculationType: calculationType.ACCUMULATED,
   leaveDuration: LeaveDurationTypes.NONE,
-  maxCarryForwardDays: 0,
+  maxCarryForwardDays: undefined,
   carryForwardExpirationDays: 0,
   carryForwardExpirationDate: null,
   isAttachment: false,

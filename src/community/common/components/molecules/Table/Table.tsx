@@ -201,7 +201,7 @@ const Table: FC<Props> = ({
         </MuiTable>
       </TableContainer>
 
-      {isPaginationEnabled && (
+      {isPaginationEnabled && (totalPages ?? 0) < 1 && (
         <TablePagination
           totalPages={totalPages}
           currentPage={currentPage}

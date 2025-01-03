@@ -160,17 +160,31 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Pagination
-            totalPages={tableData?.totalPages ?? 0}
-            currentPage={page - 1}
-            onChange={(_event, value) => setPage(value)}
-          />
+          {(tableData?.totalPages ?? 0) > 1 ? (
+            <Pagination
+              totalPages={tableData?.totalPages ?? 0}
+              currentPage={page - 1}
+              onChange={(_event, value) => setPage(value)}
+            />
+          ) : (
+            <Box></Box>
+          )}
           <Button
             buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
             label={translateText(["exportBtnTxt"])}
-            endIcon={<Icon name={IconName.DOWNLOAD_ICON} />}
+            endIcon={
+              <Icon
+                name={IconName.DOWNLOAD_ICON}
+                fill={
+                  tableData?.items?.length === 0
+                    ? theme.palette.grey[800]
+                    : theme.palette.common.black
+                }
+              />
+            }
             isFullWidth={false}
             styles={classes.buttonStyles}
+            disabled={tableData?.items?.length === 0}
             onClick={() =>
               exportLeaveBulkList(
                 tableData?.items ?? [],

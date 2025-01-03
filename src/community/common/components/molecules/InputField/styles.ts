@@ -50,7 +50,7 @@ const styles = (theme: Theme): StyleProps => ({
     "&& .MuiInputBase-input": {
       p: "0.7813rem 1rem",
       "&.Mui-disabled": {
-        WebkitTextFillColor: theme.palette.grey[700]
+        WebkitTextFillColor: theme.palette.grey[600]
       }
     },
     "&& .MuiInputAdornment-root": {

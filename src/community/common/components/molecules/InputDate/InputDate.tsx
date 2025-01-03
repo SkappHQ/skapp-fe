@@ -222,7 +222,7 @@ const InputDate: FC<Props> = ({
           sx={{
             fontWeight: 400,
             color: disabled
-              ? theme.palette.text.disabled
+              ? theme.palette.grey[700]
               : error
                 ? theme.palette.error.contrastText
                 : theme.palette.common.black
@@ -260,7 +260,6 @@ const InputDate: FC<Props> = ({
             color: selectedDate
               ? theme.palette.common.black
               : theme.palette.grey[600],
-
             opacity: 1
           }}
         >
@@ -280,6 +279,7 @@ const InputDate: FC<Props> = ({
           />
         </Box>
       </Box>
+
       <Popper
         id="custom-date-picker"
         open={open}
