@@ -1,5 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import DragAndDropField from "~community/common/components/molecules/DragAndDropField/DragAndDropField";
@@ -36,6 +36,8 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
 
   const { setToastMessage } = useToast();
 
+  const { data: leaveTypesData } = useGetLeaveTypes();
+
   const { selectedYear, setLeaveEntitlementModalType } = useLeaveStore(
     (state) => state
   );
@@ -49,11 +51,13 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
     LeaveEntitlementBulkUploadType[]
   >([]);
 
-  const { data: leaveTypesData } = useGetLeaveTypes();
+  const activeLeaveTypes = useMemo(() => {
+    return leaveTypesData?.filter((leaveType) => leaveType.isActive);
+  }, [leaveTypesData]);
 
   useEffect(() => {
-    setLeaveTypes(leaveTypesData ?? []);
-  }, [leaveTypesData, setLeaveTypes]);
+    setLeaveTypes(activeLeaveTypes ?? []);
+  }, [activeLeaveTypes]);
 
   const onSuccess = (errorLogs: BulkUploadResponse) => {
     const toastType =
