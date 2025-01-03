@@ -332,7 +332,7 @@ const SystemPermissionForm = ({
   ) => {
     const isChecked = e.target.checked;
 
-    if (!isChecked && data?.superAdminCount === 1) {
+    if (!isChecked && data === 1) {
       setToastMessage({
         open: true,
         toastType: "error",
@@ -376,6 +376,18 @@ const SystemPermissionForm = ({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const isChecked = e.target.checked;
+
+    if (!isChecked && data === 1) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["superAdminRequiredTitle"]),
+        description: roleLimitationTexts(["superAdminRequiredDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
 

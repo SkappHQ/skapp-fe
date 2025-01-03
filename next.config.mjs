@@ -199,20 +199,20 @@ const nextConfig = {
         destination: "/community/leave/analytics/:id"
       },
       {
-        source: "/verify-email",
-        destination: "/enterprise/verify-email"
+        source: "/verify/email",
+        destination: "/enterprise/verify/email"
       },
       {
-        source: "/verify-success",
-        destination: "/enterprise/verify-success"
+        source: "/verify/success",
+        destination: "/enterprise/verify/success"
       },
       {
         source: "/redirect",
         destination: "/enterprise/redirect"
       },
       {
-        source: "/verify-account-reset-password",
-        destination: "/enterprise/verify-account-reset-password"
+        source: "/verify/reset-password",
+        destination: "/enterprise/verify/reset-password"
       },
       {
         source: "/forget-password",

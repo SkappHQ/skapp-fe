@@ -17,7 +17,10 @@ const commonRoutes = [
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
-  ROUTES.NOTIFICATIONS
+  ROUTES.NOTIFICATIONS,
+  ROUTES.AUTH.VERIFY,
+  ROUTES.AUTH.VERIFY_SUCCESS,
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
 ];
 
 // Specific role-based routes
@@ -151,6 +154,9 @@ export const config = {
     "/account",
     "/reset-password",
     "/unauthorized",
+    "/verify/email",
+    "/verify/success",
+    "/verify/account-reset-password",
     // Module routes
     "/leave/:path*",
     "/people/:path*",
