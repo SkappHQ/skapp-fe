@@ -133,6 +133,10 @@ const ContactDetailsSection = forwardRef<FormMethods, props>((props, ref) => {
     setEmployeeContactDetails("countryCode", countryCode);
   };
 
+  useEffect(() => {
+    setEmployeeContactDetails("countryCode", countryCode);
+  }, []);
+
   const handlePhoneNumber = async (
     phone: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
