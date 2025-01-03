@@ -136,13 +136,16 @@ const getLeaveEntitlementsForEmployee = (
   const leaveTypeNames = getLeaveTypeNames(leaveEntitlement);
 
   const entitlements = leaveTypeNames.map((leaveType) => {
-    const leaveTypeDetails = leaveTypes?.find(
-      (type) => type?.name?.toLowerCase() === leaveType?.toLowerCase()
-    );
+    const leaveTypeDetails = leaveTypes?.find((type) => {
+      return (
+        type?.name?.replace(/\s+/g, "").toLowerCase() ===
+        leaveType?.toLowerCase()
+      );
+    });
 
     return {
       leaveTypeId: leaveTypeDetails?.typeId ?? 0,
-      name: leaveType,
+      name: leaveTypeDetails?.name ?? "",
       totalDaysAllocated: (
         leaveEntitlement as unknown as Record<string, string>
       )[leaveType],
