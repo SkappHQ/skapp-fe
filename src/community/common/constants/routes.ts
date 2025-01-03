@@ -74,7 +74,8 @@ const ROUTES = {
     LEAVE: {
       RESOURCE_AVAILABILITY: "/dashboard/leave/resource-availability"
     }
-  }
+  },
+  MAINTENANCE: "/maintenance"
 };
 
 export default ROUTES;

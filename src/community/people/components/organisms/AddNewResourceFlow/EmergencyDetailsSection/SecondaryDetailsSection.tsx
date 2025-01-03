@@ -110,6 +110,10 @@ const SecondaryDetailsSection = forwardRef<RefCallback, Props>(
       setEmployeeSecondaryEmergencyContactDetails("countryCode", countryCode);
     };
 
+    useEffect(() => {
+      setEmployeeSecondaryEmergencyContactDetails("countryCode", countryCode);
+    }, []);
+
     const handlePhoneNumber = async (
       phone: ChangeEvent<HTMLInputElement>
     ): Promise<void> => {

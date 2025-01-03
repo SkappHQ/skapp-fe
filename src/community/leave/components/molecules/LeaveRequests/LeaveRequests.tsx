@@ -20,6 +20,7 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { SortKeyTypes, StyleProps } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { pascalCaseFormatter } from "~community/common/utils/commonUtil";
 import {
   useGetEmployeeLeaveRequestData,
   useGetEmployeeLeaveRequests,
@@ -177,11 +178,11 @@ const LeaveRequests: FC = () => {
   };
 
   const leaveStatusArray = [
+    LeaveStatusTypes.PENDING,
     LeaveStatusTypes.APPROVED,
     LeaveStatusTypes.DENIED,
-    LeaveStatusTypes.PENDING,
-    LeaveStatusTypes.CANCELLED,
-    LeaveStatusTypes.REVOKED
+    LeaveStatusTypes.REVOKED,
+    LeaveStatusTypes.CANCELLED
   ];
 
   const filterButton = (
@@ -227,7 +228,7 @@ const LeaveRequests: FC = () => {
         {leaveStatusArray.map((leaveStatus) => (
           <Button
             key={leaveStatus}
-            label={leaveStatus}
+            label={pascalCaseFormatter(leaveStatus)}
             isFullWidth={false}
             onClick={() => {
               setFilter((prev) => ({

@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import { type Theme, useTheme } from "@mui/material/styles";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -7,11 +6,9 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
-
-import { userBulkTemplate } from "../../../utils/getConstants";
+import { userBulkTemplate } from "~community/people/utils/getConstants";
 
 const UserBulkCsvDownload = () => {
-  const theme: Theme = useTheme();
   const { setIsDirectoryModalOpen, setDirectoryModalType } = usePeopleStore(
     (state) => state
   );
@@ -27,15 +24,14 @@ const UserBulkCsvDownload = () => {
       <Box
         sx={{
           borderRadius: "0.75rem",
-          height: "100%",
-          mt: "1rem"
+          height: "100%"
         }}
       >
         <Typography
           sx={{
             fontSize: "1rem",
             fontWeight: 400,
-            p: "0.75rem",
+            p: "0rem 0.75rem 0.75rem 0.75rem",
             borderRadius: "0.75rem"
           }}
         >
