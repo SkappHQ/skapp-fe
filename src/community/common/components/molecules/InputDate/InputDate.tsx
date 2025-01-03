@@ -11,6 +11,7 @@ import { type Theme, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import {
   LocalizationProvider,
+  PickersCalendarHeader,
   PickersDay,
   PickersDayProps,
   StaticDatePicker
@@ -39,6 +40,7 @@ import {
   holidayType
 } from "~community/people/types/HolidayTypes";
 
+import CalendarHeader from "./CalendarHeader/CalendarHeader";
 import styles from "./styles";
 
 interface Props {
@@ -71,6 +73,7 @@ interface Props {
   popperStyles?: SxProps;
   selectedDate: DateTime | undefined;
   setSelectedDate: Dispatch<SetStateAction<DateTime | undefined>>;
+  isYearHidden?: boolean;
 }
 
 const InputDate: FC<Props> = ({
@@ -90,16 +93,18 @@ const InputDate: FC<Props> = ({
   popperStyles,
   selectedDate,
   setSelectedDate,
-  inputFormat
+  inputFormat,
+  isYearHidden
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     holidayType[]
   >([]);
 
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const open: boolean = Boolean(anchorEl);
 
   useEffect(() => {
@@ -125,6 +130,7 @@ const InputDate: FC<Props> = ({
       return holidayDate.hasSame(day, "day");
     });
   };
+
   const HolidayPickersDay = (props: PickersDayProps<DateTime>) => {
     const { day, outsideCurrentMonth, ...other } = props;
     let backgroundStyle = {};
@@ -194,6 +200,7 @@ const InputDate: FC<Props> = ({
   const onAccept = (date: DateTime | null) => {
     if (date) handleClose();
   };
+
   return (
     <Box
       sx={{
@@ -289,7 +296,10 @@ const InputDate: FC<Props> = ({
                 displayStaticWrapperAs="desktop"
                 value={value}
                 slots={{
-                  day: HolidayPickersDay
+                  day: HolidayPickersDay,
+                  calendarHeader: isYearHidden
+                    ? CalendarHeader
+                    : PickersCalendarHeader
                 }}
                 slotProps={{
                   leftArrowIcon: {

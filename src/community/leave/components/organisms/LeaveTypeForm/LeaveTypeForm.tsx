@@ -25,7 +25,10 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { specialCharacters } from "~community/common/regex/regexPatterns";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
-import { getLocalDate, nextYear } from "~community/common/utils/dateTimeUtils";
+import {
+  currentYear,
+  getLocalDate
+} from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveCycle } from "~community/leave/api/LeaveApi";
 import {
   useAddLeaveType,
@@ -432,6 +435,7 @@ const LeaveTypeForm = () => {
             />
 
             <InputDate
+              isYearHidden
               name="carryForwardExpirationDate"
               label={translateText(["carryForwardExpirationDate"])}
               value={DateTime.fromISO(values.carryForwardExpirationDate ?? "")}
@@ -444,12 +448,12 @@ const LeaveTypeForm = () => {
               }}
               error={errors?.carryForwardExpirationDate}
               minDate={DateTime.fromObject({
-                year: nextYear,
+                year: currentYear,
                 month: leaveCycle?.startMonth,
                 day: leaveCycle?.startDate
               })}
               maxDate={DateTime.fromObject({
-                year: nextYear,
+                year: currentYear,
                 month: leaveCycle?.endMonth,
                 day: leaveCycle?.endDate
               })}
