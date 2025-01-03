@@ -29,16 +29,18 @@ const useUserBulkConvert = () => {
               ?.map((team: string) => team?.trim())
           : null;
 
-        const jobFamilyObject = jobRoleList?.find(
-          (jobFamilyItem) =>
+        const jobFamilyObject = jobRoleList?.find((jobFamilyItem) => {
+          return (
             jobFamilyItem?.name?.toLowerCase() ===
-            (user?.jobRoleId as string)?.toLowerCase()
-        );
+            (user?.jobFamilyId as string)?.toLowerCase()
+          );
+        });
+
         const jobTitleObject = jobFamilyObject
           ? jobFamilyObject?.jobTitles?.find(
               (jobLevelItem: { name: string }) =>
                 jobLevelItem?.name?.toLocaleLowerCase() ===
-                (user?.jobLevelId as string)?.toLowerCase()
+                (user?.jobTitleId as string)?.toLowerCase()
             )
           : undefined;
 
@@ -116,8 +118,8 @@ const useUserBulkConvert = () => {
             isPrimary: true
           },
           employeeProgression: {
-            employeeType: user?.contractType
-              ? (user?.contractType?.toUpperCase() as EmploymentTypes)
+            employeeType: user?.employeeType
+              ? (user?.employeeType?.toUpperCase() as EmploymentTypes)
               : null,
             jobFamilyId: jobFamilyObject ? jobFamilyObject?.jobFamilyId : null,
             jobTitleId: jobTitleObject ? jobTitleObject?.jobTitleId : null,

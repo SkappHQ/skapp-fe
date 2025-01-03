@@ -47,9 +47,9 @@ export interface BulkUploadUser {
   startDate: string | null;
   endDate: string | null;
   timeZone: string | null;
-  contractType: string | null;
-  jobRoleId: number | string | null;
-  jobLevelId: number | string | null;
+  employeeType: string | null;
+  jobFamilyId: number | string | null;
+  jobTitleId: number | string | null;
   ssn: string | null;
   ethnicity: string | null;
   eeo: string | null;
