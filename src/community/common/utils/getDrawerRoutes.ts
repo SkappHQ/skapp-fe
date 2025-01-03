@@ -90,8 +90,22 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
               hasSubTree: false
             };
           }
+        }
+      }
 
-          return;
+      if (route.name === "Settings") {
+        const isEmployee = userRoles?.every((role) =>
+          Object.values(EmployeeTypes).includes(role as EmployeeTypes)
+        );
+
+        if (isEmployee) {
+          return {
+            id: route.id,
+            name: route.name,
+            url: ROUTES.SETTINGS.ACCOUNT,
+            icon: route.icon,
+            hasSubTree: false
+          };
         }
       }
 
