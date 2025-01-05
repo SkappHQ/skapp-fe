@@ -49,10 +49,16 @@ function MyApp({
         ? isProdMaintenanceMode
         : isNonProdMaintenanceMode;
 
+    console.log("---------------");
+    console.log(isMaintenanceMode)
+
     const maintenanceRef = ref(database, isMaintenanceMode);
 
     const unsubscribe = onValue(maintenanceRef, (snapshot) => {
       const isMaintenanceMode = snapshot.val();
+
+      console.log("+++++++++++++");
+      console.log(isMaintenanceMode);
 
       if (
         isMaintenanceMode === true &&
