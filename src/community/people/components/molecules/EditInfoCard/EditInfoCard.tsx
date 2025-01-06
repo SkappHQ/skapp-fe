@@ -23,10 +23,7 @@ import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMen
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import {
-  AdminTypes,
-  ROLE_SUPER_ADMIN
-} from "~community/common/types/AuthTypes";
+import { AdminTypes } from "~community/common/types/AuthTypes";
 import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
