@@ -87,7 +87,7 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
         </Box>
       </Stack>
       <Stack sx={classes.stackContainer}>
-        {tableData?.items?.length === 0 ? (
+        {tableData === undefined || tableData?.items.length === 0 ? (
           <Box sx={classes.emptyScreenContainer}>
             <TableEmptyScreen
               title={translateText(["emptyScreen", "title"], {
@@ -158,47 +158,48 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           </>
         )}
       </Stack>
-      <Stack sx={classes.paginationContainer}>
-        <Divider sx={classes.divider} />
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          {(tableData?.totalPages ?? 0) > 1 ? (
+      {tableData !== undefined && tableData?.items.length ? (
+        <Stack sx={classes.paginationContainer}>
+          <Divider sx={classes.divider} />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Pagination
               totalPages={tableData?.totalPages ?? 0}
               currentPage={page - 1}
               onChange={(_event, value) => setPage(value)}
             />
-          ) : (
-            <Box></Box>
-          )}
-          <Button
-            buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
-            label={translateText(["exportBtnTxt"])}
-            endIcon={
-              <Icon
-                name={IconName.DOWNLOAD_ICON}
-                fill={
-                  tableData?.items?.length === 0
-                    ? theme.palette.grey[800]
-                    : theme.palette.common.black
-                }
-              />
-            }
-            isFullWidth={false}
-            styles={classes.buttonStyles}
-            disabled={tableData?.items?.length === 0}
-            onClick={() =>
-              exportLeaveBulkList(
-                tableData?.items ?? [],
-                leaveEntitlementTableSelectedYear
-              )
-            }
-          />
+
+            <Button
+              buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+              label={translateText(["exportBtnTxt"])}
+              endIcon={
+                <Icon
+                  name={IconName.DOWNLOAD_ICON}
+                  fill={
+                    tableData?.items?.length === 0
+                      ? theme.palette.grey[800]
+                      : theme.palette.common.black
+                  }
+                />
+              }
+              isFullWidth={false}
+              styles={classes.buttonStyles}
+              disabled={tableData?.items?.length === 0}
+              onClick={() =>
+                exportLeaveBulkList(
+                  tableData?.items ?? [],
+                  leaveEntitlementTableSelectedYear
+                )
+              }
+            />
+          </Stack>
         </Stack>
-      </Stack>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
