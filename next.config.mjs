@@ -217,7 +217,31 @@ const nextConfig = {
       {
         source: "/forget-password",
         destination: "/enterprise/forget-password"
-      }
+      },
+      {
+        source: "/maintenance",
+        destination: "/enterprise/maintenance"
+      },
+      {
+        source: "/documents/inbox",
+        destination: "/enterprise/documents/inbox"
+      },
+      {
+        source: "/documents/sent",
+        destination: "/enterprise/documents/sent"
+      },
+      {
+        source: "/documents/contacts",
+        destination: "/enterprise/documents/contacts"
+      },
+      {
+        source: "/documents/folder",
+        destination: "/enterprise/documents/folder"
+      },
+      {
+        source: "/documents/create",
+        destination: "/enterprise/documents/create"
+      },
     ];
   },
   eslint: {

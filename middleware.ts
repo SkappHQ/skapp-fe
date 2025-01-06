@@ -25,7 +25,12 @@ const superAdminRoutes = {
   [ROLE_SUPER_ADMIN]: [
     ROUTES.ORGANIZATION.SETUP,
     ROUTES.CONFIGURATIONS.BASE,
-    ROUTES.SETTINGS.BILLING
+    ROUTES.SETTINGS.BILLING,
+    ROUTES.DOCUMENTS.CONTACTS,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
+    ROUTES.DOCUMENTS.FOLDERS,
+    ROUTES.DOCUMENTS.INBOX,
+    ROUTES.DOCUMENTS.SENT
   ]
 };
 
@@ -150,6 +155,7 @@ export const config = {
     // Module routes
     "/leave/:path*",
     "/people/:path*",
-    "/timesheet/:path*"
+    "/timesheet/:path*",
+    "/documents/:path*"
   ]
 };

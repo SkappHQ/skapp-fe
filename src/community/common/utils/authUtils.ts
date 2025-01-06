@@ -5,7 +5,8 @@ import ROUTES from "../constants/routes";
 export const IsProtectedUrl = (asPath: string): boolean => {
   const drawerHiddenProtectedRoutes = [
     ROUTES.ORGANIZATION.SETUP,
-    ROUTES.AUTH.RESET_PASSWORD
+    ROUTES.AUTH.RESET_PASSWORD,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT
   ];
 
   const protectedPaths = config.matcher
