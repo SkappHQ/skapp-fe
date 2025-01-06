@@ -470,7 +470,7 @@
     "leaveCarryForwardModalConfirmSyncBtn": "Continue and sync",
     "leaveCarryForwardModalConfirmBtn": "Continue",
     "leaveCarryForwardModalCancelBtn": "Cancel",
-    "leaveCarryForwardTypeSelectionModalTitle": "Select Leave Types",
+    "leaveCarryForwardTypeSelectionModalTitle": "Select leave types",
     "leaveCarryForwardTypeSelectionModalDescription": "Please select the leave types that you wish to carry forward to the next leave cycle",
     "leaveCarryForwardBalancePageTitle": "Carry forwarding balances",
     "leaveCarryForwardBallancePageSyncButton": "Sync",
