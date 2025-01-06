@@ -7,6 +7,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Pagination from "~community/common/components/atoms/Pagination/Pagination";
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
+import TableSkeleton from "~community/common/components/molecules/Table/TableSkeleton";
 import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -64,6 +65,10 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
       setHeaderLabels(tableHeaders);
     }
   }, [leaveTypes]);
+
+  if (isFetching) {
+    return <TableSkeleton rows={4} />;
+  }
 
   return (
     <>
@@ -160,17 +165,31 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Pagination
-            totalPages={tableData?.totalPages ?? 0}
-            currentPage={page - 1}
-            onChange={(_event, value) => setPage(value)}
-          />
+          {(tableData?.totalPages ?? 0) > 1 ? (
+            <Pagination
+              totalPages={tableData?.totalPages ?? 0}
+              currentPage={page - 1}
+              onChange={(_event, value) => setPage(value)}
+            />
+          ) : (
+            <Box></Box>
+          )}
           <Button
             buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
             label={translateText(["exportBtnTxt"])}
-            endIcon={<Icon name={IconName.DOWNLOAD_ICON} />}
+            endIcon={
+              <Icon
+                name={IconName.DOWNLOAD_ICON}
+                fill={
+                  tableData?.items?.length === 0
+                    ? theme.palette.grey[800]
+                    : theme.palette.common.black
+                }
+              />
+            }
             isFullWidth={false}
             styles={classes.buttonStyles}
+            disabled={tableData?.items?.length === 0}
             onClick={() =>
               exportLeaveBulkList(
                 tableData?.items ?? [],

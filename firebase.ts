@@ -1,4 +1,5 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
+import { Database, getDatabase } from "firebase/database";
 import { getMessaging, getToken, isSupported } from "firebase/messaging";
 
 import { appModes } from "~community/common/constants/configs";
@@ -10,6 +11,17 @@ const app =
       ? initializeApp(firebaseConfig)
       : getApp()
     : undefined;
+
+let database: Database | undefined;
+
+if (typeof window !== "undefined") {
+  database =
+    process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE
+      ? getDatabase(app)
+      : undefined;
+}
+
+export { database };
 
 const messaging = async () => {
   const supported = await isSupported();

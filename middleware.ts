@@ -17,7 +17,10 @@ const commonRoutes = [
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
-  ROUTES.NOTIFICATIONS
+  ROUTES.NOTIFICATIONS,
+  ROUTES.AUTH.VERIFY,
+  ROUTES.AUTH.VERIFY_SUCCESS,
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
 ];
 
 // Specific role-based routes
@@ -59,7 +62,11 @@ const managerRoutes = {
 };
 
 const employeeRoutes = {
-  [EmployeeTypes.PEOPLE_EMPLOYEE]: [ROUTES.PEOPLE.DIRECTORY, ...commonRoutes],
+  [EmployeeTypes.PEOPLE_EMPLOYEE]: [
+    ROUTES.PEOPLE.DIRECTORY,
+    ROUTES.PEOPLE.INDIVIDUAL,
+    ...commonRoutes
+  ],
   [EmployeeTypes.LEAVE_EMPLOYEE]: [ROUTES.LEAVE.MY_REQUESTS, ...commonRoutes],
   [EmployeeTypes.ATTENDANCE_EMPLOYEE]: [
     ROUTES.TIMESHEET.MY_TIMESHEET,
@@ -152,6 +159,9 @@ export const config = {
     "/account",
     "/reset-password",
     "/unauthorized",
+    "/verify/email",
+    "/verify/success",
+    "/verify/account-reset-password",
     // Module routes
     "/leave/:path*",
     "/people/:path*",

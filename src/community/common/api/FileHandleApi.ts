@@ -19,7 +19,8 @@ export const useUploadImages = () => {
 export const useGetUploadedImage = (
   type?: string,
   file?: string | null,
-  isThumbnail?: boolean
+  isThumbnail?: boolean,
+  enable?: boolean
 ) => {
   return useQuery({
     queryKey: ["download-file", type, file, isThumbnail],
@@ -37,7 +38,7 @@ export const useGetUploadedImage = (
 
       return url;
     },
-    enabled: Boolean(type && file)
+    enabled: Boolean(type && file && enable)
   });
 };
 

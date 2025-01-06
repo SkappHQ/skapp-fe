@@ -9,7 +9,7 @@ import {
   useTheme
 } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -21,6 +21,7 @@ import {
 } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { SettingsModalTypes } from "~community/common/types/SettingsTypes";
+import { useCheckLoginMethod } from "~enterprise/common/api/authApi";
 
 import Button from "../../atoms/Button/Button";
 import NotificationSettings from "../../molecules/NotificationSettinngs/NotificationSettinngs";
@@ -45,6 +46,27 @@ const SettingsSection: FC = () => {
       managerRoles.includes(role as ManagerTypes)
     )
     .some((role) => managerRoles.includes(role));
+
+  const [loginMethod, setLoginMethod] = useState<string>("");
+
+  const { mutate: checkLoginMethod } = useCheckLoginMethod((response) => {
+    setLoginMethod(response.data.results[0]);
+  });
+
+  const getSubDomain = (url: string, multipleValues: boolean = false) => {
+    const subdomain = multipleValues ? url.split(".") : url.split(".")[0];
+    return subdomain;
+  };
+
+  useEffect(() => {
+    const tenant =
+      typeof window !== "undefined"
+        ? getSubDomain(window.location.hostname).toString()
+        : "";
+    if (tenant) {
+      checkLoginMethod(tenant);
+    }
+  }, [checkLoginMethod]);
 
   return (
     <>
@@ -164,27 +186,29 @@ const SettingsSection: FC = () => {
         </>
       )}
 
-      <Box sx={{ py: "1.5rem" }}>
-        <Typography variant="h2" sx={{ pb: "0.75rem" }}>
-          {translatedText(["securitySettingsTitle"])}
-        </Typography>
+      {loginMethod !== "GOOGLE" && (
+        <Box sx={{ py: "1.5rem" }}>
+          <Typography variant="h2" sx={{ pb: "0.75rem" }}>
+            {translatedText(["securitySettingsTitle"])}
+          </Typography>
 
-        <Typography variant="body1">
-          {translatedText(["securitySettingsDescription"])}
-        </Typography>
+          <Typography variant="body1">
+            {translatedText(["securitySettingsDescription"])}
+          </Typography>
 
-        <Button
-          label={translatedText(["resetPasswordButtonText"])}
-          startIcon={IconName.LOCK_ICON}
-          isFullWidth={false}
-          styles={{ mt: "1.25rem", px: "1.75rem" }}
-          buttonStyle={ButtonStyle.TERTIARY}
-          onClick={() => {
-            setModalType(SettingsModalTypes.RESET_PASSWORD);
-            setModalOpen(true);
-          }}
-        />
-      </Box>
+          <Button
+            label={translatedText(["resetPasswordButtonText"])}
+            startIcon={IconName.LOCK_ICON}
+            isFullWidth={false}
+            styles={{ mt: "1.25rem", px: "1.75rem" }}
+            buttonStyle={ButtonStyle.TERTIARY}
+            onClick={() => {
+              setModalType(SettingsModalTypes.RESET_PASSWORD);
+              setModalOpen(true);
+            }}
+          />
+        </Box>
+      )}
     </>
   );
 };

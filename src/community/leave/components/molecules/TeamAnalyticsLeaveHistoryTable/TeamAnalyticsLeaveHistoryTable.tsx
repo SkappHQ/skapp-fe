@@ -220,11 +220,11 @@ const TeamAnalyticsLeaveHistoryTable: FC<Props> = ({
   };
 
   const leaveStatusArray = [
+    LeaveStatusTypes.PENDING,
     LeaveStatusTypes.APPROVED,
     LeaveStatusTypes.DENIED,
-    LeaveStatusTypes.PENDING,
-    LeaveStatusTypes.CANCELLED,
-    LeaveStatusTypes.REVOKED
+    LeaveStatusTypes.REVOKED,
+    LeaveStatusTypes.CANCELLED
   ];
 
   const filterButton = (
@@ -270,7 +270,7 @@ const TeamAnalyticsLeaveHistoryTable: FC<Props> = ({
         {leaveStatusArray.map((leaveStatus) => (
           <Button
             key={leaveStatus}
-            label={leaveStatus}
+            label={pascalCaseFormatter(leaveStatus)}
             isFullWidth={false}
             onClick={() => {
               setFilter((prev) => ({

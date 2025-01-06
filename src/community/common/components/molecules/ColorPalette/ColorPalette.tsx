@@ -50,7 +50,7 @@ const ColorPalette: FC<Props> = ({
   return (
     <Stack sx={mergeSx([classes.wrapper, componentStyle])}>
       <Typography
-        variant="label"
+        component="label"
         sx={{
           color: error
             ? theme.palette.error.contrastText

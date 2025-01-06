@@ -2,7 +2,7 @@ const styles = () => ({
   filterStackStyles: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: "0.5rem"
+    gap: "0.4rem"
   },
   filterChipButtonStyles: {
     p: "0.5rem 0.75rem",

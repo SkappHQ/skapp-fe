@@ -1,6 +1,7 @@
 import { Theme, ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { onValue, ref } from "firebase/database";
 import { SessionProvider } from "next-auth/react";
 import App, { AppContext } from "next/app";
 import { useRouter } from "next/router";
@@ -11,13 +12,19 @@ import { I18nextProvider, useSSR } from "react-i18next";
 import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
 import { appModes } from "~community/common/constants/configs";
+import ROUTES from "~community/common/constants/routes";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
 import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
+import {
+  isNonProdMaintenanceMode,
+  isProdMaintenanceMode
+} from "~enterprise/common/constants/dbKeys";
 import { initializeHotjar } from "~enterprise/common/utils/monitoring";
+import { database } from "~firebase";
 import i18n from "~i18n";
 import "~styles/global.css";
 
@@ -32,6 +39,31 @@ function MyApp({
   const [newTheme, setNewTheme] = useState<Theme>(theme);
   const [queryClient] = useState(() => new QueryClient());
   useSSR(initialI18nStore, initialLanguage);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!database) return;
+
+    const isMaintenanceMode =
+      process.env.NEXT_PUBLIC_ENTERPRISE_MODE === "prod"
+        ? isProdMaintenanceMode
+        : isNonProdMaintenanceMode;
+
+    const maintenanceRef = ref(database, isMaintenanceMode);
+
+    const unsubscribe = onValue(maintenanceRef, (snapshot) => {
+      const isMaintenanceMode = snapshot.val();
+
+      if (
+        isMaintenanceMode === true &&
+        router.pathname !== ROUTES.MAINTENANCE
+      ) {
+        router.push(ROUTES.MAINTENANCE);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   useEffect(() => {
     if (getDataFromLocalStorage("brandingData")) {
