@@ -100,7 +100,8 @@ const SystemPermissionForm = ({
     isSuperAdmin: userRoles.isSuperAdmin || false,
     peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
     leaveRole: userRoles.leaveRole || Role.LEAVE_EMPLOYEE,
-    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE
+    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
+    eSignatureRole: Role.ESIGNATURE_EMPLOYEE
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -128,7 +129,9 @@ const SystemPermissionForm = ({
     leaveManagerLimitExceeded: false,
     attendanceManagerLimitExceeded: false,
     peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false
+    superAdminLimitExceeded: false,
+    eSignatureAdminLimitExceeded: false,
+    eSignatureManagerLimitExceeded: false
   });
 
   const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
@@ -503,6 +506,22 @@ const SystemPermissionForm = ({
             checkSelected
             onChange={(e) =>
               handleCustomChange("attendanceRole", e.target.value)
+            }
+            isDisabled={
+              isProfileView || values.isSuperAdmin || isInputsDisabled
+            }
+          />
+          <DropdownList
+            inputName={"eSignatureRole"}
+            label="E-Signature"
+            itemList={grantablePermission?.attendance || []}
+            value={values.eSignatureRole}
+            componentStyle={{
+              flex: 1
+            }}
+            checkSelected
+            onChange={(e) =>
+              handleCustomChange("eSignatureRole", e.target.value)
             }
             isDisabled={
               isProfileView || values.isSuperAdmin || isInputsDisabled

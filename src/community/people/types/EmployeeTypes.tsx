@@ -410,7 +410,8 @@ export enum Role {
   LEAVE_EMPLOYEE = "LEAVE_EMPLOYEE",
   ATTENDANCE_ADMIN = "ATTENDANCE_ADMIN",
   ATTENDANCE_MANAGER = "ATTENDANCE_MANAGER",
-  ATTENDANCE_EMPLOYEE = "ATTENDANCE_EMPLOYEE"
+  ATTENDANCE_EMPLOYEE = "ATTENDANCE_EMPLOYEE",
+  ESIGNATURE_EMPLOYEE = "ESIGNATURE_EMPLOYEE"
 }
 
 export interface EmployeeRoleType {
@@ -418,6 +419,7 @@ export interface EmployeeRoleType {
   attendanceRole: Role;
   peopleRole: Role;
   leaveRole: Role;
+  eSignatureRole: Role;
 }
 
 export interface EmployeeDataExists {
