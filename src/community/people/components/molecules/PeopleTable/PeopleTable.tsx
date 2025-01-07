@@ -18,10 +18,8 @@ import {
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
-import {
-  useGetAllTeams,
-  useGetSupervisedByMe
-} from "~community/people/api/TeamApi";
+import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { useGetAllTeams } from "~community/people/api/TeamApi";
 import PeopleTableFilterBy from "~community/people/components/molecules/PeopleTable/PeopleTableFilterBy";
 import { usePeopleStore } from "~community/people/store/store";
 import {
@@ -103,7 +101,7 @@ const PeopleTable: FC<Props> = ({
   const { data: teamData, isLoading } = useGetAllTeams();
   const { data: jobFamilyData, isLoading: jobFamilyLoading } =
     useGetAllJobFamilies();
-  const { data: supervisedData } = useGetSupervisedByMe(selectedId ?? 0);
+  const { data: supervisedData } = useGetSupervisedByMe(selectedId as number);
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();

@@ -6,7 +6,10 @@ import {
 } from "@tanstack/react-query";
 
 import authFetch from "~community/common/utils/axiosInterceptor";
-import { teamEndpoints } from "~community/people/api/utils/ApiEndpoints";
+import {
+  peoplesEndpoints,
+  teamEndpoints
+} from "~community/people/api/utils/ApiEndpoints";
 import {
   managerQueryKeys,
   teamQueryKeys
@@ -152,36 +155,3 @@ export const useGetTeamDetailsById = (teamId: number) => {
     }
   });
 };
-
-export const useGetSupervisedByMe = (
-  employeeId: number
-): UseQueryResult<any> => {
-  return useQuery({
-    queryKey: [teamQueryKeys.SUPERVISED_BY_ME, employeeId],
-    queryFn: async () =>
-      await authFetch.get(`/people/${employeeId}/is-supervised-by-me`),
-    select: (data) => data?.data?.results[0],
-    enabled: !!employeeId
-  });
-};
-
-// export const useGetSupervisedByMe = (
-//   employeeId: number
-// ): UseQueryResult<any> => {
-//   return useQuery({
-//     queryKey: [teamQueryKeys.SUPERVISED_BY_ME, employeeId],
-//     queryFn: async () => ({
-//       data: {
-//         results: [
-//           {
-//             isPrimaryManager: true,
-//             isSecondaryManager: false,
-//             isTeamSupervisor: true
-//           }
-//         ]
-//       }
-//     }),
-//     select: (data) => data?.data?.results[0],
-//     enabled: !!employeeId
-//   });
-// };
