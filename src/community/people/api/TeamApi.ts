@@ -6,10 +6,7 @@ import {
 } from "@tanstack/react-query";
 
 import authFetch from "~community/common/utils/axiosInterceptor";
-import {
-  peoplesEndpoints,
-  teamEndpoints
-} from "~community/people/api/utils/ApiEndpoints";
+import { teamEndpoints } from "~community/people/api/utils/ApiEndpoints";
 import {
   managerQueryKeys,
   teamQueryKeys
