@@ -54,7 +54,7 @@ const ColorPalette: FC<Props> = ({
         sx={{
           color: error
             ? theme.palette.error.contrastText
-            : theme.palette.text.secondary
+            : theme.palette.common.black
         }}
       >
         {label}
