@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import UnsavedChangesModal from "~community/common/components/molecules/UnsavedChangesModal/UnsavedChangesModal";
 import Modal from "~community/common/components/organisms/Modal/Modal";
@@ -16,8 +16,12 @@ const ExitModal = () => {
     "unsavedChangesModal"
   );
 
-  const { leaveTypeModalType, setLeaveTypeModalType, resetEditingLeaveType } =
-    useLeaveStore((state) => state);
+  const {
+    leaveTypeModalType,
+    pendingNavigation,
+    setLeaveTypeModalType,
+    resetEditingLeaveType
+  } = useLeaveStore((state) => state);
 
   return (
     <Modal
@@ -38,7 +42,7 @@ const ExitModal = () => {
         }
         onSecondaryBtnClick={async () => {
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE);
-          await router.back();
+          await router.push(pendingNavigation);
           resetEditingLeaveType();
         }}
       />

@@ -24,12 +24,14 @@ const LeaveType: NextPage = () => {
     isLeaveTypeFormDirty,
     isLeaveTypeModalOpen,
     setLeaveTypeModalType,
-    resetEditingLeaveType
+    resetEditingLeaveType,
+    setPendingNavigation
   } = useLeaveStore((state) => state);
 
   useEffect(() => {
-    const handleRouteChangeStart = () => {
+    const handleRouteChangeStart = (url: string) => {
       if (isLeaveTypeFormDirty && !isLeaveTypeModalOpen) {
+        setPendingNavigation(url);
         setLeaveTypeModalType(LeaveTypeModalEnums.UNSAVED_CHANGES_MODAL);
         router.events.emit("routeChangeError");
         throw "routeChange aborted";

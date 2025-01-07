@@ -29,11 +29,13 @@ export interface LeaveTypeSliceType
   extends Pick<
     LeaveStore,
     | "allLeaveTypes"
+    | "pendingNavigation"
     | "isLeaveTypeModalOpen"
     | "leaveTypeModalType"
     | "editingLeaveType"
     | "isLeaveTypeFormDirty"
     | "setAllLeaveTypes"
+    | "setPendingNavigation"
     | "setIsLeaveTypeModalOpen"
     | "setLeaveTypeModalType"
     | "setEditingLeaveType"
