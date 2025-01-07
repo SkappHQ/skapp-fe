@@ -156,7 +156,9 @@ export const employeeDetailsSlice = (
   employeeProfileDetails,
   userRoles,
   isFromPeopleDirectory: false,
+  isLeaveTabVisible: false,
   viewEmployeeId: null,
+  isTimeTabVisible: false,
 
   setEmployeeGeneralDetails: (
     key: string,
@@ -377,5 +379,15 @@ export const employeeDetailsSlice = (
     set((state) => ({
       ...state,
       viewEmployeeId: value
+    })),
+  setIsLeaveTabVisible: (value: boolean) =>
+    set((state) => ({
+      ...state,
+      isLeaveTabVisible: value
+    })),
+  setIsTimeTabVisible: (value: boolean) =>
+    set((state) => ({
+      ...state,
+      isTimeTabVisible: value
     }))
 });

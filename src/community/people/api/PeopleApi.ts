@@ -595,3 +595,15 @@ export const useCheckEmailAndIdentificationNoForQuickAdd = (
     enabled: false
   });
 };
+
+export const useGetSupervisedByMe = (
+  employeeId: number
+): UseQueryResult<any> => {
+  return useQuery({
+    queryKey: [peopleQueryKeys.SUPERVISED_BY_ME, employeeId],
+    queryFn: async () =>
+      await authFetch.get(peoplesEndpoints.SUPERVISED_BY_ME(employeeId)),
+    select: (data) => data?.data?.results[0],
+    enabled: !!employeeId
+  });
+};
