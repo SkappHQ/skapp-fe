@@ -90,6 +90,8 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
               hasSubTree: false
             };
           }
+
+          return;
         }
       }
 

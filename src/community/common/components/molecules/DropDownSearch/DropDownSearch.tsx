@@ -142,8 +142,12 @@ const DropdownSearch: FC<Props> = ({
           component="label"
           lineHeight={1.5}
           sx={{
-            fontWeight: 500,
-            color: error ? theme.palette.error.contrastText : "black",
+            fontWeight: isDisabled ? 400 : 500,
+            color: isDisabled
+              ? theme.palette.grey[700]
+              : error
+                ? theme.palette.error.contrastText
+                : "black",
             mb: "0.5rem"
           }}
         >

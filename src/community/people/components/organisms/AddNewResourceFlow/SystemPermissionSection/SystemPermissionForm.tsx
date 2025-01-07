@@ -357,11 +357,9 @@ const SystemPermissionForm = ({
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
 
-    const peopleRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
-    const leaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
-    const attendanceRole = isChecked
-      ? Role.ATTENDANCE_ADMIN
-      : Role.ATTENDANCE_EMPLOYEE;
+    const peopleRole = Role.PEOPLE_ADMIN;
+    const leaveRole = Role.LEAVE_ADMIN;
+    const attendanceRole = Role.ATTENDANCE_ADMIN;
 
     void setFieldValue("peopleRole", peopleRole);
     void setFieldValue("leaveRole", leaveRole);
@@ -391,11 +389,9 @@ const SystemPermissionForm = ({
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
 
-    const peopleRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
-    const leaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
-    const attendanceRole = isChecked
-      ? Role.ATTENDANCE_ADMIN
-      : Role.ATTENDANCE_EMPLOYEE;
+    const peopleRole = Role.PEOPLE_ADMIN;
+    const leaveRole = Role.LEAVE_ADMIN;
+    const attendanceRole = Role.ATTENDANCE_ADMIN;
 
     void setFieldValue("peopleRole", peopleRole);
     void setFieldValue("leaveRole", leaveRole);

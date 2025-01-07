@@ -103,20 +103,20 @@ const FilterButton = ({
         <Divider />
         <Stack sx={classes.popperFooter}>
           <Button
-            type={ButtonTypes.BUTTON}
-            buttonStyle={ButtonStyle.PRIMARY}
-            label={translateText(["applyBtn"])}
-            styles={classes.popperButtons}
-            onClick={onApplyBtnClick}
-            size={ButtonSizes.MEDIUM}
-          />
-          <Button
             type={ButtonTypes.RESET}
             buttonStyle={ButtonStyle.TERTIARY}
             disabled={isResetBtnDisabled}
             label={translateText(["resetBtn"])}
             styles={classes.popperButtons}
             onClick={onResetBtnClick}
+            size={ButtonSizes.MEDIUM}
+          />
+          <Button
+            type={ButtonTypes.BUTTON}
+            buttonStyle={ButtonStyle.PRIMARY}
+            label={translateText(["applyBtn"])}
+            styles={classes.popperButtons}
+            onClick={onApplyBtnClick}
             size={ButtonSizes.MEDIUM}
           />
         </Stack>
