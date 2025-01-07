@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import useFcmToken from "~enterprise/common/hooks/useFCMToken";
+import useFcmToken from "~community/common/hooks/useFCMToken";
 
 import { appModes } from "../constants/configs";
 import { useCommonStore } from "../stores/commonStore";

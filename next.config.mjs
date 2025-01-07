@@ -1,8 +1,108 @@
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+import fs from 'fs'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
+
+let hasReplaced = false
+
+// Define groups of paths that need to be replaced
+const replacementGroups = {
+  auth: [
+    {
+      community: 'src/community/auth/authOptions.ts',
+      enterprise: 'src/enterprise/auth/authOptions.ts'
+    }
+  ],
+  languages: [
+    {
+      community: 'src/community/common/assets/languages/english/english.ts',
+      enterprise: 'src/enterprise/common/assets/languages/english/english.ts'
+    }
+  ],
+  constants: [
+    {
+      community: 'src/community/common/constants/dbKeys.ts',
+      enterprise: 'src/enterprise/common/constants/dbKeys.ts'
+    }
+  ],
+  utils: [
+    {
+      community: 'src/community/common/utils/monitoring.ts',
+      enterprise: 'src/enterprise/common/utils/monitoring.ts'
+    },
+    {
+      community: 'src/community/common/utils/awsS3ServiceFunctions.ts',
+      enterprise: 'src/enterprise/common/utils/awsS3ServiceFunctions.ts'
+    }
+  ],
+  configs: [
+    {
+      community: 'src/community/common/configs/firebase.ts',
+      enterprise: 'src/enterprise/common/configs/firebase.ts'
+    },
+  ],
+  hooks: [
+    {
+      community: 'src/community/common/hooks/useFCMToken.ts',
+      enterprise: 'src/enterprise/common/hooks/useFCMToken.ts'
+    },
+    {
+      community: 'src/community/common/hooks/useS3Download.ts"',
+      enterprise: 'src/enterprise/common/hooks/useS3Download.ts"'
+    }
+  ],
+  types: [
+    {
+      community: 'src/community/common/types/s3Types.ts',
+      enterprise: 'src/enterprise/common/types/s3Types.ts'
+    },
+  ],
+  apis: [
+    {
+      community: 'src/community/common/api/setDeviceTokenApi.ts',
+      enterprise: 'src/enterprise/common/api/setDeviceTokenApi.ts'
+    },
+    {
+      community: 'src/community/people/api/CheckUserLimitApi.ts',
+      enterprise: 'src/enterprise/people/api/CheckUserLimitApi.ts'
+    },
+  ],
+  components: [
+    {
+      community: 'src/community/people/components/molecules/UserLimitBanner/UserLimitBanner.tsx',
+      enterprise: 'src/enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner.tsx'
+    },
+  ],
+  stores: [
+    {
+      community: 'src/community/people/store/userLimitStore.ts',
+      enterprise: 'src/enterprise/people/store/userLimitStore.ts'
+    },
+  ]
+  // Add more groups as needed
+}
+
+const replaceFile = (communityPath, enterprisePath) => {
+  const fullCommunityPath = join(__dirname, communityPath)
+  const fullEnterprisePath = join(__dirname, enterprisePath)
+  const communityDir = dirname(fullCommunityPath)
+
+  if (fs.existsSync(fullEnterprisePath)) {
+    if (!fs.existsSync(communityDir)) {
+      fs.mkdirSync(communityDir, { recursive: true })
+    }
+    fs.copyFileSync(fullEnterprisePath, fullCommunityPath)
+  }
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
-    const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
     return [
       {
         source: "/welcome",
@@ -223,6 +323,30 @@ const nextConfig = {
         destination: "/enterprise/maintenance"
       }
     ];
+  },
+  webpack: (config) => {
+    config.plugins.push({
+      apply: (compiler) => {
+        compiler.hooks.beforeCompile.tap('ReplaceImplementations', () => { 
+          if (isEnterpriseMode && !hasReplaced) {
+            // Replace only auth and specific other files
+            const groupsToReplace = ['auth', 'languages', 'constants', 'utils', 'configs', 'hooks', 'types', 'apis'] // Add other groups as needed
+            
+            groupsToReplace.forEach(group => {
+              if (replacementGroups[group]) {
+                replacementGroups[group].forEach(({ community, enterprise }) => {
+                  replaceFile(community, enterprise)
+                })
+              }
+            })
+            // Set the flag to prevent further replacements
+            hasReplaced = true
+          }
+        })
+      }
+    })
+
+    return config
   },
   eslint: {
     ignoreDuringBuilds: true

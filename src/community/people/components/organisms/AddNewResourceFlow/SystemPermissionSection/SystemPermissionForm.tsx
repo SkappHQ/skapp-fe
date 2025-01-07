@@ -15,8 +15,10 @@ import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import { appModes } from "~community/common/constants/configs";
 import { systemPermissionFormTestId } from "~community/common/constants/testIds";
 import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
+import { useGetEnvironment } from "~community/common/hooks/useGetEnvironment";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { theme } from "~community/common/theme/theme";
@@ -37,8 +39,6 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 import SystemCredentials from "../../SystemCredentials/SystemCrendetials";
@@ -507,7 +507,7 @@ const SystemPermissionForm = ({
         </Stack>
         {isUpdate &&
           !isInputsDisabled &&
-          environment === ProfileModes.COMMUNITY && <SystemCredentials />}
+          environment === appModes.COMMUNITY && <SystemCredentials />}
 
         {!isInputsDisabled && (
           <Stack

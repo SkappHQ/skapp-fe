@@ -38,7 +38,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".storybook/**/*",
-    "pages/api/health.js"
+    "pages/api/health.js",
+    "next.config.mjs"
   ],
   "exclude": [
     "node_modules",

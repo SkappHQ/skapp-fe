@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { ManagerTypes } from "~community/common/types/CommonTypes";
-import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
+import { useGetUserPersonalDetails } from "~community/people/api/peopleApi";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   BloodGroupTypes,

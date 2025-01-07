@@ -1,7 +1,7 @@
 import S3Client from "aws-sdk/clients/s3";
 import { type NextApiRequest, type NextApiResponse } from "next";
 
-import { RequestBody } from "~enterprise/common/types/s3Types";
+import { RequestBody } from "~community/common/types/s3Types";
 
 const s3Client = new S3Client({
   region: process.env.REGION_NAME,

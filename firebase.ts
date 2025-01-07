@@ -2,8 +2,8 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { Database, getDatabase } from "firebase/database";
 import { getMessaging, getToken, isSupported } from "firebase/messaging";
 
+import { firebaseConfig } from "~community/common/configs/firebase";
 import { appModes } from "~community/common/constants/configs";
-import { firebaseConfig } from "~enterprise/common/configs/firebase";
 
 const app =
   process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE

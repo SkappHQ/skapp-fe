@@ -11,6 +11,7 @@ import {
 import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 
+import { useCheckLoginMethod } from "~community/common/api/authApi";
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -21,7 +22,6 @@ import {
 } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { SettingsModalTypes } from "~community/common/types/SettingsTypes";
-import { useCheckLoginMethod } from "~enterprise/common/api/authApi";
 
 import Button from "../../atoms/Button/Button";
 import NotificationSettings from "../../molecules/NotificationSettinngs/NotificationSettinngs";

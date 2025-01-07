@@ -11,10 +11,13 @@ import DurationSelector from "~community/common/components/molecules/DurationSel
 import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { useGetEnvironment } from "~community/common/hooks/useGetEnvironment";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { FileCategories } from "~community/common/types/s3Types";
+import { uploadFileToS3ByUrl } from "~community/common/utils/awsS3ServiceFunctions";
 import {
   convertToYYYYMMDDFromDateTime,
   currentYear,
@@ -48,10 +51,6 @@ import {
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
 import { useGetAllHolidays } from "~community/people/api/HolidayApi";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { FileCategories } from "~enterprise/common/types/s3Types";
-import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 import styles from "./styles";
 
@@ -240,7 +239,7 @@ const ApplyLeaveModal = () => {
       };
 
       if (attachments && attachments.length > 0) {
-        if (environment === ProfileModes.COMMUNITY) {
+        if (environment === appModes.COMMUNITY) {
           try {
             const uploadPromises = attachments.map((attachment) => {
               if (attachment.file) {

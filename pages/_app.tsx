@@ -12,6 +12,10 @@ import { I18nextProvider, useSSR } from "react-i18next";
 import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
 import { appModes } from "~community/common/constants/configs";
+import {
+  isNonProdMaintenanceMode,
+  isProdMaintenanceMode
+} from "~community/common/constants/dbKeys";
 import ROUTES from "~community/common/constants/routes";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
@@ -19,11 +23,7 @@ import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
-import {
-  isNonProdMaintenanceMode,
-  isProdMaintenanceMode
-} from "~enterprise/common/constants/dbKeys";
-import { initializeHotjar } from "~enterprise/common/utils/monitoring";
+import { initializeHotjar } from "~community/common/utils/monitoring";
 import { database } from "~firebase";
 import i18n from "~i18n";
 import "~styles/global.css";

@@ -9,8 +9,10 @@ import {
 import { rejects } from "assert";
 import { AxiosResponse } from "axios";
 
+import { appModes } from "~community/common/constants/configs";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import useDebounce from "~community/common/hooks/useDebounce";
+import { useGetEnvironment } from "~community/common/hooks/useGetEnvironment";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { BulkUploadResponse } from "~community/common/types/BulkUploadTypes";
@@ -50,8 +52,8 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+
+import { EmployeeRoleLimit } from "../types/EmployeeTypes";
 
 const getBannerData = async (): Promise<number> => {
   const url = peoplesEndpoints.GET_PENDING_EMPLOYEE_COUNT;
@@ -275,7 +277,7 @@ export const useQuickAddEmployeeMutation = () => {
       return response?.data?.results[0] as QuickAddEmployeeResponse;
     },
     onSuccess: (data: QuickAddEmployeeResponse) => {
-      if (environment === ProfileModes.COMMUNITY) {
+      if (environment === appModes.COMMUNITY) {
         setSharedCredentialData(data);
         setDirectoryModalType(DirectoryModalTypes.USER_CREDENTIALS);
       } else {
@@ -594,4 +596,13 @@ export const useCheckEmailAndIdentificationNoForQuickAdd = (
     },
     enabled: false
   });
+};
+
+export const useGetEmployeeRoleLimit = (
+  onSuccess: (response: EmployeeRoleLimit) => void,
+  onError: (error: unknown) => void
+) => {
+  return {
+    mutate: async () => {}
+  };
 };

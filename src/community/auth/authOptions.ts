@@ -9,7 +9,7 @@ import ROUTES from "~community/common/constants/routes";
 import { decodeJWTToken } from "~community/common/utils/authUtils";
 import authFetch from "~community/common/utils/axiosInterceptor";
 
-export const communityAuthOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: "Credentials",

@@ -5,7 +5,7 @@ import {
   RequestBody,
   S3ActionTypes,
   S3SignedUrlActions
-} from "~enterprise/common/types/s3Types";
+} from "~community/common/types/s3Types";
 
 const s3 = new S3({
   region: process.env.REGION_NAME,

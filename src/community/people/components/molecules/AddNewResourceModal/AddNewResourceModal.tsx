@@ -15,26 +15,26 @@ import {
   ButtonStyle,
   ToastType
 } from "~community/common/enums/ComponentEnums";
+import { useGetEnvironment } from "~community/common/hooks/useGetEnvironment";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
 import { useGetAllowedGrantablePermissions } from "~community/configurations/api/userRolesApi";
+import { useGetGlobalLoginMethod } from "~community/people/api/GlobalLoginMethodApi";
 import {
   useCheckEmailAndIdentificationNoForQuickAdd,
+  useGetEmployeeRoleLimit,
   useQuickAddEmployeeMutation
 } from "~community/people/api/PeopleApi";
 import { usePeopleStore } from "~community/people/store/store";
 import {
+  EmployeeRoleLimit,
   QuickAddEmployeePayload,
   Role
 } from "~community/people/types/EmployeeTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
-import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
-import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
-import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();

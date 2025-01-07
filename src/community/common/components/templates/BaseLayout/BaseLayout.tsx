@@ -3,17 +3,17 @@ import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 
 import TimeWidgetPopupController from "~community/attendance/components/organisms/TimeWidgetPopupController/TimeWidgetPopupController";
+import { setDeviceToken } from "~community/common/api/setDeviceTokenApi";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import AppBar from "~community/common/components/organisms/AppBar/AppBar";
 import Drawer from "~community/common/components/organisms/Drawer/Drawer";
+import useFcmToken from "~community/common/hooks/useFCMToken";
 import {
   initialState,
   useToast
 } from "~community/common/providers/ToastProvider";
 import { IsProtectedUrl } from "~community/common/utils/authUtils";
 import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
-import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
-import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 
 import styles from "./styles";
 

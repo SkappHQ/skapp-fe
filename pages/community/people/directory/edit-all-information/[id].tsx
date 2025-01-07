@@ -9,12 +9,19 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
+import { useGetEnvironment } from "~community/common/hooks/useGetEnvironment";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { EditAllInfoErrorTypes } from "~community/common/types/ErrorTypes";
+import { FileCategories } from "~community/common/types/s3Types";
+import {
+  deleteFileFromS3,
+  uploadFileToS3ByUrl
+} from "~community/common/utils/awsS3ServiceFunctions";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
 import { useHandleEditNewResource } from "~community/people/api/PeopleApi";
 import DiscardChangeApprovalModal from "~community/people/components/molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
@@ -45,13 +52,6 @@ import {
   contractStates
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
-import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { FileCategories } from "~enterprise/common/types/s3Types";
-import {
-  deleteFileFromS3,
-  uploadFileToS3ByUrl
-} from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
@@ -326,7 +326,7 @@ const EditAllInformation: NextPage = () => {
       try {
         setHasUploadStarted(true);
 
-        if (environment === ProfileModes.COMMUNITY) {
+        if (environment === appModes.COMMUNITY) {
           const formData = new FormData();
           formData.append("file", employeeGeneralDetails?.authPic[0]);
 

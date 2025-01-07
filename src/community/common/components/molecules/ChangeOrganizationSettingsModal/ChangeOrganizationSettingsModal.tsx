@@ -17,8 +17,8 @@ import { IconName } from "~community/common/types/IconTypes";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
 import { generateTimezoneList } from "~community/common/utils/dateTimeUtils";
 import { organizationSetupValidation } from "~community/common/utils/validation";
+import { useGetGlobalLoginMethod } from "~community/people/api/GlobalLoginMethodApi";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
-import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 
 import Button from "../../atoms/Button/Button";
 import Icon from "../../atoms/Icon/Icon";
