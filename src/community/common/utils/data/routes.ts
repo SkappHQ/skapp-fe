@@ -228,6 +228,44 @@ const routes = [
     ]
   },
   {
+    id: "6",
+    name: "Documents",
+    url: ROUTES.DOCUMENTS.BASE,
+    icon: IconName.DOCUMENTS_ICON,
+    hasSubTree: true,
+    requiredAuthLevel: [AdminTypes.SUPER_ADMIN, EmployeeTypes.PEOPLE_EMPLOYEE],
+    subTree: [
+      {
+        id: "6A",
+        name: "Inbox",
+        url: ROUTES.DOCUMENTS.INBOX,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
+      },
+      {
+        id: "6B",
+        name: "Sent",
+        url: ROUTES.DOCUMENTS.SENT,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
+      },
+      {
+        id: "6B",
+        name: "Folders",
+        url: ROUTES.DOCUMENTS.FOLDERS,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
+      },
+      {
+        id: "6B",
+        name: "Contacts",
+        url: ROUTES.DOCUMENTS.CONTACTS,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
+      }
+    ]
+  },
+  {
     id: "5",
     name: "Settings",
     url: ROUTES.SETTINGS.BASE,

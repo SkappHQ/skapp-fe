@@ -46,7 +46,9 @@ const AddNewResourceModal = () => {
     leaveManagerLimitExceeded: false,
     attendanceManagerLimitExceeded: false,
     peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false
+    superAdminLimitExceeded: false,
+    eSignatureAdminLimitExceeded: false,
+    eSignatureManagerLimitExceeded: false
   });
 
   const translateText = useTranslator(
@@ -83,7 +85,8 @@ const AddNewResourceModal = () => {
     isSuperAdmin: false,
     peopleRole: Role.PEOPLE_EMPLOYEE,
     leaveRole: Role.LEAVE_EMPLOYEE,
-    attendanceRole: Role.ATTENDANCE_EMPLOYEE
+    attendanceRole: Role.ATTENDANCE_EMPLOYEE,
+    eSignature: Role.ESIGNATURE_EMPLOYEE
   };
 
   const { mutate } = useQuickAddEmployeeMutation();
@@ -96,7 +99,8 @@ const AddNewResourceModal = () => {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
         peopleRole: values.peopleRole,
-        leaveRole: values.leaveRole
+        leaveRole: values.leaveRole,
+        eSignatureRole: values.eSignature
       }
     };
 
@@ -510,6 +514,38 @@ const AddNewResourceModal = () => {
                 inputName={"attendanceRole"}
                 itemList={grantablePermission?.attendance || []}
                 value={values.attendanceRole}
+                componentStyle={{
+                  width: "200px",
+                  borderRadius: "100px",
+                  height: "50px"
+                }}
+                paperStyles={{
+                  width: "200px",
+                  borderRadius: "100px"
+                }}
+                onChange={(e) =>
+                  handleRoleChange(e.target.name, e.target.value)
+                }
+                isDisabled={values.isSuperAdmin}
+              />
+            </Stack>
+
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <Typography
+                sx={{
+                  fontWeight: "500"
+                }}
+              >
+                {permissionTexts(["eSignature"])}
+              </Typography>
+              <DropdownList
+                inputName={"eSignatureRole"}
+                itemList={grantablePermission?.attendance || []}
+                value={values.eSignature}
                 componentStyle={{
                   width: "200px",
                   borderRadius: "100px",

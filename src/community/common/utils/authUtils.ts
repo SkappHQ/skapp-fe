@@ -6,6 +6,7 @@ export const IsProtectedUrl = (asPath: string): boolean => {
   const drawerHiddenProtectedRoutes = [
     ROUTES.ORGANIZATION.SETUP,
     ROUTES.AUTH.RESET_PASSWORD,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD

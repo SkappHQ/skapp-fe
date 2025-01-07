@@ -6,6 +6,7 @@ import TimeWidgetPopupController from "~community/attendance/components/organism
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import AppBar from "~community/common/components/organisms/AppBar/AppBar";
 import Drawer from "~community/common/components/organisms/Drawer/Drawer";
+import ROUTES from "~community/common/constants/routes";
 import {
   initialState,
   useToast
@@ -48,7 +49,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
     }
   }, [isProtected, token]);
 
-  if (isProtected) {
+  if (isProtected && asPath !== ROUTES.DOCUMENTS.CREATE_DOCUMENT) {
     return (
       <>
         <Stack sx={classes.protectedWrapper}>
