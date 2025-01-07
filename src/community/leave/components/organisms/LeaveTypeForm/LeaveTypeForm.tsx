@@ -123,7 +123,10 @@ const LeaveTypeForm = () => {
       colorCode: editingLeaveType?.colorCode,
       calculationType: editingLeaveType?.calculationType,
       leaveDuration: editingLeaveType?.leaveDuration ?? LeaveDurationTypes.NONE,
-      maxCarryForwardDays: editingLeaveType?.maxCarryForwardDays,
+      maxCarryForwardDays:
+        editingLeaveType?.maxCarryForwardDays === 0
+          ? undefined
+          : editingLeaveType?.maxCarryForwardDays,
       carryForwardExpirationDays: editingLeaveType?.carryForwardExpirationDays,
       carryForwardExpirationDate: editingLeaveType?.carryForwardExpirationDate,
       isAttachment: editingLeaveType?.isAttachment,

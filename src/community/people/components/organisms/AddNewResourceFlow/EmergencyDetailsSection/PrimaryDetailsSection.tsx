@@ -108,16 +108,18 @@ const PrimaryDetailsSection = forwardRef<RefCallback, Props>(
       setEmployeePrimaryEmergencyContactDetails("countryCode", countryCode);
     };
 
-    useEffect(() => {
-      setEmployeePrimaryEmergencyContactDetails("countryCode", countryCode);
-    }, []);
-
     const handlePhoneNumber = async (
       phone: ChangeEvent<HTMLInputElement>
     ): Promise<void> => {
       await setFieldValue("phone", phone.target.value);
       setFieldError("phone", "");
       setEmployeePrimaryEmergencyContactDetails("phone", phone.target.value);
+      if (
+        !employeeEmergencyContactDetails?.primaryEmergencyContact?.countryCode
+      ) {
+        setFieldValue("countryCode", countryCode);
+        setEmployeePrimaryEmergencyContactDetails("countryCode", countryCode);
+      }
     };
 
     useEffect(() => {

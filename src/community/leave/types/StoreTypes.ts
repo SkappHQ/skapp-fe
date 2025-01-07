@@ -39,6 +39,7 @@ interface actionsTypes {
   setLeaveTypeModalType: (value: LeaveTypeModalEnums) => void;
   setLeaveTypeFormDirty: (value: boolean) => void;
   resetEditingLeaveType: () => void;
+  setPendingNavigation: (value: string) => void;
 
   //leaveAllocationSlice
   setIsLeaveAllocationModalOpen: (isOpen: boolean) => void;
@@ -133,6 +134,7 @@ export interface LeaveStore extends actionsTypes {
   leaveTypeModalType: LeaveTypeModalEnums;
   editingLeaveType: LeaveTypeType;
   isLeaveTypeFormDirty: boolean;
+  pendingNavigation: string;
 
   //leaveAllocationSlice
   isLeaveAllocationModalOpen: boolean;

@@ -15,8 +15,8 @@
     "filterButton": {
       "placeholder": "Filter",
       "allChip": "All",
-      "applyBtn": "Apply",
-      "resetBtn": "Reset Filters"
+      "applyBtn": "Apply filters",
+      "resetBtn": "Reset filters"
     },
     "advanceFilter": {
       "placeholder": "Filters",
