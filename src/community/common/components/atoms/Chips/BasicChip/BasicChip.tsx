@@ -68,7 +68,11 @@ const BasicChip: FC<Props> = ({
         data-testid={dataTestId}
         label={
           isBelow1350 && isResponsive
-            ? `${label?.split(" ")[0]}  ${label?.split(" ")[1]}`
+            ? label
+                ?.split(" ")
+                .slice(0, 2)
+                .filter((word) => word !== undefined)
+                .join(" ")
             : label
         }
         sx={mergeSx([classes.chipContainer, chipStyles])}

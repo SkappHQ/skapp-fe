@@ -95,7 +95,9 @@ const EditAllInformation: NextPage = () => {
     employeeVisaDetails,
     employeeDataChanges,
     userRoles,
-    setEmployeeGeneralDetails
+    setEmployeeGeneralDetails,
+    isLeaveTabVisible,
+    isTimeTabVisible
   } = usePeopleStore((state) => state);
 
   const { id, tab } = router.query;
@@ -146,8 +148,8 @@ const EditAllInformation: NextPage = () => {
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
     translateText(["editAllInfo", "timeline"]),
-    translateText(["editAllInfo", "leave"]),
-    translateText(["editAllInfo", "timesheet"])
+    ...(isLeaveTabVisible ? [translateText(["editAllInfo", "leave"])] : []),
+    ...(isTimeTabVisible ? [translateText(["editAllInfo", "timesheet"])] : [])
   ];
 
   const setSuperAdminIncompleteToasts = () => {

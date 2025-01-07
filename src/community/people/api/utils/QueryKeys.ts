@@ -68,7 +68,8 @@ export const teamQueryKeys = {
     return [...(this?.all || []), "getSearchedTeams", searchedTeams].filter(
       (val) => val !== undefined
     );
-  }
+  },
+  SUPERVISED_BY_ME: ["supervised-by-me"]
 };
 
 export const jobFamilyQueryKeys = {

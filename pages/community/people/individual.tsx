@@ -43,7 +43,8 @@ const Individual: NextPage = () => {
     EditAllInformationType.personal
   );
 
-  const { viewEmployeeId } = usePeopleStore((state) => state);
+  const { viewEmployeeId, isLeaveTabVisible, isTimeTabVisible } =
+    usePeopleStore((state) => state);
 
   const {
     employee,
@@ -62,10 +63,8 @@ const Individual: NextPage = () => {
   const steps = [
     translateText(["editAllInfo", "personal"]),
     translateText(["editAllInfo", "employment"]),
-    ...(isLeaveManager ? [translateText(["editAllInfo", "leave"])] : []),
-    ...(isAttendanceManager
-      ? [translateText(["editAllInfo", "timesheet"])]
-      : [])
+    ...(isLeaveTabVisible ? [translateText(["editAllInfo", "leave"])] : []),
+    ...(isTimeTabVisible ? [translateText(["editAllInfo", "timesheet"])] : [])
   ];
 
   const getComponent = useCallback(() => {

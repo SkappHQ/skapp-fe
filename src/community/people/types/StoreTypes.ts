@@ -201,6 +201,8 @@ interface actionsTypes {
   setUserRoles: (key: keyof EmployeeRoleType, value: Role | boolean) => void;
   setIsFromPeopleDirectory: (value: boolean) => void;
   setViewEmployeeId: (value: number) => void;
+  setIsLeaveTabVisible: (value: boolean) => void;
+  setIsTimeTabVisible: (value: boolean) => void;
 
   //projectTeamModalSlice
   setProjectTeamsModalOpen: (value: boolean) => void;
@@ -309,6 +311,8 @@ export interface Store extends actionsTypes {
   employeeProfileDetails: EmployeeProfileDetailsTypes;
   userRoles: EmployeeRoleType;
   isFromPeopleDirectory: boolean;
+  isLeaveTabVisible: boolean;
+  isTimeTabVisible: boolean;
   viewEmployeeId: number | null;
 
   //projectTeamModalSlice
