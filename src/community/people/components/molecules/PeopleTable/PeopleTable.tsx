@@ -26,6 +26,7 @@ import {
   EmployeeDataType,
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
+import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
   GetTeamPreProcessor,
@@ -93,6 +94,7 @@ const PeopleTable: FC<Props> = ({
     setIsFromPeopleDirectory,
     setViewEmployeeId,
     employeeDataParams,
+    setProjectTeamNames,
     setSelectedEmployeeId,
     setIsLeaveTabVisible,
     setIsTimeTabVisible
@@ -267,6 +269,11 @@ const PeopleTable: FC<Props> = ({
         )
     }));
   };
+
+  useEffect(() => {
+    if (!isLoading && teamData)
+      setProjectTeamNames(teamData as TeamNamesType[]);
+  }, [isLoading, teamData]);
 
   useEffect(() => {
     if (isLeaveAdmin) {
