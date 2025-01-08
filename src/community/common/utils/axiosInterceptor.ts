@@ -1,5 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
+
+import { COMMON_ERROR_TOKEN_EXPIRED } from "~enterprise/common/constants/errorKeys";
 
 import { getApiUrl } from "./getConstants";
 
@@ -46,6 +48,11 @@ authFetch.interceptors.response.use(
   },
 
   async (error) => {
+    if (
+      error.response.data.results[0].messageKey === COMMON_ERROR_TOKEN_EXPIRED
+    ) {
+      await signOut();
+    }
     return await Promise.reject(error);
   }
 );

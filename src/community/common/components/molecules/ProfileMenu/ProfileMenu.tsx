@@ -46,7 +46,12 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   };
 
   const handleSignOut = async () => {
-    await signOut({ redirect: true });
+    const tenant = window.location.host.split(".")[0];
+    const data = await signOut({
+      redirect: false,
+      callbackUrl: `/signin?tenantId=${tenant}`
+    });
+    router.push(data.url);
   };
 
   return (
