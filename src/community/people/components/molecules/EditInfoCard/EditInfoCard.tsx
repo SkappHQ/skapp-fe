@@ -418,10 +418,10 @@ const EditInfoCard = ({
                     color: "common.black",
                     fontWeight: 400,
                     fontSize: "0.75rem",
-                    lineHeight: "1rem",
                     padding: "0.25rem 0.5rem",
                     backgroundColor: theme.palette.grey[200],
-                    borderRadius: "4rem"
+                    borderRadius: "4rem",
+                    marginBottom: "0.1rem"
                   }}
                 />
               </Stack>
