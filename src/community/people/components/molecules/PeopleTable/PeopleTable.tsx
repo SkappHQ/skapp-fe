@@ -69,7 +69,7 @@ const PeopleTable: FC<Props> = ({
     AdminTypes.ATTENDANCE_ADMIN
   );
   const isAttendanceManager = data?.user.roles?.includes(
-    ManagerTypes.LEAVE_MANAGER
+    ManagerTypes.ATTENDANCE_MANAGER
   );
 
   const [sortOpen, setSortOpen] = useState<boolean>(false);
