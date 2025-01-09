@@ -376,11 +376,8 @@ const useGetEmployee = ({ id }: GetEmployeeParams) => {
     setUserRoles("leaveRole", employee.userRoles?.leaveRole);
   };
 
-  // console.log("employee ", employee);
   const setEmployeeData = () => {
     if (!employee) return;
-    // console.log("setEmployeeData ", employee);
-
     setSelectedEmployeeGeneralDetails(employee);
     setSelectedEmployeeContactDetails(employee);
     setSelectedEmployeeFamilyDetails(employee);
