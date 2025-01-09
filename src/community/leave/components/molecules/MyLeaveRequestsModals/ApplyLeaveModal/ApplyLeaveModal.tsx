@@ -372,7 +372,7 @@ const ApplyLeaveModal = () => {
                 : undefined
             }
             onIconClick={() => {
-              process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+              process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
               usedStoragePercentage >= NINETY_PERCENT
                 ? setToastMessage({
                     open: true,
