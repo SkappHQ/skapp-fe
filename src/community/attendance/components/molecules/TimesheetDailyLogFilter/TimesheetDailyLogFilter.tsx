@@ -28,7 +28,10 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import SortRow from "~community/common/components/atoms/SortRow/SortRow";
 import Popper from "~community/common/components/molecules/Popper/Popper";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
@@ -283,9 +286,10 @@ const TimesheetDailyLogFilter = ({
           )}
       </Stack>
       <Button
+        isFullWidth={false}
         label={selectedOptionName}
-        buttonStyle={ButtonStyle.TERTIARY}
-        styles={classes.selectButtonStyles}
+        buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+        size={ButtonSizes.SMALL}
         endIcon={IconName.DROPDOWN_ARROW_ICON}
         onClick={(event: MouseEvent<HTMLElement>) => {
           setAnchorElDropdown(event.currentTarget);
