@@ -27,7 +27,7 @@ const UnsavedTimeConfigChangesModal: React.FC<
       title={title}
       isClosable={false}
       modalWrapperStyles={{
-        zIndex: ZIndexEnums.MAX
+        zIndex: ZIndexEnums.MODALS
       }}
     >
       <Stack spacing={2}>

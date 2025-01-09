@@ -592,7 +592,7 @@ const EditAllInformation: NextPage = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: ZIndexEnums.MAX
+            zIndex: ZIndexEnums.MODALS
           }}
         >
           <DiscardChangeApprovalModal

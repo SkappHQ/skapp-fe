@@ -6,12 +6,12 @@ export enum ZIndexEnums {
   APP_BAR = 1100,
   POPOVER = 100,
   MEDIUM = 9999,
-  MAX = 99999,
+  MAX = 1300,
   DEFAULT = 1,
   MIN = 0,
   LEVEL_2 = 2,
   MODALS = 1200,
-  POPUP = 99998
+  POPUP = 1300
 }
 
 export enum Modules {

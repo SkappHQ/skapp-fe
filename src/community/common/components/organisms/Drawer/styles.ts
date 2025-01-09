@@ -1,5 +1,7 @@
 import { Theme } from "@mui/material";
 
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
+
 type stylesProps = {
   theme: Theme;
 };
@@ -12,7 +14,7 @@ export const styles = ({ theme }: stylesProps) => ({
     right: { xs: "2.25rem", lg: "-1.3125rem" },
     height: "2.5rem",
     width: "2.5rem",
-    zIndex: 1201,
+    zIndex: ZIndexEnums.MODALS,
     backgroundColor: theme.palette.grey[100],
     borderRadius: "100%",
     border: `0.0625rem solid ${theme.palette.grey[300]}`,
