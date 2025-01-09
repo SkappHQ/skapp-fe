@@ -6,6 +6,7 @@ import { useUpdateOrganizationDetails } from "~community/common/api/settingsApi"
 import ColorInputField from "~community/common/components/molecules/ColorInputField/ColorInputField";
 import DragAndDropField from "~community/common/components/molecules/DragAndDropField/DragAndDropField";
 import Form from "~community/common/components/molecules/Form/Form";
+import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import {
   ButtonStyle,
@@ -16,7 +17,6 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { FileUploadType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
@@ -110,7 +110,7 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
     }
 
     if (companyLogo.length > 0 && companyLogo[0].file) {
-      if (environment === ProfileModes.COMMUNITY) {
+      if (environment === appModes.COMMUNITY) {
         const formData = new FormData();
         formData.append("file", companyLogo[0].file);
         formData.append("type", FileTypes.ORGANIZATION_LOGOS);

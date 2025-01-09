@@ -20,6 +20,7 @@ import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
 import { useGetOrganization } from "~community/common/api/OrganizationCreateApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import { appModes } from "~community/common/constants/configs";
 import { appDrawerTestId } from "~community/common/constants/testIds";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -37,7 +38,6 @@ import { CommonStoreTypes } from "~community/common/types/zustand/StoreTypes";
 import getDrawerRoutes from "~community/common/utils/getDrawerRoutes";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
@@ -86,9 +86,9 @@ const Drawer = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (environment === ProfileModes.COMMUNITY) {
+    if (environment === appModes.COMMUNITY) {
       if (logoUrl) setOrgLogo(logoUrl);
-    } else if (environment === ProfileModes.ENTERPRICE) {
+    } else if (environment === appModes.ENTERPRISE) {
       setOrgLogo(s3FileUrls[organizationLogo]);
     }
   }, [logoUrl, organizationLogo, s3FileUrls, environment]);

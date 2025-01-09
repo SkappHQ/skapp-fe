@@ -20,7 +20,7 @@
     "paths": {
       "~*": ["./src/*"],
       "~community/*": ["./src/community/*"],
-      "~enterprise/*": ["./src/enterprise/*"],
+      "~enterprise/*": ["./src/enterprise/*", "./src/fallback/*"],
       "~styles/*": ["./styles/*"],
       "~public/*": ["./public/*"],
       "~i18n": ["./i18n"],
