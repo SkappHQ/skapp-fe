@@ -137,6 +137,17 @@ export default withAuth(
     );
 
     if (isAllowed) {
+      const isEsignatureModuleAvailable =
+        process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+
+      if (
+        request.nextUrl.pathname.includes(ROUTES.DOCUMENTS.BASE) &&
+        !isEsignatureModuleAvailable
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
       return NextResponse.next();
     }
 
