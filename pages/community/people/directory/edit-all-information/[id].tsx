@@ -97,7 +97,8 @@ const EditAllInformation: NextPage = () => {
     userRoles,
     setEmployeeGeneralDetails,
     isLeaveTabVisible,
-    isTimeTabVisible
+    isTimeTabVisible,
+    resetEmployeeDataChanges
   } = usePeopleStore((state) => state);
 
   const { id, tab } = router.query;
@@ -107,13 +108,15 @@ const EditAllInformation: NextPage = () => {
     isSuccess,
     setEmployeeData,
     refetchEmployeeData,
-    discardEmployeeData
+    discardEmployeeData,
+    resetEmployeeData
   }: {
     employee: EmployeeDetails | undefined;
     isSuccess: boolean;
     setEmployeeData: () => void;
     refetchEmployeeData: () => Promise<void>;
     discardEmployeeData: () => void;
+    resetEmployeeData: () => void;
   } = useGetEmployee({ id: Number(id) });
 
   const { isValuesChanged } = useDetectChange({ id: Number(id) });
@@ -259,6 +262,12 @@ const EditAllInformation: NextPage = () => {
 
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
+  const goBack = () => {
+    resetEmployeeData();
+    resetEmployeeDataChanges();
+    router.back();
+  };
+
   const handleBackBtnClick = () =>
     isValuesChanged() && isSuccess && !isDiscardChangesModal.isModalOpen
       ? setIsDiscardChangesModal({
@@ -266,7 +275,7 @@ const EditAllInformation: NextPage = () => {
           modalType: DiscardTypeEnums.LEAVE_FORM,
           modalOpenedFrom: formType
         })
-      : router.back();
+      : goBack();
 
   const handleCancelBtnClick = () => {
     if (isValuesChanged() && isSuccess) {

@@ -55,10 +55,15 @@ const useGetEmployee = ({ id }: GetEmployeeParams) => {
     if (employee && isRefetchingData) {
       setIsRefetchingData(false);
       resetEmployeeDataChanges();
+    } else if (employee && !isRefetchingData) {
+      setEmployeeData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [employee]);
 
+  useEffect(() => {
+    if (isLoading) resetEmployeeData();
+  }, [isLoading]);
   const setSelectedEmployeeGeneralDetails = (employee: EmployeeDetails) => {
     setEmployeeGeneralDetails("authPic", employee?.authPic);
     setEmployeeGeneralDetails("firstName", employee?.firstName);
@@ -371,8 +376,11 @@ const useGetEmployee = ({ id }: GetEmployeeParams) => {
     setUserRoles("leaveRole", employee.userRoles?.leaveRole);
   };
 
+  // console.log("employee ", employee);
   const setEmployeeData = () => {
     if (!employee) return;
+    // console.log("setEmployeeData ", employee);
+
     setSelectedEmployeeGeneralDetails(employee);
     setSelectedEmployeeContactDetails(employee);
     setSelectedEmployeeFamilyDetails(employee);
@@ -403,7 +411,8 @@ const useGetEmployee = ({ id }: GetEmployeeParams) => {
     isLoading,
     setEmployeeData,
     refetchEmployeeData,
-    discardEmployeeData
+    discardEmployeeData,
+    resetEmployeeData
   };
 };
 
