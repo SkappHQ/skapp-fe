@@ -28,7 +28,12 @@ const superAdminRoutes = {
   [ROLE_SUPER_ADMIN]: [
     ROUTES.ORGANIZATION.SETUP,
     ROUTES.CONFIGURATIONS.BASE,
-    ROUTES.SETTINGS.BILLING
+    ROUTES.SETTINGS.BILLING,
+    ROUTES.DOCUMENTS.CONTACTS,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
+    ROUTES.DOCUMENTS.FOLDERS,
+    ROUTES.DOCUMENTS.INBOX,
+    ROUTES.DOCUMENTS.SENT
   ]
 };
 
@@ -38,6 +43,13 @@ const adminRoutes = {
   [AdminTypes.ATTENDANCE_ADMIN]: [
     ROUTES.TIMESHEET.BASE,
     ROUTES.CONFIGURATIONS.ATTENDANCE
+  ],
+  [AdminTypes.ESIGN_ADMIN]: [
+    ROUTES.DOCUMENTS.CONTACTS,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
+    ROUTES.DOCUMENTS.FOLDERS,
+    ROUTES.DOCUMENTS.INBOX,
+    ROUTES.DOCUMENTS.SENT
   ]
 };
 
@@ -66,7 +78,8 @@ const employeeRoutes = {
   [EmployeeTypes.ATTENDANCE_EMPLOYEE]: [
     ROUTES.TIMESHEET.MY_TIMESHEET,
     ...commonRoutes
-  ]
+  ],
+  [EmployeeTypes.ESIGN_EMPLOYEE]: [ROUTES.DOCUMENTS.INBOX, ...commonRoutes]
 };
 
 // Merging all routes into one allowedRoutes object
@@ -124,6 +137,17 @@ export default withAuth(
     );
 
     if (isAllowed) {
+      const isEsignatureModuleAvailable =
+        process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+
+      if (
+        request.nextUrl.pathname.includes(ROUTES.DOCUMENTS.BASE) &&
+        !isEsignatureModuleAvailable
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
       return NextResponse.next();
     }
 
@@ -160,6 +184,7 @@ export const config = {
     // Module routes
     "/leave/:path*",
     "/people/:path*",
-    "/timesheet/:path*"
+    "/timesheet/:path*",
+    "/documents/:path*"
   ]
 };

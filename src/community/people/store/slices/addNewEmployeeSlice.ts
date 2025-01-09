@@ -133,7 +133,8 @@ const userRoles: EmployeeRoleType = {
   isSuperAdmin: false,
   attendanceRole: Role.ATTENDANCE_EMPLOYEE,
   peopleRole: Role.PEOPLE_EMPLOYEE,
-  leaveRole: Role.LEAVE_EMPLOYEE
+  leaveRole: Role.LEAVE_EMPLOYEE,
+  esignRole: Role.ESIGN_EMPLOYEE
 };
 
 export const employeeDetailsSlice = (

@@ -60,6 +60,7 @@ interface Props {
   customRightContent?: JSX.Element;
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
+  backIcon?: IconName;
 }
 
 const ContentLayout = ({
@@ -81,7 +82,8 @@ const ContentLayout = ({
   dividerStyles,
   customRightContent,
   isTitleHidden = false,
-  isPrimaryBtnLoading = false
+  isPrimaryBtnLoading = false,
+  backIcon = IconName.LEFT_ARROW_ICON
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -176,7 +178,7 @@ const ContentLayout = ({
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
               >
-                <Icon name={IconName.LEFT_ARROW_ICON} />
+                <Icon name={backIcon} />
               </IconButton>
             )}
             {!isTitleHidden && <Typography variant="h1">{title}</Typography>}

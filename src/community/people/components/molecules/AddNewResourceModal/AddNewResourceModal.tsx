@@ -46,7 +46,9 @@ const AddNewResourceModal = () => {
     leaveManagerLimitExceeded: false,
     attendanceManagerLimitExceeded: false,
     peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false
+    superAdminLimitExceeded: false,
+    esignAdminLimitExceeded: false,
+    esignSenderLimitExceeded: false
   });
 
   const translateText = useTranslator(
@@ -83,7 +85,8 @@ const AddNewResourceModal = () => {
     isSuperAdmin: false,
     peopleRole: Role.PEOPLE_EMPLOYEE,
     leaveRole: Role.LEAVE_EMPLOYEE,
-    attendanceRole: Role.ATTENDANCE_EMPLOYEE
+    attendanceRole: Role.ATTENDANCE_EMPLOYEE,
+    esignRole: Role.ESIGN_EMPLOYEE
   };
 
   const { mutate } = useQuickAddEmployeeMutation();
@@ -96,7 +99,8 @@ const AddNewResourceModal = () => {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
         peopleRole: values.peopleRole,
-        leaveRole: values.leaveRole
+        leaveRole: values.leaveRole,
+        esignRole: values.esignRole
       }
     };
 
@@ -307,6 +311,36 @@ const AddNewResourceModal = () => {
       return;
     }
 
+    if (
+      name === "esignRole" &&
+      value === Role.ESIGN_ADMIN &&
+      roleLimits.esignAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["eSignAdminLimitationTitle"]),
+        description: roleLimitationTexts(["eSignAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "esignRole" &&
+      value === Role.ESIGN_SENDER &&
+      roleLimits.esignSenderLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["eSignSenderLimitationTitle"]),
+        description: roleLimitationTexts(["eSignSenderLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
     setFieldValue(name, value);
   };
 
@@ -510,6 +544,38 @@ const AddNewResourceModal = () => {
                 inputName={"attendanceRole"}
                 itemList={grantablePermission?.attendance || []}
                 value={values.attendanceRole}
+                componentStyle={{
+                  width: "200px",
+                  borderRadius: "100px",
+                  height: "50px"
+                }}
+                paperStyles={{
+                  width: "200px",
+                  borderRadius: "100px"
+                }}
+                onChange={(e) =>
+                  handleRoleChange(e.target.name, e.target.value)
+                }
+                isDisabled={values.isSuperAdmin}
+              />
+            </Stack>
+
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <Typography
+                sx={{
+                  fontWeight: "500"
+                }}
+              >
+                {permissionTexts(["eSignature"])}
+              </Typography>
+              <DropdownList
+                inputName={"esignRole"}
+                itemList={grantablePermission?.eSign || []}
+                value={values.esignRole}
                 componentStyle={{
                   width: "200px",
                   borderRadius: "100px",
