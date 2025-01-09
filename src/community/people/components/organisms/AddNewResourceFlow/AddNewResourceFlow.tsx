@@ -8,6 +8,7 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import StepperComponent from "~community/common/components/molecules/Stepper/Stepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { appModes } from "~community/common/constants/configs";
 import ROUTES from "~community/common/constants/routes";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
@@ -22,7 +23,6 @@ import {
   ModifiedFileType
 } from "~community/people/types/AddNewResourceTypes";
 import { DiscardChangeModalType } from "~community/people/types/EditEmployeeInfoTypes";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
@@ -142,7 +142,7 @@ const AddNewResourceFlow = () => {
       employeeGeneralDetails?.authPic?.length > 0
     ) {
       try {
-        if (environment === ProfileModes.COMMUNITY) {
+        if (environment === appModes.COMMUNITY) {
           const formData = new FormData();
           formData.append(
             "file",
