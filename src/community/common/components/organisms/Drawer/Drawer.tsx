@@ -39,7 +39,7 @@ import getDrawerRoutes from "~community/common/utils/getDrawerRoutes";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { useS3Download } from "~enterprise/common/hooks/useS3Download";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import { StyledDrawer } from "./StyledDrawer";
 import { getSelectedDrawerItemColor, styles } from "./styles";

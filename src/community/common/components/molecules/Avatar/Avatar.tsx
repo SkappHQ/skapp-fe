@@ -17,7 +17,7 @@ import { FileTypes } from "~community/common/enums/CommonEnums";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { useS3Download } from "~enterprise/common/hooks/useS3Download";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import styles from "./styles";
 
