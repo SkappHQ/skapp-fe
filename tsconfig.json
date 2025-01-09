@@ -20,12 +20,16 @@
     "paths": {
       "~*": ["./src/*"],
       "~community/*": ["./src/community/*"],
-      "~enterprise/*": ["./src/enterprise/*"],
+      "~enterprise/*": ["./src/enterprise/*", "./src/fallback/fallback.ts"],
       "~styles/*": ["./styles/*"],
       "~public/*": ["./public/*"],
       "~i18n": ["./i18n"],
       "~middleware": ["./middleware"],
-      "~firebase": ["./firebase"]
+      "~firebase": ["./firebase"],
+      "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner": [
+        "./src/enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner.tsx",
+        "./src/fallback/components/fallback.tsx"
+      ]
     },
     "target": "es6",
     "forceConsistentCasingInFileNames": true,
