@@ -1,7 +1,9 @@
+// Configs
 export const firebaseConfig = {};
 
 export const english = {};
 
+// Hooks
 export const useFcmToken = () => {
   const token = null;
 
@@ -10,28 +12,10 @@ export const useFcmToken = () => {
   return { token, resetUnreadCount };
 };
 
-export const setDeviceToken = (fcmToken: string): void => {};
-
 export const useCheckUserLimit = (isEnterpriseMode: boolean) => {
   return {
     data: false,
     isSuccess: true
-  };
-};
-
-interface UserLimitStore {
-  setShowUserLimitBanner: (value: boolean) => void;
-  showUserLimitBanner: boolean;
-  setIsUserLimitExceeded: (value: boolean) => void;
-}
-
-export const useUserLimitStore = (
-  arg0: (state: any) => any
-): UserLimitStore => {
-  return {
-    setShowUserLimitBanner: () => {},
-    showUserLimitBanner: false,
-    setIsUserLimitExceeded: () => {}
   };
 };
 
@@ -62,7 +46,38 @@ export const useGetGlobalLoginMethod = (
   tenantName: string
 ) => {
   return {
-    data: {}
+    data: ""
+  };
+};
+
+export const useGetEmployeeRoleLimit = (
+  onSuccess: (response: EmployeeRoleLimit) => void,
+  onError: (error: unknown) => void
+) => {
+  return {
+    mutate: async () => {}
+  };
+};
+
+// Functions
+export const setDeviceToken = (fcmToken: string): void => {};
+
+export const initializeHotjar = () => {};
+
+// Stores
+interface UserLimitStore {
+  setShowUserLimitBanner: (value: boolean) => void;
+  showUserLimitBanner: boolean;
+  setIsUserLimitExceeded: (value: boolean) => void;
+}
+
+export const useUserLimitStore = (
+  arg0: (state: any) => any
+): UserLimitStore => {
+  return {
+    setShowUserLimitBanner: () => {},
+    showUserLimitBanner: false,
+    setIsUserLimitExceeded: () => {}
   };
 };
 
@@ -76,15 +91,7 @@ export interface EmployeeRoleLimit {
   superAdminLimitExceeded: boolean;
 }
 
-export const useGetEmployeeRoleLimit = (
-  onSuccess: (response: EmployeeRoleLimit) => void,
-  onError: (error: unknown) => void
-) => {
-  return {
-    mutate: async () => {}
-  };
-};
-
+// S3 Related
 export enum FileUrlTypes {
   PROFILE_PICTURE_ATTACHMENTS = "",
   LEAVE_REQUEST_ATTACHMENTS = "",
@@ -136,7 +143,7 @@ export const deleteFileFromS3 = async (filePath: string) => {};
 
 export const getS3FoldersByUrl = (filePath: string) => {};
 
+// Constants
+
 export const isProdMaintenanceMode = "";
 export const isNonProdMaintenanceMode = "";
-
-export const initializeHotjar = () => {};
