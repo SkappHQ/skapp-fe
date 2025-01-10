@@ -1,11 +1,12 @@
 import { AttendanceSlotType } from "~community/attendance/types/attendanceTypes";
 import { pulse } from "~community/attendance/utils/TimerPulseAnimation";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 
 const styles = () => ({
   container: (status: AttendanceSlotType) => ({
     border: "1px solid #D4D4D8",
     borderRadius: "2.1875rem",
-    zIndex: 9995,
+    zIndex: ZIndexEnums.DEFAULT,
     width: "fit-content",
     padding: "0.5rem",
     opacity: status === AttendanceSlotType.READY ? 0.5 : 1,

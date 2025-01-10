@@ -1,3 +1,4 @@
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { StyleProps } from "~community/common/types/CommonTypes";
 
 const styles = (): StyleProps => ({
@@ -18,7 +19,7 @@ const styles = (): StyleProps => ({
     overflow: "hidden",
     display: "flex",
     alignItems: "center",
-    zIndex: 1
+    zIndex: ZIndexEnums.DEFAULT
   }
 });
 

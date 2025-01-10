@@ -130,7 +130,7 @@ const InputPhoneNumber: FC<Props> = ({
             cursor: isDisabled ? "not-allowed" : "pointer"
           }}
           dropdownStyle={{
-            zIndex: ZIndexEnums.MAX,
+            zIndex: ZIndexEnums.DEFAULT,
             position: "absolute"
           }}
         />

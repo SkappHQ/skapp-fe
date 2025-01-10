@@ -7,7 +7,7 @@ const styles = () => ({
   },
   wrapper: {
     outline: "none",
-    zIndex: ZIndexEnums.POPUP
+    zIndex: ZIndexEnums.MODALS
   }
 });
 

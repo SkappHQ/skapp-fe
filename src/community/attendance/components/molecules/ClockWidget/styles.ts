@@ -1,9 +1,11 @@
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
+
 const styles = () => ({
   container: {
     backgroundColor: "grey.100",
     padding: "1rem",
     borderRadius: "3.3125rem",
-    zIndex: 9995,
+    zIndex: ZIndexEnums.DEFAULT,
     width: "fit-content"
   },
   timerContainer: (isDisabled: boolean) => ({

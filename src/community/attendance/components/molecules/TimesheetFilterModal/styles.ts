@@ -7,7 +7,7 @@ const styles = (theme: Theme) => ({
     ".MuiPopper-root": { zIndex: ZIndexEnums.DEFAULT }
   },
   popperStyle: {
-    zIndex: ZIndexEnums.MODALS
+    zIndex: ZIndexEnums.POPOVER
   },
   boxBodyStyle: {
     mt: "0.8125rem !important",

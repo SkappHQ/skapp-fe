@@ -6,7 +6,7 @@ const styles = (theme: Theme) => ({
   stackStyle: {
     cursor: "default",
     width: "100%",
-    zIndex: ZIndexEnums.MEDIUM,
+    zIndex: ZIndexEnums.TOAST,
     position: "fixed",
     top: "1.25rem",
     right: "1.25rem"
