@@ -10,8 +10,7 @@ export enum ZIndexEnums {
   DEFAULT = 1,
   MIN = 0,
   LEVEL_2 = 2,
-  MODALS = 1300,
-  POPUP = 1300
+  MODALS = 1300
 }
 
 export enum Modules {
