@@ -616,9 +616,13 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 />
               ) : isManager || isProfileView ? (
                 <MultiSelectChipInput
-                  chipList={employeeProfileDetails?.teams?.map(
-                    (team) => team?.team?.teamName as string
-                  )}
+                  chipList={
+                    projectTeamList
+                      .filter((project) =>
+                        values.teams.includes(project.value as number)
+                      )
+                      .map((project) => project.label) as string[]
+                  }
                   chipWrapperStyles={{
                     borderWidth: 0
                   }}
