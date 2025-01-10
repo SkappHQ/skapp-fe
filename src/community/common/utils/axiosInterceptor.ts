@@ -1,6 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { getSession, signOut } from "next-auth/react";
 
+import { COMMON_ERROR_TOKEN_EXPIRED } from "../constants/errorMessageKeys";
 import { getApiUrl } from "./getConstants";
 
 const getSubDomain = (url: string, multipleValues: boolean = false) => {
@@ -47,7 +48,7 @@ authFetch.interceptors.response.use(
 
   async (error) => {
     if (
-      error.response.data.results[0].messageKey === "COMMON_ERROR_TOKEN_EXPIRED"
+      error.response.data.results[0].messageKey === COMMON_ERROR_TOKEN_EXPIRED
     ) {
       await signOut();
     }
