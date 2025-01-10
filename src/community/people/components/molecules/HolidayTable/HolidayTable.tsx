@@ -8,7 +8,10 @@ import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import Button from "~community/common/components/atoms/Button/Button";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Table from "~community/common/components/molecules/Table/Table";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
@@ -167,12 +170,7 @@ const HolidayTable: FC<Props> = ({
               : translateText(["deleteAllTitle"])
           }
           buttonStyle={ButtonStyle.SECONDARY}
-          styles={{
-            fontWeight: "400",
-            fontSize: "0.875rem",
-            py: "0.5rem",
-            px: "1rem"
-          }}
+          size={ButtonSizes.MEDIUM}
           startIcon={<DeleteButtonIcon />}
           onClick={handleBulkDelete}
           disabled={isDeleteButtonDisabled()}
