@@ -148,7 +148,7 @@ const ContentLayout = ({
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) && (
             <VersionUpgradeBanner />
           )}
-        {process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+        {process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
           usedStoragePercentage !== undefined &&
           usedStoragePercentage !== null &&
