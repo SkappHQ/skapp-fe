@@ -82,7 +82,7 @@ const FamilyDetailsSection = (props: Props): JSX.Element => {
         relationship:
           getLabelByValue(RelationshipList, member?.relationship) ?? "",
         parentName: member?.parentName,
-        birthDate: member?.birthDate.split("T")[0],
+        birthDate: member?.birthDate?.split("T")?.[0],
         age:
           new Date().getFullYear() - new Date(member?.birthDate).getFullYear()
       };
