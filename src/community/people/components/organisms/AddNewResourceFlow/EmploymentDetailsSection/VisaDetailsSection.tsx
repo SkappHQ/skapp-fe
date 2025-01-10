@@ -1,4 +1,4 @@
-import { Grid2 as Grid, useTheme } from "@mui/material";
+import { Grid2 as Grid } from "@mui/material";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
 import { ChangeEvent, JSX, SyntheticEvent, useEffect, useState } from "react";
@@ -31,7 +31,6 @@ interface Props {
 
 const VisaDetailsSection = (props: Props): JSX.Element => {
   const { isInputsDisabled } = props;
-  const theme = useTheme();
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -68,8 +67,8 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
       return {
         visaType: detail?.visaType,
         issuingCountry: detail?.issuingCountry,
-        issuedDate: detail?.issuedDate.split("T")[0],
-        expirationDate: detail?.expirationDate.split("T")[0]
+        issuedDate: detail?.issuedDate?.split("T")[0],
+        expirationDate: detail?.expirationDate?.split("T")[0]
       };
     });
   };

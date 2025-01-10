@@ -150,7 +150,7 @@ const EditAllInformation: NextPage = () => {
     translateText(["editAllInfo", "emergency"]),
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
-    translateText(["editAllInfo", "timeline"]),
+    // translateText(["editAllInfo", "timeline"]),
     ...(isLeaveTabVisible ? [translateText(["editAllInfo", "leave"])] : []),
     ...(isTimeTabVisible ? [translateText(["editAllInfo", "timesheet"])] : [])
   ];
