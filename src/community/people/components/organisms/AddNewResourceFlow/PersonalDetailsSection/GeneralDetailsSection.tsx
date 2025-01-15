@@ -241,7 +241,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       if (employeeGeneralDetails?.authPic?.length) {
         handleUnSelectPhoto();
       } else if (
-        process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+        process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
         usedStoragePercentage >= NINETY_PERCENT
       ) {
         setToastMessage({

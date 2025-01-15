@@ -13,15 +13,14 @@ import {
   useGetBannerData,
   useGetEmployeeData
 } from "~community/people/api/PeopleApi";
+import EmployeeDataBanner from "~community/people/components/molecules/EmployeeDataBanner/EmployeeDataBanner";
+import PeopleTable from "~community/people/components/molecules/PeopleTable/PeopleTable";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   DataFilterEnums,
   EmployeeDataType,
   EmploymentStatusTypes
 } from "~community/people/types/EmployeeTypes";
-
-import EmployeeDataBanner from "../../molecules/EmployeeDataBanner/EmployeeDataBanner";
-import PeopleTable from "../../molecules/PeopleTable/PeopleTable";
 
 const EmployeeData = () => {
   const translateText = useTranslator("peopleModule", "peoples");
@@ -35,7 +34,7 @@ const EmployeeData = () => {
   const [employeeDataItems, setEmployeeDataItems] = useState<
     EmployeeDataType[]
   >([]);
-  const [isConcatonationDone, setIsConcatonationDone] =
+  const [isConcatenationDone, setIsConcatenationDone] =
     useState<boolean>(false);
 
   const {
@@ -67,11 +66,11 @@ const EmployeeData = () => {
         ?.map((page: any) => page?.items)
         ?.flat();
       setEmployeeDataItems(employeeDataItems);
-      setIsConcatonationDone(true);
+      setIsConcatenationDone(true);
     } else if (isFetching && !isEmployeeDataLoading) {
-      setIsConcatonationDone(true);
+      setIsConcatenationDone(true);
     } else {
-      setIsConcatonationDone(false);
+      setIsConcatenationDone(false);
     }
   }, [
     employeeData,
@@ -121,7 +120,7 @@ const EmployeeData = () => {
       <PeopleTable
         employeeData={employeeDataItems}
         fetchNextPage={fetchNextPage}
-        isFetching={!isConcatonationDone}
+        isFetching={!isConcatenationDone}
         isFetchingNextPage={isFetchingNextPage}
         onSearch={searchTerm?.length > 0}
         hasNextPage={hasNextPage}

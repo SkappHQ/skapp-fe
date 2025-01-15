@@ -226,7 +226,7 @@ const EditInfoCard = ({
         });
       }
     },
-    [storageAvailableData.availableSpace, setEmployeeGeneralDetails]
+    [storageAvailableData?.availableSpace, setEmployeeGeneralDetails]
   );
 
   const { open, getInputProps } = useDropzone({

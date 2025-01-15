@@ -47,6 +47,7 @@ const useGetProfileDetails = () => {
 
   useEffect(() => {
     if (employee && isRefetchingData) {
+      resetEmployeeData();
       setIsRefetchingData(false);
       resetEmployeeDataChanges();
     }

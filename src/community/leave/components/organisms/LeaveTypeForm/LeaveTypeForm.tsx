@@ -148,7 +148,9 @@ const LeaveTypeForm = () => {
   }, [allLeaveTypes, editingLeaveType]);
 
   const onSubmit = () => {
-    const { typeId, emoji: _emoji, ...payload } = values;
+    const { typeId, emoji: _emoji, ...rest } = values;
+
+    const payload = { ...rest, name: rest.name.trim() };
 
     if (slug === LeaveTypeFormTypes.ADD) {
       addLeaveType(payload);
