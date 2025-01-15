@@ -18,7 +18,6 @@ import {
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
-import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import PeopleTableFilterBy from "~community/people/components/molecules/PeopleTable/PeopleTableFilterBy";
 import { usePeopleStore } from "~community/people/store/store";
@@ -64,15 +63,6 @@ const PeopleTable: FC<Props> = ({
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
 
-  const isLeaveAdmin = data?.user.roles?.includes(AdminTypes.LEAVE_ADMIN);
-  const isLeaveManager = data?.user.roles?.includes(ManagerTypes.LEAVE_MANAGER);
-  const isAttendanceAdmin = data?.user.roles?.includes(
-    AdminTypes.ATTENDANCE_ADMIN
-  );
-  const isAttendanceManager = data?.user.roles?.includes(
-    ManagerTypes.ATTENDANCE_MANAGER
-  );
-
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [sortEl, setSortEl] = useState<null | HTMLElement>(null);
@@ -95,15 +85,12 @@ const PeopleTable: FC<Props> = ({
     setViewEmployeeId,
     employeeDataParams,
     setProjectTeamNames,
-    setSelectedEmployeeId,
-    setIsLeaveTabVisible,
-    setIsTimeTabVisible
+    setSelectedEmployeeId
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
   const { data: jobFamilyData, isLoading: jobFamilyLoading } =
     useGetAllJobFamilies();
-  const { data: supervisedData } = useGetSupervisedByMe(selectedId as number);
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();
@@ -275,44 +262,24 @@ const PeopleTable: FC<Props> = ({
       setProjectTeamNames(teamData as TeamNamesType[]);
   }, [isLoading, teamData]);
 
-  useEffect(() => {
-    if (isLeaveAdmin) {
-      setIsLeaveTabVisible(true);
-    } else if (selectedId && supervisedData && isLeaveManager) {
-      const isManager =
-        supervisedData.isPrimaryManager ||
-        supervisedData.isSecondaryManager ||
-        supervisedData.isTeamSupervisor;
-      setIsLeaveTabVisible(isManager);
-    }
-
-    if (isAttendanceAdmin) {
-      setIsTimeTabVisible(true);
-    } else if (selectedId && supervisedData && isAttendanceManager) {
-      const isManager =
-        supervisedData.isPrimaryManager ||
-        supervisedData.isSecondaryManager ||
-        supervisedData.isTeamSupervisor;
-      setIsTimeTabVisible(isManager);
-    }
-  }, [selectedId, supervisedData]);
-
   const handleRowClick = async (employee: { id: number }) => {
     if (
       data?.user.employee?.employeeId.toString() === employee.id.toString() &&
       !isPeopleManagerOrSuperAdmin
     ) {
       setSelectedEmployeeId(employee.id);
-      await router.push(ROUTES.PEOPLE.ACCOUNT);
+      router.push(ROUTES.PEOPLE.ACCOUNT);
     } else if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee.id);
-      setSelectedId(employee.id);
-      await router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id));
+      setSelectedId(selectedId);
+      router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(selectedId));
     } else {
       setIsFromPeopleDirectory(true);
-      setSelectedId(employee.id);
+      setSelectedId(selectedId);
       setViewEmployeeId(employee.id);
-      await router.push(ROUTES.PEOPLE.INDIVIDUAL);
+
+      const route = `${ROUTES.PEOPLE.INDIVIDUAL}?viewEmployeeId=${employee.id}`;
+      router.push(route);
     }
   };
 
