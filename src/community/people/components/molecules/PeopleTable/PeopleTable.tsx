@@ -18,6 +18,7 @@ import {
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
+import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import PeopleTableFilterBy from "~community/people/components/molecules/PeopleTable/PeopleTableFilterBy";
 import { usePeopleStore } from "~community/people/store/store";
@@ -69,7 +70,6 @@ const PeopleTable: FC<Props> = ({
   const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
   const [sortType, setSortType] = useState<string>("A to Z");
   const [filter, setFilter] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const filterByOpen: boolean = filterOpen && Boolean(filterEl);
   const filterId: string | undefined = filterByOpen
@@ -85,12 +85,15 @@ const PeopleTable: FC<Props> = ({
     setViewEmployeeId,
     employeeDataParams,
     setProjectTeamNames,
-    setSelectedEmployeeId
+    setSelectedEmployeeId,
+    resetEmployeeData,
+    resetEmployeeDataChanges
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
   const { data: jobFamilyData, isLoading: jobFamilyLoading } =
     useGetAllJobFamilies();
+  const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();
@@ -264,18 +267,18 @@ const PeopleTable: FC<Props> = ({
 
   const handleRowClick = async (employee: { id: number }) => {
     if (
-      data?.user.employee?.employeeId.toString() === employee.id.toString() &&
+      currentEmployeeDetails?.employeeId === employee.id.toString() &&
       !isPeopleManagerOrSuperAdmin
     ) {
+      resetEmployeeDataChanges();
+      resetEmployeeData();
       setSelectedEmployeeId(employee.id);
       router.push(ROUTES.PEOPLE.ACCOUNT);
     } else if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee.id);
-      setSelectedId(selectedId);
-      router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(selectedId));
+      router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id));
     } else {
       setIsFromPeopleDirectory(true);
-      setSelectedId(selectedId);
       setViewEmployeeId(employee.id);
 
       const route = `${ROUTES.PEOPLE.INDIVIDUAL}?viewEmployeeId=${employee.id}`;
