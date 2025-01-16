@@ -42,6 +42,7 @@ declare module "next-auth" {
     provider?: string;
     authPic?: string;
     idToken?: string;
+    tenantId?: string;
   }
 }
 
@@ -57,5 +58,6 @@ declare module "next-auth/jwt" {
     provider?: string;
     authPic?: string;
     idToken?: string;
+    tenantId?: string;
   }
 }
