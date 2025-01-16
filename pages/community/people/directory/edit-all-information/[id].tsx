@@ -96,8 +96,6 @@ const EditAllInformation: NextPage = () => {
     employeeDataChanges,
     userRoles,
     setEmployeeGeneralDetails,
-    isLeaveTabVisible,
-    isTimeTabVisible,
     resetEmployeeDataChanges
   } = usePeopleStore((state) => state);
 
@@ -151,8 +149,8 @@ const EditAllInformation: NextPage = () => {
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
     // translateText(["editAllInfo", "timeline"]),
-    ...(isLeaveTabVisible ? [translateText(["editAllInfo", "leave"])] : []),
-    ...(isTimeTabVisible ? [translateText(["editAllInfo", "timesheet"])] : [])
+    translateText(["editAllInfo", "leave"]),
+    translateText(["editAllInfo", "timesheet"])
   ];
 
   const setSuperAdminIncompleteToasts = () => {
