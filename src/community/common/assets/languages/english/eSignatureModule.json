@@ -1,0 +1,16 @@
+{
+  "inbox": {
+    "pageHead": "Documents | Skapp",
+    "title": "Inbox"
+  },
+  "sent": {
+    "pageHead": "Documents | Skapp",
+    "title": "Sent",
+    "createDoc": "Create document"
+  },
+  "create": {
+    "pageHead": "Documents | Skapp",
+    "title": "Create Document",
+    "createDoc": "Create document"
+  }
+}

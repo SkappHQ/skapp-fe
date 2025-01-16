@@ -75,7 +75,15 @@ const ROUTES = {
       RESOURCE_AVAILABILITY: "/dashboard/leave/resource-availability"
     }
   },
-  MAINTENANCE: "/maintenance"
+  MAINTENANCE: "/maintenance",
+  DOCUMENTS: {
+    BASE: "/documents",
+    INBOX: "/documents/inbox",
+    SENT: "/documents/sent",
+    FOLDERS: "/documents/folders",
+    CONTACTS: "/documents/contacts",
+    CREATE_DOCUMENT: "/documents/create"
+  }
 };
 
 export default ROUTES;

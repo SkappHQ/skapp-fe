@@ -111,8 +111,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     backgroundColor: backgroundColor(),
     border: "0.125rem solid transparent",
     outline: outline(),
+    outlineOffset: "-1px",
     borderRadius: "3.125rem",
-    margin: "0.0625rem",
     ".MuiTypography-root": {
       color: disabled ? theme.palette.grey[800] : textcolor
     },

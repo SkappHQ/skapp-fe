@@ -100,7 +100,8 @@ const SystemPermissionForm = ({
     isSuperAdmin: userRoles.isSuperAdmin || false,
     peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
     leaveRole: userRoles.leaveRole || Role.LEAVE_EMPLOYEE,
-    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE
+    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
+    esignRole: userRoles.esignRole || Role.ESIGN_EMPLOYEE
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -110,6 +111,7 @@ const SystemPermissionForm = ({
     setUserRoles("attendanceRole", values.attendanceRole);
     setUserRoles("peopleRole", values.peopleRole);
     setUserRoles("leaveRole", values.leaveRole);
+    setUserRoles("esignRole", values.esignRole);
   };
   const formik = useFormik({
     initialValues,
@@ -128,7 +130,9 @@ const SystemPermissionForm = ({
     leaveManagerLimitExceeded: false,
     attendanceManagerLimitExceeded: false,
     peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false
+    superAdminLimitExceeded: false,
+    esignAdminLimitExceeded: false,
+    esignSenderLimitExceeded: false
   });
 
   const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
@@ -309,6 +313,36 @@ const SystemPermissionForm = ({
       return;
     }
 
+    if (
+      name === "esignRole" &&
+      value === Role.ESIGN_ADMIN &&
+      roleLimits.esignAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["eSignAdminLimitationTitle"]),
+        description: roleLimitationTexts(["eSignAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "esignRole" &&
+      value === Role.ESIGN_SENDER &&
+      roleLimits.esignSenderLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["eSignSenderLimitationTitle"]),
+        description: roleLimitationTexts(["eSignSenderLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
     setFieldValue(name, value);
     setUserRoles(name, value);
   };
@@ -324,6 +358,8 @@ const SystemPermissionForm = ({
       setUserRoles("leaveRole", value);
     } else if (name === "attendanceRole") {
       setUserRoles("attendanceRole", value);
+    } else if (name === "eSignRole") {
+      setUserRoles("esignRole", value);
     }
   };
 
@@ -500,6 +536,21 @@ const SystemPermissionForm = ({
             onChange={(e) =>
               handleCustomChange("attendanceRole", e.target.value)
             }
+            isDisabled={
+              isProfileView || values.isSuperAdmin || isInputsDisabled
+            }
+          />
+
+          <DropdownList
+            inputName={"esignRole"}
+            label="E-signature"
+            itemList={grantablePermission?.eSign || []}
+            value={values.esignRole}
+            componentStyle={{
+              flex: 1
+            }}
+            checkSelected
+            onChange={(e) => handleCustomChange("esignRole", e.target.value)}
             isDisabled={
               isProfileView || values.isSuperAdmin || isInputsDisabled
             }

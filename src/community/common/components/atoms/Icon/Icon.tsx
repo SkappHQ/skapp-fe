@@ -29,6 +29,7 @@ import DashboardIcon from "~community/common/assets/Icons/DashboardIcon";
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
+import DocumentsIcon from "~community/common/assets/Icons/DocumentsIcon";
 import DownloadIcon from "~community/common/assets/Icons/DownloadIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
@@ -187,7 +188,8 @@ export const IconMapping: Partial<
   [IconName.NUDGE_BELL_ICON]: NudgeBellIcon,
   [IconName.UPGRADE_INFO_ICON]: UpgradeInfoIcon,
   [IconName.WARNING_SIGN_ICON]: WarningSignIcon,
-  [IconName.GOOGLE_ICON]: GoogleIcon
+  [IconName.GOOGLE_ICON]: GoogleIcon,
+  [IconName.DOCUMENTS_ICON]: DocumentsIcon
   // Add more icons here as needed
 };
 

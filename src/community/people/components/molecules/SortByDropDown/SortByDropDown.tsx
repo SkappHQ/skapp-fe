@@ -4,7 +4,10 @@ import { MouseEvent, MutableRefObject, useEffect, useState } from "react";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ItemSelector from "~community/common/components/molecules/ItemSelector/ItemSelector";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import {
   OptionType,
   SortOrderTypes
@@ -70,8 +73,8 @@ const SortByDropDown = ({ holidayData, listInnerRef }: Props) => {
           label={`Sort : ${
             holidayDataSort === SortOrderTypes.ASC ? "Jan to Dec" : "Dec to Jan"
           }`}
-          buttonStyle={ButtonStyle.TERTIARY}
-          styles={classes.sortButton}
+          buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+          size={ButtonSizes.MEDIUM}
           endIcon={
             holidayData?.length !== 0 ? (
               <Icon name={IconName.DROPDOWN_ARROW_ICON} />

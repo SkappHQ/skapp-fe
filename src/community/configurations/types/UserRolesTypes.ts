@@ -43,4 +43,5 @@ export interface AllowedGrantableRolesType {
   leave: DropdownListType[];
   people: DropdownListType[];
   attendance: DropdownListType[];
+  eSign: DropdownListType[];
 }

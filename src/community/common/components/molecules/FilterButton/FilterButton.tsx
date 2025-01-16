@@ -81,10 +81,9 @@ const FilterButton = ({
           <Chip label={`+${overflowFilters.length}`} sx={classes.filterItem} />
         )}
         <Button
-          buttonStyle={ButtonStyle.TERTIARY}
+          buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
           label={translateText(["placeholder"])}
           endIcon={<FilterIcon />}
-          styles={classes.filterBtn}
           onClick={(event: MouseEvent<HTMLElement>) =>
             handleFilterBtnClick(event)
           }

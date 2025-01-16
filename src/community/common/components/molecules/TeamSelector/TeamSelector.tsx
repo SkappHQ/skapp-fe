@@ -8,7 +8,10 @@ import Button from "~community/common/components/atoms/Button/Button";
 import SASortRow from "~community/common/components/atoms/SASortRow/SASortRow";
 import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { ManagerTeamType } from "~community/common/types/CommonTypes";
@@ -105,21 +108,9 @@ const TeamSelector = ({
           label={
             !isTeamListEmpty ? selectedOptionName : translateTexts(["allLabel"])
           }
-          buttonStyle={
-            !isTeamListEmpty && isAdmin
-              ? ButtonStyle.TERTIARY
-              : ButtonStyle.TERTIARY_OUTLINED
-          }
+          buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+          size={ButtonSizes.MEDIUM}
           disabled={isTeamListEmpty && !isAdmin}
-          styles={{
-            border: ".0625rem solid",
-            borderColor: "grey.500",
-            fontWeight: "400",
-            fontSize: ".875rem",
-            py: ".5rem",
-            px: "1rem",
-            color: isTeamListEmpty ? "text.darkText" : ""
-          }}
           endIcon={<DropDownArrow />}
           onClick={(event: MouseEvent<HTMLElement>) => {
             setAnchorEl(event.currentTarget);
