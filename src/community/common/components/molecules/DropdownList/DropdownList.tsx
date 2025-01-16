@@ -13,6 +13,7 @@ import { FC, JSX, SyntheticEvent } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
@@ -133,7 +134,7 @@ const DropdownList: FC<Props> = ({
             disabled={isDisabled}
             multiple={isMultiValue}
             MenuProps={{
-              style: { maxHeight: 300, zIndex: 99999 }
+              style: { maxHeight: 300, zIndex: ZIndexEnums.MODAL }
             }}
             sx={{
               ...classes.selectStyle(theme, isDisabled, readOnly as boolean),
@@ -231,7 +232,10 @@ const DropdownList: FC<Props> = ({
             multiple={isMultiValue}
             sx={{
               flex: 1,
-              "&& .MuiInputBase-input": { p: "0.7813rem 0.1875rem", zIndex: 1 }
+              "&& .MuiInputBase-input": {
+                p: "0.7813rem 0.1875rem",
+                zIndex: ZIndexEnums.DEFAULT
+              }
             }}
             fullWidth
           >
