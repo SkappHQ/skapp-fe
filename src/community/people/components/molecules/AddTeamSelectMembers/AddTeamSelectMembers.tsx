@@ -103,7 +103,7 @@ const AddTeamSelectMembers: FC<Props> = ({
               id="add-team-kebab-menu"
               menuItems={kebabMenuOptions}
               icon={<Icon name={IconName.MORE_ICON} />}
-              customStyles={{ menu: { zIndex: ZIndexEnums.MAX } }}
+              customStyles={{ menu: { zIndex: ZIndexEnums.MODAL } }}
             />
           </Box>
         </Stack>

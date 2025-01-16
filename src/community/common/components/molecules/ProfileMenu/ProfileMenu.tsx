@@ -48,8 +48,19 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
     handleCloseMenu();
   };
 
+  const getSubDomain = (url: string, multipleValues: boolean = false) => {
+    const subdomain = multipleValues ? url.split(".") : url.split(".")[0];
+    return subdomain;
+  };
+
+  const tenantId =
+    typeof window !== "undefined" ? getSubDomain(window.location.hostname) : "";
+
   const handleSignOut = async () => {
-    await signOut({ redirect: true });
+    await signOut({
+      callbackUrl: `/signin?tenantId=${tenantId}`,
+      redirect: true
+    });
   };
 
   return (
