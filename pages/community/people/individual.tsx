@@ -52,7 +52,6 @@ const Individual: NextPage = () => {
     EditAllInformationType.personal
   );
 
-
   const {
     employee,
     isSuccess,
