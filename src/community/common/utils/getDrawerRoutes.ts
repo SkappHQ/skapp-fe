@@ -115,7 +115,6 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
       if (route.name === "Documents") {
         const isFeatureEnabled =
           process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
         if (isFeatureEnabled) {
           const isDocumentsEmployeeWithoutManagerOrAdminRole = userRoles?.some(
             (role) =>
@@ -124,11 +123,11 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
               )
           );
 
-          if (isDocumentsEmployeeWithoutManagerOrAdminRole) {
+          if (!isDocumentsEmployeeWithoutManagerOrAdminRole) {
             return {
               id: route.id,
               name: route.name,
-              url: ROUTES.SETTINGS.ACCOUNT,
+              url: ROUTES.DOCUMENTS.INBOX,
               icon: route.icon,
               hasSubTree: false
             };

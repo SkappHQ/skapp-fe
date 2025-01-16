@@ -39,6 +39,9 @@ import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
 
+  const isEsignatureModuleAvailable =
+    process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
     attendanceAdminLimitExceeded: false,
@@ -86,7 +89,7 @@ const AddNewResourceModal = () => {
     peopleRole: Role.PEOPLE_EMPLOYEE,
     leaveRole: Role.LEAVE_EMPLOYEE,
     attendanceRole: Role.ATTENDANCE_EMPLOYEE,
-    esignRole: Role.ESIGN_EMPLOYEE
+    eSignRole: Role.ESIGN_EMPLOYEE
   };
 
   const { mutate } = useQuickAddEmployeeMutation();
@@ -100,7 +103,7 @@ const AddNewResourceModal = () => {
         attendanceRole: values.attendanceRole,
         peopleRole: values.peopleRole,
         leaveRole: values.leaveRole,
-        esignRole: values.esignRole
+        eSignRole: values.eSignRole
       }
     };
 
@@ -208,10 +211,12 @@ const AddNewResourceModal = () => {
     const updatedAttendanceRole = isChecked
       ? Role.ATTENDANCE_ADMIN
       : Role.ATTENDANCE_EMPLOYEE;
+    const updateESignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
 
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
+    setFieldValue("eSignRole", updateESignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -312,7 +317,7 @@ const AddNewResourceModal = () => {
     }
 
     if (
-      name === "esignRole" &&
+      name === "eSignRole" &&
       value === Role.ESIGN_ADMIN &&
       roleLimits.esignAdminLimitExceeded
     ) {
@@ -327,7 +332,7 @@ const AddNewResourceModal = () => {
     }
 
     if (
-      name === "esignRole" &&
+      name === "eSignRole" &&
       value === Role.ESIGN_SENDER &&
       roleLimits.esignSenderLimitExceeded
     ) {
@@ -560,37 +565,39 @@ const AddNewResourceModal = () => {
               />
             </Stack>
 
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "500"
-                }}
+            {isEsignatureModuleAvailable && (
+              <Stack
+                direction={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
               >
-                {permissionTexts(["eSignature"])}
-              </Typography>
-              <DropdownList
-                inputName={"esignRole"}
-                itemList={grantablePermission?.eSign || []}
-                value={values.esignRole}
-                componentStyle={{
-                  width: "200px",
-                  borderRadius: "100px",
-                  height: "50px"
-                }}
-                paperStyles={{
-                  width: "200px",
-                  borderRadius: "100px"
-                }}
-                onChange={(e) =>
-                  handleRoleChange(e.target.name, e.target.value)
-                }
-                isDisabled={values.isSuperAdmin}
-              />
-            </Stack>
+                <Typography
+                  sx={{
+                    fontWeight: "500"
+                  }}
+                >
+                  {permissionTexts(["eSignature"])}
+                </Typography>
+                <DropdownList
+                  inputName={"eSignRole"}
+                  itemList={grantablePermission?.esign || []}
+                  value={values.eSignRole}
+                  componentStyle={{
+                    width: "200px",
+                    borderRadius: "100px",
+                    height: "50px"
+                  }}
+                  paperStyles={{
+                    width: "200px",
+                    borderRadius: "100px"
+                  }}
+                  onChange={(e) =>
+                    handleRoleChange(e.target.name, e.target.value)
+                  }
+                  isDisabled={values.isSuperAdmin}
+                />
+              </Stack>
+            )}
           </Stack>
         </Stack>
       </Stack>

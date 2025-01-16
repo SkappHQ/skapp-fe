@@ -346,5 +346,5 @@ export type SystemPermissionInitalStateType = {
   peopleRole: Role;
   leaveRole: Role;
   attendanceRole: Role;
-  esignRole: Role;
+  eSignRole: Role;
 };
