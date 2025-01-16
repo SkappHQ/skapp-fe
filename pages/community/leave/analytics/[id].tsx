@@ -204,15 +204,17 @@ const TeamTimeSheetAnalytics: NextPage = () => {
       isBackButtonVisible
       isDividerVisible={false}
       customRightContent={
-        <Button
-          buttonStyle={ButtonStyle.TERTIARY}
-          label={translateText(["viewFullReport"])}
-          endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
-          onClick={() => {
-            setReportsParams("teamId", teamId);
-            router.push("/leave/analytics/reports");
-          }}
-        />
+        data?.user.roles?.includes(AdminTypes.LEAVE_ADMIN) ? (
+          <Button
+            buttonStyle={ButtonStyle.TERTIARY}
+            label={translateText(["viewFullReport"])}
+            endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
+            onClick={() => {
+              setReportsParams("teamId", teamId);
+              router.push("/leave/analytics/reports");
+            }}
+          />
+        ) : undefined
       }
     >
       <>

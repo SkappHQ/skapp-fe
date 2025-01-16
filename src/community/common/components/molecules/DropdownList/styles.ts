@@ -1,5 +1,7 @@
 import { Theme } from "@mui/material";
 
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
+
 export const styles = (theme: Theme) => ({
   componentStyle: {
     display: "flex",
@@ -34,7 +36,7 @@ export const styles = (theme: Theme) => ({
     borderRadius: "0.5rem",
     overflow: "hidden",
     display: "flex",
-    zIndex: 1,
+    zIndex: ZIndexEnums.DEFAULT,
     border: error
       ? `${theme.palette.error.contrastText} 0.0625rem solid`
       : "none",
@@ -42,7 +44,7 @@ export const styles = (theme: Theme) => ({
       border: "none"
     },
     ".Mui-focused .MuiOutlinedInput-notchedOutline": {
-      zIndex: 1,
+      zIndex: ZIndexEnums.DEFAULT,
       border:
         error && errorFocusOutlineNeeded
           ? `${theme.palette.error.contrastText} 0.0625rem solid`
@@ -54,7 +56,7 @@ export const styles = (theme: Theme) => ({
     flex: 1,
     "&& .MuiInputBase-input": {
       p: "0.7813rem 1rem",
-      zIndex: 99999,
+      zIndex: ZIndexEnums.DEFAULT,
       color: theme.palette.grey[700],
       cursor: isDisabled || readOnly ? "default" : "pointer"
     },

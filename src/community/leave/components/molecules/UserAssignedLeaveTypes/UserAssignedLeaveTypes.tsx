@@ -26,6 +26,7 @@ const UserAssignedLeaveTypes: FC<Props> = ({ employeeId, pageSize }) => {
   );
   const { data: entitlement, isLoading } =
     useGetEmployeeEntitlements(employeeId);
+
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentEntitlementData, setCurrentEntitlementData] =
     useState<LeaveEntitlementsCardType[]>();

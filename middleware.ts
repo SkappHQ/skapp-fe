@@ -130,6 +130,17 @@ export default withAuth(
       return NextResponse.redirect(new URL(ROUTES.DASHBOARD.BASE, request.url));
     }
 
+    if (
+      roles.includes(ManagerTypes.LEAVE_MANAGER) &&
+      !roles.includes(AdminTypes.LEAVE_ADMIN) &&
+      request.nextUrl.pathname ===
+        `${ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS}/reports`
+    ) {
+      return NextResponse.redirect(
+        new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+      );
+    }
+
     const isAllowed = roles.some((role) =>
       allowedRoutes[role]?.some((url) =>
         request.nextUrl.pathname.startsWith(url)

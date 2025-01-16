@@ -11,6 +11,7 @@ import Select, {
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { type DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getLabelByValue } from "~community/common/utils/commonUtil";
@@ -93,7 +94,7 @@ const DropdownSearch: FC<Props> = ({
               flexDirection: "row",
               margin: "auto",
               gap: "0.5rem",
-              zIndex: 9999,
+              zIndex: ZIndexEnums.DEFAULT,
               height: "3rem",
               justifyContent: "center",
               alignItems: "center",
