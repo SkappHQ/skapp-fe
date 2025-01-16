@@ -134,7 +134,7 @@ const DropdownList: FC<Props> = ({
             disabled={isDisabled}
             multiple={isMultiValue}
             MenuProps={{
-              style: { maxHeight: 300, zIndex: ZIndexEnums.MODALS }
+              style: { maxHeight: 300, zIndex: ZIndexEnums.MODAL }
             }}
             sx={{
               ...classes.selectStyle(theme, isDisabled, readOnly as boolean),

@@ -14,7 +14,7 @@ export const styles = ({ theme }: stylesProps) => ({
     right: { xs: "2.25rem", lg: "-1.3125rem" },
     height: "2.5rem",
     width: "2.5rem",
-    zIndex: ZIndexEnums.MODALS,
+    zIndex: ZIndexEnums.MODAL,
     backgroundColor: theme.palette.grey[100],
     borderRadius: "100%",
     border: `0.0625rem solid ${theme.palette.grey[300]}`,

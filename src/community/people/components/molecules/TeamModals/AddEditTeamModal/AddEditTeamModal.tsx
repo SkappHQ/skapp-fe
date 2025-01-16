@@ -328,7 +328,7 @@ const AddEditTeamModal = ({
                   id="add-team-kebab-menu"
                   menuItems={kebabMenuOptions}
                   icon={<Icon name={IconName.MORE_ICON} />}
-                  customStyles={{ menu: { zIndex: ZIndexEnums.MODALS } }}
+                  customStyles={{ menu: { zIndex: ZIndexEnums.MODAL } }}
                 />
               </Box>
             )}

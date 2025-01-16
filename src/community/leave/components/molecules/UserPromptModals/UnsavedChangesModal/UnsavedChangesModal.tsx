@@ -33,7 +33,7 @@ const ExitModal = () => {
       isClosable={false}
       isDividerVisible={true}
       modalWrapperStyles={{
-        zIndex: ZIndexEnums.MODALS
+        zIndex: ZIndexEnums.MODAL
       }}
     >
       <UnsavedChangesModal
