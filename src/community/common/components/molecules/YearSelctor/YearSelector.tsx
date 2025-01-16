@@ -6,6 +6,7 @@ import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import Button from "~community/common/components/atoms/Button/Button";
 import SASortRow from "~community/common/components/atoms/SASortRow/SASortRow";
 import Popper from "~community/common/components/molecules/Popper/Popper";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
 
@@ -67,7 +68,7 @@ const YearSelector = ({ setYear }: Props): JSX.Element => {
         timeout={300}
         containerStyles={{
           boxShadow: `0rem .55rem 1.25rem ${theme.palette.grey[300]}`,
-          zIndex: 9
+          zIndex: ZIndexEnums.DEFAULT
         }}
       >
         <Box

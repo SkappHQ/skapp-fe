@@ -1,5 +1,6 @@
 import { type Theme } from "@mui/material";
 
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { StyleProps } from "~community/common/types/CommonTypes";
 
 const styles = (theme: Theme): StyleProps => ({
@@ -14,7 +15,7 @@ const styles = (theme: Theme): StyleProps => ({
       position: "absolute",
       top: "0rem",
       left: "-1.25rem",
-      zIndex: 100
+      zIndex: ZIndexEnums.POPOVER
     }
   },
   menuItem: {
