@@ -9,6 +9,7 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -45,7 +46,6 @@ import {
   contractStates
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import {
@@ -337,7 +337,7 @@ const EditAllInformation: NextPage = () => {
       try {
         setHasUploadStarted(true);
 
-        if (environment === ProfileModes.COMMUNITY) {
+        if (environment === appModes.COMMUNITY) {
           const formData = new FormData();
           formData.append("file", employeeGeneralDetails?.authPic[0]);
 
