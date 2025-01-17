@@ -80,7 +80,7 @@ const AllTimesheetsPage: NextPage = () => {
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.INDIVIDUAL}?tab=timesheet`;
+      const url = `${ROUTES.PEOPLE.INDIVIDUAL}?tab=timesheet&viewEmployeeId=${employee.id}`;
       await router.push(url);
     }
   };

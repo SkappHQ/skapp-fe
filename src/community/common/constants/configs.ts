@@ -20,8 +20,8 @@ export enum unitConversion {
 export const DEFAULT_COUNTRY_CODE = "94";
 
 export enum appModes {
-  COMMUNITY = "community",
-  ENTERPRISE = "enterprise"
+  ENTERPRISE = "enterprise",
+  COMMUNITY = "community"
 }
 
 export const DOMAIN = ".skapp.com";

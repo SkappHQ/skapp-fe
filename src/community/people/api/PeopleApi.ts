@@ -9,6 +9,7 @@ import {
 import { rejects } from "assert";
 import { AxiosResponse } from "axios";
 
+import { appModes } from "~community/common/constants/configs";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import useDebounce from "~community/common/hooks/useDebounce";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -50,7 +51,6 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 const getBannerData = async (): Promise<number> => {
@@ -275,7 +275,7 @@ export const useQuickAddEmployeeMutation = () => {
       return response?.data?.results[0] as QuickAddEmployeeResponse;
     },
     onSuccess: (data: QuickAddEmployeeResponse) => {
-      if (environment === ProfileModes.COMMUNITY) {
+      if (environment === appModes.COMMUNITY) {
         setSharedCredentialData(data);
         setDirectoryModalType(DirectoryModalTypes.USER_CREDENTIALS);
       } else {

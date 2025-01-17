@@ -9,6 +9,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import Avatar from "~community/common/components/molecules/Avatar/Avatar";
+import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -19,7 +20,6 @@ import {
   LeaveExtraPopupTypes,
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
@@ -142,23 +142,23 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
 
   useEffect(() => {
     if (attachment) {
-      if (environment === ProfileModes.COMMUNITY) {
+      if (environment === appModes.COMMUNITY) {
         refetch();
-      } else if (environment === ProfileModes.ENTERPRICE) {
+      } else if (environment === appModes.ENTERPRISE) {
         downloadS3File(attachment);
       }
     }
   }, [attachment]);
 
   useEffect(() => {
-    if (environment === ProfileModes.COMMUNITY && leaveAttachment) {
+    if (environment === appModes.COMMUNITY && leaveAttachment) {
       downloadFileToDevice(leaveAttachment);
     }
     setAttachment(null);
   }, [leaveAttachment, environment]);
 
   useEffect(() => {
-    if (environment === ProfileModes.ENTERPRICE) {
+    if (environment === appModes.ENTERPRISE) {
       downloadFileFromS3(s3FileUrls[attachment as string]);
     }
   }, [s3FileUrls, environment]);

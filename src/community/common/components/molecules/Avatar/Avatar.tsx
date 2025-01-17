@@ -12,10 +12,10 @@ import { type DropzoneInputProps } from "react-dropzone";
 import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
 import DefaultAvatar from "~community/common/components/atoms/DefaultAvatar/DefaultAvatar";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
@@ -64,14 +64,14 @@ const Avatar: FC<AvatarProps> = ({
     FileTypes.USER_IMAGE,
     src,
     true,
-    environment !== ProfileModes.ENTERPRICE
+    environment !== appModes.ENTERPRISE
   );
 
   useEffect(() => {
-    if (environment === ProfileModes.COMMUNITY) {
+    if (environment === appModes.COMMUNITY) {
       if (logoUrl) setImage(logoUrl);
       else if (src) setImage(src);
-    } else if (environment === ProfileModes.ENTERPRICE) {
+    } else if (environment === appModes.ENTERPRISE) {
       setImage(s3FileUrls[src]);
     }
   }, [logoUrl, src, s3FileUrls, environment]);
