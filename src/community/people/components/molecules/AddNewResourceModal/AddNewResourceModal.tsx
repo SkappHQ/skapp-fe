@@ -450,11 +450,7 @@ const AddNewResourceModal = () => {
             justifyContent={"space-between"}
           >
             <Stack direction={"row"} gap={3}>
-              <Typography
-                sx={{
-                  fontWeight: "500"
-                }}
-              >
+              <Typography variant="label">
                 {permissionTexts(["superAdmin"])}
               </Typography>
               <Icon name={IconName.SUPER_ADMIN_ICON} />
@@ -474,11 +470,7 @@ const AddNewResourceModal = () => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Typography
-                sx={{
-                  fontWeight: "500"
-                }}
-              >
+              <Typography variant="label">
                 {permissionTexts(["people"])}
               </Typography>
               <DropdownList
@@ -506,11 +498,7 @@ const AddNewResourceModal = () => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Typography
-                sx={{
-                  fontWeight: "500"
-                }}
-              >
+              <Typography variant="label">
                 {permissionTexts(["leave"])}
               </Typography>
               <DropdownList
@@ -538,11 +526,7 @@ const AddNewResourceModal = () => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Typography
-                sx={{
-                  fontWeight: "500"
-                }}
-              >
+              <Typography variant="label">
                 {permissionTexts(["attendance"])}
               </Typography>
               <DropdownList
@@ -571,11 +555,7 @@ const AddNewResourceModal = () => {
                 justifyContent={"space-between"}
                 alignItems={"center"}
               >
-                <Typography
-                  sx={{
-                    fontWeight: "500"
-                  }}
-                >
+                <Typography variant="label">
                   {permissionTexts(["eSignature"])}
                 </Typography>
                 <DropdownList
