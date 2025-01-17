@@ -3,7 +3,7 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
-  OtherRoleTypes,
+  SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 
@@ -118,8 +118,8 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
         if (isFeatureEnabled) {
           const isDocumentsEmployeeWithoutManagerOrAdminRole = userRoles?.some(
             (role) =>
-              [OtherRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
-                role as AdminTypes | OtherRoleTypes
+              [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
+                role as AdminTypes | SenderRoleTypes
               )
           );
 

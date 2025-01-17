@@ -6,7 +6,7 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
-  OtherRoleTypes,
+  SenderRoleTypes,
   ROLE_SUPER_ADMIN,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
@@ -67,7 +67,7 @@ const managerRoutes = {
     ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
     ROUTES.PEOPLE.INDIVIDUAL
   ],
-  [OtherRoleTypes.ESIGN_SENDER]: [
+  [SenderRoleTypes.ESIGN_SENDER]: [
     ROUTES.DOCUMENTS.CONTACTS,
     ROUTES.DOCUMENTS.CREATE_DOCUMENT,
     ROUTES.DOCUMENTS.FOLDERS,
