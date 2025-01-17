@@ -106,7 +106,7 @@ const SystemPermissionForm = ({
     peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
     leaveRole: userRoles.leaveRole || Role.LEAVE_EMPLOYEE,
     attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
-    eSignRole: userRoles.eSignRole || Role.ESIGN_EMPLOYEE
+    esignRole: userRoles.esignRole || Role.ESIGN_EMPLOYEE
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -116,7 +116,7 @@ const SystemPermissionForm = ({
     setUserRoles("attendanceRole", values.attendanceRole);
     setUserRoles("peopleRole", values.peopleRole);
     setUserRoles("leaveRole", values.leaveRole);
-    setUserRoles("eSignRole", values.eSignRole);
+    setUserRoles("esignRole", values.esignRole);
   };
   const formik = useFormik({
     initialValues,
@@ -319,7 +319,7 @@ const SystemPermissionForm = ({
     }
 
     if (
-      name === "eSignRole" &&
+      name === "esignRole" &&
       value === Role.ESIGN_ADMIN &&
       roleLimits.esignAdminLimitExceeded
     ) {
@@ -334,7 +334,7 @@ const SystemPermissionForm = ({
     }
 
     if (
-      name === "eSignRole" &&
+      name === "esignRole" &&
       value === Role.ESIGN_SENDER &&
       roleLimits.esignSenderLimitExceeded
     ) {
@@ -363,8 +363,8 @@ const SystemPermissionForm = ({
       setUserRoles("leaveRole", value);
     } else if (name === "attendanceRole") {
       setUserRoles("attendanceRole", value);
-    } else if (name === "eSignRole") {
-      setUserRoles("eSignRole", value);
+    } else if (name === "esignRole") {
+      setUserRoles("esignRole", value);
     }
   };
 
@@ -401,14 +401,17 @@ const SystemPermissionForm = ({
     const peopleRole = Role.PEOPLE_ADMIN;
     const leaveRole = Role.LEAVE_ADMIN;
     const attendanceRole = Role.ATTENDANCE_ADMIN;
+    const esignRole = Role.ESIGN_ADMIN;
 
     void setFieldValue("peopleRole", peopleRole);
     void setFieldValue("leaveRole", leaveRole);
     void setFieldValue("attendanceRole", attendanceRole);
+    void setFieldValue("esignRole", esignRole);
 
     setUserRoles("attendanceRole", attendanceRole);
     setUserRoles("peopleRole", peopleRole);
     setUserRoles("leaveRole", leaveRole);
+    setUserRoles("esignRole", esignRole);
   };
 
   const handleSuperAdminChangeDefault = async (
@@ -551,18 +554,17 @@ const SystemPermissionForm = ({
               inputName={"eSignRole"}
               label="E-signature"
               itemList={grantablePermission?.esign || []}
-              value={values.eSignRole}
+              value={values.esignRole}
               componentStyle={{
                 flex: 1
               }}
               checkSelected
-              onChange={(e) => handleCustomChange("eSignRole", e.target.value)}
+              onChange={(e) => handleCustomChange("esignRole", e.target.value)}
               isDisabled={
                 isProfileView || values.isSuperAdmin || isInputsDisabled
               }
             />
           )}
-
         </Stack>
         {isUpdate &&
           !isInputsDisabled &&

@@ -89,7 +89,7 @@ const AddNewResourceModal = () => {
     peopleRole: Role.PEOPLE_EMPLOYEE,
     leaveRole: Role.LEAVE_EMPLOYEE,
     attendanceRole: Role.ATTENDANCE_EMPLOYEE,
-    eSignRole: Role.ESIGN_EMPLOYEE
+    esignRole: Role.ESIGN_EMPLOYEE
   };
 
   const { mutate } = useQuickAddEmployeeMutation();
@@ -103,7 +103,7 @@ const AddNewResourceModal = () => {
         attendanceRole: values.attendanceRole,
         peopleRole: values.peopleRole,
         leaveRole: values.leaveRole,
-        eSignRole: values.eSignRole
+        esignRole: values.esignRole
       }
     };
 
@@ -216,7 +216,7 @@ const AddNewResourceModal = () => {
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
-    setFieldValue("eSignRole", updateESignRole);
+    setFieldValue("esignRole", updateESignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -317,7 +317,7 @@ const AddNewResourceModal = () => {
     }
 
     if (
-      name === "eSignRole" &&
+      name === "esignRole" &&
       value === Role.ESIGN_ADMIN &&
       roleLimits.esignAdminLimitExceeded
     ) {
@@ -332,7 +332,7 @@ const AddNewResourceModal = () => {
     }
 
     if (
-      name === "eSignRole" &&
+      name === "esignRole" &&
       value === Role.ESIGN_SENDER &&
       roleLimits.esignSenderLimitExceeded
     ) {
@@ -579,9 +579,9 @@ const AddNewResourceModal = () => {
                   {permissionTexts(["eSignature"])}
                 </Typography>
                 <DropdownList
-                  inputName={"eSignRole"}
+                  inputName={"esignRole"}
                   itemList={grantablePermission?.esign || []}
-                  value={values.eSignRole}
+                  value={values.esignRole}
                   componentStyle={{
                     width: "200px",
                     borderRadius: "100px",

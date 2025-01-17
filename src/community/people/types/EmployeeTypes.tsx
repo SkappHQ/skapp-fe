@@ -421,7 +421,7 @@ export interface EmployeeRoleType {
   attendanceRole: Role;
   peopleRole: Role;
   leaveRole: Role;
-  eSignRole: Role;
+  esignRole: Role;
 }
 
 export interface EmployeeDataExists {
