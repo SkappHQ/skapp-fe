@@ -99,7 +99,6 @@ const EditAllInformation: NextPage = () => {
     setEmployeeGeneralDetails,
     resetEmployeeDataChanges,
     setIsReinviteConfirmationModalOpen,
-    isWorkEmailChanged,
     isReinviteConfirmationModalOpen
   } = usePeopleStore((state) => state);
 
@@ -331,7 +330,10 @@ const EditAllInformation: NextPage = () => {
   };
 
   const handleSave = async () => {
-    if (isWorkEmailChanged && !isReinviteConfirmationModalOpen) {
+    if (
+      employeeEmploymentDetails.workEmail !== employee?.email &&
+      !isReinviteConfirmationModalOpen
+    ) {
       setIsReinviteConfirmationModalOpen(true);
       return;
     }

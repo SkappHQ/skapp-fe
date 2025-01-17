@@ -103,8 +103,6 @@ export interface AddNewResourceSliceTypes
     | "isLeaveTabVisible"
     | "setIsTimeTabVisible"
     | "isTimeTabVisible"
-    | "isWorkEmailChanged"
-    | "setIsWorkEmailChanged"
     | "isReinviteConfirmationModalOpen"
     | "setIsReinviteConfirmationModalOpen"
   > {}

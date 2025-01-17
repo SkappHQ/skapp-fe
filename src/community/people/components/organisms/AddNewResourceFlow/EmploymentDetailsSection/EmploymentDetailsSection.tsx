@@ -160,8 +160,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
 
     const [latestTeamId, setLatestTeamId] = useState<number | null>();
 
-    const { isPendingInvitationListOpen, setIsWorkEmailChanged } =
-      usePeopleStore((state) => state);
+    const { isPendingInvitationListOpen } = usePeopleStore((state) => state);
 
     const initialValues: EmployeeEmploymentDetailsFormTypes = useMemo(
       () => ({
@@ -262,7 +261,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
         name === "workEmail" &&
         (value === "" || isValidEmailPattern(value))
       ) {
-        setIsWorkEmailChanged(true);
         await setFieldValue(name, value);
         setFieldError(name, "");
         setEmployeeEmploymentDetails(name, value);
