@@ -374,6 +374,7 @@ const useGetEmployee = ({ id }: GetEmployeeParams) => {
     setUserRoles("attendanceRole", employee.userRoles?.attendanceRole);
     setUserRoles("peopleRole", employee.userRoles?.peopleRole);
     setUserRoles("leaveRole", employee.userRoles?.leaveRole);
+    setUserRoles("esignRole", employee.userRoles?.esignRole);
   };
 
   const setEmployeeData = () => {

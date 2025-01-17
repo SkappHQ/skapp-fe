@@ -31,7 +31,7 @@ export enum ManagerTypes {
   ATTENDANCE_MANAGER = "ROLE_ATTENDANCE_MANAGER"
 }
 
-export enum OtherRoleTypes {
+export enum SenderRoleTypes {
   ESIGN_SENDER = "ROLE_ESIGN_SENDER"
 }
 

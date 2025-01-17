@@ -235,8 +235,8 @@ const nextConfig = {
         destination: "/enterprise/documents/contacts"
       },
       {
-        source: "/documents/folder",
-        destination: "/enterprise/documents/folder"
+        source: "/documents/folders",
+        destination: "/enterprise/documents/folders"
       },
       {
         source: "/documents/create",
