@@ -290,7 +290,7 @@ export const useLeaveCarryForward = (
     mutationFn: async (leaveTypes: number[]) => {
       const result = authFetch.post(leaveEndPoints.CARRY_FORWARD_LEAVE_TYPES, {
         leaveTypes: leaveTypes,
-        cycleStartYear: new Date().getFullYear()
+        cycleStartYear: new Date().getFullYear() + 1
       });
       return result;
     },
