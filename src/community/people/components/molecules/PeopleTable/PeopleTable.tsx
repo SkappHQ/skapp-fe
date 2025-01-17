@@ -4,12 +4,20 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
+import InviteIcon from "~community/common/assets/Icons/InviteIcon";
+import Button from "~community/common/components/atoms/Button/Button";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
+import {
+  ButtonSizes,
+  ButtonStyle,
+  ToastType
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import {
   SortKeyTypes,
@@ -18,7 +26,10 @@ import {
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
-import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
+import {
+  useGetUserPersonalDetails,
+  useHandleReviteEmployees
+} from "~community/people/api/PeopleApi";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import PeopleTableFilterBy from "~community/people/components/molecules/PeopleTable/PeopleTableFilterBy";
 import { usePeopleStore } from "~community/people/store/store";
@@ -58,6 +69,7 @@ const PeopleTable: FC<Props> = ({
   const theme: Theme = useTheme();
   const { data } = useSession();
   const router = useRouter();
+  const { setToastMessage } = useToast();
   const translateText = useTranslator("peopleModule", "peoples");
 
   const isPeopleManagerOrSuperAdmin = data?.user.roles?.includes(
@@ -70,6 +82,7 @@ const PeopleTable: FC<Props> = ({
   const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
   const [sortType, setSortType] = useState<string>("A to Z");
   const [filter, setFilter] = useState<boolean>(false);
+  const [selectedPeople, setSelectedPeople] = useState<number[]>([]);
 
   const filterByOpen: boolean = filterOpen && Boolean(filterEl);
   const filterId: string | undefined = filterByOpen
@@ -94,6 +107,28 @@ const PeopleTable: FC<Props> = ({
   const { data: jobFamilyData, isLoading: jobFamilyLoading } =
     useGetAllJobFamilies();
   const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
+  const onSuccess = () => {
+    setToastMessage({
+      open: true,
+      toastType: ToastType.SUCCESS,
+      title: translateText(["reInvitationSuccessTitle"]),
+      description: translateText(["reInvitationSuccessDescription"]),
+      isIcon: true
+    });
+  };
+  const onError = () => {
+    setToastMessage({
+      open: true,
+      toastType: ToastType.ERROR,
+      title: translateText(["reInvitationErrorTitle"]),
+      description: translateText(["reInvitationErrorDescription"]),
+      isIcon: true
+    });
+  };
+  const { mutate: handlReviteEmployees } = useHandleReviteEmployees(
+    onSuccess,
+    onError
+  );
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();
@@ -341,6 +376,28 @@ const PeopleTable: FC<Props> = ({
     }
   }, [employeeDataParams.sortKey, employeeDataParams.sortOrder, translateText]);
 
+  const handleCheckBoxClick = (employeeId: number) => () => {
+    setSelectedPeople((prevSelectedPeople) => {
+      if (!prevSelectedPeople.includes(employeeId)) {
+        return [...prevSelectedPeople, employeeId];
+      } else {
+        return prevSelectedPeople.filter(
+          (selectedId) => selectedId !== employeeId
+        );
+      }
+    });
+  };
+
+  const handleAllCheckBoxClick = () => {
+    if (selectedPeople.length === employeeData?.length) {
+      setSelectedPeople([]);
+    } else {
+      setSelectedPeople(
+        employeeData?.map((employee) => employee.employeeId || 0) || []
+      );
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -369,6 +426,7 @@ const PeopleTable: FC<Props> = ({
               backgroundColor: theme.palette.grey[100]
             }
           }}
+          selectedRows={selectedPeople}
           actionRowOneLeftButton={
             isPeopleManagerOrSuperAdmin ? (
               <PeopleTableSortBy
@@ -383,8 +441,23 @@ const PeopleTable: FC<Props> = ({
               />
             ) : undefined
           }
+          isCheckboxSelectionEnabled={isPendingInvitationListOpen}
+          isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
+          handleAllRowsCheck={handleAllCheckBoxClick}
+          handleRowCheck={handleCheckBoxClick}
           actionRowOneRightButton={
-            isPeopleManagerOrSuperAdmin ? (
+            isPendingInvitationListOpen ? (
+              <Button
+                label={"Re invite"}
+                buttonStyle={ButtonStyle.SECONDARY}
+                size={ButtonSizes.MEDIUM}
+                endIcon={<InviteIcon />}
+                onClick={() => {
+                  handlReviteEmployees(selectedPeople);
+                }}
+                isStrokeAvailable={true}
+              />
+            ) : isPeopleManagerOrSuperAdmin ? (
               <PeopleTableFilterBy
                 filterEl={filterEl}
                 handleFilterClose={handleFilterClose}

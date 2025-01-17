@@ -138,6 +138,14 @@ const addNewResourceData = async (
   });
 };
 
+const reviteEmployees = async (
+  employeeIds: number[]
+): Promise<AxiosResponse> => {
+  return await authFetch.post(peoplesEndpoints.REVITE_EMPLOYEES, {
+    ids: employeeIds
+  });
+};
+
 export const useHandleAddNewResource = () => {
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
@@ -158,6 +166,17 @@ export const useHandleAddNewResource = () => {
     onSettled: async () => {
       await queryClient.invalidateQueries();
     }
+  });
+};
+
+export const useHandleReviteEmployees = (
+  onSuccess: () => void,
+  onError: () => void
+) => {
+  return useMutation({
+    mutationFn: reviteEmployees,
+    onSuccess,
+    onError
   });
 };
 

@@ -203,6 +203,8 @@ interface actionsTypes {
   setViewEmployeeId: (value: number) => void;
   setIsLeaveTabVisible: (value: boolean) => void;
   setIsTimeTabVisible: (value: boolean) => void;
+  setIsWorkEmailChanged: (value: boolean) => void;
+  setIsReinviteConfirmationModalOpen: (value: boolean) => void;
 
   //projectTeamModalSlice
   setProjectTeamsModalOpen: (value: boolean) => void;
@@ -314,6 +316,8 @@ export interface Store extends actionsTypes {
   isLeaveTabVisible: boolean;
   isTimeTabVisible: boolean;
   viewEmployeeId: number | null;
+  isWorkEmailChanged: boolean;
+  isReinviteConfirmationModalOpen: boolean;
 
   //projectTeamModalSlice
   isProjectTeamsModalOpen: boolean;

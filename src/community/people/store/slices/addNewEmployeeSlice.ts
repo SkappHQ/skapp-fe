@@ -160,7 +160,19 @@ export const employeeDetailsSlice = (
   isLeaveTabVisible: false,
   viewEmployeeId: null,
   isTimeTabVisible: false,
+  isWorkEmailChanged: false,
+  isReinviteConfirmationModalOpen: false,
 
+  setIsReinviteConfirmationModalOpen: (value: boolean) =>
+    set((state) => ({
+      ...state,
+      isReinviteConfirmationModalOpen: value
+    })),
+  setIsWorkEmailChanged: (value: boolean) =>
+    set((state) => ({
+      ...state,
+      isWorkEmailChanged: value
+    })),
   setEmployeeGeneralDetails: (
     key: string,
     value:

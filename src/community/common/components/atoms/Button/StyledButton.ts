@@ -12,6 +12,7 @@ interface StyledButtonProps {
   width: string;
   textcolor: string;
   isdefaulticoncolor: string;
+  isstrokeavailable: string;
 }
 
 const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
@@ -21,7 +22,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
   buttonstyle,
   width,
   textcolor,
-  isdefaulticoncolor
+  isdefaulticoncolor,
+  isstrokeavailable
 }) => {
   const padding = () => {
     switch (buttonsize) {
@@ -121,9 +123,10 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
       "svg path": {
         fill: disabled
           ? theme.palette.grey[800]
-          : isdefaulticoncolor === "false"
+          : isdefaulticoncolor === "false" && isstrokeavailable === "false"
             ? textcolor
-            : ""
+            : "",
+        stroke: isstrokeavailable === "false" ? "" : textcolor
       }
     },
     ".MuiCircularProgress-root": {

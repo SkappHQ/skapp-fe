@@ -24,7 +24,8 @@ export const peoplesEndpoints = {
   CHECK_IF_CURRENT_USER_HAS_MANAGERS_AVAILABILITY: `${moduleAPIPath.PEOPLE}/me/managers/availability`,
   MY_MANAGERS: `${moduleAPIPath.PEOPLE}/me/managers`,
   SUPERVISED_BY_ME: (employeeId: number) =>
-    `${moduleAPIPath.PEOPLE}/${employeeId}/is-supervised-by-me`
+    `${moduleAPIPath.PEOPLE}/${employeeId}/is-supervised-by-me`,
+  REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`
 };
 
 export const authEndpoints = {
