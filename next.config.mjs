@@ -21,6 +21,10 @@ const nextConfig = {
           : "/community/setup-organization"
       },
       {
+        source: "/module-selection",
+        destination: "/enterprise/module-selection"
+      },
+      {
         source: "/dashboard",
         destination: "/community/dashboard"
       },
