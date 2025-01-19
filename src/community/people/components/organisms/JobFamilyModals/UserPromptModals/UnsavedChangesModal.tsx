@@ -1,12 +1,8 @@
-import UserPromptModal from "~community/common/components/molecules/UserPromptModal/UserPromptModal";
-import { useTranslator } from "~community/common/hooks/useTranslator";
-import { IconName } from "~community/common/types/IconTypes";
+import AreYouSureModal from "~community/common/components/molecules/AreYouSureModal/AreYouSureModal";
 import { JobFamilyActionModalEnums } from "~community/people/enums/JobFamilyEnums";
 import { usePeopleStore } from "~community/people/store/store";
 
 const UnsavedChangesModal = () => {
-  const translateText = useTranslator("peopleModule", "jobFamily");
-
   const { jobFamilyModalType, setJobFamilyModalType } = usePeopleStore(
     (state) => state
   );
@@ -29,18 +25,11 @@ const UnsavedChangesModal = () => {
   };
 
   return (
-    <UserPromptModal
-      description={translateText(["unsavedChangesModalDescription"])}
-      primaryBtn={{
-        label: translateText(["keepEditingBtn"]),
-        onClick: handleCancelBtnClick,
-        endIcon: IconName.RIGHT_ARROW_ICON
-      }}
-      secondaryBtn={{
-        label: translateText(["discardBtnText"]),
-        onClick: () => setJobFamilyModalType(JobFamilyActionModalEnums.NONE),
-        endIcon: IconName.CLOSE_ICON
-      }}
+    <AreYouSureModal
+      onPrimaryBtnClick={handleCancelBtnClick}
+      onSecondaryBtnClick={() =>
+        setJobFamilyModalType(JobFamilyActionModalEnums.NONE)
+      }
     />
   );
 };

@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 
-import UnsavedChangesModal from "~community/common/components/molecules/UnsavedChangesModal/UnsavedChangesModal";
+import AreYouSureModal from "~community/common/components/molecules/AreYouSureModal/AreYouSureModal";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -36,7 +36,7 @@ const ExitModal = () => {
         zIndex: ZIndexEnums.MODAL
       }}
     >
-      <UnsavedChangesModal
+      <AreYouSureModal
         onPrimaryBtnClick={() =>
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE)
         }
