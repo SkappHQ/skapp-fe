@@ -12,6 +12,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, memo, useEffect, useMemo } from "react";
 
+import { useGetOrganization } from "~community/common/api/OrganizationCreateApi";
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -26,12 +27,14 @@ import {
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
+import { themeSelector } from "~community/common/theme/themeSelector";
 import { AdminTypes } from "~community/common/types/AuthTypes";
+import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
-import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
+import { UserLimitBanner } from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
@@ -57,6 +60,7 @@ interface Props {
   customRightContent?: JSX.Element;
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
+  backIcon?: IconName;
 }
 
 const ContentLayout = ({
@@ -78,7 +82,8 @@ const ContentLayout = ({
   dividerStyles,
   customRightContent,
   isTitleHidden = false,
-  isPrimaryBtnLoading = false
+  isPrimaryBtnLoading = false,
+  backIcon = IconName.LEFT_ARROW_ICON
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -93,6 +98,14 @@ const ContentLayout = ({
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
     (state) => state
   );
+
+  const { data: organizationDetails } = useGetOrganization();
+
+  const updatedTheme = themeSelector(
+    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
+  );
+
+  theme.palette = updatedTheme.palette;
 
   const {
     setShowUserLimitBanner,
@@ -135,9 +148,10 @@ const ContentLayout = ({
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) && (
             <VersionUpgradeBanner />
           )}
-        {process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+        {process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
           data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
-          usedStoragePercentage &&
+          usedStoragePercentage !== undefined &&
+          usedStoragePercentage !== null &&
           usedStoragePercentage >= EIGHTY_PERCENT && (
             <VersionUpgradeBanner
               isStorageBanner
@@ -164,7 +178,7 @@ const ContentLayout = ({
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
               >
-                <Icon name={IconName.LEFT_ARROW_ICON} />
+                <Icon name={backIcon} />
               </IconButton>
             )}
             {!isTitleHidden && <Typography variant="h1">{title}</Typography>}

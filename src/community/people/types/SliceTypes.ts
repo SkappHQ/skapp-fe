@@ -99,6 +99,10 @@ export interface AddNewResourceSliceTypes
     | "viewEmployeeId"
     | "setIsFromPeopleDirectory"
     | "setViewEmployeeId"
+    | "setIsLeaveTabVisible"
+    | "isLeaveTabVisible"
+    | "setIsTimeTabVisible"
+    | "isTimeTabVisible"
   > {}
 
 export interface ProjectTeamModalSliceType

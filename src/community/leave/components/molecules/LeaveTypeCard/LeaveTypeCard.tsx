@@ -15,15 +15,15 @@ import { getEmoji, mergeSx } from "~community/common/utils/commonUtil";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveAllocationDataTypes } from "~community/leave/types/MyRequests";
-import { useCheckIfUserHasManagers } from "~community/people/api/PeopleApi";
 
 import styles from "./styles";
 
 interface Props {
   entitlement: LeaveAllocationDataTypes;
+  managers: boolean;
 }
 
-const LeaveTypeCard: FC<Props> = ({ entitlement }: Props) => {
+const LeaveTypeCard: FC<Props> = ({ entitlement, managers }: Props) => {
   const {
     validTo,
     totalDaysAllocated,
@@ -47,15 +47,13 @@ const LeaveTypeCard: FC<Props> = ({ entitlement }: Props) => {
 
   const [isMouseOn, setMouseOn] = useState(false);
 
-  const { data: managers } = useCheckIfUserHasManagers();
-
   const validUntil = useMemo(
-    () => (validTo ? new Date(validTo).getTime() : 0),
+    () => (validTo ? new Date(validTo).setHours(23, 59, 59) : 0),
     [validTo]
   );
 
   const isExpired = useMemo(
-    () => validUntil > 0 && validUntil <= Date.now(),
+    () => validUntil > 0 && validUntil < Date.now(),
     [validUntil]
   );
 

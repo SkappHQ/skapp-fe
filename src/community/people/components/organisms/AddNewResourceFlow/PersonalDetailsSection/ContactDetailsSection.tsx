@@ -139,6 +139,10 @@ const ContactDetailsSection = forwardRef<FormMethods, props>((props, ref) => {
     await setFieldValue("phone", phone.target.value);
     setFieldError("phone", "");
     setEmployeeContactDetails("phone", phone.target.value);
+    if (!employeeContactDetails?.countryCode) {
+      setFieldValue("countryCode", countryCode);
+      setEmployeeContactDetails("countryCode", countryCode);
+    }
   };
 
   useEffect(() => {

@@ -4,12 +4,14 @@ import { useDropzone } from "react-dropzone";
 
 import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
 import Avatar from "~community/common/components/molecules/Avatar/Avatar";
+import { appModes } from "~community/common/constants/configs";
 import { accountPageTestId } from "~community/common/constants/testIds";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { theme } from "~community/common/theme/theme";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
   selectedUser: EmployeeDetails;
@@ -29,6 +31,7 @@ const UserDetailsCentered: FC<Props> = ({
     (state) => state
   );
 
+  const environment = useGetEnvironment();
   const cardData = useMemo(() => {
     return {
       employeeId: selectedUser?.identificationNo?.toString() || "",
@@ -68,7 +71,8 @@ const UserDetailsCentered: FC<Props> = ({
   const { data: uploadedImage, isLoading } = useGetUploadedImage(
     FileTypes.USER_IMAGE,
     cardData?.authPic,
-    true
+    true,
+    environment !== appModes.ENTERPRISE
   );
 
   const handleUnSelectPhoto = (): void => {

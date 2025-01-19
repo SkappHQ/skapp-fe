@@ -114,6 +114,12 @@ const PrimaryDetailsSection = forwardRef<RefCallback, Props>(
       await setFieldValue("phone", phone.target.value);
       setFieldError("phone", "");
       setEmployeePrimaryEmergencyContactDetails("phone", phone.target.value);
+      if (
+        !employeeEmergencyContactDetails?.primaryEmergencyContact?.countryCode
+      ) {
+        setFieldValue("countryCode", countryCode);
+        setEmployeePrimaryEmergencyContactDetails("countryCode", countryCode);
+      }
     };
 
     useEffect(() => {

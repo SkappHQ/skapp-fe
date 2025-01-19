@@ -25,7 +25,10 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { specialCharacters } from "~community/common/regex/regexPatterns";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
-import { getLocalDate, nextYear } from "~community/common/utils/dateTimeUtils";
+import {
+  currentYear,
+  getLocalDate
+} from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveCycle } from "~community/leave/api/LeaveApi";
 import {
   useAddLeaveType,
@@ -46,7 +49,6 @@ import {
   carryForwardKeyDownRestriction,
   carryForwardPasteRestriction,
   getIsActiveFieldDirtyStatus,
-  handleBackBtnClick,
   handleColorClick,
   handleLeaveDurationClick
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
@@ -70,7 +72,6 @@ const LeaveTypeForm = () => {
     allLeaveTypes,
     editingLeaveType,
     setLeaveTypeFormDirty,
-    resetEditingLeaveType,
     setLeaveTypeModalType
   } = useLeaveStore((state) => state);
 
@@ -88,7 +89,7 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.replace
+        redirect: router.push
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR,
@@ -104,7 +105,7 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.replace
+        redirect: router.push
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.EDIT_LEAVE_TYPE_ERROR,
@@ -122,7 +123,10 @@ const LeaveTypeForm = () => {
       colorCode: editingLeaveType?.colorCode,
       calculationType: editingLeaveType?.calculationType,
       leaveDuration: editingLeaveType?.leaveDuration ?? LeaveDurationTypes.NONE,
-      maxCarryForwardDays: editingLeaveType?.maxCarryForwardDays,
+      maxCarryForwardDays:
+        editingLeaveType?.maxCarryForwardDays === 0
+          ? undefined
+          : editingLeaveType?.maxCarryForwardDays,
       carryForwardExpirationDays: editingLeaveType?.carryForwardExpirationDays,
       carryForwardExpirationDate: editingLeaveType?.carryForwardExpirationDate,
       isAttachment: editingLeaveType?.isAttachment,
@@ -144,7 +148,9 @@ const LeaveTypeForm = () => {
   }, [allLeaveTypes, editingLeaveType]);
 
   const onSubmit = () => {
-    const { typeId, emoji: _emoji, ...payload } = values;
+    const { typeId, emoji: _emoji, ...rest } = values;
+
+    const payload = { ...rest, name: rest.name.trim() };
 
     if (slug === LeaveTypeFormTypes.ADD) {
       addLeaveType(payload);
@@ -434,6 +440,7 @@ const LeaveTypeForm = () => {
             />
 
             <InputDate
+              isYearHidden
               name="carryForwardExpirationDate"
               label={translateText(["carryForwardExpirationDate"])}
               value={DateTime.fromISO(values.carryForwardExpirationDate ?? "")}
@@ -446,12 +453,12 @@ const LeaveTypeForm = () => {
               }}
               error={errors?.carryForwardExpirationDate}
               minDate={DateTime.fromObject({
-                year: nextYear,
+                year: currentYear,
                 month: leaveCycle?.startMonth,
                 day: leaveCycle?.startDate
               })}
               maxDate={DateTime.fromObject({
-                year: nextYear,
+                year: currentYear,
                 month: leaveCycle?.endMonth,
                 day: leaveCycle?.endDate
               })}
@@ -475,14 +482,7 @@ const LeaveTypeForm = () => {
               isFullWidth={false}
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
-              onClick={() =>
-                handleBackBtnClick({
-                  router,
-                  isLeaveTypeFormDirty: dirty,
-                  resetEditingLeaveType,
-                  setLeaveTypeModalType
-                })
-              }
+              onClick={async () => await router.back()}
             />
             <Button
               type={ButtonTypes.SUBMIT}

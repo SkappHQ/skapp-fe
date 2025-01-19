@@ -30,9 +30,12 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   const isPeopleManagerOrSuperAdmin = session?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
-  const { setSelectedEmployeeId } = usePeopleStore((state) => state);
+  const { setSelectedEmployeeId, resetEmployeeData, resetEmployeeDataChanges } =
+    usePeopleStore((state) => state);
 
   const handelViewAccount = async () => {
+    resetEmployeeDataChanges();
+    resetEmployeeData();
     if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee?.employeeId as unknown as string);
       await router.push(
@@ -45,8 +48,19 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
     handleCloseMenu();
   };
 
+  const getSubDomain = (url: string, multipleValues: boolean = false) => {
+    const subdomain = multipleValues ? url.split(".") : url.split(".")[0];
+    return subdomain;
+  };
+
+  const tenantId =
+    typeof window !== "undefined" ? getSubDomain(window.location.hostname) : "";
+
   const handleSignOut = async () => {
-    await signOut({ redirect: true });
+    await signOut({
+      callbackUrl: `/signin?tenantId=${tenantId}`,
+      redirect: true
+    });
   };
 
   return (
@@ -80,7 +94,7 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
               color={theme.palette.text.secondary}
               sx={{ fontSize: 13, fontWeight: 400 }}
             >
-              {employee?.jobTitle}
+              {employee?.jobTitle?.name}
             </Typography>
           </Stack>
         </Stack>

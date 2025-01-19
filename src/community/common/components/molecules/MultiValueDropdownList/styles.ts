@@ -56,7 +56,7 @@ export const styles = (theme: Theme) => ({
     flex: 1,
     "&& .MuiInputBase-input": {
       p: "0.7813rem 1rem",
-      zIndex: ZIndexEnums.MAX,
+      zIndex: ZIndexEnums.DEFAULT,
       color: theme.palette.grey[700],
       cursor: isDisabled || readOnly ? "default" : "pointer"
     }

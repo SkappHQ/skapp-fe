@@ -199,24 +199,48 @@ const nextConfig = {
         destination: "/community/leave/analytics/:id"
       },
       {
-        source: "/verify-email",
-        destination: "/enterprise/verify-email"
+        source: "/verify/email",
+        destination: "/enterprise/verify/email"
       },
       {
-        source: "/verify-success",
-        destination: "/enterprise/verify-success"
+        source: "/verify/success",
+        destination: "/enterprise/verify/success"
       },
       {
         source: "/redirect",
         destination: "/enterprise/redirect"
       },
       {
-        source: "/verify-account-reset-password",
-        destination: "/enterprise/verify-account-reset-password"
+        source: "/verify/reset-password",
+        destination: "/enterprise/verify/reset-password"
       },
       {
         source: "/forget-password",
         destination: "/enterprise/forget-password"
+      },
+      {
+        source: "/maintenance",
+        destination: "/enterprise/maintenance"
+      },
+      {
+        source: "/documents/inbox",
+        destination: "/enterprise/documents/inbox"
+      },
+      {
+        source: "/documents/sent",
+        destination: "/enterprise/documents/sent"
+      },
+      {
+        source: "/documents/contacts",
+        destination: "/enterprise/documents/contacts"
+      },
+      {
+        source: "/documents/folders",
+        destination: "/enterprise/documents/folders"
+      },
+      {
+        source: "/documents/create",
+        destination: "/enterprise/documents/create"
       }
     ];
   },

@@ -6,6 +6,7 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
+  SenderRoleTypes,
   ROLE_SUPER_ADMIN,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
@@ -17,7 +18,10 @@ const commonRoutes = [
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
-  ROUTES.NOTIFICATIONS
+  ROUTES.NOTIFICATIONS,
+  ROUTES.AUTH.VERIFY,
+  ROUTES.AUTH.VERIFY_SUCCESS,
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
 ];
 
 // Specific role-based routes
@@ -25,7 +29,12 @@ const superAdminRoutes = {
   [ROLE_SUPER_ADMIN]: [
     ROUTES.ORGANIZATION.SETUP,
     ROUTES.CONFIGURATIONS.BASE,
-    ROUTES.SETTINGS.BILLING
+    ROUTES.SETTINGS.BILLING,
+    ROUTES.DOCUMENTS.CONTACTS,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
+    ROUTES.DOCUMENTS.FOLDERS,
+    ROUTES.DOCUMENTS.INBOX,
+    ROUTES.DOCUMENTS.SENT
   ]
 };
 
@@ -35,6 +44,13 @@ const adminRoutes = {
   [AdminTypes.ATTENDANCE_ADMIN]: [
     ROUTES.TIMESHEET.BASE,
     ROUTES.CONFIGURATIONS.ATTENDANCE
+  ],
+  [AdminTypes.ESIGN_ADMIN]: [
+    ROUTES.DOCUMENTS.CONTACTS,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
+    ROUTES.DOCUMENTS.FOLDERS,
+    ROUTES.DOCUMENTS.INBOX,
+    ROUTES.DOCUMENTS.SENT
   ]
 };
 
@@ -50,16 +66,28 @@ const managerRoutes = {
     ROUTES.TIMESHEET.ALL_TIMESHEETS,
     ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
     ROUTES.PEOPLE.INDIVIDUAL
+  ],
+  [SenderRoleTypes.ESIGN_SENDER]: [
+    ROUTES.DOCUMENTS.CONTACTS,
+    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
+    ROUTES.DOCUMENTS.FOLDERS,
+    ROUTES.DOCUMENTS.INBOX,
+    ROUTES.DOCUMENTS.SENT
   ]
 };
 
 const employeeRoutes = {
-  [EmployeeTypes.PEOPLE_EMPLOYEE]: [ROUTES.PEOPLE.DIRECTORY, ...commonRoutes],
+  [EmployeeTypes.PEOPLE_EMPLOYEE]: [
+    ROUTES.PEOPLE.DIRECTORY,
+    ROUTES.PEOPLE.INDIVIDUAL,
+    ...commonRoutes
+  ],
   [EmployeeTypes.LEAVE_EMPLOYEE]: [ROUTES.LEAVE.MY_REQUESTS, ...commonRoutes],
   [EmployeeTypes.ATTENDANCE_EMPLOYEE]: [
     ROUTES.TIMESHEET.MY_TIMESHEET,
     ...commonRoutes
-  ]
+  ],
+  [EmployeeTypes.ESIGN_EMPLOYEE]: [ROUTES.DOCUMENTS.INBOX, ...commonRoutes]
 };
 
 // Merging all routes into one allowedRoutes object
@@ -110,6 +138,17 @@ export default withAuth(
       return NextResponse.redirect(new URL(ROUTES.DASHBOARD.BASE, request.url));
     }
 
+    if (
+      roles.includes(ManagerTypes.LEAVE_MANAGER) &&
+      !roles.includes(AdminTypes.LEAVE_ADMIN) &&
+      request.nextUrl.pathname ===
+        `${ROUTES.LEAVE.TEAM_TIME_SHEET_ANALYTICS}/reports`
+    ) {
+      return NextResponse.redirect(
+        new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+      );
+    }
+
     const isAllowed = roles.some((role) =>
       allowedRoutes[role]?.some((url) =>
         request.nextUrl.pathname.startsWith(url)
@@ -117,6 +156,17 @@ export default withAuth(
     );
 
     if (isAllowed) {
+      const isEsignatureModuleAvailable =
+        process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+
+      if (
+        request.nextUrl.pathname.includes(ROUTES.DOCUMENTS.BASE) &&
+        !isEsignatureModuleAvailable
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
       return NextResponse.next();
     }
 
@@ -147,9 +197,13 @@ export const config = {
     "/account",
     "/reset-password",
     "/unauthorized",
+    "/verify/email",
+    "/verify/success",
+    "/verify/account-reset-password",
     // Module routes
     "/leave/:path*",
     "/people/:path*",
-    "/timesheet/:path*"
+    "/timesheet/:path*",
+    "/documents/:path*"
   ]
 };

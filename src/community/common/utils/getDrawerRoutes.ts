@@ -3,6 +3,7 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
+  SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 
@@ -92,6 +93,47 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
           }
 
           return;
+        }
+      }
+
+      if (route.name === "Settings") {
+        const isEmployee = userRoles?.every((role) =>
+          Object.values(EmployeeTypes).includes(role as EmployeeTypes)
+        );
+
+        if (isEmployee) {
+          return {
+            id: route.id,
+            name: route.name,
+            url: ROUTES.SETTINGS.ACCOUNT,
+            icon: route.icon,
+            hasSubTree: false
+          };
+        }
+      }
+
+      if (route.name === "Documents") {
+        const isFeatureEnabled =
+          process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+        if (isFeatureEnabled) {
+          const isDocumentsEmployeeWithoutManagerOrAdminRole = userRoles?.some(
+            (role) =>
+              [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
+                role as AdminTypes | SenderRoleTypes
+              )
+          );
+
+          if (!isDocumentsEmployeeWithoutManagerOrAdminRole) {
+            return {
+              id: route.id,
+              name: route.name,
+              url: ROUTES.DOCUMENTS.INBOX,
+              icon: route.icon,
+              hasSubTree: false
+            };
+          }
+        } else {
+          return null;
         }
       }
 

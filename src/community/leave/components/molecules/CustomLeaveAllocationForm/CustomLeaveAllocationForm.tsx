@@ -321,7 +321,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
         <InputField
           id="leave-allocation-number-of-days-input"
           inputName="numberOfDaysOff"
-          inputType="number"
+          inputType="text"
           inputProps={{
             min: 0.5,
             max: 360,

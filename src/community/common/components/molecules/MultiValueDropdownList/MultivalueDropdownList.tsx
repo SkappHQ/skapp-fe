@@ -14,6 +14,7 @@ import { FC, JSX, SyntheticEvent, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
@@ -168,7 +169,9 @@ const MultivalueDropdownList: FC<Props> = ({
             open={open}
             name={inputName}
             disabled={isDisabled}
-            MenuProps={{ style: { maxHeight: 300, zIndex: 99999 } }}
+            MenuProps={{
+              style: { maxHeight: 300, zIndex: ZIndexEnums.DEFAULT }
+            }}
             sx={{
               ...classes.selectStyle(theme, isDisabled, readOnly),
               ...selectStyles

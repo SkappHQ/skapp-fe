@@ -2,10 +2,11 @@ const styles = () => ({
   filterStackStyles: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: "0.5rem"
+    rowGap: "0.5rem",
+    columnGap: "0.2rem"
   },
   filterChipButtonStyles: {
-    p: "0.5rem 0.75rem",
+    paddingX: "0.5rem",
     textTransform: "capitalize",
     lineHeight: "1.3125rem",
     height: "2rem"

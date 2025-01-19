@@ -8,9 +8,9 @@ const ROUTES = {
     UNAUTHORIZED: "/unauthorized",
     ERROR: "/_error",
     FORGOT_PASSWORD: "/forgot-password",
-    VERIFY: "/verify-email",
-    VERIFY_SUCCESS: "/verify-success",
-    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify-account-reset-password",
+    VERIFY: "/verify/email",
+    VERIFY_SUCCESS: "/verify/success",
+    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/reset-password",
     FORGET_PASSWORD: "/forget-password"
   },
   ORGANIZATION: {
@@ -74,6 +74,15 @@ const ROUTES = {
     LEAVE: {
       RESOURCE_AVAILABILITY: "/dashboard/leave/resource-availability"
     }
+  },
+  MAINTENANCE: "/maintenance",
+  DOCUMENTS: {
+    BASE: "/documents",
+    INBOX: "/documents/inbox",
+    SENT: "/documents/sent",
+    FOLDERS: "/documents/folders",
+    CONTACTS: "/documents/contacts",
+    CREATE_DOCUMENT: "/documents/create"
   }
 };
 

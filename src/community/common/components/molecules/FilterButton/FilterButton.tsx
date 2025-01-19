@@ -81,10 +81,9 @@ const FilterButton = ({
           <Chip label={`+${overflowFilters.length}`} sx={classes.filterItem} />
         )}
         <Button
-          buttonStyle={ButtonStyle.TERTIARY}
+          buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
           label={translateText(["placeholder"])}
           endIcon={<FilterIcon />}
-          styles={classes.filterBtn}
           onClick={(event: MouseEvent<HTMLElement>) =>
             handleFilterBtnClick(event)
           }
@@ -103,20 +102,20 @@ const FilterButton = ({
         <Divider />
         <Stack sx={classes.popperFooter}>
           <Button
-            type={ButtonTypes.BUTTON}
-            buttonStyle={ButtonStyle.PRIMARY}
-            label={translateText(["applyBtn"])}
-            styles={classes.popperButtons}
-            onClick={onApplyBtnClick}
-            size={ButtonSizes.MEDIUM}
-          />
-          <Button
             type={ButtonTypes.RESET}
             buttonStyle={ButtonStyle.TERTIARY}
             disabled={isResetBtnDisabled}
             label={translateText(["resetBtn"])}
             styles={classes.popperButtons}
             onClick={onResetBtnClick}
+            size={ButtonSizes.MEDIUM}
+          />
+          <Button
+            type={ButtonTypes.BUTTON}
+            buttonStyle={ButtonStyle.PRIMARY}
+            label={translateText(["applyBtn"])}
+            styles={classes.popperButtons}
+            onClick={onApplyBtnClick}
             size={ButtonSizes.MEDIUM}
           />
         </Stack>

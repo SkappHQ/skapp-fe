@@ -1,8 +1,7 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import UnsavedChangesModal from "~community/common/components/molecules/UnsavedChangesModal/UnsavedChangesModal";
 import Modal from "~community/common/components/organisms/Modal/Modal";
-import ROUTES from "~community/common/constants/routes";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveTypeModalEnums } from "~community/leave/enums/LeaveTypeEnums";
@@ -17,8 +16,12 @@ const ExitModal = () => {
     "unsavedChangesModal"
   );
 
-  const { leaveTypeModalType, setLeaveTypeModalType, resetEditingLeaveType } =
-    useLeaveStore((state) => state);
+  const {
+    leaveTypeModalType,
+    pendingNavigation,
+    setLeaveTypeModalType,
+    resetEditingLeaveType
+  } = useLeaveStore((state) => state);
 
   return (
     <Modal
@@ -30,16 +33,16 @@ const ExitModal = () => {
       isClosable={false}
       isDividerVisible={true}
       modalWrapperStyles={{
-        zIndex: ZIndexEnums.MAX
+        zIndex: ZIndexEnums.MODAL
       }}
     >
       <UnsavedChangesModal
         onPrimaryBtnClick={() =>
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE)
         }
-        onSecondaryBtnClick={() => {
+        onSecondaryBtnClick={async () => {
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE);
-          router.replace(ROUTES.LEAVE.LEAVE_TYPES);
+          await router.push(pendingNavigation);
           resetEditingLeaveType();
         }}
       />

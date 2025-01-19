@@ -32,9 +32,15 @@ import {
 
 interface Props {
   searchTerm?: string;
+  setHasFilteredData: (hasData: boolean) => void;
+  setHasEmptyFilterResults: (isEmpty: boolean) => void;
 }
 
-const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
+const CustomLeaveAllocationsTable: React.FC<Props> = ({
+  searchTerm,
+  setHasFilteredData,
+  setHasEmptyFilterResults
+}) => {
   const translateText = useTranslator("leaveModule", "customLeave");
   const theme: Theme = useTheme();
 
@@ -66,8 +72,23 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
   useEffect(() => {
     if (customLeaveData?.items) {
       setCustomLeaveAllocations(customLeaveData.items);
+      setHasFilteredData(customLeaveData.items.length > 0);
+      setHasEmptyFilterResults(
+        customLeaveData.items.length === 0 &&
+          (!!searchTerm || selectedLeaveTypes.length > 0)
+      );
+    } else {
+      setHasFilteredData(false);
+      setHasEmptyFilterResults(false);
     }
-  }, [customLeaveData?.items, setCustomLeaveAllocations]);
+  }, [
+    customLeaveData?.items,
+    searchTerm,
+    selectedLeaveTypes,
+    setCustomLeaveAllocations,
+    setHasFilteredData,
+    setHasEmptyFilterResults
+  ]);
 
   const handleEdit = useCallback(
     (leaveAllocation: LeaveAllocation) => {
@@ -100,10 +121,6 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
       setIsLeaveAllocationModalOpen
     ]
   );
-
-  const handleRemoveFilters = (leaveType: { id: string; text: string }) => {
-    setSelectedLeaveTypes((prev) => prev.filter((i) => i !== leaveType.id));
-  };
 
   const columns = useMemo(
     () => [
@@ -248,11 +265,23 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
                 text: leaveType.name
               })
             }
-            color={
-              tempSelectedLeaveTypes.includes(leaveType.id.toString())
-                ? "primary"
-                : "default"
-            }
+            sx={{
+              backgroundColor: tempSelectedLeaveTypes.includes(
+                leaveType.id.toString()
+              )
+                ? theme.palette.secondary.main
+                : theme.palette.grey[100],
+              color: tempSelectedLeaveTypes.includes(leaveType.id.toString())
+                ? theme.palette.common.black
+                : theme.palette.text.primary,
+              "&:hover": {
+                backgroundColor: tempSelectedLeaveTypes.includes(
+                  leaveType.id.toString()
+                )
+                  ? theme.palette.secondary.dark
+                  : theme.palette.grey[200]
+              }
+            }}
           />
         ))}
       </Box>
@@ -293,7 +322,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({ searchTerm }) => {
         emptyScreenButtonText={translateText([
           "CustomLeaveAllocationsSectionBtn"
         ])}
-        isDataAvailable={!!customLeaveData?.items?.length}
+        isDataAvailable={
+          !!customLeaveData?.items?.length ||
+          !!searchTerm ||
+          !!selectedLeaveTypes.length
+        }
         actionRowOneLeftButton={yearFilter}
         actionRowOneRightButton={filterButton}
         onEmptyScreenBtnClick={handleAddLeaveAllocation}

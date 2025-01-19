@@ -92,44 +92,46 @@ const LeaveManagerModalController = () => {
 
   return (
     <div>
-      <Modal
-        isModalOpen={isManagerModalOpen}
-        onCloseModal={handelManagerModal}
-        aria-labelledby="modal-title"
-        title={modalTitle}
-      >
-        <Box
+      {isManagerModalOpen && popupType && (
+        <Modal
+          isModalOpen={isManagerModalOpen}
+          onCloseModal={handelManagerModal}
           aria-labelledby="modal-title"
-          sx={{
-            marginTop: "1rem"
-          }}
+          title={modalTitle}
         >
-          {popupType === LeaveStatusTypes.PENDING && (
-            <ManagerApproveLeaveModal setPopupType={setPopupType} />
-          )}
+          <Box
+            aria-labelledby="modal-title"
+            sx={{
+              marginTop: "1rem"
+            }}
+          >
+            {popupType === LeaveStatusTypes.PENDING && (
+              <ManagerApproveLeaveModal setPopupType={setPopupType} />
+            )}
 
-          {(popupType === LeaveExtraPopupTypes.APPROVED_STATUS ||
-            popupType === LeaveExtraPopupTypes.DECLINE_STATUS ||
-            popupType === LeaveExtraPopupTypes.REVOKE_POPUP ||
-            popupType === LeaveStatusTypes.DENIED ||
-            popupType === LeaveStatusTypes.APPROVED ||
-            popupType === LeaveStatusTypes.CANCELLED ||
-            popupType === LeaveStatusTypes.REVOKED) && (
-            <LeaveManagerSuccessModal
-              closeModel={closeModel}
-              popupType={popupType}
-              setPopupType={setPopupType}
-            />
-          )}
+            {(popupType === LeaveExtraPopupTypes.APPROVED_STATUS ||
+              popupType === LeaveExtraPopupTypes.DECLINE_STATUS ||
+              popupType === LeaveExtraPopupTypes.REVOKE_POPUP ||
+              popupType === LeaveStatusTypes.DENIED ||
+              popupType === LeaveStatusTypes.APPROVED ||
+              popupType === LeaveStatusTypes.CANCELLED ||
+              popupType === LeaveStatusTypes.REVOKED) && (
+              <LeaveManagerSuccessModal
+                closeModel={closeModel}
+                popupType={popupType}
+                setPopupType={setPopupType}
+              />
+            )}
 
-          {popupType === LeaveExtraPopupTypes.DECLINE && (
-            <ManagerDeclineLeaveModal
-              closeModel={closeModel}
-              setPopupType={setPopupType}
-            />
-          )}
-        </Box>
-      </Modal>
+            {popupType === LeaveExtraPopupTypes.DECLINE && (
+              <ManagerDeclineLeaveModal
+                closeModel={closeModel}
+                setPopupType={setPopupType}
+              />
+            )}
+          </Box>
+        </Modal>
+      )}
     </div>
   );
 };

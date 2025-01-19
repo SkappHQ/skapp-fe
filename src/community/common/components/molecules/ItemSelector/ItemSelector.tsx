@@ -6,7 +6,10 @@ import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon"
 import Button from "~community/common/components/atoms/Button/Button";
 import SortRow from "~community/common/components/atoms/SortRow/SortRow";
 import Popper from "~community/common/components/molecules/Popper/Popper";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { usePeopleStore } from "~community/people/store/store";
 
 interface OptionType {
@@ -63,16 +66,8 @@ const ItemSelector = ({
       <Box>
         <Button
           label={selectedOption.name}
-          buttonStyle={ButtonStyle.TERTIARY}
-          styles={{
-            border: ".0625rem solid",
-            borderColor: "grey.500",
-            fontWeight: "400",
-            fontSize: ".875rem",
-            py: ".5rem",
-            px: "1rem",
-            width: "6.25rem"
-          }}
+          buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+          size={ButtonSizes.MEDIUM}
           endIcon={<DropDownArrowIcon />}
           onClick={(event: MouseEvent<HTMLElement>) => {
             setAnchorEl(event.currentTarget);

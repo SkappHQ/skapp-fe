@@ -23,7 +23,10 @@ import {
   useGetLeaveTypes
 } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
-import { LeaveRequestItemsType } from "~community/leave/types/LeaveRequestTypes";
+import {
+  LeaveRequestItemsType,
+  leaveRequestRowDataTypes
+} from "~community/leave/types/LeaveRequestTypes";
 import {
   removeFiltersByLabel,
   requestTypeSelector,
@@ -139,11 +142,9 @@ const ManagerLeaveRequest: FC<Props> = ({
   };
 
   const handelRowClick = async (leaveRequest: { id: number }) => {
+    setIsManagerModal(false);
+    setLeaveRequestData({} as leaveRequestRowDataTypes);
     setNewLeaveId(leaveRequest.id);
-  };
-
-  const handelModels = (): void => {
-    setIsManagerModal(true);
   };
 
   const removeFilters = (label?: string) => {
@@ -344,15 +345,17 @@ const ManagerLeaveRequest: FC<Props> = ({
   useEffect(() => {
     if (getleaveByIdSuccess && getLeaveByIdData) {
       setLeaveRequestData(getLeaveByIdData);
-      handelModels();
     }
   }, [getLeaveByIdData, getleaveByIdSuccess]);
 
   useEffect(() => {
     if (newLeaveId) {
-      refetch().catch(console.error);
+      refetch()
+        .then(() => setIsManagerModal(true))
+        .catch(console.error);
     }
   }, [newLeaveId]);
+
   return (
     <Table
       tableHeaders={tableHeaders}

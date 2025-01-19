@@ -20,12 +20,14 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { SortKeyTypes, StyleProps } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { pascalCaseFormatter } from "~community/common/utils/commonUtil";
 import {
   useGetEmployeeLeaveRequestData,
   useGetEmployeeLeaveRequests,
   useGetLeaveAllocation
 } from "~community/leave/api/MyRequestApi";
 import { useLeaveStore } from "~community/leave/store/store";
+import { LeaveRequestDataType } from "~community/leave/types/EmployeeLeaveRequestTypes";
 import { LeaveStatusTypes } from "~community/leave/types/LeaveTypes";
 import { leaveStatusIconSelector } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
@@ -70,13 +72,8 @@ const LeaveRequests: FC = () => {
   useEffect(() => {
     if (isSuccess && leaveData) {
       setEmployeeLeaveRequestData(leaveData);
-      handleModals();
     }
   }, [isSuccess, leaveData]);
-
-  const handleModals = () => {
-    setIsEmployeeModal(true);
-  };
 
   const columns = [
     {
@@ -181,11 +178,11 @@ const LeaveRequests: FC = () => {
   };
 
   const leaveStatusArray = [
+    LeaveStatusTypes.PENDING,
     LeaveStatusTypes.APPROVED,
     LeaveStatusTypes.DENIED,
-    LeaveStatusTypes.PENDING,
-    LeaveStatusTypes.CANCELLED,
-    LeaveStatusTypes.REVOKED
+    LeaveStatusTypes.REVOKED,
+    LeaveStatusTypes.CANCELLED
   ];
 
   const filterButton = (
@@ -231,7 +228,7 @@ const LeaveRequests: FC = () => {
         {leaveStatusArray.map((leaveStatus) => (
           <Button
             key={leaveStatus}
-            label={leaveStatus}
+            label={pascalCaseFormatter(leaveStatus)}
             isFullWidth={false}
             onClick={() => {
               setFilter((prev) => ({
@@ -325,12 +322,18 @@ const LeaveRequests: FC = () => {
   );
 
   const handleRowClick = (leaveRequest: any): void => {
+    setIsEmployeeModal(false);
+    setEmployeeLeaveRequestData({} as LeaveRequestDataType);
     setNewLeaveId(leaveRequest.id);
   };
 
   useEffect(() => {
     if (newLeaveId) {
-      refetch().catch(console.error);
+      refetch()
+        .then(() => {
+          setIsEmployeeModal(true);
+        })
+        .catch(console.error);
     }
   }, [newLeaveId]);
 

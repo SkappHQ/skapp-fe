@@ -9,6 +9,7 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -45,7 +46,6 @@ import {
   contractStates
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import {
@@ -95,7 +95,8 @@ const EditAllInformation: NextPage = () => {
     employeeVisaDetails,
     employeeDataChanges,
     userRoles,
-    setEmployeeGeneralDetails
+    setEmployeeGeneralDetails,
+    resetEmployeeDataChanges
   } = usePeopleStore((state) => state);
 
   const { id, tab } = router.query;
@@ -105,13 +106,15 @@ const EditAllInformation: NextPage = () => {
     isSuccess,
     setEmployeeData,
     refetchEmployeeData,
-    discardEmployeeData
+    discardEmployeeData,
+    resetEmployeeData
   }: {
     employee: EmployeeDetails | undefined;
     isSuccess: boolean;
     setEmployeeData: () => void;
     refetchEmployeeData: () => Promise<void>;
     discardEmployeeData: () => void;
+    resetEmployeeData: () => void;
   } = useGetEmployee({ id: Number(id) });
 
   const { isValuesChanged } = useDetectChange({ id: Number(id) });
@@ -145,7 +148,7 @@ const EditAllInformation: NextPage = () => {
     translateText(["editAllInfo", "emergency"]),
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
-    translateText(["editAllInfo", "timeline"]),
+    // translateText(["editAllInfo", "timeline"]),
     translateText(["editAllInfo", "leave"]),
     translateText(["editAllInfo", "timesheet"])
   ];
@@ -257,6 +260,12 @@ const EditAllInformation: NextPage = () => {
 
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
+  const goBack = () => {
+    resetEmployeeData();
+    resetEmployeeDataChanges();
+    router.back();
+  };
+
   const handleBackBtnClick = () =>
     isValuesChanged() && isSuccess && !isDiscardChangesModal.isModalOpen
       ? setIsDiscardChangesModal({
@@ -264,7 +273,7 @@ const EditAllInformation: NextPage = () => {
           modalType: DiscardTypeEnums.LEAVE_FORM,
           modalOpenedFrom: formType
         })
-      : router.back();
+      : goBack();
 
   const handleCancelBtnClick = () => {
     if (isValuesChanged() && isSuccess) {
@@ -326,7 +335,7 @@ const EditAllInformation: NextPage = () => {
       try {
         setHasUploadStarted(true);
 
-        if (environment === ProfileModes.COMMUNITY) {
+        if (environment === appModes.COMMUNITY) {
           const formData = new FormData();
           formData.append("file", employeeGeneralDetails?.authPic[0]);
 
@@ -590,7 +599,7 @@ const EditAllInformation: NextPage = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: ZIndexEnums.MAX
+            zIndex: ZIndexEnums.MODAL
           }}
         >
           <DiscardChangeApprovalModal

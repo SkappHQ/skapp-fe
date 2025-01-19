@@ -33,6 +33,7 @@ import PeopleLayout from "~community/common/components/templates/PeopleLayout/Pe
 import { appModes } from "~community/common/constants/configs";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
 import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { isValidAlphaNumericName } from "~community/common/regex/regexPatterns";
@@ -241,7 +242,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       if (employeeGeneralDetails?.authPic?.length) {
         handleUnSelectPhoto();
       } else if (
-        process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+        process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
         usedStoragePercentage >= NINETY_PERCENT
       ) {
         setToastMessage({
@@ -314,7 +315,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                       borderRadius: "50%",
                       backgroundColor: theme.palette.secondary.main,
                       cursor: "pointer",
-                      zIndex: 1
+                      zIndex: ZIndexEnums.DEFAULT
                     }}
                     onClick={handleImageClick}
                   >

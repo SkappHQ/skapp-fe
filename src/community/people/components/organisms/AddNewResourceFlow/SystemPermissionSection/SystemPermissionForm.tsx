@@ -15,6 +15,7 @@ import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import { appModes } from "~community/common/constants/configs";
 import { systemPermissionFormTestId } from "~community/common/constants/testIds";
 import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -37,7 +38,6 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
@@ -78,6 +78,10 @@ const SystemPermissionForm = ({
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
   const environment = useGetEnvironment();
+
+  const isEsignatureModuleAvailable =
+    process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -95,12 +99,14 @@ const SystemPermissionForm = ({
 
   const { data } = useGetSuperAdminCount();
   const { setUserRoles, userRoles } = usePeopleStore((state) => state);
+
   const { setToastMessage } = useToast();
   const initialValues: SystemPermissionInitalStateType = {
     isSuperAdmin: userRoles.isSuperAdmin || false,
     peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
     leaveRole: userRoles.leaveRole || Role.LEAVE_EMPLOYEE,
-    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE
+    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
+    esignRole: userRoles.esignRole || Role.ESIGN_EMPLOYEE
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -110,6 +116,7 @@ const SystemPermissionForm = ({
     setUserRoles("attendanceRole", values.attendanceRole);
     setUserRoles("peopleRole", values.peopleRole);
     setUserRoles("leaveRole", values.leaveRole);
+    setUserRoles("esignRole", values.esignRole);
   };
   const formik = useFormik({
     initialValues,
@@ -128,7 +135,9 @@ const SystemPermissionForm = ({
     leaveManagerLimitExceeded: false,
     attendanceManagerLimitExceeded: false,
     peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false
+    superAdminLimitExceeded: false,
+    esignAdminLimitExceeded: false,
+    esignSenderLimitExceeded: false
   });
 
   const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
@@ -309,6 +318,36 @@ const SystemPermissionForm = ({
       return;
     }
 
+    if (
+      name === "esignRole" &&
+      value === Role.ESIGN_ADMIN &&
+      roleLimits.esignAdminLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["eSignAdminLimitationTitle"]),
+        description: roleLimitationTexts(["eSignAdminLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      name === "esignRole" &&
+      value === Role.ESIGN_SENDER &&
+      roleLimits.esignSenderLimitExceeded
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["eSignSenderLimitationTitle"]),
+        description: roleLimitationTexts(["eSignSenderLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
     setFieldValue(name, value);
     setUserRoles(name, value);
   };
@@ -324,6 +363,8 @@ const SystemPermissionForm = ({
       setUserRoles("leaveRole", value);
     } else if (name === "attendanceRole") {
       setUserRoles("attendanceRole", value);
+    } else if (name === "esignRole") {
+      setUserRoles("esignRole", value);
     }
   };
 
@@ -332,7 +373,7 @@ const SystemPermissionForm = ({
   ) => {
     const isChecked = e.target.checked;
 
-    if (!isChecked && data?.superAdminCount === 1) {
+    if (!isChecked && data === 1) {
       setToastMessage({
         open: true,
         toastType: "error",
@@ -357,33 +398,44 @@ const SystemPermissionForm = ({
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
 
-    const peopleRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
-    const leaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
-    const attendanceRole = isChecked
-      ? Role.ATTENDANCE_ADMIN
-      : Role.ATTENDANCE_EMPLOYEE;
+    const peopleRole = Role.PEOPLE_ADMIN;
+    const leaveRole = Role.LEAVE_ADMIN;
+    const attendanceRole = Role.ATTENDANCE_ADMIN;
+    const esignRole = Role.ESIGN_ADMIN;
 
     void setFieldValue("peopleRole", peopleRole);
     void setFieldValue("leaveRole", leaveRole);
     void setFieldValue("attendanceRole", attendanceRole);
+    void setFieldValue("esignRole", esignRole);
 
     setUserRoles("attendanceRole", attendanceRole);
     setUserRoles("peopleRole", peopleRole);
     setUserRoles("leaveRole", leaveRole);
+    setUserRoles("esignRole", esignRole);
   };
 
   const handleSuperAdminChangeDefault = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const isChecked = e.target.checked;
+
+    if (!isChecked && data === 1) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: roleLimitationTexts(["superAdminRequiredTitle"]),
+        description: roleLimitationTexts(["superAdminRequiredDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
 
-    const peopleRole = isChecked ? Role.PEOPLE_ADMIN : Role.PEOPLE_EMPLOYEE;
-    const leaveRole = isChecked ? Role.LEAVE_ADMIN : Role.LEAVE_EMPLOYEE;
-    const attendanceRole = isChecked
-      ? Role.ATTENDANCE_ADMIN
-      : Role.ATTENDANCE_EMPLOYEE;
+    const peopleRole = Role.PEOPLE_ADMIN;
+    const leaveRole = Role.LEAVE_ADMIN;
+    const attendanceRole = Role.ATTENDANCE_ADMIN;
 
     void setFieldValue("peopleRole", peopleRole);
     void setFieldValue("leaveRole", leaveRole);
@@ -496,10 +548,27 @@ const SystemPermissionForm = ({
               isProfileView || values.isSuperAdmin || isInputsDisabled
             }
           />
+
+          {isEsignatureModuleAvailable && (
+            <DropdownList
+              inputName={"eSignRole"}
+              label="E-signature"
+              itemList={grantablePermission?.esign || []}
+              value={values.esignRole}
+              componentStyle={{
+                flex: 1
+              }}
+              checkSelected
+              onChange={(e) => handleCustomChange("esignRole", e.target.value)}
+              isDisabled={
+                isProfileView || values.isSuperAdmin || isInputsDisabled
+              }
+            />
+          )}
         </Stack>
         {isUpdate &&
           !isInputsDisabled &&
-          environment === ProfileModes.COMMUNITY && <SystemCredentials />}
+          environment === appModes.COMMUNITY && <SystemCredentials />}
 
         {!isInputsDisabled && (
           <Stack

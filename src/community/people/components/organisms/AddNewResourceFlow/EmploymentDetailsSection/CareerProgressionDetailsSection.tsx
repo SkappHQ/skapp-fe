@@ -516,7 +516,10 @@ const CareerProgressionDetailsSection = ({
                     label={translateText(["jobFamily"])}
                     value={values.jobFamily ?? ""}
                     placeholder={translateText(["selectJobFamily"])}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldValue("jobTitle", "");
+                    }}
                     onInput={handleInput}
                     error={errors.jobFamily ?? ""}
                     componentStyle={{ mt: "0rem" }}

@@ -53,7 +53,8 @@ export const peopleQueryKeys = {
       workEmail,
       identificationNo
     ].filter((val) => val !== undefined);
-  }
+  },
+  SUPERVISED_BY_ME: ["supervised-by-me"]
 };
 
 export const teamQueryKeys = {

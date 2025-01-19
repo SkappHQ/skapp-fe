@@ -133,7 +133,8 @@ const userRoles: EmployeeRoleType = {
   isSuperAdmin: false,
   attendanceRole: Role.ATTENDANCE_EMPLOYEE,
   peopleRole: Role.PEOPLE_EMPLOYEE,
-  leaveRole: Role.LEAVE_EMPLOYEE
+  leaveRole: Role.LEAVE_EMPLOYEE,
+  esignRole: Role.ESIGN_EMPLOYEE
 };
 
 export const employeeDetailsSlice = (
@@ -156,7 +157,9 @@ export const employeeDetailsSlice = (
   employeeProfileDetails,
   userRoles,
   isFromPeopleDirectory: false,
+  isLeaveTabVisible: false,
   viewEmployeeId: null,
+  isTimeTabVisible: false,
 
   setEmployeeGeneralDetails: (
     key: string,
@@ -377,5 +380,15 @@ export const employeeDetailsSlice = (
     set((state) => ({
       ...state,
       viewEmployeeId: value
+    })),
+  setIsLeaveTabVisible: (value: boolean) =>
+    set((state) => ({
+      ...state,
+      isLeaveTabVisible: value
+    })),
+  setIsTimeTabVisible: (value: boolean) =>
+    set((state) => ({
+      ...state,
+      isTimeTabVisible: value
     }))
 });

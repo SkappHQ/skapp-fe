@@ -18,6 +18,7 @@ import {
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
+import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import PeopleTableFilterBy from "~community/people/components/molecules/PeopleTable/PeopleTableFilterBy";
 import { usePeopleStore } from "~community/people/store/store";
@@ -25,6 +26,7 @@ import {
   EmployeeDataType,
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
+import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
   GetTeamPreProcessor,
@@ -61,6 +63,7 @@ const PeopleTable: FC<Props> = ({
   const isPeopleManagerOrSuperAdmin = data?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
+
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [sortEl, setSortEl] = useState<null | HTMLElement>(null);
@@ -81,12 +84,16 @@ const PeopleTable: FC<Props> = ({
     setIsFromPeopleDirectory,
     setViewEmployeeId,
     employeeDataParams,
-    setSelectedEmployeeId
+    setProjectTeamNames,
+    setSelectedEmployeeId,
+    resetEmployeeData,
+    resetEmployeeDataChanges
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
   const { data: jobFamilyData, isLoading: jobFamilyLoading } =
     useGetAllJobFamilies();
+  const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();
@@ -253,20 +260,29 @@ const PeopleTable: FC<Props> = ({
     }));
   };
 
+  useEffect(() => {
+    if (!isLoading && teamData)
+      setProjectTeamNames(teamData as TeamNamesType[]);
+  }, [isLoading, teamData]);
+
   const handleRowClick = async (employee: { id: number }) => {
     if (
-      data?.user.employee?.employeeId.toString() === employee.id.toString() &&
+      currentEmployeeDetails?.employeeId === employee.id.toString() &&
       !isPeopleManagerOrSuperAdmin
     ) {
+      resetEmployeeDataChanges();
+      resetEmployeeData();
       setSelectedEmployeeId(employee.id);
-      await router.push(ROUTES.PEOPLE.ACCOUNT);
+      router.push(ROUTES.PEOPLE.ACCOUNT);
     } else if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee.id);
-      await router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id));
+      router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id));
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-      await router.push(ROUTES.PEOPLE.INDIVIDUAL);
+
+      const route = `${ROUTES.PEOPLE.INDIVIDUAL}?viewEmployeeId=${employee.id}`;
+      router.push(route);
     }
   };
 

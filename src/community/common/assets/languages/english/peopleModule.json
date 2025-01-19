@@ -775,6 +775,7 @@
       "leave": "Leave",
       "attendance": "Attendance",
       "admin": "Admin",
+      "eSignature": "E-signature",
       "manager": "Manager",
       "employee": "Employee",
       "peopleAdmin": "People Admin",
@@ -971,6 +972,10 @@
     "peopleAdminLimitationTitle": "People Admin Limit Reached",
     "peopleAdminLimitationDescription": "Only one People Admin account is allowed.",
     "peopleManagerLimitationTitle": "People Manager Limit Reached",
-    "peopleManagerLimitationDescription": "Only one People Manager account is allowed."
+    "peopleManagerLimitationDescription": "Only one People Manager account is allowed.",
+    "eSignSenderLimitationTitle": "Sender Limit Reached",
+    "eSignSenderLimitationDescription": "Only one Sender account is allowed under the current plan.",
+    "eSignAdminLimitationTitle": "E-sign Admin Limit Reached",
+    "eSignAdminLimitationDescription": "Only one E-sign admin account is allowed."
   }
 }

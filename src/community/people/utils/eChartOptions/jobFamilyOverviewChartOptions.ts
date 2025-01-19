@@ -1,5 +1,9 @@
 import { type Theme, useTheme } from "@mui/material/styles";
 
+import {
+  MediaQueries,
+  useMediaQuery
+} from "~community/common/hooks/useMediaQuery";
 import { SingleTooltipFormatterParams } from "~community/common/types/EchartTypes";
 import { getCommonEChartOptions } from "~community/common/utils/eChartsCommonStyles";
 import { JobFamilyBreakdownType } from "~community/people/types/PeopleDashboardTypes";
@@ -11,6 +15,8 @@ export const useJobFamilyOverviewChartOptions = (
 ) => {
   const theme: Theme = useTheme();
   const commonOptions = getCommonEChartOptions(theme);
+  const isTabScreen = useMediaQuery()(MediaQueries.BELOW_1024);
+  const isLaptopScreen = useMediaQuery()(MediaQueries.BELOW_1440);
 
   return {
     ...commonOptions,
@@ -30,6 +36,7 @@ export const useJobFamilyOverviewChartOptions = (
       right: "1%"
     },
     legend: {
+      show: !(isLaptopScreen && !isTabScreen),
       orient: "vertical",
       right: 30,
       top: "center",

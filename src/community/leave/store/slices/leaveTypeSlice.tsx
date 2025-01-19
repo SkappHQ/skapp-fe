@@ -15,7 +15,7 @@ const initialLeaveType: LeaveTypeType = {
   colorCode: leaveTypeColors[0],
   calculationType: calculationType.ACCUMULATED,
   leaveDuration: LeaveDurationTypes.NONE,
-  maxCarryForwardDays: 0,
+  maxCarryForwardDays: undefined,
   carryForwardExpirationDays: 0,
   carryForwardExpirationDate: null,
   isAttachment: false,
@@ -36,6 +36,7 @@ export const leaveTypeSlice = (
   leaveTypeModalType: LeaveTypeModalEnums.NONE,
   editingLeaveType: initialLeaveType,
   isLeaveTypeFormDirty: false,
+  pendingNavigation: "",
   setAllLeaveTypes: (leaveTypes: LeaveTypeType[]) =>
     set((state) => ({
       ...state,
@@ -52,7 +53,8 @@ export const leaveTypeSlice = (
         return {
           ...state,
           isLeaveTypeModalOpen: false,
-          leaveTypeModalType: status
+          leaveTypeModalType: status,
+          pendingNavigation: ""
         };
       }
 
@@ -67,6 +69,11 @@ export const leaveTypeSlice = (
       ...state,
       editingLeaveType: leaveType
     })),
+  setPendingNavigation: (value: string) =>
+    set((state) => ({
+      ...state,
+      pendingNavigation: value
+    })),
   setLeaveTypeFormDirty: (value: boolean) =>
     set((state) => ({
       ...state,
@@ -77,6 +84,6 @@ export const leaveTypeSlice = (
       ...state,
       editingLeaveType: initialLeaveType,
       isLeaveTypeFormDirty: false,
-      isLeaveTypeModalOpen: false
+      pendingNavigation: ""
     }))
 });

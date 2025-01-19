@@ -2,6 +2,7 @@ import { Box, Divider, Typography } from "@mui/material";
 import { useEffect, useMemo } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
+import { AccountSignIn } from "~community/common/constants/stringConstants";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
@@ -30,6 +31,10 @@ const DownloadCsv = () => {
 
   useEffect(() => {
     setEmployeeDataParams("isExport", true);
+    setEmployeeDataParams(
+      "accountStatus",
+      `${AccountSignIn.PENDING},${AccountSignIn.ACTIVE}`
+    );
   }, [setEmployeeDataParams]);
 
   const activeLeaveTypes = useMemo(() => {

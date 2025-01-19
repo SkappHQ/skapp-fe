@@ -11,6 +11,7 @@ import { type Theme, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import {
   LocalizationProvider,
+  PickersCalendarHeader,
   PickersDay,
   PickersDayProps,
   StaticDatePicker
@@ -39,6 +40,7 @@ import {
   holidayType
 } from "~community/people/types/HolidayTypes";
 
+import CalendarHeader from "./CalendarHeader/CalendarHeader";
 import styles from "./styles";
 
 interface Props {
@@ -71,6 +73,7 @@ interface Props {
   popperStyles?: SxProps;
   selectedDate: DateTime | undefined;
   setSelectedDate: Dispatch<SetStateAction<DateTime | undefined>>;
+  isYearHidden?: boolean;
 }
 
 const InputDate: FC<Props> = ({
@@ -90,10 +93,14 @@ const InputDate: FC<Props> = ({
   popperStyles,
   selectedDate,
   setSelectedDate,
-  inputFormat
+  inputFormat,
+  isYearHidden
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     holidayType[]
   >([]);
@@ -199,6 +206,7 @@ const InputDate: FC<Props> = ({
     if (date) handleClose();
   };
 
+
   return (
     // TODO: Move the styles to the styles file, and remove the inline styles except for the styles that are dynamic
     // TODO: Use Stack instead of Box when display is flex
@@ -222,7 +230,7 @@ const InputDate: FC<Props> = ({
           sx={{
             fontWeight: 400,
             color: disabled
-              ? theme.palette.text.disabled
+              ? theme.palette.grey[700]
               : error
                 ? theme.palette.error.contrastText
                 : theme.palette.common.black
@@ -260,7 +268,6 @@ const InputDate: FC<Props> = ({
             color: selectedDate
               ? theme.palette.common.black
               : theme.palette.grey[600],
-
             opacity: 1
           }}
         >
@@ -280,6 +287,7 @@ const InputDate: FC<Props> = ({
           />
         </Box>
       </Box>
+
       <Popper
         id="custom-date-picker"
         open={open}
@@ -296,7 +304,10 @@ const InputDate: FC<Props> = ({
                 displayStaticWrapperAs="desktop"
                 value={value}
                 slots={{
-                  day: HolidayPickersDay
+                  day: HolidayPickersDay,
+                  calendarHeader: isYearHidden
+                    ? CalendarHeader
+                    : PickersCalendarHeader
                 }}
                 slotProps={{
                   leftArrowIcon: {

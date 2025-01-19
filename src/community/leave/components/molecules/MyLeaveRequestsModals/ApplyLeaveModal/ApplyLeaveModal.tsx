@@ -48,7 +48,6 @@ import {
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
 import { useGetAllHolidays } from "~community/people/api/HolidayApi";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
-import { ProfileModes } from "~enterprise/common/enums/CommonEum";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
@@ -240,7 +239,7 @@ const ApplyLeaveModal = () => {
       };
 
       if (attachments && attachments.length > 0) {
-        if (environment === ProfileModes.COMMUNITY) {
+        if (environment === appModes.COMMUNITY) {
           try {
             const uploadPromises = attachments.map((attachment) => {
               if (attachment.file) {
@@ -372,7 +371,7 @@ const ApplyLeaveModal = () => {
                 : undefined
             }
             onIconClick={() => {
-              process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE &&
+              process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
               usedStoragePercentage >= NINETY_PERCENT
                 ? setToastMessage({
                     open: true,

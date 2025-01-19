@@ -10,6 +10,7 @@ import ContentLayout from "~community/common/components/templates/ContentLayout/
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
+import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
 import EditAllInfoSkeleton from "~community/people/components/molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
 import UserDetailsCentered from "~community/people/components/molecules/UserDetailsCentered/UserDetailsCentered";
 import EmergencyDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmergencyDetailsSection/EmergencyDetailsForm";
@@ -18,7 +19,6 @@ import SecondaryDetailsSection from "~community/people/components/organisms/AddN
 import EmploymentDetailsSection from "~community/people/components/organisms/AddNewResourceFlow/EmploymentDetailsSection/EmploymentDetailsSection";
 import GeneralDetailsSection from "~community/people/components/organisms/AddNewResourceFlow/PersonalDetailsSection/GeneralDetailsSection";
 import useGetEmployee from "~community/people/hooks/useGetEmployee";
-import { usePeopleStore } from "~community/people/store/store";
 import { EditAllInformationType } from "~community/people/types/EditEmployeeInfoTypes";
 import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
 
@@ -27,7 +27,16 @@ const Individual: NextPage = () => {
   const translateText = useTranslator("peopleModule");
 
   const { data } = useSession();
-  const { tab } = router.query;
+  const { tab, viewEmployeeId } = router.query;
+
+  const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
+  const [isTimeTabVisible, setIsTimeTabVisible] = useState(false);
+
+  const isLeaveAdmin = data?.user.roles?.includes(AdminTypes.LEAVE_ADMIN);
+
+  const isAttendanceAdmin = data?.user.roles?.includes(
+    AdminTypes.ATTENDANCE_ADMIN
+  );
 
   const isLeaveManager = data?.user.roles?.includes(
     ManagerTypes.LEAVE_MANAGER || AdminTypes.LEAVE_ADMIN
@@ -43,8 +52,6 @@ const Individual: NextPage = () => {
     EditAllInformationType.personal
   );
 
-  const { viewEmployeeId } = usePeopleStore((state) => state);
-
   const {
     employee,
     isSuccess,
@@ -59,13 +66,14 @@ const Individual: NextPage = () => {
     discardEmployeeData: () => void;
   } = useGetEmployee({ id: Number(viewEmployeeId) });
 
+  const { data: supervisedData, isLoading: supervisorDataLoading } =
+    useGetSupervisedByMe(Number(viewEmployeeId));
+
   const steps = [
     translateText(["editAllInfo", "personal"]),
     translateText(["editAllInfo", "employment"]),
-    ...(isLeaveManager ? [translateText(["editAllInfo", "leave"])] : []),
-    ...(isAttendanceManager
-      ? [translateText(["editAllInfo", "timesheet"])]
-      : [])
+    ...(isLeaveTabVisible ? [translateText(["editAllInfo", "leave"])] : []),
+    ...(isTimeTabVisible ? [translateText(["editAllInfo", "timesheet"])] : [])
   ];
 
   const getComponent = useCallback(() => {
@@ -142,6 +150,29 @@ const Individual: NextPage = () => {
     }
   }, [tab]);
 
+  useEffect(() => {
+    if (supervisedData && !supervisorDataLoading) {
+      if (isLeaveAdmin) {
+        setIsLeaveTabVisible(true);
+      } else if (supervisedData && isLeaveManager) {
+        const isManager =
+          supervisedData.isPrimaryManager ||
+          supervisedData.isSecondaryManager ||
+          supervisedData.isTeamSupervisor;
+        setIsLeaveTabVisible(isManager);
+      }
+
+      if (isAttendanceAdmin) {
+        setIsTimeTabVisible(true);
+      } else if (supervisedData && isAttendanceManager) {
+        const isManager =
+          supervisedData.isPrimaryManager ||
+          supervisedData.isSecondaryManager ||
+          supervisedData.isTeamSupervisor;
+        setIsTimeTabVisible(isManager);
+      }
+    }
+  }, [supervisorDataLoading, supervisedData]);
   return (
     <ContentLayout
       title={""}
@@ -161,15 +192,18 @@ const Individual: NextPage = () => {
           isSuccess={isSuccess}
           enableEdit={false}
         />
-        <BoxStepper
-          activeStep={formType}
-          steps={steps}
-          onStepClick={(step) => setFormType(step as EditAllInformationType)}
-          useStringIdentifier
-          stepperStyles={{
-            marginBottom: "1.75rem"
-          }}
-        />
+        {!supervisorDataLoading && (
+          <BoxStepper
+            activeStep={formType}
+            steps={steps}
+            onStepClick={(step) => setFormType(step as EditAllInformationType)}
+            useStringIdentifier
+            stepperStyles={{
+              marginBottom: "1.75rem"
+            }}
+          />
+        )}
+
         {isSuccess ? getComponent() : <EditAllInfoSkeleton />}
       </Stack>
     </ContentLayout>

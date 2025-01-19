@@ -7,12 +7,14 @@ import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Pagination from "~community/common/components/atoms/Pagination/Pagination";
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
+import TableSkeleton from "~community/common/components/molecules/Table/TableSkeleton";
 import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
 import { getAdjacentYearsWithCurrent } from "~community/common/utils/dateTimeUtils";
+import { useGetAllLeaveEntitlements } from "~community/leave/api/LeaveEntitlementApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -35,12 +37,11 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const { data: leaveTypes } = useGetLeaveTypes();
+  const translateText = useTranslator("leaveModule", "leaveEntitlements");
+
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
   }));
-
-  const translateText = useTranslator("leaveModule", "leaveEntitlements");
 
   const {
     leaveEntitlementTableSelectedYear,
@@ -51,6 +52,12 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
   } = useLeaveStore((state) => state);
 
   const [headerLabels, setHeaderLabels] = useState<string[]>([]);
+
+  const { data: leaveTypes } = useGetLeaveTypes();
+
+  const { data: allLeaveEntitlementData } = useGetAllLeaveEntitlements(
+    leaveEntitlementTableSelectedYear
+  );
 
   useMemo(() => {
     if (leaveTypes) {
@@ -64,6 +71,10 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
       setHeaderLabels(tableHeaders);
     }
   }, [leaveTypes]);
+
+  if (isFetching) {
+    return <TableSkeleton rows={4} />;
+  }
 
   return (
     <>
@@ -153,33 +164,48 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           </>
         )}
       </Stack>
-      <Stack sx={classes.paginationContainer}>
-        <Divider sx={classes.divider} />
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Pagination
-            totalPages={tableData?.totalPages ?? 0}
-            currentPage={page - 1}
-            onChange={(_event, value) => setPage(value)}
-          />
-          <Button
-            buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
-            label={translateText(["exportBtnTxt"])}
-            endIcon={<Icon name={IconName.DOWNLOAD_ICON} />}
-            isFullWidth={false}
-            styles={classes.buttonStyles}
-            onClick={() =>
-              exportLeaveBulkList(
-                tableData?.items ?? [],
-                leaveEntitlementTableSelectedYear
-              )
-            }
-          />
+      {(tableData?.totalPages ?? 0) > 1 ? (
+        <Stack sx={classes.paginationContainer}>
+          <Divider sx={classes.divider} />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Pagination
+              totalPages={tableData?.totalPages ?? 0}
+              currentPage={page - 1}
+              onChange={(_event, value) => setPage(value)}
+            />
+
+            <Button
+              buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+              label={translateText(["exportBtnTxt"])}
+              endIcon={
+                <Icon
+                  name={IconName.DOWNLOAD_ICON}
+                  fill={
+                    tableData?.items?.length === 0
+                      ? theme.palette.grey[800]
+                      : theme.palette.common.black
+                  }
+                />
+              }
+              isFullWidth={false}
+              styles={classes.buttonStyles}
+              disabled={tableData?.items?.length === 0}
+              onClick={() =>
+                exportLeaveBulkList(
+                  tableData?.items ?? [],
+                  leaveEntitlementTableSelectedYear
+                )
+              }
+            />
+          </Stack>
         </Stack>
-      </Stack>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

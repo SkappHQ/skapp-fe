@@ -44,6 +44,11 @@ export const leaveQueryKeys = {
 
 export const leaveEntitlementQueryKeys = {
   ALL: ["all-leave-entitlements"],
+  ALL_LEAVE_ENTITLEMENTS: function (params?: LeaveEntitlementParamsType) {
+    if (params)
+      return ["all-leave-entitlements", ...Object.entries(params).flat()];
+    else return ["all-leave-entitlements"];
+  },
   LEAVE_ENTITLEMENTS: function (params?: LeaveEntitlementParamsType) {
     if (params)
       return ["all-leave-entitlements", ...Object.entries(params).flat()];

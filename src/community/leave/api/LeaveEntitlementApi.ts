@@ -15,7 +15,8 @@ import { leaveEntitlementEndPoints } from "~community/leave//api/utils/ApiEndpoi
 import { leaveEntitlementQueryKeys } from "~community/leave/api/utils/QueryKeys";
 import {
   LeaveEntitlementBulkPayloadType,
-  LeaveEntitlementResponseType
+  LeaveEntitlementResponseType,
+  LeaveEntitlementType
 } from "~community/leave/types/LeaveEntitlementTypes";
 
 export const useGetLeaveEntitlements = (
@@ -38,8 +39,32 @@ export const useGetLeaveEntitlements = (
         params: pageParams
       }),
     select: (data) => {
-      const results = data.data.results[0] ?? [];
+      const results = data.data.results ?? [];
+      return results[0];
+    }
+  });
+};
 
+export const useGetAllLeaveEntitlements = (
+  selectedYear: string
+): UseQueryResult<LeaveEntitlementType[]> => {
+  const pageParams = {
+    page: 0,
+    size: 1,
+    year: selectedYear,
+    isExport: true,
+    sortOrder: SortOrderTypes.ASC,
+    sortKey: SortKeyTypes.CREATED_DATE
+  };
+
+  return useQuery({
+    queryKey: leaveEntitlementQueryKeys.ALL_LEAVE_ENTITLEMENTS(pageParams),
+    queryFn: () =>
+      authFetch.get(leaveEntitlementEndPoints.GET_LEAVE_ENTITLEMENTS, {
+        params: pageParams
+      }),
+    select: (data) => {
+      const results = data.data.results ?? [];
       return results;
     }
   });
