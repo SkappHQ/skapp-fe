@@ -21,11 +21,11 @@ const ColorPaletteSkeleton: FC<Props> = ({ label, numberOfColors = 7 }) => {
           {Array.from({ length: numberOfColors }, (_, index) => (
             <Skeleton
               key={index}
-              variant={"rounded"}
-              width={"1.75rem"}
-              height={"1.75rem"}
+              variant="rounded"
+              width="1.75rem"
+              height="1.75rem"
               sx={classes.skeleton}
-              animation={"wave"}
+              animation="wave"
               data-testid={`skeleton-${index}`}
             />
           ))}

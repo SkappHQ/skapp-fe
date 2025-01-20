@@ -15,10 +15,10 @@ interface KebabMenuProps {
   icon?: ReactNode;
   ariaLabel?: string;
   menuAlign?: {
-    anchorOrigin?: { vertical: "top" | "bottom"; horizontal: "left" | "right" };
+    anchorOrigin?: { vertical: "top" | "bottom"; horizontal: "left" | "right" }; // TODO: Use enum
     transformOrigin?: {
-      vertical: "top" | "bottom";
-      horizontal: "left" | "right";
+      vertical: "top" | "bottom"; // TODO: Use enum
+      horizontal: "left" | "right"; // TODO: Use enum
     };
   };
   customStyles?: {

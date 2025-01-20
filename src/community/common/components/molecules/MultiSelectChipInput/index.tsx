@@ -1,4 +1,4 @@
-import { type SxProps, type Theme, useTheme } from "@mui/material";
+import { type SxProps } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { FC } from "react";
@@ -21,10 +21,10 @@ const MultiSelectChipInput: FC<MultiSelectChipInputProps> = ({
   hiddenChipStyles,
   chipList: chips
 }) => {
-  const theme: Theme = useTheme();
-  const classes = styles({ theme });
+  const classes = styles();
 
   return (
+    // TODO: move styles to styles.ts
     <>
       <Typography component="label" lineHeight={1.5} sx={classes.label}>
         {label}

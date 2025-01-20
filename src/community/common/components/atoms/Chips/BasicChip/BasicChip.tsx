@@ -40,6 +40,7 @@ const BasicChip: FC<Props> = ({
   const theme = useTheme();
   const classes = styles(theme);
 
+  // TODO: Is a custom breakpoint needed here? can't we use an existing breakpoint?
   const queryMatches = useMediaQuery();
   const isBelow1350 = queryMatches(1350);
 
@@ -82,7 +83,7 @@ const BasicChip: FC<Props> = ({
           <Box>
             <Icon
               name={IconName.CLOSE_ICON}
-              fill={coloredCloseIcon ? theme.palette.primary.dark : "black"}
+              fill={coloredCloseIcon ? theme.palette.primary.dark : "black"} // TODO: use the theme color
             />
           </Box>
         }

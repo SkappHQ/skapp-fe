@@ -14,7 +14,7 @@ interface Props {
   icon?: JSX.Element | string;
   chipStyles?: SxProps;
   isResponsive?: boolean;
-  textTransform?: "capitalize" | "uppercase" | "lowercase" | "none" | undefined;
+  textTransform?: "capitalize" | "uppercase" | "lowercase" | "none" | undefined; // TODO: create an enum for this
   onDelete?: (event: MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onClick?: MouseEventHandler<HTMLDivElement>;
   endIcon?: JSX.Element;
@@ -72,6 +72,7 @@ const IconChip: FC<Props> = ({
   };
 
   return (
+    // TODO: Try using a styled chip here, instead of passing the styles as props
     <Chip
       component="div"
       icon={renderIcon()}
