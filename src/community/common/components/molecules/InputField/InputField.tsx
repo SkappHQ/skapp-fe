@@ -122,6 +122,7 @@ const InputField = ({
   const theme = useTheme();
   const classes = styles(theme);
 
+  // TODO: Refactor this to a util function and write test cases for it, also try to use switch instead of if else
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     if (inputType === "password") {
@@ -142,6 +143,7 @@ const InputField = ({
     }
   };
 
+  // TODO: Refactor this to a separate function
   const renderInputBase = () => (
     <InputBase
       id={id}
@@ -176,6 +178,8 @@ const InputField = ({
   );
 
   return (
+    // TODO: Check if the below code could be improved
+    // TODO: Use Stack instead of Box if display is flex
     <Box sx={componentStyle} {...commonProp}>
       <Stack sx={mergeSx([classes.labelWrapper, tooltipStyles])}>
         <Typography
@@ -203,6 +207,7 @@ const InputField = ({
           )}
         </Typography>
         {tooltip && (
+          // TODO: Use Stack instead of Box if display is flex
           <Box
             sx={classes.tooltipWrapper}
             onMouseOver={onTooltipHover}
@@ -233,6 +238,7 @@ const InputField = ({
         ])}
       >
         {isMulti && value ? (
+          // TODO: Use Stack instead of Box if display is flex and remove the second box if not needed
           <Box sx={classes.multiValueOuterBox}>
             <Box>
               {String(value)

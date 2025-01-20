@@ -81,24 +81,24 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
   const form = useFormik({
     initialValues: {
       assignedTo:
-        currentEditingLeaveAllocation?.assignedTo || initialValues.assignedTo,
-      entitlementId: currentEditingLeaveAllocation?.entitlementId
-        ? Number(currentEditingLeaveAllocation.entitlementId)
-        : Number(initialValues.entitlementId),
-      employeeId: currentEditingLeaveAllocation?.employeeId
-        ? Number(currentEditingLeaveAllocation.employeeId)
-        : Number(initialValues.employeeId),
-      typeId: currentEditingLeaveAllocation?.typeId
-        ? Number(currentEditingLeaveAllocation.typeId)
-        : Number(initialValues.typeId),
-      numberOfDaysOff: currentEditingLeaveAllocation?.numberOfDaysOff
-        ? Number(currentEditingLeaveAllocation.numberOfDaysOff)
-        : Number(initialValues.numberOfDaysOff),
+        initialValues.assignedTo || currentEditingLeaveAllocation?.assignedTo,
+      entitlementId: initialValues.entitlementId
+        ? Number(initialValues.entitlementId)
+        : Number(currentEditingLeaveAllocation?.entitlementId),
+      employeeId: initialValues.employeeId
+        ? Number(initialValues.employeeId)
+        : Number(currentEditingLeaveAllocation?.employeeId),
+      typeId: initialValues.typeId
+        ? Number(initialValues.typeId)
+        : Number(currentEditingLeaveAllocation?.typeId),
+      numberOfDaysOff: initialValues.numberOfDaysOff
+        ? Number(initialValues.numberOfDaysOff)
+        : Number(currentEditingLeaveAllocation?.numberOfDaysOff),
       validToDate:
-        currentEditingLeaveAllocation?.validToDate || initialValues.validToDate,
+        initialValues.validToDate || currentEditingLeaveAllocation?.validToDate,
       validFromDate:
-        currentEditingLeaveAllocation?.validFromDate ||
-        initialValues.validFromDate
+        initialValues.validFromDate ||
+        currentEditingLeaveAllocation?.validFromDate
     },
     validationSchema: customLeaveAllocationValidation(translateText),
     onSubmit,

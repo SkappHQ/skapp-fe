@@ -7,7 +7,8 @@ interface Props {
   onPrimaryBtnClick: () => void;
   onSecondaryBtnClick: () => void;
 }
-const ExitModal = ({ onPrimaryBtnClick, onSecondaryBtnClick }: Props) => {
+
+const AreYouSureModal = ({ onPrimaryBtnClick, onSecondaryBtnClick }: Props) => {
   const translateText = useTranslator(
     "commonComponents",
     "userPromptModal",
@@ -32,4 +33,4 @@ const ExitModal = ({ onPrimaryBtnClick, onSecondaryBtnClick }: Props) => {
   );
 };
 
-export default ExitModal;
+export default AreYouSureModal;

@@ -828,7 +828,6 @@
     "saveBtnText": "Save",
     "cancelBtnText": "Cancel",
     "backBtnText": "Back",
-    "discardBtnText": "Discard",
     "okayBtnText": "Okay",
     "alert": "Alert",
     "atLeastOneJobTitleRequired": {
@@ -860,9 +859,7 @@
     "jobTitleTransferMembersSuccessToastTitle": "Job Title Deleted",
     "jobTitleTransferMembersErrorToastDescription": "Failed to delete the job title. Please try again.",
     "addNewJobFamilyBtn": "Add new job family",
-    "keepEditingBtn": "Keep editing",
     "unsavedChangesModalTitle": "Unsaved changes",
-    "unsavedChangesModalDescription": "You have unsaved changes. To proceed, would you like to save or discard them?",
     "deleteModalTitle": "Confirm deletion",
     "jobFamilyDeleteConfirmationModalDescription": "Are you sure you want to delete this job family? You will not be able to revoke this decision.",
     "jobFamilyDeleteConfirmationModalBtn": "Delete job family",

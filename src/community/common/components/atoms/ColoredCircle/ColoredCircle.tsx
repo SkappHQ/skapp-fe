@@ -1,6 +1,8 @@
 import CheckIcon from "@mui/icons-material/Check";
-import { Box, useTheme } from "@mui/material";
+import { Stack } from "@mui/material";
 import { FC, MouseEventHandler } from "react";
+
+import { mergeSx } from "~community/common/utils/commonUtil";
 
 import { styles } from "./styles";
 
@@ -16,13 +18,13 @@ const ColoredCircle: FC<Props> = ({
   isSelected,
   dataTestId
 }) => {
-  const theme = useTheme();
-  const classes = styles(theme, color);
+  const classes = styles();
+
   return (
-    <Box
-      sx={classes.container}
+    <Stack
+      sx={mergeSx([classes.container, { backgroundColor: `${color}` }])}
       onClick={onClick}
-      component={"div"}
+      component="div"
       data-testid={dataTestId}
     >
       {isSelected ? (
@@ -30,7 +32,7 @@ const ColoredCircle: FC<Props> = ({
       ) : (
         <></>
       )}
-    </Box>
+    </Stack>
   );
 };
 

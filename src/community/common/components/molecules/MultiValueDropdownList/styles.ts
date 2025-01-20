@@ -2,6 +2,7 @@ import { Theme } from "@mui/material";
 
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 
+// TODO: use StyleProps and then move dynamic styles to component file
 export const styles = (theme: Theme) => ({
   componentStyle: {
     display: "flex",

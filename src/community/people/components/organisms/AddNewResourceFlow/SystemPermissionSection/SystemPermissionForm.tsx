@@ -78,6 +78,10 @@ const SystemPermissionForm = ({
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
   const environment = useGetEnvironment();
+
+  const isEsignatureModuleAvailable =
+    process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
+
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -95,6 +99,7 @@ const SystemPermissionForm = ({
 
   const { data } = useGetSuperAdminCount();
   const { setUserRoles, userRoles } = usePeopleStore((state) => state);
+
   const { setToastMessage } = useToast();
   const initialValues: SystemPermissionInitalStateType = {
     isSuperAdmin: userRoles.isSuperAdmin || false,
@@ -358,7 +363,7 @@ const SystemPermissionForm = ({
       setUserRoles("leaveRole", value);
     } else if (name === "attendanceRole") {
       setUserRoles("attendanceRole", value);
-    } else if (name === "eSignRole") {
+    } else if (name === "esignRole") {
       setUserRoles("esignRole", value);
     }
   };
@@ -396,14 +401,17 @@ const SystemPermissionForm = ({
     const peopleRole = Role.PEOPLE_ADMIN;
     const leaveRole = Role.LEAVE_ADMIN;
     const attendanceRole = Role.ATTENDANCE_ADMIN;
+    const esignRole = Role.ESIGN_ADMIN;
 
     void setFieldValue("peopleRole", peopleRole);
     void setFieldValue("leaveRole", leaveRole);
     void setFieldValue("attendanceRole", attendanceRole);
+    void setFieldValue("esignRole", esignRole);
 
     setUserRoles("attendanceRole", attendanceRole);
     setUserRoles("peopleRole", peopleRole);
     setUserRoles("leaveRole", leaveRole);
+    setUserRoles("esignRole", esignRole);
   };
 
   const handleSuperAdminChangeDefault = async (
@@ -541,20 +549,22 @@ const SystemPermissionForm = ({
             }
           />
 
-          <DropdownList
-            inputName={"esignRole"}
-            label="E-signature"
-            itemList={grantablePermission?.eSign || []}
-            value={values.esignRole}
-            componentStyle={{
-              flex: 1
-            }}
-            checkSelected
-            onChange={(e) => handleCustomChange("esignRole", e.target.value)}
-            isDisabled={
-              isProfileView || values.isSuperAdmin || isInputsDisabled
-            }
-          />
+          {isEsignatureModuleAvailable && (
+            <DropdownList
+              inputName={"eSignRole"}
+              label="E-signature"
+              itemList={grantablePermission?.esign || []}
+              value={values.esignRole}
+              componentStyle={{
+                flex: 1
+              }}
+              checkSelected
+              onChange={(e) => handleCustomChange("esignRole", e.target.value)}
+              isDisabled={
+                isProfileView || values.isSuperAdmin || isInputsDisabled
+              }
+            />
+          )}
         </Stack>
         {isUpdate &&
           !isInputsDisabled &&

@@ -10,7 +10,8 @@ export const transformRolesToDropdownFormat = (
   const result: AllowedGrantableRolesType = {
     leave: [],
     people: [],
-    attendance: []
+    attendance: [],
+    esign: []
   };
 
   rolesData.forEach((moduleData) => {
