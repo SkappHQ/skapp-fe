@@ -11,7 +11,10 @@ import routes from "./data/routes";
 
 type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
-const getDrawerRoutes = (userRoles: Role[] | undefined) => {
+const getDrawerRoutes = (
+  userRoles: Role[] | undefined,
+  globalLoginMethod?: string
+) => {
   const userSpecificRoutes = routes
     .map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
@@ -101,7 +104,15 @@ const getDrawerRoutes = (userRoles: Role[] | undefined) => {
           Object.values(EmployeeTypes).includes(role as EmployeeTypes)
         );
 
-        if (isEmployee) {
+        const isSuperAdmin = userRoles?.includes(AdminTypes.SUPER_ADMIN);
+
+        const isGoogle = globalLoginMethod === "GOOGLE";
+
+        if (isEmployee && isGoogle) {
+          return null;
+        }
+
+        if (!isSuperAdmin) {
           return {
             id: route.id,
             name: route.name,
