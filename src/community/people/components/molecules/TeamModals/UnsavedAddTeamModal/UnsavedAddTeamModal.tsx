@@ -1,9 +1,6 @@
-import { Box, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
-import Button from "~community/common/components/atoms/Button/Button";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
-import { useTranslator } from "~community/common/hooks/useTranslator";
+import AreYouSureModal from "~community/common/components/molecules/AreYouSureModal/AreYouSureModal";
 import { usePeopleStore } from "~community/people/store/store";
 import { AddTeamType, TeamModelTypes } from "~community/people/types/TeamTypes";
 
@@ -12,41 +9,19 @@ interface Props {
 }
 
 const UnsavedAddTeamModal = ({ setTempTeamDetails }: Props) => {
-  const translateText = useTranslator("peopleModule", "teams");
   const { setTeamModalType, setIsTeamModalOpen } = usePeopleStore(
     (state) => state
   );
 
   return (
-    <Box>
-      <Typography sx={{ mt: "1rem" }}>
-        {translateText(["unsavedChangesAddModalDes"])}
-      </Typography>
-      <Box>
-        <Button
-          label={translateText(["resumeTask"])}
-          styles={{
-            mt: "1rem"
-          }}
-          buttonStyle={ButtonStyle.PRIMARY}
-          onClick={() => {
-            setTeamModalType(TeamModelTypes.ADD_TEAM);
-          }}
-        />
-        <Button
-          label={translateText(["leaveAnyway"])}
-          styles={{
-            mt: "1rem"
-          }}
-          buttonStyle={ButtonStyle.ERROR}
-          onClick={() => {
-            setTempTeamDetails(undefined);
-            setIsTeamModalOpen(false);
-            setTeamModalType(TeamModelTypes.UNSAVED_ADD_TEAM);
-          }}
-        />
-      </Box>
-    </Box>
+    <AreYouSureModal
+      onPrimaryBtnClick={() => setTeamModalType(TeamModelTypes.ADD_TEAM)}
+      onSecondaryBtnClick={() => {
+        setTempTeamDetails(undefined);
+        setIsTeamModalOpen(false);
+        setTeamModalType(TeamModelTypes.UNSAVED_ADD_TEAM);
+      }}
+    />
   );
 };
 
