@@ -6,8 +6,8 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
-  SenderRoleTypes,
   ROLE_SUPER_ADMIN,
+  SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 

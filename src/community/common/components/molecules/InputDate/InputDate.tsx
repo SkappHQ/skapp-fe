@@ -99,8 +99,6 @@ const InputDate: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles();
 
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [placement, setPlacement] = useState<PopperPlacementType>("bottom");
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     holidayType[]
   >([]);
@@ -205,7 +203,6 @@ const InputDate: FC<Props> = ({
   const onAccept = (date: DateTime | null) => {
     if (date) handleClose();
   };
-
 
   return (
     // TODO: Move the styles to the styles file, and remove the inline styles except for the styles that are dynamic

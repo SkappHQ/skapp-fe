@@ -6,15 +6,20 @@ import TimeWidgetPopupController from "~community/attendance/components/organism
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import AppBar from "~community/common/components/organisms/AppBar/AppBar";
 import Drawer from "~community/common/components/organisms/Drawer/Drawer";
+import { appModes } from "~community/common/constants/configs";
 import ROUTES from "~community/common/constants/routes";
 import {
   initialState,
   useToast
 } from "~community/common/providers/ToastProvider";
 import { IsProtectedUrl } from "~community/common/utils/authUtils";
+import { tenantID } from "~community/common/utils/axiosInterceptor";
 import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
 import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
 import useFcmToken from "~enterprise/common/hooks/useFCMToken";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 
 import styles from "./styles";
 
@@ -33,6 +38,21 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
   const [isClient, setIsClient] = useState(false);
   const [isProtected, setIsProtected] = useState(false);
 
+  const environment = useGetEnvironment();
+
+  const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => state);
+
+  const { data: globalLogin } = useGetGlobalLoginMethod(
+    environment === appModes.ENTERPRISE,
+    tenantID as string
+  );
+
+  useEffect(() => {
+    if (globalLogin) {
+      setGlobalLoginMethod(globalLogin);
+    }
+  }, [globalLogin, setGlobalLoginMethod]);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -49,7 +69,11 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
     }
   }, [isProtected, token]);
 
-  if (isProtected && asPath !== ROUTES.DOCUMENTS.CREATE_DOCUMENT) {
+  if (
+    isProtected &&
+    asPath !== ROUTES.DOCUMENTS.CREATE_DOCUMENT &&
+    globalLogin
+  ) {
     return (
       <>
         <Stack sx={classes.protectedWrapper}>
