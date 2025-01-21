@@ -245,6 +245,10 @@ const nextConfig = {
       {
         source: "/documents/create",
         destination: "/enterprise/documents/create"
+      },
+      {
+        source: "/settings/modules",
+        destination: "/enterprise/settings/modules"
       }
     ];
   },

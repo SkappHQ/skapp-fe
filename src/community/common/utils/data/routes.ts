@@ -250,7 +250,7 @@ const routes = [
           AdminTypes.SUPER_ADMIN,
           AdminTypes.ESIGN_ADMIN,
           SenderRoleTypes.ESIGN_SENDER,
-          EmployeeTypes.ESIGN_EMPLOYEE,
+          EmployeeTypes.ESIGN_EMPLOYEE
         ]
       },
       {
@@ -316,6 +316,13 @@ const routes = [
       },
       {
         id: "6B",
+        name: "Modules",
+        url: ROUTES.SETTINGS.MODULES,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
+      },
+      {
+        id: "6C",
         name: "Account Settings",
         url: ROUTES.SETTINGS.ACCOUNT,
         hasSubTree: false,
