@@ -14,7 +14,8 @@ const ROUTES = {
     FORGET_PASSWORD: "/forget-password"
   },
   ORGANIZATION: {
-    SETUP: "/setup-organization"
+    SETUP: "/setup-organization",
+    MODULE_SELECTION: "/module-selection"
   },
   NOTIFICATIONS: "/notifications",
   SETTINGS: {

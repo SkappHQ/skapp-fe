@@ -6,6 +6,7 @@ import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
 import AssetIcon from "~community/common/assets/Icons/AssetIcon";
 import AttachmentIcon from "~community/common/assets/Icons/AttachmentIcon";
+import AttendanceModuleIcon from "~community/common/assets/Icons/AttendanceModuleIcon";
 import BackIcon from "~community/common/assets/Icons/BackIcon";
 import BellIcon from "~community/common/assets/Icons/BellIcon";
 import BinIcon from "~community/common/assets/Icons/BinIcon";
@@ -43,6 +44,7 @@ import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
 import LeaveIcon from "~community/common/assets/Icons/LeaveIcon";
+import LeaveModuleIcon from "~community/common/assets/Icons/LeaveModuleIcon";
 import LeftArrowIcon from "~community/common/assets/Icons/LeftArrowIcon";
 import LockIcon from "~community/common/assets/Icons/LockIcon";
 import MagnifyingGlassIcon from "~community/common/assets/Icons/MagnifyingGlassIcon";
@@ -57,6 +59,7 @@ import PauseIcon from "~community/common/assets/Icons/PauseIcon";
 import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
+import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
@@ -189,7 +192,10 @@ export const IconMapping: Partial<
   [IconName.UPGRADE_INFO_ICON]: UpgradeInfoIcon,
   [IconName.WARNING_SIGN_ICON]: WarningSignIcon,
   [IconName.GOOGLE_ICON]: GoogleIcon,
-  [IconName.DOCUMENTS_ICON]: DocumentsIcon
+  [IconName.DOCUMENTS_ICON]: DocumentsIcon,
+  [IconName.PEOPLE_MODULE_ICON]: PeopleModuleIcon,
+  [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
+  [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon
   // Add more icons here as needed
 };
 
