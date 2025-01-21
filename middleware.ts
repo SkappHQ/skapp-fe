@@ -19,8 +19,6 @@ const commonRoutes = [
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
   ROUTES.NOTIFICATIONS,
-  ROUTES.AUTH.VERIFY,
-  ROUTES.AUTH.VERIFY_SUCCESS,
   ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
 ];
 
@@ -28,13 +26,16 @@ const commonRoutes = [
 const superAdminRoutes = {
   [ROLE_SUPER_ADMIN]: [
     ROUTES.ORGANIZATION.SETUP,
+    ROUTES.ORGANIZATION.MODULE_SELECTION,
     ROUTES.CONFIGURATIONS.BASE,
     ROUTES.SETTINGS.BILLING,
     ROUTES.DOCUMENTS.CONTACTS,
     ROUTES.DOCUMENTS.CREATE_DOCUMENT,
     ROUTES.DOCUMENTS.FOLDERS,
     ROUTES.DOCUMENTS.INBOX,
-    ROUTES.DOCUMENTS.SENT
+    ROUTES.DOCUMENTS.SENT,
+    ROUTES.AUTH.VERIFY,
+    ROUTES.AUTH.VERIFY_SUCCESS
   ]
 };
 
@@ -189,6 +190,7 @@ export const config = {
     "/community/:path*",
     // Super admin routes
     "/setup-organization/:path*",
+    "/module-selection",
     // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
