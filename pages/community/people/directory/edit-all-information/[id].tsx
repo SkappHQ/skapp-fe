@@ -23,6 +23,7 @@ import EditAllInfoSkeleton from "~community/people/components/molecules/EditAllI
 import EditInfoCard from "~community/people/components/molecules/EditInfoCard/EditInfoCard";
 import EditInfoCardSkeleton from "~community/people/components/molecules/EditInfoCard/EditInfoCardSkeleton";
 import PeopleTimeline from "~community/people/components/molecules/PeopleTimeline/PeopleTimeline";
+import ReinviteConfirmationModal from "~community/people/components/molecules/ReinviteConfirmationModal/ReinviteConfirmationModal";
 import TerminationModalController from "~community/people/components/molecules/TerminationModalController/TerminationModalController";
 import EmergencyDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmploymentDetailsSection/EmploymentDetailsForm";
@@ -96,7 +97,9 @@ const EditAllInformation: NextPage = () => {
     employeeDataChanges,
     userRoles,
     setEmployeeGeneralDetails,
-    resetEmployeeDataChanges
+    resetEmployeeDataChanges,
+    setIsReinviteConfirmationModalOpen,
+    isReinviteConfirmationModalOpen
   } = usePeopleStore((state) => state);
 
   const { id, tab } = router.query;
@@ -185,6 +188,7 @@ const EditAllInformation: NextPage = () => {
   };
 
   const onSuccess = async () => {
+    setIsReinviteConfirmationModalOpen(false);
     if (isDiscardChangesModal.isModalOpen) {
       setUpdateEmployeeStatus(EditAllInformationFormStatus.UPDATED);
     } else {
@@ -326,6 +330,13 @@ const EditAllInformation: NextPage = () => {
   };
 
   const handleSave = async () => {
+    if (
+      employeeEmploymentDetails.workEmail !== employee?.email &&
+      !isReinviteConfirmationModalOpen
+    ) {
+      setIsReinviteConfirmationModalOpen(true);
+      return;
+    }
     let newAuthPicURL = "";
     if (
       typeof employeeGeneralDetails?.authPic === "object" &&
@@ -583,6 +594,10 @@ const EditAllInformation: NextPage = () => {
           {isSuccess ? getComponent() : <EditAllInfoSkeleton />}
         </Stack>
       </ContentLayout>
+      <ReinviteConfirmationModal
+        onClose={() => setIsReinviteConfirmationModalOpen(false)}
+        onClick={handleSave}
+      />
       <TerminationModalController />
       {isDiscardChangesModal.isModalOpen && (
         <Modal

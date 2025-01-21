@@ -160,6 +160,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
 
     const [latestTeamId, setLatestTeamId] = useState<number | null>();
 
+    const { isPendingInvitationListOpen } = usePeopleStore((state) => state);
+
     const initialValues: EmployeeEmploymentDetailsFormTypes = useMemo(
       () => ({
         employeeNumber: employeeEmploymentDetails?.employeeNumber || "",
@@ -568,7 +570,11 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 }}
                 required={!isManager && !isProfileView}
                 readOnly={
-                  isManager || isUpdate || isProfileView || isInputsDisabled
+                  (isManager ||
+                    isUpdate ||
+                    isProfileView ||
+                    isInputsDisabled) &&
+                  !isPendingInvitationListOpen
                 }
                 isDisabled={isInputsDisabled}
                 maxLength={100}

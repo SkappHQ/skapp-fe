@@ -103,6 +103,8 @@ export interface AddNewResourceSliceTypes
     | "isLeaveTabVisible"
     | "setIsTimeTabVisible"
     | "isTimeTabVisible"
+    | "isReinviteConfirmationModalOpen"
+    | "setIsReinviteConfirmationModalOpen"
   > {}
 
 export interface ProjectTeamModalSliceType

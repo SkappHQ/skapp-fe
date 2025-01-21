@@ -393,7 +393,16 @@
         "attendance_employee": "Attendance Employee",
         "super_admin": "Super Admin"
       }
-    }
+    },
+    "reInvitationSuccessTitle": "Reinvitated Successfully",
+    "reInvitationSuccessDescription": "Reinvitation sent for the selected employees",
+    "reInvitationErrorTitle": "Oops! Something went wrong",
+    "reInvitationErrorDescription": "Failed to send the reinvitation. Please try again",
+    "reInvitenConfirmationModalTitle": "Are you sure?",
+    "reInvitenConfirmationModalDescription": "This action will send a new invitation to all selected users, allowing them to complete their first-time login. Are you sure you want to proceed?",
+    "confirmAndInviteButtonTitle": "Confirm and Invite",
+    "confirmAndInviteCancelButtonTitle": "Cancel",
+    "reinviteButtonTitle": "Re invite"
   },
 
   "addResource": {
