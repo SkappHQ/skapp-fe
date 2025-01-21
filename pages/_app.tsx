@@ -23,8 +23,8 @@ import {
   isNonProdMaintenanceMode,
   isProdMaintenanceMode
 } from "~enterprise/common/constants/dbKeys";
+import { database } from "~enterprise/common/utils/firebase";
 import { initializeHotjar } from "~enterprise/common/utils/monitoring";
-import { database } from "~firebase";
 import i18n from "~i18n";
 import "~styles/global.css";
 
