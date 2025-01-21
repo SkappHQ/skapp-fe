@@ -297,7 +297,7 @@ export const employeeUpdatePreProcessor = (
     authPic: employee?.generalDetails?.authPic,
     country: employee?.contactDetails?.country,
     personalEmail: employee?.contactDetails?.personalEmail,
-    workEmail: employee?.employmentDetails?.workEmail,
+    email: employee?.employmentDetails?.workEmail,
     gender: employee?.generalDetails?.gender,
     phone:
       employee?.contactDetails?.phone &&

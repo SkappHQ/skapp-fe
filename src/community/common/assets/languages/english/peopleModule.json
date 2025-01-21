@@ -401,7 +401,8 @@
     "reInvitenConfirmationModalTitle": "Are you sure?",
     "reInvitenConfirmationModalDescription": "This action will send a new invitation to all selected users, allowing them to complete their first-time login. Are you sure you want to proceed?",
     "confirmAndInviteButtonTitle": "Confirm and Invite",
-    "confirmAndInviteCancelButtonTitle": "Cancel"
+    "confirmAndInviteCancelButtonTitle": "Cancel",
+    "reinviteButtonTitle": "Re invite"
   },
 
   "addResource": {

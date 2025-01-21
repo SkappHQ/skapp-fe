@@ -1,9 +1,10 @@
 import { JSX } from "react";
 
+import { theme } from "~community/common/theme/theme";
 import { IconProps } from "~community/common/types/IconTypes";
 
 const InviteIcon = ({
-  fill = "#000",
+  fill = theme.palette.grey[800],
   width = "20",
   height = "20",
   id,

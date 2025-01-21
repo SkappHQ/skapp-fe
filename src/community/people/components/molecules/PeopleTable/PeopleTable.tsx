@@ -47,6 +47,7 @@ import {
 } from "~community/people/utils/PeopleDirectoryUtils";
 
 import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
+import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";
 import SupervisorAvatarGroup from "../SupervisorAvatarGroup/SupervisorAvatarGroup";
 
 interface Props {
@@ -100,7 +101,8 @@ const PeopleTable: FC<Props> = ({
     setProjectTeamNames,
     setSelectedEmployeeId,
     resetEmployeeData,
-    resetEmployeeDataChanges
+    resetEmployeeDataChanges,
+    setIsReinviteConfirmationModalOpen
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
@@ -108,6 +110,8 @@ const PeopleTable: FC<Props> = ({
     useGetAllJobFamilies();
   const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
   const onSuccess = () => {
+    setSelectedPeople([]);
+    setIsReinviteConfirmationModalOpen(false);
     setToastMessage({
       open: true,
       toastType: ToastType.SUCCESS,
@@ -117,6 +121,7 @@ const PeopleTable: FC<Props> = ({
     });
   };
   const onError = () => {
+    setIsReinviteConfirmationModalOpen(false);
     setToastMessage({
       open: true,
       toastType: ToastType.ERROR,
@@ -448,14 +453,15 @@ const PeopleTable: FC<Props> = ({
           actionRowOneRightButton={
             isPendingInvitationListOpen ? (
               <Button
-                label={"Re invite"}
+                label={translateText(["reinviteButtonTitle"])}
                 buttonStyle={ButtonStyle.SECONDARY}
                 size={ButtonSizes.MEDIUM}
                 endIcon={<InviteIcon />}
                 onClick={() => {
-                  handlReviteEmployees(selectedPeople);
+                  setIsReinviteConfirmationModalOpen(true);
                 }}
                 isStrokeAvailable={true}
+                disabled={selectedPeople.length === 0}
               />
             ) : isPeopleManagerOrSuperAdmin ? (
               <PeopleTableFilterBy
@@ -501,6 +507,10 @@ const PeopleTable: FC<Props> = ({
           }
         />
       </Box>
+      <ReinviteConfirmationModal
+        onClose={() => setIsReinviteConfirmationModalOpen(false)}
+        onClick={() => handlReviteEmployees(selectedPeople)}
+      />
     </Box>
   );
 };

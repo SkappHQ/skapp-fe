@@ -121,12 +121,13 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     ".MuiButton-startIcon, .MuiButton-endIcon": {
       margin: "0rem",
       "svg path": {
-        fill: disabled
-          ? theme.palette.grey[800]
-          : isdefaulticoncolor === "false" && isstrokeavailable === "false"
-            ? textcolor
-            : "",
-        stroke: isstrokeavailable === "false" ? "" : textcolor
+        fill:
+          disabled && isstrokeavailable === "false"
+            ? theme.palette.grey[800]
+            : isdefaulticoncolor === "false" && isstrokeavailable === "false"
+              ? textcolor
+              : "",
+        stroke: isstrokeavailable === "false" || disabled ? "" : textcolor
       }
     },
     ".MuiCircularProgress-root": {
