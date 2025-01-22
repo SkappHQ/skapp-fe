@@ -30,7 +30,7 @@
     "orgNameCharacterError": "Special characters are not allowed in the organization name",
     "orgNameLengthError": "Please enter a value within the character limit of 100",
     "countryRequiredError": "Please select the country",
-    "validCompanyWebsiteError": "The website should either be in the format of abc.tld or www.abc.tld",
+    "validCompanyWebsiteError": "Please enter a valid URL",
     "uploadLogoLabel": "Upload company logo/brandmark",
     "timezoneLabel": "Timezone",
     "timezoneRequiredError": "Please select the timezone",

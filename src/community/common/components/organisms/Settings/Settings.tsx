@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { FC } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
+import { appModes } from "~community/common/constants/configs";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
@@ -21,6 +22,7 @@ import {
 } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { SettingsModalTypes } from "~community/common/types/SettingsTypes";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import Button from "../../atoms/Button/Button";
@@ -37,7 +39,9 @@ const SettingsSection: FC = () => {
 
   const { setModalType, setModalOpen } = useCommonStore((state) => state);
 
-  const { data: config } = useGetEmailServerConfig();
+  const isEnterpriseMode = useGetEnvironment() === appModes.ENTERPRISE;
+
+  const { data: config } = useGetEmailServerConfig(isEnterpriseMode);
 
   const managerRoles = Object.values(ManagerTypes);
 
