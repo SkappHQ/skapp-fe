@@ -40,10 +40,12 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
 
   const environment = useGetEnvironment();
 
+  const isEnterprise = environment === appModes.ENTERPRISE;
+
   const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => state);
 
   const { data: globalLogin } = useGetGlobalLoginMethod(
-    environment === appModes.ENTERPRISE,
+    isEnterprise,
     tenantID as string
   );
 
@@ -72,7 +74,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
   if (
     isProtected &&
     asPath !== ROUTES.DOCUMENTS.CREATE_DOCUMENT &&
-    globalLogin
+    (!isEnterprise || globalLogin)
   ) {
     return (
       <>
