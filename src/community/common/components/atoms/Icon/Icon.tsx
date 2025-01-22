@@ -36,6 +36,7 @@ import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon"
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import EditIcon from "~community/common/assets/Icons/EditIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
+import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
@@ -195,7 +196,8 @@ export const IconMapping: Partial<
   [IconName.DOCUMENTS_ICON]: DocumentsIcon,
   [IconName.PEOPLE_MODULE_ICON]: PeopleModuleIcon,
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
-  [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon
+  [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
+  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon
   // Add more icons here as needed
 };
 
