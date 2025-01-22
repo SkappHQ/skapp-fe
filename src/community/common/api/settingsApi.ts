@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 
 import { useCommonStore } from "../stores/commonStore";
 import authFetch from "../utils/axiosInterceptor";
@@ -44,7 +43,7 @@ export const useUpdateNotificationSettings = (onSuccess: () => void) => {
   });
 };
 
-export const useGetEmailServerConfig = () => {
+export const useGetEmailServerConfig = (isEnterpriseMode: boolean) => {
   return useQuery({
     queryKey: [emailServerConfigQueryKeys.EMAIL_SERVER_CONFIG],
     queryFn: async () => {
@@ -52,7 +51,8 @@ export const useGetEmailServerConfig = () => {
         emailServerConfigEndpoints.GET_EMAIL_SERVER_CONFIG
       );
       return response.data.results[0].emailConfigs;
-    }
+    },
+    enabled: !isEnterpriseMode
   });
 };
 
@@ -104,20 +104,24 @@ export const useTestEmailServer = (onSuccess: () => void) => {
   });
 };
 
-export const useChangePassword = (onSuccess: () => void) => {
-  const { data: session } = useSession();
+export const useChangePassword = (
+  employeeId: string | number | undefined,
+  onSuccess: () => void,
+  onError: (error: unknown) => void
+) => {
   const { setModalOpen } = useCommonStore((state) => state);
   return useMutation({
     mutationFn: (data: { oldPassword: string; newPassword: string }) =>
       authFetch.patch(
-        authenticationEndpoints.CHANGE_PASSWORD(
-          session?.user.employee?.employeeId as number
-        ),
+        authenticationEndpoints.CHANGE_PASSWORD(employeeId as string),
         data
       ),
     onSuccess: () => {
       setModalOpen(false);
       onSuccess();
+    },
+    onError: (error) => {
+      onError(error);
     }
   });
 };

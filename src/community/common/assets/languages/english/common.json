@@ -175,6 +175,7 @@
     "brandingSuccessDescription": "Branding settings have been updated successfully.",
     "passwordChangeSuccessTitle": "Password Changed",
     "passwordChangeSuccessDescription": "Password has been changed successfully.",
+    "usedPreviousPasswordError": "Please Choose a password you have not used before.",
     "uploadLogoLabel": "Upload company logo/brandmark",
     "timezoneLabel": "Timezone",
     "companyDomainLabel": "Company domain",

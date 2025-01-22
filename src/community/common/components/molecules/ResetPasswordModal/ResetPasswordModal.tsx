@@ -1,12 +1,12 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment, Stack } from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
-import { signIn, useSession } from "next-auth/react";
 import React, { FocusEvent, useState } from "react";
 
 import { useChangePassword } from "~community/common/api/settingsApi";
 import Form from "~community/common/components/molecules/Form/Form";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import { COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS } from "~community/common/constants/errorMessageKeys";
 import {
   ButtonStyle,
   ButtonTypes
@@ -15,6 +15,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { changePasswordValidation } from "~community/common/utils/validation";
+import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 
 import Button from "../../atoms/Button/Button";
 import Icon from "../../atoms/Icon/Icon";
@@ -39,7 +40,7 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
     "resetPassword"
   );
   const { setToastMessage } = useToast();
-  const { data: session } = useSession();
+  const { data: employee } = useGetUserPersonalDetails();
 
   const [passwordVisibility, setPasswordVisibility] = useState({
     currentPassword: false,
@@ -72,14 +73,7 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
       description: translateText(["passwordChangeSuccessDescription"]),
       isIcon: true
     });
-    await signIn("credentials", {
-      redirect: false,
-      email: session?.user?.email as string,
-      password: values.password
-    });
   };
-
-  const resetPasswordMutation = useChangePassword(onSuccess);
 
   const onSubmit = async (
     values: FormValues,
@@ -118,8 +112,24 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
     handleChange,
     handleBlur,
     isSubmitting,
-    dirty
+    dirty,
+    setFieldError
   } = formik;
+
+  const onError = (error: any) => {
+    if (
+      error.response.data.results[0].messageKey ===
+      COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS
+    ) {
+      setFieldError("password", translateText(["usedPreviousPasswordError"]));
+    }
+  };
+
+  const resetPasswordMutation = useChangePassword(
+    employee?.employeeId,
+    onSuccess,
+    onError
+  );
 
   const handleCancel = () => {
     formik.resetForm();
