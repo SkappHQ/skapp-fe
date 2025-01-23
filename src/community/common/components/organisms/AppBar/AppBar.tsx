@@ -31,6 +31,7 @@ const AppBar = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuTitle, setMenuTitle] = useState<AppBarItemTypes | null>(null);
+  const [showClockWidget, setShowClockWidget] = useState(false);
 
   const { handleDrawer } = useDrawer();
 
@@ -69,13 +70,22 @@ const AppBar = () => {
     });
   }, [setNotifyData, unreadCount]);
 
+  useEffect(() => {
+    setShowClockWidget(
+      session?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE) || false
+    );
+  }, [session]);
+
   return (
     <>
       <Stack sx={classes.wrapper}>
-        <Stack sx={classes.container}>
-          {session?.user?.roles?.includes(
-            EmployeeTypes.ATTENDANCE_EMPLOYEE
-          ) && (
+        <Stack
+          sx={{
+            ...classes.container,
+            justifyContent: showClockWidget ? "space-between" : "flex-end"
+          }}
+        >
+          {showClockWidget && (
             <Stack sx={classes.clockInWrapper}>
               <ClockWidget />
             </Stack>
