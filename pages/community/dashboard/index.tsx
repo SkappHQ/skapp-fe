@@ -55,7 +55,7 @@ const Dashboard: NextPage = () => {
     ]
   };
 
-  // Define tabs with role restrictions
+  // Define tabs
   const tabs = [
     ...(data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [
