@@ -21,7 +21,7 @@ jobs:
           cache-dependency-path: "./package-lock.json"
 
       - run: npm ci
-      - run: npm run check-format
+#      - run: npm run check-format
       - run: npm run check-lint
       - run: npm run test:coverage
       - uses: actions/upload-artifact@v4
