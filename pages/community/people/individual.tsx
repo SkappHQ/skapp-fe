@@ -8,7 +8,11 @@ import IndividualEmployeeTimeReportSection from "~community/attendance/component
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
+import {
+  AdminTypes,
+  EmployeeTypes,
+  ManagerTypes
+} from "~community/common/types/AuthTypes";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
 import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
 import EditAllInfoSkeleton from "~community/people/components/molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
@@ -27,6 +31,7 @@ const Individual: NextPage = () => {
   const translateText = useTranslator("peopleModule");
 
   const { data } = useSession();
+
   const { tab, viewEmployeeId } = router.query;
 
   const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
@@ -72,8 +77,14 @@ const Individual: NextPage = () => {
   const steps = [
     translateText(["editAllInfo", "personal"]),
     translateText(["editAllInfo", "employment"]),
-    ...(isLeaveTabVisible ? [translateText(["editAllInfo", "leave"])] : []),
-    ...(isTimeTabVisible ? [translateText(["editAllInfo", "timesheet"])] : [])
+    ...(isLeaveTabVisible &&
+    data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+      ? [translateText(["editAllInfo", "leave"])]
+      : []),
+    ...(isTimeTabVisible &&
+    data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+      ? [translateText(["editAllInfo", "timesheet"])]
+      : [])
   ];
 
   const getComponent = useCallback(() => {

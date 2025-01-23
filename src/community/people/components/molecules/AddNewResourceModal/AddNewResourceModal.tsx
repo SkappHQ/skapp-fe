@@ -1,5 +1,6 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -17,6 +18,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
 import { useGetAllowedGrantablePermissions } from "~community/configurations/api/userRolesApi";
@@ -38,6 +40,7 @@ import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
+  const { data: session } = useSession();
 
   const isEsignatureModuleAvailable =
     process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
@@ -493,61 +496,67 @@ const AddNewResourceModal = () => {
               />
             </Stack>
 
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Typography variant="label">
-                {permissionTexts(["leave"])}
-              </Typography>
-              <DropdownList
-                inputName={"leaveRole"}
-                itemList={grantablePermission?.leave || []}
-                value={values.leaveRole}
-                componentStyle={{
-                  width: "200px",
-                  borderRadius: "100px",
-                  height: "50px"
-                }}
-                paperStyles={{
-                  width: "200px",
-                  borderRadius: "100px"
-                }}
-                onChange={(e) =>
-                  handleRoleChange(e.target.name, e.target.value)
-                }
-                isDisabled={values.isSuperAdmin}
-              />
-            </Stack>
+            {session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) && (
+              <Stack
+                direction={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Typography variant="label">
+                  {permissionTexts(["leave"])}
+                </Typography>
+                <DropdownList
+                  inputName={"leaveRole"}
+                  itemList={grantablePermission?.leave || []}
+                  value={values.leaveRole}
+                  componentStyle={{
+                    width: "200px",
+                    borderRadius: "100px",
+                    height: "50px"
+                  }}
+                  paperStyles={{
+                    width: "200px",
+                    borderRadius: "100px"
+                  }}
+                  onChange={(e) =>
+                    handleRoleChange(e.target.name, e.target.value)
+                  }
+                  isDisabled={values.isSuperAdmin}
+                />
+              </Stack>
+            )}
 
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Typography variant="label">
-                {permissionTexts(["attendance"])}
-              </Typography>
-              <DropdownList
-                inputName={"attendanceRole"}
-                itemList={grantablePermission?.attendance || []}
-                value={values.attendanceRole}
-                componentStyle={{
-                  width: "200px",
-                  borderRadius: "100px",
-                  height: "50px"
-                }}
-                paperStyles={{
-                  width: "200px",
-                  borderRadius: "100px"
-                }}
-                onChange={(e) =>
-                  handleRoleChange(e.target.name, e.target.value)
-                }
-                isDisabled={values.isSuperAdmin}
-              />
-            </Stack>
+            {session?.user?.roles?.includes(
+              EmployeeTypes.ATTENDANCE_EMPLOYEE
+            ) && (
+              <Stack
+                direction={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Typography variant="label">
+                  {permissionTexts(["attendance"])}
+                </Typography>
+                <DropdownList
+                  inputName={"attendanceRole"}
+                  itemList={grantablePermission?.attendance || []}
+                  value={values.attendanceRole}
+                  componentStyle={{
+                    width: "200px",
+                    borderRadius: "100px",
+                    height: "50px"
+                  }}
+                  paperStyles={{
+                    width: "200px",
+                    borderRadius: "100px"
+                  }}
+                  onChange={(e) =>
+                    handleRoleChange(e.target.name, e.target.value)
+                  }
+                  isDisabled={values.isSuperAdmin}
+                />
+              </Stack>
+            )}
 
             {isEsignatureModuleAvailable && (
               <Stack

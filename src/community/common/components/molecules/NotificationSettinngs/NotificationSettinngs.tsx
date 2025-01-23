@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
+import { useSession } from "next-auth/react";
 import { ChangeEvent, JSX } from "react";
 
 import {
@@ -9,6 +10,7 @@ import {
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 
 import SwitchRow from "../../atoms/SwitchRow/SwitchRow";
 import ToastMessage from "../ToastMessage/ToastMessage";
@@ -18,6 +20,8 @@ const NotificationSettings = (): JSX.Element => {
   const { toastMessage, setToastMessage } = useToast();
 
   const { data: settings } = useGetNotificationSettings();
+
+  const { data: session } = useSession();
 
   const updateMutation = useUpdateNotificationSettings(() => {
     setToastMessage({
@@ -30,6 +34,7 @@ const NotificationSettings = (): JSX.Element => {
       isIcon: true
     });
   });
+
   const handleSwitchChange = (
     event: ChangeEvent<HTMLInputElement>,
     type: string
@@ -67,14 +72,30 @@ const NotificationSettings = (): JSX.Element => {
           }}
         >
           {settings &&
-            Object.keys(settings).map((key) => (
-              <SwitchRow
-                key={key}
-                label={translateText([key])}
-                checked={settings[key]}
-                onChange={(event) => handleSwitchChange(event, key)}
-              />
-            ))}
+            Object.keys(settings).map((key, index) => {
+              if (
+                index === 0 &&
+                !session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+              ) {
+                return null;
+              }
+              if (
+                index === 1 &&
+                !session?.user?.roles?.includes(
+                  EmployeeTypes.ATTENDANCE_EMPLOYEE
+                )
+              ) {
+                return null;
+              }
+              return (
+                <SwitchRow
+                  key={key}
+                  label={translateText([key])}
+                  checked={settings[key]}
+                  onChange={(event) => handleSwitchChange(event, key)}
+                />
+              );
+            })}
         </Stack>
       </Box>
       <ToastMessage

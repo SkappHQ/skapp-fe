@@ -1,4 +1,5 @@
 import { Box, useTheme } from "@mui/material";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { JSX, useMemo } from "react";
 
@@ -7,6 +8,7 @@ import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
 import { Modules } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { useGetAllUserRoles } from "~community/configurations/api/userRolesApi";
 import {
   AllUserRolesResponseType,
@@ -27,22 +29,34 @@ const UserRolesTable = (): JSX.Element => {
   const { data: allUserRoles, isPending: isUserRolesPending } =
     useGetAllUserRoles();
 
+  const { data: session } = useSession();
+
   const formattedUserRoles = useMemo(() => {
     if (allUserRoles !== undefined && allUserRoles?.length > 0) {
-      const formattedUserRoles = allUserRoles?.map(
-        (role: AllUserRolesResponseType) => {
+      const formattedUserRoles = allUserRoles
+        ?.filter((role: AllUserRolesResponseType) => {
+          if (role.module.toUpperCase() === Modules.LEAVE) {
+            return session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE);
+          }
+          if (role.module.toUpperCase() === Modules.ATTENDANCE) {
+            return session?.user?.roles?.includes(
+              EmployeeTypes.ATTENDANCE_EMPLOYEE
+            );
+          }
+          return true;
+        })
+        .map((role: AllUserRolesResponseType) => {
           if (role.module.toUpperCase() === Modules.ATTENDANCE) {
             return { ...role, name: translateText(["timeAndAttendance"]) };
           } else {
             return { ...role, name: role.module };
           }
-        }
-      );
+        });
       return formattedUserRoles;
     } else {
       return [];
     }
-  }, [allUserRoles, translateText]);
+  }, [allUserRoles, translateText, session?.user?.roles?.length]);
 
   const transformToTableRows = (): UserRoleTableType[] => {
     return (

@@ -1,5 +1,6 @@
 import { Box, MenuItem } from "@mui/material";
 import { rejects } from "assert";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { JSX, Key } from "react";
 
@@ -8,6 +9,7 @@ import ROUTES from "~community/common/constants/routes";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   NotificationDataTypes,
@@ -40,6 +42,7 @@ const NotificationsPopup = ({
   };
 
   const { mutate } = useMarkNotificationAsRead();
+  const { data: session } = useSession();
 
   const handelMenuRow = (
     id: number,
@@ -48,20 +51,28 @@ const NotificationsPopup = ({
   ): void => {
     if (
       isCausedByCurrentUser &&
-      notificationType === NotificationItemsTypes.LEAVE_REQUEST
+      notificationType === NotificationItemsTypes.LEAVE_REQUEST &&
+      session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
     ) {
       router.push(ROUTES.LEAVE.MY_REQUESTS);
       handleCloseMenu();
-    } else if (notificationType === NotificationItemsTypes.LEAVE_REQUEST) {
+    } else if (
+      notificationType === NotificationItemsTypes.LEAVE_REQUEST &&
+      session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+    ) {
       router.push(ROUTES.LEAVE.LEAVE_REQUESTS);
       handleCloseMenu();
     } else if (
       isCausedByCurrentUser &&
-      notificationType === NotificationItemsTypes.TIME_ENTRY
+      notificationType === NotificationItemsTypes.TIME_ENTRY &&
+      session?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
     ) {
       router.push(ROUTES.TIMESHEET.MY_TIMESHEET);
       handleCloseMenu();
-    } else if (notificationType === NotificationItemsTypes.TIME_ENTRY) {
+    } else if (
+      notificationType === NotificationItemsTypes.TIME_ENTRY &&
+      session?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+    ) {
       router.push(ROUTES.TIMESHEET.ALL_TIMESHEETS);
       handleCloseMenu();
     }
