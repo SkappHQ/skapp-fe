@@ -21,7 +21,8 @@ const ROUTES = {
   SETTINGS: {
     BASE: "/settings",
     BILLING: "/settings/billing",
-    ACCOUNT: "/settings/account"
+    ACCOUNT: "/settings/account",
+    MODULES: "/settings/modules"
   },
   TIMESHEET: {
     BASE: "/timesheet",
