@@ -394,15 +394,17 @@
         "super_admin": "Super Admin"
       }
     },
-    "reInvitationSuccessTitle": "Reinvitated Successfully",
+    "reInvitationSuccessTitle": "Reinvited Successfully",
     "reInvitationSuccessDescription": "Reinvitation sent for the selected employees",
+    "workEmailChangingReinvitationConfirmationModalTitle": "Confirm email change",
+    "workEmailChangingReinvitationConfirmationModalDescription": "The work email for this profile has been changed. Proceeding with this update will send a new invitation to the user at the updated email address.  Are you sure you want to proceed?",
     "reInvitationErrorTitle": "Oops! Something went wrong",
     "reInvitationErrorDescription": "Failed to send the reinvitation. Please try again",
     "reInvitenConfirmationModalTitle": "Are you sure?",
     "reInvitenConfirmationModalDescription": "This action will send a new invitation to all selected users, allowing them to complete their first-time login. Are you sure you want to proceed?",
     "confirmAndInviteButtonTitle": "Confirm and Invite",
     "confirmAndInviteCancelButtonTitle": "Cancel",
-    "reinviteButtonTitle": "Re invite"
+    "reinviteButtonTitle": "Reinvite"
   },
 
   "addResource": {

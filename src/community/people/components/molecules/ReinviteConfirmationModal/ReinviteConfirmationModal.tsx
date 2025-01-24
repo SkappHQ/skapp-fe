@@ -11,11 +11,15 @@ import { usePeopleStore } from "~community/people/store/store";
 interface ReinviteConfirmationModalProps {
   onClose: () => void;
   onClick: () => void;
+  title: string;
+  description: string;
 }
 
 const ReinviteConfirmationModal: React.FC<ReinviteConfirmationModalProps> = ({
   onClose,
-  onClick
+  onClick,
+  title,
+  description
 }) => {
   const translateText = useTranslator("peopleModule", "peoples");
 
@@ -24,12 +28,12 @@ const ReinviteConfirmationModal: React.FC<ReinviteConfirmationModalProps> = ({
     <Modal
       isModalOpen={isReinviteConfirmationModalOpen}
       onCloseModal={onClose}
-      title={translateText(["reInvitenConfirmationModalTitle"])}
+      title={title}
       isClosable={false}
     >
       <Stack spacing={2}>
         <UserPromptModal
-          description={translateText(["reInvitenConfirmationModalDescription"])}
+          description={description}
           primaryBtn={{
             label: translateText(["confirmAndInviteButtonTitle"]),
             buttonStyle: ButtonStyle.PRIMARY,
