@@ -32,6 +32,7 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { themeSelector } from "~community/common/theme/themeSelector";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { CommonStoreTypes } from "~community/common/types/zustand/StoreTypes";
@@ -286,19 +287,23 @@ const Drawer = (): JSX.Element => {
         </List>
         {isDrawerExpanded && (
           <Stack sx={classes.footer}>
-            <Button
-              styles={classes.applyLeaveBtn}
-              isFullWidth={false}
-              label={translateText(["applyLeaveBtn"])}
-              buttonStyle={ButtonStyle.PRIMARY}
-              endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
-              onClick={() =>
-                setMyLeaveRequestModalType(
-                  MyRequestModalEnums.LEAVE_TYPE_SELECTION
-                )
-              }
-              data-testid={appDrawerTestId.buttons.applyLeaveBtn}
-            />
+            {sessionData?.user.roles?.includes(
+              EmployeeTypes.LEAVE_EMPLOYEE
+            ) && (
+              <Button
+                styles={classes.applyLeaveBtn}
+                isFullWidth={false}
+                label={translateText(["applyLeaveBtn"])}
+                buttonStyle={ButtonStyle.PRIMARY}
+                endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
+                onClick={() =>
+                  setMyLeaveRequestModalType(
+                    MyRequestModalEnums.LEAVE_TYPE_SELECTION
+                  )
+                }
+                data-testid={appDrawerTestId.buttons.applyLeaveBtn}
+              />
+            )}
             <MuiLink
               href="https://docs.skapp.com"
               target="_blank"
