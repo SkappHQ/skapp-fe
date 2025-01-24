@@ -43,6 +43,10 @@ const getDrawerRoutes = (
       }
 
       if (route.name === "Timesheet") {
+        if (!userRoles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)) {
+          return null;
+        }
+
         const isNotAttendanceEmployee = userRoles?.some((role) =>
           [
             AdminTypes.ATTENDANCE_ADMIN,
@@ -65,6 +69,9 @@ const getDrawerRoutes = (
       }
 
       if (route.name === "Leave") {
+        if (!userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)) {
+          return null;
+        }
         const isLeaveEmployeeWithoutManagerOrAdminRole =
           userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
           !userRoles?.some((role) =>
