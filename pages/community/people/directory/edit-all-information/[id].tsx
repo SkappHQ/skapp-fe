@@ -597,6 +597,14 @@ const EditAllInformation: NextPage = () => {
       <ReinviteConfirmationModal
         onClose={() => setIsReinviteConfirmationModalOpen(false)}
         onClick={handleSave}
+        title={translateText([
+          "peoples",
+          "workEmailChangingReinvitationConfirmationModalTitle"
+        ])}
+        description={translateText([
+          "peoples",
+          "workEmailChangingReinvitationConfirmationModalDescription"
+        ])}
       />
       <TerminationModalController />
       {isDiscardChangesModal.isModalOpen && (
