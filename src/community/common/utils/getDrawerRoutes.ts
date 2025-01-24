@@ -130,6 +130,35 @@ const getDrawerRoutes = (
         }
       }
 
+      if (route.name === "Configurations") {
+        const isSuperAdmin = userRoles?.some((role) =>
+          [AdminTypes.SUPER_ADMIN].includes(role as AdminTypes)
+        );
+
+        if (isSuperAdmin) {
+          const subRoutes = route.subTree?.filter((subRoute) => {
+            if (
+              subRoute.name === "Attendance" &&
+              !userRoles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+            ) {
+              return false;
+            }
+            return subRoute.requiredAuthLevel?.some((requiredRole) =>
+              userRoles?.includes(requiredRole)
+            );
+          });
+
+          return {
+            id: route.id,
+            name: route.name,
+            url: ROUTES.CONFIGURATIONS.BASE,
+            icon: route.icon,
+            hasSubTree: route.hasSubTree,
+            subTree: subRoutes
+          };
+        }
+      }
+
       if (route.name === "Documents") {
         const isFeatureEnabled =
           process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";

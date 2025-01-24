@@ -14,7 +14,7 @@ import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { AdminTypes } from "~community/common/types/AuthTypes";
+import { AdminTypes, EmployeeTypes } from "~community/common/types/AuthTypes";
 import { EditAllInfoErrorTypes } from "~community/common/types/ErrorTypes";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
 import { useHandleEditNewResource } from "~community/people/api/PeopleApi";
@@ -152,8 +152,12 @@ const EditAllInformation: NextPage = () => {
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
     // translateText(["editAllInfo", "timeline"]),
-    translateText(["editAllInfo", "leave"]),
-    translateText(["editAllInfo", "timesheet"])
+    ...(data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+      ? [translateText(["editAllInfo", "leave"])]
+      : []),
+    ...(data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+      ? [translateText(["editAllInfo", "timesheet"])]
+      : [])
   ];
 
   const setSuperAdminIncompleteToasts = () => {

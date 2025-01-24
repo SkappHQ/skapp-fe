@@ -17,6 +17,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import { appBarTestId } from "~community/common/constants/testIds";
 import useDrawer from "~community/common/hooks/useDrawer";
 import { useCommonStore } from "~community/common/stores/commonStore";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { AppBarItemTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
@@ -30,10 +31,11 @@ const AppBar = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuTitle, setMenuTitle] = useState<AppBarItemTypes | null>(null);
+  const [showClockWidget, setShowClockWidget] = useState(false);
 
   const { handleDrawer } = useDrawer();
 
-  const { status } = useSession();
+  const { data: session, status } = useSession();
 
   const userInfoRef = useRef<HTMLDivElement | null>(null);
   const { notifyData, setNotifyData } = useCommonStore((state) => state);
@@ -68,13 +70,26 @@ const AppBar = () => {
     });
   }, [setNotifyData, unreadCount]);
 
+  useEffect(() => {
+    setShowClockWidget(
+      session?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE) || false
+    );
+  }, [session]);
+
   return (
     <>
       <Stack sx={classes.wrapper}>
-        <Stack sx={classes.container}>
-          <Stack sx={classes.clockInWrapper}>
-            <ClockWidget />
-          </Stack>
+        <Stack
+          sx={{
+            ...classes.container,
+            justifyContent: showClockWidget ? "space-between" : "flex-end"
+          }}
+        >
+          {showClockWidget && (
+            <Stack sx={classes.clockInWrapper}>
+              <ClockWidget />
+            </Stack>
+          )}
           {employee ? (
             <Stack sx={classes.userInfoPanelWrapper} ref={userInfoRef}>
               <Box

@@ -57,20 +57,28 @@ const Dashboard: NextPage = () => {
 
   // Define tabs
   const tabs = [
-    {
-      label: translateText(["attendanceTab"]),
-      content: <AttendanceDashboard />,
-      module: ModuleTypes.TIME
-    },
-    {
-      label: translateText(["leaveTab"]),
-      content: (
-        <div>
-          <LeaveDashboard />
-        </div>
-      ),
-      module: ModuleTypes.LEAVE
-    },
+    ...(data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+      ? [
+          {
+            label: translateText(["attendanceTab"]),
+            content: <AttendanceDashboard />,
+            module: ModuleTypes.TIME
+          }
+        ]
+      : []),
+    ...(data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+      ? [
+          {
+            label: translateText(["leaveTab"]),
+            content: (
+              <div>
+                <LeaveDashboard />
+              </div>
+            ),
+            module: ModuleTypes.LEAVE
+          }
+        ]
+      : []),
     {
       label: translateText(["peopleTab"]),
       content: <PeopleDashboard />,
@@ -79,7 +87,6 @@ const Dashboard: NextPage = () => {
   ];
 
   // Filters tabs based on user roles.
-
   const getVisibleTabs = (userRoles: RoleTypes[] = []) => {
     return tabs.filter((tab) => {
       const allowedRoles = modulePermissions[tab.module];

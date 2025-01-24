@@ -1,5 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, {
   Dispatch,
@@ -21,6 +22,7 @@ import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { theme } from "~community/common/theme/theme";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   useGetAllowedGrantablePermissions,
@@ -99,6 +101,8 @@ const SystemPermissionForm = ({
 
   const { data } = useGetSuperAdminCount();
   const { setUserRoles, userRoles } = usePeopleStore((state) => state);
+
+  const { data: session } = useSession();
 
   const { setToastMessage } = useToast();
   const initialValues: SystemPermissionInitalStateType = {
@@ -518,36 +522,43 @@ const SystemPermissionForm = ({
               isProfileView || values.isSuperAdmin || isInputsDisabled
             }
           />
-          <DropdownList
-            inputName={"leaveRole"}
-            label="Leave"
-            itemList={grantablePermission?.leave || []}
-            value={values.leaveRole}
-            checkSelected
-            componentStyle={{
-              flex: 1
-            }}
-            onChange={(e) => handleCustomChange("leaveRole", e.target.value)}
-            isDisabled={
-              isProfileView || values.isSuperAdmin || isInputsDisabled
-            }
-          />
-          <DropdownList
-            inputName={"attendanceRole"}
-            label="Attendance"
-            itemList={grantablePermission?.attendance || []}
-            value={values.attendanceRole}
-            componentStyle={{
-              flex: 1
-            }}
-            checkSelected
-            onChange={(e) =>
-              handleCustomChange("attendanceRole", e.target.value)
-            }
-            isDisabled={
-              isProfileView || values.isSuperAdmin || isInputsDisabled
-            }
-          />
+          {session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) && (
+            <DropdownList
+              inputName={"leaveRole"}
+              label="Leave"
+              itemList={grantablePermission?.leave || []}
+              value={values.leaveRole}
+              checkSelected
+              componentStyle={{
+                flex: 1
+              }}
+              onChange={(e) => handleCustomChange("leaveRole", e.target.value)}
+              isDisabled={
+                isProfileView || values.isSuperAdmin || isInputsDisabled
+              }
+            />
+          )}
+
+          {session?.user?.roles?.includes(
+            EmployeeTypes.ATTENDANCE_EMPLOYEE
+          ) && (
+            <DropdownList
+              inputName={"attendanceRole"}
+              label="Attendance"
+              itemList={grantablePermission?.attendance || []}
+              value={values.attendanceRole}
+              componentStyle={{
+                flex: 1
+              }}
+              checkSelected
+              onChange={(e) =>
+                handleCustomChange("attendanceRole", e.target.value)
+              }
+              isDisabled={
+                isProfileView || values.isSuperAdmin || isInputsDisabled
+              }
+            />
+          )}
 
           {isEsignatureModuleAvailable && (
             <DropdownList
