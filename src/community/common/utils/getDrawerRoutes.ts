@@ -43,10 +43,8 @@ const getDrawerRoutes = (
             userRoles?.some((role) =>
               [
                 ManagerTypes.PEOPLE_MANAGER,
-                ManagerTypes.ATTENDANCE_MANAGER,
-                AdminTypes.PEOPLE_ADMIN,
-                AdminTypes.ATTENDANCE_ADMIN
-              ].includes(role as ManagerTypes | AdminTypes)
+                ManagerTypes.ATTENDANCE_MANAGER
+              ].includes(role as ManagerTypes)
             );
 
           if (hasAdditionalRolesForLeaveEmployee) {
