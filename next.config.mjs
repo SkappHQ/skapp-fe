@@ -67,6 +67,10 @@ const nextConfig = {
         destination: "/community/unauthorized"
       },
       {
+        source: "/updated-permissions",
+        destination: "/community/updated-permissions"
+      },
+      {
         source: "/timesheet/my-timesheet",
         destination: "/community/timesheet/my-timesheet"
       },

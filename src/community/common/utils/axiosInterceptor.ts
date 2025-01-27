@@ -2,6 +2,8 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { getSession, signOut } from "next-auth/react";
 
 import { COMMON_ERROR_TOKEN_EXPIRED } from "../constants/errorMessageKeys";
+import { HTTP_FORBIDDEN } from "../constants/httpStatusCodes";
+import ROUTES from "../constants/routes";
 import { getApiUrl } from "./getConstants";
 
 const getSubDomain = (url: string, multipleValues: boolean = false) => {
@@ -51,6 +53,13 @@ authFetch.interceptors.response.use(
       error.response.data.results[0].messageKey === COMMON_ERROR_TOKEN_EXPIRED
     ) {
       await signOut();
+    }
+
+    if (error.response.status === HTTP_FORBIDDEN) {
+      await signOut({
+        redirect: true,
+        callbackUrl: ROUTES.UPDATED_PERMISSIONS
+      });
     }
     return await Promise.reject(error);
   }

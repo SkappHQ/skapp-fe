@@ -85,7 +85,8 @@ const ROUTES = {
     FOLDERS: "/documents/folders",
     CONTACTS: "/documents/contacts",
     CREATE_DOCUMENT: "/documents/create"
-  }
+  },
+  UPDATED_PERMISSIONS: "/updated-permissions"
 };
 
 export default ROUTES;
