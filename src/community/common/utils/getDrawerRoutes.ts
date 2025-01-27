@@ -7,6 +7,7 @@ import {
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 
+import { appModes } from "../constants/configs";
 import routes from "./data/routes";
 
 type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
@@ -15,6 +16,7 @@ const getDrawerRoutes = (
   userRoles: Role[] | undefined,
   globalLoginMethod?: string
 ) => {
+  const isEnterprise = process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE;
   const userSpecificRoutes = routes
     .map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
@@ -166,6 +168,26 @@ const getDrawerRoutes = (
             url: ROUTES.SETTINGS.ACCOUNT,
             icon: route.icon,
             hasSubTree: false
+          };
+        }
+
+        if (!isEnterprise) {
+          const subRoutes = route.subTree?.filter((subRoute) => {
+            if (subRoute.name === "Billing" || subRoute.name === "Modules") {
+              return false;
+            }
+            return subRoute.requiredAuthLevel?.some((requiredRole) =>
+              userRoles?.includes(requiredRole)
+            );
+          });
+
+          return {
+            id: route.id,
+            name: route.name,
+            url: ROUTES.SETTINGS.BASE,
+            icon: route.icon,
+            hasSubTree: route.hasSubTree,
+            subTree: subRoutes
           };
         }
       }
