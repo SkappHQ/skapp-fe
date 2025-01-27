@@ -1,6 +1,8 @@
 import { Stack } from "@mui/material";
+import { useSession } from "next-auth/react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { usePeopleStore } from "~community/people/store/store";
 import { Role } from "~community/people/types/EmployeeTypes";
 
@@ -15,6 +17,8 @@ const UserRolesSection = () => {
   const { employeeDataFilter, setEmployeeDataFilter } = usePeopleStore(
     (state) => state
   );
+
+  const { data: sessionData } = useSession();
 
   const peopleRoles = [
     { label: translateText(["admin"]), value: Role.PEOPLE_ADMIN },
@@ -41,16 +45,24 @@ const UserRolesSection = () => {
   ];
 
   const filterData = [
-    {
-      title: translateText(["attendanceModule"]),
-      filterKey: "permission",
-      roles: attendanceRoles
-    },
-    {
-      title: translateText(["leaveModule"]),
-      filterKey: "permission",
-      roles: leaveRoles
-    },
+    ...(sessionData?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+      ? [
+          {
+            title: translateText(["attendanceModule"]),
+            filterKey: "permission",
+            roles: attendanceRoles
+          }
+        ]
+      : []),
+    ...(sessionData?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+      ? [
+          {
+            title: translateText(["leaveModule"]),
+            filterKey: "permission",
+            roles: leaveRoles
+          }
+        ]
+      : []),
     {
       title: translateText(["peopleModule"]),
       filterKey: "permission",

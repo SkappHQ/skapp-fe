@@ -21,6 +21,46 @@ const getDrawerRoutes = (
         userRoles?.includes(requiredRole)
       );
 
+      if (route.name === "Dashboard") {
+        if (
+          !userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
+          !userRoles?.includes(ManagerTypes.PEOPLE_MANAGER) &&
+          !userRoles?.includes(ManagerTypes.ATTENDANCE_MANAGER)
+        ) {
+          return null;
+        }
+        const isLeaveEmployeeWithoutManagerOrAdminRole =
+          userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
+          !userRoles?.some((role) =>
+            [ManagerTypes.LEAVE_MANAGER, AdminTypes.LEAVE_ADMIN].includes(
+              role as ManagerTypes | AdminTypes
+            )
+          );
+
+        if (isLeaveEmployeeWithoutManagerOrAdminRole) {
+          const hasAdditionalRolesForLeaveEmployee =
+            userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
+            userRoles?.some((role) =>
+              [
+                ManagerTypes.PEOPLE_MANAGER,
+                ManagerTypes.ATTENDANCE_MANAGER
+              ].includes(role as ManagerTypes)
+            );
+
+          if (hasAdditionalRolesForLeaveEmployee) {
+            return {
+              id: route.id,
+              name: route.name,
+              url: ROUTES.DASHBOARD.BASE,
+              icon: route.icon,
+              hasSubTree: false
+            };
+          }
+
+          return;
+        }
+      }
+
       if (route.name === "People") {
         const isNotPeopleEmployee = userRoles?.some((role) =>
           [AdminTypes.PEOPLE_ADMIN, ManagerTypes.PEOPLE_MANAGER].includes(
