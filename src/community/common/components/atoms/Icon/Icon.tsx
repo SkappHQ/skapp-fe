@@ -61,6 +61,7 @@ import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
 import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
+import PermissionsUpdateIcon from "~community/common/assets/Icons/PermissionsUpdateIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
@@ -197,7 +198,8 @@ export const IconMapping: Partial<
   [IconName.PEOPLE_MODULE_ICON]: PeopleModuleIcon,
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
-  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon
+  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
+  [IconName.PERMISSIONS_UPDATE_ICON]: PermissionsUpdateIcon
   // Add more icons here as needed
 };
 

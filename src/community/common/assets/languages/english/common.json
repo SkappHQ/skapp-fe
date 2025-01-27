@@ -185,7 +185,10 @@
     "pageHead": "Access Denied | Skapp",
     "title": "Access Denied",
     "descriptionPartOne": "You do not have permission to access this page.",
-    "descriptionPartTwo": "For further support, please contact your administrator"
+    "descriptionPartTwo": "For further support, please contact your administrator",
+    "permissionsUpdateTitle": "Important Update",
+    "permissionsUpdateDescription": "Oops! It seems the organization has updated a few things. Please sign in again.",
+    "buttonText": "Sign in"
   },
   "notFound": {
     "title": "Page Not Found!",
