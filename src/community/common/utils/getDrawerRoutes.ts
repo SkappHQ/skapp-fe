@@ -6,6 +6,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import { appModes } from "../constants/configs";
 import routes from "./data/routes";
@@ -17,10 +18,11 @@ const getDrawerRoutes = (
   globalLoginMethod?: string
 ) => {
   const isEnterprise = process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE;
-  const userSpecificRoutes = routes
+  const allRoutes = isEnterprise ? enterpriseRoutes : routes;
+  const userSpecificRoutes = allRoutes
     .map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
-        userRoles?.includes(requiredRole)
+        userRoles?.includes(requiredRole as Role)
       );
 
       if (route.name === "Dashboard") {
@@ -170,26 +172,6 @@ const getDrawerRoutes = (
             hasSubTree: false
           };
         }
-
-        if (!isEnterprise) {
-          const subRoutes = route.subTree?.filter((subRoute) => {
-            if (subRoute.name === "Billing" || subRoute.name === "Modules") {
-              return false;
-            }
-            return subRoute.requiredAuthLevel?.some((requiredRole) =>
-              userRoles?.includes(requiredRole)
-            );
-          });
-
-          return {
-            id: route.id,
-            name: route.name,
-            url: ROUTES.SETTINGS.BASE,
-            icon: route.icon,
-            hasSubTree: route.hasSubTree,
-            subTree: subRoutes
-          };
-        }
       }
 
       if (route.name === "Configurations") {
@@ -206,7 +188,7 @@ const getDrawerRoutes = (
               return false;
             }
             return subRoute.requiredAuthLevel?.some((requiredRole) =>
-              userRoles?.includes(requiredRole)
+              userRoles?.includes(requiredRole as Role)
             );
           });
 
@@ -249,7 +231,7 @@ const getDrawerRoutes = (
       if (isAuthorized && route?.hasSubTree) {
         const subRoutes = route.subTree?.filter((subRoute) =>
           subRoute.requiredAuthLevel?.some((requiredRole) =>
-            userRoles?.includes(requiredRole)
+            userRoles?.includes(requiredRole as Role)
           )
         );
 
