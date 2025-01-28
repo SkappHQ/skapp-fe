@@ -152,6 +152,17 @@ export default withAuth(
       );
     }
 
+    if (
+      request.nextUrl.pathname.startsWith(ROUTES.DASHBOARD.BASE) &&
+      !roles.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
+      !roles.includes(ManagerTypes.PEOPLE_MANAGER) &&
+      !roles.includes(ManagerTypes.ATTENDANCE_MANAGER)
+    ) {
+      return NextResponse.redirect(
+        new URL(ROUTES.TIMESHEET.MY_TIMESHEET, request.url)
+      );
+    }
+
     const isAllowed = roles.some((role) =>
       allowedRoutes[role]?.some((url) =>
         request.nextUrl.pathname.startsWith(url)
