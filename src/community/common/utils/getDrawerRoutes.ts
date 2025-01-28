@@ -42,14 +42,13 @@ const getDrawerRoutes = (
           );
 
         if (isLeaveEmployeeWithoutManagerOrAdminRole) {
-          const hasAdditionalRolesForLeaveEmployee =
-            userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
-            userRoles?.some((role) =>
-              [
-                ManagerTypes.PEOPLE_MANAGER,
-                ManagerTypes.ATTENDANCE_MANAGER
-              ].includes(role as ManagerTypes)
-            );
+          const hasAdditionalRolesForLeaveEmployee = userRoles?.some((role) =>
+            [
+              ManagerTypes.PEOPLE_MANAGER,
+              ManagerTypes.ATTENDANCE_MANAGER,
+              EmployeeTypes.LEAVE_EMPLOYEE
+            ].includes(role as ManagerTypes)
+          );
 
           if (hasAdditionalRolesForLeaveEmployee) {
             return {
