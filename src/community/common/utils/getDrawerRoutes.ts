@@ -20,7 +20,7 @@ const getDrawerRoutes = (
   const isEnterprise = process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE;
   const allRoutes = isEnterprise ? enterpriseRoutes : routes;
   const userSpecificRoutes = allRoutes
-    .map((route) => {
+    ?.map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
         userRoles?.includes(requiredRole as Role)
       );
