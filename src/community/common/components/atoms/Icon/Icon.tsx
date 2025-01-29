@@ -41,6 +41,7 @@ import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import ForwardArrow from "~community/common/assets/Icons/ForwardArrow";
+import GoogleCalendarIcon from "~community/common/assets/Icons/GoogleCalendarIcon";
 import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
@@ -197,7 +198,8 @@ export const IconMapping: Partial<
   [IconName.PEOPLE_MODULE_ICON]: PeopleModuleIcon,
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
-  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon
+  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
+  [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon
   // Add more icons here as needed
 };
 

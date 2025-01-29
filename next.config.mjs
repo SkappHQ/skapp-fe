@@ -249,6 +249,10 @@ const nextConfig = {
       {
         source: "/settings/modules",
         destination: "/enterprise/settings/modules"
+      },
+      {
+        source: "/settings/integrations",
+        destination: "/enterprise/settings/integrations"
       }
     ];
   },
