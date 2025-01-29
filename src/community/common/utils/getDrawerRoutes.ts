@@ -6,6 +6,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import routes from "./data/routes";
 
@@ -13,12 +14,14 @@ type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
 const getDrawerRoutes = (
   userRoles: Role[] | undefined,
+  isEnterprise: boolean,
   globalLoginMethod?: string
 ) => {
-  const userSpecificRoutes = routes
-    .map((route) => {
+  const allRoutes = isEnterprise ? enterpriseRoutes : routes;
+  const userSpecificRoutes = allRoutes
+    ?.map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
-        userRoles?.includes(requiredRole)
+        userRoles?.includes(requiredRole as Role)
       );
 
       if (route.name === "Dashboard") {
@@ -183,7 +186,7 @@ const getDrawerRoutes = (
               return false;
             }
             return subRoute.requiredAuthLevel?.some((requiredRole) =>
-              userRoles?.includes(requiredRole)
+              userRoles?.includes(requiredRole as Role)
             );
           });
 
@@ -226,7 +229,7 @@ const getDrawerRoutes = (
       if (isAuthorized && route?.hasSubTree) {
         const subRoutes = route.subTree?.filter((subRoute) =>
           subRoute.requiredAuthLevel?.some((requiredRole) =>
-            userRoles?.includes(requiredRole)
+            userRoles?.includes(requiredRole as Role)
           )
         );
 

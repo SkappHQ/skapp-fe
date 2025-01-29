@@ -66,9 +66,16 @@ const Drawer = (): JSX.Element => {
 
   const { globalLoginMethod } = useCommonEnterpriseStore((state) => state);
 
+  const isEnterprise = environment === appModes.ENTERPRISE;
+
   const drawerRoutes = useMemo(
-    () => getDrawerRoutes(sessionData?.user?.roles, globalLoginMethod),
-    [sessionData, globalLoginMethod]
+    () =>
+      getDrawerRoutes(
+        sessionData?.user?.roles,
+        isEnterprise,
+        globalLoginMethod
+      ),
+    [sessionData, globalLoginMethod, isEnterprise]
   );
 
   const { data: organizationDetails, isLoading: orgLoading } =
