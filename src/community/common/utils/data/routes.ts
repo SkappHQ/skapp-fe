@@ -308,7 +308,7 @@ const routes = [
     ],
     subTree: [
       {
-        id: "6C",
+        id: "6A",
         name: "Account Settings",
         url: ROUTES.SETTINGS.ACCOUNT,
         hasSubTree: false,

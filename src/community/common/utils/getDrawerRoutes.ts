@@ -8,16 +8,15 @@ import {
 } from "~community/common/types/AuthTypes";
 import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
-import { appModes } from "../constants/configs";
 import routes from "./data/routes";
 
 type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
 const getDrawerRoutes = (
   userRoles: Role[] | undefined,
+  isEnterprise: boolean,
   globalLoginMethod?: string
 ) => {
-  const isEnterprise = process.env.NEXT_PUBLIC_MODE === appModes.ENTERPRISE;
   const allRoutes = isEnterprise ? enterpriseRoutes : routes;
   const userSpecificRoutes = allRoutes
     ?.map((route) => {
