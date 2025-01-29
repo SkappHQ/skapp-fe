@@ -23,7 +23,9 @@ import { EditAllInfoErrorTypes } from "~community/common/types/ErrorTypes";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
 import {
   useGetSupervisedByMe,
-  useHandleEditNewResource
+  useGetUserPersonalDetails,
+  useHandleEditNewResource,
+  useUpdateLeaveManagerData
 } from "~community/people/api/PeopleApi";
 import DiscardChangeApprovalModal from "~community/people/components/molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
 import EditAllInfoSkeleton from "~community/people/components/molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
@@ -69,7 +71,12 @@ const EditAllInformation: NextPage = () => {
 
   const environment = useGetEnvironment();
 
+  const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
+
   const isPeopleAdmin = data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const isPeopleManager = data?.user.roles?.includes(
+    ManagerTypes.PEOPLE_MANAGER
+  );
 
   const translateToastText = useTranslator(
     "peopleModule",
@@ -294,6 +301,16 @@ const EditAllInformation: NextPage = () => {
     isSuccess: isEditingEmployeeSuccess
   } = useHandleEditNewResource(onSuccess, onError);
 
+  const {
+    mutate: updatePeopleManager,
+    isPending: isEditingPeopleManagerLoading,
+    isSuccess: isEditingPeopleManagerSuccess
+  } = useUpdateLeaveManagerData(id as string, onSuccess, onError);
+
+  const isPeopleManagerMe =
+    isPeopleManager &&
+    currentEmployeeDetails?.employeeId === (id?.toString() ?? "");
+
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
   const goBack = () => {
@@ -439,12 +456,15 @@ const EditAllInformation: NextPage = () => {
     if (isAdmin) {
       setIsSuperAdminEditFlow(true);
     }
-    mutate(updatedEmployeeData);
+    isPeopleManagerMe
+      ? updatePeopleManager(updatedEmployeeData)
+      : mutate(updatedEmployeeData);
   };
 
   const isInputsDisabled =
     employee?.employmentStatus ===
-      AccountStatusEnums.TERMINATED.toUpperCase() || !isPeopleAdmin;
+      AccountStatusEnums.TERMINATED.toUpperCase() ||
+    (!isPeopleAdmin && !isPeopleManagerMe);
 
   const getComponent = useCallback(() => {
     switch (formType) {
@@ -557,6 +577,8 @@ const EditAllInformation: NextPage = () => {
     id,
     isEditingEmployeeSuccess,
     isEditingEmployeeLoading,
+    isEditingPeopleManagerLoading,
+    isEditingPeopleManagerSuccess,
     isProbation,
     handleBackBtnClick,
     mutate

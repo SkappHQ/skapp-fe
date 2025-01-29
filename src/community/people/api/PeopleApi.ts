@@ -478,6 +478,31 @@ export const useUpdatePersonalDetails = (
   });
 };
 
+export const useUpdateLeaveManagerData = (
+  id: string,
+  onSuccess: () => void,
+  onError: (error: string) => void
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updatePersonalData,
+    onSuccess: () => {
+      onSuccess();
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: peopleQueryKeys.GET_ME
+      });
+      await queryClient.invalidateQueries({
+        queryKey: peopleQueryKeys.EMPLOYEE_BY_ID(Number(id))
+      });
+    },
+    onError: (error: ErrorResponse) => {
+      onError(error?.response?.data?.results?.[0]?.message ?? "");
+    }
+  });
+};
+
 export const useGetEmployeeTimeline = (memberId: number) => {
   return useQuery({
     queryKey: ["employeeTimeline", memberId],
