@@ -22,6 +22,7 @@ import {
 import { EditAllInfoErrorTypes } from "~community/common/types/ErrorTypes";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
 import {
+  useGetSupervisedByMe,
   useGetUserPersonalDetails,
   useHandleEditNewResource,
   useUpdateLeaveManagerData
@@ -94,6 +95,20 @@ const EditAllInformation: NextPage = () => {
       AdminTypes.ATTENDANCE_ADMIN
   );
 
+  const isLeaveAdmin = data?.user.roles?.includes(AdminTypes.LEAVE_ADMIN);
+
+  const isAttendanceAdmin = data?.user.roles?.includes(
+    AdminTypes.ATTENDANCE_ADMIN
+  );
+
+  const isLeaveManager = data?.user.roles?.includes(
+    ManagerTypes.LEAVE_MANAGER || AdminTypes.LEAVE_ADMIN
+  );
+
+  const isAttendanceManager = data?.user.roles?.includes(
+    ManagerTypes.ATTENDANCE_MANAGER || AdminTypes.ATTENDANCE_ADMIN
+  );
+
   const {
     employeeGeneralDetails,
     employeeContactDetails,
@@ -135,6 +150,8 @@ const EditAllInformation: NextPage = () => {
 
   const { isValuesChanged } = useDetectChange({ id: Number(id) });
 
+  const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
+  const [isTimeTabVisible, setIsTimeTabVisible] = useState(false);
   const [isSuperAdminEditFlow, setIsSuperAdminEditFlow] = useState(false);
   const [_, setHasUploadStarted] = useState(false);
   const [formType, setFormType] = useState<EditAllInformationType>(
@@ -159,16 +176,21 @@ const EditAllInformation: NextPage = () => {
       false
   );
 
+  const { data: supervisedData, isLoading: supervisorDataLoading } =
+    useGetSupervisedByMe(Number(id));
+
   const steps = [
     translateText(["editAllInfo", "personal"]),
     translateText(["editAllInfo", "emergency"]),
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
     // translateText(["editAllInfo", "timeline"]),
-    ...(data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+    ...(isLeaveTabVisible &&
+    data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
       ? [translateText(["editAllInfo", "leave"])]
       : []),
-    ...(data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+    ...(isTimeTabVisible &&
+    data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [translateText(["editAllInfo", "timesheet"])]
       : [])
   ];
@@ -592,6 +614,30 @@ const EditAllInformation: NextPage = () => {
       setFormType(EditAllInformationType.leave);
     }
   }, [tab]);
+
+  useEffect(() => {
+    if (supervisedData && !supervisorDataLoading) {
+      if (isLeaveAdmin) {
+        setIsLeaveTabVisible(true);
+      } else if (supervisedData && isLeaveManager) {
+        const isManager =
+          supervisedData.isPrimaryManager ||
+          supervisedData.isSecondaryManager ||
+          supervisedData.isTeamSupervisor;
+        setIsLeaveTabVisible(isManager);
+      }
+
+      if (isAttendanceAdmin) {
+        setIsTimeTabVisible(true);
+      } else if (supervisedData && isAttendanceManager) {
+        const isManager =
+          supervisedData.isPrimaryManager ||
+          supervisedData.isSecondaryManager ||
+          supervisedData.isTeamSupervisor;
+        setIsTimeTabVisible(isManager);
+      }
+    }
+  }, [supervisorDataLoading, supervisedData]);
 
   return (
     <>
