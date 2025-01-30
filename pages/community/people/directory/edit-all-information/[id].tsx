@@ -14,10 +14,19 @@ import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { AdminTypes, EmployeeTypes } from "~community/common/types/AuthTypes";
+import {
+  AdminTypes,
+  EmployeeTypes,
+  ManagerTypes
+} from "~community/common/types/AuthTypes";
 import { EditAllInfoErrorTypes } from "~community/common/types/ErrorTypes";
 import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
-import { useHandleEditNewResource } from "~community/people/api/PeopleApi";
+import {
+  useGetSupervisedByMe,
+  useGetUserPersonalDetails,
+  useHandleEditNewResource,
+  useUpdateLeaveManagerData
+} from "~community/people/api/PeopleApi";
 import DiscardChangeApprovalModal from "~community/people/components/molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
 import EditAllInfoSkeleton from "~community/people/components/molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
 import EditInfoCard from "~community/people/components/molecules/EditInfoCard/EditInfoCard";
@@ -62,7 +71,12 @@ const EditAllInformation: NextPage = () => {
 
   const environment = useGetEnvironment();
 
+  const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
+
   const isPeopleAdmin = data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const isPeopleManager = data?.user.roles?.includes(
+    ManagerTypes.PEOPLE_MANAGER
+  );
 
   const translateToastText = useTranslator(
     "peopleModule",
@@ -79,6 +93,20 @@ const EditAllInformation: NextPage = () => {
       AdminTypes.PEOPLE_ADMIN ||
       AdminTypes.LEAVE_ADMIN ||
       AdminTypes.ATTENDANCE_ADMIN
+  );
+
+  const isLeaveAdmin = data?.user.roles?.includes(AdminTypes.LEAVE_ADMIN);
+
+  const isAttendanceAdmin = data?.user.roles?.includes(
+    AdminTypes.ATTENDANCE_ADMIN
+  );
+
+  const isLeaveManager = data?.user.roles?.includes(
+    ManagerTypes.LEAVE_MANAGER || AdminTypes.LEAVE_ADMIN
+  );
+
+  const isAttendanceManager = data?.user.roles?.includes(
+    ManagerTypes.ATTENDANCE_MANAGER || AdminTypes.ATTENDANCE_ADMIN
   );
 
   const {
@@ -122,6 +150,8 @@ const EditAllInformation: NextPage = () => {
 
   const { isValuesChanged } = useDetectChange({ id: Number(id) });
 
+  const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
+  const [isTimeTabVisible, setIsTimeTabVisible] = useState(false);
   const [isSuperAdminEditFlow, setIsSuperAdminEditFlow] = useState(false);
   const [_, setHasUploadStarted] = useState(false);
   const [formType, setFormType] = useState<EditAllInformationType>(
@@ -146,16 +176,21 @@ const EditAllInformation: NextPage = () => {
       false
   );
 
+  const { data: supervisedData, isLoading: supervisorDataLoading } =
+    useGetSupervisedByMe(Number(id));
+
   const steps = [
     translateText(["editAllInfo", "personal"]),
     translateText(["editAllInfo", "emergency"]),
     translateText(["editAllInfo", "employment"]),
     translateText(["editAllInfo", "systemPermissions"]),
     // translateText(["editAllInfo", "timeline"]),
-    ...(data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
+    ...(isLeaveTabVisible &&
+    data?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
       ? [translateText(["editAllInfo", "leave"])]
       : []),
-    ...(data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
+    ...(isTimeTabVisible &&
+    data?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [translateText(["editAllInfo", "timesheet"])]
       : [])
   ];
@@ -265,6 +300,16 @@ const EditAllInformation: NextPage = () => {
     isPending: isEditingEmployeeLoading,
     isSuccess: isEditingEmployeeSuccess
   } = useHandleEditNewResource(onSuccess, onError);
+
+  const {
+    mutate: updatePeopleManager,
+    isPending: isEditingPeopleManagerLoading,
+    isSuccess: isEditingPeopleManagerSuccess
+  } = useUpdateLeaveManagerData(id as string, onSuccess, onError);
+
+  const isPeopleManagerMe =
+    isPeopleManager &&
+    currentEmployeeDetails?.employeeId === (id?.toString() ?? "");
 
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
@@ -411,12 +456,15 @@ const EditAllInformation: NextPage = () => {
     if (isAdmin) {
       setIsSuperAdminEditFlow(true);
     }
-    mutate(updatedEmployeeData);
+    isPeopleManagerMe
+      ? updatePeopleManager(updatedEmployeeData)
+      : mutate(updatedEmployeeData);
   };
 
   const isInputsDisabled =
     employee?.employmentStatus ===
-      AccountStatusEnums.TERMINATED.toUpperCase() || !isPeopleAdmin;
+      AccountStatusEnums.TERMINATED.toUpperCase() ||
+    (!isPeopleAdmin && !isPeopleManagerMe);
 
   const getComponent = useCallback(() => {
     switch (formType) {
@@ -529,6 +577,8 @@ const EditAllInformation: NextPage = () => {
     id,
     isEditingEmployeeSuccess,
     isEditingEmployeeLoading,
+    isEditingPeopleManagerLoading,
+    isEditingPeopleManagerSuccess,
     isProbation,
     handleBackBtnClick,
     mutate
@@ -564,6 +614,30 @@ const EditAllInformation: NextPage = () => {
       setFormType(EditAllInformationType.leave);
     }
   }, [tab]);
+
+  useEffect(() => {
+    if (supervisedData && !supervisorDataLoading) {
+      if (isLeaveAdmin) {
+        setIsLeaveTabVisible(true);
+      } else if (supervisedData && isLeaveManager) {
+        const isManager =
+          supervisedData.isPrimaryManager ||
+          supervisedData.isSecondaryManager ||
+          supervisedData.isTeamSupervisor;
+        setIsLeaveTabVisible(isManager);
+      }
+
+      if (isAttendanceAdmin) {
+        setIsTimeTabVisible(true);
+      } else if (supervisedData && isAttendanceManager) {
+        const isManager =
+          supervisedData.isPrimaryManager ||
+          supervisedData.isSecondaryManager ||
+          supervisedData.isTeamSupervisor;
+        setIsTimeTabVisible(isManager);
+      }
+    }
+  }, [supervisorDataLoading, supervisedData]);
 
   return (
     <>
