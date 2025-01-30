@@ -309,20 +309,6 @@ const routes = [
     subTree: [
       {
         id: "6A",
-        name: "Billing",
-        url: ROUTES.SETTINGS.BILLING,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
-      },
-      {
-        id: "6B",
-        name: "Modules",
-        url: ROUTES.SETTINGS.MODULES,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
-      },
-      {
-        id: "6C",
         name: "Account Settings",
         url: ROUTES.SETTINGS.ACCOUNT,
         hasSubTree: false,

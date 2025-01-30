@@ -158,9 +158,11 @@ export default withAuth(
       !roles.includes(ManagerTypes.PEOPLE_MANAGER) &&
       !roles.includes(ManagerTypes.ATTENDANCE_MANAGER)
     ) {
-      return NextResponse.redirect(
-        new URL(ROUTES.TIMESHEET.MY_TIMESHEET, request.url)
-      );
+      if (roles.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)) {
+        return NextResponse.redirect(
+          new URL(ROUTES.TIMESHEET.MY_TIMESHEET, request.url)
+        );
+      }
     }
 
     const isAllowed = roles.some((role) =>
