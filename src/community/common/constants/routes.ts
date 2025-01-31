@@ -22,7 +22,8 @@ const ROUTES = {
     BASE: "/settings",
     BILLING: "/settings/billing",
     ACCOUNT: "/settings/account",
-    MODULES: "/settings/modules"
+    MODULES: "/settings/modules",
+    INTEGRATIONS: "/settings/integrations"
   },
   TIMESHEET: {
     BASE: "/timesheet",

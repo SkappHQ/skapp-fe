@@ -80,6 +80,7 @@ import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
+import SkappIcon from "~community/common/assets/Icons/SkappIcon";
 import SuccessIcon from "~community/common/assets/Icons/SuccessIcon";
 import SuperAdminIcon from "~community/common/assets/Icons/SuperAdminIcon";
 import SyncIcon from "~community/common/assets/Icons/SyncIcon";
@@ -199,7 +200,8 @@ export const IconMapping: Partial<
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
   [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
-  [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon
+  [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon,
+  [IconName.SKAPP_ICON]: SkappIcon
   // Add more icons here as needed
 };
 
