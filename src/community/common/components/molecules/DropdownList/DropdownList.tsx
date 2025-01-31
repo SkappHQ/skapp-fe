@@ -156,7 +156,8 @@ const DropdownList: FC<Props> = ({
                           paddingLeft: emojiWithText ? "0.25rem" : "0",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
-                          whiteSpace: "nowrap"
+                          whiteSpace: "nowrap",
+                          color: readOnly ? "text.secondary" : "common.black"
                         }}
                       >
                         {itemList?.find((item) => item?.value === value)?.label}
