@@ -179,7 +179,17 @@
     "uploadLogoLabel": "Upload company logo/brandmark",
     "timezoneLabel": "Timezone",
     "companyDomainLabel": "Company domain",
-    "globalLogin": "Global login method"
+    "globalLogin": "Global login method",
+    "integrationTitle": "Integrations",
+    "googleCalendarText": "Google Calendar",
+    "googleCalendarDes": "Connect your Google Calendar to seamlessly sync your leave and stay updated across your schedules.",
+    "googleCalendarAddSuccessTitle": "Google Calendar Connected",
+    "googleCalendarAddSuccessDes": "Your Google Calendar connected successfully.",
+    "googleCalendarRemoveSuccessTitle": "Google Calendar Disconnected",
+    "googleCalendarRemoveSuccessDes": "Your Google Calendar disconnected successfully.",
+    "googleCalendarErrorTitle": "Oops! Something Went Wrong",
+    "googleCalendarAddErrorDes": "Failed to add Google Calendar. Please try again.",
+    "googleCalendarRemoveErrorDes": "Failed to remove Google Calendar. Please try again."
   },
   "unauthorized": {
     "pageHead": "Access Denied | Skapp",
