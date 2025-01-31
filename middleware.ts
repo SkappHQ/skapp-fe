@@ -29,14 +29,14 @@ const superAdminRoutes = {
     ROUTES.CONFIGURATIONS.BASE,
     ROUTES.ORGANIZATION.MODULE_SELECTION,
     ROUTES.SETTINGS.BILLING,
-    ROUTES.DOCUMENTS.CONTACTS,
-    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
-    ROUTES.DOCUMENTS.FOLDERS,
-    ROUTES.DOCUMENTS.INBOX,
-    ROUTES.DOCUMENTS.SENT,
+    ROUTES.SIGN.CONTACTS,
+    ROUTES.SIGN.CREATE_DOCUMENT,
+    ROUTES.SIGN.FOLDERS,
+    ROUTES.SIGN.INBOX,
+    ROUTES.SIGN.SENT,
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
-    ROUTES.DOCUMENTS.SENT,
+    ROUTES.SIGN.SENT,
     ROUTES.SETTINGS.MODULES
   ]
 };
@@ -49,11 +49,11 @@ const adminRoutes = {
     ROUTES.CONFIGURATIONS.ATTENDANCE
   ],
   [AdminTypes.ESIGN_ADMIN]: [
-    ROUTES.DOCUMENTS.CONTACTS,
-    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
-    ROUTES.DOCUMENTS.FOLDERS,
-    ROUTES.DOCUMENTS.INBOX,
-    ROUTES.DOCUMENTS.SENT
+    ROUTES.SIGN.CONTACTS,
+    ROUTES.SIGN.CREATE_DOCUMENT,
+    ROUTES.SIGN.FOLDERS,
+    ROUTES.SIGN.INBOX,
+    ROUTES.SIGN.SENT
   ]
 };
 
@@ -71,11 +71,11 @@ const managerRoutes = {
     ROUTES.PEOPLE.INDIVIDUAL
   ],
   [SenderRoleTypes.ESIGN_SENDER]: [
-    ROUTES.DOCUMENTS.CONTACTS,
-    ROUTES.DOCUMENTS.CREATE_DOCUMENT,
-    ROUTES.DOCUMENTS.FOLDERS,
-    ROUTES.DOCUMENTS.INBOX,
-    ROUTES.DOCUMENTS.SENT
+    ROUTES.SIGN.CONTACTS,
+    ROUTES.SIGN.CREATE_DOCUMENT,
+    ROUTES.SIGN.FOLDERS,
+    ROUTES.SIGN.INBOX,
+    ROUTES.SIGN.SENT
   ]
 };
 
@@ -90,7 +90,7 @@ const employeeRoutes = {
     ROUTES.TIMESHEET.MY_TIMESHEET,
     ...commonRoutes
   ],
-  [EmployeeTypes.ESIGN_EMPLOYEE]: [ROUTES.DOCUMENTS.INBOX, ...commonRoutes]
+  [EmployeeTypes.ESIGN_EMPLOYEE]: [ROUTES.SIGN.INBOX, ...commonRoutes]
 };
 
 // Merging all routes into one allowedRoutes object
@@ -176,7 +176,7 @@ export default withAuth(
         process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
 
       if (
-        request.nextUrl.pathname.includes(ROUTES.DOCUMENTS.BASE) &&
+        request.nextUrl.pathname.includes(ROUTES.SIGN.BASE) &&
         !isEsignatureModuleAvailable
       ) {
         return NextResponse.redirect(
@@ -221,6 +221,6 @@ export const config = {
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/documents/:path*"
+    "/sign/:path*"
   ]
 };
