@@ -28,7 +28,6 @@ import DropdownAutocomplete from "~community/common/components/molecules/Dropdow
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import InputPhoneNumber from "~community/common/components/molecules/InputPhoneNumber/InputPhoneNumber";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { appModes } from "~community/common/constants/configs";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
@@ -46,6 +45,7 @@ import {
   NAME_MAX_CHARACTER_LENGTH,
   PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH
 } from "~community/people/constants/configs";
+import useGetCountryList from "~community/people/hooks/useGetCountryList";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import {
@@ -88,7 +88,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       employeeContactDetails,
       employeeDataChanges,
       employeeGeneralDetails,
-      setEmployeeGeneralDetails
+      setEmployeeGeneralDetails,
+      setEmployeeContactDetails
     } = usePeopleStore((state) => state);
 
     const [age, setAge] = useState<number | string>(0);
@@ -106,11 +107,14 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         nationality: employeeGeneralDetails?.nationality || "",
         nin: employeeGeneralDetails?.nin || "",
         passportNumber: employeeGeneralDetails?.passportNumber || "",
-        maritalStatus: employeeGeneralDetails?.maritalStatus || ""
+        maritalStatus: employeeGeneralDetails?.maritalStatus || "",
+        country: employeeContactDetails?.country || ""
       }),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [employeeDataChanges]
     );
+
+    const countryList = useGetCountryList();
 
     const usedStoragePercentage = useMemo(() => {
       return 100 - storageAvailabilityData?.availableSpace;
@@ -165,6 +169,17 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       await setFieldValue(e.target.name, e.target.value);
       setFieldError(e.target.name, "");
       setEmployeeGeneralDetails(e.target.name, e.target.value);
+    };
+
+    const handleCountrySelect = async (
+      e: SyntheticEvent,
+      value: DropdownListType
+    ): Promise<void> => {
+      setFieldError("country", "");
+      await setFieldValue("country", value.value);
+      setEmployeeContactDetails("country", value.value);
+      await setFieldValue("state", "");
+      setEmployeeContactDetails("state", "");
     };
 
     const dateOnChange = async (
@@ -431,10 +446,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 />
               </Grid>
 
-              <Grid
-                size={{ xs: 12, md: 6, xl: 4 }}
-                sx={{ display: isManager ? "none" : "block" }}
-              >
+              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <div
                   style={{
                     display: "flex",
@@ -467,6 +479,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                     }}
                     inputFormat="dd/MM/yyyy"
                     disabled={isInputsDisabled}
+                    readOnly={isManager}
                     selectedDate={selectedDob}
                     setSelectedDate={setSelectedDob}
                   />
@@ -487,10 +500,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 </div>
               </Grid>
 
-              <Grid
-                size={{ xs: 12, md: 6, xl: 4 }}
-                sx={{ display: isManager ? "none" : "block" }}
-              >
+              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <DropdownAutocomplete
                   itemList={NationalityList}
                   inputName="nationalty"
@@ -510,6 +520,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                     mt: "0rem"
                   }}
                   isDisabled={isInputsDisabled}
+                  readOnly={isManager}
                 />
               </Grid>
 
@@ -576,16 +587,26 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 size={{ xs: 12, md: 6, xl: 4 }}
                 sx={{ display: isManager ? "block" : "none" }}
               >
-                <InputPhoneNumber
-                  label={translateText(["contactNo"])}
-                  value={employeeContactDetails?.phone ?? ""}
-                  countryCodeValue={employeeContactDetails?.countryCode}
-                  inputName="phone"
-                  fullComponentStyle={{
+                <DropdownAutocomplete
+                  itemList={countryList}
+                  inputName="country"
+                  label={translateText(["country"])}
+                  value={
+                    values.country
+                      ? {
+                          label: values.country,
+                          value: values.country
+                        }
+                      : undefined
+                  }
+                  placeholder={translateText(["selectCountry"])}
+                  onChange={handleCountrySelect}
+                  error={errors.country ?? ""}
+                  componentStyle={{
                     mt: "0rem"
                   }}
+                  isDisabled={isInputsDisabled}
                   readOnly={isManager}
-                  isDisabled={isManager || isInputsDisabled}
                 />
               </Grid>
             </Grid>
