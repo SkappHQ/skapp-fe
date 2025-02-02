@@ -161,10 +161,23 @@ const AddNewResourceFlow = () => {
             }
           });
         } else {
-          newAuthPicURL = await uploadFileToS3ByUrl(
+          await uploadFileToS3ByUrl(
             employeeGeneralDetails?.authPic[0] as File,
-            FileCategories.PROFILE_PICTURES
+            FileCategories.PROFILE_PICTURES_ORIGINAL
           );
+
+          if (
+            typeof employeeGeneralDetails?.thumbnail === "object" &&
+            employeeGeneralDetails?.thumbnail &&
+            employeeGeneralDetails?.thumbnail?.length > 0
+          ) {
+            const thumbnailURL = await uploadFileToS3ByUrl(
+              employeeGeneralDetails?.thumbnail[0],
+              FileCategories.PROFILE_PICTURES_THUMBNAIL
+            );
+
+            newAuthPicURL = thumbnailURL;
+          }
         }
       } catch (error) {
         handleError(translateError(["uploadError"]));

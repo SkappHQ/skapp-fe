@@ -11,6 +11,7 @@ import { theme } from "~community/common/theme/theme";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
+import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
@@ -32,10 +33,12 @@ const UserDetailsCentered: FC<Props> = ({
   );
 
   const environment = useGetEnvironment();
+
   const cardData = useMemo(() => {
     return {
       employeeId: selectedUser?.identificationNo?.toString() || "",
       authPic: selectedUser?.authPic || "",
+      thumbnail: selectedUser?.thumbnail || "",
       firstName: selectedUser?.firstName ?? "",
       lastName: selectedUser?.lastName || "",
       fullName:
@@ -51,7 +54,12 @@ const UserDetailsCentered: FC<Props> = ({
       const profilePic = acceptedFiles.map((file: File) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       );
+
       setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+
+      generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+        setEmployeeGeneralDetails("thumbnail", thumbnail)
+      );
     },
     [setEmployeeGeneralDetails]
   );
@@ -113,8 +121,13 @@ const UserDetailsCentered: FC<Props> = ({
           lastName={cardData?.lastName}
           alt={cardData?.fullName}
           src={
-            (employeeGeneralDetails?.authPic as string) ||
-            (profilePicture ?? "")
+            Array.isArray(employeeGeneralDetails?.authPic)
+              ? employeeGeneralDetails?.authPic?.length
+                ? (employeeGeneralDetails?.authPic[0] as ModifiedFileType)
+                    .preview
+                : ""
+              : (employeeGeneralDetails?.authPic as string) ||
+                (profilePicture ?? "")
           }
           avatarStyles={{
             width: "6.125rem",

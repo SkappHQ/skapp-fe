@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { appModes } from "~community/common/constants/configs";
 import { accountPageTestId } from "~community/common/constants/testIds";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
@@ -33,11 +34,18 @@ import {
   EmployeeDetails,
   contractStates
 } from "~community/people/types/EmployeeTypes";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { FileCategories } from "~enterprise/common/types/s3Types";
+import {
+  deleteFileFromS3,
+  uploadFileToS3ByUrl
+} from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 const Account: NextPage = () => {
   const router = useRouter();
 
   const { setToastMessage } = useToast();
+
   const translateText = useTranslator("peopleModule");
   const translateToastText = useTranslator(
     "peopleModule",
@@ -62,6 +70,8 @@ const Account: NextPage = () => {
     setEmployeeGeneralDetails,
     userRoles
   } = usePeopleStore((state) => state);
+
+  const environment = useGetEnvironment();
 
   const { id } = router.query;
 
@@ -239,28 +249,53 @@ const Account: NextPage = () => {
 
   const handleSave = async () => {
     let newAuthPicURL = "";
+
     if (
       typeof employeeGeneralDetails?.authPic === "object" &&
       employeeGeneralDetails?.authPic &&
       employeeGeneralDetails?.authPic?.length > 0
     ) {
       try {
-        const formData = new FormData();
-        formData.append("file", employeeGeneralDetails?.authPic[0]);
+        if (environment === appModes.COMMUNITY) {
+          const formData = new FormData();
+          formData.append("file", employeeGeneralDetails?.authPic[0]);
 
-        formData.append("type", "USER_IMAGE");
+          formData.append("type", "USER_IMAGE");
 
-        await imageUploadMutate(formData).then((response) => {
-          const filePath = response.message?.split(
-            "File uploaded successfully: "
-          )[1];
-          if (filePath) {
-            const fileName = filePath.split("/").pop();
-            if (fileName) {
-              newAuthPicURL = fileName;
+          await imageUploadMutate(formData).then((response) => {
+            const filePath = response.message?.split(
+              "File uploaded successfully: "
+            )[1];
+            if (filePath) {
+              const fileName = filePath.split("/").pop();
+              if (fileName) {
+                newAuthPicURL = fileName;
+              }
             }
+          });
+        } else {
+          await uploadFileToS3ByUrl(
+            employeeGeneralDetails?.authPic[0],
+            FileCategories.PROFILE_PICTURES_ORIGINAL
+          );
+
+          if (
+            typeof employeeGeneralDetails?.thumbnail === "object" &&
+            employeeGeneralDetails?.thumbnail &&
+            employeeGeneralDetails?.thumbnail?.length > 0
+          ) {
+            const thumbnailURL = await uploadFileToS3ByUrl(
+              employeeGeneralDetails?.thumbnail[0],
+              FileCategories.PROFILE_PICTURES_THUMBNAIL
+            );
+
+            newAuthPicURL = thumbnailURL;
           }
-        });
+
+          if (employee?.authPic) {
+            await deleteFileFromS3(employee?.authPic as string);
+          }
+        }
       } catch (error) {
         onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);
       }
@@ -274,10 +309,7 @@ const Account: NextPage = () => {
       employeeId: employee?.employeeId,
       generalDetails: {
         ...employeeGeneralDetails,
-        authPic:
-          typeof employeeGeneralDetails?.authPic?.[0] === "object"
-            ? employeeGeneralDetails?.authPic?.[0]?.path
-            : employeeGeneralDetails?.authPic
+        authPic: newAuthPicURL
       },
       contactDetails: employeeContactDetails,
       familyDetails: employeeFamilyDetails,

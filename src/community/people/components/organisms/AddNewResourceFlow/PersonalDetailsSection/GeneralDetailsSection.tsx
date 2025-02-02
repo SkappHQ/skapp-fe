@@ -53,6 +53,7 @@ import {
   MaritalStatusList,
   NationalityList
 } from "~community/people/utils/data/employeeSetupStaticData";
+import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { employeeGeneralDetailsValidation } from "~community/people/utils/peopleValidations";
 
 interface Props {
@@ -95,9 +96,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
       undefined
     );
+
     const initialValues = useMemo(
       () => ({
         authPic: employeeGeneralDetails?.authPic ?? "",
+        thumbnail: employeeGeneralDetails?.thumbnail ?? "",
         firstName: employeeGeneralDetails?.firstName || "",
         middleName: employeeGeneralDetails?.middleName || "",
         lastName: employeeGeneralDetails?.lastName || "",
@@ -194,9 +197,16 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     const onDrop = useCallback(
       (acceptedFiles: File[]) => {
         const profilePic = acceptedFiles.map((file: File) =>
-          Object.assign(file, { preview: URL.createObjectURL(file) })
+          Object.assign(file, {
+            preview: URL.createObjectURL(file)
+          })
         );
-        setEmployeeGeneralDetails("authPic", profilePic);
+
+        setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+
+        generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+          setEmployeeGeneralDetails("thumbnail", thumbnail)
+        );
       },
       [setEmployeeGeneralDetails]
     );

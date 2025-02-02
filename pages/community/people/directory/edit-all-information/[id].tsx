@@ -386,7 +386,9 @@ const EditAllInformation: NextPage = () => {
       setIsReinviteConfirmationModalOpen(true);
       return;
     }
+
     let newAuthPicURL = "";
+
     if (
       typeof employeeGeneralDetails?.authPic === "object" &&
       employeeGeneralDetails?.authPic &&
@@ -413,13 +415,26 @@ const EditAllInformation: NextPage = () => {
             }
           });
         } else {
-          newAuthPicURL = await uploadFileToS3ByUrl(
+          await uploadFileToS3ByUrl(
             employeeGeneralDetails?.authPic[0],
-            FileCategories.PROFILE_PICTURES
+            FileCategories.PROFILE_PICTURES_ORIGINAL
           );
 
+          if (
+            typeof employeeGeneralDetails?.thumbnail === "object" &&
+            employeeGeneralDetails?.thumbnail &&
+            employeeGeneralDetails?.thumbnail?.length > 0
+          ) {
+            const thumbnailURL = await uploadFileToS3ByUrl(
+              employeeGeneralDetails?.thumbnail[0],
+              FileCategories.PROFILE_PICTURES_THUMBNAIL
+            );
+
+            newAuthPicURL = thumbnailURL;
+          }
+
           if (employee?.authPic) {
-            deleteFileFromS3(employee?.authPic as string);
+            await deleteFileFromS3(employee?.authPic as string);
           }
         }
 
@@ -432,6 +447,7 @@ const EditAllInformation: NextPage = () => {
     }
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
+
     const updatedEmployeeData: EmployeeType = {
       employeeId: employee?.employeeId as string,
       generalDetails: {

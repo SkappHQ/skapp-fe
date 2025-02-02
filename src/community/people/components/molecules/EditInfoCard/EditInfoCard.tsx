@@ -20,6 +20,7 @@ import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import BasicChipGroup from "~community/common/components/molecules/BasicChipGroup/BasicChipGroup";
 import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMenu";
+import { appModes } from "~community/common/constants/configs";
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
@@ -38,11 +39,13 @@ import {
   EmployeeDetails,
   EmployeeManagerType
 } from "~community/people/types/EmployeeTypes";
+import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { toPascalCase } from "~community/people/utils/jobFamilyUtils/commonUtils";
 import {
   findHasSupervisoryRoles,
   getStatusStyle
 } from "~community/people/utils/terminationUtil";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
   selectedEmployee: EmployeeDetails;
@@ -70,6 +73,8 @@ const EditInfoCard = ({
   const AVAILABLE_FIELD_COUNT = 2;
 
   const { data } = useSession();
+
+  const environment = useGetEnvironment();
 
   const { setToastMessage } = useToast();
 
@@ -211,11 +216,19 @@ const EditInfoCard = ({
 
   const onDrop: (acceptedFiles: File[]) => void = useCallback(
     (acceptedFiles: File[]) => {
-      if (storageAvailableData?.availableSpace <= EIGHTY_PERCENT) {
+      if (
+        environment === appModes.ENTERPRISE ||
+        (environment === appModes.COMMUNITY &&
+          storageAvailableData?.availableSpace <= EIGHTY_PERCENT)
+      ) {
         const profilePic = acceptedFiles.map((file: File) =>
           Object.assign(file, { preview: URL.createObjectURL(file) })
         );
         setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+
+        generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+          setEmployeeGeneralDetails("thumbnail", thumbnail)
+        );
       } else {
         setToastMessage({
           open: true,
@@ -268,6 +281,7 @@ const EditInfoCard = ({
       });
     }
   };
+
   return (
     <Stack
       sx={{
