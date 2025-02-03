@@ -105,6 +105,7 @@ const SystemPermissionForm = ({
   const { data: session } = useSession();
 
   const { setToastMessage } = useToast();
+  const [superAdminCount, setSuperAdminCount] = useState(data);
   const initialValues: SystemPermissionInitalStateType = {
     isSuperAdmin: userRoles.isSuperAdmin || false,
     peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
@@ -163,6 +164,10 @@ const SystemPermissionForm = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateEmployeeStatus]);
+
+  useEffect(() => {
+    setSuperAdminCount(data);
+  }, [data]);
 
   const isSupervisingTeams = (): boolean => {
     const teams = employee?.teams as TeamResultsType[];
@@ -377,7 +382,7 @@ const SystemPermissionForm = ({
   ) => {
     const isChecked = e.target.checked;
 
-    if (!isChecked && data === 1) {
+    if (!isChecked && superAdminCount <= 1) {
       setToastMessage({
         open: true,
         toastType: "error",
@@ -398,6 +403,10 @@ const SystemPermissionForm = ({
       });
       return;
     }
+
+    setSuperAdminCount((prevCount: number) =>
+      isChecked ? prevCount + 1 : prevCount - 1
+    );
 
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
