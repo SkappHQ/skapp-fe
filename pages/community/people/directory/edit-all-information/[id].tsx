@@ -58,10 +58,7 @@ import {
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
-import {
-  deleteFileFromS3,
-  uploadFileToS3ByUrl
-} from "~enterprise/common/utils/awsS3ServiceFunctions";
+import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
@@ -432,10 +429,6 @@ const EditAllInformation: NextPage = () => {
 
             newAuthPicURL = thumbnailURL;
           }
-
-          if (employee?.authPic) {
-            await deleteFileFromS3(employee?.authPic as string);
-          }
         }
 
         setHasUploadStarted(false);
@@ -452,7 +445,7 @@ const EditAllInformation: NextPage = () => {
       employeeId: employee?.employeeId as string,
       generalDetails: {
         ...employeeGeneralDetails,
-        authPic: newAuthPicURL
+        authPic: newAuthPicURL.split("/").slice(2).join("/")
       },
       contactDetails: employeeContactDetails,
       familyDetails: employeeFamilyDetails,

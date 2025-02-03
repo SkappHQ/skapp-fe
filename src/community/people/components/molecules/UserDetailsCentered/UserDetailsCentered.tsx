@@ -13,6 +13,7 @@ import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
 import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { getProfilePicThumbnailUrl } from "~enterprise/common/utils/commonUtil";
 
 interface Props {
   selectedUser: EmployeeDetails;
@@ -126,7 +127,9 @@ const UserDetailsCentered: FC<Props> = ({
                 ? (employeeGeneralDetails?.authPic[0] as ModifiedFileType)
                     .preview
                 : ""
-              : (employeeGeneralDetails?.authPic as string) ||
+              : getProfilePicThumbnailUrl(
+                  employeeGeneralDetails?.authPic as string
+                ) ||
                 (profilePicture ?? "")
           }
           avatarStyles={{

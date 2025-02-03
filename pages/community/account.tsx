@@ -36,10 +36,7 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
-import {
-  deleteFileFromS3,
-  uploadFileToS3ByUrl
-} from "~enterprise/common/utils/awsS3ServiceFunctions";
+import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 const Account: NextPage = () => {
   const router = useRouter();
@@ -290,10 +287,6 @@ const Account: NextPage = () => {
             );
 
             newAuthPicURL = thumbnailURL;
-          }
-
-          if (employee?.authPic) {
-            await deleteFileFromS3(employee?.authPic as string);
           }
         }
       } catch (error) {
