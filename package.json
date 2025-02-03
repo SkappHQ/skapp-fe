@@ -26,6 +26,8 @@
     "@mui/base": "^5.0.0-beta.58",
     "@mui/x-date-pickers": "^7.18.0",
     "@next/third-parties": "^15.1.0",
+    "@stripe/react-stripe-js": "^3.1.1",
+    "@stripe/stripe-js": "^5.6.0",
     "@tanstack/react-query": "^5.55.4",
     "@tanstack/react-query-devtools": "^5.55.4",
     "aws-sdk": "^2.1692.0",
@@ -51,6 +53,7 @@
     "react-i18next": "^15.0.1",
     "react-phone-input-2": "^2.15.1",
     "react-select": "^5.8.0",
+    "stripe": "^17.6.0",
     "zustand": "^4.5.5"
   },
   "devDependencies": {

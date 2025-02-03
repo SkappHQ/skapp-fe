@@ -37,7 +37,8 @@ const superAdminRoutes = {
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.DOCUMENTS.SENT,
-    ROUTES.SETTINGS.MODULES
+    ROUTES.SETTINGS.MODULES,
+    "/subscribe"
   ]
 };
 
@@ -208,6 +209,7 @@ export const config = {
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/documents/:path*"
+    "/documents/:path*",
+    "/subscribe"
   ]
 };
