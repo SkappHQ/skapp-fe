@@ -182,6 +182,100 @@ const SystemPermissionForm = ({
   };
 
   const handleNext = async () => {
+    if (!values.isSuperAdmin) {
+      if (
+        roleLimits.peopleAdminLimitExceeded &&
+        values.peopleRole === Role.PEOPLE_ADMIN
+      ) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
+          description: roleLimitationTexts([
+            "peopleAdminLimitationDescription"
+          ]),
+          isIcon: true
+        });
+        return;
+      }
+
+      if (
+        roleLimits.leaveAdminLimitExceeded &&
+        values.leaveRole === Role.LEAVE_ADMIN
+      ) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
+          description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
+          isIcon: true
+        });
+        return;
+      }
+
+      if (
+        roleLimits.attendanceAdminLimitExceeded &&
+        values.attendanceRole === Role.ATTENDANCE_ADMIN
+      ) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
+          description: roleLimitationTexts([
+            "attendanceAdminLimitationDescription"
+          ]),
+          isIcon: true
+        });
+        return;
+      }
+
+      if (
+        roleLimits.peopleManagerLimitExceeded &&
+        values.peopleRole === Role.PEOPLE_MANAGER
+      ) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
+          description: roleLimitationTexts([
+            "peopleManagerLimitationDescription"
+          ]),
+          isIcon: true
+        });
+        return;
+      }
+    }
+
+    if (
+      roleLimits.leaveManagerLimitExceeded &&
+      values.leaveRole === Role.LEAVE_MANAGER
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
+        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
+        isIcon: true
+      });
+      return;
+    }
+
+    if (
+      roleLimits.attendanceManagerLimitExceeded &&
+      values.attendanceRole === Role.ATTENDANCE_MANAGER
+    ) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
+        description: roleLimitationTexts([
+          "attendanceManagerLimitationDescription"
+        ]),
+        isIcon: true
+      });
+      return;
+    }
+
     if (isUpdate) {
       if (
         isDemoteUser(employee, values) &&
