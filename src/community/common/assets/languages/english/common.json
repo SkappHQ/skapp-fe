@@ -189,7 +189,11 @@
     "googleCalendarRemoveSuccessDes": "Your Google Calendar disconnected successfully.",
     "googleCalendarErrorTitle": "Oops! Something Went Wrong",
     "googleCalendarAddErrorDes": "Failed to add Google Calendar. Please try again.",
-    "googleCalendarRemoveErrorDes": "Failed to remove Google Calendar. Please try again."
+    "googleCalendarRemoveErrorDes": "Failed to remove Google Calendar. Please try again.",
+    "confirmDisconnectTitle": "Are you Sure?",
+    "confirmDisconnectMessage": "You are about to disconnect your Google Calendar from your account. This action will stop syncing your leave records with your calendar. Are you sure you want to proceed?",
+    "confirmBtn": "Confirm",
+    "cancelBtn": "Cancel"
   },
   "unauthorized": {
     "pageHead": "Access Denied | Skapp",
