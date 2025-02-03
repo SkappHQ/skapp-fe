@@ -116,7 +116,7 @@ const ApplyLeaveModal = () => {
       setToastMessage,
       translateText
     });
-    setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
+    setMyLeaveRequestModalType(MyRequestModalEnums.MARK_OUT_OF_OFFICE);
   };
 
   const onError = (error: string) => {
