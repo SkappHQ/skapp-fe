@@ -51,6 +51,10 @@ const Individual: NextPage = () => {
     ManagerTypes.ATTENDANCE_MANAGER || AdminTypes.ATTENDANCE_ADMIN
   );
 
+  const isEmployee = data?.user.roles?.every((role) =>
+    Object.values(EmployeeTypes).includes(role as EmployeeTypes)
+  );
+
   const isManager = isLeaveManager || isAttendanceManager;
 
   const [formType, setFormType] = useState<EditAllInformationType>(
@@ -119,7 +123,10 @@ const Individual: NextPage = () => {
       case EditAllInformationType.employment:
         return (
           <>
-            <EmploymentDetailsSection isManager={true} />
+            <EmploymentDetailsSection
+              isManager={true}
+              isEmployee={isEmployee}
+            />
           </>
         );
       case EditAllInformationType.timesheeet:

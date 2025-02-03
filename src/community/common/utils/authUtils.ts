@@ -15,7 +15,12 @@ export const IsProtectedUrl = (asPath: string): boolean => {
     .map((path) => path.replace(/\/:path\*$/, ""))
     .filter((path) => !drawerHiddenProtectedRoutes.includes(path));
 
-  return protectedPaths.some((path) => asPath.includes(path));
+  return protectedPaths.some(
+    (path) =>
+      !asPath.includes("/signin") &&
+      !asPath.includes("/signup") &&
+      asPath.includes(path)
+  );
 };
 
 export const decodeJWTToken = (token: string) => {

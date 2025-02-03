@@ -79,13 +79,13 @@ const ROUTES = {
     }
   },
   MAINTENANCE: "/maintenance",
-  DOCUMENTS: {
-    BASE: "/documents",
-    INBOX: "/documents/inbox",
-    SENT: "/documents/sent",
-    FOLDERS: "/documents/folders",
-    CONTACTS: "/documents/contacts",
-    CREATE_DOCUMENT: "/documents/create"
+  SIGN: {
+    BASE: "/sign",
+    INBOX: "/sign/inbox",
+    SENT: "/sign/sent",
+    FOLDERS: "/sign/folders",
+    CONTACTS: "/sign/contacts",
+    CREATE_DOCUMENT: "/sign/create"
   }
 };
 

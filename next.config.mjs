@@ -229,24 +229,24 @@ const nextConfig = {
         destination: "/enterprise/maintenance"
       },
       {
-        source: "/documents/inbox",
-        destination: "/enterprise/documents/inbox"
+        source: "/sign/inbox",
+        destination: "/enterprise/sign/inbox"
       },
       {
-        source: "/documents/sent",
-        destination: "/enterprise/documents/sent"
+        source: "/sign/sent",
+        destination: "/enterprise/sign/sent"
       },
       {
-        source: "/documents/contacts",
-        destination: "/enterprise/documents/contacts"
+        source: "/sign/contacts",
+        destination: "/enterprise/sign/contacts"
       },
       {
-        source: "/documents/folders",
-        destination: "/enterprise/documents/folders"
+        source: "/sign/folders",
+        destination: "/enterprise/sign/folders"
       },
       {
-        source: "/documents/create",
-        destination: "/enterprise/documents/create"
+        source: "/sign/create",
+        destination: "/enterprise/sign/create"
       },
       {
         source: "/settings/modules",
