@@ -79,6 +79,7 @@ const SystemPermissionForm = ({
   const classes = styles();
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
+  const [isFormChanged, setIsFormChanged] = useState(false);
   const environment = useGetEnvironment();
 
   const isEsignatureModuleAvailable =
@@ -453,6 +454,7 @@ const SystemPermissionForm = ({
 
     setFieldValue(name, value);
     setUserRoles(name, value);
+    setIsFormChanged(true);
   };
 
   const handleCustomChangeDefault = (name: string, value: any) => {
@@ -519,6 +521,8 @@ const SystemPermissionForm = ({
     setUserRoles("peopleRole", peopleRole);
     setUserRoles("leaveRole", leaveRole);
     setUserRoles("esignRole", esignRole);
+
+    setIsFormChanged(true);
   };
 
   const handleSuperAdminChangeDefault = async (
@@ -705,7 +709,12 @@ const SystemPermissionForm = ({
               styles={{
                 padding: "1.25rem 1.75rem"
               }}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
+              disabled={
+                isSubmitDisabled ||
+                isLoading ||
+                isInputsDisabled ||
+                (isUpdate && !isFormChanged)
+              }
               dataTestId={
                 isUpdate
                   ? systemPermissionFormTestId.buttons.cancelBtn
@@ -725,7 +734,12 @@ const SystemPermissionForm = ({
               isFullWidth={false}
               onClick={handleNext}
               styles={{ padding: "1.25rem 2.5rem" }}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
+              disabled={
+                isSubmitDisabled ||
+                isLoading ||
+                isInputsDisabled ||
+                (isUpdate && !isFormChanged)
+              }
               isLoading={isLoading}
               dataTestId={
                 isUpdate
