@@ -113,8 +113,7 @@ const UserDetailsCentered: FC<Props> = ({
           lastName={cardData?.lastName}
           alt={cardData?.fullName}
           src={
-            (employeeGeneralDetails?.authPic?.[0] as ModifiedFileType)
-              ?.preview ||
+            (employeeGeneralDetails?.authPic as string) ||
             (profilePicture ?? "")
           }
           avatarStyles={{

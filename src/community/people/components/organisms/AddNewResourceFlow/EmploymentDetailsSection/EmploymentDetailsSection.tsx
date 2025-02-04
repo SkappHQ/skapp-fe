@@ -68,6 +68,7 @@ interface Props {
   isUpdate?: boolean;
   isProfileView?: boolean;
   isInputsDisabled?: boolean;
+  isEmployee?: boolean;
 }
 
 interface FormMethods {
@@ -82,7 +83,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       isManager = false,
       isUpdate = false,
       isProfileView = false,
-      isInputsDisabled = false
+      isInputsDisabled = false,
+      isEmployee = false
     }: Props,
     ref
   ) => {
@@ -675,7 +677,10 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               )}
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+            <Grid
+              size={{ xs: 12, md: 6, xl: 4 }}
+              sx={{ display: isEmployee ? "none" : "block" }}
+            >
               <AvatarSearch
                 id="primary-manager-search"
                 title={translateText(["primarySupervisor"])}
@@ -704,7 +709,10 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               />
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+            <Grid
+              size={{ xs: 12, md: 6, xl: 4 }}
+              sx={{ display: isEmployee ? "none" : "block" }}
+            >
               <AvatarSearch
                 id="secondary-manager-search"
                 title={translateText(["secondarySupervisor"])}
@@ -869,7 +877,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 componentStyle={{
                   mt: "0rem"
                 }}
-                isDisabled={isManager || isInputsDisabled}
+                isDisabled={isInputsDisabled}
+                readOnly={isManager}
               />
             </Grid>
           </Grid>
