@@ -38,6 +38,7 @@ import EditIcon from "~community/common/assets/Icons/EditIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
 import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
+import FileIcon from "~community/common/assets/Icons/FileIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import ForwardArrow from "~community/common/assets/Icons/ForwardArrow";
@@ -197,7 +198,8 @@ export const IconMapping: Partial<
   [IconName.PEOPLE_MODULE_ICON]: PeopleModuleIcon,
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
-  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon
+  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
+  [IconName.FILE_ICON]: FileIcon
   // Add more icons here as needed
 };
 

@@ -11,6 +11,48 @@
   "create": {
     "pageHead": "Documents | Skapp",
     "title": "Create Document",
-    "createDoc": "Create document"
+    "createDoc": "Create document",
+    "of": "of",
+    "next": "Next",
+    "stepper": {
+      "recepientDetails": "Recipient details",
+      "defineFields": "Define fields",
+      "summary": "Document summary"
+    },
+    "recepientDetails": {
+      "uploadDoc": {
+        "title": "Upload documents",
+        "head": "Documents | Skapp",
+        "upload": "Upload",
+        "cancel": "Cancel",
+        "kebabMenuOptions": {
+          "view": "View",
+          "replace": "Replace",
+          "delete": "Delete",
+          "rename": "Rename"
+        },
+        "errors": {
+          "fileTypeNotSupported": {
+            "title": "File type not supported",
+            "description": "The uploaded file type is not supported. Please try again."
+          },
+          "fileTooLarge": {
+            "title": "Allowed file size exceeded",
+            "description": "The file size should be less than 25 MB. Please try again."
+          },
+          "uploadFailed": {
+            "title": "Oops! Something went wrong",
+            "description": "Failed to upload the document. Please try again."
+          }
+        }
+      }
+    }
+  },
+  "modals": {
+    "deleteDocumentTitle": "Confirm deletion",
+    "previewTitle": "Upload document",
+    "deleteDocumentDesc": "Are you sure you want to delete this uploaded document? You will not be able to revoke this decision.",
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }
