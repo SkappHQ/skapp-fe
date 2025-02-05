@@ -20,9 +20,13 @@ interface Props {
 
 const AttendanceCard: FC<Props> = ({ analytic1, analytic2, title, type }) => {
   const router = useRouter();
-  const { setClockInType } = useAttendanceStore((state) => state);
   const theme = useTheme();
 
+  const { setClockInType } = useAttendanceStore((state) => ({
+    setClockInType: state.setClockInType
+  }));
+
+  //TODO: Move styles to a different file
   return (
     <>
       <Box
@@ -52,6 +56,7 @@ const AttendanceCard: FC<Props> = ({ analytic1, analytic2, title, type }) => {
             </Typography>
             <Box
               sx={{ cursor: "pointer" }}
+              //TODO: Move to a function
               onClick={() => {
                 type === ClockInOutGraphTypes.CLOCK_IN
                   ? setClockInType({})

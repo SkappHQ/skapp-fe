@@ -56,7 +56,17 @@ interface Props {
 
 const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
   const theme: Theme = useTheme();
+  const classes = styles(theme);
+
   const translateText = useTranslator("attendanceModule", "timesheet");
+
+  const {
+    selectedDailyRecord,
+    employeeTimesheetModalType, //TODO: Fix spelling mistake
+    currentAddTimeChanges,
+    setIsEmployeeTimesheetModalOpen //TODO: Fix spelling mistake
+  } = useAttendanceStore((state) => state);
+
   const [duration, setDuration] = useState<string>();
   const [breakHours, setBreakHours] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<DateTime | undefined>(
@@ -64,15 +74,7 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
   );
   const [timeAvailability, setTimeAvailability] =
     useState<TimeAvailabilityType>();
-  const classes = styles(theme);
   const { data: timeConfigData } = useDefaultCapacity();
-
-  const {
-    selectedDailyRecord,
-    employeeTimesheetModalType,
-    currentAddTimeChanges,
-    setIsEmployeeTimesheetModalOpen
-  } = useAttendanceStore((state) => state);
 
   const {
     isDurationValid,
@@ -115,12 +117,14 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
     values.toTime
   );
 
+  // TODO: Move to the relevant util file and write unit test cases
   const isInvalidTimeForDisableButton = () => {
+    // TODO: How about we write a switch case here? It will reduce the number of lines and make it more readable
     if (
-      employeeTimesheetModalType ===
-        EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY ||
-      employeeTimesheetModalType ===
-        EmployeeTimesheetModalTypes.EDIT_LEAVE_TIME_ENTRY
+      employeeTimesheetModalType === //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY || //TODO: Fix spelling mistake
+      employeeTimesheetModalType === //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.EDIT_LEAVE_TIME_ENTRY //TODO: Fix spelling mistake
     ) {
       return clockInOutWithPrevTimeValidation(
         values.fromTime,
@@ -132,12 +136,12 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
         false
       );
     } else if (
-      employeeTimesheetModalType ===
-        EmployeeTimesheetModalTypes.ADD_TIME_ENTRY ||
-      employeeTimesheetModalType ===
-        EmployeeTimesheetModalTypes.ADD_LEAVE_TIME_ENTRY ||
-      employeeTimesheetModalType ===
-        EmployeeTimesheetModalTypes.ADD_TIME_ENTRY_BY_TABLE
+      employeeTimesheetModalType === //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.ADD_TIME_ENTRY || //TODO: Fix spelling mistake
+      employeeTimesheetModalType === //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.ADD_LEAVE_TIME_ENTRY || //TODO: Fix spelling mistake
+      employeeTimesheetModalType === //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.ADD_TIME_ENTRY_BY_TABLE //TODO: Fix spelling mistake
     ) {
       return clockInOutValidation(values.fromTime, values.toTime, false);
     } else {
@@ -172,10 +176,10 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
     if (
       values.fromTime?.length === TIME_LENGTH &&
       values.toTime?.length === TIME_LENGTH &&
-      employeeTimesheetModalType !==
-        EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY &&
-      employeeTimesheetModalType !==
-        EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY
+      employeeTimesheetModalType !== //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY && //TODO: Fix spelling mistake
+      employeeTimesheetModalType !== //TODO: Fix spelling mistake
+        EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY //TODO: Fix spelling mistake
     ) {
       const duration = getDuration(values.fromTime, values.toTime);
       if (!duration?.includes("-")) {
@@ -187,13 +191,13 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
   useEffect(() => {
     if (
       currentAddTimeChanges &&
-      employeeTimesheetModalType === EmployeeTimesheetModalTypes.ADD_TIME_ENTRY
+      employeeTimesheetModalType === EmployeeTimesheetModalTypes.ADD_TIME_ENTRY //TODO: Fix spelling mistake
     ) {
       void setFieldValue("fromTime", currentAddTimeChanges?.fromTime);
       void setFieldValue("toTime", currentAddTimeChanges?.toTime);
     } else if (
       timeConfigData &&
-      (employeeTimesheetModalType ===
+      (employeeTimesheetModalType === //TODO: Fix spelling mistake
         EmployeeTimesheetModalTypes.ADD_TIME_ENTRY ||
         employeeTimesheetModalType ===
           EmployeeTimesheetModalTypes.ADD_LEAVE_TIME_ENTRY ||
@@ -220,6 +224,7 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
   ]);
 
   useEffect(() => {
+    // TODO: How about we write a switch case here? It will reduce the number of lines and make it more readable
     if (
       employeeTimesheetModalType ===
         EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY ||
@@ -270,6 +275,7 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
   ]);
 
   useEffect(() => {
+    // TODO: How about we write a switch case here? It will reduce the number of lines and make it more readable
     if (
       employeeTimesheetModalType ===
         EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY ||
@@ -301,6 +307,7 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
   ]);
 
   useEffect(() => {
+    // TODO: How about we write a switch case here? It will reduce the number of lines and make it more readable
     if (
       employeeTimesheetModalType ===
         EmployeeTimesheetModalTypes.EDIT_AVAILABLE_TIME_ENTRY ||
@@ -335,6 +342,8 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
     }
   }, []);
 
+  // TODO: Make sure to more the styles to the styles.ts file
+  // TODO: What if we remove the tsx to a different component and leave only the logic in this file??
   return (
     <Form onSubmit={handleSubmit}>
       {(employeeTimesheetModalType ===
