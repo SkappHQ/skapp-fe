@@ -397,7 +397,7 @@ const EditAllInformation: NextPage = () => {
       employeeId: employee?.employeeId as string,
       generalDetails: {
         ...employeeGeneralDetails,
-        authPic: newAuthPicURL.split("/").slice(2).join("/")
+        authPic: newAuthPicURL
       },
       contactDetails: employeeContactDetails,
       familyDetails: employeeFamilyDetails,
