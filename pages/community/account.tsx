@@ -39,6 +39,8 @@ import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 const Account: NextPage = () => {
   const router = useRouter();
 
+  const environment = useGetEnvironment();
+
   const { setToastMessage } = useToast();
 
   const translateText = useTranslator("peopleModule");
@@ -65,8 +67,6 @@ const Account: NextPage = () => {
     setEmployeeGeneralDetails,
     userRoles
   } = usePeopleStore((state) => state);
-
-  const environment = useGetEnvironment();
 
   const { id } = router.query;
 
@@ -243,26 +243,13 @@ const Account: NextPage = () => {
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
   const handleSave = async () => {
-    let newAuthPicURL = "";
-
-    if (
-      typeof employeeGeneralDetails?.authPic === "object" &&
-      employeeGeneralDetails?.authPic &&
-      employeeGeneralDetails?.authPic?.length > 0
-    ) {
-      try {
-        newAuthPicURL = await uploadImage({
-          environment,
-          authPic: employeeGeneralDetails?.authPic,
-          thumbnail: employeeGeneralDetails?.thumbnail,
-          imageUploadMutate
-        });
-      } catch (error) {
-        onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);
-      }
-    } else {
-      newAuthPicURL = (employeeGeneralDetails?.authPic as string) ?? "";
-    }
+    const newAuthPicURL = await uploadImage({
+      environment,
+      authPic: employeeGeneralDetails?.authPic,
+      thumbnail: employeeGeneralDetails?.thumbnail,
+      imageUploadMutate,
+      onError: onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR)
+    });
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
 

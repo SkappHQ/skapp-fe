@@ -131,23 +131,14 @@ const AddNewResourceFlow = () => {
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
   const handleSave = async () => {
-    let newAuthPicURL = "";
-
-    if (
-      employeeGeneralDetails?.authPic &&
-      employeeGeneralDetails?.authPic?.length > 0
-    ) {
-      try {
-        newAuthPicURL = await uploadImage({
-          environment,
-          authPic: employeeGeneralDetails?.authPic,
-          thumbnail: employeeGeneralDetails?.thumbnail,
-          imageUploadMutate
-        });
-      } catch (error) {
-        handleError(translateError(["uploadError"]));
-      }
-    }
+    const newAuthPicURL = await uploadImage({
+      isNewResource: true,
+      environment,
+      authPic: employeeGeneralDetails?.authPic,
+      thumbnail: employeeGeneralDetails?.thumbnail,
+      imageUploadMutate,
+      onError: handleError(translateError(["uploadError"]))
+    });
 
     const data: EmployeeType = {
       generalDetails: {

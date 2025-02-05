@@ -382,30 +382,14 @@ const EditAllInformation: NextPage = () => {
       return;
     }
 
-    let newAuthPicURL = "";
-
-    if (
-      typeof employeeGeneralDetails?.authPic === "object" &&
-      employeeGeneralDetails?.authPic &&
-      employeeGeneralDetails?.authPic?.length > 0
-    ) {
-      try {
-        setHasUploadStarted(true);
-
-        newAuthPicURL = await uploadImage({
-          environment,
-          authPic: employeeGeneralDetails?.authPic,
-          thumbnail: employeeGeneralDetails?.thumbnail,
-          imageUploadMutate
-        });
-
-        setHasUploadStarted(false);
-      } catch (error) {
-        onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);
-      }
-    } else {
-      newAuthPicURL = (employeeGeneralDetails?.authPic as string) ?? "";
-    }
+    const newAuthPicURL = await uploadImage({
+      environment,
+      authPic: employeeGeneralDetails?.authPic,
+      thumbnail: employeeGeneralDetails?.thumbnail,
+      imageUploadMutate,
+      onError: onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR),
+      setHasUploadStarted
+    });
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
 
