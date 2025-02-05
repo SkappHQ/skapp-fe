@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
-import { appModes } from "~community/common/constants/configs";
 import { accountPageTestId } from "~community/common/constants/testIds";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
@@ -34,9 +33,8 @@ import {
   EmployeeDetails,
   contractStates
 } from "~community/people/types/EmployeeTypes";
+import uploadImage from "~community/people/utils/image/uploadImage";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { FileCategories } from "~enterprise/common/types/s3Types";
-import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 const Account: NextPage = () => {
   const router = useRouter();
@@ -253,42 +251,12 @@ const Account: NextPage = () => {
       employeeGeneralDetails?.authPic?.length > 0
     ) {
       try {
-        if (environment === appModes.COMMUNITY) {
-          const formData = new FormData();
-          formData.append("file", employeeGeneralDetails?.authPic[0]);
-
-          formData.append("type", "USER_IMAGE");
-
-          await imageUploadMutate(formData).then((response) => {
-            const filePath = response.message?.split(
-              "File uploaded successfully: "
-            )[1];
-            if (filePath) {
-              const fileName = filePath.split("/").pop();
-              if (fileName) {
-                newAuthPicURL = fileName;
-              }
-            }
-          });
-        } else {
-          await uploadFileToS3ByUrl(
-            employeeGeneralDetails?.authPic[0],
-            FileCategories.PROFILE_PICTURES_ORIGINAL
-          );
-
-          if (
-            typeof employeeGeneralDetails?.thumbnail === "object" &&
-            employeeGeneralDetails?.thumbnail &&
-            employeeGeneralDetails?.thumbnail?.length > 0
-          ) {
-            const thumbnailURL = await uploadFileToS3ByUrl(
-              employeeGeneralDetails?.thumbnail[0],
-              FileCategories.PROFILE_PICTURES_THUMBNAIL
-            );
-
-            newAuthPicURL = thumbnailURL;
-          }
-        }
+        newAuthPicURL = await uploadImage({
+          environment,
+          authPic: employeeGeneralDetails?.authPic,
+          thumbnail: employeeGeneralDetails?.thumbnail,
+          imageUploadMutate
+        });
       } catch (error) {
         onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);
       }

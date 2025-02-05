@@ -9,7 +9,6 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
-import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -56,9 +55,8 @@ import {
   contractStates
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
+import uploadImage from "~community/people/utils/image/uploadImage";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { FileCategories } from "~enterprise/common/types/s3Types";
-import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
@@ -394,42 +392,12 @@ const EditAllInformation: NextPage = () => {
       try {
         setHasUploadStarted(true);
 
-        if (environment === appModes.COMMUNITY) {
-          const formData = new FormData();
-          formData.append("file", employeeGeneralDetails?.authPic[0]);
-
-          formData.append("type", "USER_IMAGE");
-
-          await imageUploadMutate(formData).then((response) => {
-            const filePath = response.message?.split(
-              "File uploaded successfully: "
-            )[1];
-            if (filePath) {
-              const fileName = filePath.split("/").pop();
-              if (fileName) {
-                newAuthPicURL = fileName;
-              }
-            }
-          });
-        } else {
-          await uploadFileToS3ByUrl(
-            employeeGeneralDetails?.authPic[0],
-            FileCategories.PROFILE_PICTURES_ORIGINAL
-          );
-
-          if (
-            typeof employeeGeneralDetails?.thumbnail === "object" &&
-            employeeGeneralDetails?.thumbnail &&
-            employeeGeneralDetails?.thumbnail?.length > 0
-          ) {
-            const thumbnailURL = await uploadFileToS3ByUrl(
-              employeeGeneralDetails?.thumbnail[0],
-              FileCategories.PROFILE_PICTURES_THUMBNAIL
-            );
-
-            newAuthPicURL = thumbnailURL;
-          }
-        }
+        newAuthPicURL = await uploadImage({
+          environment,
+          authPic: employeeGeneralDetails?.authPic,
+          thumbnail: employeeGeneralDetails?.thumbnail,
+          imageUploadMutate
+        });
 
         setHasUploadStarted(false);
       } catch (error) {
