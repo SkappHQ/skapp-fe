@@ -383,6 +383,7 @@ const EditAllInformation: NextPage = () => {
     }
 
     const newAuthPicURL = await uploadImage({
+      isAnExistingResource: true,
       environment,
       authPic: employeeGeneralDetails?.authPic,
       thumbnail: employeeGeneralDetails?.thumbnail,

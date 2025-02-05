@@ -7,7 +7,7 @@ import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 interface UploadImageProps {
-  isNewResource?: boolean;
+  isAnExistingResource?: boolean;
   environment: string | undefined;
   authPic: [] | ModifiedFileType[] | string | null | undefined;
   thumbnail: [] | ModifiedFileType[] | string | null | undefined;
@@ -17,7 +17,7 @@ interface UploadImageProps {
 }
 
 const uploadImage = async ({
-  isNewResource = false,
+  isAnExistingResource = false,
   environment,
   authPic,
   thumbnail,
@@ -27,7 +27,7 @@ const uploadImage = async ({
 }: UploadImageProps) => {
   let newAuthPicURL = "";
 
-  if (authPic && authPic?.length > 0) {
+  if (typeof authPic === "object" && authPic && authPic?.length > 0) {
     try {
       setHasUploadStarted?.(true);
 
@@ -63,7 +63,7 @@ const uploadImage = async ({
             FileCategories.PROFILE_PICTURES_THUMBNAIL
           );
 
-          newAuthPicURL = thumbnailURL;
+          newAuthPicURL = thumbnailURL.split("/").slice(2).join("/");
         }
       }
 
@@ -71,7 +71,7 @@ const uploadImage = async ({
     } catch (error) {
       onError();
     }
-  } else if (isNewResource) {
+  } else if (isAnExistingResource) {
     newAuthPicURL = (authPic as string) ?? "";
   }
 

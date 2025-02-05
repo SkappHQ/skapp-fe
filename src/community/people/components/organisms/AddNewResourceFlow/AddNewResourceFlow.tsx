@@ -132,7 +132,6 @@ const AddNewResourceFlow = () => {
 
   const handleSave = async () => {
     const newAuthPicURL = await uploadImage({
-      isNewResource: true,
       environment,
       authPic: employeeGeneralDetails?.authPic,
       thumbnail: employeeGeneralDetails?.thumbnail,
