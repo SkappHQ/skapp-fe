@@ -115,13 +115,15 @@ const ApplyLeaveModal = () => {
 
   const { data: isGoogleConnected } = useIsGoogleCalendarConnected();
 
+  const isEnterprise = useGetEnvironment() === appModes.ENTERPRISE;
+
   const onSuccess = (data: LeaveRequestItemsType) => {
     handleApplyLeaveApiResponse({
       type: ApplyLeaveToastEnums.APPLY_LEAVE_SUCCESS,
       setToastMessage,
       translateText
     });
-    if (isGoogleConnected) {
+    if (isEnterprise && isGoogleConnected) {
       setLeaveRequestId(data.leaveRequestId);
       setMyLeaveRequestModalType(MyRequestModalEnums.MARK_OUT_OF_OFFICE);
     } else {
