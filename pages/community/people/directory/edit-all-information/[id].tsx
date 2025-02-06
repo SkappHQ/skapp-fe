@@ -265,6 +265,7 @@ const EditAllInformation: NextPage = () => {
 
   const onError = (error: string) => {
     setUpdateEmployeeStatus(EditAllInformationFormStatus.UPDATE_ERROR);
+
     const toastContent = {
       toastType: ToastType.ERROR,
       title: translateErrors(["title"]),
@@ -273,6 +274,7 @@ const EditAllInformation: NextPage = () => {
       }),
       open: true
     };
+
     const errors = {
       [EditAllInfoErrorTypes.REALOCATE_INDIVIDUAL_SUPERVISOR_ERROR]:
         translateErrors(["realocateIndividualSupervisorError"]),
@@ -285,8 +287,10 @@ const EditAllInformation: NextPage = () => {
         "uploadError"
       ])
     };
+
     toastContent.description =
       errors[error as EditAllInfoErrorTypes] ?? toastContent.description;
+
     setToastMessage(toastContent);
   };
 
@@ -388,11 +392,13 @@ const EditAllInformation: NextPage = () => {
       authPic: employeeGeneralDetails?.authPic,
       thumbnail: employeeGeneralDetails?.thumbnail,
       imageUploadMutate,
-      onError: onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR),
+      onError: () =>
+        onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR),
       setHasUploadStarted
     });
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
+    setEmployeeGeneralDetails("thumbnail", "");
 
     const updatedEmployeeData: EmployeeType = {
       employeeId: employee?.employeeId as string,
@@ -418,6 +424,7 @@ const EditAllInformation: NextPage = () => {
     if (isAdmin) {
       setIsSuperAdminEditFlow(true);
     }
+
     isPeopleManagerMe
       ? updatePeopleManager(updatedEmployeeData)
       : mutate(updatedEmployeeData);

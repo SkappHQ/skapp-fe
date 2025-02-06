@@ -136,7 +136,7 @@ const AddNewResourceFlow = () => {
       authPic: employeeGeneralDetails?.authPic,
       thumbnail: employeeGeneralDetails?.thumbnail,
       imageUploadMutate,
-      onError: handleError(translateError(["uploadError"]))
+      onError: () => handleError(translateError(["uploadError"]))
     });
 
     const data: EmployeeType = {

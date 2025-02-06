@@ -13,7 +13,6 @@ import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
 import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { getProfilePicThumbnailUrl } from "~enterprise/common/utils/commonUtil";
 
 interface Props {
   selectedUser: EmployeeDetails;
@@ -95,6 +94,19 @@ const UserDetailsCentered: FC<Props> = ({
     }
   }, [isLoading, uploadedImage]);
 
+  const getAvatarThumbnailUrl = useCallback((): string => {
+    if (employeeGeneralDetails?.authPic !== undefined) {
+      if (Array.isArray(employeeGeneralDetails?.authPic)) {
+        return employeeGeneralDetails?.authPic[0]?.preview;
+      }
+      return employeeGeneralDetails?.authPic ?? "";
+    } else if (profilePicture !== undefined) {
+      return profilePicture;
+    }
+
+    return "";
+  }, [profilePicture, employeeGeneralDetails?.authPic]);
+
   return (
     <Box
       component="div"
@@ -121,17 +133,7 @@ const UserDetailsCentered: FC<Props> = ({
           firstName={cardData?.firstName}
           lastName={cardData?.lastName}
           alt={cardData?.fullName}
-          src={
-            Array.isArray(employeeGeneralDetails?.authPic)
-              ? employeeGeneralDetails?.authPic?.length
-                ? (employeeGeneralDetails?.authPic[0] as ModifiedFileType)
-                    .preview
-                : ""
-              : getProfilePicThumbnailUrl(
-                  employeeGeneralDetails?.authPic as string
-                ) ||
-                (profilePicture ?? "")
-          }
+          src={getAvatarThumbnailUrl()}
           avatarStyles={{
             width: "6.125rem",
             height: "6.125rem",

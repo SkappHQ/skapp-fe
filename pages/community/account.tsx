@@ -244,14 +244,16 @@ const Account: NextPage = () => {
 
   const handleSave = async () => {
     const newAuthPicURL = await uploadImage({
+      isAnExistingResource: true,
       environment,
       authPic: employeeGeneralDetails?.authPic,
       thumbnail: employeeGeneralDetails?.thumbnail,
       imageUploadMutate,
-      onError: onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR)
+      onError: () => onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR)
     });
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
+    setEmployeeGeneralDetails("thumbnail", "");
 
     const updatedEmployeeData: EmployeeType = {
       employeeId: employee?.employeeId,
@@ -273,6 +275,7 @@ const Account: NextPage = () => {
       visaDetails: employeeVisaDetails,
       userRoles: userRoles
     };
+
     mutate(updatedEmployeeData);
   };
 

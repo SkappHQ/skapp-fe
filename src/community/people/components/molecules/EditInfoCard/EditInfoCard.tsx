@@ -282,6 +282,23 @@ const EditInfoCard = ({
     }
   };
 
+  const getAvatarThumbnailUrl = useCallback((): string => {
+    if (employeeGeneralDetails?.authPic !== undefined) {
+      if (Array.isArray(employeeGeneralDetails?.authPic)) {
+        return employeeGeneralDetails?.authPic[0]?.preview;
+      }
+
+      return employeeGeneralDetails?.authPic ?? "";
+    } else if (cardData?.authPic !== undefined) {
+      if (Array.isArray(cardData?.authPic)) {
+        return cardData?.authPic[0]?.preview;
+      }
+      return cardData?.authPic ?? "";
+    }
+
+    return "";
+  }, [cardData?.authPic, employeeGeneralDetails?.authPic]);
+
   return (
     <Stack
       sx={{
@@ -314,11 +331,7 @@ const EditInfoCard = ({
         <Avatar
           id="avatar"
           alt={cardData?.fullName}
-          src={
-            (employeeGeneralDetails?.authPic?.[0] as ModifiedFileType)
-              ?.preview ||
-            (cardData?.authPic ?? "")
-          }
+          src={getAvatarThumbnailUrl()}
           avatarStyles={{
             width: "6.125rem",
             height: "6.125rem",
