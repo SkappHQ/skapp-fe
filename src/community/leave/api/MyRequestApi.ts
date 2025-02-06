@@ -169,7 +169,7 @@ export const useGetEmployeeLeaveRequestData = (leaveId: number) => {
   });
 };
 
-export const useCancelLeaveRequest = () => {
+export const useCancelLeaveRequest = (selectedYear: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (leaveRequestId: { id: number }) => {
@@ -196,6 +196,14 @@ export const useCancelLeaveRequest = () => {
       queryClient
         .invalidateQueries({
           queryKey: [getAttendanceQueryKeys.employeeLeaveStatus()]
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: [
+            leaveEntitlementQueryKeys.MY_LEAVE_ALLOCATION,
+            selectedYear
+          ]
         })
         .catch(rejects);
     }
