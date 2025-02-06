@@ -6,6 +6,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import routes from "./data/routes";
 
@@ -13,12 +14,14 @@ type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
 const getDrawerRoutes = (
   userRoles: Role[] | undefined,
+  isEnterprise: boolean,
   globalLoginMethod?: string
 ) => {
-  const userSpecificRoutes = routes
-    .map((route) => {
+  const allRoutes = isEnterprise ? enterpriseRoutes : routes;
+  const userSpecificRoutes = allRoutes
+    ?.map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
-        userRoles?.includes(requiredRole)
+        userRoles?.includes(requiredRole as Role)
       );
 
       if (route.name === "Dashboard") {
@@ -38,14 +41,13 @@ const getDrawerRoutes = (
           );
 
         if (isLeaveEmployeeWithoutManagerOrAdminRole) {
-          const hasAdditionalRolesForLeaveEmployee =
-            userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
-            userRoles?.some((role) =>
-              [
-                ManagerTypes.PEOPLE_MANAGER,
-                ManagerTypes.ATTENDANCE_MANAGER
-              ].includes(role as ManagerTypes)
-            );
+          const hasAdditionalRolesForLeaveEmployee = userRoles?.some((role) =>
+            [
+              ManagerTypes.PEOPLE_MANAGER,
+              ManagerTypes.ATTENDANCE_MANAGER,
+              EmployeeTypes.LEAVE_EMPLOYEE
+            ].includes(role as ManagerTypes)
+          );
 
           if (hasAdditionalRolesForLeaveEmployee) {
             return {
@@ -184,7 +186,7 @@ const getDrawerRoutes = (
               return false;
             }
             return subRoute.requiredAuthLevel?.some((requiredRole) =>
-              userRoles?.includes(requiredRole)
+              userRoles?.includes(requiredRole as Role)
             );
           });
 
@@ -199,22 +201,22 @@ const getDrawerRoutes = (
         }
       }
 
-      if (route.name === "Documents") {
+      if (route.name === "Sign") {
         const isFeatureEnabled =
           process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
         if (isFeatureEnabled) {
-          const isDocumentsEmployeeWithoutManagerOrAdminRole = userRoles?.some(
+          const isEsignEmployeeWithoutManagerOrAdminRole = userRoles?.some(
             (role) =>
               [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
                 role as AdminTypes | SenderRoleTypes
               )
           );
 
-          if (!isDocumentsEmployeeWithoutManagerOrAdminRole) {
+          if (!isEsignEmployeeWithoutManagerOrAdminRole) {
             return {
               id: route.id,
               name: route.name,
-              url: ROUTES.DOCUMENTS.INBOX,
+              url: ROUTES.SIGN.INBOX,
               icon: route.icon,
               hasSubTree: false
             };
@@ -227,7 +229,7 @@ const getDrawerRoutes = (
       if (isAuthorized && route?.hasSubTree) {
         const subRoutes = route.subTree?.filter((subRoute) =>
           subRoute.requiredAuthLevel?.some((requiredRole) =>
-            userRoles?.includes(requiredRole)
+            userRoles?.includes(requiredRole as Role)
           )
         );
 

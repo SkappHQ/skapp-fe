@@ -230,8 +230,8 @@ const routes = [
   },
   {
     id: "5",
-    name: "Documents",
-    url: ROUTES.DOCUMENTS.BASE,
+    name: "Sign",
+    url: ROUTES.SIGN.BASE,
     icon: IconName.DOCUMENTS_ICON,
     hasSubTree: true,
     requiredAuthLevel: [
@@ -244,7 +244,7 @@ const routes = [
       {
         id: "5A",
         name: "Inbox",
-        url: ROUTES.DOCUMENTS.INBOX,
+        url: ROUTES.SIGN.INBOX,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -256,7 +256,7 @@ const routes = [
       {
         id: "5B",
         name: "Sent",
-        url: ROUTES.DOCUMENTS.SENT,
+        url: ROUTES.SIGN.SENT,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -267,7 +267,7 @@ const routes = [
       {
         id: "5C",
         name: "Folders",
-        url: ROUTES.DOCUMENTS.FOLDERS,
+        url: ROUTES.SIGN.FOLDERS,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -278,7 +278,7 @@ const routes = [
       {
         id: "5D",
         name: "Contacts",
-        url: ROUTES.DOCUMENTS.CONTACTS,
+        url: ROUTES.SIGN.CONTACTS,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -309,20 +309,6 @@ const routes = [
     subTree: [
       {
         id: "6A",
-        name: "Billing",
-        url: ROUTES.SETTINGS.BILLING,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
-      },
-      {
-        id: "6B",
-        name: "Modules",
-        url: ROUTES.SETTINGS.MODULES,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
-      },
-      {
-        id: "6C",
         name: "Account Settings",
         url: ROUTES.SETTINGS.ACCOUNT,
         hasSubTree: false,

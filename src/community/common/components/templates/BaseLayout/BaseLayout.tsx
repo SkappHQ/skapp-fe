@@ -73,7 +73,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
 
   if (
     isProtected &&
-    asPath !== ROUTES.DOCUMENTS.CREATE_DOCUMENT &&
+    asPath !== ROUTES.SIGN.CREATE_DOCUMENT &&
     (!isEnterprise || globalLogin)
   ) {
     return (

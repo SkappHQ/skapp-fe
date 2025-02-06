@@ -215,7 +215,7 @@ const DropdownAutocomplete: FC<Props> = ({
                     .startsWith(state.inputValue.trimStart().toLowerCase())
                 )
         }
-        disabled={isDisabled}
+        disabled={readOnly || isDisabled}
         onChange={onChange}
         value={value}
         isOptionEqualToValue={(option, value) => option.value === value.value}

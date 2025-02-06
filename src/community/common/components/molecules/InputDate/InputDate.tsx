@@ -94,7 +94,8 @@ const InputDate: FC<Props> = ({
   selectedDate,
   setSelectedDate,
   inputFormat,
-  isYearHidden
+  isYearHidden,
+  readOnly = false
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
@@ -262,9 +263,11 @@ const InputDate: FC<Props> = ({
       >
         <Typography
           sx={{
-            color: selectedDate
-              ? theme.palette.common.black
-              : theme.palette.grey[600],
+            color: readOnly
+              ? "text.secondary"
+              : selectedDate
+                ? theme.palette.common.black
+                : theme.palette.grey[600],
             opacity: 1
           }}
         >
@@ -275,12 +278,18 @@ const InputDate: FC<Props> = ({
               )
             : placeholder}
         </Typography>
-        <Box onClick={(e) => !disabled && handleClick(e)}>
+        <Box onClick={(e) => !(disabled || readOnly) && handleClick(e)}>
           <Icon
             name={IconName.CALENDAR_ICON}
             width="6.25rem"
             height="6.25rem"
-            fill={disabled ? theme.palette.grey[600] : "black"}
+            fill={
+              readOnly
+                ? theme.palette.grey[700]
+                : disabled
+                  ? theme.palette.grey[600]
+                  : "black"
+            }
           />
         </Box>
       </Box>

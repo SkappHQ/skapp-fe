@@ -507,7 +507,9 @@
       "head": "Directory | Skapp",
       "quickAddSuccessTitle": "User Added",
       "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully.",
-      "workEmailGoogle": "Work email must be a Google account."
+      "workEmailGoogle": "Work email must be a Google account.",
+      "country": "Country",
+      "selectCountry": "Select country"
     },
     "contactDetails": {
       "title": "Contact Details",
