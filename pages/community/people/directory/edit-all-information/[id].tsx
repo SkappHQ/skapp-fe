@@ -57,14 +57,19 @@ import {
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
 import uploadImage from "~community/people/utils/image/uploadImage";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
-  const { setToastMessage, toastMessage } = useToast();
   const translateText = useTranslator("peopleModule");
+
+  const { setToastMessage, toastMessage } = useToast();
+
   const { data } = useSession();
 
   const environment = useGetEnvironment();
+
+  const { forceRefetch } = useS3Download();
 
   const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
 
@@ -223,6 +228,7 @@ const EditAllInformation: NextPage = () => {
 
   const onSuccess = async () => {
     setIsReinviteConfirmationModalOpen(false);
+
     if (isDiscardChangesModal.isModalOpen) {
       setUpdateEmployeeStatus(EditAllInformationFormStatus.UPDATED);
     } else {
@@ -396,6 +402,8 @@ const EditAllInformation: NextPage = () => {
         onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR),
       setHasUploadStarted
     });
+
+    forceRefetch(newAuthPicURL);
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
     setEmployeeGeneralDetails("thumbnail", "");

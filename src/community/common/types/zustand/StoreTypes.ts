@@ -6,11 +6,13 @@ import { NotifyFilterButtonTypes } from "../notificationTypes";
 interface actionTypes {
   setIsDrawerExpanded: (status: boolean) => void;
   setExpandedDrawerListItem: (listItem: string) => void;
+  setS3FileUrls: (fileUrls: Record<string, string>) => void;
 }
 
 export interface CommonStoreTypes extends actionTypes {
   isDrawerExpanded: boolean;
   expandedDrawerListItem: string;
+  s3FileUrls: Record<string, string>;
 
   // Settings
   modalType: SettingsModalTypes;

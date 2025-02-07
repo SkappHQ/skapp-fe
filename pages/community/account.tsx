@@ -35,11 +35,14 @@ import {
 } from "~community/people/types/EmployeeTypes";
 import uploadImage from "~community/people/utils/image/uploadImage";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 const Account: NextPage = () => {
   const router = useRouter();
 
   const environment = useGetEnvironment();
+
+  const { forceRefetch } = useS3Download();
 
   const { setToastMessage } = useToast();
 
@@ -251,6 +254,8 @@ const Account: NextPage = () => {
       imageUploadMutate,
       onError: () => onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR)
     });
+
+    forceRefetch(newAuthPicURL);
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
     setEmployeeGeneralDetails("thumbnail", "");
