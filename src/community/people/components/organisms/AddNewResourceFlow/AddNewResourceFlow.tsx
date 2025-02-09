@@ -126,7 +126,10 @@ const AddNewResourceFlow = () => {
   };
 
   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-    if (!isDiscardChangesModal.isModalOpen) {
+    if (
+      !isObjectEmpty(getEmployeeObject()) &&
+      !isDiscardChangesModal.isModalOpen
+    ) {
       e.preventDefault();
       return "";
     }
