@@ -2,9 +2,12 @@ import { Avatar, SxProps, Theme, useTheme } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
+import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import DefaultAvatar from "../../atoms/DefaultAvatar/DefaultAvatar";
 import styles from "./styles";
@@ -30,18 +33,36 @@ const AvatarGroupAvatar: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const environment = useGetEnvironment();
+
+  const { s3FileUrls, downloadS3File } = useS3Download();
+
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const { data: logoUrl } = useGetUploadedImage(
     FileTypes.USER_IMAGE,
     image,
-    true
+    true,
+    environment !== appModes.ENTERPRISE
   );
 
   useEffect(() => {
-    if (logoUrl) setProfileImage(logoUrl);
-    else if (image) setProfileImage(image);
-  }, [logoUrl, image]);
+    if (environment === appModes.COMMUNITY) {
+      if (logoUrl) setProfileImage(logoUrl);
+      else if (image) setProfileImage(image);
+    } else if (environment === appModes.ENTERPRISE && image !== null) {
+      setProfileImage(s3FileUrls[image]);
+    }
+  }, [logoUrl, image, s3FileUrls, environment]);
+
+  useEffect(() => {
+    if (!image) return;
+
+    if (image || !s3FileUrls[image]) {
+      downloadS3File(image);
+    }
+  }, [image]);
+
   return (
     <Avatar
       key={index.toString()}

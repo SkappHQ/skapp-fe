@@ -8,7 +8,6 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import StepperComponent from "~community/common/components/molecules/Stepper/Stepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
-import { appModes } from "~community/common/constants/configs";
 import ROUTES from "~community/common/constants/routes";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
@@ -18,14 +17,10 @@ import { isObjectEmpty } from "~community/common/utils/commonUtil";
 import { useHandleAddNewResource } from "~community/people/api/PeopleApi";
 import { DiscardTypeEnums } from "~community/people/enums/editResourceEnums";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  EmployeeType,
-  ModifiedFileType
-} from "~community/people/types/AddNewResourceTypes";
+import { EmployeeType } from "~community/people/types/AddNewResourceTypes";
 import { DiscardChangeModalType } from "~community/people/types/EditEmployeeInfoTypes";
+import uploadImage from "~community/people/utils/image/uploadImage";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { FileCategories } from "~enterprise/common/types/s3Types";
-import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
 import useCreateEmployeeObject from "../../../hooks/useCreateEmployeeObject";
 import DiscardChangeApprovalModal from "../../molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
@@ -136,40 +131,13 @@ const AddNewResourceFlow = () => {
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
   const handleSave = async () => {
-    let newAuthPicURL = "";
-    if (
-      employeeGeneralDetails?.authPic &&
-      employeeGeneralDetails?.authPic?.length > 0
-    ) {
-      try {
-        if (environment === appModes.COMMUNITY) {
-          const formData = new FormData();
-          formData.append(
-            "file",
-            employeeGeneralDetails?.authPic[0] as ModifiedFileType
-          );
-          formData.append("type", "USER_IMAGE");
-          await imageUploadMutate(formData).then((response) => {
-            const filePath = response.message?.split(
-              "File uploaded successfully: "
-            )[1];
-            if (filePath) {
-              const fileName = filePath.split("/").pop();
-              if (fileName) {
-                newAuthPicURL = fileName;
-              }
-            }
-          });
-        } else {
-          newAuthPicURL = await uploadFileToS3ByUrl(
-            employeeGeneralDetails?.authPic[0] as File,
-            FileCategories.PROFILE_PICTURES
-          );
-        }
-      } catch (error) {
-        handleError(translateError(["uploadError"]));
-      }
-    }
+    const newAuthPicURL = await uploadImage({
+      environment,
+      authPic: employeeGeneralDetails?.authPic,
+      thumbnail: employeeGeneralDetails?.thumbnail,
+      imageUploadMutate,
+      onError: () => handleError(translateError(["uploadError"]))
+    });
 
     const data: EmployeeType = {
       generalDetails: {
