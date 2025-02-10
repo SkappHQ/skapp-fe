@@ -69,7 +69,8 @@
     "domainLabel": "Company domain",
     "verificationCodeLabel": "Verification code",
     "workEmailValidationTitle": "Invalid Account Type",
-    "workEmailValidationDescription": "Please use a business email to signup"
+    "workEmailValidationDescription": "Please use a business email to signup",
+    "workEmailValidationError": "Please enter a business email (in corporate domain)"
   },
   "signIn": {
     "pageHeading": "Log in",
