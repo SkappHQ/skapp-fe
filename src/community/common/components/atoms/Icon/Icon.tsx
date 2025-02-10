@@ -32,6 +32,7 @@ import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
 import DocumentsIcon from "~community/common/assets/Icons/DocumentsIcon";
 import DownloadIcon from "~community/common/assets/Icons/DownloadIcon";
+import DragIcon from "~community/common/assets/Icons/DragIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import EditIcon from "~community/common/assets/Icons/EditIcon";
@@ -79,6 +80,7 @@ import SearchIcon from "~community/common/assets/Icons/SearchIcon";
 import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
+import SignerIcon from "~community/common/assets/Icons/SignerIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
 import SuccessIcon from "~community/common/assets/Icons/SuccessIcon";
 import SuperAdminIcon from "~community/common/assets/Icons/SuperAdminIcon";
@@ -92,6 +94,7 @@ import UndoIcon from "~community/common/assets/Icons/UndoIcon";
 import UpArrowIcon from "~community/common/assets/Icons/UpArrowIcon";
 import UpgradeInfoIcon from "~community/common/assets/Icons/UpgradeInfoIcon";
 import UserUploadIcon from "~community/common/assets/Icons/UserUploadIcon";
+import ViewIcon from "~community/common/assets/Icons/ViewIcon";
 import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
@@ -199,7 +202,10 @@ export const IconMapping: Partial<
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
   [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
-  [IconName.FILE_ICON]: FileIcon
+  [IconName.FILE_ICON]: FileIcon,
+  [IconName.DRAG_ICON]: DragIcon,
+  [IconName.SIGN_ICON]: SignerIcon,
+  [IconName.VIEW_ICON]: ViewIcon
   // Add more icons here as needed
 };
 

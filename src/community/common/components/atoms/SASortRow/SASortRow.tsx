@@ -3,7 +3,8 @@ import {
   Stack,
   type SxProps,
   Typography,
-  styled
+  styled,
+  useTheme
 } from "@mui/material";
 import { JSX, type MouseEventHandler } from "react";
 
@@ -21,6 +22,8 @@ interface Props {
   ariaLabel?: string;
   isDisabled?: boolean;
   isSoftDisabled?: boolean;
+  startIcon?: IconName;
+  showSelectedIcon?: boolean;
 }
 
 const SASortRow = ({
@@ -32,8 +35,11 @@ const SASortRow = ({
   textStyles,
   ariaLabel,
   isDisabled = false,
-  isSoftDisabled = false
+  isSoftDisabled = false,
+  startIcon = IconName.REMOVE_CIRCLE_ICON,
+  showSelectedIcon = true
 }: Props): JSX.Element => {
+  const theme = useTheme();
   const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     paddingLeft: "16px",
     paddingRight: "16px",
@@ -46,15 +52,7 @@ const SASortRow = ({
       backgroundColor: theme.palette.secondary.main,
       border: "1px solid",
       borderColor: theme.palette.grey[300],
-      color: theme.palette.primary.dark,
-
-      svg: {
-        fill: theme.palette.primary.dark,
-
-        path: {
-          fill: theme.palette.primary.dark
-        }
-      }
+      color: theme.palette.primary.dark
     },
     "&.Mui-disabled": {
       backgroundColor: theme.palette.grey[100],
@@ -81,12 +79,19 @@ const SASortRow = ({
       data-value={text}
     >
       <Stack direction="row" alignItems="center" gap="8px">
-        {isStartIcon && <Icon name={IconName.REMOVE_CIRCLE_ICON} />}
+        {isStartIcon && (
+          <Icon
+            name={startIcon}
+            fill={selected ? theme.palette.primary.dark : "black"}
+          />
+        )}
         <Typography variant="body2" sx={{ ...textStyles }}>
           {text}
         </Typography>
       </Stack>
-      {selected && <Icon name={IconName.CHECK_CIRCLE_ICON} />}
+      {selected && showSelectedIcon && (
+        <Icon name={IconName.CHECK_CIRCLE_ICON} />
+      )}
     </StyledMenuItem>
   );
 };
