@@ -53,6 +53,7 @@ import {
   MaritalStatusList,
   NationalityList
 } from "~community/people/utils/data/employeeSetupStaticData";
+import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { employeeGeneralDetailsValidation } from "~community/people/utils/peopleValidations";
 
 interface Props {
@@ -96,9 +97,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
       undefined
     );
+
     const initialValues = useMemo(
       () => ({
         authPic: employeeGeneralDetails?.authPic ?? "",
+        thumbnail: employeeGeneralDetails?.thumbnail ?? "",
         firstName: employeeGeneralDetails?.firstName || "",
         middleName: employeeGeneralDetails?.middleName || "",
         lastName: employeeGeneralDetails?.lastName || "",
@@ -209,9 +212,16 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     const onDrop = useCallback(
       (acceptedFiles: File[]) => {
         const profilePic = acceptedFiles.map((file: File) =>
-          Object.assign(file, { preview: URL.createObjectURL(file) })
+          Object.assign(file, {
+            preview: URL.createObjectURL(file)
+          })
         );
-        setEmployeeGeneralDetails("authPic", profilePic);
+
+        setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+
+        generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+          setEmployeeGeneralDetails("thumbnail", thumbnail)
+        );
       },
       [setEmployeeGeneralDetails]
     );
@@ -272,6 +282,17 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       }
     };
 
+    const getAvatarThumbnailUrl = useCallback((): string => {
+      if (employeeGeneralDetails?.authPic !== undefined) {
+        if (Array.isArray(employeeGeneralDetails?.authPic)) {
+          return employeeGeneralDetails?.authPic[0]?.preview;
+        }
+        return employeeGeneralDetails?.authPic ?? "";
+      }
+
+      return "";
+    }, [employeeGeneralDetails?.authPic]);
+
     return (
       <PeopleLayout
         title={translateText(["title"])}
@@ -295,17 +316,15 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               <Stack
                 direction="row"
                 alignItems="center"
-                sx={{ mb: "1.5rem", position: "relative" }}
+                sx={{
+                  mb: "1.5rem",
+                  position: "relative"
+                }}
               >
                 <Avatar
                   id="avatar"
-                  alt={values.firstName}
-                  src={
-                    employeeGeneralDetails?.authPic?.length
-                      ? (employeeGeneralDetails?.authPic[0] as ModifiedFileType)
-                          ?.preview
-                      : ""
-                  }
+                  alt={`${values.firstName} ${values.lastName}`}
+                  src={getAvatarThumbnailUrl()}
                   sx={{
                     width: "6.125rem",
                     height: "6.125rem",
