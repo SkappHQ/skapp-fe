@@ -248,6 +248,7 @@ export interface EmployeeDetails {
   isActive?: boolean;
   accountSignIn?: AccountSignIn;
   authPic: [] | ModifiedFileType[] | string | null | undefined;
+  thumbnail: [] | ModifiedFileType[] | string | null | undefined;
   contractState?: string | null;
   contractType?: string | null;
   country: string | null | undefined;

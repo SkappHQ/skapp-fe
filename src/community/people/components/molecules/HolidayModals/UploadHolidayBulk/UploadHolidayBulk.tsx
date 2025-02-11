@@ -54,6 +54,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
   );
 
   const [isInvalidFileError, setIsInvalidFileError] = useState<boolean>(false);
+  const [noRecordError, setNoRecordError] = useState<boolean>(false);
   const [holidayBulkList, setHolidayBulkList] = useState<Holiday[]>([]);
   const translateText = useTranslator("peopleModule", "holidays");
   const { setToastMessage } = useToast();
@@ -135,6 +136,17 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
   ): Promise<void> => {
     setIsInvalidFileError(false);
     if (acceptedFiles?.[0]?.file) {
+      if (acceptedFiles[0].file.size === 0) {
+        setToastMessage({
+          title: translateText(["noRecordCSVTitle"]),
+          description: translateText(["noRecordCSVDes"]),
+          isIcon: true,
+          toastType: ToastType.ERROR,
+          open: true
+        });
+        setNoRecordError(true);
+        return;
+      }
       parse(acceptedFiles[0].file, {
         header: true,
         skipEmptyLines: true,
@@ -150,6 +162,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
               toastType: ToastType.ERROR,
               open: true
             });
+            setNoRecordError(true);
             return;
           }
 
@@ -230,6 +243,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
         uploadableFiles={calendarAttachments}
         supportedFiles={".csv"}
         maxFileSize={1}
+        minFileSize={0}
         isZeroFilesErrorRequired={false}
         descriptionStyles={{ color: theme.palette.grey[700] }}
         browseTextStyles={{ color: theme.palette.grey[700] }}
@@ -248,7 +262,8 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
         disabled={
           attachmentError ||
           !(calendarAttachments?.length > 0) ||
-          isInvalidFileError
+          isInvalidFileError ||
+          noRecordError
         }
         label={translateText(["UploadHolidays"])}
         endIcon={<RightArrowIcon />}

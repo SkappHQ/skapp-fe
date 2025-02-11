@@ -40,6 +40,7 @@ import {
   MyRequestModalEnums
 } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import { LeaveRequestItemsType } from "~community/leave/types/LeaveRequestTypes";
 import { handleApplyLeaveApiResponse } from "~community/leave/utils/myRequests/apiUtils";
 import {
   getApplyLeaveFormValidationErrors,
@@ -48,6 +49,7 @@ import {
 } from "~community/leave/utils/myRequests/applyLeaveModalUtils";
 import { useGetAllHolidays } from "~community/people/api/HolidayApi";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
+import { useIsGoogleCalendarConnected } from "~enterprise/common/api/CalendarApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
@@ -86,7 +88,8 @@ const ApplyLeaveModal = () => {
     setSelectedDuration,
     setFormErrors,
     setAttachments,
-    setMyLeaveRequestModalType
+    setMyLeaveRequestModalType,
+    setLeaveRequestId
   } = useLeaveStore();
 
   const firstDateOfYear = useMemo(
@@ -110,13 +113,22 @@ const ApplyLeaveModal = () => {
 
   const { data: storageAvailabilityData } = useStorageAvailability();
 
-  const onSuccess = () => {
+  const { data: isGoogleConnected } = useIsGoogleCalendarConnected();
+
+  const isEnterprise = useGetEnvironment() === appModes.ENTERPRISE;
+
+  const onSuccess = (data: LeaveRequestItemsType) => {
     handleApplyLeaveApiResponse({
       type: ApplyLeaveToastEnums.APPLY_LEAVE_SUCCESS,
       setToastMessage,
       translateText
     });
-    setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
+    if (isEnterprise && isGoogleConnected) {
+      setLeaveRequestId(data.leaveRequestId);
+      setMyLeaveRequestModalType(MyRequestModalEnums.MARK_OUT_OF_OFFICE);
+    } else {
+      setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
+    }
   };
 
   const onError = (error: string) => {

@@ -33,11 +33,19 @@ import {
   EmployeeDetails,
   contractStates
 } from "~community/people/types/EmployeeTypes";
+import uploadImage from "~community/people/utils/image/uploadImage";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 const Account: NextPage = () => {
   const router = useRouter();
 
+  const environment = useGetEnvironment();
+
+  const { forceRefetch } = useS3Download();
+
   const { setToastMessage } = useToast();
+
   const translateText = useTranslator("peopleModule");
   const translateToastText = useTranslator(
     "peopleModule",
@@ -238,46 +246,25 @@ const Account: NextPage = () => {
   const { mutateAsync: imageUploadMutate } = useUploadImages();
 
   const handleSave = async () => {
-    let newAuthPicURL = "";
-    if (
-      typeof employeeGeneralDetails?.authPic === "object" &&
-      employeeGeneralDetails?.authPic &&
-      employeeGeneralDetails?.authPic?.length > 0
-    ) {
-      try {
-        const formData = new FormData();
-        formData.append("file", employeeGeneralDetails?.authPic[0]);
+    const newAuthPicURL = await uploadImage({
+      isAnExistingResource: true,
+      environment,
+      authPic: employeeGeneralDetails?.authPic,
+      thumbnail: employeeGeneralDetails?.thumbnail,
+      imageUploadMutate,
+      onError: () => onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR)
+    });
 
-        formData.append("type", "USER_IMAGE");
-
-        await imageUploadMutate(formData).then((response) => {
-          const filePath = response.message?.split(
-            "File uploaded successfully: "
-          )[1];
-          if (filePath) {
-            const fileName = filePath.split("/").pop();
-            if (fileName) {
-              newAuthPicURL = fileName;
-            }
-          }
-        });
-      } catch (error) {
-        onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);
-      }
-    } else {
-      newAuthPicURL = (employeeGeneralDetails?.authPic as string) ?? "";
-    }
+    forceRefetch(newAuthPicURL);
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
+    setEmployeeGeneralDetails("thumbnail", "");
 
     const updatedEmployeeData: EmployeeType = {
       employeeId: employee?.employeeId,
       generalDetails: {
         ...employeeGeneralDetails,
-        authPic:
-          typeof employeeGeneralDetails?.authPic?.[0] === "object"
-            ? employeeGeneralDetails?.authPic?.[0]?.path
-            : employeeGeneralDetails?.authPic
+        authPic: newAuthPicURL
       },
       contactDetails: employeeContactDetails,
       familyDetails: employeeFamilyDetails,
@@ -293,6 +280,7 @@ const Account: NextPage = () => {
       visaDetails: employeeVisaDetails,
       userRoles: userRoles
     };
+
     mutate(updatedEmployeeData);
   };
 
