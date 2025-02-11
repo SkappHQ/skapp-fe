@@ -6,6 +6,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { TierEnum } from "~enterprise/common/enums/CommonEum";
 import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import routes from "./data/routes";
@@ -14,6 +15,7 @@ type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
 const getDrawerRoutes = (
   userRoles: Role[] | undefined,
+  tier: string,
   isEnterprise: boolean,
   globalLoginMethod?: string
 ) => {
@@ -159,6 +161,26 @@ const getDrawerRoutes = (
 
         if (isEmployee && isGoogle) {
           return null;
+        }
+
+        if (isSuperAdmin) {
+          const subRoutes = route.subTree?.filter((subRoute) => {
+            if (subRoute.name === "Integrations" && tier != TierEnum.PRO) {
+              return false;
+            }
+            return subRoute.requiredAuthLevel?.some((requiredRole) =>
+              userRoles?.includes(requiredRole as Role)
+            );
+          });
+
+          return {
+            id: route.id,
+            name: route.name,
+            url: ROUTES.SETTINGS.ACCOUNT,
+            icon: route.icon,
+            hasSubTree: route.hasSubTree,
+            subTree: subRoutes
+          };
         }
 
         if (!isSuperAdmin) {
