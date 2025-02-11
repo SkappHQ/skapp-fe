@@ -6,6 +6,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { TierEnum } from "~enterprise/common/enums/CommonEum";
 import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import routes from "./data/routes";
@@ -164,7 +165,7 @@ const getDrawerRoutes = (
 
         if (isSuperAdmin) {
           const subRoutes = route.subTree?.filter((subRoute) => {
-            if (subRoute.name === "Integrations" && tier != "PRO") {
+            if (subRoute.name === "Integrations" && tier != TierEnum.PRO) {
               return false;
             }
             return subRoute.requiredAuthLevel?.some((requiredRole) =>
