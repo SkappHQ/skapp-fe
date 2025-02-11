@@ -2,7 +2,7 @@ import { Box, Modal } from "@mui/material";
 import { AxiosError } from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useUploadImages } from "~community/common/api/FileHandleApi";
 import StepperComponent from "~community/common/components/molecules/Stepper/Stepper";
@@ -80,6 +80,10 @@ const AddNewResourceFlow = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
+  const allowRouteChangeRef = useRef(false);
+
+  const targetRouteRef = useRef<string>("");
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) =>
       prevActiveStep < steps.length - 1 ? prevActiveStep + 1 : prevActiveStep
@@ -115,6 +119,48 @@ const AddNewResourceFlow = () => {
       });
     }
   };
+
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    if (
+      !isObjectEmpty(getEmployeeObject()) &&
+      !isDiscardChangesModal.isModalOpen
+    ) {
+      e.preventDefault();
+      return "";
+    }
+  };
+
+  const handleConfirmDiscard = async () => {
+    allowRouteChangeRef.current = true;
+    const targetRoute = targetRouteRef.current || ROUTES.PEOPLE.DIRECTORY;
+    await router.push(targetRoute);
+  };
+
+  const handleRouteChange = (url: string) => {
+    if (allowRouteChangeRef.current) return;
+    targetRouteRef.current = url;
+    if (
+      !isObjectEmpty(getEmployeeObject()) &&
+      !isDiscardChangesModal.isModalOpen
+    ) {
+      setIsDiscardChangesModal({
+        isModalOpen: true,
+        modalType: DiscardTypeEnums.DISCARD_FORM,
+        modalOpenedFrom: ""
+      });
+      router.events.emit("routeChangeError");
+      throw "routeChange aborted";
+    }
+  };
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", handleRouteChange);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [handleRouteChange, handleBeforeUnload]);
 
   const handleError = (message: string) => {
     setToastMessage({
@@ -258,7 +304,7 @@ const AddNewResourceFlow = () => {
           <DiscardChangeApprovalModal
             isDiscardChangesModal={isDiscardChangesModal}
             setIsDiscardChangesModal={setIsDiscardChangesModal}
-            functionOnLeave={handleGoBack}
+            functionOnLeave={handleConfirmDiscard}
           />
         </Modal>
       )}
