@@ -39,6 +39,7 @@ import {
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
+import { setRoleLimitToastMessage } from "~community/people/utils/setRoleLimitToastMessage";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
@@ -79,6 +80,7 @@ const SystemPermissionForm = ({
   const classes = styles();
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
+  const [isFormChanged, setIsFormChanged] = useState(false);
   const environment = useGetEnvironment();
 
   const isEsignatureModuleAvailable =
@@ -105,6 +107,7 @@ const SystemPermissionForm = ({
   const { data: session } = useSession();
 
   const { setToastMessage } = useToast();
+  const [superAdminCount, setSuperAdminCount] = useState(data);
   const initialValues: SystemPermissionInitalStateType = {
     isSuperAdmin: userRoles.isSuperAdmin || false,
     peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
@@ -164,6 +167,10 @@ const SystemPermissionForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateEmployeeStatus]);
 
+  useEffect(() => {
+    setSuperAdminCount(data);
+  }, [data]);
+
   const isSupervisingTeams = (): boolean => {
     const teams = employee?.teams as TeamResultsType[];
     return (
@@ -177,6 +184,80 @@ const SystemPermissionForm = ({
   };
 
   const handleNext = async () => {
+    if (!values.isSuperAdmin) {
+      if (
+        roleLimits.peopleAdminLimitExceeded &&
+        values.peopleRole === Role.PEOPLE_ADMIN
+      ) {
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "peopleAdmin"
+        );
+        return;
+      }
+
+      if (
+        roleLimits.leaveAdminLimitExceeded &&
+        values.leaveRole === Role.LEAVE_ADMIN
+      ) {
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "leaveAdmin"
+        );
+        return;
+      }
+
+      if (
+        roleLimits.attendanceAdminLimitExceeded &&
+        values.attendanceRole === Role.ATTENDANCE_ADMIN
+      ) {
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "attendanceAdmin"
+        );
+        return;
+      }
+
+      if (
+        roleLimits.peopleManagerLimitExceeded &&
+        values.peopleRole === Role.PEOPLE_MANAGER
+      ) {
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "peopleManager"
+        );
+        return;
+      }
+    }
+
+    if (
+      roleLimits.leaveManagerLimitExceeded &&
+      values.leaveRole === Role.LEAVE_MANAGER
+    ) {
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "leaveManager"
+      );
+      return;
+    }
+
+    if (
+      roleLimits.attendanceManagerLimitExceeded &&
+      values.attendanceRole === Role.ATTENDANCE_MANAGER
+    ) {
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "attendanceManager"
+      );
+      return;
+    }
+
     if (isUpdate) {
       if (
         isDemoteUser(employee, values) &&
@@ -231,13 +312,11 @@ const SystemPermissionForm = ({
       value === Role.PEOPLE_ADMIN &&
       roleLimits.peopleAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
-        description: roleLimitationTexts(["peopleAdminLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "peopleAdmin"
+      );
       return;
     }
 
@@ -246,13 +325,11 @@ const SystemPermissionForm = ({
       value === Role.LEAVE_ADMIN &&
       roleLimits.leaveAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
-        description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "leaveAdmin"
+      );
       return;
     }
 
@@ -261,15 +338,11 @@ const SystemPermissionForm = ({
       value === Role.ATTENDANCE_ADMIN &&
       roleLimits.attendanceAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceAdminLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "attendanceAdmin"
+      );
       return;
     }
 
@@ -278,15 +351,11 @@ const SystemPermissionForm = ({
       value === Role.PEOPLE_MANAGER &&
       roleLimits.peopleManagerLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "peopleManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "peopleManager"
+      );
       return;
     }
 
@@ -295,13 +364,11 @@ const SystemPermissionForm = ({
       value === Role.LEAVE_MANAGER &&
       roleLimits.leaveManagerLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
-        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "leaveManager"
+      );
       return;
     }
 
@@ -310,15 +377,11 @@ const SystemPermissionForm = ({
       value === Role.ATTENDANCE_MANAGER &&
       roleLimits.attendanceManagerLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "attendanceManager"
+      );
       return;
     }
 
@@ -327,13 +390,11 @@ const SystemPermissionForm = ({
       value === Role.ESIGN_ADMIN &&
       roleLimits.esignAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["eSignAdminLimitationTitle"]),
-        description: roleLimitationTexts(["eSignAdminLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "esignAdmin"
+      );
       return;
     }
 
@@ -342,18 +403,17 @@ const SystemPermissionForm = ({
       value === Role.ESIGN_SENDER &&
       roleLimits.esignSenderLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["eSignSenderLimitationTitle"]),
-        description: roleLimitationTexts(["eSignSenderLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "esignSender"
+      );
       return;
     }
 
     setFieldValue(name, value);
     setUserRoles(name, value);
+    setIsFormChanged(true);
   };
 
   const handleCustomChangeDefault = (name: string, value: any) => {
@@ -377,7 +437,7 @@ const SystemPermissionForm = ({
   ) => {
     const isChecked = e.target.checked;
 
-    if (!isChecked && data === 1) {
+    if (!isChecked && superAdminCount <= 1) {
       setToastMessage({
         open: true,
         toastType: "error",
@@ -399,6 +459,10 @@ const SystemPermissionForm = ({
       return;
     }
 
+    setSuperAdminCount((prevCount: number) =>
+      isChecked ? prevCount + 1 : prevCount - 1
+    );
+
     void setFieldValue("isSuperAdmin", isChecked);
     setUserRoles("isSuperAdmin", isChecked);
 
@@ -416,6 +480,8 @@ const SystemPermissionForm = ({
     setUserRoles("peopleRole", peopleRole);
     setUserRoles("leaveRole", leaveRole);
     setUserRoles("esignRole", esignRole);
+
+    setIsFormChanged(true);
   };
 
   const handleSuperAdminChangeDefault = async (
@@ -602,7 +668,12 @@ const SystemPermissionForm = ({
               styles={{
                 padding: "1.25rem 1.75rem"
               }}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
+              disabled={
+                isSubmitDisabled ||
+                isLoading ||
+                isInputsDisabled ||
+                (isUpdate && !isFormChanged)
+              }
               dataTestId={
                 isUpdate
                   ? systemPermissionFormTestId.buttons.cancelBtn
@@ -622,7 +693,12 @@ const SystemPermissionForm = ({
               isFullWidth={false}
               onClick={handleNext}
               styles={{ padding: "1.25rem 2.5rem" }}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
+              disabled={
+                isSubmitDisabled ||
+                isLoading ||
+                isInputsDisabled ||
+                (isUpdate && !isFormChanged)
+              }
               isLoading={isLoading}
               dataTestId={
                 isUpdate
