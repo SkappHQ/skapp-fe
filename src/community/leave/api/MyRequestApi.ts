@@ -29,6 +29,7 @@ import {
 } from "~community/leave/types/MyRequests";
 
 import { useLeaveStore } from "../store/store";
+import { LeaveRequestItemsType } from "../types/LeaveRequestTypes";
 
 export const useGetLeaveAllocation = (selectedYear: string) => {
   return useQuery({
@@ -112,23 +113,27 @@ export const useGetLeaveEntitlementBalance = (
 
 export const useApplyLeave = (
   selectedYear: string,
-  onSuccess: () => void,
+  onSuccess: (data: LeaveRequestItemsType) => void,
   onError: (error: string) => void
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (leaveRequestData: LeaveRequestPayloadType) => {
-      return authFetch.post(myRequestsEndPoints.APPLY_LEAVE, leaveRequestData);
+    mutationFn: async (leaveRequestData: LeaveRequestPayloadType) => {
+      const response = await authFetch.post(
+        myRequestsEndPoints.APPLY_LEAVE,
+        leaveRequestData
+      );
+      return response.data.results[0];
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [leaveEntitlementQueryKeys.MY_LEAVE_ALLOCATION, selectedYear]
       });
       queryClient.invalidateQueries({
         queryKey: [leaveQueryKeys.EMPLOYEE_LEAVE_REQUESTS]
       });
-      onSuccess();
+      onSuccess(data);
     },
     onError: (error: ErrorResponse) => {
       onError(error.response.data.results[0]?.messageKey || "");
@@ -164,7 +169,7 @@ export const useGetEmployeeLeaveRequestData = (leaveId: number) => {
   });
 };
 
-export const useCancelLeaveRequest = () => {
+export const useCancelLeaveRequest = (selectedYear: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (leaveRequestId: { id: number }) => {
@@ -191,6 +196,14 @@ export const useCancelLeaveRequest = () => {
       queryClient
         .invalidateQueries({
           queryKey: [getAttendanceQueryKeys.employeeLeaveStatus()]
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: [
+            leaveEntitlementQueryKeys.MY_LEAVE_ALLOCATION,
+            selectedYear
+          ]
         })
         .catch(rejects);
     }

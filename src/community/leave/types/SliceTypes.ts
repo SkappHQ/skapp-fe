@@ -115,6 +115,8 @@ export interface MyRequestSliceType
     | "setSelectedDuration"
     | "setAttachments"
     | "setFormErrors"
+    | "leaveRequestId"
+    | "setLeaveRequestId"
   > {}
 
 export interface LeaveRequestFiltersSliceTypes

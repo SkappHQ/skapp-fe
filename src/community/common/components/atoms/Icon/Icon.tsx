@@ -42,6 +42,7 @@ import FileIcon from "~community/common/assets/Icons/FileIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import ForwardArrow from "~community/common/assets/Icons/ForwardArrow";
+import GoogleCalendarIcon from "~community/common/assets/Icons/GoogleCalendarIcon";
 import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
@@ -80,6 +81,7 @@ import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
+import SkappIcon from "~community/common/assets/Icons/SkappIcon";
 import SuccessIcon from "~community/common/assets/Icons/SuccessIcon";
 import SuperAdminIcon from "~community/common/assets/Icons/SuperAdminIcon";
 import SyncIcon from "~community/common/assets/Icons/SyncIcon";
@@ -199,7 +201,9 @@ export const IconMapping: Partial<
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
   [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
-  [IconName.FILE_ICON]: FileIcon
+  [IconName.FILE_ICON]: FileIcon,
+  [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon,
+  [IconName.SKAPP_ICON]: SkappIcon
   // Add more icons here as needed
 };
 

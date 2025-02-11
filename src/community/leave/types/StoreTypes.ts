@@ -85,6 +85,7 @@ interface actionsTypes {
   setSelectedDuration: (value: LeaveStates) => void;
   setAttachments: (value: FileUploadType[]) => void;
   setFormErrors: (key: string, value: string) => void;
+  setLeaveRequestId: (leaveRequestId: number) => void;
 
   //LeaveRequestFiltersSliceTypes
   handleLeaveRequestsSort: (key: string, value: string) => void;
@@ -177,6 +178,7 @@ export interface LeaveStore extends actionsTypes {
   selectedDuration: LeaveStates;
   attachments: FileUploadType[];
   formErrors: Record<string, string>;
+  leaveRequestId: number;
 
   //LeaveRequestFiltersSliceTypes
   leaveRequestsFilter: LeaveRequestsFilterType;
