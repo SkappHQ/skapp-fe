@@ -24,6 +24,7 @@ declare module "next-auth" {
       provider?: string;
       authPic?: string;
       idToken?: string;
+      tier?: string;
     } & DefaultSession;
   }
 
@@ -43,6 +44,7 @@ declare module "next-auth" {
     authPic?: string;
     idToken?: string;
     tenantId?: string;
+    tier?: string;
   }
 }
 
@@ -59,5 +61,6 @@ declare module "next-auth/jwt" {
     authPic?: string;
     idToken?: string;
     tenantId?: string;
+    tier?: string;
   }
 }

@@ -72,6 +72,7 @@ const Drawer = (): JSX.Element => {
     () =>
       getDrawerRoutes(
         sessionData?.user?.roles,
+        sessionData?.user?.tier ?? "",
         isEnterprise,
         globalLoginMethod
       ),
