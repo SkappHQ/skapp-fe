@@ -6,13 +6,19 @@ import {
   EntitlementInfo
 } from "~community/people/types/EmployeeBulkUpload";
 
-export const processEnitlementPayload = (
-  requiredYear: EntitlementYears,
-  employeeNumber: string,
-  employeeName: string,
-  email: string,
-  employeeEntitlementsDetails: EmployeeEntitlementsDetailType[]
-): EntitlementInfo => {
+interface ProcessEntitlementPayloadProps {
+  requiredYear: EntitlementYears;
+  employeeName: string;
+  email: string;
+  employeeEntitlementsDetails: EmployeeEntitlementsDetailType[];
+}
+
+export const processEntitlementPayload = ({
+  requiredYear,
+  employeeName,
+  email,
+  employeeEntitlementsDetails
+}: ProcessEntitlementPayloadProps): EntitlementInfo => {
   const year =
     requiredYear === EntitlementYears.CURRENT
       ? new Date().getFullYear()?.toString()

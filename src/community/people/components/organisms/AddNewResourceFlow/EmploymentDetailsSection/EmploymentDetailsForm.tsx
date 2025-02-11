@@ -4,9 +4,9 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
-import ROUTES from "~community/common/constants/routes";
 import { employmentDetailsFormTestId } from "~community/common/constants/testIds";
-import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
+import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import useModuleChecker from "~community/common/hooks/useModuleChecker";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -16,6 +16,7 @@ import {
 } from "~community/common/utils/commonUtil";
 import { usePeopleStore } from "~community/people/store/store";
 import { EditAllInformationFormStatus } from "~community/people/types/EditEmployeeInfoTypes";
+import { handleAddNewResourceSuccess } from "~community/people/utils/directoryUtils/addNewResourceFlowUtils/addNewResourceUtils";
 
 import CareerProgressionDetailsSection from "./CareerProgressionDetailsSection";
 import EmploymentDetailsSection from "./EmploymentDetailsSection";
@@ -53,20 +54,24 @@ const EmploymentDetailsForm = ({
   isSuperAdminEditFlow = false,
   isInputsDisabled = false
 }: Props) => {
-  const router = useRouter();
   const theme: Theme = useTheme();
-  const { resetEmployeeData, employeeDataChanges } = usePeopleStore(
-    (state) => state
-  );
-  const { setToastMessage } = useToast();
+
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
     "commonText"
   );
 
-  const isLeaveModuleAvailable = true;
-  const [employeeSaveSuccessFlag, setEmployeeSaveSuccessFlag] = useState(false);
+  const router = useRouter();
+
+  const { setToastMessage } = useToast();
+
+  const { isLeaveModuleEnabled } = useModuleChecker();
+
+  const { resetEmployeeData, employeeDataChanges } = usePeopleStore(
+    (state) => state
+  );
+
   const [initialResetFlag, setInitialResetFlag] = useState(false);
 
   const employmentDetailsRef = useRef<{
@@ -105,23 +110,15 @@ const EmploymentDetailsForm = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setEmployeeSaveSuccessFlag(true);
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (employeeSaveSuccessFlag) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.SUCCESS,
-        title: translateText(["resourceSuccessMessage"])
+      handleAddNewResourceSuccess({
+        setToastMessage,
+        resetEmployeeData,
+        router,
+        translateText
       });
-
-      resetEmployeeData();
-      void router.push(ROUTES.PEOPLE.DIRECTORY);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employeeSaveSuccessFlag, resetEmployeeData]);
+  }, [isSuccess]);
 
   useEffect(() => {
     const resetForms = () => {
@@ -220,13 +217,13 @@ const EmploymentDetailsForm = ({
             />
             <Button
               label={
-                isUpdate || !isLeaveModuleAvailable
+                isUpdate || !isLeaveModuleEnabled
                   ? translateText(["saveDetails"])
                   : translateText(["next"])
               }
               buttonStyle={ButtonStyle.PRIMARY}
               endIcon={
-                isUpdate || !isLeaveModuleAvailable
+                isUpdate || !isLeaveModuleEnabled
                   ? IconName.SAVE_ICON
                   : IconName.RIGHT_ARROW_ICON
               }
