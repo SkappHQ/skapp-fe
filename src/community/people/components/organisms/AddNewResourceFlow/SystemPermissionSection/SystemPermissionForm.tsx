@@ -39,6 +39,7 @@ import {
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
 import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
+import { setRoleLimitToastMessage } from "~community/people/utils/setRoleLimitToastMessage";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
@@ -188,15 +189,11 @@ const SystemPermissionForm = ({
         roleLimits.peopleAdminLimitExceeded &&
         values.peopleRole === Role.PEOPLE_ADMIN
       ) {
-        setToastMessage({
-          open: true,
-          toastType: ToastType.ERROR,
-          title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
-          description: roleLimitationTexts([
-            "peopleAdminLimitationDescription"
-          ]),
-          isIcon: true
-        });
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "peopleAdmin"
+        );
         return;
       }
 
@@ -204,13 +201,11 @@ const SystemPermissionForm = ({
         roleLimits.leaveAdminLimitExceeded &&
         values.leaveRole === Role.LEAVE_ADMIN
       ) {
-        setToastMessage({
-          open: true,
-          toastType: ToastType.ERROR,
-          title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
-          description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
-          isIcon: true
-        });
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "leaveAdmin"
+        );
         return;
       }
 
@@ -218,15 +213,11 @@ const SystemPermissionForm = ({
         roleLimits.attendanceAdminLimitExceeded &&
         values.attendanceRole === Role.ATTENDANCE_ADMIN
       ) {
-        setToastMessage({
-          open: true,
-          toastType: ToastType.ERROR,
-          title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
-          description: roleLimitationTexts([
-            "attendanceAdminLimitationDescription"
-          ]),
-          isIcon: true
-        });
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "attendanceAdmin"
+        );
         return;
       }
 
@@ -234,15 +225,11 @@ const SystemPermissionForm = ({
         roleLimits.peopleManagerLimitExceeded &&
         values.peopleRole === Role.PEOPLE_MANAGER
       ) {
-        setToastMessage({
-          open: true,
-          toastType: ToastType.ERROR,
-          title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
-          description: roleLimitationTexts([
-            "peopleManagerLimitationDescription"
-          ]),
-          isIcon: true
-        });
+        setRoleLimitToastMessage(
+          setToastMessage,
+          roleLimitationTexts,
+          "peopleManager"
+        );
         return;
       }
     }
@@ -251,13 +238,11 @@ const SystemPermissionForm = ({
       roleLimits.leaveManagerLimitExceeded &&
       values.leaveRole === Role.LEAVE_MANAGER
     ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
-        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "leaveManager"
+      );
       return;
     }
 
@@ -265,15 +250,11 @@ const SystemPermissionForm = ({
       roleLimits.attendanceManagerLimitExceeded &&
       values.attendanceRole === Role.ATTENDANCE_MANAGER
     ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "attendanceManager"
+      );
       return;
     }
 
@@ -331,13 +312,11 @@ const SystemPermissionForm = ({
       value === Role.PEOPLE_ADMIN &&
       roleLimits.peopleAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
-        description: roleLimitationTexts(["peopleAdminLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "peopleAdmin"
+      );
       return;
     }
 
@@ -346,13 +325,11 @@ const SystemPermissionForm = ({
       value === Role.LEAVE_ADMIN &&
       roleLimits.leaveAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
-        description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "leaveAdmin"
+      );
       return;
     }
 
@@ -361,15 +338,11 @@ const SystemPermissionForm = ({
       value === Role.ATTENDANCE_ADMIN &&
       roleLimits.attendanceAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceAdminLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "attendanceAdmin"
+      );
       return;
     }
 
@@ -378,15 +351,11 @@ const SystemPermissionForm = ({
       value === Role.PEOPLE_MANAGER &&
       roleLimits.peopleManagerLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "peopleManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "peopleManager"
+      );
       return;
     }
 
@@ -395,13 +364,11 @@ const SystemPermissionForm = ({
       value === Role.LEAVE_MANAGER &&
       roleLimits.leaveManagerLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
-        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "leaveManager"
+      );
       return;
     }
 
@@ -410,15 +377,11 @@ const SystemPermissionForm = ({
       value === Role.ATTENDANCE_MANAGER &&
       roleLimits.attendanceManagerLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "attendanceManager"
+      );
       return;
     }
 
@@ -427,13 +390,11 @@ const SystemPermissionForm = ({
       value === Role.ESIGN_ADMIN &&
       roleLimits.esignAdminLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["eSignAdminLimitationTitle"]),
-        description: roleLimitationTexts(["eSignAdminLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "esignAdmin"
+      );
       return;
     }
 
@@ -442,13 +403,11 @@ const SystemPermissionForm = ({
       value === Role.ESIGN_SENDER &&
       roleLimits.esignSenderLimitExceeded
     ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["eSignSenderLimitationTitle"]),
-        description: roleLimitationTexts(["eSignSenderLimitationDescription"]),
-        isIcon: true
-      });
+      setRoleLimitToastMessage(
+        setToastMessage,
+        roleLimitationTexts,
+        "esignSender"
+      );
       return;
     }
 
