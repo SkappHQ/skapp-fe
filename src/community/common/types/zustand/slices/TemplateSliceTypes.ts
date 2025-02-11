@@ -5,8 +5,10 @@ export interface TemplateSliceTypes
     CommonStoreTypes,
     | "isDrawerExpanded"
     | "expandedDrawerListItem"
+    | "s3FileUrls"
     | "setIsDrawerExpanded"
     | "setExpandedDrawerListItem"
+    | "setS3FileUrls"
   > {}
 
 export interface OrganizationSLiceTypes

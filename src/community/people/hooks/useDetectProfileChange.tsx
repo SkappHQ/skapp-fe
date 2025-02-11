@@ -160,6 +160,7 @@ const useDetectProfileChange = () => {
       employeeId: employee?.employeeId,
       generalDetails: {
         authPic: employee?.authPic,
+        thumbnail: "",
         firstName: employee?.firstName,
         middleName: employee?.middleName,
         lastName: employee?.lastName,
