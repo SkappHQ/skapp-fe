@@ -34,7 +34,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
-import { UserLimitBanner } from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
+import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
