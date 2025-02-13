@@ -43,6 +43,7 @@ interface Props {
   label?: string;
   descriptionStyles?: SxProps;
   browseTextStyles?: SxProps;
+  maxSizeOfFile?: number;
 }
 
 const MAX_FILE_SIZE_OF_FILE = 5000000;
@@ -61,7 +62,8 @@ const DragAndDropField: FC<Props> = ({
   customError,
   label,
   descriptionStyles,
-  browseTextStyles
+  browseTextStyles,
+  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
 
@@ -167,7 +169,7 @@ const DragAndDropField: FC<Props> = ({
     accept,
     maxFiles: maxFileSize - uploadableFiles?.length,
     minSize: minFileSize,
-    maxSize: MAX_FILE_SIZE_OF_FILE
+    maxSize: maxSizeOfFile
   });
 
   const handleUnselectItem = (filePath: string): void => {
