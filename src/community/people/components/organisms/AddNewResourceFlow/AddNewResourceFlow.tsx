@@ -1,6 +1,5 @@
 import { Box, Modal } from "@mui/material";
 import { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -13,9 +12,9 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
+import useModuleChecker from "~community/common/hooks/useModuleChecker";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { isObjectEmpty } from "~community/common/utils/commonUtil";
 import { useHandleAddNewResource } from "~community/people/api/PeopleApi";
 import DiscardChangeApprovalModal from "~community/people/components/molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
@@ -52,7 +51,7 @@ const AddNewResourceFlow = () => {
 
   const environment = useGetEnvironment();
 
-  const { data: sessionData } = useSession();
+  const { isLeaveModuleEnabled } = useModuleChecker();
 
   const translateText = useTranslator(
     "peopleModule",
@@ -72,12 +71,12 @@ const AddNewResourceFlow = () => {
       translateText(["entitlements"])
     ];
 
-    if (!sessionData?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)) {
+    if (isLeaveModuleEnabled) {
       steps = steps.filter((step) => step !== translateText(["entitlements"]));
     }
 
     return steps;
-  }, [sessionData?.user?.roles, translateText]);
+  }, [isLeaveModuleEnabled, translateText]);
 
   const { activeStep, handleNext, handleBack } = useStepper(steps);
 
@@ -289,16 +288,15 @@ const AddNewResourceFlow = () => {
                 isSuccess={isSuccess}
               />
             )}
-            {sessionData?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
-              activeStep === 4 && (
-                <EntitlementsDetailsForm
-                  onBack={handleBack}
-                  onNext={handleNext}
-                  onSave={handleSave}
-                  isLoading={isPending}
-                  isSuccess={isSuccess}
-                />
-              )}
+            {isLeaveModuleEnabled && activeStep === 4 && (
+              <EntitlementsDetailsForm
+                onBack={handleBack}
+                onNext={handleNext}
+                onSave={handleSave}
+                isLoading={isPending}
+                isSuccess={isSuccess}
+              />
+            )}
           </>
         </>
       </ContentLayout>
