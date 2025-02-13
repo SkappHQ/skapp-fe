@@ -53,6 +53,7 @@
     "react-i18next": "^15.0.1",
     "react-phone-input-2": "^2.15.1",
     "react-select": "^5.8.0",
+    "stripe": "^17.6.0",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
