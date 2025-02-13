@@ -109,6 +109,8 @@ export enum IconName {
   FILE_ICON = "FILE_ICON",
   DRAG_ICON = "DRAG_ICON",
   SIGN_ICON = "SIGN_ICON",
-  VIEW_ICON = "VIEW_ICON"
+  VIEW_ICON = "VIEW_ICON",
+  GOOGLE_CALENDAR_ICON = "GOOGLE_CALENDAR_ICON",
+  SKAPP_ICON = "SKAPP_ICON"
   // add more icons in snake case
 }

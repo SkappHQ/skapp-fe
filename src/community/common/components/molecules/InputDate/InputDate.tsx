@@ -308,7 +308,7 @@ const InputDate: FC<Props> = ({
             <LocalizationProvider dateAdapter={AdapterLuxon}>
               <StaticDatePicker
                 displayStaticWrapperAs="desktop"
-                value={value}
+                value={selectedDate}
                 slots={{
                   day: HolidayPickersDay,
                   calendarHeader: isYearHidden

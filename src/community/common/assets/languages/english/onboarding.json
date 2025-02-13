@@ -67,7 +67,10 @@
     "credentialsDescription": "Enter your username and password to sign in to the system",
     "domainDescription": "Please enter the company domain of your account to access your workspace.",
     "domainLabel": "Company domain",
-    "verificationCodeLabel": "Verification code"
+    "verificationCodeLabel": "Verification code",
+    "workEmailValidationTitle": "Invalid Account Type",
+    "workEmailValidationDescription": "Please use a business email to signup",
+    "workEmailValidationError": "Please enter a business email (in corporate domain)"
   },
   "signIn": {
     "pageHeading": "Log in",
