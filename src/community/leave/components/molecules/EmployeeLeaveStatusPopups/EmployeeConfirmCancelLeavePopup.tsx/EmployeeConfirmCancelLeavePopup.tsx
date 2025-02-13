@@ -17,14 +17,17 @@ interface Props {
 
 const EmployeeConfirmCancelLeavePopup: FC<Props> = ({ setPopupType }) => {
   const theme: Theme = useTheme();
-  const { employeeLeaveRequestData } = useLeaveStore((state) => state);
+  const { employeeLeaveRequestData, selectedYear } = useLeaveStore(
+    (state) => state
+  );
   const { setToastMessage } = useToast();
   const translateText = useTranslator("leaveModule", "myRequests");
   const {
     mutate: employeeCancelLeaveRequest,
     isSuccess: isCancellationSuccess,
-    isError: isCancellationError
-  } = useCancelLeaveRequest();
+    isError: isCancellationError,
+    isPending: isCancellationPending
+  } = useCancelLeaveRequest(selectedYear);
 
   useEffect(() => {
     if (isCancellationSuccess) {
@@ -83,6 +86,7 @@ const EmployeeConfirmCancelLeavePopup: FC<Props> = ({ setPopupType }) => {
           endIcon={IconName.REQUEST_CANCEL_CROSS_ICON}
           buttonStyle={ButtonStyle.ERROR}
           onClick={handleCancelLeave}
+          isLoading={isCancellationPending}
         />
       </Box>
     </>

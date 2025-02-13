@@ -8,6 +8,7 @@ import LeaveTypeSelectionModal from "~community/leave/components/molecules/MyLea
 import TeamAvailabilityModal from "~community/leave/components/molecules/MyLeaveRequestsModals/TeamAvailabilityModal/TeamAvailabilityModal";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import MarkOutOfOfficeModal from "~enterprise/leave/components/molecules/MyLeaveRequestModals/MarkOutOfOfficeModal";
 
 const MyRequestModalController = () => {
   const translateText = useTranslator("leaveModule", "myRequests");
@@ -27,6 +28,8 @@ const MyRequestModalController = () => {
         return translateText(["teamAvailabilityCard", "title"]);
       case MyRequestModalEnums.ADD_ATTACHMENT:
         return translateText(["addAttachmentModal", "title"]);
+      case MyRequestModalEnums.MARK_OUT_OF_OFFICE:
+        return translateText(["applyLeaveModal", "markOutOfOfficeModalTitle"]);
       default:
         return "";
     }
@@ -56,6 +59,7 @@ const MyRequestModalController = () => {
     switch (myRequestModalType) {
       case MyRequestModalEnums.APPLY_LEAVE:
       case MyRequestModalEnums.LEAVE_TYPE_SELECTION:
+      case MyRequestModalEnums.MARK_OUT_OF_OFFICE:
         setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
         break;
       case MyRequestModalEnums.TEAM_AVAILABILITY:
@@ -88,6 +92,9 @@ const MyRequestModalController = () => {
         )}
         {myRequestModalType === MyRequestModalEnums.ADD_ATTACHMENT && (
           <AddAttachmentModal />
+        )}
+        {myRequestModalType === MyRequestModalEnums.MARK_OUT_OF_OFFICE && (
+          <MarkOutOfOfficeModal />
         )}
       </>
     </ModalController>
