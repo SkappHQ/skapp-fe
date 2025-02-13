@@ -2,12 +2,13 @@ import { Box, Modal } from "@mui/material";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useUploadImages } from "~community/common/api/FileHandleApi";
 import StepperComponent from "~community/common/components/molecules/Stepper/Stepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import ROUTES from "~community/common/constants/routes";
 import {
   MediaQueries,
   useMediaQuery
@@ -15,8 +16,10 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
+import { isObjectEmpty } from "~community/common/utils/commonUtil";
 import { useHandleAddNewResource } from "~community/people/api/PeopleApi";
 import DiscardChangeApprovalModal from "~community/people/components/molecules/DiscardChangeApprovalModal/DiscardChangeApprovalModal";
+import { DiscardTypeEnums } from "~community/people/enums/DirectoryEnums";
 import useCreateEmployeeObject from "~community/people/hooks/useCreateEmployeeObject";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
@@ -38,6 +41,9 @@ import styles from "./styles";
 
 const AddNewResourceFlow = () => {
   const classes = styles();
+
+  const allowRouteChangeRef = useRef<boolean>(false);
+  const targetRouteRef = useRef<string>("");
 
   const queryMatches = useMediaQuery();
   const isBelow1024 = queryMatches(MediaQueries.BELOW_1024);
@@ -149,6 +155,48 @@ const AddNewResourceFlow = () => {
 
   const [isDiscardChangesModal, setIsDiscardChangesModal] =
     useState<DiscardChangeModalType>(initialDiscardChangeModalState);
+
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    if (
+      !isObjectEmpty(getEmployeeObject()) &&
+      !isDiscardChangesModal.isModalOpen
+    ) {
+      e.preventDefault();
+      return "";
+    }
+  };
+
+  const handleConfirmDiscard = async () => {
+    allowRouteChangeRef.current = true;
+    const targetRoute = targetRouteRef.current || ROUTES.PEOPLE.DIRECTORY;
+    await router.push(targetRoute);
+  };
+
+  const handleRouteChange = (url: string) => {
+    if (allowRouteChangeRef.current) return;
+    targetRouteRef.current = url;
+    if (
+      !isObjectEmpty(getEmployeeObject()) &&
+      !isDiscardChangesModal.isModalOpen
+    ) {
+      setIsDiscardChangesModal({
+        isModalOpen: true,
+        modalType: DiscardTypeEnums.DISCARD_FORM,
+        modalOpenedFrom: ""
+      });
+      router.events.emit("routeChangeError");
+      throw "routeChange aborted";
+    }
+  };
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", handleRouteChange);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [handleRouteChange, handleBeforeUnload]);
 
   const handleSave = async () => {
     const newAuthPicURL = await uploadImage({
@@ -266,15 +314,7 @@ const AddNewResourceFlow = () => {
           <DiscardChangeApprovalModal
             isDiscardChangesModal={isDiscardChangesModal}
             setIsDiscardChangesModal={setIsDiscardChangesModal}
-            functionOnLeave={() =>
-              handleGoBack({
-                activeStep,
-                isDiscardChangesModal,
-                setIsDiscardChangesModal,
-                router,
-                getEmployeeObject
-              })
-            }
+            functionOnLeave={handleConfirmDiscard}
           />
         </Modal>
       )}
