@@ -6,7 +6,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { employmentDetailsFormTestId } from "~community/common/constants/testIds";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
-import useModuleChecker from "~community/common/hooks/useModuleChecker";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -66,7 +66,7 @@ const EmploymentDetailsForm = ({
 
   const { setToastMessage } = useToast();
 
-  const { isLeaveModuleEnabled } = useModuleChecker();
+  const { isLeaveModuleEnabled } = useSessionData();
 
   const { resetEmployeeData, employeeDataChanges } = usePeopleStore(
     (state) => state

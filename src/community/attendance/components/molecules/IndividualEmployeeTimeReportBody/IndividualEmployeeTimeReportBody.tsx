@@ -16,6 +16,7 @@ import {
   getMonthName,
   getStartAndEndDateOfTheMonth
 } from "~community/common/utils/dateTimeUtils";
+import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverlay/UpgradeOverlay";
 
 import WorkHourGraph from "../Graphs/WorkHourGraph";
 import TimeUtilizationCard from "../TimeUtilizationCard/TimeUtilizationCard";
@@ -66,55 +67,63 @@ const IndividualEmployeeTimeReportSection: FC<Props> = ({ selectedUser }) => {
       showDivider={false}
       pageHead={translateText(["individualTimeSheetAnalytics.title"])}
     >
-      <>
-        <Grid container spacing={1}>
-          <Grid size={{ xs: 2 }}>
-            <TimeUtilizationCard
-              lastThirtyDayChange={
-                roundNumberToX(managerUtilizaionData?.lastThirtyDayChange, 1) ??
-                "--"
-              }
-              trend={
-                managerUtilizaionData?.toString()?.startsWith("-")
-                  ? TimeUtilizationTrendTypes.TREND_DOWN
-                  : TimeUtilizationTrendTypes.TREND_UP
-              }
-              percentage={
-                roundNumberToX(managerUtilizaionData?.percentage, 1) ?? "--"
-              }
-            />
+      <UpgradeOverlay>
+        <>
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 2 }}>
+              <TimeUtilizationCard
+                lastThirtyDayChange={
+                  roundNumberToX(
+                    managerUtilizaionData?.lastThirtyDayChange,
+                    1
+                  ) ?? "--"
+                }
+                trend={
+                  managerUtilizaionData?.toString()?.startsWith("-")
+                    ? TimeUtilizationTrendTypes.TREND_DOWN
+                    : TimeUtilizationTrendTypes.TREND_UP
+                }
+                percentage={
+                  roundNumberToX(managerUtilizaionData?.percentage, 1) ?? "--"
+                }
+              />
+            </Grid>
+            <Grid size={{ xs: 10 }}>
+              <WorkHourGraph
+                data={
+                  workHoursGraphData ?? { preProcessedData: [], labels: [] }
+                }
+                isLoading={isworkHoursGraphLoading}
+                title={translateText([
+                  "individualTimeSheetAnalytics.workHours"
+                ])}
+                month={month}
+                setMonth={setMonth}
+              />
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 10 }}>
-            <WorkHourGraph
-              data={workHoursGraphData ?? { preProcessedData: [], labels: [] }}
-              isLoading={isworkHoursGraphLoading}
-              title={translateText(["individualTimeSheetAnalytics.workHours"])}
-              month={month}
-              setMonth={setMonth}
-            />
-          </Grid>
-        </Grid>
 
-        <Grid
-          size={{ xs: 12 }}
-          sx={{
-            marginTop: "1.5rem"
-          }}
-        >
-          <TimesheetDailyRecordTable
-            dailyLogData={dailyLogData || []}
-            downloadEmployeeDailyLogCsv={() => {
-              downloadEmployeeDailyLogCsv(
-                dailyLogData || [],
-                session?.user.employee?.firstName || "",
-                getStartAndEndDateOfTheMonth().start,
-                getStartAndEndDateOfTheMonth().end
-              );
+          <Grid
+            size={{ xs: 12 }}
+            sx={{
+              marginTop: "1.5rem"
             }}
-            isDailyLogLoading={isDailyLogLoading}
-          />
-        </Grid>
-      </>
+          >
+            <TimesheetDailyRecordTable
+              dailyLogData={dailyLogData || []}
+              downloadEmployeeDailyLogCsv={() => {
+                downloadEmployeeDailyLogCsv(
+                  dailyLogData || [],
+                  session?.user.employee?.firstName || "",
+                  getStartAndEndDateOfTheMonth().start,
+                  getStartAndEndDateOfTheMonth().end
+                );
+              }}
+              isDailyLogLoading={isDailyLogLoading}
+            />
+          </Grid>
+        </>
+      </UpgradeOverlay>
     </PeopleLayout>
   );
 };

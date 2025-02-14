@@ -12,7 +12,7 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
-import useModuleChecker from "~community/common/hooks/useModuleChecker";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { isObjectEmpty } from "~community/common/utils/commonUtil";
@@ -51,7 +51,7 @@ const AddNewResourceFlow = () => {
 
   const environment = useGetEnvironment();
 
-  const { isLeaveModuleEnabled } = useModuleChecker();
+  const { isLeaveModuleEnabled } = useSessionData();
 
   const translateText = useTranslator(
     "peopleModule",

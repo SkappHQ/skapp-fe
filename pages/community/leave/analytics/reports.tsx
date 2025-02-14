@@ -11,6 +11,7 @@ import LeaveRequestsReportTable from "~community/leave/components/molecules/Leav
 import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetAllManagerTeams } from "~community/people/api/TeamApi";
+import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverlay/UpgradeOverlay";
 
 const LeaveReportPage: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveReports");
@@ -56,83 +57,87 @@ const LeaveReportPage: NextPage = () => {
       isBackButtonVisible={true}
       isDividerVisible={true}
     >
-      <>
-        <Stack
-          sx={{
-            padding: "0.5rem",
-            flexDirection: { xs: "column", sm: "row" },
-            alignItems: "center",
-            justifyContent: "space-between",
-            mb: "1rem",
-            gap: "1rem"
-          }}
-        >
+      <UpgradeOverlay>
+        <>
           <Stack
             sx={{
-              flexDirection: "row",
+              padding: "0.5rem",
+              flexDirection: { xs: "column", sm: "row" },
               alignItems: "center",
-              gap: "1rem",
-              width: "100%",
-              maxWidth: "28.125rem"
+              justifyContent: "space-between",
+              mb: "1rem",
+              gap: "1rem"
             }}
           >
-            <Typography>{translateText(["reportType"])}</Typography>
-            <DropdownList
-              id="reportTypeDropdownList"
-              inputName="reportType"
-              itemList={sheetTypeList || []}
-              value={reportType}
-              onChange={(event: SelectChangeEvent) => {
-                setReportType(event.target.value);
+            <Stack
+              sx={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "1rem",
+                width: "100%",
+                maxWidth: "28.125rem"
               }}
-              componentStyle={{
-                width: "100%"
+            >
+              <Typography>{translateText(["reportType"])}</Typography>
+              <DropdownList
+                id="reportTypeDropdownList"
+                inputName="reportType"
+                itemList={sheetTypeList || []}
+                value={reportType}
+                onChange={(event: SelectChangeEvent) => {
+                  setReportType(event.target.value);
+                }}
+                componentStyle={{
+                  width: "100%"
+                }}
+              />
+            </Stack>
+
+            <Stack
+              sx={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "1rem",
+                width: "100%",
+                maxWidth: "28.125rem"
               }}
-            />
+            >
+              <Typography>{translateText(["selectTeam"])}</Typography>
+              <DropdownList
+                isDisabled={!teams?.managerTeams?.length}
+                id="teamDropdownList"
+                inputName="team"
+                itemList={
+                  teams?.managerTeams.map((team) => ({
+                    label: team.teamName,
+                    value: team.teamId
+                  })) || []
+                }
+                value={selectedTeamId}
+                onChange={(event: SelectChangeEvent) => {
+                  onChangeTeam(
+                    event as unknown as MouseEvent<HTMLElement>,
+                    event.target.value
+                  );
+                }}
+                componentStyle={{
+                  width: "100%"
+                }}
+              />
+            </Stack>
           </Stack>
 
-          <Stack
-            sx={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "1rem",
-              width: "100%",
-              maxWidth: "28.125rem"
-            }}
-          >
-            <Typography>{translateText(["selectTeam"])}</Typography>
-            <DropdownList
-              isDisabled={!teams?.managerTeams?.length}
-              id="teamDropdownList"
-              inputName="team"
-              itemList={
-                teams?.managerTeams.map((team) => ({
-                  label: team.teamName,
-                  value: team.teamId
-                })) || []
-              }
-              value={selectedTeamId}
-              onChange={(event: SelectChangeEvent) => {
-                onChangeTeam(
-                  event as unknown as MouseEvent<HTMLElement>,
-                  event.target.value
-                );
-              }}
-              componentStyle={{
-                width: "100%"
-              }}
-            />
-          </Stack>
-        </Stack>
-
-        {reportType === SheetType.LeaveAllocation && (
-          <LeaveEntitlementsReportsTable />
-        )}
-        {reportType === SheetType.CustomAllocation && (
-          <CustomAllocationsReportTable />
-        )}
-        {reportType === SheetType.LeaveRequests && <LeaveRequestsReportTable />}
-      </>
+          {reportType === SheetType.LeaveAllocation && (
+            <LeaveEntitlementsReportsTable />
+          )}
+          {reportType === SheetType.CustomAllocation && (
+            <CustomAllocationsReportTable />
+          )}
+          {reportType === SheetType.LeaveRequests && (
+            <LeaveRequestsReportTable />
+          )}
+        </>
+      </UpgradeOverlay>
     </ContentLayout>
   );
 };
