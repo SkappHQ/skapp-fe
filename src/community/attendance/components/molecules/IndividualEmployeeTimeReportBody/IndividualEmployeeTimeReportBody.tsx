@@ -39,16 +39,17 @@ const IndividualEmployeeTimeReportSection: FC<Props> = ({ selectedUser }) => {
       getStartAndEndDateOfTheMonth().end,
       selectedUser
     );
+
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
   }));
 
-  const { data: managerUtilizaionData } = useGetIndividualUtilization(
+  const { data: managerUtilizationData } = useGetIndividualUtilization(
     selectedUser,
     true
   );
 
-  const { data: workHoursGraphData, isLoading: isworkHoursGraphLoading } =
+  const { data: workHoursGraphData, isLoading: isWorkHoursGraphLoading } =
     useGetIndividualWorkHourGraphData(
       getMonthName(month)?.toUpperCase(),
       selectedUser,
@@ -74,17 +75,17 @@ const IndividualEmployeeTimeReportSection: FC<Props> = ({ selectedUser }) => {
               <TimeUtilizationCard
                 lastThirtyDayChange={
                   roundNumberToX(
-                    managerUtilizaionData?.lastThirtyDayChange,
+                    managerUtilizationData?.lastThirtyDayChange,
                     1
                   ) ?? "--"
                 }
                 trend={
-                  managerUtilizaionData?.toString()?.startsWith("-")
+                  managerUtilizationData?.toString()?.startsWith("-")
                     ? TimeUtilizationTrendTypes.TREND_DOWN
                     : TimeUtilizationTrendTypes.TREND_UP
                 }
                 percentage={
-                  roundNumberToX(managerUtilizaionData?.percentage, 1) ?? "--"
+                  roundNumberToX(managerUtilizationData?.percentage, 1) ?? "--"
                 }
               />
             </Grid>
@@ -93,7 +94,7 @@ const IndividualEmployeeTimeReportSection: FC<Props> = ({ selectedUser }) => {
                 data={
                   workHoursGraphData ?? { preProcessedData: [], labels: [] }
                 }
-                isLoading={isworkHoursGraphLoading}
+                isLoading={isWorkHoursGraphLoading}
                 title={translateText([
                   "individualTimeSheetAnalytics.workHours"
                 ])}

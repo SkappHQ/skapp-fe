@@ -15,7 +15,9 @@ import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverl
 
 const LeaveReportPage: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveReports");
+
   const { data: teams } = useGetAllManagerTeams();
+
   const sheetTypeList = [
     {
       label: translateText(["cutomAllocation"]),
@@ -36,10 +38,10 @@ const LeaveReportPage: NextPage = () => {
   const [selectedTeamId, setSelectedTeamId] = useState<string | number>(
     reportsParams.teamId
   );
-
   const [reportType, setReportType] = useState<string>(
     SheetType.LeaveAllocation
   );
+
   const onChangeTeam = (
     _event: MouseEvent<HTMLElement>,
     item: string | { [key: string]: any }

@@ -33,25 +33,26 @@ import {
   useGetEmployeeLeaveReportCSV
 } from "~community/leave/api/LeaveReportApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
+import LeaveReportsTableHeader from "~community/leave/components/molecules/LeaveReportTableHeader/LeaveReportTableHeader";
+import LeaveReportsTableRow from "~community/leave/components/molecules/LeaveReportTableRow/LeaveReportTableRow";
 import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { ReportTableRowDataType } from "~community/leave/types/LeaveReportTypes";
 import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportReportUtils";
 
-import LeaveReportsTableHeader from "../LeaveReportTableHeader/LeaveReportTableHeader";
-import LeaveReportsTableRow from "../LeaveReportTableRow/LeaveReportTableRow";
 import { styles } from "./styles";
 
 const LeaveEntitlementsReportsTable: FC = () => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const { data: leaveTypes } = useGetLeaveTypes();
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
   }));
 
   const translateText = useTranslator("leaveModule", "leaveReports");
+
+  const years = getRecentYearsInStrings();
 
   const {
     reportsParams,
@@ -73,7 +74,25 @@ const LeaveEntitlementsReportsTable: FC = () => {
     reportsFilter.leaveType || []
   );
 
-  const years = getRecentYearsInStrings();
+  const { data: leaveTypes } = useGetLeaveTypes();
+
+  const reportData = useGetEmployeeLeaveReport(
+    reportsParams.year,
+    reportsParams.leaveTypeId,
+    reportsParams.teamId,
+    reportsParams.page,
+    reportsParams.size,
+    reportsParams.sortKey,
+    reportsParams.sortOrder
+  );
+
+  const CSVdata = useGetEmployeeLeaveReportCSV(
+    reportsParams.year,
+    reportsParams.leaveTypeId,
+    reportsParams.teamId,
+    headerLabels,
+    []
+  );
 
   const leaveTypeButtons = useMemo(() => {
     return Array.isArray(leaveTypes)
@@ -86,9 +105,42 @@ const LeaveEntitlementsReportsTable: FC = () => {
       : [];
   }, [leaveTypes]);
 
-  const handleYearClick = (event: MouseEvent<HTMLElement>): void => {
-    setReportsParams("year", event.currentTarget.innerText);
-  };
+  useEffect(() => {
+    if (reportsFilterOrder?.length === 0) {
+      const sortedLeaveTypes = leaveTypeButtons
+        ?.slice()
+        .sort((a: any, b: any) => a.id - b.id);
+      setHeaderLabels(
+        sortedLeaveTypes?.map((leaveType: any) => leaveType.text)
+      );
+      setReportsFilterOrderIds(
+        sortedLeaveTypes?.map((leaveType: any) => leaveType.id)
+      );
+    } else {
+      setHeaderLabels(reportsFilterOrder);
+      setReportsFilterOrderIds(reportsFilter.leaveType);
+    }
+  }, [
+    reportsFilter,
+    leaveTypes,
+    reportsFilterOrder,
+    leaveTypeButtons,
+    setReportsFilterOrderIds
+  ]);
+
+  useEffect(() => {
+    return () => {
+      resetReportsParams();
+      resetReportsFilter();
+      resetReportsFilterOrder();
+      resetReportsFilterOrderIds();
+    };
+  }, [
+    resetReportsFilter,
+    resetReportsFilterOrder,
+    resetReportsFilterOrderIds,
+    resetReportsParams
+  ]);
 
   const handleLeaveTypeFilter = (leaveType: { id: string; text: string }) => {
     const updatedTypes = selectedLeaveTypes.includes(leaveType.text)
@@ -154,60 +206,9 @@ const LeaveEntitlementsReportsTable: FC = () => {
     resetReportsFilterOrderIds();
   };
 
-  const reportData = useGetEmployeeLeaveReport(
-    reportsParams.year,
-    reportsParams.leaveTypeId,
-    reportsParams.teamId,
-    reportsParams.page,
-    reportsParams.size,
-    reportsParams.sortKey,
-    reportsParams.sortOrder
-  );
-
-  useEffect(() => {
-    if (reportsFilterOrder?.length === 0) {
-      const sortedLeaveTypes = leaveTypeButtons
-        ?.slice()
-        .sort((a: any, b: any) => a.id - b.id);
-      setHeaderLabels(
-        sortedLeaveTypes?.map((leaveType: any) => leaveType.text)
-      );
-      setReportsFilterOrderIds(
-        sortedLeaveTypes?.map((leaveType: any) => leaveType.id)
-      );
-    } else {
-      setHeaderLabels(reportsFilterOrder);
-      setReportsFilterOrderIds(reportsFilter.leaveType);
-    }
-  }, [
-    reportsFilter,
-    leaveTypes,
-    reportsFilterOrder,
-    leaveTypeButtons,
-    setReportsFilterOrderIds
-  ]);
-
-  useEffect(() => {
-    return () => {
-      resetReportsParams();
-      resetReportsFilter();
-      resetReportsFilterOrder();
-      resetReportsFilterOrderIds();
-    };
-  }, [
-    resetReportsFilter,
-    resetReportsFilterOrder,
-    resetReportsFilterOrderIds,
-    resetReportsParams
-  ]);
-
-  const CSVdata = useGetEmployeeLeaveReportCSV(
-    reportsParams.year,
-    reportsParams.leaveTypeId,
-    reportsParams.teamId,
-    headerLabels,
-    []
-  );
+  const handleYearClick = (event: MouseEvent<HTMLElement>): void => {
+    setReportsParams("year", event.currentTarget.innerText);
+  };
 
   const downloadCSV = (reportType: SheetType) => {
     if (CSVdata) {
