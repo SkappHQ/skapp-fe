@@ -1,3 +1,4 @@
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/routes";
 import { config } from "~middleware";
 
 import ROUTES from "../constants/routes";
@@ -8,7 +9,8 @@ export const IsProtectedUrl = (asPath: string): boolean => {
     ROUTES.AUTH.RESET_PASSWORD,
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
-    ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
+    ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
+    ENTERPRISE_ROUTES.SETTINGS.PAYMENT
   ];
 
   const protectedPaths = config.matcher

@@ -10,6 +10,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/routes";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -37,7 +38,8 @@ const superAdminRoutes = {
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.SIGN.SENT,
-    ROUTES.SETTINGS.MODULES
+    ROUTES.SETTINGS.MODULES,
+    ENTERPRISE_ROUTES.SETTINGS.PAYMENT
   ]
 };
 
@@ -206,6 +208,7 @@ export const config = {
     // Super admin routes
     "/setup-organization/:path*",
     "/module-selection",
+    "/payment",
     // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
