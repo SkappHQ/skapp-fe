@@ -24,6 +24,7 @@ import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
 import FilterButton from "~community/common/components/molecules/FilterButton/FilterButton";
 import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
@@ -39,6 +40,9 @@ import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { ReportTableRowDataType } from "~community/leave/types/LeaveReportTypes";
 import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportReportUtils";
+import csvMockData from "~enterprise/leave/data/csvMockData.json";
+import leaveReportsMockData from "~enterprise/leave/data/leaveReportsMockData.json";
+import leaveTypesMockData from "~enterprise/leave/data/leaveTypesMockData.json";
 
 import { styles } from "./styles";
 
@@ -46,13 +50,15 @@ const LeaveEntitlementsReportsTable: FC = () => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const translateText = useTranslator("leaveModule", "leaveReports");
+
+  const { isProTier } = useSessionData();
+
+  const years = getRecentYearsInStrings();
+
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
   }));
-
-  const translateText = useTranslator("leaveModule", "leaveReports");
-
-  const years = getRecentYearsInStrings();
 
   const {
     reportsParams,
@@ -74,25 +80,39 @@ const LeaveEntitlementsReportsTable: FC = () => {
     reportsFilter.leaveType || []
   );
 
-  const { data: leaveTypes } = useGetLeaveTypes();
+  const { data: leaveTypesData } = useGetLeaveTypes(isProTier);
 
-  const reportData = useGetEmployeeLeaveReport(
+  const leaveTypes = useMemo(() => {
+    return isProTier ? leaveTypesData : leaveTypesMockData;
+  }, [isProTier, leaveTypesData]);
+
+  const employeeLeaveReportData = useGetEmployeeLeaveReport(
     reportsParams.year,
     reportsParams.leaveTypeId,
     reportsParams.teamId,
     reportsParams.page,
     reportsParams.size,
     reportsParams.sortKey,
-    reportsParams.sortOrder
+    reportsParams.sortOrder,
+    isProTier
   );
 
-  const CSVdata = useGetEmployeeLeaveReportCSV(
+  const reportData = useMemo(() => {
+    return isProTier ? employeeLeaveReportData : leaveReportsMockData;
+  }, [isProTier, employeeLeaveReportData]);
+
+  const allCSVData = useGetEmployeeLeaveReportCSV(
     reportsParams.year,
     reportsParams.leaveTypeId,
     reportsParams.teamId,
     headerLabels,
-    []
+    [],
+    isProTier
   );
+
+  const CSVdata = useMemo(() => {
+    return isProTier ? allCSVData : csvMockData;
+  }, [isProTier, allCSVData]);
 
   const leaveTypeButtons = useMemo(() => {
     return Array.isArray(leaveTypes)

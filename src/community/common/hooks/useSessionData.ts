@@ -8,13 +8,13 @@ const useSessionData = () => {
   const { data: sessionData } = useSession();
 
   const isFreeTier = useMemo(
-    () => sessionData?.tier === TierEnum.FREE,
-    [sessionData?.tier]
+    () => sessionData?.user?.tier === TierEnum.FREE,
+    [sessionData?.user?.tier]
   );
 
   const isProTier = useMemo(
-    () => sessionData?.tier === TierEnum.PRO,
-    [sessionData?.tier]
+    () => sessionData?.user?.tier === TierEnum.PRO,
+    [sessionData?.user?.tier]
   );
 
   const isLeaveModuleEnabled = useMemo(
@@ -27,11 +27,17 @@ const useSessionData = () => {
     [sessionData?.user?.roles]
   );
 
+  const employeeDetails = useMemo(
+    () => sessionData?.user?.employee,
+    [sessionData?.user?.employee]
+  );
+
   return {
     isFreeTier,
     isProTier,
     isAttendanceModuleEnabled,
-    isLeaveModuleEnabled
+    isLeaveModuleEnabled,
+    employeeDetails
   };
 };
 

@@ -25,7 +25,7 @@ const buttonStyles = {
 };
 
 type Props = {
-  toggle: SelectedFiltersTypes;
+  toggle?: SelectedFiltersTypes;
   onClick: (i: string) => void;
   colors?: Record<string, string>;
   maxTypeToShow?: number;
@@ -43,13 +43,16 @@ const LeaveTypeBreakdownButtons = ({
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
 
-  const maxLeaveTypeToShow = maxTypeToShow;
+  const translateText = useTranslator("commonComponents", "multiTeamSelector");
+
   const [open, setOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const maxLeaveTypeToShow = maxTypeToShow;
+
   const count = toggle
     ? Object.values(toggle).filter((value) => value).length
     : null;
-  const translateText = useTranslator("commonComponents", "multiTeamSelector");
 
   const colorIndicator = (color: string): JSX.Element => {
     return (

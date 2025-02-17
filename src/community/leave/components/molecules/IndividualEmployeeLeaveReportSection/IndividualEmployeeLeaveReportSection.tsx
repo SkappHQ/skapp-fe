@@ -1,6 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveApi";
 import UserAssignedLeaveTypes from "~community/leave/components/molecules/UserAssignedLeaveTypes/UserAssignedLeaveTypes";
@@ -9,6 +10,7 @@ import UserLeaveUtilization from "~community/leave/components/molecules/UserLeav
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveType } from "~community/leave/types/CustomLeaveAllocationTypes";
 import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverlay/UpgradeOverlay";
+import leaveTypesMockData from "~enterprise/leave/data/leaveTypesMockData.json";
 
 import styles from "./styles";
 
@@ -30,12 +32,18 @@ const IndividualEmployeeLeaveReportSection: FC<Props> = ({
     "individualLeaveAnalytics"
   );
 
+  const { isProTier } = useSessionData();
+
   const { resetLeaveRequestParams } = useLeaveStore((state) => state);
 
   const [leaveTypesList, setLeaveTypesList] = useState<LeaveType[]>([]);
 
-  const { data: leaveTypes, isLoading: leaveTypeIsLoading } =
-    useGetLeaveTypes();
+  const { data: leaveTypesData, isLoading: leaveTypeIsLoading } =
+    useGetLeaveTypes(isProTier);
+
+  const leaveTypes = useMemo(() => {
+    return isProTier ? leaveTypesData : leaveTypesMockData;
+  }, [isProTier, leaveTypesData]);
 
   useEffect(() => {
     if (leaveTypes && !leaveTypeIsLoading) setLeaveTypesList(leaveTypes);
@@ -48,8 +56,8 @@ const IndividualEmployeeLeaveReportSection: FC<Props> = ({
   return (
     <PeopleLayout
       title={""}
-      containerStyles={classes.container}
       showDivider={false}
+      containerStyles={classes.container}
       pageHead={translateText(["pageHead"])}
     >
       <UpgradeOverlay customContainerStyles={classes.customContainerStyles}>

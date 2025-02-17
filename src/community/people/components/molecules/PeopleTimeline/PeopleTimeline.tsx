@@ -1,10 +1,11 @@
 import { Box, Divider, Stack, Typography, useMediaQuery } from "@mui/material";
 import { DateTime } from "luxon";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import MultipleSkeletons from "~community/common/components/molecules/Skeletons/MultipleSkeletons";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 import { monthAbbreviations } from "~community/common/utils/commonUtil";
@@ -12,6 +13,7 @@ import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import { useGetEmployeeTimeline } from "~community/people/api/PeopleApi";
 import { TimelineDataType } from "~community/people/types/TimelineTypes";
 import { getTimelineValues } from "~community/people/utils/peopleTimelineUtils";
+import timelineMockData from "~enterprise/attendance/data/timelineMockData.json";
 import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverlay/UpgradeOverlay";
 
 import styles from "./styles";
@@ -22,6 +24,9 @@ interface Props {
 
 const PeopleTimeline: FC<Props> = ({ id }) => {
   const classes = styles(theme);
+
+  const { isProTier } = useSessionData();
+
   const translateText = useTranslator("peopleModule", "editAllInfo");
   const translateTimelineText = useTranslator(
     "peopleModule",
@@ -29,10 +34,15 @@ const PeopleTimeline: FC<Props> = ({ id }) => {
     "filters",
     "selectedFiltersFilterItems"
   );
+
   const isExtraLargeScreen: boolean = useMediaQuery(theme.breakpoints.up("xl"));
   const isXXLScreen: boolean = useMediaQuery(theme.breakpoints.up("2xl"));
 
-  const { data: timeline } = useGetEmployeeTimeline(Number(id));
+  const { data: timelineData } = useGetEmployeeTimeline(Number(id), isProTier);
+
+  const timeline = useMemo(() => {
+    return isProTier ? timelineData : timelineMockData;
+  }, [isProTier, timelineData]);
 
   const getGroupTitle = (date: string): string => {
     const originalDate = DateTime.fromISO(new Date(date).toISOString());

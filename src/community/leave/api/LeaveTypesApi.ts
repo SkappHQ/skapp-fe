@@ -26,8 +26,11 @@ const params = {
   isCarryForward: false
 };
 
-export const useGetLeaveTypes = (): UseQueryResult<LeaveTypeType[]> => {
+export const useGetLeaveTypes = (
+  isEnabled: boolean = true
+): UseQueryResult<LeaveTypeType[]> => {
   return useQuery({
+    enabled: isEnabled,
     queryKey: leaveTypeQueryKeys.LEAVE_TYPES(params),
     queryFn: () =>
       authFetch.get(leaveTypeEndPoints.GET_LEAVE_TYPES, {
