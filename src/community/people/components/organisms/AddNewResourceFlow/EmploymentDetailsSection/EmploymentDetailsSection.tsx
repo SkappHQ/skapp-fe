@@ -38,6 +38,7 @@ import {
   useCheckEmailAndIdentificationNo,
   useGetSearchedEmployees
 } from "~community/people/api/PeopleApi";
+import useGetEmployee from "~community/people/hooks/useGetEmployee";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   EmployeeEmploymentDetailsFormTypes,
@@ -46,6 +47,7 @@ import {
 } from "~community/people/types/AddNewResourceTypes";
 import {
   EmployeeDataType,
+  EmployeeDetails,
   EmployeeEmploymentContextType,
   EmploymentStatusTypes
 } from "~community/people/types/EmployeeTypes";
@@ -144,6 +146,12 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       SystemPermissionTypes.MANAGERS
     );
 
+    const {
+      employee
+    }: {
+      employee: EmployeeDetails | undefined;
+    } = useGetEmployee({ id: Number(id) });
+
     const workTimeZoneDictionary: Record<string, string> = timeZonesList.reduce<
       Record<string, string>
     >((acc: Record<string, string>, curr: { value: string; label: string }) => {
@@ -205,7 +213,10 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     const context: EmployeeEmploymentContextType = {
       isUniqueEmail,
       isUniqueEmployeeNo,
-      isUpdate
+      isUpdate:
+        employeeEmploymentDetails.workEmail !== employee?.email
+          ? false
+          : isUpdate
     };
 
     const formik = useFormik<EmployeeEmploymentDetailsFormTypes>({
