@@ -38,6 +38,12 @@ const styles = () => ({
   },
   iconChipStyles: {
     color: "common.black"
+  },
+  buttonWrapper: {
+    direction: "row",
+    justifyContent: "flex-start",
+    spacing: 2,
+    padding: "1rem 0rem"
   }
 });
 
