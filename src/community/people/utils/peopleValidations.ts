@@ -211,7 +211,7 @@ export const employeeEmploymentDetailsValidation = (
       .email(translator(["validEmailError"]))
       .required(translator(["requireEmailError"]))
       .test("is-unique-email", translator(["uniqueEmailError"]), function () {
-        return context?.isUniqueEmail;
+        return context?.isUniqueEmail || context?.isUpdate;
       }),
     employmentAllocation: Yup.string(),
     teams: Yup.array(),
