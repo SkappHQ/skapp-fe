@@ -12,15 +12,8 @@ const styles = (theme: Theme) => ({
     backgroundColor: theme.palette.grey[300]
   },
   avatarHasStyledBadge: {
-    overflow: "initial",
     "&.MuiAvatar-root": {
-      padding: "0.125rem",
-      backgroundImage: `linear-gradient(90deg, red 50%, red 50%)`,
-      "& .MuiAvatar-img": {
-        borderRadius: "50%",
-        padding: "0.125rem",
-        backgroundColor: theme.palette.common.white
-      }
+      border: `2px solid ${theme.palette.error.contrastText}`
     }
   },
   defaultAvatar: {
@@ -62,7 +55,7 @@ const styles = (theme: Theme) => ({
     overflow: "initial",
     "&.MuiAvatar-root": {
       padding: "0.125rem",
-      backgroundImage: `linear-gradient(90deg, red 50%, white 50%)`,
+      backgroundImage: `linear-gradient(90deg, white 50%, red 50%)`,
       "& .MuiAvatar-img": {
         borderRadius: "50%",
         padding: "0.125rem",

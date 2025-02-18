@@ -206,6 +206,7 @@ const useDetectChange = ({ id, isProfile = false }: GetEmployeeParams) => {
       employeeId: employee?.employeeId,
       generalDetails: {
         authPic: employee?.authPic,
+        thumbnail: "",
         firstName: employee?.firstName,
         middleName: employee?.middleName,
         lastName: employee?.lastName,
@@ -368,6 +369,7 @@ const useDetectChange = ({ id, isProfile = false }: GetEmployeeParams) => {
     const isChanged =
       JSON.stringify(replaceEmptyStringsWithUndefined(previousEmployeeData)) !==
       JSON.stringify(replaceEmptyStringsWithUndefined(updatedEmployeeData));
+
     return isChanged;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

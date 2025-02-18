@@ -48,7 +48,9 @@ const nextConfig = {
       },
       {
         source: "/settings/account",
-        destination: "/community/settings/account"
+        destination: isEnterpriseMode
+          ? "/enterprise/settings/account"
+          : "/community/settings/account"
       },
       {
         source: "/settings/billing",
@@ -249,6 +251,10 @@ const nextConfig = {
       {
         source: "/settings/modules",
         destination: "/enterprise/settings/modules"
+      },
+      {
+        source: "/settings/integrations",
+        destination: "/enterprise/settings/integrations"
       },
       {
         source: "/payment",
