@@ -26,7 +26,7 @@ interface Props {
   showSelectedIcon?: boolean;
 }
 
-const SASortRow = ({
+const SortRow = ({
   id,
   text,
   selected,
@@ -82,7 +82,9 @@ const SASortRow = ({
         {isStartIcon && (
           <Icon
             name={startIcon}
-            fill={selected ? theme.palette.primary.dark : "black"}
+            fill={
+              selected ? theme.palette.primary.dark : theme.palette.common.black
+            }
           />
         )}
         <Typography variant="body2" sx={{ ...textStyles }}>
@@ -96,4 +98,4 @@ const SASortRow = ({
   );
 };
 
-export default SASortRow;
+export default SortRow;
