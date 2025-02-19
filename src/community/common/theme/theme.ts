@@ -70,6 +70,16 @@ declare module "@mui/material/styles" {
       pink: string;
       blue: string;
     };
+    contactUserChip: {
+      internal: {
+        dark: string;
+        light: string;
+      };
+      external: {
+        dark: string;
+        light: string;
+      };
+    };
   }
   interface PaletteOptions {
     notifyBadge: {
@@ -138,6 +148,16 @@ declare module "@mui/material/styles" {
       yellow: string;
       pink: string;
       blue: string;
+    };
+    contactUserChip: {
+      internal: {
+        dark: string;
+        light: string;
+      };
+      external: {
+        dark: string;
+        light: string;
+      };
     };
   }
   interface TypographyVariants {
@@ -312,6 +332,16 @@ export const theme = createTheme({
       yellow: "#FFCD56",
       pink: "#FF6384",
       blue: "#7BB9FF"
+    },
+    contactUserChip: {
+      internal: {
+        dark: "#164E63",
+        light: "#ECFEFF"
+      },
+      external: {
+        dark: "#6B21A8",
+        light: "#F3E8FF"
+      }
     }
   },
   typography: {
