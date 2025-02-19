@@ -98,6 +98,8 @@ import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
 import { IconName, IconProps } from "~community/common/types/IconTypes";
+import MasterCardIcon from "~enterprise/settings/assets/Icons/MasterCardIcon";
+import VisaCardIcon from "~enterprise/settings/assets/Icons/VisaCardIcon";
 
 interface Props extends IconProps {
   name: IconName;
@@ -203,7 +205,9 @@ export const IconMapping: Partial<
   [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
   [IconName.FILE_ICON]: FileIcon,
   [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon,
-  [IconName.SKAPP_ICON]: SkappIcon
+  [IconName.SKAPP_ICON]: SkappIcon,
+  [IconName.MASTER_CARD_ICON]: MasterCardIcon,
+  [IconName.VISA_CARD_ICON]: VisaCardIcon
   // Add more icons here as needed
 };
 
