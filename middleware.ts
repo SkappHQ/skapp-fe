@@ -10,7 +10,10 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import { stripeEndpoints } from "~enterprise/common/api/utils/ApiEndpoints";
+import {
+  s3Endpoints,
+  stripeEndpoints
+} from "~enterprise/common/api/utils/ApiEndpoints";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -20,7 +23,9 @@ const commonRoutes = [
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
   ROUTES.NOTIFICATIONS,
-  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
+  s3Endpoints.GET_SIGNED_URL,
+  s3Endpoints.DELETE_FILE
 ];
 
 // Specific role-based routes
