@@ -82,7 +82,6 @@ const DropdownList: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  console.log("itemList ",itemList)
   const handleChange = (event: SelectChangeEvent): void => {
     onChange?.(event);
     onInput?.(event);
