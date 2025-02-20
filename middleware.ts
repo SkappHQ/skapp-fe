@@ -48,7 +48,8 @@ const superAdminRoutes = {
     // Next API Routes for Stripe
     stripeEndpoints.CREATE_SUBSCRIPTION,
     stripeEndpoints.GET_PRICE_PLANS,
-    stripeEndpoints.VERIFY_PROMOCODE
+    stripeEndpoints.VERIFY_PROMOCODE,
+    "/api/enterprise/get-billing-details"
   ]
 };
 
