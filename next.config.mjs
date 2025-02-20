@@ -255,6 +255,10 @@ const nextConfig = {
       {
         source: "/settings/integrations",
         destination: "/enterprise/settings/integrations"
+      },
+      {
+        source: "/payment",
+        destination: "/enterprise/payment"
       }
     ];
   },
