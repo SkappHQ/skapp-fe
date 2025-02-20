@@ -58,6 +58,7 @@ const AddNewResourceFlow = () => {
     "addResource",
     "commonText"
   );
+
   const translateError = useTranslator("peopleModule", "addResource");
 
   const { setToastMessage, toastMessage } = useToast();
@@ -97,7 +98,8 @@ const AddNewResourceFlow = () => {
   useEffect(() => {
     if (isError && error instanceof AxiosError) {
       const errorMessage =
-        error?.response?.data?.results[0]?.message ?? "Something went wrong";
+        error?.response?.data?.results[0]?.message ??
+        translateText(["defaultErrorMsg"]);
 
       handleError({
         message: errorMessage,
