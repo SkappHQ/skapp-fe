@@ -1,6 +1,6 @@
 import { theme } from "~community/common/theme/theme";
+import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
 
-import { AccountStatusEnums } from "../enums/editResourceEnums";
 import { getStatusStyle } from "./terminationUtil";
 
 describe("getStatusStyle", () => {

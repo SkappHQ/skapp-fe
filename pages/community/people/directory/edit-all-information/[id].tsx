@@ -40,7 +40,7 @@ import SystemPermissionForm from "~community/people/components/organisms/AddNewR
 import {
   AccountStatusEnums,
   DiscardTypeEnums
-} from "~community/people/enums/editResourceEnums";
+} from "~community/people/enums/DirectoryEnums";
 import useDetectChange from "~community/people/hooks/useDetectChange";
 import useGetEmployee from "~community/people/hooks/useGetEmployee";
 import { usePeopleStore } from "~community/people/store/store";

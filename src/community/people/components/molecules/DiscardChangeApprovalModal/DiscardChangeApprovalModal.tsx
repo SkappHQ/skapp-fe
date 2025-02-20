@@ -6,7 +6,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { DiscardTypeEnums } from "~community/people/enums/editResourceEnums";
+import { DiscardTypeEnums } from "~community/people/enums/DirectoryEnums";
 import {
   DiscardChangeModalType,
   EditAllInformationFormStatus,

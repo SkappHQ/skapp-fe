@@ -149,6 +149,7 @@ const reviteEmployees = async (
 export const useHandleAddNewResource = () => {
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
+
   return useMutation({
     mutationFn: addNewResourceData,
     onSuccess: () => {

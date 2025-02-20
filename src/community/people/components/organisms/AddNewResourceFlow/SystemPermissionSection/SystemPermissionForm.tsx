@@ -1,8 +1,8 @@
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, {
+import {
+  ChangeEvent,
   Dispatch,
   JSX,
   SetStateAction,
@@ -11,39 +11,47 @@ import React, {
 } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
-import Icon from "~community/common/components/atoms/Icon/Icon";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { appModes } from "~community/common/constants/configs";
 import { systemPermissionFormTestId } from "~community/common/constants/testIds";
-import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
+import useModuleChecker from "~community/common/hooks/useModuleChecker";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { theme } from "~community/common/theme/theme";
-import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   useGetAllowedGrantablePermissions,
   useGetSuperAdminCount
 } from "~community/configurations/api/userRolesApi";
-import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
+import SystemCredentials from "~community/people/components/organisms/SystemCredentials/SystemCredentials";
 import { usePeopleStore } from "~community/people/store/store";
-import { SystemPermissionInitalStateType } from "~community/people/types/AddNewResourceTypes";
+import { SystemPermissionInitialStateType } from "~community/people/types/AddNewResourceTypes";
 import { EditAllInformationFormStatus } from "~community/people/types/EditEmployeeInfoTypes";
 import {
   EmployeeDetails,
   EmployeeRoleType,
-  Role,
-  TeamResultsType
+  Role
 } from "~community/people/types/EmployeeTypes";
-import { isDemoteUser } from "~community/people/utils/PeopleDirectoryUtils";
+import { handleAddNewResourceSuccess } from "~community/people/utils/directoryUtils/addNewResourceFlowUtils/addNewResourceUtils";
+import {
+  handleCustomChangeDefault,
+  handleCustomChangeEnterprise,
+  handleModalClose,
+  handleNextBtnClick,
+  handleSuperAdminChangeDefault,
+  handleSuperAdminChangeEnterprise,
+  handleSystemPermissionFormSubmit
+} from "~community/people/utils/directoryUtils/addNewResourceFlowUtils/systemPermissionFormUtils";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
-import SystemCredentials from "../../SystemCredentials/SystemCrendetials";
 import styles from "./styles";
 
 interface Props {
@@ -67,6 +75,7 @@ interface Props {
 const SystemPermissionForm = ({
   onBack,
   onNext,
+  onSave,
   isUpdate = false,
   isSubmitDisabled = false,
   isProfileView = false,
@@ -74,64 +83,44 @@ const SystemPermissionForm = ({
   setUpdateEmployeeStatus,
   isLoading,
   employee,
-  isInputsDisabled = false
+  isInputsDisabled = false,
+  isSuccess
 }: Props): JSX.Element => {
-  const classes = styles();
-  const [openModal, setOpenModal] = useState(false);
-  const [modalDescription, setModalDescription] = useState("");
-  const environment = useGetEnvironment();
-
   const isEsignatureModuleAvailable =
     process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
 
-  const translateText = useTranslator(
+  const classes = styles();
+
+  const router = useRouter();
+
+  const environment = useGetEnvironment();
+
+  const { data: superAdminCount } = useGetSuperAdminCount();
+  const { data: grantablePermission } = useGetAllowedGrantablePermissions();
+
+  const { isAttendanceModuleEnabled, isLeaveModuleEnabled } =
+    useModuleChecker();
+
+  const { setToastMessage } = useToast();
+
+  const systemPermissionsText = useTranslator(
     "peopleModule",
     "addResource",
     "systemPermissions"
   );
+  const commonText = useTranslator("peopleModule", "addResource", "commonText");
+  const roleLimitationText = useTranslator("peopleModule", "roleLimitation");
 
-  const translateTexts = useTranslator(
-    "peopleModule",
-    "addResource",
-    "commonText"
+  const { setUserRoles, userRoles, resetEmployeeData } = usePeopleStore(
+    (state) => ({
+      setUserRoles: state.setUserRoles,
+      userRoles: state.userRoles,
+      resetEmployeeData: state.resetEmployeeData
+    })
   );
 
-  const roleLimitationTexts = useTranslator("peopleModule", "roleLimitation");
-  const router = useRouter();
-
-  const { data } = useGetSuperAdminCount();
-  const { setUserRoles, userRoles } = usePeopleStore((state) => state);
-
-  const { data: session } = useSession();
-
-  const { setToastMessage } = useToast();
-  const initialValues: SystemPermissionInitalStateType = {
-    isSuperAdmin: userRoles.isSuperAdmin || false,
-    peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
-    leaveRole: userRoles.leaveRole || Role.LEAVE_EMPLOYEE,
-    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
-    esignRole: userRoles.esignRole || Role.ESIGN_EMPLOYEE
-  };
-
-  const { data: grantablePermission } = useGetAllowedGrantablePermissions();
-
-  const onSubmit = (values: EmployeeRoleType) => {
-    setUserRoles("isSuperAdmin", values.isSuperAdmin);
-    setUserRoles("attendanceRole", values.attendanceRole);
-    setUserRoles("peopleRole", values.peopleRole);
-    setUserRoles("leaveRole", values.leaveRole);
-    setUserRoles("esignRole", values.esignRole);
-  };
-  const formik = useFormik({
-    initialValues,
-    onSubmit,
-    validateOnChange: false
-  });
-
-  const { values, setFieldValue } = formik;
-
-  const env = useGetEnvironment();
-
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalDescription, setModalDescription] = useState<string>("");
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
     attendanceAdminLimitExceeded: false,
@@ -144,6 +133,21 @@ const SystemPermissionForm = ({
     esignSenderLimitExceeded: false
   });
 
+  const initialValues: SystemPermissionInitialStateType = {
+    isSuperAdmin: userRoles.isSuperAdmin || false,
+    peopleRole: userRoles.peopleRole || Role.PEOPLE_EMPLOYEE,
+    leaveRole: userRoles.leaveRole || Role.LEAVE_EMPLOYEE,
+    attendanceRole: userRoles.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
+    esignRole: userRoles.esignRole || Role.ESIGN_EMPLOYEE
+  };
+
+  const { values, setFieldValue } = useFormik({
+    initialValues,
+    onSubmit: (values: EmployeeRoleType) =>
+      handleSystemPermissionFormSubmit({ values, setUserRoles }),
+    validateOnChange: false
+  });
+
   const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
     (response) => setRoleLimits(response),
     () => {
@@ -152,407 +156,177 @@ const SystemPermissionForm = ({
   );
 
   useEffect(() => {
-    if (env === "enterprise") {
+    if (environment === appModes.ENTERPRISE) {
       checkRoleLimits();
     }
-  }, [env]);
+  }, [environment]);
 
   useEffect(() => {
     if (updateEmployeeStatus === EditAllInformationFormStatus.TRIGGERED) {
-      void handleNext();
+      void handleNextBtnClick({
+        isUpdate,
+        systemPermissionsText,
+        employee,
+        setToastMessage,
+        superAdminCount,
+        setModalDescription,
+        setOpenModal,
+        values,
+        setUpdateEmployeeStatus,
+        onNext
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateEmployeeStatus]);
 
-  const isSupervisingTeams = (): boolean => {
-    const teams = employee?.teams as TeamResultsType[];
-    return (
-      teams.some((team: TeamResultsType) => team?.team?.isSupervisor) ?? false
-    );
-  };
+  useEffect(() => {
+    if (isSuccess) {
+      handleAddNewResourceSuccess({
+        setToastMessage,
+        resetEmployeeData,
+        router,
+        translateText: commonText
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
-  const isSupervisingEmployees = (): boolean => {
-    if (employee?.managers) return employee?.managers?.length > 0;
-    else return false;
-  };
-
-  const handleNext = async () => {
-    if (isUpdate) {
-      if (
-        isDemoteUser(employee, values) &&
-        (isSupervisingTeams() || isSupervisingEmployees())
-      ) {
-        if (isSupervisingEmployees())
-          setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-        else setModalDescription(translateText(["demoteUserSupervisingTeams"]));
-
-        setOpenModal(true);
-      } else {
-        if (
-          employee &&
-          !employee?.userRoles?.isSuperAdmin &&
-          values.isSuperAdmin &&
-          data &&
-          data >= MAX_SUPERVISOR_LIMIT
-        ) {
-          setToastMessage({
-            toastType: ToastType.ERROR,
-            title: translateText(["maxSupervisorCountReached"]),
-            description: translateText([
-              "maxSupervisorCountReachedDescription"
-            ]),
-            open: true
-          });
-        } else {
-          setUpdateEmployeeStatus?.(EditAllInformationFormStatus.VALIDATED);
-          onNext();
-        }
-      }
+  const handlePrimaryBtnClick = () => {
+    if (isLeaveModuleEnabled) {
+      handleNextBtnClick({
+        isUpdate,
+        systemPermissionsText,
+        employee,
+        setToastMessage,
+        superAdminCount,
+        setModalDescription,
+        setOpenModal,
+        values,
+        setUpdateEmployeeStatus,
+        onNext
+      });
     } else {
-      if (values.isSuperAdmin && data && data >= MAX_SUPERVISOR_LIMIT) {
-        setToastMessage({
-          toastType: ToastType.ERROR,
-          title: translateText(["maxSupervisorCountReached"]),
-          open: true
+      onSave();
+    }
+  };
+
+  const handleCustomChange = ({
+    name,
+    value
+  }: {
+    name: keyof EmployeeRoleType;
+    value: any;
+  }) => {
+    environment === appModes.ENTERPRISE
+      ? handleCustomChangeEnterprise({
+          name,
+          value,
+          setToastMessage,
+          roleLimitationText,
+          roleLimits,
+          setFieldValue,
+          setUserRoles
+        })
+      : handleCustomChangeDefault({
+          name,
+          value,
+          setFieldValue,
+          setUserRoles
         });
-      } else {
-        setUpdateEmployeeStatus?.(EditAllInformationFormStatus.VALIDATED);
-        onNext();
-      }
+  };
+
+  const handleSuperAdminChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (environment === appModes.ENTERPRISE) {
+      handleSuperAdminChangeEnterprise({
+        event,
+        setFieldValue,
+        setUserRoles,
+        setToastMessage,
+        roleLimitationText,
+        roleLimits,
+        superAdminCount
+      });
+    } else {
+      handleSuperAdminChangeDefault({
+        event,
+        setFieldValue,
+        setUserRoles,
+        setToastMessage,
+        roleLimitationText,
+        superAdminCount
+      });
     }
   };
 
-  const handleCustomChangeEnterprise = (
-    name: keyof EmployeeRoleType,
-    value: any
-  ) => {
-    if (
-      name === "peopleRole" &&
-      value === Role.PEOPLE_ADMIN &&
-      roleLimits.peopleAdminLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["peopleAdminLimitationTitle"]),
-        description: roleLimitationTexts(["peopleAdminLimitationDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "leaveRole" &&
-      value === Role.LEAVE_ADMIN &&
-      roleLimits.leaveAdminLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["leaveAdminLimitationTitle"]),
-        description: roleLimitationTexts(["leaveAdminLimitationDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "attendanceRole" &&
-      value === Role.ATTENDANCE_ADMIN &&
-      roleLimits.attendanceAdminLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["attendanceAdminLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceAdminLimitationDescription"
-        ]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "peopleRole" &&
-      value === Role.PEOPLE_MANAGER &&
-      roleLimits.peopleManagerLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["peopleManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "peopleManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "leaveRole" &&
-      value === Role.LEAVE_MANAGER &&
-      roleLimits.leaveManagerLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["leaveManagerLimitationTitle"]),
-        description: roleLimitationTexts(["leaveManagerLimitationDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "attendanceRole" &&
-      value === Role.ATTENDANCE_MANAGER &&
-      roleLimits.attendanceManagerLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["attendanceManagerLimitationTitle"]),
-        description: roleLimitationTexts([
-          "attendanceManagerLimitationDescription"
-        ]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "esignRole" &&
-      value === Role.ESIGN_ADMIN &&
-      roleLimits.esignAdminLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["eSignAdminLimitationTitle"]),
-        description: roleLimitationTexts(["eSignAdminLimitationDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (
-      name === "esignRole" &&
-      value === Role.ESIGN_SENDER &&
-      roleLimits.esignSenderLimitExceeded
-    ) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.ERROR,
-        title: roleLimitationTexts(["eSignSenderLimitationTitle"]),
-        description: roleLimitationTexts(["eSignSenderLimitationDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    setFieldValue(name, value);
-    setUserRoles(name, value);
-  };
-
-  const handleCustomChangeDefault = (name: string, value: any) => {
-    setFieldValue(name, value);
-
-    if (name === "isSuperAdmin") {
-      setUserRoles("isSuperAdmin", value);
-    } else if (name === "peopleRole") {
-      setUserRoles("peopleRole", value);
-    } else if (name === "leaveRole") {
-      setUserRoles("leaveRole", value);
-    } else if (name === "attendanceRole") {
-      setUserRoles("attendanceRole", value);
-    } else if (name === "esignRole") {
-      setUserRoles("esignRole", value);
-    }
-  };
-
-  const handleSuperAdminChangeEnterprise = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const isChecked = e.target.checked;
-
-    if (!isChecked && data === 1) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["superAdminRequiredTitle"]),
-        description: roleLimitationTexts(["superAdminRequiredDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    if (isChecked && roleLimits.superAdminLimitExceeded) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["superAdminLimitationTitle"]),
-        description: roleLimitationTexts(["superAdminLimitationDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    void setFieldValue("isSuperAdmin", isChecked);
-    setUserRoles("isSuperAdmin", isChecked);
-
-    const peopleRole = Role.PEOPLE_ADMIN;
-    const leaveRole = Role.LEAVE_ADMIN;
-    const attendanceRole = Role.ATTENDANCE_ADMIN;
-    const esignRole = Role.ESIGN_ADMIN;
-
-    void setFieldValue("peopleRole", peopleRole);
-    void setFieldValue("leaveRole", leaveRole);
-    void setFieldValue("attendanceRole", attendanceRole);
-    void setFieldValue("esignRole", esignRole);
-
-    setUserRoles("attendanceRole", attendanceRole);
-    setUserRoles("peopleRole", peopleRole);
-    setUserRoles("leaveRole", leaveRole);
-    setUserRoles("esignRole", esignRole);
-  };
-
-  const handleSuperAdminChangeDefault = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const isChecked = e.target.checked;
-
-    if (!isChecked && data === 1) {
-      setToastMessage({
-        open: true,
-        toastType: "error",
-        title: roleLimitationTexts(["superAdminRequiredTitle"]),
-        description: roleLimitationTexts(["superAdminRequiredDescription"]),
-        isIcon: true
-      });
-      return;
-    }
-
-    void setFieldValue("isSuperAdmin", isChecked);
-    setUserRoles("isSuperAdmin", isChecked);
-
-    const peopleRole = Role.PEOPLE_ADMIN;
-    const leaveRole = Role.LEAVE_ADMIN;
-    const attendanceRole = Role.ATTENDANCE_ADMIN;
-
-    void setFieldValue("peopleRole", peopleRole);
-    void setFieldValue("leaveRole", leaveRole);
-    void setFieldValue("attendanceRole", attendanceRole);
-
-    setUserRoles("attendanceRole", attendanceRole);
-    setUserRoles("peopleRole", peopleRole);
-    setUserRoles("leaveRole", leaveRole);
-  };
-
-  const handleCustomChange =
-    env === "enterprise"
-      ? handleCustomChangeEnterprise
-      : handleCustomChangeDefault;
-  const handleSuperAdminChange =
-    env === "enterprise"
-      ? handleSuperAdminChangeEnterprise
-      : handleSuperAdminChangeDefault;
-
-  const handleModalClose = () => {
-    if (employee) {
-      const roles = [
-        "isSuperAdmin",
-        "peopleRole",
-        "leaveRole",
-        "attendanceRole"
-      ] as const;
-
-      roles.forEach((role) => {
-        setUserRoles(role, employee.userRoles[role]);
-        void setFieldValue(role, employee.userRoles[role]);
-      });
-    }
-
-    setModalDescription("");
-    setOpenModal(false);
-  };
   return (
     <PeopleLayout
-      title={translateText(["title"])}
+      title={systemPermissionsText(["title"])}
+      pageHead={systemPermissionsText(["head"])}
       containerStyles={classes.layoutContainerStyles}
       dividerStyles={classes.layoutDividerStyles}
-      pageHead={translateText(["head"])}
     >
       <>
-        <Stack direction={"row"} gap={6} marginTop={2}>
-          <Stack direction={"row"} gap={6} width={"auto"}>
-            <Typography
-              sx={{
-                color: isInputsDisabled
-                  ? theme.palette.text.disabled
-                  : "inherit"
-              }}
-            >
-              {translateText(["superAdmin"])}
-            </Typography>
-            {!isInputsDisabled && <Icon name={IconName.SUPER_ADMIN_ICON} />}
-          </Stack>
-          <Stack>
-            <SwitchRow
-              disabled={isProfileView || isInputsDisabled}
-              checked={values.isSuperAdmin}
-              onChange={handleSuperAdminChange}
-            />
-          </Stack>
-        </Stack>
+        <SwitchRow
+          label={systemPermissionsText(["superAdmin"])}
+          disabled={isProfileView || isInputsDisabled}
+          checked={values.isSuperAdmin}
+          onChange={handleSuperAdminChange}
+          wrapperStyles={classes.switchRowWrapper}
+          icon={!isInputsDisabled ? IconName.SUPER_ADMIN_ICON : undefined}
+        />
 
-        <Stack direction={"row"} gap={4} marginTop={5}>
+        <Stack sx={classes.dropdownContainer}>
           <DropdownList
             inputName={"peopleRole"}
             label="People"
             itemList={grantablePermission?.people || []}
             value={values.peopleRole}
-            componentStyle={{
-              flex: 1
-            }}
+            componentStyle={classes.dropdownListComponentStyles}
             checkSelected
-            onChange={(e) => handleCustomChange("peopleRole", e.target.value)}
+            onChange={(event) =>
+              handleCustomChange({
+                name: "peopleRole",
+                value: event.target.value
+              })
+            }
             isDisabled={
               isProfileView || values.isSuperAdmin || isInputsDisabled
             }
           />
-          {session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) && (
+
+          {isLeaveModuleEnabled && (
             <DropdownList
               inputName={"leaveRole"}
               label="Leave"
               itemList={grantablePermission?.leave || []}
               value={values.leaveRole}
               checkSelected
-              componentStyle={{
-                flex: 1
-              }}
-              onChange={(e) => handleCustomChange("leaveRole", e.target.value)}
+              componentStyle={classes.dropdownListComponentStyles}
+              onChange={(event) =>
+                handleCustomChange({
+                  name: "leaveRole",
+                  value: event.target.value
+                })
+              }
               isDisabled={
                 isProfileView || values.isSuperAdmin || isInputsDisabled
               }
             />
           )}
 
-          {session?.user?.roles?.includes(
-            EmployeeTypes.ATTENDANCE_EMPLOYEE
-          ) && (
+          {isAttendanceModuleEnabled && (
             <DropdownList
               inputName={"attendanceRole"}
               label="Attendance"
               itemList={grantablePermission?.attendance || []}
               value={values.attendanceRole}
-              componentStyle={{
-                flex: 1
-              }}
+              componentStyle={classes.dropdownListComponentStyles}
               checkSelected
-              onChange={(e) =>
-                handleCustomChange("attendanceRole", e.target.value)
+              onChange={(event) =>
+                handleCustomChange({
+                  name: "attendanceRole",
+                  value: event.target.value
+                })
               }
               isDisabled={
                 isProfileView || values.isSuperAdmin || isInputsDisabled
@@ -563,46 +337,40 @@ const SystemPermissionForm = ({
           {isEsignatureModuleAvailable && (
             <DropdownList
               inputName={"eSignRole"}
-              label="E-signature"
+              label="event-signature"
               itemList={grantablePermission?.esign || []}
               value={values.esignRole}
-              componentStyle={{
-                flex: 1
-              }}
+              componentStyle={classes.dropdownListComponentStyles}
               checkSelected
-              onChange={(e) => handleCustomChange("esignRole", e.target.value)}
+              onChange={(event) =>
+                handleCustomChange({
+                  name: "esignRole",
+                  value: event.target.value
+                })
+              }
               isDisabled={
                 isProfileView || values.isSuperAdmin || isInputsDisabled
               }
             />
           )}
         </Stack>
+
         {isUpdate &&
           !isInputsDisabled &&
           environment === appModes.COMMUNITY && <SystemCredentials />}
 
         {!isInputsDisabled && (
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            spacing={2}
-            marginTop={10}
-            sx={{ padding: "1rem 0" }}
-          >
+          <Stack sx={classes.btnWrapper}>
             <Button
-              label={
-                isUpdate ? translateTexts(["cancel"]) : translateTexts(["back"])
-              }
+              isFullWidth={false}
+              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
               buttonStyle={ButtonStyle.TERTIARY}
+              size={ButtonSizes.LARGE}
+              label={isUpdate ? commonText(["cancel"]) : commonText(["back"])}
               endIcon={
                 isUpdate ? IconName.CLOSE_ICON : IconName.LEFT_ARROW_ICON
               }
-              isFullWidth={false}
               onClick={onBack}
-              styles={{
-                padding: "1.25rem 1.75rem"
-              }}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
               dataTestId={
                 isUpdate
                   ? systemPermissionFormTestId.buttons.cancelBtn
@@ -610,22 +378,24 @@ const SystemPermissionForm = ({
               }
             />
             <Button
-              label={
-                isUpdate
-                  ? translateTexts(["saveDetails"])
-                  : translateTexts(["next"])
-              }
-              buttonStyle={ButtonStyle.PRIMARY}
-              endIcon={
-                isUpdate ? IconName.SAVE_ICON : IconName.RIGHT_ARROW_ICON
-              }
-              isFullWidth={false}
-              onClick={handleNext}
-              styles={{ padding: "1.25rem 2.5rem" }}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
               isLoading={isLoading}
+              isFullWidth={false}
+              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
+              buttonStyle={ButtonStyle.PRIMARY}
+              size={ButtonSizes.LARGE}
+              label={
+                !isLeaveModuleEnabled || isUpdate
+                  ? commonText(["saveDetails"])
+                  : commonText(["next"])
+              }
+              endIcon={
+                !isLeaveModuleEnabled || isUpdate
+                  ? IconName.SAVE_ICON
+                  : IconName.RIGHT_ARROW_ICON
+              }
+              onClick={handlePrimaryBtnClick}
               dataTestId={
-                isUpdate
+                !isLeaveModuleEnabled || isUpdate
                   ? systemPermissionFormTestId.buttons.saveDetailsBtn
                   : systemPermissionFormTestId.buttons.nextBtn
               }
@@ -641,18 +411,20 @@ const SystemPermissionForm = ({
             setModalDescription("");
           }}
         >
-          <Stack
-            sx={{
-              gap: 2,
-              marginTop: 2
-            }}
-          >
+          <Stack sx={classes.modalContainer}>
             <Typography>{modalDescription}</Typography>
-
             <Button
               buttonStyle={ButtonStyle.PRIMARY}
-              label={"Okay"}
-              onClick={handleModalClose}
+              label={commonText(["okay"])}
+              onClick={() =>
+                handleModalClose({
+                  employee,
+                  setUserRoles,
+                  setFieldValue,
+                  setModalDescription,
+                  setOpenModal
+                })
+              }
             />
           </Stack>
         </Modal>

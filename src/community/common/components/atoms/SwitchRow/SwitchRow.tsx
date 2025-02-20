@@ -2,6 +2,8 @@ import { Stack, Typography } from "@mui/material";
 import { SxProps, type Theme, useTheme } from "@mui/material/styles";
 import { ChangeEvent, FC } from "react";
 
+import Icon from "~community/common/components/atoms/Icon/Icon";
+import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import StyledSwitch from "./StyledSwitch";
@@ -16,6 +18,7 @@ interface SwitchComponentProps {
   error?: string;
   wrapperStyles?: SxProps<Theme>;
   name?: string;
+  icon?: IconName;
 }
 
 const SwitchRow: FC<SwitchComponentProps> = ({
@@ -26,7 +29,8 @@ const SwitchRow: FC<SwitchComponentProps> = ({
   disabled = false,
   error,
   wrapperStyles,
-  name
+  name,
+  icon
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -43,6 +47,7 @@ const SwitchRow: FC<SwitchComponentProps> = ({
           }}
         >
           {label}
+          {!!icon && <Icon name={icon} />}
         </Typography>
       )}
       <StyledSwitch

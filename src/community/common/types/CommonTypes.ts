@@ -1,5 +1,6 @@
 import { type SxProps } from "@mui/material";
 import { AppProps } from "next/app";
+import { JSX } from "react";
 import { type FileRejection } from "react-dropzone";
 import { StoreApi } from "zustand";
 
@@ -29,7 +30,7 @@ export interface MyAppPropsType extends AppProps {
 export type StyleProps = Record<string, SxProps>;
 
 export interface DropdownListType {
-  label: string | number;
+  label: string | number | JSX.Element;
   value: string | number;
   emoji?: string;
 }
