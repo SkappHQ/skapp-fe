@@ -26,6 +26,7 @@ declare module "next-auth" {
       authPic?: string;
       idToken?: string;
       tier?: TierEnum;
+      tenantId?: string;
     } & DefaultSession;
   }
 
