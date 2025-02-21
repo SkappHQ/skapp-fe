@@ -5,11 +5,16 @@ import { LeaveTypeBreakDownReturnTypes } from "~community/leave/types/LeaveUtili
 
 import LeaveTypeBreakdownTooltip from "./LeaveTypeBreakdownTooltip";
 
-export const useLeaveUtilizationChartOptions = (
-  datasets: LeaveTypeBreakDownReturnTypes,
-  toggle: Record<string, boolean>,
-  monthsArray: string[]
-) => {
+interface LeaveUtilizationChartOptionsProps {
+  monthsArray?: string[];
+  toggle?: Record<string, boolean>;
+  datasets?: LeaveTypeBreakDownReturnTypes;
+}
+export const useLeaveUtilizationChartOptions = ({
+  datasets,
+  toggle,
+  monthsArray
+}: LeaveUtilizationChartOptionsProps) => {
   const theme: Theme = useTheme();
 
   const isDataAvailable = datasets?.data

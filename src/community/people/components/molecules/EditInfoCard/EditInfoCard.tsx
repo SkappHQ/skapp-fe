@@ -32,7 +32,7 @@ import {
   getTimeElapsedSinceDate
 } from "~community/common/utils/dateTimeUtils";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
-import { AccountStatusEnums } from "~community/people/enums/editResourceEnums";
+import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import {
