@@ -393,12 +393,12 @@ export const formatChartButtonList = ({
   return transformedData;
 };
 
-export const updateTogleState = ({
+export const updateToggleState = ({
   buttonType,
-  initialList
+  initialList = {}
 }: {
   buttonType: string;
-  initialList: Record<string, boolean>;
+  initialList?: Record<string, boolean>;
 }) => {
   const updatedToggle = {
     ...initialList,
@@ -413,9 +413,12 @@ export const updateTogleState = ({
     }
     return 0;
   });
+
   const reorderedObj: Record<string, boolean> = {};
+
   reorderedKeys.forEach((key) => {
     reorderedObj[key] = updatedToggle[key];
   });
+
   return reorderedObj;
 };

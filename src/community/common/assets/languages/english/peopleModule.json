@@ -440,6 +440,7 @@
     "commonText": {
       "headerTitle": "People Configuration | Skapp",
       "title": "Add People",
+      "okay": "Okay",
       "of": "of",
       "saveDetails": "Save Details",
       "next": "Next",
@@ -459,7 +460,8 @@
       "incompleteSuperAdminToastDescriptionPersonal": "Please fill the mandatory personal details",
       "incompleteSuperAdminToastDescriptionEmergency": "Please fill the mandatory emergency details",
       "incompleteSuperAdminToastDescriptionEmployment": "Please fill the mandatory employment details",
-      "head": "Directory | Skapp"
+      "head": "Directory | Skapp",
+      "defaultErrorMsg": "Something went wrong"
     },
     "commonValidations": {
       "lettersAllowed": "Only letters are allowed",
