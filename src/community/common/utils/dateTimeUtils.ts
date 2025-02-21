@@ -558,3 +558,22 @@ export const fromDateToRelativeTime = (
 export const getCurrentWeekNumber = () => {
   return DateTime.now().weekNumber;
 };
+
+// Example: "2024-03-05" → "5th March 2024"  
+export const formatISODateWithSuffix = (isoString: string): string => {
+  const date = DateTime.fromISO(isoString, { zone: "utc" });
+  const day = date.day;
+  const suffix = getDaySuffix(day);
+
+  return `${day}${suffix} ${date.toFormat("MMMM yyyy")}`;
+};
+
+const getDaySuffix = (day: number): string => {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+};
