@@ -342,7 +342,7 @@ export interface ManagerRemoveType {
   setSupervisor: (field: string, value: ManagerStoreType) => void;
 }
 
-export type SystemPermissionInitalStateType = {
+export type SystemPermissionInitialStateType = {
   isSuperAdmin: boolean;
   peopleRole: Role;
   leaveRole: Role;

@@ -7,9 +7,6 @@ import { TierEnum } from "~enterprise/common/enums/CommonEum";
 const useSessionData = () => {
   const { data: sessionData } = useSession();
 
-  // const isFreeTier = false;
-  // const isProTier = true;
-
   const isFreeTier = useMemo(
     () => sessionData?.user?.tier === TierEnum.FREE,
     [sessionData?.user?.tier]

@@ -149,6 +149,7 @@ const reviteEmployees = async (
 export const useHandleAddNewResource = () => {
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
+
   return useMutation({
     mutationFn: addNewResourceData,
     onSuccess: () => {
@@ -503,7 +504,10 @@ export const useUpdateLeaveManagerData = (
   });
 };
 
-export const useGetEmployeeTimeline = (memberId: number) => {
+export const useGetEmployeeTimeline = (
+  memberId: number,
+  isEnabled: boolean = true
+) => {
   return useQuery({
     queryKey: ["employeeTimeline", memberId],
     queryFn: async () => {
@@ -516,7 +520,7 @@ export const useGetEmployeeTimeline = (memberId: number) => {
         };
       }
     },
-    enabled: memberId !== 0
+    enabled: isEnabled && memberId !== 0
   });
 };
 

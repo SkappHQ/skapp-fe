@@ -8,6 +8,7 @@ import {
   ManagerTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { TierEnum } from "~enterprise/common/enums/CommonEum";
 
 declare module "next-auth" {
   interface Session {
@@ -24,7 +25,7 @@ declare module "next-auth" {
       provider?: string;
       authPic?: string;
       idToken?: string;
-      tier?: string;
+      tier?: TierEnum;
       tenantId?: string;
     } & DefaultSession;
   }
@@ -45,7 +46,7 @@ declare module "next-auth" {
     authPic?: string;
     idToken?: string;
     tenantId?: string;
-    tier?: string;
+    tier?: TierEnum;
   }
 }
 
@@ -62,6 +63,6 @@ declare module "next-auth/jwt" {
     authPic?: string;
     idToken?: string;
     tenantId?: string;
-    tier?: string;
+    tier?: TierEnum;
   }
 }

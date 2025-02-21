@@ -7,7 +7,7 @@ import { JSX, useEffect, useRef, useState } from "react";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   formatChartButtonList,
-  updateTogleState
+  updateToggleState
 } from "~community/common/utils/commonUtil";
 import { LeaveTypeBreakDownReturnTypes } from "~community/leave/types/LeaveUtilizationTypes";
 import { useLeaveUtilizationChartOptions } from "~community/leave/utils/eChartOptions/leaveUtilizationChartOptions";
@@ -25,20 +25,22 @@ const LeaveTypeBreakdownChart = ({
   error,
   datasets
 }: Props): JSX.Element => {
-  const theme: Theme = useTheme();
-  const translateTexts = useTranslator("leaveModule", "dashboard");
-  const [buttonColors, setButtonColors] = useState<string[]>([]);
-
   const chartRef = useRef();
+
+  const theme: Theme = useTheme();
+
+  const translateTexts = useTranslator("leaveModule", "dashboard");
+
+  const [buttonColors, setButtonColors] = useState<string[]>([]);
   const [toggle, setToggle] = useState<Record<string, boolean> | undefined>(
     datasets?.toggle
   );
 
-  const chartData = useLeaveUtilizationChartOptions(
+  const chartData = useLeaveUtilizationChartOptions({
     datasets,
     toggle,
-    datasets?.months
-  );
+    monthsArray: datasets?.months
+  });
 
   useEffect(() => {
     if (toggle === undefined) setToggle(datasets?.toggle);
@@ -52,7 +54,7 @@ const LeaveTypeBreakdownChart = ({
 
   const toggleData = (leaveType: string): void => {
     setToggle(
-      updateTogleState({
+      updateToggleState({
         buttonType: leaveType,
         initialList: toggle
       })

@@ -20,7 +20,7 @@ import UserDetailsCentered from "~community/people/components/molecules/UserDeta
 import EmergencyDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmploymentDetailsSection/EmploymentDetailsForm";
 import PersonalDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/PersonalDetailsSection/PersonalDetailsForm";
-import { DiscardTypeEnums } from "~community/people/enums/editResourceEnums";
+import { DiscardTypeEnums } from "~community/people/enums/DirectoryEnums";
 import useDetectProfileChange from "~community/people/hooks/useDetectProfileChange";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeType } from "~community/people/types/AddNewResourceTypes";
