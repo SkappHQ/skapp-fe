@@ -95,7 +95,11 @@ const KebabMenu: FC<KebabMenuProps> = ({
             >
               {item?.icon && <Box>{item?.icon}</Box>}
               <Typography
-                sx={{ ...classes.menuItemText, ...customStyles.menuItemText }}
+                sx={{
+                  color: item?.color ?? theme.palette.common.black,
+                  ...classes.menuItemText,
+                  ...customStyles.menuItemText
+                }}
               >
                 {item?.text}
               </Typography>
