@@ -71,7 +71,7 @@ const AddNewResourceFlow = () => {
       translateText(["entitlements"])
     ];
 
-    if (isLeaveModuleEnabled) {
+    if (!isLeaveModuleEnabled) {
       steps = steps.filter((step) => step !== translateText(["entitlements"]));
     }
 
@@ -99,11 +99,7 @@ const AddNewResourceFlow = () => {
       const errorMessage =
         error?.response?.data?.results[0]?.message ?? "Something went wrong";
 
-      handleError({
-        message: errorMessage,
-        setToastMessage,
-        translateError
-      });
+      handleError({ message: errorMessage, setToastMessage, translateError });
     }
   }, [error, isError]);
 
@@ -212,10 +208,7 @@ const AddNewResourceFlow = () => {
     });
 
     const data: EmployeeType = {
-      generalDetails: {
-        ...employeeGeneralDetails,
-        authPic: newAuthPicURL
-      },
+      generalDetails: { ...employeeGeneralDetails, authPic: newAuthPicURL },
       contactDetails: employeeContactDetails,
       familyDetails: employeeFamilyDetails,
       educationalDetails: employeeEducationalDetails,
@@ -251,9 +244,7 @@ const AddNewResourceFlow = () => {
             getEmployeeObject
           })
         }
-        containerStyles={{
-          overflowY: activeStep === 1 ? "unset" : "auto"
-        }}
+        containerStyles={{ overflowY: activeStep === 1 ? "unset" : "auto" }}
       >
         <>
           <Box sx={classes.stepperWrapper}>
