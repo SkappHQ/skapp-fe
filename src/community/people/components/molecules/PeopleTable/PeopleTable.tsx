@@ -508,7 +508,7 @@ const PeopleTable: FC<Props> = ({
         />
       </Box>
       <ReinviteConfirmationModal
-        onClose={() => setIsReinviteConfirmationModalOpen(false)}
+        onCancel={() => setIsReinviteConfirmationModalOpen(false)}
         onClick={() => handlReviteEmployees(selectedPeople)}
         title={translateText(["reInvitenConfirmationModalTitle"])}
         description={translateText(["reInvitenConfirmationModalDescription"])}
