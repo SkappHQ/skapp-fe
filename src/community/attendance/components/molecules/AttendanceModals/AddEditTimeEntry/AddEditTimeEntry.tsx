@@ -86,7 +86,6 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
       LeaveStatusEnums.APPROVED,
       LeaveStatusEnums.PENDING
     ]);
-    setLeaveRequestParams("size", "30");
   }, []);
 
   const {
