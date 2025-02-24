@@ -148,7 +148,7 @@ const EntitlementsDetailsForm = ({
             isFullWidth={false}
             label={translateText(["back"])}
             onClick={onBack}
-            endIcon={IconName.LEFT_ARROW_ICON}
+            startIcon={IconName.LEFT_ARROW_ICON}
             buttonStyle={ButtonStyle.TERTIARY}
           />
           <Button
