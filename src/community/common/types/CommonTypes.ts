@@ -259,3 +259,8 @@ export enum LeaveRequestStates {
   CANCELLED = "CANCELLED",
   DENIED = "DENIED"
 }
+
+export enum AnalyticsTypes {
+  LEAVE = "leaveAnalytics",
+  TIME = "timeSheetAnalytics"
+}

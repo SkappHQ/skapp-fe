@@ -6,7 +6,6 @@ import Button from "~community/common/components/atoms/Button/Button";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { employmentDetailsFormTestId } from "~community/common/constants/testIds";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
-import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -65,8 +64,6 @@ const EmploymentDetailsForm = ({
   const router = useRouter();
 
   const { setToastMessage } = useToast();
-
-  const { isLeaveModuleEnabled } = useSessionData();
 
   const { resetEmployeeData, employeeDataChanges } = usePeopleStore(
     (state) => state
@@ -168,9 +165,7 @@ const EmploymentDetailsForm = ({
         height: "auto",
         fontFamily: "Poppins, sans-serif"
       }}
-      dividerStyles={{
-        mt: "0.5rem"
-      }}
+      dividerStyles={{ mt: "0.5rem" }}
       pageHead={translateText(["head"])}
       showDivider={false}
     >
@@ -217,15 +212,13 @@ const EmploymentDetailsForm = ({
             />
             <Button
               label={
-                isUpdate || !isLeaveModuleEnabled
+                isUpdate
                   ? translateText(["saveDetails"])
                   : translateText(["next"])
               }
               buttonStyle={ButtonStyle.PRIMARY}
               endIcon={
-                isUpdate || !isLeaveModuleEnabled
-                  ? IconName.SAVE_ICON
-                  : IconName.RIGHT_ARROW_ICON
+                isUpdate ? IconName.SAVE_ICON : IconName.RIGHT_ARROW_ICON
               }
               isFullWidth={false}
               onClick={handleNext}
