@@ -20,6 +20,7 @@ import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import BasicChipGroup from "~community/common/components/molecules/BasicChipGroup/BasicChipGroup";
 import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMenu";
+import { appModes } from "~community/common/constants/configs";
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
@@ -31,18 +32,20 @@ import {
   getTimeElapsedSinceDate
 } from "~community/common/utils/dateTimeUtils";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
-import { AccountStatusEnums } from "~community/people/enums/editResourceEnums";
+import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import {
   EmployeeDetails,
   EmployeeManagerType
 } from "~community/people/types/EmployeeTypes";
+import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { toPascalCase } from "~community/people/utils/jobFamilyUtils/commonUtils";
 import {
   findHasSupervisoryRoles,
   getStatusStyle
 } from "~community/people/utils/terminationUtil";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
   selectedEmployee: EmployeeDetails;
@@ -70,6 +73,8 @@ const EditInfoCard = ({
   const AVAILABLE_FIELD_COUNT = 2;
 
   const { data } = useSession();
+
+  const environment = useGetEnvironment();
 
   const { setToastMessage } = useToast();
 
@@ -211,11 +216,19 @@ const EditInfoCard = ({
 
   const onDrop: (acceptedFiles: File[]) => void = useCallback(
     (acceptedFiles: File[]) => {
-      if (storageAvailableData?.availableSpace <= EIGHTY_PERCENT) {
+      if (
+        environment === appModes.ENTERPRISE ||
+        (environment === appModes.COMMUNITY &&
+          storageAvailableData?.availableSpace <= EIGHTY_PERCENT)
+      ) {
         const profilePic = acceptedFiles.map((file: File) =>
           Object.assign(file, { preview: URL.createObjectURL(file) })
         );
         setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+
+        generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+          setEmployeeGeneralDetails("thumbnail", thumbnail)
+        );
       } else {
         setToastMessage({
           open: true,
@@ -268,6 +281,24 @@ const EditInfoCard = ({
       });
     }
   };
+
+  const getAvatarThumbnailUrl = useCallback((): string => {
+    if (employeeGeneralDetails?.authPic !== undefined) {
+      if (Array.isArray(employeeGeneralDetails?.authPic)) {
+        return employeeGeneralDetails?.authPic[0]?.preview;
+      }
+
+      return employeeGeneralDetails?.authPic ?? "";
+    } else if (cardData?.authPic !== undefined) {
+      if (Array.isArray(cardData?.authPic)) {
+        return cardData?.authPic[0]?.preview;
+      }
+      return cardData?.authPic ?? "";
+    }
+
+    return "";
+  }, [cardData?.authPic, employeeGeneralDetails?.authPic]);
+
   return (
     <Stack
       sx={{
@@ -300,11 +331,7 @@ const EditInfoCard = ({
         <Avatar
           id="avatar"
           alt={cardData?.fullName}
-          src={
-            (employeeGeneralDetails?.authPic?.[0] as ModifiedFileType)
-              ?.preview ||
-            (cardData?.authPic ?? "")
-          }
+          src={getAvatarThumbnailUrl()}
           avatarStyles={{
             width: "6.125rem",
             height: "6.125rem",
@@ -315,7 +342,10 @@ const EditInfoCard = ({
           getInputProps={getInputProps}
           handleUnSelectPhoto={handleUnSelectPhoto}
           open={openFileBrowser}
-          enableEdit
+          enableEdit={
+            selectedEmployee?.accountStatus !==
+            AccountStatusEnums.TERMINATED.toUpperCase()
+          }
           imageUploaded={
             cardData?.authPic !==
             ((employeeGeneralDetails?.authPic as string) ?? "")

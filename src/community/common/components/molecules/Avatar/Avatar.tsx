@@ -55,8 +55,10 @@ const Avatar: FC<AvatarProps> = ({
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
-  const [image, setImage] = useState<string | null>(null);
+
   const { s3FileUrls, downloadS3File } = useS3Download();
+
+  const [image, setImage] = useState<string | null>(null);
 
   const environment = useGetEnvironment();
 

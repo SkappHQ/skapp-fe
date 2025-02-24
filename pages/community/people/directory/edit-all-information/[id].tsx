@@ -9,7 +9,6 @@ import { useUploadImages } from "~community/common/api/FileHandleApi";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
-import { appModes } from "~community/common/constants/configs";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -41,7 +40,7 @@ import SystemPermissionForm from "~community/people/components/organisms/AddNewR
 import {
   AccountStatusEnums,
   DiscardTypeEnums
-} from "~community/people/enums/editResourceEnums";
+} from "~community/people/enums/DirectoryEnums";
 import useDetectChange from "~community/people/hooks/useDetectChange";
 import useGetEmployee from "~community/people/hooks/useGetEmployee";
 import { usePeopleStore } from "~community/people/store/store";
@@ -56,20 +55,21 @@ import {
   contractStates
 } from "~community/people/types/EmployeeTypes";
 import { superAdminRedirectSteps } from "~community/people/utils/addNewResourceFunctions";
+import uploadImage from "~community/people/utils/image/uploadImage";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { FileCategories } from "~enterprise/common/types/s3Types";
-import {
-  deleteFileFromS3,
-  uploadFileToS3ByUrl
-} from "~enterprise/common/utils/awsS3ServiceFunctions";
+import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 const EditAllInformation: NextPage = () => {
   const router = useRouter();
-  const { setToastMessage, toastMessage } = useToast();
   const translateText = useTranslator("peopleModule");
+
+  const { setToastMessage, toastMessage } = useToast();
+
   const { data } = useSession();
 
   const environment = useGetEnvironment();
+
+  const { forceRefetch } = useS3Download();
 
   const { data: currentEmployeeDetails } = useGetUserPersonalDetails();
 
@@ -228,6 +228,7 @@ const EditAllInformation: NextPage = () => {
 
   const onSuccess = async () => {
     setIsReinviteConfirmationModalOpen(false);
+
     if (isDiscardChangesModal.isModalOpen) {
       setUpdateEmployeeStatus(EditAllInformationFormStatus.UPDATED);
     } else {
@@ -270,6 +271,7 @@ const EditAllInformation: NextPage = () => {
 
   const onError = (error: string) => {
     setUpdateEmployeeStatus(EditAllInformationFormStatus.UPDATE_ERROR);
+
     const toastContent = {
       toastType: ToastType.ERROR,
       title: translateErrors(["title"]),
@@ -278,6 +280,7 @@ const EditAllInformation: NextPage = () => {
       }),
       open: true
     };
+
     const errors = {
       [EditAllInfoErrorTypes.REALOCATE_INDIVIDUAL_SUPERVISOR_ERROR]:
         translateErrors(["realocateIndividualSupervisorError"]),
@@ -290,8 +293,10 @@ const EditAllInformation: NextPage = () => {
         "uploadError"
       ])
     };
+
     toastContent.description =
       errors[error as EditAllInfoErrorTypes] ?? toastContent.description;
+
     setToastMessage(toastContent);
   };
 
@@ -386,52 +391,23 @@ const EditAllInformation: NextPage = () => {
       setIsReinviteConfirmationModalOpen(true);
       return;
     }
-    let newAuthPicURL = "";
-    if (
-      typeof employeeGeneralDetails?.authPic === "object" &&
-      employeeGeneralDetails?.authPic &&
-      employeeGeneralDetails?.authPic?.length > 0
-    ) {
-      try {
-        setHasUploadStarted(true);
 
-        if (environment === appModes.COMMUNITY) {
-          const formData = new FormData();
-          formData.append("file", employeeGeneralDetails?.authPic[0]);
+    const newAuthPicURL = await uploadImage({
+      isAnExistingResource: true,
+      environment,
+      authPic: employeeGeneralDetails?.authPic,
+      thumbnail: employeeGeneralDetails?.thumbnail,
+      imageUploadMutate,
+      onError: () =>
+        onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR),
+      setHasUploadStarted
+    });
 
-          formData.append("type", "USER_IMAGE");
-
-          await imageUploadMutate(formData).then((response) => {
-            const filePath = response.message?.split(
-              "File uploaded successfully: "
-            )[1];
-            if (filePath) {
-              const fileName = filePath.split("/").pop();
-              if (fileName) {
-                newAuthPicURL = fileName;
-              }
-            }
-          });
-        } else {
-          newAuthPicURL = await uploadFileToS3ByUrl(
-            employeeGeneralDetails?.authPic[0],
-            FileCategories.PROFILE_PICTURES
-          );
-
-          if (employee?.authPic) {
-            deleteFileFromS3(employee?.authPic as string);
-          }
-        }
-
-        setHasUploadStarted(false);
-      } catch (error) {
-        onError(EditAllInfoErrorTypes.UPLOAD_PROFILE_PICTURE_ERROR);
-      }
-    } else {
-      newAuthPicURL = (employeeGeneralDetails?.authPic as string) ?? "";
-    }
+    forceRefetch(newAuthPicURL);
 
     setEmployeeGeneralDetails("authPic", newAuthPicURL);
+    setEmployeeGeneralDetails("thumbnail", "");
+
     const updatedEmployeeData: EmployeeType = {
       employeeId: employee?.employeeId as string,
       generalDetails: {
@@ -456,14 +432,14 @@ const EditAllInformation: NextPage = () => {
     if (isAdmin) {
       setIsSuperAdminEditFlow(true);
     }
+
     isPeopleManagerMe
       ? updatePeopleManager(updatedEmployeeData)
       : mutate(updatedEmployeeData);
   };
 
   const isInputsDisabled =
-    employee?.employmentStatus ===
-      AccountStatusEnums.TERMINATED.toUpperCase() ||
+    employee?.accountStatus === AccountStatusEnums.TERMINATED.toUpperCase() ||
     (!isPeopleAdmin && !isPeopleManagerMe);
 
   const getComponent = useCallback(() => {
@@ -542,9 +518,9 @@ const EditAllInformation: NextPage = () => {
             onSave={handleSave}
             isLoading={false}
             isUpdate
-            isSuccess={isSuccess}
             employee={employee}
             isInputsDisabled={isInputsDisabled}
+            isSubmitDisabled={!isValuesChanged()}
           />
         );
       case EditAllInformationType.timeline:

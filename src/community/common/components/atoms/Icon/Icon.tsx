@@ -32,15 +32,18 @@ import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
 import DocumentsIcon from "~community/common/assets/Icons/DocumentsIcon";
 import DownloadIcon from "~community/common/assets/Icons/DownloadIcon";
+import DragIcon from "~community/common/assets/Icons/DragIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import EditIcon from "~community/common/assets/Icons/EditIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
 import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
+import FileIcon from "~community/common/assets/Icons/FileIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import ForwardArrow from "~community/common/assets/Icons/ForwardArrow";
+import GoogleCalendarIcon from "~community/common/assets/Icons/GoogleCalendarIcon";
 import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
@@ -78,7 +81,9 @@ import SearchIcon from "~community/common/assets/Icons/SearchIcon";
 import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
+import SignerIcon from "~community/common/assets/Icons/SignerIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
+import SkappIcon from "~community/common/assets/Icons/SkappIcon";
 import SuccessIcon from "~community/common/assets/Icons/SuccessIcon";
 import SuperAdminIcon from "~community/common/assets/Icons/SuperAdminIcon";
 import SyncIcon from "~community/common/assets/Icons/SyncIcon";
@@ -91,6 +96,7 @@ import UndoIcon from "~community/common/assets/Icons/UndoIcon";
 import UpArrowIcon from "~community/common/assets/Icons/UpArrowIcon";
 import UpgradeInfoIcon from "~community/common/assets/Icons/UpgradeInfoIcon";
 import UserUploadIcon from "~community/common/assets/Icons/UserUploadIcon";
+import ViewIcon from "~community/common/assets/Icons/ViewIcon";
 import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
@@ -197,7 +203,13 @@ export const IconMapping: Partial<
   [IconName.PEOPLE_MODULE_ICON]: PeopleModuleIcon,
   [IconName.ATTENDANCE_MODULE_ICON]: AttendanceModuleIcon,
   [IconName.LEAVE_MODULE_ICON]: LeaveModuleIcon,
-  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon
+  [IconName.ESIGNATURE_MODULE_ICON]: EsignatureModuleIcon,
+  [IconName.FILE_ICON]: FileIcon,
+  [IconName.DRAG_ICON]: DragIcon,
+  [IconName.SIGN_ICON]: SignerIcon,
+  [IconName.VIEW_ICON]: ViewIcon,
+  [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon,
+  [IconName.SKAPP_ICON]: SkappIcon
   // Add more icons here as needed
 };
 

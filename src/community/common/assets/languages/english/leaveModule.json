@@ -32,6 +32,7 @@
       "comment": "Comment",
       "addComment": "Add a comment",
       "commentRequiredError": "Please enter a comment",
+      "markOutOfOfficeModalTitle": "Mark out of office",
       "leaveSummary": {
         "title": "Leave summary",
         "type": "Type:",

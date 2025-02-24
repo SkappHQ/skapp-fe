@@ -10,6 +10,10 @@ const styles = (theme: Theme): StyleProps => ({
     width: "100%",
     gap: "1.25rem"
   },
+  label: {
+    display: "flex",
+    gap: "0.625rem"
+  },
   error: { color: theme.palette.error.contrastText }
 });
 

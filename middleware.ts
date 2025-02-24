@@ -183,10 +183,19 @@ export default withAuth(
           new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
         );
       }
+
+      if (
+        request.nextUrl.pathname.startsWith(ROUTES.SETTINGS.INTEGRATIONS) &&
+        token?.tier !== "PRO"
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
+
       return NextResponse.next();
     }
 
-    // Redirect to /unauthorized if no access
     return NextResponse.redirect(
       new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
     );
@@ -198,15 +207,11 @@ export default withAuth(
   }
 );
 
-// Define the matcher patterns for this middleware
 export const config = {
   matcher: [
-    // All community routes
     "/community/:path*",
-    // Super admin routes
     "/setup-organization/:path*",
     "/module-selection",
-    // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
     "/settings/:path*",
@@ -217,7 +222,6 @@ export const config = {
     "/verify/email",
     "/verify/success",
     "/verify/account-reset-password",
-    // Module routes
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
