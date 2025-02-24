@@ -257,6 +257,12 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       values.employeeNumber
     );
 
+    useEffect(() => {
+      if (employeeEmploymentDetails.workEmail !== values.workEmail) {
+        setFieldValue("workEmail", employeeEmploymentDetails.workEmail);
+      }
+    }, [employeeEmploymentDetails]);
+
     const handleInput = async (
       e: ChangeEvent<HTMLInputElement> | SelectChangeEvent
     ) => {
