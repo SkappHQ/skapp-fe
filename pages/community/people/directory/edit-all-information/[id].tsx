@@ -519,9 +519,10 @@ const EditAllInformation: NextPage = () => {
             onSave={handleSave}
             isLoading={false}
             isUpdate
-            isSuccess={isSuccess}
+            isSuccess={isEditingEmployeeSuccess}
             employee={employee}
             isInputsDisabled={isInputsDisabled}
+            isSubmitDisabled={!isValuesChanged()}
           />
         );
       case EditAllInformationType.timeline:
