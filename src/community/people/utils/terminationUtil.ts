@@ -1,7 +1,6 @@
 import { theme } from "~community/common/theme/theme";
-
-import { AccountStatusEnums } from "../enums/editResourceEnums";
-import { EmployeeDetails } from "../types/EmployeeTypes";
+import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
+import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
 
 export function getStatusStyle(status: AccountStatusEnums) {
   const statusStyles = {
