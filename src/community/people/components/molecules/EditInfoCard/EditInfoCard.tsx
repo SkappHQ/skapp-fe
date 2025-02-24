@@ -342,7 +342,10 @@ const EditInfoCard = ({
           getInputProps={getInputProps}
           handleUnSelectPhoto={handleUnSelectPhoto}
           open={openFileBrowser}
-          enableEdit
+          enableEdit={
+            selectedEmployee?.accountStatus !==
+            AccountStatusEnums.TERMINATED.toUpperCase()
+          }
           imageUploaded={
             cardData?.authPic !==
             ((employeeGeneralDetails?.authPic as string) ?? "")

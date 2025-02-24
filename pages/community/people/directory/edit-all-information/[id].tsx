@@ -440,8 +440,7 @@ const EditAllInformation: NextPage = () => {
   };
 
   const isInputsDisabled =
-    employee?.employmentStatus ===
-      AccountStatusEnums.TERMINATED.toUpperCase() ||
+    employee?.accountStatus === AccountStatusEnums.TERMINATED.toUpperCase() ||
     (!isPeopleAdmin && !isPeopleManagerMe);
 
   const getComponent = useCallback(() => {
@@ -520,9 +519,10 @@ const EditAllInformation: NextPage = () => {
             onSave={handleSave}
             isLoading={false}
             isUpdate
-            isSuccess={isSuccess}
+            isSuccess={isEditingEmployeeSuccess}
             employee={employee}
             isInputsDisabled={isInputsDisabled}
+            isSubmitDisabled={!isValuesChanged()}
           />
         );
       case EditAllInformationType.timeline:
