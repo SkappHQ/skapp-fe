@@ -204,7 +204,10 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     const context: EmployeeEmploymentContextType = {
       isUniqueEmail,
       isUniqueEmployeeNo,
-      isUpdate
+      isUpdate:
+        initialValues?.workEmail !== employeeEmploymentDetails?.workEmail
+          ? false
+          : isUpdate
     };
 
     const formik = useFormik<EmployeeEmploymentDetailsFormTypes>({
