@@ -1,11 +1,19 @@
 import { Box, Stack, Theme, Typography, useTheme } from "@mui/material";
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  MouseEvent,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
 import Table from "~community/common/components/molecules/Table/Table";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { FilterButtonTypes } from "~community/common/types/CommonTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
@@ -15,6 +23,7 @@ import {
   getDateForPeriod
 } from "~community/common/utils/dateTimeUtils";
 import { useGetEmployeeLeaveHistory } from "~community/leave/api/LeaveAnalyticsApi";
+import LeaveRequestMenu from "~community/leave/components/molecules/LeaveRequestMenu/LeaveRequestMenu";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
   LeaveHistoryDataTypes,
@@ -32,8 +41,7 @@ import {
   requestedLeaveTypesPreProcessor
 } from "~community/leave/utils/LeaveRequestFilterActions";
 import ShowSelectedFilters from "~community/people/components/molecules/ShowSelectedFilters/ShowSelectedFilters";
-
-import LeaveRequestMenu from "../LeaveRequestMenu/LeaveRequestMenu";
+import leaveHistoryMockData from "~enterprise/leave/data/leaveHistoryMockData.json";
 
 interface Props {
   employeeId: number;
@@ -41,6 +49,7 @@ interface Props {
   employeeLastName?: string;
   employeeFirstName?: string;
 }
+
 const UserLeaveHistory: FC<Props> = ({
   employeeId,
   leaveTypesList,
@@ -48,6 +57,8 @@ const UserLeaveHistory: FC<Props> = ({
   employeeFirstName
 }) => {
   const theme: Theme = useTheme();
+
+  const { isProTier } = useSessionData();
 
   const translateText = useTranslator(
     "peopleModule",
@@ -64,7 +75,6 @@ const UserLeaveHistory: FC<Props> = ({
   } = useLeaveStore((state) => state);
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
@@ -81,17 +91,23 @@ const UserLeaveHistory: FC<Props> = ({
     });
 
   const filterBeOpen: boolean = filterOpen && Boolean(filterEl);
+
   const filterId = filterBeOpen ? "filter-popper" : undefined;
 
-  const { data: leaveHistory, isLoading } = useGetEmployeeLeaveHistory(
+  const { data: leaveHistoryData, isLoading } = useGetEmployeeLeaveHistory(
     employeeId,
     selectedDates,
     leaveRequestsFilter.status,
     leaveRequestsFilter.type,
     currentPage,
     6,
-    false
+    false,
+    isProTier
   );
+
+  const leaveHistory = useMemo(() => {
+    return isProTier ? leaveHistoryData : leaveHistoryMockData;
+  }, [isProTier, leaveHistoryData]);
 
   const { data: exportHistoryData } = useGetEmployeeLeaveHistory(
     employeeId,
@@ -100,7 +116,8 @@ const UserLeaveHistory: FC<Props> = ({
     leaveRequestsFilter.type,
     0,
     6,
-    true
+    true,
+    isProTier
   );
 
   const columns = [

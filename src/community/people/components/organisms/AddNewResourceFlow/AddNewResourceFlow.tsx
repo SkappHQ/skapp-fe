@@ -12,7 +12,7 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
-import useModuleChecker from "~community/common/hooks/useModuleChecker";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { isObjectEmpty } from "~community/common/utils/commonUtil";
@@ -51,13 +51,14 @@ const AddNewResourceFlow = () => {
 
   const environment = useGetEnvironment();
 
-  const { isLeaveModuleEnabled } = useModuleChecker();
+  const { isLeaveModuleEnabled } = useSessionData();
 
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
     "commonText"
   );
+
   const translateError = useTranslator("peopleModule", "addResource");
 
   const { setToastMessage, toastMessage } = useToast();
@@ -71,7 +72,7 @@ const AddNewResourceFlow = () => {
       translateText(["entitlements"])
     ];
 
-    if (!isLeaveModuleEnabled) {
+    if (isLeaveModuleEnabled) {
       steps = steps.filter((step) => step !== translateText(["entitlements"]));
     }
 
@@ -97,7 +98,8 @@ const AddNewResourceFlow = () => {
   useEffect(() => {
     if (isError && error instanceof AxiosError) {
       const errorMessage =
-        error?.response?.data?.results[0]?.message ?? "Something went wrong";
+        error?.response?.data?.results[0]?.message ??
+        translateText(["defaultErrorMsg"]);
 
       handleError({ message: errorMessage, setToastMessage, translateError });
     }

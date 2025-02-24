@@ -2,15 +2,14 @@ import {
   Box,
   Divider,
   IconButton,
-  Modal as MuiModal,
   Stack,
   SxProps,
   Typography
 } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
 import { FC, JSX, MouseEvent, ReactElement } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import BasicModal from "~community/common/components/organisms/BasicModal/BasicModal";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -50,15 +49,9 @@ const Modal: FC<Props> = ({
   const classes = styles();
 
   return (
-    <MuiModal
+    <BasicModal
       open={isModalOpen}
-      onClose={(event, reason) => {
-        if (reason === "backdropClick") return;
-        onCloseModal(event as MouseEvent<HTMLButtonElement>, reason);
-      }}
-      disableEscapeKeyDown
-      slots={{ backdrop: Backdrop }}
-      slotProps={{ backdrop: { timeout: 100 } }}
+      onClose={onCloseModal}
       sx={mergeSx([classes.modalWrapper, modalWrapperStyles])}
     >
       <Stack sx={mergeSx([classes.modelContentWrapper, modalContentStyles])}>
@@ -93,7 +86,7 @@ const Modal: FC<Props> = ({
           {children}
         </Stack>
       </Stack>
-    </MuiModal>
+    </BasicModal>
   );
 };
 
