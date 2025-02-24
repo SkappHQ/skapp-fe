@@ -439,8 +439,7 @@ const EditAllInformation: NextPage = () => {
   };
 
   const isInputsDisabled =
-    employee?.employmentStatus ===
-      AccountStatusEnums.TERMINATED.toUpperCase() ||
+    employee?.accountStatus === AccountStatusEnums.TERMINATED.toUpperCase() ||
     (!isPeopleAdmin && !isPeopleManagerMe);
 
   const getComponent = useCallback(() => {
