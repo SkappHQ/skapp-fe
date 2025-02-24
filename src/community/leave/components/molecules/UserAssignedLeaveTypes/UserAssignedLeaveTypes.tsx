@@ -1,15 +1,17 @@
 import { Box, Stack, Theme, Typography, useTheme } from "@mui/material";
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 
 import NoDataIcon from "~community/common/assets/Icons/NoDataIcon";
 import Pagination from "~community/common/components/atoms/Pagination/Pagination";
 import AnalyticCardSkeleton from "~community/common/components/molecules/AnalyticCardSkeleton/AnalyticCardSkeleton";
 import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useGetEmployeeEntitlements } from "~community/leave/api/LeaveAnalyticsApi";
 import useResponsiveCardSize from "~community/leave/hooks/useResponsiveCardSize";
 import { LeaveEntitlementsCardType } from "~community/leave/types/MyRequests";
 import { getPercentage } from "~community/leave/utils/LeavePreprocessors";
+import entitlementMockData from "~enterprise/leave/data/entitlementMockData.json";
 
 import AnalyticCard from "../AnalyticCard/AnalyticCard";
 
@@ -20,18 +22,29 @@ interface Props {
 
 const UserAssignedLeaveTypes: FC<Props> = ({ employeeId, pageSize }) => {
   const theme: Theme = useTheme();
+
+  const { isProTier } = useSessionData();
+
   const translateText = useTranslator(
     "peopleModule",
     "individualLeaveAnalytics"
   );
-  const { data: entitlement, isLoading } =
-    useGetEmployeeEntitlements(employeeId);
+
+  const { responsivePageSize, responsiveCardSize } =
+    useResponsiveCardSize(pageSize);
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentEntitlementData, setCurrentEntitlementData] =
     useState<LeaveEntitlementsCardType[]>();
-  const { responsivePageSize, responsiveCardSize } =
-    useResponsiveCardSize(pageSize);
+
+  const { data: entitlementData, isLoading } = useGetEmployeeEntitlements(
+    employeeId,
+    isProTier
+  );
+
+  const entitlement = useMemo(() => {
+    return isProTier ? entitlementData : entitlementMockData;
+  }, [isProTier, entitlementData]);
 
   useEffect(() => {
     if (entitlement) {

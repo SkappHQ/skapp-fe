@@ -106,6 +106,10 @@ import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
 import { IconName, IconProps } from "~community/common/types/IconTypes";
+import GreyPlusIcon from "~enterprise/settings/assets/Icons/GreyPlusIcon";
+import GreyRoundedTickIcon from "~enterprise/settings/assets/Icons/GreyRoundedTickIcon";
+import MasterCardIcon from "~enterprise/settings/assets/Icons/MasterCardIcon";
+import VisaCardIcon from "~enterprise/settings/assets/Icons/VisaCardIcon";
 
 interface Props extends IconProps {
   name: IconName;
@@ -219,7 +223,11 @@ export const IconMapping: Partial<
   [IconName.STAMP_ICON]: StampIcon,
   [IconName.APPROVED_ICON]: ApprovedIcon,
   [IconName.DECLINED_ICON]: DeclinedIcon,
-  [IconName.SIGNATURE_ICON]: SignatureIcon
+  [IconName.SIGNATURE_ICON]: SignatureIcon,
+  [IconName.MASTER_CARD_ICON]: MasterCardIcon,
+  [IconName.VISA_CARD_ICON]: VisaCardIcon,
+  [IconName.GREY_ROUNDED_TICK_ICON]: GreyRoundedTickIcon,
+  [IconName.GREY_PLUS_ICON]: GreyPlusIcon
   // Add more icons here as needed
 };
 

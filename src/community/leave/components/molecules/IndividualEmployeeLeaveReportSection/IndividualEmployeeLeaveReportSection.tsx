@@ -1,15 +1,18 @@
-import { Stack } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveApi";
+import UserAssignedLeaveTypes from "~community/leave/components/molecules/UserAssignedLeaveTypes/UserAssignedLeaveTypes";
+import UserLeaveHistory from "~community/leave/components/molecules/UserLeaveHistory/UserLeaveHistory";
+import UserLeaveUtilization from "~community/leave/components/molecules/UserLeaveUtilization/UserLeaveUtilization";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveType } from "~community/leave/types/CustomLeaveAllocationTypes";
+import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverlay/UpgradeOverlay";
+import leaveTypesMockData from "~enterprise/leave/data/leaveTypesMockData.json";
 
-import UserAssignedLeaveTypes from "../UserAssignedLeaveTypes/UserAssignedLeaveTypes";
-import UserLeaveHistory from "../UserLeaveHistory/UserLeaveHistory";
-import UserLeaveUtilization from "../UserLeaveUtilization/UserLeaveUtilization";
+import styles from "./styles";
 
 interface Props {
   selectedUser: number;
@@ -22,17 +25,25 @@ const IndividualEmployeeLeaveReportSection: FC<Props> = ({
   employeeLastName,
   employeeFirstName
 }) => {
+  const classes = styles();
+
   const translateText = useTranslator(
     "peopleModule",
     "individualLeaveAnalytics"
   );
 
+  const { isProTier } = useSessionData();
+
   const { resetLeaveRequestParams } = useLeaveStore((state) => state);
 
   const [leaveTypesList, setLeaveTypesList] = useState<LeaveType[]>([]);
 
-  const { data: leaveTypes, isLoading: leaveTypeIsLoading } =
-    useGetLeaveTypes();
+  const { data: leaveTypesData, isLoading: leaveTypeIsLoading } =
+    useGetLeaveTypes(isProTier);
+
+  const leaveTypes = useMemo(() => {
+    return isProTier ? leaveTypesData : leaveTypesMockData;
+  }, [isProTier, leaveTypesData]);
 
   useEffect(() => {
     if (leaveTypes && !leaveTypeIsLoading) setLeaveTypesList(leaveTypes);
@@ -41,34 +52,33 @@ const IndividualEmployeeLeaveReportSection: FC<Props> = ({
   useEffect(() => {
     resetLeaveRequestParams();
   }, []);
+
   return (
     <PeopleLayout
       title={""}
-      containerStyles={{
-        padding: "0",
-        margin: "0 auto",
-        height: "auto"
-      }}
       showDivider={false}
+      containerStyles={classes.container}
       pageHead={translateText(["pageHead"])}
     >
-      <Stack gap={"1.5rem"}>
-        <UserAssignedLeaveTypes employeeId={selectedUser} pageSize={8} />
+      <UpgradeOverlay customContainerStyles={classes.customContainerStyles}>
+        <>
+          <UserAssignedLeaveTypes employeeId={selectedUser} pageSize={8} />
 
-        {leaveTypesList?.length > 0 && (
-          <UserLeaveUtilization
+          {leaveTypesList?.length > 0 && (
+            <UserLeaveUtilization
+              employeeId={selectedUser}
+              leaveTypesList={leaveTypesList}
+            />
+          )}
+
+          <UserLeaveHistory
             employeeId={selectedUser}
             leaveTypesList={leaveTypesList}
+            employeeLastName={employeeLastName}
+            employeeFirstName={employeeFirstName}
           />
-        )}
-
-        <UserLeaveHistory
-          employeeId={selectedUser}
-          leaveTypesList={leaveTypesList}
-          employeeLastName={employeeLastName}
-          employeeFirstName={employeeFirstName}
-        />
-      </Stack>
+        </>
+      </UpgradeOverlay>
     </PeopleLayout>
   );
 };

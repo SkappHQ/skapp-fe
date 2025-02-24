@@ -17,10 +17,12 @@ export const useGetEmployeeLeaveReport = (
   page: number,
   size: number,
   sortKey: string,
-  sortOrder: string
+  sortOrder: string,
+  isEnabled: boolean = true
 ) => {
   const filterIds = useLeaveStore((state) => state.reportsFilterOrderIds);
   const { data, isLoading, isSuccess } = useQuery({
+    enabled: isEnabled,
     queryKey: reportsQueryKeys.getEmployeeLeaveReportByAdmin(
       year,
       leaveTypeId,
@@ -58,9 +60,11 @@ export const useGetEmployeeLeaveReportCSV = (
   leaveTypeIds: string[],
   teamId: string,
   headerLabels: string[],
-  leaveStatues: string[]
+  leaveStatues: string[],
+  isEnabled: boolean = true
 ) => {
   const { data, isLoading, isSuccess } = useQuery({
+    enabled: isEnabled,
     queryKey: reportsQueryKeys.getEmployeeLeaveReportCSV(
       year,
       leaveTypeIds,

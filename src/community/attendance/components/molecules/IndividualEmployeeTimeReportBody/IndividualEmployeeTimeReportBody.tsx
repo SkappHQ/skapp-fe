@@ -1,13 +1,16 @@
 import { Grid2 as Grid } from "@mui/material";
-import { useSession } from "next-auth/react";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 
 import { useGetIndividualUtilization } from "~community/attendance/api/AttendanceAdminApi";
 import { useGetDailyLogsByEmployeeId } from "~community/attendance/api/AttendanceEmployeeApi";
 import { useGetIndividualWorkHourGraphData } from "~community/attendance/api/attendanceManagerApi";
+import WorkHourGraph from "~community/attendance/components/molecules/Graphs/WorkHourGraph";
+import TimeUtilizationCard from "~community/attendance/components/molecules/TimeUtilizationCard/TimeUtilizationCard";
+import TimesheetDailyRecordTable from "~community/attendance/components/molecules/TimesheetDailyRecordTable/TimesheetDailyRecordTable";
 import { TimeUtilizationTrendTypes } from "~community/attendance/types/timeSheetTypes";
 import { downloadEmployeeDailyLogCsv } from "~community/attendance/utils/TimesheetCsvUtil";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { roundNumberToX } from "~community/common/utils/commonUtil";
@@ -16,10 +19,10 @@ import {
   getMonthName,
   getStartAndEndDateOfTheMonth
 } from "~community/common/utils/dateTimeUtils";
-
-import WorkHourGraph from "../Graphs/WorkHourGraph";
-import TimeUtilizationCard from "../TimeUtilizationCard/TimeUtilizationCard";
-import TimesheetDailyRecordTable from "../TimesheetDailyRecordTable/TimesheetDailyRecordTable";
+import dailyLogMockData from "~enterprise/attendance/data/dailyLogMockData";
+import managerUtilizationMockData from "~enterprise/attendance/data/managerUtilizationMockData.json";
+import workHoursGraphMockData from "~enterprise/attendance/data/workHoursGraphMockData.json";
+import UpgradeOverlay from "~enterprise/common/components/molecules/UpgradeOverlay/UpgradeOverlay";
 
 interface Props {
   selectedUser: number;
@@ -28,31 +31,45 @@ interface Props {
 const IndividualEmployeeTimeReportSection: FC<Props> = ({ selectedUser }) => {
   const translateText = useTranslator("attendanceModule", "timesheet");
 
-  const [month, setMonth] = useState(getCurrentMonth());
+  const { employeeDetails, isProTier } = useSessionData();
 
-  const { data: session } = useSession();
+  const { isDrawerToggled } = useCommonStore((state) => ({
+    isDrawerToggled: state.isDrawerExpanded
+  }));
+
+  const [month, setMonth] = useState(isProTier ? getCurrentMonth() : 1);
 
   const { data: dailyLogData, isLoading: isDailyLogLoading } =
     useGetDailyLogsByEmployeeId(
       getStartAndEndDateOfTheMonth().start,
       getStartAndEndDateOfTheMonth().end,
-      selectedUser
+      selectedUser,
+      isProTier
     );
-  const { isDrawerToggled } = useCommonStore((state) => ({
-    isDrawerToggled: state.isDrawerExpanded
-  }));
 
-  const { data: managerUtilizaionData } = useGetIndividualUtilization(
+  const dailyLogs = useMemo(() => {
+    return isProTier ? dailyLogData : dailyLogMockData;
+  }, [isProTier, dailyLogData]);
+
+  const { data: managerUtilizationData } = useGetIndividualUtilization(
     selectedUser,
-    true
+    isProTier
   );
 
-  const { data: workHoursGraphData, isLoading: isworkHoursGraphLoading } =
+  const managerUtilizations = useMemo(() => {
+    return isProTier ? managerUtilizationData : managerUtilizationMockData;
+  }, [isProTier, managerUtilizationData]);
+
+  const { data: workHoursGraphData, isLoading: isWorkHoursGraphLoading } =
     useGetIndividualWorkHourGraphData(
       getMonthName(month)?.toUpperCase(),
       selectedUser,
-      true
+      isProTier
     );
+
+  const employeeWorkHoursDataset = useMemo(() => {
+    return isProTier ? workHoursGraphData : workHoursGraphMockData;
+  }, [isProTier, workHoursGraphData]);
 
   return (
     <PeopleLayout
@@ -66,55 +83,64 @@ const IndividualEmployeeTimeReportSection: FC<Props> = ({ selectedUser }) => {
       showDivider={false}
       pageHead={translateText(["individualTimeSheetAnalytics.title"])}
     >
-      <>
-        <Grid container spacing={1}>
-          <Grid size={{ xs: 2 }}>
-            <TimeUtilizationCard
-              lastThirtyDayChange={
-                roundNumberToX(managerUtilizaionData?.lastThirtyDayChange, 1) ??
-                "--"
-              }
-              trend={
-                managerUtilizaionData?.toString()?.startsWith("-")
-                  ? TimeUtilizationTrendTypes.TREND_DOWN
-                  : TimeUtilizationTrendTypes.TREND_UP
-              }
-              percentage={
-                roundNumberToX(managerUtilizaionData?.percentage, 1) ?? "--"
-              }
-            />
+      <UpgradeOverlay>
+        <>
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 2 }}>
+              <TimeUtilizationCard
+                lastThirtyDayChange={
+                  roundNumberToX(managerUtilizations?.lastThirtyDayChange, 1) ??
+                  "--"
+                }
+                trend={
+                  managerUtilizations?.toString()?.startsWith("-")
+                    ? TimeUtilizationTrendTypes.TREND_DOWN
+                    : TimeUtilizationTrendTypes.TREND_UP
+                }
+                percentage={
+                  roundNumberToX(managerUtilizations?.percentage, 1) ?? "--"
+                }
+              />
+            </Grid>
+            <Grid size={{ xs: 10 }}>
+              <WorkHourGraph
+                data={
+                  employeeWorkHoursDataset ?? {
+                    preProcessedData: [],
+                    labels: []
+                  }
+                }
+                isLoading={isWorkHoursGraphLoading}
+                title={translateText([
+                  "individualTimeSheetAnalytics.workHours"
+                ])}
+                month={month}
+                setMonth={setMonth}
+              />
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 10 }}>
-            <WorkHourGraph
-              data={workHoursGraphData ?? { preProcessedData: [], labels: [] }}
-              isLoading={isworkHoursGraphLoading}
-              title={translateText(["individualTimeSheetAnalytics.workHours"])}
-              month={month}
-              setMonth={setMonth}
-            />
-          </Grid>
-        </Grid>
 
-        <Grid
-          size={{ xs: 12 }}
-          sx={{
-            marginTop: "1.5rem"
-          }}
-        >
-          <TimesheetDailyRecordTable
-            dailyLogData={dailyLogData || []}
-            downloadEmployeeDailyLogCsv={() => {
-              downloadEmployeeDailyLogCsv(
-                dailyLogData || [],
-                session?.user.employee?.firstName || "",
-                getStartAndEndDateOfTheMonth().start,
-                getStartAndEndDateOfTheMonth().end
-              );
+          <Grid
+            size={{ xs: 12 }}
+            sx={{
+              marginTop: "1.5rem"
             }}
-            isDailyLogLoading={isDailyLogLoading}
-          />
-        </Grid>
-      </>
+          >
+            <TimesheetDailyRecordTable
+              dailyLogData={dailyLogs || []}
+              downloadEmployeeDailyLogCsv={() => {
+                downloadEmployeeDailyLogCsv(
+                  dailyLogs || [],
+                  employeeDetails?.firstName || "",
+                  getStartAndEndDateOfTheMonth().start,
+                  getStartAndEndDateOfTheMonth().end
+                );
+              }}
+              isDailyLogLoading={isDailyLogLoading}
+            />
+          </Grid>
+        </>
+      </UpgradeOverlay>
     </PeopleLayout>
   );
 };

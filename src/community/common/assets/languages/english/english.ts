@@ -12,5 +12,6 @@ export const english = {
   peopleModule,
   leaveModule,
   attendanceModule
+
   // add other modules here
 };
