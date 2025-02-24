@@ -68,6 +68,7 @@ export const myRequestSlice = (
   attachments: [],
   comment: "",
   formErrors: initialFormErrors,
+  leaveRequestId: 0,
 
   setIsMyRequestModalOpen: (status: boolean) =>
     set((state: MyRequestSliceType) => ({
@@ -147,5 +148,10 @@ export const myRequestSlice = (
         ...state.formErrors,
         [key]: value
       }
+    })),
+  setLeaveRequestId: (leaveRequestId: number) =>
+    set((state: MyRequestSliceType) => ({
+      ...state,
+      leaveRequestId: leaveRequestId
     }))
 });

@@ -143,7 +143,8 @@ const EmergencyDetailsForm = ({
               isUpdate ? translateText(["cancel"]) : translateText(["back"])
             }
             buttonStyle={ButtonStyle.TERTIARY}
-            endIcon={isUpdate ? IconName.CLOSE_ICON : IconName.LEFT_ARROW_ICON}
+            startIcon={isUpdate ? <></> : IconName.LEFT_ARROW_ICON}
+            endIcon={isUpdate ? IconName.CLOSE_ICON : <></>}
             isFullWidth={false}
             onClick={onBack}
             disabled={isSubmitDisabled || isLoading || isInputsDisabled}

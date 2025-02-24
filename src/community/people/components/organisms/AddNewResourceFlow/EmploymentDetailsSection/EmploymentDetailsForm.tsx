@@ -4,9 +4,8 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
-import ROUTES from "~community/common/constants/routes";
 import { employmentDetailsFormTestId } from "~community/common/constants/testIds";
-import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
+import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -16,6 +15,7 @@ import {
 } from "~community/common/utils/commonUtil";
 import { usePeopleStore } from "~community/people/store/store";
 import { EditAllInformationFormStatus } from "~community/people/types/EditEmployeeInfoTypes";
+import { handleAddNewResourceSuccess } from "~community/people/utils/directoryUtils/addNewResourceFlowUtils/addNewResourceUtils";
 
 import CareerProgressionDetailsSection from "./CareerProgressionDetailsSection";
 import EmploymentDetailsSection from "./EmploymentDetailsSection";
@@ -53,20 +53,22 @@ const EmploymentDetailsForm = ({
   isSuperAdminEditFlow = false,
   isInputsDisabled = false
 }: Props) => {
-  const router = useRouter();
   const theme: Theme = useTheme();
-  const { resetEmployeeData, employeeDataChanges } = usePeopleStore(
-    (state) => state
-  );
-  const { setToastMessage } = useToast();
+
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
     "commonText"
   );
 
-  const isLeaveModuleAvailable = true;
-  const [employeeSaveSuccessFlag, setEmployeeSaveSuccessFlag] = useState(false);
+  const router = useRouter();
+
+  const { setToastMessage } = useToast();
+
+  const { resetEmployeeData, employeeDataChanges } = usePeopleStore(
+    (state) => state
+  );
+
   const [initialResetFlag, setInitialResetFlag] = useState(false);
 
   const employmentDetailsRef = useRef<{
@@ -105,23 +107,15 @@ const EmploymentDetailsForm = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setEmployeeSaveSuccessFlag(true);
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (employeeSaveSuccessFlag) {
-      setToastMessage({
-        open: true,
-        toastType: ToastType.SUCCESS,
-        title: translateText(["resourceSuccessMessage"])
+      handleAddNewResourceSuccess({
+        setToastMessage,
+        resetEmployeeData,
+        router,
+        translateText
       });
-
-      resetEmployeeData();
-      void router.push(ROUTES.PEOPLE.DIRECTORY);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employeeSaveSuccessFlag, resetEmployeeData]);
+  }, [isSuccess]);
 
   useEffect(() => {
     const resetForms = () => {
@@ -171,9 +165,7 @@ const EmploymentDetailsForm = ({
         height: "auto",
         fontFamily: "Poppins, sans-serif"
       }}
-      dividerStyles={{
-        mt: "0.5rem"
-      }}
+      dividerStyles={{ mt: "0.5rem" }}
       pageHead={translateText(["head"])}
       showDivider={false}
     >
@@ -206,9 +198,8 @@ const EmploymentDetailsForm = ({
                 isUpdate ? translateText(["cancel"]) : translateText(["back"])
               }
               buttonStyle={ButtonStyle.TERTIARY}
-              endIcon={
-                isUpdate ? IconName.CLOSE_ICON : IconName.LEFT_ARROW_ICON
-              }
+              startIcon={isUpdate ? <></> : IconName.LEFT_ARROW_ICON}
+              endIcon={isUpdate ? IconName.CLOSE_ICON : <></>}
               isFullWidth={false}
               onClick={onBack}
               disabled={isSubmitDisabled || isLoading || isInputsDisabled}
@@ -220,15 +211,13 @@ const EmploymentDetailsForm = ({
             />
             <Button
               label={
-                isUpdate || !isLeaveModuleAvailable
+                isUpdate
                   ? translateText(["saveDetails"])
                   : translateText(["next"])
               }
               buttonStyle={ButtonStyle.PRIMARY}
               endIcon={
-                isUpdate || !isLeaveModuleAvailable
-                  ? IconName.SAVE_ICON
-                  : IconName.RIGHT_ARROW_ICON
+                isUpdate ? IconName.SAVE_ICON : IconName.RIGHT_ARROW_ICON
               }
               isFullWidth={false}
               onClick={handleNext}

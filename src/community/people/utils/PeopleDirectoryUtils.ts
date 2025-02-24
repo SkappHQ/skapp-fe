@@ -1,6 +1,7 @@
 import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { FilterButtonTypes } from "~community/common/types/filterTypes";
+import { SystemPermissionInitialStateType } from "~community/people/types/AddNewResourceTypes";
 import {
   EmployeeDetails,
   EmployeeManagerType,
@@ -8,9 +9,7 @@ import {
   TeamResultsType,
   TeamType
 } from "~community/people/types/EmployeeTypes";
-
-import { SystemPermissionInitalStateType } from "../types/AddNewResourceTypes";
-import { AllJobFamilyType } from "../types/JobFamilyTypes";
+import { AllJobFamilyType } from "~community/people/types/JobFamilyTypes";
 
 export const sortSupervisorAvatars = (
   avatars: Array<AvatarPropTypes>
@@ -74,7 +73,7 @@ export function GetFamilyFilterPreProcessor(
 
 export const isDemoteUser = (
   employee: EmployeeDetails | undefined,
-  values: SystemPermissionInitalStateType
+  values: SystemPermissionInitialStateType
 ): boolean => {
   if (!employee || !employee.userRoles) {
     return false;
