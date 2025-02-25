@@ -10,6 +10,10 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import {
+  s3Endpoints,
+  stripeEndpoints
+} from "~enterprise/common/api/utils/ApiEndpoints";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -19,7 +23,9 @@ const commonRoutes = [
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
   ROUTES.NOTIFICATIONS,
-  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
+  s3Endpoints.GET_SIGNED_URL,
+  s3Endpoints.DELETE_FILE
 ];
 
 // Specific role-based routes
@@ -37,7 +43,12 @@ const superAdminRoutes = {
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.SIGN.SENT,
-    ROUTES.SETTINGS.MODULES
+    ROUTES.SETTINGS.MODULES,
+    ROUTES.SETTINGS.PAYMENT,
+    // Next API Routes for Stripe
+    stripeEndpoints.CREATE_SUBSCRIPTION,
+    stripeEndpoints.GET_PRICE_PLANS,
+    stripeEndpoints.VERIFY_PROMOCODE
   ]
 };
 
@@ -196,6 +207,7 @@ export default withAuth(
       return NextResponse.next();
     }
 
+    // Redirect to /unauthorized if no access
     return NextResponse.redirect(
       new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
     );
@@ -207,11 +219,16 @@ export default withAuth(
   }
 );
 
+// Define the matcher patterns for this middleware
 export const config = {
   matcher: [
+    // All community routes
     "/community/:path*",
+    // Super admin routes
     "/setup-organization/:path*",
     "/module-selection",
+    "/payment",
+    // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
     "/settings/:path*",
@@ -222,6 +239,8 @@ export const config = {
     "/verify/email",
     "/verify/success",
     "/verify/account-reset-password",
+    "/api/:path*", // API routes
+    // Module routes
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",

@@ -28,6 +28,7 @@ import ContentLayout from "~community/common/components/templates/ContentLayout/
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
+import { AnalyticsTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   getCurrentMonth,
@@ -102,10 +103,10 @@ const TeamTimeSheetAnalytics: NextPage = () => {
 
   const steps = [
     ...(isLeaveManager
-      ? [{ id: "leaveAnalytics", label: translateText(["stepLeave"]) }]
+      ? [{ id: AnalyticsTypes.LEAVE, label: translateText(["stepLeave"]) }]
       : []),
     ...(isAttendanceManager
-      ? [{ id: "timeSheetAnalytics", label: translateText(["stepTimeSheet"]) }]
+      ? [{ id: AnalyticsTypes.TIME, label: translateText(["stepTimeSheet"]) }]
       : [])
   ];
 
@@ -115,9 +116,9 @@ const TeamTimeSheetAnalytics: NextPage = () => {
 
   const getComponent = useCallback(() => {
     switch (activeStep) {
-      case "leaveAnalytics":
+      case AnalyticsTypes.LEAVE:
         return <TeamLeaveAnalyticsContent teamId={teamId as number} />;
-      case "timeSheetAnalytics":
+      case AnalyticsTypes.TIME:
         return (
           <>
             <Grid container spacing={1}>
@@ -204,15 +205,17 @@ const TeamTimeSheetAnalytics: NextPage = () => {
       isBackButtonVisible
       isDividerVisible={false}
       customRightContent={
-        <Button
-          buttonStyle={ButtonStyle.TERTIARY}
-          label={translateText(["viewFullReport"])}
-          endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
-          onClick={() => {
-            setReportsParams("teamId", teamId);
-            router.push("/leave/analytics/reports");
-          }}
-        />
+        activeStep === AnalyticsTypes.LEAVE ? (
+          <Button
+            buttonStyle={ButtonStyle.TERTIARY}
+            label={translateText(["viewFullReport"])}
+            endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
+            onClick={() => {
+              setReportsParams("teamId", teamId);
+              router.push("/leave/analytics/reports");
+            }}
+          />
+        ) : undefined
       }
     >
       <>

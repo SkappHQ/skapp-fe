@@ -125,6 +125,7 @@ const EditAllInformation: NextPage = () => {
     employeeDataChanges,
     userRoles,
     setEmployeeGeneralDetails,
+    setEmployeeEmploymentDetails,
     resetEmployeeDataChanges,
     setIsReinviteConfirmationModalOpen,
     isReinviteConfirmationModalOpen
@@ -649,7 +650,10 @@ const EditAllInformation: NextPage = () => {
         </Stack>
       </ContentLayout>
       <ReinviteConfirmationModal
-        onClose={() => setIsReinviteConfirmationModalOpen(false)}
+        onCancel={() => {
+          setIsReinviteConfirmationModalOpen(false);
+          setEmployeeEmploymentDetails("workEmail", employee?.email);
+        }}
         onClick={handleSave}
         title={translateText([
           "peoples",

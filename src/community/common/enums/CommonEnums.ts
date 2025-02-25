@@ -17,6 +17,7 @@ export enum Modules {
   LEAVE = "LEAVE",
   ATTENDANCE = "ATTENDANCE",
   PEOPLE = "PEOPLE",
+  ESIGNATURE = "ESIGNATURE",
   NONE = ""
 }
 

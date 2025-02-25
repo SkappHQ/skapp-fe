@@ -1,5 +1,7 @@
 import { DateTime } from "luxon";
 
+import { daysTypes } from "~community/common/constants/stringConstants";
+
 export interface TimesheetEmployeeType {
   employeeId: number;
   firstName: string;
@@ -116,23 +118,42 @@ export interface TimeSlotsType {
   timeSlotId?: string;
 }
 
-export interface DailyLogType {
-  timeRecordId: number | null;
-  date: string;
-  workedHours: number;
-  timeSlots: TimeSlotsType[];
-  leaveRequest?: {
-    leaveState: string;
-    leaveType: {
-      emojiCode: string;
-      name: string;
-    };
-  };
-  holiday?: {
+export interface LeaveRequestType {
+  leaveRequestId: number;
+  startDate: string;
+  endDate: string;
+  leaveType: {
+    typeId: number;
     name: string;
-    holidayDuration: string;
+    leaveDuration: string;
+    emojiCode: string;
+    colorCode: string;
+    isCommentMandatory: boolean;
+    isAttachmentMandatory: boolean;
+    isAttachment: boolean;
   };
-  breakHours?: number;
+  leaveState: string;
+  status: string;
+  isViewed: boolean;
+  durationDays: number;
+  requestDesc: string;
+  createdDate: string;
+}
+
+export interface HolidayType {
+  name: string;
+  holidayDuration: string;
+}
+
+export interface DailyLogType {
+  timeRecordId: number;
+  date: string;
+  day: daysTypes;
+  workedHours: number;
+  breakHours: number;
+  timeSlots: TimeSlotsType[];
+  leaveRequest: LeaveRequestType | null;
+  holiday: HolidayType | null;
 }
 
 export interface TimeAvailabilityType {

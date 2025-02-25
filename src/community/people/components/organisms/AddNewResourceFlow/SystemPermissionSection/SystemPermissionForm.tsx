@@ -21,7 +21,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
-import useModuleChecker from "~community/common/hooks/useModuleChecker";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -98,8 +98,7 @@ const SystemPermissionForm = ({
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
 
-  const { isAttendanceModuleEnabled, isLeaveModuleEnabled } =
-    useModuleChecker();
+  const { isAttendanceModuleEnabled, isLeaveModuleEnabled } = useSessionData();
 
   const { setToastMessage } = useToast();
 

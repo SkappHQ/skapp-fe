@@ -29,6 +29,12 @@ declare module "@mui/material/styles" {
       chipText: string;
       chipDark: string;
       text: string;
+      100: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
     };
     trendChart: {
       available: string;
@@ -63,6 +69,9 @@ declare module "@mui/material/styles" {
     };
     customGrey: {
       customGreyWithAlpha: string;
+      lightShadowGrey: string;
+      midDarkGrey: string;
+      darkGrey: string;
     };
     graphColors: {
       green: string;
@@ -108,6 +117,12 @@ declare module "@mui/material/styles" {
       chipText: string;
       chipDark: string;
       text: string;
+      100: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
     };
     trendChart: {
       available: string;
@@ -142,6 +157,9 @@ declare module "@mui/material/styles" {
     };
     customGrey: {
       customGreyWithAlpha: string;
+      lightShadowGrey: string;
+      midDarkGrey: string;
+      darkGrey: string;
     };
     graphColors: {
       green: string;
@@ -291,7 +309,13 @@ export const theme = createTheme({
       main: "#EEA92E",
       chipText: "#78350F",
       chipDark: "#FCD34D",
-      text: "#92400E"
+      text: "#92400E",
+      100: "#FEF9C3",
+      200: "#FBBF24",
+      300: "#FFC107",
+      400: "#EAB308",
+      500: "#CA8A04",
+      600: "#854D0E"
     },
     trendChart: {
       available: "#15803D",
@@ -325,7 +349,10 @@ export const theme = createTheme({
       area: "#f9787b75"
     },
     customGrey: {
-      customGreyWithAlpha: "rgba(0,0,0,0.01)"
+      customGreyWithAlpha: "rgba(0,0,0,0.01)",
+      lightShadowGrey: "#0900410D",
+      midDarkGrey: "#3D3D3D",
+      darkGrey: "#18212C"
     },
     graphColors: {
       green: "#4CC0C0",
