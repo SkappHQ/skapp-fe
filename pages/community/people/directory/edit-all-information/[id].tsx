@@ -519,7 +519,6 @@ const EditAllInformation: NextPage = () => {
             onSave={handleSave}
             isLoading={false}
             isUpdate
-            isSuccess={isEditingEmployeeSuccess}
             employee={employee}
             isInputsDisabled={isInputsDisabled}
             isSubmitDisabled={!isValuesChanged()}
