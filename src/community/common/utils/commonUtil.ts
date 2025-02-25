@@ -148,7 +148,9 @@ export const isObjectEmpty = (obj: any): boolean => {
   return true;
 };
 
-const parseHexToRgb = (hex: string): { r: number; g: number; b: number } => {
+export const parseHexToRgb = (
+  hex: string
+): { r: number; g: number; b: number } => {
   hex = hex.replace(/^#/, "");
 
   if (![3, 6].includes(hex.length)) {
