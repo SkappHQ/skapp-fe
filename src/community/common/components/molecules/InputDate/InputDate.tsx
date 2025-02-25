@@ -102,7 +102,7 @@ const InputDate: FC<Props> = ({
   myLeaveRequests
 }) => {
   const theme: Theme = useTheme();
-  const classes = styles();
+  const classes = styles(theme);
 
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     holidayType[]
@@ -184,42 +184,12 @@ const InputDate: FC<Props> = ({
 
     if (appliedLeave) {
       if (appliedLeave.leaveStates === LeaveState.FULL_DAY) {
-        backgroundStyle = {
-          border: `0.125rem solid ${theme.palette.error.contrastText}`
-        };
+        backgroundStyle = { ...classes.fullDayLeave };
       } else if (appliedLeave.leaveStates === LeaveState.HALF_DAY_MORNING) {
-        backgroundStyle = {
-          position: "relative",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            borderLeft: `0.125rem solid ${theme.palette.error.contrastText}`,
-            borderTop: `0.125rem solid ${theme.palette.error.contrastText}`,
-            borderBottom: `0.125rem solid ${theme.palette.error.contrastText}`,
-            borderRadius: "50%",
-            clipPath: "polygon(0 0, 50% 0, 50% 100%, 0% 100%)"
-          }
-        };
+        backgroundStyle = { ...classes.halfDayMorningLeave };
       } else if (appliedLeave.leaveStates === LeaveState.HALF_DAY_EVENING) {
         backgroundStyle = {
-          position: "relative",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            borderRight: `0.125rem solid ${theme.palette.error.contrastText}`,
-            borderTop: `0.125rem solid ${theme.palette.error.contrastText}`,
-            borderBottom: `0.125rem solid ${theme.palette.error.contrastText}`,
-            borderRadius: "50%",
-            clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)"
-          }
+          ...classes.halfDayEveningLeave
         };
       }
     }
