@@ -72,7 +72,7 @@ const AddNewResourceFlow = () => {
       translateText(["entitlements"])
     ];
 
-    if (isLeaveModuleEnabled) {
+    if (!isLeaveModuleEnabled) {
       steps = steps.filter((step) => step !== translateText(["entitlements"]));
     }
 
