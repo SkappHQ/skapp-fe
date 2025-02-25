@@ -10,10 +10,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import {
-  s3Endpoints,
-  stripeEndpoints
-} from "~enterprise/common/api/utils/ApiEndpoints";
+import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -44,11 +41,7 @@ const superAdminRoutes = {
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.SIGN.SENT,
     ROUTES.SETTINGS.MODULES,
-    ROUTES.SETTINGS.PAYMENT,
-    // Next API Routes for Stripe
-    stripeEndpoints.CREATE_SUBSCRIPTION,
-    stripeEndpoints.GET_PRICE_PLANS,
-    stripeEndpoints.VERIFY_PROMOCODE
+    ROUTES.SETTINGS.PAYMENT
   ]
 };
 
@@ -239,7 +232,7 @@ export const config = {
     "/verify/email",
     "/verify/success",
     "/verify/account-reset-password",
-    "/api/:path*", // API routes
+    // "/api/:path*", // API routes
     // Module routes
     "/leave/:path*",
     "/people/:path*",
