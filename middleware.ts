@@ -187,6 +187,16 @@ export default withAuth(
           new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
         );
       }
+
+      if (
+        request.nextUrl.pathname.startsWith(ROUTES.SETTINGS.INTEGRATIONS) &&
+        token?.tier !== "PRO"
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
+
       return NextResponse.next();
     }
 

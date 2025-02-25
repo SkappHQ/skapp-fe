@@ -6,7 +6,7 @@ import { JSX, MouseEvent, useEffect, useState } from "react";
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import Button from "~community/common/components/atoms/Button/Button";
-import SASortRow from "~community/common/components/atoms/SASortRow/SASortRow";
+import SortRow from "~community/common/components/atoms/SASortRow/SASortRow";
 import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -207,13 +207,13 @@ const MultiTeamSelector = ({
         }}
       >
         <Box sx={{ backgroundColor: "common.white" }}>
-          <SASortRow
+          <SortRow
             text={translateTexts(["allLabel"])}
             selected={selectedOptionIds.length === 0}
             onClick={() => toggleSelectOption(0)}
           />
           {teamsData?.map((item) => (
-            <SASortRow
+            <SortRow
               key={item?.teamId}
               text={item?.teamName}
               selected={selectedOptionIds.includes(item?.teamId as number)}

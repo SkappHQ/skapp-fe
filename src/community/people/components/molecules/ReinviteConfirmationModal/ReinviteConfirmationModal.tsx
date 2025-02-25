@@ -9,14 +9,14 @@ import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
 
 interface ReinviteConfirmationModalProps {
-  onClose: () => void;
+  onCancel: () => void;
   onClick: () => void;
   title: string;
   description: string;
 }
 
 const ReinviteConfirmationModal: React.FC<ReinviteConfirmationModalProps> = ({
-  onClose,
+  onCancel,
   onClick,
   title,
   description
@@ -27,7 +27,7 @@ const ReinviteConfirmationModal: React.FC<ReinviteConfirmationModalProps> = ({
   return (
     <Modal
       isModalOpen={isReinviteConfirmationModalOpen}
-      onCloseModal={onClose}
+      onCloseModal={onCancel}
       title={title}
       isClosable={false}
     >
@@ -47,7 +47,7 @@ const ReinviteConfirmationModal: React.FC<ReinviteConfirmationModalProps> = ({
             label: translateText(["confirmAndInviteCancelButtonTitle"]),
             buttonStyle: ButtonStyle.TERTIARY,
             endIcon: IconName.CLOSE_ICON,
-            onClick: onClose
+            onClick: onCancel
           }}
         />
       </Stack>
