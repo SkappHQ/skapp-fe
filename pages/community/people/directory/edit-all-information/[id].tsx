@@ -125,6 +125,7 @@ const EditAllInformation: NextPage = () => {
     employeeDataChanges,
     userRoles,
     setEmployeeGeneralDetails,
+    setEmployeeEmploymentDetails,
     resetEmployeeDataChanges,
     setIsReinviteConfirmationModalOpen,
     isReinviteConfirmationModalOpen
@@ -439,8 +440,7 @@ const EditAllInformation: NextPage = () => {
   };
 
   const isInputsDisabled =
-    employee?.employmentStatus ===
-      AccountStatusEnums.TERMINATED.toUpperCase() ||
+    employee?.accountStatus === AccountStatusEnums.TERMINATED.toUpperCase() ||
     (!isPeopleAdmin && !isPeopleManagerMe);
 
   const getComponent = useCallback(() => {
@@ -519,9 +519,9 @@ const EditAllInformation: NextPage = () => {
             onSave={handleSave}
             isLoading={false}
             isUpdate
-            isSuccess={isSuccess}
             employee={employee}
             isInputsDisabled={isInputsDisabled}
+            isSubmitDisabled={!isValuesChanged()}
           />
         );
       case EditAllInformationType.timeline:
@@ -650,7 +650,10 @@ const EditAllInformation: NextPage = () => {
         </Stack>
       </ContentLayout>
       <ReinviteConfirmationModal
-        onClose={() => setIsReinviteConfirmationModalOpen(false)}
+        onCancel={() => {
+          setIsReinviteConfirmationModalOpen(false);
+          setEmployeeEmploymentDetails("workEmail", employee?.email);
+        }}
         onClick={handleSave}
         title={translateText([
           "peoples",

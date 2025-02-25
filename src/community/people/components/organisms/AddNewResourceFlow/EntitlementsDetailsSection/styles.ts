@@ -40,9 +40,9 @@ const styles = () => ({
     color: "common.black"
   },
   buttonWrapper: {
-    direction: "row",
+    flexDirection: "row",
     justifyContent: "flex-start",
-    spacing: 2,
+    gap: "1rem",
     padding: "1rem 0rem"
   }
 });

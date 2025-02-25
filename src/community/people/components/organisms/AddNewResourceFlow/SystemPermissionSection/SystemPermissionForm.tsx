@@ -59,7 +59,7 @@ interface Props {
   onSave: () => void;
   onBack: () => void;
   isLoading: boolean;
-  isSuccess: boolean;
+  isSuccess?: boolean;
   isUpdate?: boolean;
   isSubmitDisabled?: boolean;
   isProfileView?: boolean;
@@ -336,7 +336,7 @@ const SystemPermissionForm = ({
           {isEsignatureModuleAvailable && (
             <DropdownList
               inputName={"eSignRole"}
-              label="event-signature"
+              label="e-signature"
               itemList={grantablePermission?.esign || []}
               value={values.esignRole}
               componentStyle={classes.dropdownListComponentStyles}
@@ -366,9 +366,8 @@ const SystemPermissionForm = ({
               buttonStyle={ButtonStyle.TERTIARY}
               size={ButtonSizes.LARGE}
               label={isUpdate ? commonText(["cancel"]) : commonText(["back"])}
-              endIcon={
-                isUpdate ? IconName.CLOSE_ICON : IconName.LEFT_ARROW_ICON
-              }
+              startIcon={isUpdate ? <></> : IconName.LEFT_ARROW_ICON}
+              endIcon={isUpdate ? IconName.CLOSE_ICON : <></>}
               onClick={onBack}
               dataTestId={
                 isUpdate
