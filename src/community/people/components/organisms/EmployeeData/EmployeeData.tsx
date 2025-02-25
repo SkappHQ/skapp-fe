@@ -3,9 +3,14 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import Button from "~community/common/components/atoms/Button/Button";
 import SearchBox from "~community/common/components/molecules/SearchBox/SearchBox";
 import ROUTES from "~community/common/constants/routes";
 import { peopleDirectoryTestId } from "~community/common/constants/testIds";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -21,8 +26,13 @@ import {
   EmployeeDataType,
   EmploymentStatusTypes
 } from "~community/people/types/EmployeeTypes";
+import RemovePeopleCountBanner from "~enterprise/settings/components/molecules/RemovePeopleCountBanner/RemovePeopleCountBanner";
 
-const EmployeeData = () => {
+interface EmployeeDataProps {
+  isRemovePeople?: boolean;
+}
+
+const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   const translateText = useTranslator("peopleModule", "peoples");
   const router = useRouter();
   const { data } = useSession();
@@ -117,6 +127,33 @@ const EmployeeData = () => {
         <Box sx={{ height: "1.5rem" }} />
       )}
 
+      {isRemovePeople && (
+        <>
+          <Stack direction="row" gap={1} justifyContent="flex-start">
+            <Button
+              label={"Active"}
+              isFullWidth={false}
+              buttonStyle={ButtonStyle.TERTIARY}
+              size={ButtonSizes.MEDIUM}
+            />
+            <Button
+              label={"Pending"}
+              isFullWidth={false}
+              buttonStyle={ButtonStyle.SECONDARY}
+              size={ButtonSizes.MEDIUM}
+            />
+          </Stack>
+
+          <RemovePeopleCountBanner
+            startingIcon={IconName.REMOVE_PEOPLE_ICON}
+            count={bannerData}
+            title={"x"}
+            titleForOne={"y"}
+            prompt={"z"}
+          />
+        </>
+      )}
+
       <PeopleTable
         employeeData={employeeDataItems}
         fetchNextPage={fetchNextPage}
@@ -124,6 +161,7 @@ const EmployeeData = () => {
         isFetchingNextPage={isFetchingNextPage}
         onSearch={searchTerm?.length > 0}
         hasNextPage={hasNextPage}
+        isRemovePeople={isRemovePeople}
       />
     </Stack>
   );

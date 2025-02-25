@@ -87,7 +87,8 @@ const ROUTES = {
     FOLDERS: "/sign/folders",
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create"
-  }
+  },
+  REMOVE_PEOPLE: "/remove-people"
 };
 
 export default ROUTES;

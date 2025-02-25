@@ -45,6 +45,7 @@ const superAdminRoutes = {
     ROUTES.SIGN.SENT,
     ROUTES.SETTINGS.MODULES,
     ROUTES.SETTINGS.PAYMENT,
+    ROUTES.REMOVE_PEOPLE,
     // Next API Routes for Stripe
     stripeEndpoints.CREATE_SUBSCRIPTION,
     stripeEndpoints.GET_PRICE_PLANS,
@@ -244,6 +245,7 @@ export const config = {
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/sign/:path*"
+    "/sign/:path*",
+    "/remove-people"
   ]
 };

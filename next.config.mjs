@@ -259,6 +259,10 @@ const nextConfig = {
       {
         source: "/payment",
         destination: "/enterprise/payment"
+      },
+      {
+        source: "/remove-people",
+        destination: "/enterprise/remove-people"
       }
     ];
   },

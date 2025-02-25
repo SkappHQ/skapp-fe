@@ -57,6 +57,7 @@ interface Props {
   isFetchingNextPage?: boolean;
   onSearch: boolean;
   hasNextPage?: boolean;
+  isRemovePeople?: boolean;
 }
 
 const PeopleTable: FC<Props> = ({
@@ -65,7 +66,8 @@ const PeopleTable: FC<Props> = ({
   isFetching,
   isFetchingNextPage,
   onSearch,
-  hasNextPage
+  hasNextPage,
+  isRemovePeople = false
 }) => {
   const theme: Theme = useTheme();
   const { data } = useSession();
@@ -433,7 +435,7 @@ const PeopleTable: FC<Props> = ({
           }}
           selectedRows={selectedPeople}
           actionRowOneLeftButton={
-            isPeopleManagerOrSuperAdmin ? (
+            isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
               <PeopleTableSortBy
                 sortEl={sortEl}
                 handleSortClose={handleSortClose}
@@ -446,7 +448,9 @@ const PeopleTable: FC<Props> = ({
               />
             ) : undefined
           }
-          isCheckboxSelectionEnabled={isPendingInvitationListOpen}
+          isCheckboxSelectionEnabled={
+            isPendingInvitationListOpen || isRemovePeople
+          }
           isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
           handleAllRowsCheck={handleAllCheckBoxClick}
           handleRowCheck={handleCheckBoxClick}
@@ -463,7 +467,7 @@ const PeopleTable: FC<Props> = ({
                 isStrokeAvailable={true}
                 disabled={selectedPeople.length === 0}
               />
-            ) : isPeopleManagerOrSuperAdmin ? (
+            ) : isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
               <PeopleTableFilterBy
                 filterEl={filterEl}
                 handleFilterClose={handleFilterClose}
