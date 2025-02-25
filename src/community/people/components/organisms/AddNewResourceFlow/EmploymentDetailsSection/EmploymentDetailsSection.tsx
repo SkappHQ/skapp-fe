@@ -38,7 +38,6 @@ import {
   useCheckEmailAndIdentificationNo,
   useGetSearchedEmployees
 } from "~community/people/api/PeopleApi";
-import useGetEmployee from "~community/people/hooks/useGetEmployee";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   EmployeeEmploymentDetailsFormTypes,
@@ -47,7 +46,6 @@ import {
 } from "~community/people/types/AddNewResourceTypes";
 import {
   EmployeeDataType,
-  EmployeeDetails,
   EmployeeEmploymentContextType,
   EmploymentStatusTypes
 } from "~community/people/types/EmployeeTypes";
@@ -98,7 +96,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     const {
       projectTeamNames,
       employeeEmploymentDetails,
-      employeeProfileDetails,
       setEmployeeEmploymentDetails,
       setTeamModalType,
       setIsTeamModalOpen,
@@ -145,12 +142,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       secondaryManagerSearchTerm || "",
       SystemPermissionTypes.MANAGERS
     );
-
-    const {
-      employee
-    }: {
-      employee: EmployeeDetails | undefined;
-    } = useGetEmployee({ id: Number(id) });
 
     const workTimeZoneDictionary: Record<string, string> = timeZonesList.reduce<
       Record<string, string>
@@ -214,7 +205,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       isUniqueEmail,
       isUniqueEmployeeNo,
       isUpdate:
-        employeeEmploymentDetails.workEmail !== employee?.email
+        initialValues?.workEmail !== employeeEmploymentDetails?.workEmail
           ? false
           : isUpdate
     };

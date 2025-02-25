@@ -10,10 +10,7 @@ import {
   SenderRoleTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import {
-  s3Endpoints,
-  stripeEndpoints
-} from "~enterprise/common/api/utils/ApiEndpoints";
+import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
 
 // Define common routes shared by all roles
 const commonRoutes = [
