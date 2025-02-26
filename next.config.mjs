@@ -263,6 +263,10 @@ const nextConfig = {
       {
         source: "/remove-people",
         destination: "/enterprise/remove-people"
+      },
+      {
+        source: "/change-supervisors",
+        destination: "/enterprise/change-supervisors"
       }
     ];
   },

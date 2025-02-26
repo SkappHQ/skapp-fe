@@ -58,6 +58,8 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
 
   const {
     isPendingInvitationListOpen,
+    selectedEmployees,
+    employeeDataParams,
     setSearchKeyword,
     setEmployeeDataParams,
     resetEmployeeDataParams
@@ -112,6 +114,7 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
         data-testid={peopleDirectoryTestId.searchInput}
       />
       {bannerData &&
+      !isRemovePeople &&
       bannerData > 0 &&
       !isPendingInvitationListOpen &&
       isPeopleManagerOrSuperAdmin ? (
@@ -133,23 +136,42 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
             <Button
               label={"Active"}
               isFullWidth={false}
-              buttonStyle={ButtonStyle.TERTIARY}
+              buttonStyle={
+                employeeDataParams?.accountStatus?.includes(
+                  EmploymentStatusTypes.ACTIVE
+                )
+                  ? ButtonStyle.SECONDARY
+                  : ButtonStyle.TERTIARY
+              }
               size={ButtonSizes.MEDIUM}
+              onClick={() =>
+                setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
+                  EmploymentStatusTypes.ACTIVE
+                ])
+              }
             />
             <Button
               label={"Pending"}
               isFullWidth={false}
-              buttonStyle={ButtonStyle.SECONDARY}
+              buttonStyle={
+                employeeDataParams?.accountStatus?.includes(
+                  EmploymentStatusTypes.PENDING
+                )
+                  ? ButtonStyle.SECONDARY
+                  : ButtonStyle.TERTIARY
+              }
               size={ButtonSizes.MEDIUM}
+              onClick={() =>
+                setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
+                  EmploymentStatusTypes.PENDING
+                ])
+              }
             />
           </Stack>
 
           <RemovePeopleCountBanner
             startingIcon={IconName.REMOVE_PEOPLE_ICON}
-            count={bannerData}
-            title={"x"}
-            titleForOne={"y"}
-            prompt={"z"}
+            selectedCount={selectedEmployees.length}
           />
         </>
       )}

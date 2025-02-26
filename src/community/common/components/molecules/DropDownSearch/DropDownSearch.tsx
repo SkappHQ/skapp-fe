@@ -189,6 +189,7 @@ const DropdownSearch: FC<Props> = ({
           },
           ...selectStyles
         }}
+        menuPortalTarget={document.body}
         components={{ DropdownIndicator, Menu }}
         onChange={handleChange}
         name={inputName}

@@ -42,11 +42,7 @@ const superAdminRoutes = {
     ROUTES.SIGN.SENT,
     ROUTES.SETTINGS.MODULES,
     ROUTES.SETTINGS.PAYMENT,
-    ROUTES.REMOVE_PEOPLE,
-    // Next API Routes for Stripe
-    stripeEndpoints.CREATE_SUBSCRIPTION,
-    stripeEndpoints.GET_PRICE_PLANS,
-    stripeEndpoints.VERIFY_PROMOCODE
+    ROUTES.REMOVE_PEOPLE
   ]
 };
 
