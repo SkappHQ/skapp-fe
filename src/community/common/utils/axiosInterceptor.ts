@@ -1,7 +1,13 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { getSession, signOut } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 
-import { COMMON_ERROR_TOKEN_EXPIRED } from "../constants/errorMessageKeys";
+import {
+  COMMON_ERROR_INVALID_TOKEN,
+  COMMON_ERROR_SYSTEM_VERSION_MISMATCH,
+  COMMON_ERROR_TOKEN_EXPIRED,
+  COMMON_ERROR_USER_VERSION_MISMATCH
+} from "../constants/errorMessageKeys";
+import { decodeJWTToken } from "./authUtils";
 import { getApiUrl } from "./getConstants";
 
 const getSubDomain = (url: string, multipleValues: boolean = false) => {
@@ -47,11 +53,48 @@ authFetch.interceptors.response.use(
   },
 
   async (error) => {
+    const session = await getSession();
     if (
-      error.response.data.results[0].messageKey === COMMON_ERROR_TOKEN_EXPIRED
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_TOKEN_EXPIRED ||
+      error.response.data.results[0].messageKey === COMMON_ERROR_INVALID_TOKEN
     ) {
       await signOut();
     }
+
+    if (
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_INVALID_TOKEN ||
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_TOKEN_EXPIRED ||
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_USER_VERSION_MISMATCH
+    ) {
+      try {
+        const res = await authFetch.post("/auth/refresh-token", {
+          refreshToken: session?.user?.refreshToken
+        });
+
+        const accessToken = res?.data?.results[0]?.accessToken;
+
+        const result = await signIn("credentials", {
+          redirect: false,
+          email: "",
+          password: "",
+          accessToken,
+          refreshToken: session?.user?.refreshToken
+        });
+
+        if (result?.error) {
+          signOut();
+        }
+      } catch (error) {
+        signOut();
+      }
+    }
+
     return await Promise.reject(error);
   }
 );
