@@ -26,6 +26,7 @@ interface Props {
   icon?: JSX.Element;
   modalContentStyles?: SxProps;
   modalWrapperStyles?: SxProps;
+  customCloseComponent?: JSX.Element;
   customCloseIcon?: JSX.Element;
   modalHeaderStyles?: SxProps;
   modalChildrenStyles?: SxProps;
@@ -42,6 +43,7 @@ const Modal: FC<Props> = ({
   icon,
   modalContentStyles,
   modalWrapperStyles,
+  customCloseComponent,
   customCloseIcon,
   modalHeaderStyles,
   modalChildrenStyles
@@ -60,7 +62,9 @@ const Modal: FC<Props> = ({
             {isIconVisible && <Box sx={classes.titleIcon}>{icon}</Box>}
             <Typography sx={classes.modalHeaderTitle}>{title}</Typography>
           </Stack>
-          {isClosable && (
+          {isClosable && customCloseComponent ? (
+            customCloseComponent
+          ) : (
             <IconButton
               sx={classes.closeIconBtn}
               onClick={(event) => onCloseModal(event, "backdropClick")}
@@ -75,13 +79,15 @@ const Modal: FC<Props> = ({
         </Stack>
         {isDividerVisible && <Divider />}
         <Stack
-          sx={{
-            ...classes.childrenWrapper,
-            "::-webkit-scrollbar": {
-              display: "none"
+          sx={mergeSx([
+            classes.childrenWrapper,
+            {
+              "::-webkit-scrollbar": {
+                display: "none"
+              }
             },
-            ...modalChildrenStyles
-          }}
+            modalChildrenStyles
+          ])}
         >
           {children}
         </Stack>
