@@ -232,7 +232,7 @@ export const config = {
     "/verify/email",
     "/verify/success",
     "/verify/account-reset-password",
-    "/api/:path*", // API routes
+    // "/api/:path*", // API routes
     // Module routes
     "/leave/:path*",
     "/people/:path*",
