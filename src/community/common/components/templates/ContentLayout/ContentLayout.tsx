@@ -36,6 +36,7 @@ import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
+import QuickSetupFloatingButton from "~enterprise/quickSetup/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
@@ -229,6 +230,7 @@ const ContentLayout = ({
           </Stack>
         )}
         {children}
+        <QuickSetupFloatingButton setupPercentage={50} />
       </Stack>
     </>
   );
