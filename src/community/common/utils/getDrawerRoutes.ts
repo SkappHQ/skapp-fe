@@ -16,7 +16,7 @@ type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 const getDrawerRoutes = (
   userRoles: Role[] | undefined,
   tier: string,
-  isEnterprise: boolean,
+  isEnterprise: boolean
 ) => {
   const allRoutes = isEnterprise ? enterpriseRoutes : routes;
   const userSpecificRoutes = allRoutes
@@ -150,16 +150,7 @@ const getDrawerRoutes = (
       }
 
       if (route.name === "Settings") {
-        const isEmployee = userRoles?.every((role) =>
-          Object.values(EmployeeTypes).includes(role as EmployeeTypes)
-        );
-
         const isSuperAdmin = userRoles?.includes(AdminTypes.SUPER_ADMIN);
-
-
-        if (isEmployee) {
-          return null;
-        }
 
         if (isSuperAdmin) {
           const subRoutes = route.subTree?.filter((subRoute) => {
