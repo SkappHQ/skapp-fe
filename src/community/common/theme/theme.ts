@@ -228,7 +228,7 @@ declare module "@mui/material/Typography" {
     h3: true;
     h4: true;
     h5: true;
-    h6: false;
+    h6: true;
     subtitle1: false;
     subtitle2: false;
     body1: true;
@@ -399,7 +399,10 @@ export const theme = createTheme({
       fontWeight: 600,
       fontSize: "0.875rem" // 14px
     },
-    h6: undefined,
+    h6: {
+      fontWeight: 600,
+      fontSize: "2rem" // 32px
+    },
     subtitle1: undefined,
     subtitle2: undefined,
     // Nav heading, Table filter chip, Modal content, Button large, Paragraph, Toggle label
