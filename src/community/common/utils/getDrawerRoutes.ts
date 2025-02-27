@@ -224,27 +224,25 @@ const getDrawerRoutes = (
       }
 
       if (route.name === "Sign") {
-        const isFeatureEnabled =
-          process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-        if (isFeatureEnabled) {
-          const isEsignEmployeeWithoutManagerOrAdminRole = userRoles?.some(
-            (role) =>
-              [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
-                role as AdminTypes | SenderRoleTypes
-              )
-          );
-
-          if (!isEsignEmployeeWithoutManagerOrAdminRole) {
-            return {
-              id: route.id,
-              name: route.name,
-              url: ROUTES.SIGN.INBOX,
-              icon: route.icon,
-              hasSubTree: false
-            };
-          }
-        } else {
+        if (!userRoles?.includes(EmployeeTypes.ESIGN_EMPLOYEE)) {
           return null;
+        }
+
+        const isEsignEmployeeWithoutManagerOrAdminRole = userRoles?.some(
+          (role) =>
+            [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
+              role as AdminTypes | SenderRoleTypes
+            )
+        );
+
+        if (!isEsignEmployeeWithoutManagerOrAdminRole) {
+          return {
+            id: route.id,
+            name: route.name,
+            url: ROUTES.SIGN.INBOX,
+            icon: route.icon,
+            hasSubTree: false
+          };
         }
       }
 
