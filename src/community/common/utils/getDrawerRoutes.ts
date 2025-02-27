@@ -17,7 +17,6 @@ const getDrawerRoutes = (
   userRoles: Role[] | undefined,
   tier: string,
   isEnterprise: boolean,
-  globalLoginMethod?: string
 ) => {
   const allRoutes = isEnterprise ? enterpriseRoutes : routes;
   const userSpecificRoutes = allRoutes
@@ -157,9 +156,8 @@ const getDrawerRoutes = (
 
         const isSuperAdmin = userRoles?.includes(AdminTypes.SUPER_ADMIN);
 
-        const isGoogle = globalLoginMethod === "GOOGLE";
 
-        if (isEmployee && isGoogle) {
+        if (isEmployee) {
           return null;
         }
 
