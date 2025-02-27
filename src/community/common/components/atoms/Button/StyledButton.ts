@@ -45,7 +45,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return theme.palette.primary.main;
       case ButtonStyle.SECONDARY:
         return theme.palette.secondary.main;
-      case ButtonStyle.BLUE:
+      case ButtonStyle.BLUE_OUTLINED:
         return BrandingBlueColor.secondary.main;
       case ButtonStyle.TERTIARY:
       case ButtonStyle.TERTIARY_OUTLINED:
@@ -63,7 +63,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return `0.125rem solid ${theme.palette.secondary.dark}`;
       case ButtonStyle.SECONDARY:
         return `0.125rem solid ${theme.palette.secondary.dark}`;
-      case ButtonStyle.BLUE:
+      case ButtonStyle.BLUE_OUTLINED:
         return `0.125rem solid ${BrandingBlueColor.secondary.dark}`;
       case ButtonStyle.TERTIARY:
       case ButtonStyle.TERTIARY_OUTLINED:
@@ -81,7 +81,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return theme.palette.primary.dark;
       case ButtonStyle.SECONDARY:
         return theme.palette.secondary.dark;
-      case ButtonStyle.BLUE:
+      case ButtonStyle.BLUE_OUTLINED:
         return BrandingBlueColor.secondary.dark;
       case ButtonStyle.TERTIARY:
       case ButtonStyle.TERTIARY_OUTLINED:
@@ -101,7 +101,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return "none";
       case ButtonStyle.SECONDARY:
         return `0.0625rem solid ${theme.palette.secondary.dark}`;
-      case ButtonStyle.BLUE:
+      case ButtonStyle.BLUE_OUTLINED:
         return `0.0625rem solid ${BrandingBlueColor.secondary.dark}`;
       case ButtonStyle.TERTIARY_OUTLINED:
         return `0.0625rem solid ${theme.palette.grey[500]}`;

@@ -96,7 +96,7 @@ const Button = ({
         return theme.palette.common.black;
       case ButtonStyle.SECONDARY:
         return theme.palette.primary.dark;
-      case ButtonStyle.BLUE:
+      case ButtonStyle.BLUE_OUTLINED:
         return BrandingBlueColor.primary.dark;
       case ButtonStyle.ERROR:
         return theme.palette.text.error;
