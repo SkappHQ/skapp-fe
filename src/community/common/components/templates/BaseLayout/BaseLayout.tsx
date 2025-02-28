@@ -20,6 +20,7 @@ import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
+import QuickSetupModalController from "~enterprise/quickSetup/components/organisms/QuickSetupModalController/QuickSetupModalController";
 
 import styles from "./styles";
 
@@ -98,6 +99,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
         />
         <TimeWidgetPopupController />
         <MyRequestModalController />
+        <QuickSetupModalController />
       </>
     );
   }
