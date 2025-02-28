@@ -258,11 +258,11 @@ const nextConfig = {
       },
       {
         source: "/settings/remove-people",
-        destination: "/enterprise/remove-people"
+        destination: "/enterprise/settings/remove-people"
       },
       {
         source: "/settings/change-supervisors",
-        destination: "/enterprise/change-supervisors"
+        destination: "/enterprise/settings/change-supervisors"
       },
       {
         source: "/payment",
