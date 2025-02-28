@@ -69,3 +69,14 @@ export enum EmailProvider {
 }
 export const DEFAULT_PORT = "587";
 export const DISABLED_PORT = "-";
+
+export const BrandingBlueColor = {
+  primary: {
+    main: "#93C5FD",
+    dark: "#2A61A0"
+  },
+  secondary: {
+    main: "#DBEAFE",
+    dark: "#408CE4"
+  }
+};

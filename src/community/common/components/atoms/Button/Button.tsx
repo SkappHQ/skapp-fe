@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { JSX, MouseEvent as ReactMouseEvent, useMemo } from "react";
 
+import { BrandingBlueColor } from "~community/common/constants/stringConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -95,6 +96,8 @@ const Button = ({
         return theme.palette.common.black;
       case ButtonStyle.SECONDARY:
         return theme.palette.primary.dark;
+      case ButtonStyle.BLUE_OUTLINED:
+        return BrandingBlueColor.primary.dark;
       case ButtonStyle.ERROR:
         return theme.palette.text.error;
       default:
