@@ -1,5 +1,6 @@
 import { Button, type ButtonProps } from "@mui/material";
 import { styled } from "@mui/system";
+import { useMemo } from "react";
 
 import {
   ButtonSizes,
@@ -104,7 +105,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     }
   };
 
-  const rgbForBlink = () => {
+  const rgbForBlink = useMemo(() => {
     if (shouldblink) {
       const rgbValues = parseHexToRgb(theme.palette.secondary.dark);
 
@@ -112,7 +113,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     }
 
     return "";
-  };
+  }, [shouldblink, theme.palette.secondary.dark]);
 
   return {
     display: "flex",
@@ -161,13 +162,13 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
       animation: "blink 1.5s ease-in-out infinite",
       "@keyframes blink": {
         "0%": {
-          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink()})`
+          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
         },
         "50%": {
-          boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink()})`
+          boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
         },
         "100%": {
-          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink()})`
+          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
         }
       }
     })

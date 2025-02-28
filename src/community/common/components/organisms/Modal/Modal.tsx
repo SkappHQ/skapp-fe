@@ -30,6 +30,7 @@ interface Props {
   customCloseIcon?: JSX.Element;
   modalHeaderStyles?: SxProps;
   modalChildrenStyles?: SxProps;
+  dividerStyles?: SxProps;
 }
 
 const Modal: FC<Props> = ({
@@ -46,7 +47,8 @@ const Modal: FC<Props> = ({
   customCloseComponent,
   customCloseIcon,
   modalHeaderStyles,
-  modalChildrenStyles
+  modalChildrenStyles,
+  dividerStyles
 }) => {
   const classes = styles();
 
@@ -77,7 +79,7 @@ const Modal: FC<Props> = ({
             </IconButton>
           )}
         </Stack>
-        {isDividerVisible && <Divider />}
+        {isDividerVisible && <Divider sx={dividerStyles} />}
         <Stack
           sx={mergeSx([
             classes.childrenWrapper,

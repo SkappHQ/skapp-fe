@@ -9,7 +9,7 @@ import { JSX, type MouseEventHandler, useMemo } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
-import { mergeSx } from "~community/common/utils/commonUtil";
+import { mergeSx, parseHexToRgb } from "~community/common/utils/commonUtil";
 
 import { styles } from "./styles";
 
@@ -45,7 +45,7 @@ const DescribedSelection = ({
   onClick,
   typographyStyles,
   isChevronIconVisible = false,
-  isAnimationOn = true
+  isAnimationOn = false
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -62,24 +62,15 @@ const DescribedSelection = ({
     }
   }, [selected, isError, theme.palette.grey]);
 
-  const opacityAnimation = () => {
-    return isAnimationOn
-      ? {
-          animation: "opacity-blink 1.5s ease-in-out infinite",
-          "@keyframes opacity-blink": {
-            "0%, 49%": {
-              color: theme.palette.text.secondary
-            },
-            "50%, 99%": {
-              color: theme.palette.text.textDarkGrey
-            },
-            "100%": {
-              color: theme.palette.common.black
-            }
-          }
-        }
-      : {};
-  };
+  const rgbForBlink = useMemo(() => {
+    if (isAnimationOn) {
+      const rgbValues = parseHexToRgb(theme.palette.grey.A100);
+
+      return `${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}`;
+    }
+
+    return "";
+  }, [isAnimationOn, theme.palette.grey.A100]);
 
   return (
     <Stack
@@ -93,6 +84,20 @@ const DescribedSelection = ({
           ...(isError && {
             borderColor: theme.palette.error.contrastText,
             background: theme.palette.error.light
+          }),
+          ...(isAnimationOn && {
+            animation: "blink 1.5s ease-in-out infinite",
+            "@keyframes blink": {
+              "0%": {
+                boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+              },
+              "50%": {
+                boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
+              },
+              "100%": {
+                boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+              }
+            }
           })
         },
         cardWrapperStyles
@@ -108,8 +113,7 @@ const DescribedSelection = ({
               sx={{
                 color: isError
                   ? theme.palette.error.contrastText
-                  : typographyStyles?.color?.title,
-                ...opacityAnimation()
+                  : typographyStyles?.color?.title
               }}
             >
               {title}
@@ -119,8 +123,7 @@ const DescribedSelection = ({
               sx={{
                 color: isError
                   ? theme.palette.error.contrastText
-                  : typographyStyles?.color?.description,
-                ...opacityAnimation()
+                  : typographyStyles?.color?.description
               }}
             >
               {description}

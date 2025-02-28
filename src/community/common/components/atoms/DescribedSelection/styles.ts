@@ -12,8 +12,7 @@ export const styles = (theme: Theme): StyleProps => ({
     background: theme.palette.grey[50],
     cursor: "pointer",
     borderRadius: "0.5rem",
-    float: "inline-start",
-    animation: "blink 1s infinite"
+    float: "inline-start"
   },
   container: {
     flexDirection: "row",
