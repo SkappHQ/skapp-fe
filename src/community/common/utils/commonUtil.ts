@@ -424,3 +424,44 @@ export const updateToggleState = ({
 
   return reorderedObj;
 };
+
+interface GetBorderStylesProps {
+  index: number;
+  total: number;
+  selectedIndexes: Set<number>;
+}
+
+interface BorderStyles {
+  borderTop: string;
+  borderLeft: string;
+  borderRight: string;
+  borderBottom?: string;
+}
+
+export const getCardBorderStyles = ({
+  index,
+  total,
+  selectedIndexes
+}: GetBorderStylesProps): BorderStyles => {
+  const baseBorder = "1px solid grey.A100";
+  const noBorder = "none";
+
+  const isSelected = selectedIndexes.has(index);
+  const hasPrevSelected = selectedIndexes.has(index - 1);
+
+  if (isSelected) {
+    return {
+      borderTop: hasPrevSelected ? noBorder : baseBorder,
+      borderLeft: baseBorder,
+      borderRight: baseBorder,
+      borderBottom: baseBorder
+    };
+  }
+
+  return {
+    borderTop: hasPrevSelected ? noBorder : baseBorder,
+    borderLeft: baseBorder,
+    borderRight: baseBorder,
+    borderBottom: index === total - 1 ? baseBorder : noBorder
+  };
+};
