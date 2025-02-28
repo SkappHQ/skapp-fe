@@ -64,18 +64,19 @@ const DescribedSelection = ({
 
   const rgbForBlink = useMemo(() => {
     if (isAnimationOn) {
-      const rgbValues = parseHexToRgb(theme.palette.grey.A100);
+      const rgbValues = parseHexToRgb(theme.palette.primary.main);
 
       return `${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}`;
     }
 
     return "";
-  }, [isAnimationOn, theme.palette.grey.A100]);
+  }, [isAnimationOn, theme.palette.primary.main]);
 
   return (
     <Stack
       sx={mergeSx([
         classes.wrapper,
+        cardWrapperStyles,
         {
           ...(selected && {
             borderColor: theme.palette.secondary.dark,
@@ -86,6 +87,8 @@ const DescribedSelection = ({
             background: theme.palette.error.light
           }),
           ...(isAnimationOn && {
+            borderColor: theme.palette.secondary.dark,
+            background: theme.palette.secondary.main,
             animation: "blink 1.5s ease-in-out infinite",
             "@keyframes blink": {
               "0%": {
@@ -99,8 +102,7 @@ const DescribedSelection = ({
               }
             }
           })
-        },
-        cardWrapperStyles
+        }
       ])}
       onClick={onClick}
     >
