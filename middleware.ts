@@ -176,12 +176,9 @@ export default withAuth(
     );
 
     if (isAllowed) {
-      const isEsignatureModuleAvailable =
-        process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
       if (
         request.nextUrl.pathname.includes(ROUTES.SIGN.BASE) &&
-        !isEsignatureModuleAvailable
+        !roles.includes(EmployeeTypes.ESIGN_EMPLOYEE)
       ) {
         return NextResponse.redirect(
           new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
@@ -199,7 +196,6 @@ export default withAuth(
 
       return NextResponse.next();
     }
-
     // Redirect to /unauthorized if no access
     return NextResponse.redirect(
       new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
