@@ -266,7 +266,9 @@ const ContentLayout = ({
           </Stack>
         )}
         {children}
-        <QuickSetupFloatingButton />
+        {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
+          quickSetupProgress?.progress != null &&
+          quickSetupProgress.progress !== 100 && <QuickSetupFloatingButton />}
       </Stack>
     </>
   );
