@@ -189,7 +189,9 @@ const DropdownSearch: FC<Props> = ({
           },
           ...selectStyles
         }}
-        menuPortalTarget={document.body}
+        menuPortalTarget={
+          typeof window !== "undefined" ? document.body : undefined
+        }
         components={{ DropdownIndicator, Menu }}
         onChange={handleChange}
         name={inputName}
