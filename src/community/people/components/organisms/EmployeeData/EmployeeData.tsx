@@ -29,7 +29,7 @@ import {
 import RemovePeopleCountBanner from "~enterprise/settings/components/molecules/RemovePeopleCountBanner/RemovePeopleCountBanner";
 
 interface EmployeeDataProps {
-  isRemovePeople?: boolean;
+  isRemovePeople: boolean;
 }
 
 const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
@@ -134,7 +134,11 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
         <>
           <Stack direction="row" gap={1} justifyContent="flex-start">
             <Button
-              label={"Active"}
+              label={translateText([
+                "filters",
+                "selectedFiltersFilterItems",
+                "active"
+              ])}
               isFullWidth={false}
               buttonStyle={
                 employeeDataParams?.accountStatus?.includes(
@@ -151,7 +155,11 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
               }
             />
             <Button
-              label={"Pending"}
+              label={translateText([
+                "filters",
+                "selectedFiltersFilterItems",
+                "pending"
+              ])}
               isFullWidth={false}
               buttonStyle={
                 employeeDataParams?.accountStatus?.includes(
