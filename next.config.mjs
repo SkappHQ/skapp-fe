@@ -257,12 +257,12 @@ const nextConfig = {
         destination: "/enterprise/settings/integrations"
       },
       {
-        source: "/settings/remove-people",
-        destination: "/enterprise/settings/remove-people"
+        source: "/remove-people",
+        destination: "/enterprise/remove-people"
       },
       {
-        source: "/settings/change-supervisors",
-        destination: "/enterprise/settings/change-supervisors"
+        source: "/change-supervisors",
+        destination: "/enterprise/change-supervisors"
       },
       {
         source: "/payment",

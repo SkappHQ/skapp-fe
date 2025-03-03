@@ -88,8 +88,8 @@ const ROUTES = {
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create"
   },
-  REMOVE_PEOPLE: "/settings/remove-people",
-  CHANGE_SUPERVISORS: "/settings/change-supervisors"
+  REMOVE_PEOPLE: "/remove-people",
+  CHANGE_SUPERVISORS: "/change-supervisors"
 };
 
 export default ROUTES;
