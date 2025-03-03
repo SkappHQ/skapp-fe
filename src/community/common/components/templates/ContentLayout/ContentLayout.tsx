@@ -39,6 +39,7 @@ import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBa
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 import { useGetQuickSetupProgress } from "~enterprise/quickSetup/api/quickSetupApi";
 import QuickSetupFloatingButton from "~enterprise/quickSetup/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
+import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
@@ -116,11 +117,19 @@ const ContentLayout = ({
     setIsUserLimitExceeded
   } = useUserLimitStore((state) => state);
 
-  const { setProgressPercentage, setQuickSetupStatus } =
-    useCommonEnterpriseStore((state) => ({
-      setProgressPercentage: state.setProgressPercentage,
-      setQuickSetupStatus: state.setQuickSetupStatus
-    }));
+  const {
+    setProgressPercentage,
+    setQuickSetupStatus,
+    quickSetupModalType,
+    isQuickSetupCompleted,
+    setIsQuickSetupCompleted
+  } = useCommonEnterpriseStore((state) => ({
+    setProgressPercentage: state.setProgressPercentage,
+    setQuickSetupStatus: state.setQuickSetupStatus,
+    quickSetupModalType: state.quickSetupModalType,
+    isQuickSetupCompleted: state.isQuickSetupCompleted,
+    setIsQuickSetupCompleted: state.setIsQuickSetupCompleted
+  }));
 
   const { data: storageAvailabilityData } = useStorageAvailability();
 
@@ -151,6 +160,7 @@ const ContentLayout = ({
   useEffect(() => {
     if (quickSetupProgress) {
       setProgressPercentage(quickSetupProgress?.progress);
+      setIsQuickSetupCompleted(quickSetupProgress?.isQuickSetupCompleted);
       setQuickSetupStatus(
         "INVITE_EMPLOYEES",
         quickSetupProgress?.quickSetupStatus?.INVITE_EMPLOYEES
@@ -268,7 +278,11 @@ const ContentLayout = ({
         {children}
         {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
           quickSetupProgress?.progress != null &&
-          quickSetupProgress.progress !== 100 && <QuickSetupFloatingButton />}
+          !isQuickSetupCompleted &&
+          quickSetupModalType !== QuickSetupModalType.QUICK_SETUP &&
+          quickSetupModalType !== QuickSetupModalType.QUICK_SETUP_FINISHED && (
+            <QuickSetupFloatingButton />
+          )}
       </Stack>
     </>
   );
