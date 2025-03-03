@@ -11,6 +11,10 @@ import SetupOrganizationForm from "~community/common/components/organisms/Forms/
 import OnboardingLayout from "~community/common/components/templates/OnboardingLayout/OnboardingLayout";
 import ROUTES from "~community/common/constants/routes";
 import { FileTypes } from "~community/common/enums/CommonEnums";
+import {
+  MediaQueries,
+  useMediaQuery
+} from "~community/common/hooks/useMediaQuery";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
@@ -20,14 +24,27 @@ import {
 } from "~community/common/types/CommonTypes";
 import { organizationSetupValidation } from "~community/common/utils/validation";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
 
 const SetupOrganization: NextPage = () => {
   const router: NextRouter = useRouter();
+
   const theme: Theme = useTheme();
+
   const translateText = useTranslator("onboarding", "organizationCreate");
+
+  const queryMatches = useMediaQuery();
+  const isBelow900 = queryMatches(MediaQueries.BELOW_900);
+
+  const { setQuickSetupModalType } = useCommonEnterpriseStore((state) => ({
+    setQuickSetupModalType: state.setQuickSetupModalType
+  }));
 
   const onSuccess = () => {
     router.replace(ROUTES.DASHBOARD.BASE);
+    !isBelow900 &&
+      setQuickSetupModalType(QuickSetupModalType.START_QUICK_SETUP);
   };
 
   const { mutate: createOrganization, isPending } =
@@ -49,6 +66,7 @@ const SetupOrganization: NextPage = () => {
   };
 
   const countryList = useGetCountryList();
+
   const onSubmit = async (values: typeof initialValues) => {
     if (companyLogo.length > 0 && companyLogo[0].file) {
       const formData = new FormData();
