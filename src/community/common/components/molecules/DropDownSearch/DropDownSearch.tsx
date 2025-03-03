@@ -23,7 +23,7 @@ interface Props {
   label?: string;
   inputName: string;
   inputStyle?: Record<string, string>;
-  value: string | Array<string | number>;
+  value: string | Array<string | number> | number;
   onChange?: (
     value: (string | number | Date)[] | string | number | Date
   ) => void;
