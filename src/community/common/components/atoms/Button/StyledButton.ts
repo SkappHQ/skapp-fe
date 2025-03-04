@@ -1,10 +1,12 @@
 import { Button, type ButtonProps } from "@mui/material";
 import { styled } from "@mui/system";
+import { useMemo } from "react";
 
 import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import { parseHexToRgb } from "~community/common/utils/commonUtil";
 
 interface StyledButtonProps {
   buttonsize: ButtonSizes;
@@ -13,6 +15,7 @@ interface StyledButtonProps {
   textcolor: string;
   isdefaulticoncolor: string;
   isstrokeavailable: string;
+  shouldblink?: boolean; // New prop to enable blinking outline
 }
 
 const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
@@ -23,7 +26,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
   width,
   textcolor,
   isdefaulticoncolor,
-  isstrokeavailable
+  isstrokeavailable,
+  shouldblink
 }) => {
   const padding = () => {
     switch (buttonsize) {
@@ -101,6 +105,16 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     }
   };
 
+  const rgbForBlink = useMemo(() => {
+    if (shouldblink) {
+      const rgbValues = parseHexToRgb(theme.palette.secondary.dark);
+
+      return `${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}`;
+    }
+
+    return "";
+  }, [shouldblink, theme.palette.secondary.dark]);
+
   return {
     display: "flex",
     flexDirection: "row",
@@ -143,7 +157,21 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
       backgroundColor: theme.palette.grey[100],
       boxShadow: `inset 0 0 0 0.063rem ${theme.palette.grey[300]}`,
       border: `0.125rem solid ${theme.palette.grey[300]}`
-    }
+    },
+    ...(shouldblink && {
+      animation: "blink 1.5s ease-in-out infinite",
+      "@keyframes blink": {
+        "0%": {
+          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+        },
+        "50%": {
+          boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
+        },
+        "100%": {
+          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+        }
+      }
+    })
   };
 });
 
