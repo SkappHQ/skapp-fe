@@ -3,7 +3,7 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
-  SenderRoleTypes,
+  SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 import { TierEnum } from "~enterprise/common/enums/CommonEum";
@@ -230,8 +230,8 @@ const getDrawerRoutes = (
 
         const isEsignEmployeeWithoutManagerOrAdminRole = userRoles?.some(
           (role) =>
-            [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
-              role as AdminTypes | SenderRoleTypes
+            [SenderTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
+              role as AdminTypes | SenderTypes
             )
         );
 

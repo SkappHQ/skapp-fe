@@ -7,7 +7,7 @@ import {
   EmployeeTypes,
   ManagerTypes,
   ROLE_SUPER_ADMIN,
-  SenderRoleTypes,
+  SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
@@ -74,7 +74,7 @@ const managerRoutes = {
     ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
     ROUTES.PEOPLE.INDIVIDUAL
   ],
-  [SenderRoleTypes.ESIGN_SENDER]: [
+  [SenderTypes.ESIGN_SENDER]: [
     ROUTES.SIGN.CONTACTS,
     ROUTES.SIGN.CREATE_DOCUMENT,
     ROUTES.SIGN.FOLDERS,
