@@ -125,6 +125,7 @@ export interface EmployeeDataParamsTypes {
   sortOrder?: string;
   searchKeyword?: string;
   isExport?: boolean;
+  accountStatus?: EmploymentStatusTypes;
 }
 
 export interface JobRole {

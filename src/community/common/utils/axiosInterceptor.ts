@@ -1,7 +1,12 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { getSession, signOut } from "next-auth/react";
 
-import { COMMON_ERROR_TOKEN_EXPIRED } from "../constants/errorMessageKeys";
+import {
+  COMMON_ERROR_INVALID_TOKEN,
+  COMMON_ERROR_SYSTEM_VERSION_MISMATCH,
+  COMMON_ERROR_TOKEN_EXPIRED,
+  COMMON_ERROR_USER_VERSION_MISMATCH
+} from "../constants/errorMessageKeys";
 import { getApiUrl } from "./getConstants";
 
 const getSubDomain = (url: string, multipleValues: boolean = false) => {
@@ -48,9 +53,19 @@ authFetch.interceptors.response.use(
 
   async (error) => {
     if (
-      error.response.data.results[0].messageKey === COMMON_ERROR_TOKEN_EXPIRED
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_INVALID_TOKEN ||
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_TOKEN_EXPIRED ||
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
+      error.response.data.results[0].messageKey ===
+        COMMON_ERROR_USER_VERSION_MISMATCH
     ) {
-      await signOut();
+      await signOut({
+        redirect: true,
+        callbackUrl: "/system-update"
+      });
     }
     return await Promise.reject(error);
   }
