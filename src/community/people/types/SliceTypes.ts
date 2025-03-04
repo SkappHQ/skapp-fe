@@ -25,6 +25,8 @@ export interface EmployeeDataFiltersSliceType
     | "employeeDataFilter"
     | "employeeDataFilterOrder"
     | "employeeDataParams"
+    | "selectedEmployees"
+    | "setSelectedEmployees"
     | "menuItems"
     | "searchedItems"
     | "handleEmployeeDataSort"

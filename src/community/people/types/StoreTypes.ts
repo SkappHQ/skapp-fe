@@ -204,6 +204,7 @@ interface actionsTypes {
   setIsLeaveTabVisible: (value: boolean) => void;
   setIsTimeTabVisible: (value: boolean) => void;
   setIsReinviteConfirmationModalOpen: (value: boolean) => void;
+  setSelectedEmployees: (value: number[]) => void;
 
   //projectTeamModalSlice
   setProjectTeamsModalOpen: (value: boolean) => void;
@@ -287,6 +288,7 @@ export interface Store extends actionsTypes {
   menuItems: MenuitemsDataTypes[];
   searchedItems: string[];
   isPendingInvitationListOpen: boolean;
+  selectedEmployees: number[];
 
   //directoryModalSlice
   isDirectoryModalOpen: boolean;
