@@ -49,7 +49,9 @@ interface Props {
   secondaryBtnText?: string;
   primaryButtonText?: string | boolean;
   primaryBtnIconName?: IconName;
+  shouldPrimaryBtnBlink?: boolean;
   secondaryBtnIconName?: IconName;
+  shouldSecondaryBtnBlink?: boolean;
   isBackButtonVisible?: boolean;
   isDividerVisible?: boolean;
   primaryButtonType?: ButtonStyle;
@@ -73,7 +75,9 @@ const ContentLayout = ({
   secondaryBtnText,
   primaryButtonType,
   primaryBtnIconName = IconName.ADD_ICON,
+  shouldPrimaryBtnBlink = false,
   secondaryBtnIconName = IconName.ADD_ICON,
+  shouldSecondaryBtnBlink = false,
   isBackButtonVisible = false,
   isDividerVisible = true,
   onPrimaryButtonClick,
@@ -207,6 +211,7 @@ const ContentLayout = ({
                 endIcon={secondaryBtnIconName}
                 onClick={onSecondaryButtonClick}
                 dataTestId={contentLayoutTestId.buttons.secondaryButton}
+                shouldBlink={shouldSecondaryBtnBlink}
               />
             )}
             {primaryButtonText && (
@@ -219,6 +224,7 @@ const ContentLayout = ({
                 isLoading={isPrimaryBtnLoading}
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
+                shouldBlink={shouldPrimaryBtnBlink}
                 disabled={isPrimaryBtnDisabled}
               />
             )}
