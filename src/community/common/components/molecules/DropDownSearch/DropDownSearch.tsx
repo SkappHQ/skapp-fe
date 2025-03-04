@@ -23,7 +23,7 @@ interface Props {
   label?: string;
   inputName: string;
   inputStyle?: Record<string, string>;
-  value: string | Array<string | number>;
+  value: string | Array<string | number> | number;
   onChange?: (
     value: (string | number | Date)[] | string | number | Date
   ) => void;
@@ -189,6 +189,9 @@ const DropdownSearch: FC<Props> = ({
           },
           ...selectStyles
         }}
+        menuPortalTarget={
+          typeof window !== "undefined" ? document.body : undefined
+        }
         components={{ DropdownIndicator, Menu }}
         onChange={handleChange}
         name={inputName}

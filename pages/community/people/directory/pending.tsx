@@ -75,7 +75,7 @@ const Pending = () => {
         isBackButtonVisible={true}
       >
         <Box>
-          <EmployeeData />
+          <EmployeeData isRemovePeople={false} />
           <DirectoryPopupController />
         </Box>
       </ContentLayout>
