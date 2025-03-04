@@ -248,5 +248,10 @@
   "StorageToastMessage": {
     "storageTitle": "Storage Limit Reached",
     "contactAdminText": "Please contact your administrator."
+  },
+  "importantUpdate": {
+    "title": "Important Update",
+    "description": "Oops! It seems the organization has updated a few things. Please sign in again.",
+    "buttonText": "Sign in"
   }
 }
