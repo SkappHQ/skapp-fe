@@ -86,7 +86,9 @@ const ROUTES = {
     SENT: "/sign/sent",
     FOLDERS: "/sign/folders",
     CONTACTS: "/sign/contacts",
-    CREATE_DOCUMENT: "/sign/create"
+    CREATE_DOCUMENT: "/sign/create",
+    SIGN: "/sign/sign",
+    REDIRECT: "/sign/redirect"
   }
 };
 

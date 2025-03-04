@@ -249,6 +249,14 @@ const nextConfig = {
         destination: "/enterprise/sign/create"
       },
       {
+        source: "/sign/sign",
+        destination: "/enterprise/sign/sign"
+      },
+      {
+        source: "/sign/redirect",
+        destination: "/enterprise/sign/redirect"
+      },
+      {
         source: "/settings/modules",
         destination: "/enterprise/settings/modules"
       },
