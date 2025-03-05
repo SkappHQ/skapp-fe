@@ -13,6 +13,7 @@ import UserBulkCsvUpload from "~community/people/components/molecules/UserBulkUp
 import { usePeopleStore } from "~community/people/store/store";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 const DirectoryPopupController = () => {
   const translatedTexts = useTranslator("peopleModule", "peoples");
@@ -24,11 +25,15 @@ const DirectoryPopupController = () => {
     setBulkUploadUsers
   } = usePeopleStore((state) => state);
 
-  const { setIsInviteEmployeeFlowEnabled } = useCommonEnterpriseStore(
-    (state) => ({
-      setIsInviteEmployeeFlowEnabled: state.setIsInviteEmployeeFlowEnabled
-    })
-  );
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    setStopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+  }));
 
   const { data: jobFamilies } = useGetAllJobFamilies();
   const [bulkUploadData, setBulkUploadData] = useState<BulkUploadResponse>();
@@ -54,7 +59,12 @@ const DirectoryPopupController = () => {
 
   const handleCloseModal = (): void => {
     setBulkUploadUsers([]);
-    setIsInviteEmployeeFlowEnabled(false);
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setStopAllOngoingQuickSetup();
+      if (directoryModalType === DirectoryModalTypes.UPLOAD_SUMMARY) {
+        setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+      }
+    }
   };
 
   return (

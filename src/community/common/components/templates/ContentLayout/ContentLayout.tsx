@@ -39,7 +39,7 @@ import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBa
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 import { useGetQuickSetupProgress } from "~enterprise/quickSetup/api/quickSetupApi";
 import QuickSetupFloatingButton from "~enterprise/quickSetup/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
-import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
+import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
@@ -294,8 +294,9 @@ const ContentLayout = ({
         {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
           quickSetupProgress?.progress != null &&
           !isQuickSetupCompleted &&
-          quickSetupModalType !== QuickSetupModalType.QUICK_SETUP &&
-          quickSetupModalType !== QuickSetupModalType.QUICK_SETUP_FINISHED && (
+          quickSetupModalType !== QuickSetupModalTypeEnums.QUICK_SETUP &&
+          quickSetupModalType !==
+            QuickSetupModalTypeEnums.QUICK_SETUP_FINISHED && (
             <QuickSetupFloatingButton />
           )}
       </Stack>

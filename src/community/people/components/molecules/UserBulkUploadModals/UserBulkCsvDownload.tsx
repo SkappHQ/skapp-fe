@@ -21,18 +21,18 @@ const UserBulkCsvDownload = () => {
     setDirectoryModalType(DirectoryModalTypes.UPLOAD_CSV);
   };
 
-  const { isInviteEmployeeFlowEnabled } = useCommonEnterpriseStore((state) => ({
-    isInviteEmployeeFlowEnabled: state.isInviteEmployeeFlowEnabled
+  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
   const [isDownloadBlinking, setIsDownloadBlinking] = useState(false);
   const [isNextBlinking, setIsNextBlinking] = useState(false);
 
   useEffect(() => {
-    if (isInviteEmployeeFlowEnabled) {
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
       setIsDownloadBlinking(true);
     }
-  }, [isInviteEmployeeFlowEnabled]);
+  }, [ongoingQuickSetup]);
 
   const handleDownloadClick = () => {
     setIsDownloadBlinking(false);
@@ -92,7 +92,7 @@ const UserBulkCsvDownload = () => {
         buttonStyle={ButtonStyle.PRIMARY}
         styles={{ mb: "0.5rem" }}
         onClick={() => handleNextBtn()}
-        disabled={isInviteEmployeeFlowEnabled && isDownloadBlinking}
+        disabled={ongoingQuickSetup.INVITE_EMPLOYEES && isDownloadBlinking}
         shouldBlink={isNextBlinking}
       />
     </Box>

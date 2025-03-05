@@ -23,6 +23,8 @@ import { AllJobFamilyType } from "~community/people/types/JobFamilyTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { BulkUploadUser } from "~community/people/types/UserBulkUploadTypes";
 import { convertUserBulkCsvHeaders } from "~community/people/utils/userBulkUploadUtils";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 interface Props {
   jobRoleList: AllJobFamilyType[] | undefined;
@@ -40,6 +42,16 @@ const UserBulkCsvUpload: FC<Props> = ({
   const { bulkUploadUsers, setBulkUploadUsers } = usePeopleStore(
     (state) => state
   );
+
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    setStopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+  }));
 
   const [, setAttachmentError] = useState(false);
   const [bulkUserAttachment, setBulkUserAttachment] = useState<
@@ -87,6 +99,10 @@ const UserBulkCsvUpload: FC<Props> = ({
         setPopupType(DirectoryModalTypes.UPLOAD_SUMMARY);
       else {
         setPopupType(DirectoryModalTypes.NONE);
+        if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+          setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+          setStopAllOngoingQuickSetup();
+        }
         setToastMessage({
           toastType: ToastType.SUCCESS,
           open: true,
@@ -167,6 +183,7 @@ const UserBulkCsvUpload: FC<Props> = ({
         onClick={() => handleUploadBtn()}
         isLoading={false}
         disabled={bulkUserAttachment?.length === 0}
+        shouldBlink={bulkUserAttachment?.length > 0}
       />
 
       <Button

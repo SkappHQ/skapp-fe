@@ -38,7 +38,7 @@ import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
-import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
+import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
@@ -98,9 +98,9 @@ const AddNewResourceModal = () => {
   };
 
   const handleSuccess = () => {
-    if (isInviteEmployeeFlowEnabled) {
-      setQuickSetupModalType(QuickSetupModalType.QUICK_SETUP);
-      setIsInviteEmployeeFlowEnabled(false);
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+      setStopAllOngoingQuickSetup();
     }
   };
 
@@ -137,13 +137,13 @@ const AddNewResourceModal = () => {
   );
 
   const {
-    isInviteEmployeeFlowEnabled,
+    ongoingQuickSetup,
     setQuickSetupModalType,
-    setIsInviteEmployeeFlowEnabled
+    setStopAllOngoingQuickSetup
   } = useCommonEnterpriseStore((state) => ({
-    isInviteEmployeeFlowEnabled: state.isInviteEmployeeFlowEnabled,
+    ongoingQuickSetup: state.ongoingQuickSetup,
     setQuickSetupModalType: state.setQuickSetupModalType,
-    setIsInviteEmployeeFlowEnabled: state.setIsInviteEmployeeFlowEnabled
+    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
   }));
 
   const {
@@ -155,9 +155,9 @@ const AddNewResourceModal = () => {
   const closeModal = () => {
     setDirectoryModalType(DirectoryModalTypes.NONE);
     setIsDirectoryModalOpen(false);
-    if (isInviteEmployeeFlowEnabled) {
-      setQuickSetupModalType(QuickSetupModalType.QUICK_SETUP);
-      setIsInviteEmployeeFlowEnabled(false);
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+      setStopAllOngoingQuickSetup();
     }
   };
 
@@ -630,7 +630,7 @@ const AddNewResourceModal = () => {
         }
         data-testid={peopleDirectoryTestId.buttons.quickAddSaveBtn}
         shouldBlink={
-          isInviteEmployeeFlowEnabled &&
+          ongoingQuickSetup.INVITE_EMPLOYEES &&
           values.workEmail !== "" &&
           values.firstName !== "" &&
           values.lastName !== ""
