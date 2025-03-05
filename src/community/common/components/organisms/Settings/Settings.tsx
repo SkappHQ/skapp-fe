@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { FC } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
+import StarIcon from "~community/common/assets/Icons/StarIcon";
 import { appModes } from "~community/common/constants/configs";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -27,6 +28,7 @@ import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import Button from "../../atoms/Button/Button";
 import NotificationSettings from "../../molecules/NotificationSettinngs/NotificationSettinngs";
+import { useRouter } from "next/navigation";
 
 const SettingsSection: FC = () => {
   const translatedText = useTranslator("settings");
@@ -52,6 +54,8 @@ const SettingsSection: FC = () => {
     .some((role) => managerRoles.includes(role));
 
   const { globalLoginMethod } = useCommonEnterpriseStore((state) => state);
+
+  const router = useRouter();
 
   return (
     <>
@@ -194,6 +198,31 @@ const SettingsSection: FC = () => {
           />
         </Box>
       )}
+
+      <Divider />
+
+      <Box sx={{ py: "1.5rem" }}>
+        <Typography variant="h2" sx={{ pb: "0.75rem" }}>
+          {"Subscriptions"}
+        </Typography>
+
+        <Typography variant="body1">
+          {
+            "Reset your password when required to maintain your account's security"
+          }
+        </Typography>
+
+        <Button
+          label={"Manage subscription"}
+          startIcon={<StarIcon />}
+          isFullWidth={false}
+          styles={{ mt: "1.25rem", px: "1.75rem" }}
+          buttonStyle={ButtonStyle.TERTIARY}
+          onClick={() => {
+            router.push("/subscription");
+          }}
+        />
+      </Box>
     </>
   );
 };

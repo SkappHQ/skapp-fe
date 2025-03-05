@@ -271,6 +271,10 @@ const nextConfig = {
       {
         source: "/system-update",
         destination: "/enterprise/system-update"
+      },
+      {
+        source: "/subscription",
+        destination: "/enterprise/subscription"
       }
     ];
   },
