@@ -25,7 +25,7 @@ import {
 import { organizationSetupValidation } from "~community/common/utils/validation";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
+import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 const SetupOrganization: NextPage = () => {
   const router: NextRouter = useRouter();
@@ -44,7 +44,7 @@ const SetupOrganization: NextPage = () => {
   const onSuccess = () => {
     router.replace(ROUTES.DASHBOARD.BASE);
     !isBelow900 &&
-      setQuickSetupModalType(QuickSetupModalType.START_QUICK_SETUP);
+      setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
   };
 
   const { mutate: createOrganization, isPending } =

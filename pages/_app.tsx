@@ -25,6 +25,7 @@ import {
 } from "~enterprise/common/constants/dbKeys";
 import { database } from "~enterprise/common/utils/firebase";
 import { initializeHotjar } from "~enterprise/common/utils/monitoring";
+import "~enterprise/quickSetup/components/atoms/driverJsPopover/styles.css";
 import i18n from "~i18n";
 import "~styles/global.css";
 
