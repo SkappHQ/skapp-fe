@@ -54,6 +54,8 @@ import {
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 import { handleLeaveTypeApiResponse } from "~community/leave/utils/leaveTypes/apiUtils";
 import { addLeaveTypeValidationSchema } from "~community/leave/utils/validations";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { QuickSetupTaskEnums } from "~enterprise/quickSetup/enum/Common";
 
 import { styles } from "./styles";
 
@@ -73,7 +75,18 @@ const LeaveTypeForm = () => {
     editingLeaveType,
     setLeaveTypeFormDirty,
     setLeaveTypeModalType
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    allLeaveTypes: state.allLeaveTypes,
+    editingLeaveType: state.editingLeaveType,
+    setLeaveTypeFormDirty: state.setLeaveTypeFormDirty,
+    setLeaveTypeModalType: state.setLeaveTypeModalType
+  }));
+
+  const { setOngoingQuickSetup, setQuickSetupModalType } =
+    useCommonEnterpriseStore((state) => ({
+      setOngoingQuickSetup: state.setOngoingQuickSetup,
+      setQuickSetupModalType: state.setQuickSetupModalType
+    }));
 
   const [colors, setColors] = useState<string[]>(leaveTypeColors);
   const [selectedDate, setSelectedDate] = useState<DateTime | undefined>(
@@ -89,7 +102,9 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.push
+        redirect: router.push,
+        setOngoingQuickSetup,
+        setQuickSetupModalType
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR,
@@ -502,7 +517,13 @@ const LeaveTypeForm = () => {
               isFullWidth={false}
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
-              onClick={async () => await router.back()}
+              onClick={async () => {
+                setOngoingQuickSetup(
+                  QuickSetupTaskEnums.SETUP_LEAVE_TYPES,
+                  false
+                );
+                await router.back();
+              }}
             />
             <Button
               type={ButtonTypes.SUBMIT}
