@@ -35,8 +35,10 @@ import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
+import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
@@ -95,7 +97,15 @@ const AddNewResourceModal = () => {
     esignRole: Role.ESIGN_EMPLOYEE
   };
 
-  const { mutate } = useQuickAddEmployeeMutation();
+  const handleSuccess = () => {
+    if (isInviteEmployeeFlowEnabled) {
+      setQuickSetupModalType(QuickSetupModalType.QUICK_SETUP);
+      setIsInviteEmployeeFlowEnabled(false);
+    }
+  };
+
+  const { mutate } = useQuickAddEmployeeMutation(handleSuccess);
+
   const onSubmit = async (values: any) => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
@@ -127,6 +137,16 @@ const AddNewResourceModal = () => {
   );
 
   const {
+    isInviteEmployeeFlowEnabled,
+    setQuickSetupModalType,
+    setIsInviteEmployeeFlowEnabled
+  } = useCommonEnterpriseStore((state) => ({
+    isInviteEmployeeFlowEnabled: state.isInviteEmployeeFlowEnabled,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    setIsInviteEmployeeFlowEnabled: state.setIsInviteEmployeeFlowEnabled
+  }));
+
+  const {
     data: checkEmailAndIdentificationNo,
     refetch,
     isSuccess
@@ -135,6 +155,10 @@ const AddNewResourceModal = () => {
   const closeModal = () => {
     setDirectoryModalType(DirectoryModalTypes.NONE);
     setIsDirectoryModalOpen(false);
+    if (isInviteEmployeeFlowEnabled) {
+      setQuickSetupModalType(QuickSetupModalType.QUICK_SETUP);
+      setIsInviteEmployeeFlowEnabled(false);
+    }
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -605,6 +629,12 @@ const AddNewResourceModal = () => {
           values.lastName === ""
         }
         data-testid={peopleDirectoryTestId.buttons.quickAddSaveBtn}
+        shouldBlink={
+          isInviteEmployeeFlowEnabled &&
+          values.workEmail !== "" &&
+          values.firstName !== "" &&
+          values.lastName !== ""
+        }
       />
       <Button
         buttonStyle={ButtonStyle.TERTIARY}

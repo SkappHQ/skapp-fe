@@ -271,7 +271,7 @@ export const useGetPreprocessedRoles = (): UseQueryResult<JobFamilies[]> => {
   });
 };
 
-export const useQuickAddEmployeeMutation = () => {
+export const useQuickAddEmployeeMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
   const {
     setSharedCredentialData,
@@ -318,6 +318,9 @@ export const useQuickAddEmployeeMutation = () => {
           queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE()
         })
         .catch(rejects);
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();

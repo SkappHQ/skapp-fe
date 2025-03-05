@@ -12,6 +12,7 @@ import UserBulkCsvDownload from "~community/people/components/molecules/UserBulk
 import UserBulkCsvUpload from "~community/people/components/molecules/UserBulkUploadModals/UserBulkCsvUpload";
 import { usePeopleStore } from "~community/people/store/store";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const DirectoryPopupController = () => {
   const translatedTexts = useTranslator("peopleModule", "peoples");
@@ -22,6 +23,12 @@ const DirectoryPopupController = () => {
     setDirectoryModalType,
     setBulkUploadUsers
   } = usePeopleStore((state) => state);
+
+  const { setIsInviteEmployeeFlowEnabled } = useCommonEnterpriseStore(
+    (state) => ({
+      setIsInviteEmployeeFlowEnabled: state.setIsInviteEmployeeFlowEnabled
+    })
+  );
 
   const { data: jobFamilies } = useGetAllJobFamilies();
   const [bulkUploadData, setBulkUploadData] = useState<BulkUploadResponse>();
@@ -47,6 +54,7 @@ const DirectoryPopupController = () => {
 
   const handleCloseModal = (): void => {
     setBulkUploadUsers([]);
+    setIsInviteEmployeeFlowEnabled(false);
   };
 
   return (

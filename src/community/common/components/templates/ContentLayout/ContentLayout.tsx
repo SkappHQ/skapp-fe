@@ -67,6 +67,9 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
+  buttonContainerId?: string;
+  primaryButtonId?: string;
+  secondaryButtonId?: string;
 }
 
 const ContentLayout = ({
@@ -91,7 +94,10 @@ const ContentLayout = ({
   customRightContent,
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
-  backIcon = IconName.LEFT_ARROW_ICON
+  backIcon = IconName.LEFT_ARROW_ICON,
+  buttonContainerId,
+  primaryButtonId,
+  secondaryButtonId
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -246,7 +252,7 @@ const ContentLayout = ({
               </Typography>
             )}
           </Stack>
-          <Stack sx={classes.rightContent}>
+          <Stack id={buttonContainerId} sx={classes.rightContent}>
             {secondaryBtnText && (
               <Button
                 isFullWidth={isBelow600}
@@ -257,6 +263,7 @@ const ContentLayout = ({
                 onClick={onSecondaryButtonClick}
                 dataTestId={contentLayoutTestId.buttons.secondaryButton}
                 shouldBlink={shouldSecondaryBtnBlink}
+                id={secondaryButtonId}
               />
             )}
             {primaryButtonText && (
@@ -270,6 +277,7 @@ const ContentLayout = ({
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
                 shouldBlink={shouldPrimaryBtnBlink}
+                id={primaryButtonId}
               />
             )}
             {customRightContent}
