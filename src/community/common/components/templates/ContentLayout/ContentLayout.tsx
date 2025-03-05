@@ -53,9 +53,7 @@ interface Props {
   secondaryBtnText?: string;
   primaryButtonText?: string | boolean;
   primaryBtnIconName?: IconName;
-  shouldPrimaryBtnBlink?: boolean;
   secondaryBtnIconName?: IconName;
-  shouldSecondaryBtnBlink?: boolean;
   isBackButtonVisible?: boolean;
   isDividerVisible?: boolean;
   primaryButtonType?: ButtonStyle;
@@ -67,9 +65,15 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
-  buttonContainerId?: string;
-  primaryButtonId?: string;
-  secondaryButtonId?: string;
+  id?: {
+    btnWrapper?: string;
+    primaryBtn?: string;
+    secondaryBtn?: string;
+  };
+  shouldBlink?: {
+    primaryBtn?: boolean;
+    secondaryBtn?: boolean;
+  };
 }
 
 const ContentLayout = ({
@@ -81,9 +85,7 @@ const ContentLayout = ({
   secondaryBtnText,
   primaryButtonType,
   primaryBtnIconName = IconName.ADD_ICON,
-  shouldPrimaryBtnBlink = false,
   secondaryBtnIconName = IconName.ADD_ICON,
-  shouldSecondaryBtnBlink = false,
   isBackButtonVisible = false,
   isDividerVisible = true,
   onPrimaryButtonClick,
@@ -95,9 +97,8 @@ const ContentLayout = ({
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
   backIcon = IconName.LEFT_ARROW_ICON,
-  buttonContainerId,
-  primaryButtonId,
-  secondaryButtonId
+  id,
+  shouldBlink
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -252,7 +253,7 @@ const ContentLayout = ({
               </Typography>
             )}
           </Stack>
-          <Stack id={buttonContainerId} sx={classes.rightContent}>
+          <Stack sx={classes.rightContent} id={id?.btnWrapper}>
             {secondaryBtnText && (
               <Button
                 isFullWidth={isBelow600}
@@ -262,8 +263,8 @@ const ContentLayout = ({
                 endIcon={secondaryBtnIconName}
                 onClick={onSecondaryButtonClick}
                 dataTestId={contentLayoutTestId.buttons.secondaryButton}
-                shouldBlink={shouldSecondaryBtnBlink}
-                id={secondaryButtonId}
+                shouldBlink={shouldBlink?.secondaryBtn}
+                id={id?.secondaryBtn}
               />
             )}
             {primaryButtonText && (
@@ -276,8 +277,8 @@ const ContentLayout = ({
                 isLoading={isPrimaryBtnLoading}
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
-                shouldBlink={shouldPrimaryBtnBlink}
-                id={primaryButtonId}
+                shouldBlink={shouldBlink?.primaryBtn}
+                id={id?.primaryBtn}
               />
             )}
             {customRightContent}
