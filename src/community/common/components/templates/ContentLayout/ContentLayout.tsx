@@ -62,6 +62,7 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
+  isPrimaryBtnDisabled?: boolean;
   id?: {
     btnWrapper?: string;
     primaryBtn?: string;
@@ -94,6 +95,7 @@ const ContentLayout = ({
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
   backIcon = IconName.LEFT_ARROW_ICON,
+  isPrimaryBtnDisabled = false,
   id,
   shouldBlink
 }: Props): JSX.Element => {
@@ -233,6 +235,7 @@ const ContentLayout = ({
                 data-testid={contentLayoutTestId.buttons.primaryButton}
                 shouldBlink={shouldBlink?.primaryBtn}
                 id={id?.primaryBtn}
+                disabled={isPrimaryBtnDisabled}
               />
             )}
             {customRightContent}

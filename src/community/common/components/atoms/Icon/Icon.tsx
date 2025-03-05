@@ -67,6 +67,7 @@ import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
 import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
+import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
@@ -227,7 +228,8 @@ export const IconMapping: Partial<
   [IconName.MASTER_CARD_ICON]: MasterCardIcon,
   [IconName.VISA_CARD_ICON]: VisaCardIcon,
   [IconName.GREY_ROUNDED_TICK_ICON]: GreyRoundedTickIcon,
-  [IconName.GREY_PLUS_ICON]: GreyPlusIcon
+  [IconName.GREY_PLUS_ICON]: GreyPlusIcon,
+  [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon
   // Add more icons here as needed
 };
 
