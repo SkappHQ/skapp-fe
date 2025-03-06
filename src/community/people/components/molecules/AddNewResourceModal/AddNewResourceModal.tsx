@@ -44,9 +44,6 @@ const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
   const { data: session } = useSession();
 
-  const isEsignatureModuleAvailable =
-    process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
     attendanceAdminLimitExceeded: false,
@@ -582,7 +579,7 @@ const AddNewResourceModal = () => {
               </Stack>
             )}
 
-            {isEsignatureModuleAvailable && (
+            {session?.user?.roles?.includes(EmployeeTypes.ESIGN_EMPLOYEE) && (
               <Stack
                 direction={"row"}
                 justifyContent={"space-between"}

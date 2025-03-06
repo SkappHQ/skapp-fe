@@ -54,8 +54,8 @@ import {
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 import { handleLeaveTypeApiResponse } from "~community/leave/utils/leaveTypes/apiUtils";
 import { addLeaveTypeValidationSchema } from "~community/leave/utils/validations";
+import { QuickSetupTaskEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { QuickSetupTaskEnums } from "~enterprise/quickSetup/enum/Common";
 
 import { styles } from "./styles";
 

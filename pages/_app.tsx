@@ -19,13 +19,13 @@ import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
+import "~enterprise/common/components/atoms/driverJsPopover/styles.css";
 import {
   isNonProdMaintenanceMode,
   isProdMaintenanceMode
 } from "~enterprise/common/constants/dbKeys";
 import { database } from "~enterprise/common/utils/firebase";
 import { initializeHotjar } from "~enterprise/common/utils/monitoring";
-import "~enterprise/quickSetup/components/atoms/driverJsPopover/styles.css";
 import i18n from "~i18n";
 import "~styles/global.css";
 

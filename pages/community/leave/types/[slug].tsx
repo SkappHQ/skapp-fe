@@ -13,8 +13,8 @@ import {
   LeaveTypeModalEnums
 } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import { QuickSetupTaskEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { QuickSetupTaskEnums } from "~enterprise/quickSetup/enum/Common";
 
 const LeaveType: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveTypes");

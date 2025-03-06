@@ -6,9 +6,9 @@ import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import LeaveTypesTable from "~community/leave/components/molecules/LeaveTypesTable/LeaveTypesTable";
 import { LeaveTypeFormTypes } from "~community/leave/enums/LeaveTypeEnums";
+import { HighlightAddLeaveTypesBtn } from "~enterprise/common/constants/SetupLeaveTypesFlow";
+import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { HighlightAddLeaveTypesBtn } from "~enterprise/quickSetup/constants/SetupLeaveTypesFlow";
-import useProductTour from "~enterprise/quickSetup/hooks/useProductTour";
 
 const LeaveTypes: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveTypes");

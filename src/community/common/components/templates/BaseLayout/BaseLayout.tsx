@@ -16,11 +16,11 @@ import { IsProtectedUrl } from "~community/common/utils/authUtils";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
 import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
 import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
+import QuickSetupModalController from "~enterprise/common/components/organisms/QuickSetupModalController/QuickSetupModalController";
 import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
-import QuickSetupModalController from "~enterprise/quickSetup/components/organisms/QuickSetupModalController/QuickSetupModalController";
 
 import styles from "./styles";
 

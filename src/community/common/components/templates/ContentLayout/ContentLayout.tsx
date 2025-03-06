@@ -16,6 +16,7 @@ import { useGetOrganization } from "~community/common/api/OrganizationCreateApi"
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import VersionUpgradeBanner from "~community/common/components/molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import { appModes } from "~community/common/constants/configs";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
@@ -33,15 +34,14 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import { useGetQuickSetupProgress } from "~enterprise/common/api/quickSetupApi";
+import QuickSetupFloatingButton from "~enterprise/common/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
-import { useGetQuickSetupProgress } from "~enterprise/quickSetup/api/quickSetupApi";
-import QuickSetupFloatingButton from "~enterprise/quickSetup/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
-import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
-import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
 
 interface Props {
@@ -65,6 +65,7 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
+  isPrimaryBtnDisabled?: boolean;
   id?: {
     btnWrapper?: string;
     primaryBtn?: string;
@@ -97,6 +98,7 @@ const ContentLayout = ({
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
   backIcon = IconName.LEFT_ARROW_ICON,
+  isPrimaryBtnDisabled = false,
   id,
   shouldBlink
 }: Props): JSX.Element => {
@@ -279,6 +281,7 @@ const ContentLayout = ({
                 data-testid={contentLayoutTestId.buttons.primaryButton}
                 shouldBlink={shouldBlink?.primaryBtn}
                 id={id?.primaryBtn}
+                disabled={isPrimaryBtnDisabled}
               />
             )}
             {customRightContent}
@@ -294,9 +297,10 @@ const ContentLayout = ({
         {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
           quickSetupProgress?.progress != null &&
           !isQuickSetupCompleted &&
-          quickSetupModalType !== QuickSetupModalTypeEnums.QUICK_SETUP &&
           quickSetupModalType !==
-            QuickSetupModalTypeEnums.QUICK_SETUP_FINISHED && (
+            QuickSetupModalTypeEnums.IN_PROGRESS_START_UP &&
+          quickSetupModalType !==
+            QuickSetupModalTypeEnums.FINISH_QUICK_SETUP && (
             <QuickSetupFloatingButton />
           )}
       </Stack>

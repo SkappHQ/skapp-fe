@@ -1,12 +1,17 @@
 import { sendGTMEvent } from "@next/third-parties/google";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import AttendanceDashboard from "~community/attendance/components/organisms/AttendanceDashboard/AttendanceDashboard";
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
 import VersionUpgradeModal from "~community/common/components/molecules/VersionUpgradeModal/VersionUpgradeModal";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import {
+  MediaQueries,
+  useMediaQuery
+} from "~community/common/hooks/useMediaQuery";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   AdminTypes,
@@ -19,10 +24,28 @@ import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsVa
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 type RoleTypes = AdminTypes | ManagerTypes | EmployeeTypes;
 
 const Dashboard: NextPage = () => {
+  const { query } = useRouter();
+
+  const queryMatches = useMediaQuery();
+  const isBelow900 = queryMatches(MediaQueries.BELOW_900);
+
+  const { setQuickSetupModalType } = useCommonEnterpriseStore((state) => ({
+    setQuickSetupModalType: state.setQuickSetupModalType
+  }));
+
+  useEffect(() => {
+    if (query.newTenant) {
+      !isBelow900 &&
+        setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
+    }
+  }, [query]);
+
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
       sendGTMEvent({
