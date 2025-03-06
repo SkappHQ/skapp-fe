@@ -42,7 +42,8 @@ const superAdminRoutes = {
     ROUTES.SIGN.SENT,
     ROUTES.SETTINGS.MODULES,
     ROUTES.SETTINGS.PAYMENT,
-    ROUTES.REMOVE_PEOPLE
+    ROUTES.REMOVE_PEOPLE,
+    ROUTES.SUBSCRIPTION
   ]
 };
 
@@ -247,6 +248,7 @@ export const config = {
     "/people/:path*",
     "/timesheet/:path*",
     "/sign/:path*",
-    "/remove-people"
+    "/remove-people",
+    "/subscription"
   ]
 };

@@ -9,6 +9,7 @@ import {
   useTheme
 } from "@mui/material";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
@@ -24,6 +25,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { SettingsModalTypes } from "~community/common/types/SettingsTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import ManageSubscriptionSettingsSection from "~enterprise/settings/components/molecules/ManageSubscriptionSettingsSection/ManageSubscriptionSettingsSection";
 
 import Button from "../../atoms/Button/Button";
 import NotificationSettings from "../../molecules/NotificationSettinngs/NotificationSettinngs";
@@ -52,6 +54,8 @@ const SettingsSection: FC = () => {
     .some((role) => managerRoles.includes(role));
 
   const { globalLoginMethod } = useCommonEnterpriseStore((state) => state);
+
+  const router = useRouter();
 
   return (
     <>
@@ -194,6 +198,10 @@ const SettingsSection: FC = () => {
           />
         </Box>
       )}
+
+      <Divider />
+
+      {isEnterpriseMode && <ManageSubscriptionSettingsSection />}
     </>
   );
 };

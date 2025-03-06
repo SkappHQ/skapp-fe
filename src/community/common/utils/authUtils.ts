@@ -11,7 +11,8 @@ export const IsProtectedUrl = (asPath: string): boolean => {
     ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
     ROUTES.SETTINGS.PAYMENT,
     ROUTES.REMOVE_PEOPLE,
-    ROUTES.CHANGE_SUPERVISORS
+    ROUTES.CHANGE_SUPERVISORS,
+    ROUTES.SUBSCRIPTION
   ];
 
   const protectedPaths = config.matcher
