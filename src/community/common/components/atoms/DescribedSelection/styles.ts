@@ -14,6 +14,19 @@ export const styles = (theme: Theme): StyleProps => ({
     borderRadius: "0.5rem",
     float: "inline-start"
   },
+  selectedWrapper: {
+    borderColor: theme.palette.secondary.dark,
+    background: theme.palette.secondary.main
+  },
+  errorWrapper: {
+    borderColor: theme.palette.error.contrastText,
+    background: theme.palette.error.light
+  },
+  animatedWrapper: {
+    borderColor: theme.palette.secondary.dark,
+    background: theme.palette.secondary.main,
+    animation: "blink 1.5s ease-in-out infinite"
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",

@@ -9,7 +9,11 @@ import { JSX, type MouseEventHandler, useMemo } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
-import { mergeSx, parseHexToRgb } from "~community/common/utils/commonUtil";
+import { mergeSx } from "~community/common/utils/commonUtil";
+import {
+  getRgbForBlink,
+  getSelectionStatusIcon
+} from "~community/common/utils/describedSelectionUtils";
 
 import { styles } from "./styles";
 
@@ -51,25 +55,18 @@ const DescribedSelection = ({
   const classes = styles(theme);
 
   const icon = useMemo(() => {
-    if (selected) {
-      return <Icon name={IconName.SUCCESS_ICON} />;
-    } else if (isError) {
-      return <Icon name={IconName.UNCHECKED_ICON} />;
-    } else {
-      return (
-        <Icon name={IconName.UNCHECKED_ICON} fill={theme.palette.grey[500]} />
-      );
-    }
+    const iconName = getSelectionStatusIcon({
+      selected,
+      isError
+    });
+
+    const fill = !selected && !isError ? theme.palette.grey[500] : "";
+
+    return <Icon name={iconName} fill={fill} />;
   }, [selected, isError, theme.palette.grey]);
 
   const rgbForBlink = useMemo(() => {
-    if (isAnimationOn) {
-      const rgbValues = parseHexToRgb(theme.palette.primary.main);
-
-      return `${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}`;
-    }
-
-    return "";
+    return getRgbForBlink({ isAnimationOn, color: theme.palette.primary.main });
   }, [isAnimationOn, theme.palette.primary.main]);
 
   return (
@@ -77,32 +74,24 @@ const DescribedSelection = ({
       sx={mergeSx([
         classes.wrapper,
         cardWrapperStyles,
-        {
-          ...(selected && {
-            borderColor: theme.palette.secondary.dark,
-            background: theme.palette.secondary.main
-          }),
-          ...(isError && {
-            borderColor: theme.palette.error.contrastText,
-            background: theme.palette.error.light
-          }),
-          ...(isAnimationOn && {
-            borderColor: theme.palette.secondary.dark,
-            background: theme.palette.secondary.main,
-            animation: "blink 1.5s ease-in-out infinite",
-            "@keyframes blink": {
-              "0%": {
-                boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
-              },
-              "50%": {
-                boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
-              },
-              "100%": {
-                boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+        selected ? classes.selectedWrapper : {},
+        isError ? classes.errorWrapper : {},
+        isAnimationOn
+          ? {
+              ...classes.animatedWrapper,
+              "@keyframes blink": {
+                "0%": {
+                  boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+                },
+                "50%": {
+                  boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
+                },
+                "100%": {
+                  boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+                }
               }
             }
-          })
-        }
+          : {}
       ])}
       onClick={onClick}
     >
