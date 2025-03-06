@@ -90,7 +90,9 @@ const ROUTES = {
     SIGN: "/sign/sign",
     REDIRECT: "/sign/redirect",
     COMPLETE: "/sign/complete"
-  }
+  },
+  REMOVE_PEOPLE: "/remove-people",
+  CHANGE_SUPERVISORS: "/change-supervisors"
 };
 
 export default ROUTES;

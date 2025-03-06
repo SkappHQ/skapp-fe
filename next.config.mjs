@@ -269,8 +269,20 @@ const nextConfig = {
         destination: "/enterprise/settings/integrations"
       },
       {
+        source: "/remove-people",
+        destination: "/enterprise/remove-people"
+      },
+      {
+        source: "/change-supervisors",
+        destination: "/enterprise/change-supervisors"
+      },
+      {
         source: "/payment",
         destination: "/enterprise/payment"
+      },
+      {
+        source: "/system-update",
+        destination: "/enterprise/system-update"
       }
     ];
   },

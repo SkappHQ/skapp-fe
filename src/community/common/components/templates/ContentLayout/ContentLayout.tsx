@@ -63,6 +63,7 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
+  isPrimaryBtnDisabled?: boolean;
 }
 
 const ContentLayout = ({
@@ -87,7 +88,8 @@ const ContentLayout = ({
   customRightContent,
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
-  backIcon = IconName.LEFT_ARROW_ICON
+  backIcon = IconName.LEFT_ARROW_ICON,
+  isPrimaryBtnDisabled = false
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -223,6 +225,7 @@ const ContentLayout = ({
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
                 shouldBlink={shouldPrimaryBtnBlink}
+                disabled={isPrimaryBtnDisabled}
               />
             )}
             {customRightContent}
