@@ -8,7 +8,7 @@ import {
   ManagerTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import { TierEnum } from "~enterprise/common/enums/CommonEum";
+import { TierEnum } from "~enterprise/common/enums/Common";
 
 declare module "next-auth" {
   interface Session {

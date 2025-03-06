@@ -16,6 +16,7 @@ import { useGetOrganization } from "~community/common/api/OrganizationCreateApi"
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import VersionUpgradeBanner from "~community/common/components/molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import { appModes } from "~community/common/constants/configs";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
@@ -33,12 +34,11 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
-import QuickSetupContainer from "~enterprise/quickSetup/components/molecules/QuickSetupContainer/QuickSetupContainer";
 
-import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
 
 interface Props {
