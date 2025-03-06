@@ -16,6 +16,7 @@ import { useGetOrganization } from "~community/common/api/OrganizationCreateApi"
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import VersionUpgradeBanner from "~community/common/components/molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import { appModes } from "~community/common/constants/configs";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
@@ -41,7 +42,6 @@ import { useGetQuickSetupProgress } from "~enterprise/quickSetup/api/quickSetupA
 import QuickSetupFloatingButton from "~enterprise/quickSetup/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
 import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
-import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
 
 interface Props {
