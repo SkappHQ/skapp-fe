@@ -34,10 +34,7 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
-import { useGetQuickSetupProgress } from "~enterprise/common/api/quickSetupApi";
-import QuickSetupFloatingButton from "~enterprise/common/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
-import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
-import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
@@ -130,20 +127,6 @@ const ContentLayout = ({
     setIsUserLimitExceeded
   } = useUserLimitStore((state) => state);
 
-  const {
-    setProgressPercentage,
-    setQuickSetupStatus,
-    quickSetupModalType,
-    isQuickSetupCompleted,
-    setIsQuickSetupCompleted
-  } = useCommonEnterpriseStore((state) => ({
-    setProgressPercentage: state.setProgressPercentage,
-    setQuickSetupStatus: state.setQuickSetupStatus,
-    quickSetupModalType: state.quickSetupModalType,
-    isQuickSetupCompleted: state.isQuickSetupCompleted,
-    setIsQuickSetupCompleted: state.setIsQuickSetupCompleted
-  }));
-
   const { data: storageAvailabilityData } = useStorageAvailability();
 
   const usedStoragePercentage = useMemo(() => {
@@ -167,35 +150,6 @@ const ContentLayout = ({
     setIsUserLimitExceeded,
     setShowUserLimitBanner
   ]);
-
-  const { data: quickSetupProgress } = useGetQuickSetupProgress();
-
-  useEffect(() => {
-    if (quickSetupProgress) {
-      setProgressPercentage(quickSetupProgress?.progress);
-      setIsQuickSetupCompleted(quickSetupProgress?.isQuickSetupCompleted);
-      setQuickSetupStatus(
-        "INVITE_EMPLOYEES",
-        quickSetupProgress?.quickSetupStatus?.INVITE_EMPLOYEES
-      );
-      setQuickSetupStatus(
-        "DEFINE_TEAMS",
-        quickSetupProgress?.quickSetupStatus?.DEFINE_TEAMS
-      );
-      setQuickSetupStatus(
-        "DEFINE_JOB_FAMILIES",
-        quickSetupProgress?.quickSetupStatus?.DEFINE_JOB_FAMILIES
-      );
-      setQuickSetupStatus(
-        "SETUP_HOLIDAYS",
-        quickSetupProgress?.quickSetupStatus?.SETUP_HOLIDAYS
-      );
-      setQuickSetupStatus(
-        "SETUP_LEAVE_TYPES",
-        quickSetupProgress?.quickSetupStatus?.SETUP_LEAVE_TYPES
-      );
-    }
-  }, [quickSetupProgress]);
 
   return (
     <>
@@ -294,15 +248,7 @@ const ContentLayout = ({
           </Stack>
         )}
         {children}
-        {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
-          quickSetupProgress?.progress != null &&
-          !isQuickSetupCompleted &&
-          quickSetupModalType !==
-            QuickSetupModalTypeEnums.IN_PROGRESS_START_UP &&
-          quickSetupModalType !==
-            QuickSetupModalTypeEnums.FINISH_QUICK_SETUP && (
-            <QuickSetupFloatingButton />
-          )}
+        <QuickSetupContainer />
       </Stack>
     </>
   );
