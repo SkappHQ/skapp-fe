@@ -27,11 +27,19 @@ export const employeeDataFiltersSlice = (
     sortKey: SortKeyTypes.NAME,
     sortOrder: SortOrderTypes.ASC,
     searchKeyword: "",
-    isExport: false
+    isExport: false,
+    accountStatus: EmploymentStatusTypes?.ACTIVE
   },
   menuItems: [],
   searchedItems: [],
   isPendingInvitationListOpen: false,
+  selectedEmployees: [],
+  setSelectedEmployees: (value: number[]) => {
+    set((state: EmployeeDataFiltersSliceType) => ({
+      ...state,
+      selectedEmployees: value
+    }));
+  },
 
   handleEmployeeDataSort: (key: string, value: string | boolean) => {
     set((state: EmployeeDataFiltersSliceType) => ({

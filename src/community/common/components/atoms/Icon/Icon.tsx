@@ -50,6 +50,7 @@ import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
 import InitialsIcon from "~community/common/assets/Icons/InitialsIcon";
+import InviteIcon from "~community/common/assets/Icons/InviteIcon";
 import LeaveIcon from "~community/common/assets/Icons/LeaveIcon";
 import LeaveModuleIcon from "~community/common/assets/Icons/LeaveModuleIcon";
 import LeftArrowIcon from "~community/common/assets/Icons/LeftArrowIcon";
@@ -67,6 +68,7 @@ import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
 import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
+import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
@@ -219,15 +221,17 @@ export const IconMapping: Partial<
   [IconName.VIEW_ICON]: ViewIcon,
   [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon,
   [IconName.SKAPP_ICON]: SkappIcon,
+  [IconName.MASTER_CARD_ICON]: MasterCardIcon,
+  [IconName.VISA_CARD_ICON]: VisaCardIcon,
+  [IconName.GREY_ROUNDED_TICK_ICON]: GreyRoundedTickIcon,
+  [IconName.GREY_PLUS_ICON]: GreyPlusIcon,
   [IconName.INITIALS_ICON]: InitialsIcon,
   [IconName.STAMP_ICON]: StampIcon,
   [IconName.APPROVED_ICON]: ApprovedIcon,
   [IconName.DECLINED_ICON]: DeclinedIcon,
   [IconName.SIGNATURE_ICON]: SignatureIcon,
-  [IconName.MASTER_CARD_ICON]: MasterCardIcon,
-  [IconName.VISA_CARD_ICON]: VisaCardIcon,
-  [IconName.GREY_ROUNDED_TICK_ICON]: GreyRoundedTickIcon,
-  [IconName.GREY_PLUS_ICON]: GreyPlusIcon
+  [IconName.INVITE_ICON]: InviteIcon,
+  [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon
   // Add more icons here as needed
 };
 

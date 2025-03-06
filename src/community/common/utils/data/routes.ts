@@ -3,7 +3,7 @@ import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
-  SenderRoleTypes
+  SenderTypes
 } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 
@@ -238,7 +238,7 @@ const routes = [
       AdminTypes.SUPER_ADMIN,
       EmployeeTypes.ESIGN_EMPLOYEE,
       AdminTypes.ESIGN_ADMIN,
-      SenderRoleTypes.ESIGN_SENDER
+      SenderTypes.ESIGN_SENDER
     ],
     subTree: [
       {
@@ -249,7 +249,7 @@ const routes = [
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
           AdminTypes.ESIGN_ADMIN,
-          SenderRoleTypes.ESIGN_SENDER,
+          SenderTypes.ESIGN_SENDER,
           EmployeeTypes.ESIGN_EMPLOYEE
         ]
       },
@@ -260,7 +260,7 @@ const routes = [
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
-          SenderRoleTypes.ESIGN_SENDER,
+          SenderTypes.ESIGN_SENDER,
           AdminTypes.ESIGN_ADMIN
         ]
       },
@@ -271,7 +271,7 @@ const routes = [
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
-          SenderRoleTypes.ESIGN_SENDER,
+          SenderTypes.ESIGN_SENDER,
           AdminTypes.ESIGN_ADMIN
         ]
       },
@@ -282,7 +282,7 @@ const routes = [
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
-          SenderRoleTypes.ESIGN_SENDER,
+          SenderTypes.ESIGN_SENDER,
           AdminTypes.ESIGN_ADMIN
         ]
       }

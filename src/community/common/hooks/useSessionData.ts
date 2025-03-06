@@ -27,6 +27,11 @@ const useSessionData = () => {
     [sessionData?.user?.roles]
   );
 
+  const isEsignatureModuleEnabled = useMemo(
+    () => sessionData?.user?.roles?.includes(EmployeeTypes.ESIGN_EMPLOYEE),
+    [sessionData?.user?.roles]
+  );
+
   const employeeDetails = useMemo(
     () => sessionData?.user?.employee,
     [sessionData?.user?.employee]
@@ -37,6 +42,7 @@ const useSessionData = () => {
     isProTier,
     isAttendanceModuleEnabled,
     isLeaveModuleEnabled,
+    isEsignatureModuleEnabled,
     employeeDetails
   };
 };
