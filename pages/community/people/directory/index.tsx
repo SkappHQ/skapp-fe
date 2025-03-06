@@ -57,7 +57,7 @@ const Directory: NextPage = () => {
         isDividerVisible
       >
         <Box>
-          <EmployeeData />
+          <EmployeeData isRemovePeople={false} />
           <DirectoryPopupController />
         </Box>
       </ContentLayout>

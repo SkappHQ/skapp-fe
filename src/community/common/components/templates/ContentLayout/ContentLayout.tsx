@@ -33,13 +33,10 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
-import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
-import { useGetQuickSetupProgress } from "~enterprise/quickSetup/api/quickSetupApi";
-import QuickSetupFloatingButton from "~enterprise/quickSetup/components/molecules/QuickSetupFloatingButton/QuickSetupFloatingButton";
-import { QuickSetupModalType } from "~enterprise/quickSetup/enum/Common";
+import QuickSetupContainer from "~enterprise/quickSetup/components/molecules/QuickSetupContainer/QuickSetupContainer";
 
 import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
@@ -67,6 +64,7 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
+  isPrimaryBtnDisabled?: boolean;
 }
 
 const ContentLayout = ({
@@ -91,7 +89,8 @@ const ContentLayout = ({
   customRightContent,
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
-  backIcon = IconName.LEFT_ARROW_ICON
+  backIcon = IconName.LEFT_ARROW_ICON,
+  isPrimaryBtnDisabled = false
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -121,20 +120,6 @@ const ContentLayout = ({
     setIsUserLimitExceeded
   } = useUserLimitStore((state) => state);
 
-  const {
-    setProgressPercentage,
-    setQuickSetupStatus,
-    quickSetupModalType,
-    isQuickSetupCompleted,
-    setIsQuickSetupCompleted
-  } = useCommonEnterpriseStore((state) => ({
-    setProgressPercentage: state.setProgressPercentage,
-    setQuickSetupStatus: state.setQuickSetupStatus,
-    quickSetupModalType: state.quickSetupModalType,
-    isQuickSetupCompleted: state.isQuickSetupCompleted,
-    setIsQuickSetupCompleted: state.setIsQuickSetupCompleted
-  }));
-
   const { data: storageAvailabilityData } = useStorageAvailability();
 
   const usedStoragePercentage = useMemo(() => {
@@ -158,35 +143,6 @@ const ContentLayout = ({
     setIsUserLimitExceeded,
     setShowUserLimitBanner
   ]);
-
-  const { data: quickSetupProgress } = useGetQuickSetupProgress();
-
-  useEffect(() => {
-    if (quickSetupProgress) {
-      setProgressPercentage(quickSetupProgress?.progress);
-      setIsQuickSetupCompleted(quickSetupProgress?.isQuickSetupCompleted);
-      setQuickSetupStatus(
-        "INVITE_EMPLOYEES",
-        quickSetupProgress?.quickSetupStatus?.INVITE_EMPLOYEES
-      );
-      setQuickSetupStatus(
-        "DEFINE_TEAMS",
-        quickSetupProgress?.quickSetupStatus?.DEFINE_TEAMS
-      );
-      setQuickSetupStatus(
-        "DEFINE_JOB_FAMILIES",
-        quickSetupProgress?.quickSetupStatus?.DEFINE_JOB_FAMILIES
-      );
-      setQuickSetupStatus(
-        "SETUP_HOLIDAYS",
-        quickSetupProgress?.quickSetupStatus?.SETUP_HOLIDAYS
-      );
-      setQuickSetupStatus(
-        "SETUP_LEAVE_TYPES",
-        quickSetupProgress?.quickSetupStatus?.SETUP_LEAVE_TYPES
-      );
-    }
-  }, [quickSetupProgress]);
 
   return (
     <>
@@ -270,6 +226,7 @@ const ContentLayout = ({
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
                 shouldBlink={shouldPrimaryBtnBlink}
+                disabled={isPrimaryBtnDisabled}
               />
             )}
             {customRightContent}
@@ -282,13 +239,7 @@ const ContentLayout = ({
           </Stack>
         )}
         {children}
-        {data?.user.roles?.includes(AdminTypes.SUPER_ADMIN) &&
-          quickSetupProgress?.progress != null &&
-          !isQuickSetupCompleted &&
-          quickSetupModalType !== QuickSetupModalType.QUICK_SETUP &&
-          quickSetupModalType !== QuickSetupModalType.QUICK_SETUP_FINISHED && (
-            <QuickSetupFloatingButton />
-          )}
+        <QuickSetupContainer />
       </Stack>
     </>
   );
