@@ -24,8 +24,8 @@ import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsVa
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 type RoleTypes = AdminTypes | ManagerTypes | EmployeeTypes;
 

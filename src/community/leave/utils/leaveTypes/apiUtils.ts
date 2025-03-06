@@ -8,7 +8,7 @@ import { LeaveTypeToastEnums } from "~community/leave/enums/LeaveTypeEnums";
 import {
   QuickSetupModalTypeEnums,
   QuickSetupTaskEnums
-} from "~enterprise/quickSetup/enum/Common";
+} from "~enterprise/common/enums/Common";
 
 export const handleLeaveTypeApiResponse =
   ({
@@ -40,7 +40,7 @@ export const handleLeaveTypeApiResponse =
         setFormDirty?.(false);
         await redirect?.(ROUTES.LEAVE.LEAVE_TYPES);
         setOngoingQuickSetup?.(QuickSetupTaskEnums.SETUP_LEAVE_TYPES, false);
-        setQuickSetupModalType?.(QuickSetupModalTypeEnums.QUICK_SETUP);
+        setQuickSetupModalType?.(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
         break;
       case LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR:
         setToastMessage({

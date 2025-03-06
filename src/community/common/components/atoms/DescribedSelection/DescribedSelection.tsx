@@ -10,10 +10,7 @@ import { JSX, type MouseEventHandler, useMemo } from "react";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
-import {
-  getRgbForBlink,
-  getSelectionStatusIcon
-} from "~community/common/utils/describedSelectionUtils";
+import { getRgbForBlink } from "~community/common/utils/describedSelectionUtils";
 
 import { styles } from "./styles";
 
@@ -55,14 +52,15 @@ const DescribedSelection = ({
   const classes = styles(theme);
 
   const icon = useMemo(() => {
-    const iconName = getSelectionStatusIcon({
-      selected,
-      isError
-    });
-
-    const fill = !selected && !isError ? theme.palette.grey[500] : "";
-
-    return <Icon name={iconName} fill={fill} />;
+    if (selected) {
+      return <Icon name={IconName.SUCCESS_ICON} />;
+    } else if (isError) {
+      return <Icon name={IconName.UNCHECKED_ICON} />;
+    } else {
+      return (
+        <Icon name={IconName.UNCHECKED_ICON} fill={theme.palette.grey[500]} />
+      );
+    }
   }, [selected, isError, theme.palette.grey]);
 
   const rgbForBlink = useMemo(() => {
