@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
-import { TierEnum } from "~enterprise/common/enums/CommonEum";
+import { TierEnum } from "~enterprise/common/enums/Common";
 
 const useSessionData = () => {
   const { data: sessionData } = useSession();

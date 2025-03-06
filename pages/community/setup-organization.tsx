@@ -23,7 +23,9 @@ import useGetCountryList from "~community/people/hooks/useGetCountryList";
 
 const SetupOrganization: NextPage = () => {
   const router: NextRouter = useRouter();
+
   const theme: Theme = useTheme();
+
   const translateText = useTranslator("onboarding", "organizationCreate");
 
   const onSuccess = () => {
@@ -49,6 +51,7 @@ const SetupOrganization: NextPage = () => {
   };
 
   const countryList = useGetCountryList();
+
   const onSubmit = async (values: typeof initialValues) => {
     if (companyLogo.length > 0 && companyLogo[0].file) {
       const formData = new FormData();
