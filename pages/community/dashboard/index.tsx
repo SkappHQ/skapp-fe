@@ -40,7 +40,7 @@ const Dashboard: NextPage = () => {
   }));
 
   useEffect(() => {
-    if (query.newTenant) {
+    if (query.isFirstTime) {
       !isBelow900 &&
         setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
     }
