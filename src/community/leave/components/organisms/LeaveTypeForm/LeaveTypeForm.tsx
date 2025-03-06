@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import ColorPaletteSkeleton from "~community/common/components/atoms/ColorPaletteSkeleton/ColorPaletteSkeleton";
+import DescribedSelection from "~community/common/components/atoms/DescribedSelection/DescribedSelection";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import ColorPalette from "~community/common/components/molecules/ColorPalette/ColorPalette";
@@ -34,7 +35,6 @@ import {
   useAddLeaveType,
   useEditLeaveType
 } from "~community/leave/api/LeaveTypesApi";
-import LeaveDurationTypeCard from "~community/leave/components/molecules/LeaveDurationTypeCard/LeaveDurationTypeCard";
 import ConfirmLeaveTypeStatusUpdateModal from "~community/leave/components/molecules/UserPromptModals/ConfirmLeaveTypeStatusUpdateModal/ConfirmLeaveTypeStatusUpdateModal";
 import { leaveTypeColors } from "~community/leave/constants/configs";
 import {
@@ -298,7 +298,7 @@ const LeaveTypeForm = () => {
           </Stack>
 
           <Stack sx={classes.cardContainer}>
-            <LeaveDurationTypeCard
+            <DescribedSelection
               title={translateText(["halfDay"])}
               description={translateText(["halfDayDescription"])}
               selected={
@@ -315,8 +315,18 @@ const LeaveTypeForm = () => {
                 )
               }
               isError={Boolean(errors.leaveDuration)}
+              typographyStyles={{
+                variant: {
+                  title: "h4",
+                  description: "body1"
+                },
+                color: {
+                  title: theme.palette.common.black,
+                  description: theme.palette.common.black
+                }
+              }}
             />
-            <LeaveDurationTypeCard
+            <DescribedSelection
               title={translateText(["fullDay"])}
               description={translateText(["fullDayDescription"])}
               selected={
@@ -333,6 +343,16 @@ const LeaveTypeForm = () => {
                 )
               }
               isError={Boolean(errors.leaveDuration)}
+              typographyStyles={{
+                variant: {
+                  title: "h4",
+                  description: "body1"
+                },
+                color: {
+                  title: theme.palette.common.black,
+                  description: theme.palette.common.black
+                }
+              }}
             />
           </Stack>
 
