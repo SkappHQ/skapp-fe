@@ -1,8 +1,8 @@
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 
-import { EmployeeTypes } from "~community/common/types/AuthTypes";
-import { TierEnum } from "~enterprise/common/enums/CommonEum";
+import { AdminTypes, EmployeeTypes } from "~community/common/types/AuthTypes";
+import { TierEnum } from "~enterprise/common/enums/Common";
 
 const useSessionData = () => {
   const { data: sessionData } = useSession();
@@ -37,13 +37,19 @@ const useSessionData = () => {
     [sessionData?.user?.employee]
   );
 
+  const isSuperAdmin = useMemo(
+    () => sessionData?.user?.roles?.includes(AdminTypes.SUPER_ADMIN),
+    [sessionData?.user?.roles]
+  );
+
   return {
     isFreeTier,
     isProTier,
     isAttendanceModuleEnabled,
     isLeaveModuleEnabled,
     isEsignatureModuleEnabled,
-    employeeDetails
+    employeeDetails,
+    isSuperAdmin
   };
 };
 

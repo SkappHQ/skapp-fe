@@ -59,7 +59,10 @@ const adminRoutes = {
     ROUTES.SIGN.CREATE_DOCUMENT,
     ROUTES.SIGN.FOLDERS,
     ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT
+    ROUTES.SIGN.SENT,
+    ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.COMPLETE
   ]
 };
 
@@ -81,7 +84,10 @@ const managerRoutes = {
     ROUTES.SIGN.CREATE_DOCUMENT,
     ROUTES.SIGN.FOLDERS,
     ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT
+    ROUTES.SIGN.SENT,
+    ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.COMPLETE
   ]
 };
 
@@ -96,7 +102,13 @@ const employeeRoutes = {
     ROUTES.TIMESHEET.MY_TIMESHEET,
     ...commonRoutes
   ],
-  [EmployeeTypes.ESIGN_EMPLOYEE]: [ROUTES.SIGN.INBOX, ...commonRoutes]
+  [EmployeeTypes.ESIGN_EMPLOYEE]: [
+    ROUTES.SIGN.INBOX,
+    ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.COMPLETE,
+    ...commonRoutes
+  ]
 };
 
 // Merging all routes into one allowedRoutes object
