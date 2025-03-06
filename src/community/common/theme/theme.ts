@@ -433,7 +433,6 @@ export const theme = createTheme({
       fontWeight: 600,
       fontSize: "0.875rem" // 14px
     },
-    h6: undefined,
     subtitle1: undefined,
     subtitle2: undefined,
     // Nav heading, Table filter chip, Modal content, Button large, Paragraph, Toggle label

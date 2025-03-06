@@ -1,4 +1,6 @@
-const styles = () => ({
+import { StyleProps } from "~community/common/types/CommonTypes";
+
+const styles = (): StyleProps => ({
   modalWrapper: {
     width: { xs: "100%", sm: "60%" },
     marginInline: "auto"

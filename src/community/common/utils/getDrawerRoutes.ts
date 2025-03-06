@@ -6,7 +6,7 @@ import {
   SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import { TierEnum } from "~enterprise/common/enums/CommonEum";
+import { TierEnum } from "~enterprise/common/enums/Common";
 import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import routes from "./data/routes";
