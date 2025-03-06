@@ -89,6 +89,10 @@ declare module "@mui/material/styles" {
         light: string;
       };
     };
+    recipientsColors: {
+      background: string;
+      border: string;
+    }[];
   }
   interface PaletteOptions {
     notifyBadge: {
@@ -177,6 +181,10 @@ declare module "@mui/material/styles" {
         light: string;
       };
     };
+    recipientsColors: {
+      background: string;
+      border: string;
+    }[];
   }
   interface TypographyVariants {
     onboardingHeader: React.CSSProperties;
@@ -369,7 +377,33 @@ export const theme = createTheme({
         dark: "#6B21A8",
         light: "#F3E8FF"
       }
-    }
+    },
+    recipientsColors: [
+      {
+        background: "#E7DBFFB2",
+        border: "#9A66FF"
+      },
+      {
+        background: "#FFDFE6B2",
+        border: "#FF6384"
+      },
+      {
+        background: "#FFE3C7B2",
+        border: "#FF9F40"
+      },
+      {
+        background: "#FFF5DEB2",
+        border: "#FFCD56"
+      },
+      {
+        background: "#9FD6D6B2",
+        border: "#4CC0C0"
+      },
+      {
+        background: "#7AA3BF",
+        border: "#37A2EB"
+      }
+    ]
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
@@ -399,7 +433,6 @@ export const theme = createTheme({
       fontWeight: 600,
       fontSize: "0.875rem" // 14px
     },
-    h6: undefined,
     subtitle1: undefined,
     subtitle2: undefined,
     // Nav heading, Table filter chip, Modal content, Button large, Paragraph, Toggle label

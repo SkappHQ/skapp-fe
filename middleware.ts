@@ -7,7 +7,7 @@ import {
   EmployeeTypes,
   ManagerTypes,
   ROLE_SUPER_ADMIN,
-  SenderRoleTypes,
+  SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
@@ -75,7 +75,7 @@ const managerRoutes = {
     ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
     ROUTES.PEOPLE.INDIVIDUAL
   ],
-  [SenderRoleTypes.ESIGN_SENDER]: [
+  [SenderTypes.ESIGN_SENDER]: [
     ROUTES.SIGN.CONTACTS,
     ROUTES.SIGN.CREATE_DOCUMENT,
     ROUTES.SIGN.FOLDERS,
@@ -177,12 +177,9 @@ export default withAuth(
     );
 
     if (isAllowed) {
-      const isEsignatureModuleAvailable =
-        process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
       if (
         request.nextUrl.pathname.includes(ROUTES.SIGN.BASE) &&
-        !isEsignatureModuleAvailable
+        !roles.includes(EmployeeTypes.ESIGN_EMPLOYEE)
       ) {
         return NextResponse.redirect(
           new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
@@ -200,7 +197,6 @@ export default withAuth(
 
       return NextResponse.next();
     }
-
     // Redirect to /unauthorized if no access
     return NextResponse.redirect(
       new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
