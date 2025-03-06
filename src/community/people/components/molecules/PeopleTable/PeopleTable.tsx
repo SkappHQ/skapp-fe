@@ -57,6 +57,7 @@ interface Props {
   isFetchingNextPage?: boolean;
   onSearch: boolean;
   hasNextPage?: boolean;
+  isRemovePeople?: boolean;
 }
 
 const PeopleTable: FC<Props> = ({
@@ -65,7 +66,8 @@ const PeopleTable: FC<Props> = ({
   isFetching,
   isFetchingNextPage,
   onSearch,
-  hasNextPage
+  hasNextPage,
+  isRemovePeople = false
 }) => {
   const theme: Theme = useTheme();
   const { data } = useSession();
@@ -97,6 +99,7 @@ const PeopleTable: FC<Props> = ({
     isPendingInvitationListOpen,
     setIsFromPeopleDirectory,
     setViewEmployeeId,
+    setSelectedEmployees,
     employeeDataParams,
     setProjectTeamNames,
     setSelectedEmployeeId,
@@ -137,6 +140,10 @@ const PeopleTable: FC<Props> = ({
 
   const listInnerRef = useRef<HTMLDivElement>();
   const supportsPassive = testPassiveEventSupport();
+
+  useEffect(() => {
+    setSelectedEmployees(selectedPeople);
+  }, [selectedPeople]);
 
   const handleSortClick = (
     event: MouseEvent<HTMLElement> | FormEvent<HTMLFormElement>
@@ -201,103 +208,110 @@ const PeopleTable: FC<Props> = ({
   }));
 
   const transformToTableRows = () => {
-    return employeeData?.map((employee: EmployeeDataType) => ({
-      id: employee?.employeeId,
-      name: (
-        <Stack flexDirection={"row"} gap={1} alignItems={"center"}>
-          <AvatarChip
-            firstName={employee?.firstName ?? ""}
-            lastName={employee?.lastName ?? ""}
-            avatarUrl={employee?.avatarUrl}
-            isResponsiveLayout={true}
-            chipStyles={{
-              color: employee?.isActive
-                ? "common.black"
-                : theme.palette.grey[700],
-              maxWidth: isPendingInvitationListOpen ? "9.5rem" : "12.625rem",
-              "& .MuiChip-label": {
-                pr: "0.3rem"
-              }
-            }}
-          />
-          {isPendingInvitationListOpen && (
-            <Stack
-              sx={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 1,
-                backgroundColor: theme.palette.amber.light,
-                color: theme.palette.amber.dark,
-                padding: "0.25rem",
-                borderRadius: 10,
-                fontSize: "0.625rem"
+    return employeeData
+      ?.filter(
+        (employee: EmployeeDataType) =>
+          !isRemovePeople ||
+          employee?.employeeId !== currentEmployeeDetails?.employeeId
+      )
+      .map((employee: EmployeeDataType) => ({
+        id: employee?.employeeId,
+        name: (
+          <Stack flexDirection={"row"} gap={1} alignItems={"center"}>
+            <AvatarChip
+              firstName={employee?.firstName ?? ""}
+              lastName={employee?.lastName ?? ""}
+              avatarUrl={employee?.avatarUrl}
+              isResponsiveLayout={true}
+              chipStyles={{
+                color: employee?.isActive
+                  ? "common.black"
+                  : theme.palette.grey[700],
+                maxWidth: isPendingInvitationListOpen ? "9.5rem" : "12.625rem",
+                "& .MuiChip-label": {
+                  pr: "0.3rem"
+                }
               }}
-            >
-              <Icon
-                name={IconName.CLOCK_ICON}
-                fill={theme.palette.amber.dark}
-              />
-              {translateText(["Pending"])}
-            </Stack>
-          )}
-        </Stack>
-      ),
-      jobTitle: employee?.jobLevel,
-      email: employee?.email,
-      team:
-        employee?.teams?.length === 0 ? (
-          <>-</>
-        ) : (
-          <Stack
-            sx={{
-              gap: 1,
-              flexDirection: "row",
-              width: "100%"
-            }}
-          >
-            {refactorTeamListData(employee?.teams as TeamResultsType[])
-              ?.firstTeamName && (
-              <Box width="100%">
-                <BasicChip
-                  label={
-                    refactorTeamListData(employee?.teams as TeamResultsType[])
-                      .firstTeamName
-                  }
-                  isResponsive={true}
+            />
+            {isPendingInvitationListOpen && (
+              <Stack
+                sx={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 1,
+                  backgroundColor: theme.palette.amber.light,
+                  color: theme.palette.amber.dark,
+                  padding: "0.25rem",
+                  borderRadius: 10,
+                  fontSize: "0.625rem"
+                }}
+              >
+                <Icon
+                  name={IconName.CLOCK_ICON}
+                  fill={theme.palette.amber.dark}
                 />
-              </Box>
-            )}
-
-            {refactorTeamListData(employee?.teams as TeamResultsType[])
-              .otherTeamCount >= 1 && (
-              <Box width="100%">
-                <BasicChip
-                  chipStyles={{
-                    color: theme.palette.primary.dark
-                  }}
-                  label={
-                    (`+ ` +
-                      refactorTeamListData(employee?.teams as TeamResultsType[])
-                        .otherTeamCount) as unknown as string
-                  }
-                  isResponsive={true}
-                />
-              </Box>
+                {translateText(["Pending"])}
+              </Stack>
             )}
           </Stack>
         ),
-      supervisor:
-        employee?.managers?.length === 0 ? (
-          <>{translateText(["noSupervisor"])}</>
-        ) : (
-          <SupervisorAvatarGroup
-            avatars={sortSupervisorAvatars(
-              refactorSupervisorAvatars(employee?.managers ?? [])
-            )}
-            isHoverModal={true}
-          />
-        )
-    }));
+        jobTitle: employee?.jobLevel,
+        email: employee?.email,
+        team:
+          employee?.teams?.length === 0 ? (
+            <>-</>
+          ) : (
+            <Stack
+              sx={{
+                gap: 1,
+                flexDirection: "row",
+                width: "100%"
+              }}
+            >
+              {refactorTeamListData(employee?.teams as TeamResultsType[])
+                ?.firstTeamName && (
+                <Box width="100%">
+                  <BasicChip
+                    label={
+                      refactorTeamListData(employee?.teams as TeamResultsType[])
+                        .firstTeamName
+                    }
+                    isResponsive={true}
+                  />
+                </Box>
+              )}
+
+              {refactorTeamListData(employee?.teams as TeamResultsType[])
+                .otherTeamCount >= 1 && (
+                <Box width="100%">
+                  <BasicChip
+                    chipStyles={{
+                      color: theme.palette.primary.dark
+                    }}
+                    label={
+                      (`+ ` +
+                        refactorTeamListData(
+                          employee?.teams as TeamResultsType[]
+                        ).otherTeamCount) as unknown as string
+                    }
+                    isResponsive={true}
+                  />
+                </Box>
+              )}
+            </Stack>
+          ),
+        supervisor:
+          employee?.managers?.length === 0 ? (
+            <>{translateText(["noSupervisor"])}</>
+          ) : (
+            <SupervisorAvatarGroup
+              avatars={sortSupervisorAvatars(
+                refactorSupervisorAvatars(employee?.managers ?? [])
+              )}
+              isHoverModal={true}
+            />
+          )
+      }));
   };
 
   useEffect(() => {
@@ -425,15 +439,15 @@ const PeopleTable: FC<Props> = ({
           tableContainerStyles={tableContainerStyles}
           isPaginationEnabled={false}
           tableHeaderCellStyles={tableHeaderCellStyles}
-          onRowClick={handleRowClick}
+          onRowClick={isRemovePeople ? undefined : handleRowClick}
           tableRowStyles={{
-            ":hover": {
-              backgroundColor: theme.palette.grey[100]
+            "&:hover": {
+              cursor: isRemovePeople ? "default" : "pointer"
             }
           }}
           selectedRows={selectedPeople}
           actionRowOneLeftButton={
-            isPeopleManagerOrSuperAdmin ? (
+            isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
               <PeopleTableSortBy
                 sortEl={sortEl}
                 handleSortClose={handleSortClose}
@@ -446,8 +460,12 @@ const PeopleTable: FC<Props> = ({
               />
             ) : undefined
           }
-          isCheckboxSelectionEnabled={isPendingInvitationListOpen}
-          isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
+          isCheckboxSelectionEnabled={
+            isPendingInvitationListOpen || isRemovePeople
+          }
+          isSelectAllCheckboxEnabled={
+            isPendingInvitationListOpen || isRemovePeople
+          }
           handleAllRowsCheck={handleAllCheckBoxClick}
           handleRowCheck={handleCheckBoxClick}
           actionRowOneRightButton={
@@ -463,7 +481,7 @@ const PeopleTable: FC<Props> = ({
                 isStrokeAvailable={true}
                 disabled={selectedPeople.length === 0}
               />
-            ) : isPeopleManagerOrSuperAdmin ? (
+            ) : isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
               <PeopleTableFilterBy
                 filterEl={filterEl}
                 handleFilterClose={handleFilterClose}
