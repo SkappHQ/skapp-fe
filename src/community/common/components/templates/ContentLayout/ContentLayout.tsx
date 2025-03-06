@@ -34,10 +34,10 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
-import QuickSetupContainer from "~enterprise/quickSetup/components/molecules/QuickSetupContainer/QuickSetupContainer";
 
 import styles from "./styles";
 
