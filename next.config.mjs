@@ -249,6 +249,18 @@ const nextConfig = {
         destination: "/enterprise/sign/create"
       },
       {
+        source: "/sign/sign",
+        destination: "/enterprise/sign/sign"
+      },
+      {
+        source: "/sign/redirect",
+        destination: "/enterprise/sign/redirect"
+      },
+      {
+        source: "/sign/complete",
+        destination: "/enterprise/sign/complete"
+      },
+      {
         source: "/settings/modules",
         destination: "/enterprise/settings/modules"
       },
@@ -271,8 +283,15 @@ const nextConfig = {
       {
         source: "/system-update",
         destination: "/enterprise/system-update"
+      },
+      {
+        source: "/subscription",
+        destination: "/enterprise/subscription"
       }
     ];
+  },
+  images: {
+    domains: ["dev-app-storage-bucket.s3.ap-southeast-1.amazonaws.com"]
   },
   eslint: {
     ignoreDuringBuilds: true

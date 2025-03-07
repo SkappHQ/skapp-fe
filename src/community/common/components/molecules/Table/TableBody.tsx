@@ -57,6 +57,7 @@ interface Props {
     OnClick: (data: any) => void;
   } | null;
   emptyScreenButtonType?: ButtonStyle;
+  shouldEmptyTableScreenBtnBlink?: boolean;
 }
 
 const TableBody: FC<Props> = ({
@@ -82,7 +83,8 @@ const TableBody: FC<Props> = ({
   isActionColumnEnabled = false,
   actionColumnIconBtnLeft,
   actionColumnIconBtnRight,
-  emptyScreenButtonType
+  emptyScreenButtonType,
+  shouldEmptyTableScreenBtnBlink
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -225,6 +227,7 @@ const TableBody: FC<Props> = ({
                 buttonText={emptyScreenButtonText}
                 onButtonClick={onEmptyScreenBtnClick}
                 buttonStyle={emptyScreenButtonType}
+                shouldEmptyTableScreenBtnBlink={shouldEmptyTableScreenBtnBlink}
               />
             )}
           </TableCell>

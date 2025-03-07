@@ -82,8 +82,9 @@ const LeaveTypeForm = () => {
     setLeaveTypeModalType: state.setLeaveTypeModalType
   }));
 
-  const { setOngoingQuickSetup, setQuickSetupModalType } =
+  const { ongoingQuickSetup, setOngoingQuickSetup, setQuickSetupModalType } =
     useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
       setOngoingQuickSetup: state.setOngoingQuickSetup,
       setQuickSetupModalType: state.setQuickSetupModalType
     }));
@@ -524,6 +525,7 @@ const LeaveTypeForm = () => {
                 );
                 await router.back();
               }}
+              shouldBlink={ongoingQuickSetup.SETUP_LEAVE_TYPES}
             />
             <Button
               type={ButtonTypes.SUBMIT}

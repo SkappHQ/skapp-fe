@@ -86,10 +86,14 @@ const ROUTES = {
     SENT: "/sign/sent",
     FOLDERS: "/sign/folders",
     CONTACTS: "/sign/contacts",
-    CREATE_DOCUMENT: "/sign/create"
+    CREATE_DOCUMENT: "/sign/create",
+    SIGN: "/sign/sign",
+    REDIRECT: "/sign/redirect",
+    COMPLETE: "/sign/complete"
   },
   REMOVE_PEOPLE: "/remove-people",
-  CHANGE_SUPERVISORS: "/change-supervisors"
+  CHANGE_SUPERVISORS: "/change-supervisors",
+  SUBSCRIPTION: "/subscription"
 };
 
 export default ROUTES;

@@ -19,6 +19,8 @@ import {
   handleJobFamilyDeleteBtnClick,
   handleJobFamilyEditBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobFamilyTableUtils";
+import { HighlightAddJobFamiliesBtn } from "~enterprise/common/constants/DefineJobFamiliesFlow";
+import useProductTour from "~enterprise/common/hooks/useProductTour";
 
 import styles from "./styles";
 
@@ -40,6 +42,8 @@ const JobFamilyTable: FC<Props> = ({
   const translateText = useTranslator("peopleModule", "jobFamily");
 
   const { data: session } = useSession();
+
+  const { driverObj } = useProductTour({ steps: HighlightAddJobFamiliesBtn });
 
   const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 
@@ -143,9 +147,10 @@ const JobFamilyTable: FC<Props> = ({
         emptyDataTitle={translateText(["emptyScreen", "title"])}
         emptyDataDescription={translateText(["emptyScreen", "description"])}
         emptyScreenButtonText={translateText(["addJobFamily"])}
-        onEmptyScreenBtnClick={() =>
-          setJobFamilyModalType(JobFamilyActionModalEnums.ADD_JOB_FAMILY)
-        }
+        onEmptyScreenBtnClick={() => {
+          setJobFamilyModalType(JobFamilyActionModalEnums.ADD_JOB_FAMILY);
+          driverObj?.destroy();
+        }}
         isDataAvailable={allJobFamilies && allJobFamilies?.length > 0}
         isLoading={isJobFamilyPending}
         skeletonRows={6}
