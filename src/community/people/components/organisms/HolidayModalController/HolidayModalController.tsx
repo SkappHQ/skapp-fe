@@ -14,6 +14,8 @@ import {
   holidayBulkUploadResponse,
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import BulkUploadSummary from "../../molecules/HolidayModals/BulkUploadSummary/BulkUploadSummary";
 import HolidayExitConfirmationModal from "../../molecules/HolidayModals/HolidayExitConfirmationModal/HolidayConfirmationModal";
@@ -36,6 +38,16 @@ const HolidayModalController: FC = () => {
     setIsBulkUpload
   } = usePeopleStore((state) => state);
   const { data: holidays, refetch } = useGetAllHolidaysInfinite(selectedYear);
+
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    setStopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+  }));
 
   const getModalTitle = (): string => {
     switch (holidayModalType) {
@@ -75,6 +87,17 @@ const HolidayModalController: FC = () => {
     } else {
       setIsHolidayModalOpen(false);
       setHolidayModalType(holidayModalTypes.NONE);
+    }
+
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      setStopAllOngoingQuickSetup();
+      if (
+        holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
+        bulkUploadData &&
+        bulkUploadData?.bulkStatusSummary?.successCount > 0
+      ) {
+        setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      }
     }
   };
 

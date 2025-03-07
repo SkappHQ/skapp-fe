@@ -1,7 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { useSession } from "next-auth/react";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
@@ -12,8 +11,8 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import SortByDropDown from "~community/people/components/molecules/SortByDropDown/SortByDropDown";
 import { usePeopleStore } from "~community/people/store/store";
@@ -24,6 +23,9 @@ import {
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
 import { getFormattedDate } from "~community/people/utils/holidayUtils/commonUtils";
+import { HighlightAddHolidayBtnGroup } from "~enterprise/common/constants/SetupHolidayFlow";
+import useProductTour from "~enterprise/common/hooks/useProductTour";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { styles } from "./styles";
 
@@ -50,15 +52,17 @@ const HolidayTable: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const { data: session } = useSession();
-
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const { isPeopleAdmin } = useSessionData();
 
   const { setIsHolidayModalOpen, setHolidayModalType } = usePeopleStore(
     (state) => state
   );
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
+
+  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup
+  }));
 
   const translateText = useTranslator("peopleModule", "holidays");
 
@@ -243,9 +247,18 @@ const HolidayTable: FC<Props> = ({
     return holidayData?.length === 0;
   }, [holidayData]);
 
+  const { driverObj } = useProductTour({
+    steps: HighlightAddHolidayBtnGroup,
+    delay: 100
+  });
+
   const AddHolidayButtonClick = () => {
     setHolidayModalType(holidayModalTypes.ADD_CALENDAR);
     setIsHolidayModalOpen(true);
+
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      driverObj.destroy();
+    }
   };
 
   return (
@@ -261,7 +274,7 @@ const HolidayTable: FC<Props> = ({
             />
           }
           actionRowOneRightButton={
-            holidayData && holidayData?.length > 0 && isAdmin
+            holidayData && holidayData?.length > 0 && isPeopleAdmin
               ? renderDeleteAllButton()
               : null
           }
@@ -269,24 +282,26 @@ const HolidayTable: FC<Props> = ({
           skeletonRows={5}
           handleRowCheck={handleCheckBoxClick}
           isLoading={isFetching && !isFetchingNextPage}
-          isDataAvailable={false}
+          isDataAvailable={holidayData && holidayData?.length > 0}
           emptyDataDescription={translateText(["noHolidayDes"])}
           emptyDataTitle={translateText(["noHolidaysTitle"], {
             selectedYear: holidaySelectedYear
           })}
-          emptyScreenButtonText={isAdmin && translateText(["addHolidaysBtn"])}
+          emptyScreenButtonText={
+            isPeopleAdmin ? translateText(["addHolidaysBtn"]) : ""
+          }
           tableContainerStyles={{ border: 0, maxHeight: "32rem" }}
           tableHeaderTypographyStyles={{
-            paddingLeft: isAdmin ? "0rem" : "1rem"
+            paddingLeft: isPeopleAdmin ? "0rem" : "1rem"
           }}
-          tableRowCellStyles={{ paddingLeft: isAdmin ? "0rem" : "1rem" }}
-          tableRowStyles={{ paddingLeft: isAdmin ? "0rem" : "1rem" }}
+          tableRowCellStyles={{ paddingLeft: isPeopleAdmin ? "0rem" : "1rem" }}
+          tableRowStyles={{ paddingLeft: isPeopleAdmin ? "0rem" : "1rem" }}
           onEmptyScreenBtnClick={AddHolidayButtonClick}
           isPaginationEnabled={false}
-          isCheckboxSelectionEnabled={isAdmin}
+          isCheckboxSelectionEnabled={isPeopleAdmin}
           isSelectAllCheckboxEnabled={holidayData?.length === 0 ? false : true}
           actionColumnIconBtnRight={
-            isAdmin
+            isPeopleAdmin
               ? {
                   OnClick: (data) => handleIndividualDelete(data),
                   styles: { mr: "1rem" }

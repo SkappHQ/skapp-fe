@@ -80,6 +80,7 @@ const TableEmptyScreen: FC<Props> = ({
               isFullWidth={false}
               onClick={onButtonClick}
               styles={classes.buttonStyles}
+              id="table-empty-screen-button"
             />
           </Box>
         )}

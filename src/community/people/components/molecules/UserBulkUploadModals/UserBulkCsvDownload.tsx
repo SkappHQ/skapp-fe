@@ -35,8 +35,10 @@ const UserBulkCsvDownload = () => {
   }, [ongoingQuickSetup]);
 
   const handleDownloadClick = () => {
-    setIsDownloadBlinking(false);
-    setIsNextBlinking(true);
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setIsDownloadBlinking(false);
+      setIsNextBlinking(true);
+    }
   };
 
   return (
@@ -92,7 +94,6 @@ const UserBulkCsvDownload = () => {
         buttonStyle={ButtonStyle.PRIMARY}
         styles={{ mb: "0.5rem" }}
         onClick={() => handleNextBtn()}
-        disabled={ongoingQuickSetup.INVITE_EMPLOYEES && isDownloadBlinking}
         shouldBlink={isNextBlinking}
       />
     </Box>
