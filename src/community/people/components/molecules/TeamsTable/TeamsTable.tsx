@@ -16,6 +16,9 @@ import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
 import { TeamModelTypes, TeamType } from "~community/people/types/TeamTypes";
+import { HighlightDefineTeamsBtn } from "~enterprise/common/constants/DefineTeamsFlow";
+import useProductTour from "~enterprise/common/hooks/useProductTour";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import styles from "./styles";
 
@@ -33,6 +36,7 @@ const TeamsTable: FC<Props> = ({
   isAdmin = false
 }) => {
   const translateText = useTranslator("peopleModule", "teams");
+
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -44,6 +48,12 @@ const TeamsTable: FC<Props> = ({
     setCurrentEditingTeam,
     setCurrentDeletingTeam
   } = usePeopleStore((state) => state);
+
+  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup
+  }));
+
+  const { driverObj } = useProductTour({ steps: HighlightDefineTeamsBtn });
 
   const columns = [
     { field: "teamName", headerName: translateText(["nameHeader"]) },
@@ -202,9 +212,13 @@ const TeamsTable: FC<Props> = ({
         emptyDataDescription={translateText(["emptyScreen", "description"])}
         isDataAvailable={allTeams && allTeams?.length > 0}
         isLoading={isTeamsLoading}
-        onEmptyScreenBtnClick={teamAddButtonButtonClick}
+        onEmptyScreenBtnClick={() => {
+          teamAddButtonButtonClick?.();
+          driverObj.destroy();
+        }}
         emptyScreenButtonText={teamAddButtonText}
         skeletonRows={3}
+        shouldEmptyTableScreenBtnBlink={ongoingQuickSetup.DEFINE_TEAMS}
       />
     </Box>
   );

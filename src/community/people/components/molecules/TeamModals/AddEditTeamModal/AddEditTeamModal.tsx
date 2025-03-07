@@ -22,13 +22,18 @@ import AddTeamSelectMembers from "~community/people/components/molecules/AddTeam
 import { characterLengths } from "~community/people/constants/stringConstants";
 import { MemberTypes } from "~community/people/enums/TeamEnums";
 import { usePeopleStore } from "~community/people/store/store";
-import { EmployeeType } from "~community/people/types/EmployeeTypes";
+import {
+  EmployeeDataType,
+  EmployeeType
+} from "~community/people/types/EmployeeTypes";
 import {
   AddTeamType,
   TeamMemberTypes,
   TeamModelTypes
 } from "~community/people/types/TeamTypes";
 import { addEditTeamValidationSchema } from "~community/people/utils/validation";
+import { HighlightTeamMemberList } from "~enterprise/common/constants/DefineTeamsFlow";
+import useProductTour from "~enterprise/common/hooks/useProductTour";
 
 interface Props {
   tempTeamDetails: AddTeamType | undefined;
@@ -46,14 +51,18 @@ const AddEditTeamModal = ({
   setLatestTeamId
 }: Props) => {
   const translateText = useTranslator("peopleModule", "teams");
+
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+
   const {
     teamModalType,
     currentEditingTeam,
     setTeamModalType,
     setIsTeamModalOpen
   } = usePeopleStore((state) => state);
+
+  const { driverObj } = useProductTour({ steps: HighlightTeamMemberList });
 
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -338,27 +347,30 @@ const AddEditTeamModal = ({
             maxHeight={"20vh"}
             overflow="auto"
             spacing="0.75rem"
+            id={values.teamMembers?.length > 0 ? "team-members-list" : ""}
           >
             <>
-              {values?.teamSupervisors?.map((user: EmployeeType, index) => (
-                <AddTeamMemberRow
-                  id={"supervisor-".concat(index.toString())}
-                  key={user?.employeeId}
-                  userType={MemberTypes.SUPERVISOR}
-                  employeeData={user}
-                  teamMembers={{
-                    supervisor: values.teamSupervisors,
-                    members: values.teamMembers
-                  }}
-                  setTeamMembers={setTeamMembers}
-                />
-              ))}
-              {values.teamMembers.map((user: EmployeeType, index) => (
+              {values?.teamSupervisors?.map(
+                (employee: EmployeeDataType, index) => (
+                  <AddTeamMemberRow
+                    id={"supervisor-".concat(index.toString())}
+                    key={employee?.employeeId}
+                    userType={MemberTypes.SUPERVISOR}
+                    employeeData={employee}
+                    teamMembers={{
+                      supervisor: values.teamSupervisors,
+                      members: values.teamMembers
+                    }}
+                    setTeamMembers={setTeamMembers}
+                  />
+                )
+              )}
+              {values.teamMembers.map((employee: EmployeeDataType, index) => (
                 <AddTeamMemberRow
                   id={"member-".concat(index.toString())}
-                  key={user?.employeeId}
+                  key={employee?.employeeId}
                   userType={MemberTypes.MEMBER}
-                  employeeData={user}
+                  employeeData={employee}
                   teamMembers={{
                     supervisor: values.teamSupervisors,
                     members: values.teamMembers
@@ -390,7 +402,10 @@ const AddEditTeamModal = ({
             }}
             buttonStyle={ButtonStyle.PRIMARY}
             endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
-            onClick={() => handleSubmit()}
+            onClick={() => {
+              handleSubmit();
+              driverObj.destroy();
+            }}
           />
           <Button
             label={translateText(["cancelBtnText"])}
@@ -399,7 +414,10 @@ const AddEditTeamModal = ({
             }}
             buttonStyle={ButtonStyle.TERTIARY}
             endIcon={<Icon name={IconName.CLOSE_ICON} />}
-            onClick={handleCancel}
+            onClick={() => {
+              handleCancel();
+              driverObj.destroy();
+            }}
           />
         </Box>
       )}
@@ -411,7 +429,10 @@ const AddEditTeamModal = ({
           }}
           buttonStyle={ButtonStyle.TERTIARY}
           startIcon={<Icon name={IconName.LEFT_ARROW_ICON} />}
-          onClick={handleCancel}
+          onClick={() => {
+            handleCancel();
+            driverObj.destroy();
+          }}
         />
       )}
     </Box>

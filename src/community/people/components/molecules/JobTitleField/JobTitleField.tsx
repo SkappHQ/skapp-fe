@@ -1,6 +1,6 @@
 import { Box, InputAdornment, Stack, Theme, useTheme } from "@mui/material";
 import { FormikErrors, FormikState } from "formik";
-import { JSX, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
@@ -24,6 +24,8 @@ import {
   handleJobTitleNameChange,
   handleTickIconBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobTitleFieldUtils";
+import { HighlightAddJobTitleBtn } from "~enterprise/common/constants/DefineJobFamiliesFlow";
+import useProductTour from "~enterprise/common/hooks/useProductTour";
 
 import styles from "./styles";
 
@@ -55,12 +57,24 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
 
   const { values, errors, setFieldValue, setFieldError } = formik;
 
+  const { driverObj } = useProductTour({
+    steps: HighlightAddJobTitleBtn
+  });
+
   const [hoveredInputField, setHoveredInputField] = useState<number | null>(
     null
   );
   const [editingInputField, setEditingInputField] = useState<number | null>(
     null
   );
+
+  useEffect(() => {
+    if (values.jobTitles.length > 0) {
+      driverObj?.destroy();
+    } else {
+      driverObj?.drive();
+    }
+  }, [values.jobTitles]);
 
   return (
     <Stack>
@@ -91,6 +105,7 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
             maxLength={characterLengths.JOB_TITLE_LENGTH}
           />
           <IconButton
+            id="add-job-title-btn"
             icon={<Icon name={IconName.ADD_ICON} />}
             buttonStyles={classes.addIconBtn}
             onClick={async () => {
