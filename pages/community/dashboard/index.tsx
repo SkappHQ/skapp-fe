@@ -8,11 +8,13 @@ import AttendanceDashboard from "~community/attendance/components/organisms/Atte
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
 import VersionUpgradeModal from "~community/common/components/molecules/VersionUpgradeModal/VersionUpgradeModal";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { ToastType } from "~community/common/enums/ComponentEnums";
 import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -31,7 +33,8 @@ type RoleTypes = AdminTypes | ManagerTypes | EmployeeTypes;
 
 const Dashboard: NextPage = () => {
   const { query } = useRouter();
-
+  const { setToastMessage } = useToast();
+  const billingTranslateText = useTranslator("settingEnterprise", "billing");
   const queryMatches = useMediaQuery();
   const isBelow900 = queryMatches(MediaQueries.BELOW_900);
 
@@ -52,6 +55,26 @@ const Dashboard: NextPage = () => {
         event: GoogleAnalyticsTypes.DASHBOARD_VIEWED,
         value: GoogleAnalyticsValues.DASHBOARD_VIEWED,
         timestamp: new Date().toISOString()
+      });
+    }
+
+    if (query.success === "true") {
+      setToastMessage({
+        toastType: ToastType.SUCCESS,
+        title: billingTranslateText(["subscriptionSuccessToastTitle"]),
+        description: billingTranslateText([
+          "subscriptionSuccessToastDescription"
+        ]),
+        open: true
+      });
+    } else if (query.success === "false") {
+      setToastMessage({
+        toastType: ToastType.ERROR,
+        title: billingTranslateText(["subscriptionErrorToastTitle"]),
+        description: billingTranslateText([
+          "subscriptionErrorToastDescription"
+        ]),
+        open: true
       });
     }
   }, []);
