@@ -34,11 +34,11 @@ import {
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
-import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
@@ -96,7 +96,7 @@ const AddNewResourceModal = () => {
 
   const handleSuccess = () => {
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
-      setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
       setStopAllOngoingQuickSetup();
     }
   };
@@ -153,7 +153,7 @@ const AddNewResourceModal = () => {
     setDirectoryModalType(DirectoryModalTypes.NONE);
     setIsDirectoryModalOpen(false);
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
-      setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
       setStopAllOngoingQuickSetup();
     }
   };

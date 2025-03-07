@@ -23,8 +23,8 @@ import { AllJobFamilyType } from "~community/people/types/JobFamilyTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { BulkUploadUser } from "~community/people/types/UserBulkUploadTypes";
 import { convertUserBulkCsvHeaders } from "~community/people/utils/userBulkUploadUtils";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 interface Props {
   jobRoleList: AllJobFamilyType[] | undefined;
@@ -100,7 +100,7 @@ const UserBulkCsvUpload: FC<Props> = ({
       else {
         setPopupType(DirectoryModalTypes.NONE);
         if (ongoingQuickSetup.INVITE_EMPLOYEES) {
-          setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+          setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
           setStopAllOngoingQuickSetup();
         }
         setToastMessage({

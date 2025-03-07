@@ -12,8 +12,8 @@ import UserBulkCsvDownload from "~community/people/components/molecules/UserBulk
 import UserBulkCsvUpload from "~community/people/components/molecules/UserBulkUploadModals/UserBulkCsvUpload";
 import { usePeopleStore } from "~community/people/store/store";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-import { QuickSetupModalTypeEnums } from "~enterprise/quickSetup/enum/Common";
 
 const DirectoryPopupController = () => {
   const translatedTexts = useTranslator("peopleModule", "peoples");
@@ -62,7 +62,7 @@ const DirectoryPopupController = () => {
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
       setStopAllOngoingQuickSetup();
       if (directoryModalType === DirectoryModalTypes.UPLOAD_SUMMARY) {
-        setQuickSetupModalType(QuickSetupModalTypeEnums.QUICK_SETUP);
+        setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
       }
     }
   };
