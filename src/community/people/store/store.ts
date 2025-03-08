@@ -18,6 +18,7 @@ import {
 } from "./slices/projectTeamSlice";
 import { terminationConfirmationModalSlice } from "./slices/terminateEmployeeSlice";
 import { terminationAlertModalSlice } from "./slices/terminationAlertSlice";
+import { userDeletionModalSlice } from "./slices/userDeletionSlice";
 
 export const usePeopleStore = create<
   Store,
@@ -37,7 +38,8 @@ export const usePeopleStore = create<
       ...projectTeamModalSlice(set),
       ...projectTeamSearchSlice(set),
       ...terminationConfirmationModalSlice(set),
-      ...terminationAlertModalSlice(set)
+      ...terminationAlertModalSlice(set),
+      ...userDeletionModalSlice(set)
     }),
     { name: "peopleStore" }
   )

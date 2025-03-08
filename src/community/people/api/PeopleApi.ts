@@ -655,3 +655,23 @@ export const useGetSupervisedByMe = (
     enabled: !!employeeId
   });
 };
+
+export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
+  const queryClient = useQueryClient();
+
+  const { selectedEmployeeId } = usePeopleStore((state) => state);
+  return useMutation({
+    mutationFn: () => {
+      return authFetch.delete(
+        peoplesEndpoints.DELETE_USER(selectedEmployeeId as number)
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: peopleQueryKeys.EMPLOYEE_BY_ID(Number(selectedEmployeeId))
+      });
+      onSuccess();
+    },
+    onError
+  });
+};
