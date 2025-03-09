@@ -16,6 +16,7 @@ import { useGetOrganization } from "~community/common/api/OrganizationCreateApi"
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import VersionUpgradeBanner from "~community/common/components/molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import { appModes } from "~community/common/constants/configs";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
@@ -33,11 +34,11 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 
-import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
 
 interface Props {
@@ -49,9 +50,7 @@ interface Props {
   secondaryBtnText?: string;
   primaryButtonText?: string | boolean;
   primaryBtnIconName?: IconName;
-  shouldPrimaryBtnBlink?: boolean;
   secondaryBtnIconName?: IconName;
-  shouldSecondaryBtnBlink?: boolean;
   isBackButtonVisible?: boolean;
   isDividerVisible?: boolean;
   primaryButtonType?: ButtonStyle;
@@ -64,6 +63,15 @@ interface Props {
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
   isPrimaryBtnDisabled?: boolean;
+  id?: {
+    btnWrapper?: string;
+    primaryBtn?: string;
+    secondaryBtn?: string;
+  };
+  shouldBlink?: {
+    primaryBtn?: boolean;
+    secondaryBtn?: boolean;
+  };
 }
 
 const ContentLayout = ({
@@ -75,9 +83,7 @@ const ContentLayout = ({
   secondaryBtnText,
   primaryButtonType,
   primaryBtnIconName = IconName.ADD_ICON,
-  shouldPrimaryBtnBlink = false,
   secondaryBtnIconName = IconName.ADD_ICON,
-  shouldSecondaryBtnBlink = false,
   isBackButtonVisible = false,
   isDividerVisible = true,
   onPrimaryButtonClick,
@@ -89,7 +95,9 @@ const ContentLayout = ({
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
   backIcon = IconName.LEFT_ARROW_ICON,
-  isPrimaryBtnDisabled = false
+  isPrimaryBtnDisabled = false,
+  id,
+  shouldBlink
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -201,7 +209,7 @@ const ContentLayout = ({
               </Typography>
             )}
           </Stack>
-          <Stack sx={classes.rightContent}>
+          <Stack sx={classes.rightContent} id={id?.btnWrapper}>
             {secondaryBtnText && (
               <Button
                 isFullWidth={isBelow600}
@@ -211,7 +219,8 @@ const ContentLayout = ({
                 endIcon={secondaryBtnIconName}
                 onClick={onSecondaryButtonClick}
                 dataTestId={contentLayoutTestId.buttons.secondaryButton}
-                shouldBlink={shouldSecondaryBtnBlink}
+                shouldBlink={shouldBlink?.secondaryBtn}
+                id={id?.secondaryBtn}
               />
             )}
             {primaryButtonText && (
@@ -224,7 +233,8 @@ const ContentLayout = ({
                 isLoading={isPrimaryBtnLoading}
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
-                shouldBlink={shouldPrimaryBtnBlink}
+                shouldBlink={shouldBlink?.primaryBtn}
+                id={id?.primaryBtn}
                 disabled={isPrimaryBtnDisabled}
               />
             )}
@@ -238,6 +248,7 @@ const ContentLayout = ({
           </Stack>
         )}
         {children}
+        <QuickSetupContainer />
       </Stack>
     </>
   );

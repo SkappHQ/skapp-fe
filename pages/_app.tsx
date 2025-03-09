@@ -19,6 +19,7 @@ import { theme } from "~community/common/theme/theme";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { MyAppPropsType } from "~community/common/types/CommonTypes";
 import { getDataFromLocalStorage } from "~community/common/utils/accessLocalStorage";
+import "~enterprise/common/components/atoms/driverJsPopover/styles.css";
 import {
   isNonProdMaintenanceMode,
   isProdMaintenanceMode
