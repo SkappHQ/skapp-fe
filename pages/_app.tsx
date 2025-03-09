@@ -12,7 +12,6 @@ import { I18nextProvider, useSSR } from "react-i18next";
 import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
 import { appModes } from "~community/common/constants/configs";
-import ROUTES from "~community/common/constants/routes";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
 import { theme } from "~community/common/theme/theme";
@@ -30,6 +29,7 @@ import i18n from "~i18n";
 import "~styles/global.css";
 
 import Error from "./_error";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/enterpriseRoutes";
 
 function MyApp({
   Component,
@@ -57,9 +57,9 @@ function MyApp({
 
       if (
         isMaintenanceMode === true &&
-        router.pathname !== ROUTES.MAINTENANCE
+        router.pathname !== ENTERPRISE_ROUTES.MAINTENANCE
       ) {
-        router.push(ROUTES.MAINTENANCE);
+        router.push(ENTERPRISE_ROUTES.MAINTENANCE);
       }
     });
 

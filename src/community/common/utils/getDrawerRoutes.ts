@@ -10,6 +10,7 @@ import { TierEnum } from "~enterprise/common/enums/Common";
 import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
 
 import routes from "./data/routes";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/enterpriseRoutes";
 
 type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
@@ -239,7 +240,7 @@ const getDrawerRoutes = (
           return {
             id: route.id,
             name: route.name,
-            url: ROUTES.SIGN.INBOX,
+            url: ENTERPRISE_ROUTES.SIGN.INBOX,
             icon: route.icon,
             hasSubTree: false
           };

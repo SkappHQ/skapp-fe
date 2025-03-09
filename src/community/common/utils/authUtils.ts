@@ -1,6 +1,7 @@
 import { config } from "~middleware";
 
 import ROUTES from "../constants/routes";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/enterpriseRoutes";
 
 export const IsProtectedUrl = (asPath: string): boolean => {
   const drawerHiddenProtectedRoutes = [
@@ -9,10 +10,9 @@ export const IsProtectedUrl = (asPath: string): boolean => {
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
-    ROUTES.SETTINGS.PAYMENT,
-    ROUTES.REMOVE_PEOPLE,
-    ROUTES.CHANGE_SUPERVISORS,
-    ROUTES.SUBSCRIPTION
+    ENTERPRISE_ROUTES.REMOVE_PEOPLE,
+    ENTERPRISE_ROUTES.CHANGE_SUPERVISORS,
+    ENTERPRISE_ROUTES.SUBSCRIPTION
   ];
 
   const protectedPaths = config.matcher

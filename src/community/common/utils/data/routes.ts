@@ -6,6 +6,7 @@ import {
   SenderTypes
 } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/enterpriseRoutes";
 
 const routes = [
   {
@@ -231,7 +232,7 @@ const routes = [
   {
     id: "5",
     name: "Sign",
-    url: ROUTES.SIGN.BASE,
+    url: ENTERPRISE_ROUTES.SIGN.BASE,
     icon: IconName.DOCUMENTS_ICON,
     hasSubTree: true,
     requiredAuthLevel: [
@@ -244,7 +245,7 @@ const routes = [
       {
         id: "5A",
         name: "Inbox",
-        url: ROUTES.SIGN.INBOX,
+        url: ENTERPRISE_ROUTES.SIGN.INBOX,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -256,7 +257,7 @@ const routes = [
       {
         id: "5B",
         name: "Sent",
-        url: ROUTES.SIGN.SENT,
+        url: ENTERPRISE_ROUTES.SIGN.SENT,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -267,7 +268,7 @@ const routes = [
       {
         id: "5C",
         name: "Folders",
-        url: ROUTES.SIGN.FOLDERS,
+        url: ENTERPRISE_ROUTES.SIGN.FOLDERS,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,
@@ -278,7 +279,7 @@ const routes = [
       {
         id: "5D",
         name: "Contacts",
-        url: ROUTES.SIGN.CONTACTS,
+        url: ENTERPRISE_ROUTES.SIGN.CONTACTS,
         hasSubTree: false,
         requiredAuthLevel: [
           AdminTypes.SUPER_ADMIN,

@@ -11,6 +11,7 @@ import {
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/enterpriseRoutes";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -30,20 +31,17 @@ const superAdminRoutes = {
   [ROLE_SUPER_ADMIN]: [
     ROUTES.ORGANIZATION.SETUP,
     ROUTES.CONFIGURATIONS.BASE,
-    ROUTES.ORGANIZATION.MODULE_SELECTION,
-    ROUTES.SETTINGS.BILLING,
-    ROUTES.SIGN.CONTACTS,
-    ROUTES.SIGN.CREATE_DOCUMENT,
-    ROUTES.SIGN.FOLDERS,
-    ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT,
+    ENTERPRISE_ROUTES.SIGN.CONTACTS,
+    ENTERPRISE_ROUTES.SIGN.CREATE_DOCUMENT,
+    ENTERPRISE_ROUTES.SIGN.FOLDERS,
+    ENTERPRISE_ROUTES.SIGN.INBOX,
+    ENTERPRISE_ROUTES.SIGN.SENT,
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
-    ROUTES.SIGN.SENT,
+    ENTERPRISE_ROUTES.SIGN.SENT,
     ROUTES.SETTINGS.MODULES,
-    ROUTES.SETTINGS.PAYMENT,
-    ROUTES.REMOVE_PEOPLE,
-    ROUTES.SUBSCRIPTION
+    ENTERPRISE_ROUTES.REMOVE_PEOPLE,
+    ENTERPRISE_ROUTES.SUBSCRIPTION
   ]
 };
 
@@ -55,14 +53,14 @@ const adminRoutes = {
     ROUTES.CONFIGURATIONS.ATTENDANCE
   ],
   [AdminTypes.ESIGN_ADMIN]: [
-    ROUTES.SIGN.CONTACTS,
-    ROUTES.SIGN.CREATE_DOCUMENT,
-    ROUTES.SIGN.FOLDERS,
-    ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT,
-    ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
-    ROUTES.SIGN.COMPLETE
+    ENTERPRISE_ROUTES.SIGN.CONTACTS,
+    ENTERPRISE_ROUTES.SIGN.CREATE_DOCUMENT,
+    ENTERPRISE_ROUTES.SIGN.FOLDERS,
+    ENTERPRISE_ROUTES.SIGN.INBOX,
+    ENTERPRISE_ROUTES.SIGN.SENT,
+    ENTERPRISE_ROUTES.SIGN.SIGN,
+    ENTERPRISE_ROUTES.SIGN.REDIRECT,
+    ENTERPRISE_ROUTES.SIGN.COMPLETE
   ]
 };
 
@@ -80,14 +78,14 @@ const managerRoutes = {
     ROUTES.PEOPLE.INDIVIDUAL
   ],
   [SenderTypes.ESIGN_SENDER]: [
-    ROUTES.SIGN.CONTACTS,
-    ROUTES.SIGN.CREATE_DOCUMENT,
-    ROUTES.SIGN.FOLDERS,
-    ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT,
-    ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
-    ROUTES.SIGN.COMPLETE
+    ENTERPRISE_ROUTES.SIGN.CONTACTS,
+    ENTERPRISE_ROUTES.SIGN.CREATE_DOCUMENT,
+    ENTERPRISE_ROUTES.SIGN.FOLDERS,
+    ENTERPRISE_ROUTES.SIGN.INBOX,
+    ENTERPRISE_ROUTES.SIGN.SENT,
+    ENTERPRISE_ROUTES.SIGN.SIGN,
+    ENTERPRISE_ROUTES.SIGN.REDIRECT,
+    ENTERPRISE_ROUTES.SIGN.COMPLETE
   ]
 };
 
@@ -103,10 +101,10 @@ const employeeRoutes = {
     ...commonRoutes
   ],
   [EmployeeTypes.ESIGN_EMPLOYEE]: [
-    ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
-    ROUTES.SIGN.COMPLETE,
+    ENTERPRISE_ROUTES.SIGN.INBOX,
+    ENTERPRISE_ROUTES.SIGN.SIGN,
+    ENTERPRISE_ROUTES.SIGN.REDIRECT,
+    ENTERPRISE_ROUTES.SIGN.COMPLETE,
     ...commonRoutes
   ]
 };
@@ -191,7 +189,7 @@ export default withAuth(
 
     if (isAllowed) {
       if (
-        request.nextUrl.pathname.includes(ROUTES.SIGN.BASE) &&
+        request.nextUrl.pathname.includes(ENTERPRISE_ROUTES.SIGN.BASE) &&
         !roles.includes(EmployeeTypes.ESIGN_EMPLOYEE)
       ) {
         return NextResponse.redirect(
@@ -229,8 +227,6 @@ export const config = {
     "/community/:path*",
     // Super admin routes
     "/setup-organization/:path*",
-    "/module-selection",
-    "/payment",
     // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",

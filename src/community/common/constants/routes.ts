@@ -2,8 +2,6 @@ const ROUTES = {
   AUTH: {
     SIGNUP: "/signup",
     SIGNIN: "/signin",
-    ENTERPRISE_SIGNIN: "/enterprise/signin",
-    DOMAIN_VERIFICATION: "/enterprise/domain-verification",
     RESET_PASSWORD: "/reset-password",
     UNAUTHORIZED: "/unauthorized",
     ERROR: "/_error",
@@ -15,16 +13,13 @@ const ROUTES = {
   },
   ORGANIZATION: {
     SETUP: "/setup-organization",
-    MODULE_SELECTION: "/module-selection"
   },
   NOTIFICATIONS: "/notifications",
   SETTINGS: {
     BASE: "/settings",
-    BILLING: "/settings/billing",
     ACCOUNT: "/settings/account",
     MODULES: "/settings/modules",
     INTEGRATIONS: "/settings/integrations",
-    PAYMENT: "/payment"
   },
   TIMESHEET: {
     BASE: "/timesheet",
@@ -78,22 +73,7 @@ const ROUTES = {
     LEAVE: {
       RESOURCE_AVAILABILITY: "/dashboard/leave/resource-availability"
     }
-  },
-  MAINTENANCE: "/maintenance",
-  SIGN: {
-    BASE: "/sign",
-    INBOX: "/sign/inbox",
-    SENT: "/sign/sent",
-    FOLDERS: "/sign/folders",
-    CONTACTS: "/sign/contacts",
-    CREATE_DOCUMENT: "/sign/create",
-    SIGN: "/sign/sign",
-    REDIRECT: "/sign/redirect",
-    COMPLETE: "/sign/complete"
-  },
-  REMOVE_PEOPLE: "/remove-people",
-  CHANGE_SUPERVISORS: "/change-supervisors",
-  SUBSCRIPTION: "/subscription"
+  }
 };
 
 export default ROUTES;

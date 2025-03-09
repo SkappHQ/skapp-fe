@@ -7,7 +7,6 @@ import ToastMessage from "~community/common/components/molecules/ToastMessage/To
 import AppBar from "~community/common/components/organisms/AppBar/AppBar";
 import Drawer from "~community/common/components/organisms/Drawer/Drawer";
 import { appModes } from "~community/common/constants/configs";
-import ROUTES from "~community/common/constants/routes";
 import {
   initialState,
   useToast
@@ -23,6 +22,7 @@ import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 
 import styles from "./styles";
+import ENTERPRISE_ROUTES from "~enterprise/common/constants/enterpriseRoutes";
 
 interface BaseLayoutProps {
   children: ReactNode;
@@ -74,8 +74,8 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
 
   if (
     isProtected &&
-    asPath !== ROUTES.SIGN.CREATE_DOCUMENT &&
-    asPath !== ROUTES.SIGN.SIGN &&
+    asPath !== ENTERPRISE_ROUTES.SIGN.CREATE_DOCUMENT &&
+    asPath !== ENTERPRISE_ROUTES.SIGN.SIGN &&
     (!isEnterprise || globalLogin)
   ) {
     return (
