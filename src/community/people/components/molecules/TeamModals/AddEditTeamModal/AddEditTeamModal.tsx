@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
@@ -10,10 +9,10 @@ import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMen
 import PeopleSearch from "~community/common/components/molecules/PeopleSearch/PeopleSearch";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { hasSpecialCharacter } from "~community/common/regex/regexPatterns";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSearchedEmployees } from "~community/people/api/PeopleApi";
 import { useCreateTeam, useUpdateTeam } from "~community/people/api/TeamApi";
@@ -32,8 +31,11 @@ import {
   TeamModelTypes
 } from "~community/people/types/TeamTypes";
 import { addEditTeamValidationSchema } from "~community/people/utils/validation";
-import { HighlightTeamMemberList } from "~enterprise/common/constants/DefineTeamsFlow";
-import useProductTour from "~enterprise/common/hooks/useProductTour";
+import {
+  QuickSetupModalTypeEnums,
+  QuickSetupTaskEnums
+} from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   tempTeamDetails: AddTeamType | undefined;
@@ -52,17 +54,28 @@ const AddEditTeamModal = ({
 }: Props) => {
   const translateText = useTranslator("peopleModule", "teams");
 
-  const { data: session } = useSession();
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const { setToastMessage } = useToast();
+
+  const { isPeopleAdmin } = useSessionData();
 
   const {
     teamModalType,
     currentEditingTeam,
     setTeamModalType,
     setIsTeamModalOpen
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    teamModalType: state.teamModalType,
+    currentEditingTeam: state.currentEditingTeam,
+    setTeamModalType: state.setTeamModalType,
+    setIsTeamModalOpen: state.setIsTeamModalOpen
+  }));
 
-  const { driverObj } = useProductTour({ steps: HighlightTeamMemberList });
+  const { ongoingQuickSetup, setOngoingQuickSetup, setQuickSetupModalType } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      setOngoingQuickSetup: state.setOngoingQuickSetup,
+      setQuickSetupModalType: state.setQuickSetupModalType
+    }));
 
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -70,7 +83,6 @@ const AddEditTeamModal = ({
     undefined
   );
   const [isSelectingMembers, setIsSelectingMembers] = useState<boolean>(false);
-  const { toastMessage, setToastMessage } = useToast();
 
   const initialValues: AddTeamType = {
     teamName: "",
@@ -88,6 +100,8 @@ const AddEditTeamModal = ({
       description: translateText(["teamCreateSuccessDes"]),
       isIcon: true
     });
+    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_TEAMS, false);
+    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
   };
 
   const onAddError = () => {
@@ -127,6 +141,7 @@ const AddEditTeamModal = ({
     data,
     isSuccess
   } = useCreateTeam(onAddSuccess, onAddError);
+
   const { mutate: updateTeamMutate } = useUpdateTeam(
     onUpdateSuccess,
     onUpdateError
@@ -162,8 +177,14 @@ const AddEditTeamModal = ({
     validateOnChange: false
   });
 
-  const { values, errors, handleSubmit, setFieldValue, setFieldError } =
-    teamAddForm;
+  const {
+    values,
+    errors,
+    isValid,
+    handleSubmit,
+    setFieldValue,
+    setFieldError
+  } = teamAddForm;
 
   const allSelectedUsers = [
     ...(values?.teamMembers || []),
@@ -277,12 +298,7 @@ const AddEditTeamModal = ({
   ]);
 
   return (
-    <Box
-      component="div"
-      sx={{
-        mt: "1rem"
-      }}
-    >
+    <Box component="div">
       <InputField
         id="team-name-input"
         inputName={"teamName"}
@@ -302,9 +318,9 @@ const AddEditTeamModal = ({
         required
         placeHolder={translateText(["teamNameInputPlaceholder"])}
         maxLength={characterLengths.TEAM_NAME_LENGTH}
-        isDisabled={!isAdmin}
+        isDisabled={!isPeopleAdmin}
       />
-      {isAdmin && (
+      {isPeopleAdmin && (
         <PeopleSearch
           id="search-team-member-input"
           label={translateText(["addMemberInputLabel"])}
@@ -331,7 +347,7 @@ const AddEditTeamModal = ({
             <Typography variant="body1" fontWeight={500} lineHeight="1.5rem">
               {translateText(["memberListTitle"])}
             </Typography>
-            {isAdmin && (
+            {isPeopleAdmin && (
               <Box>
                 <KebabMenu
                   id="add-team-kebab-menu"
@@ -393,7 +409,7 @@ const AddEditTeamModal = ({
           setTeamMembers={setTeamMembers}
         />
       )}
-      {!isSelectingMembers && isAdmin && (
+      {!isSelectingMembers && isPeopleAdmin && (
         <Box>
           <Button
             label={translateText(["saveBtnText"])}
@@ -402,10 +418,12 @@ const AddEditTeamModal = ({
             }}
             buttonStyle={ButtonStyle.PRIMARY}
             endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
-            onClick={() => {
-              handleSubmit();
-              driverObj.destroy();
-            }}
+            onClick={() => handleSubmit()}
+            shouldBlink={
+              values.teamName && values.teamSupervisors?.length > 0
+                ? ongoingQuickSetup.DEFINE_TEAMS
+                : false
+            }
           />
           <Button
             label={translateText(["cancelBtnText"])}
@@ -414,14 +432,11 @@ const AddEditTeamModal = ({
             }}
             buttonStyle={ButtonStyle.TERTIARY}
             endIcon={<Icon name={IconName.CLOSE_ICON} />}
-            onClick={() => {
-              handleCancel();
-              driverObj.destroy();
-            }}
+            onClick={handleCancel}
           />
         </Box>
       )}
-      {!isAdmin && (
+      {!isPeopleAdmin && (
         <Button
           label={translateText(["goBackBtnText"])}
           styles={{
@@ -429,10 +444,7 @@ const AddEditTeamModal = ({
           }}
           buttonStyle={ButtonStyle.TERTIARY}
           startIcon={<Icon name={IconName.LEFT_ARROW_ICON} />}
-          onClick={() => {
-            handleCancel();
-            driverObj.destroy();
-          }}
+          onClick={handleCancel}
         />
       )}
     </Box>

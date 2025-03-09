@@ -1,5 +1,4 @@
 import { Box, Theme, useTheme } from "@mui/material";
-import { useSession } from "next-auth/react";
 import { FC } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
@@ -7,8 +6,8 @@ import AvatarChip from "~community/common/components/molecules/AvatarChip/Avatar
 import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import Table from "~community/common/components/molecules/Table/Table";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import { JobFamilyActionModalEnums } from "~community/people/enums/JobFamilyEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import {
@@ -36,22 +35,23 @@ const JobFamilyTable: FC<Props> = ({
   isJobFamilyPending
 }) => {
   const theme: Theme = useTheme();
-
   const classes = styles(theme);
 
   const translateText = useTranslator("peopleModule", "jobFamily");
 
-  const { data: session } = useSession();
+  const { isPeopleAdmin } = useSessionData();
 
   const { driverObj } = useProductTour({ steps: HighlightAddJobFamiliesBtn });
-
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 
   const {
     setCurrentEditingJobFamily,
     setCurrentDeletingJobFamily,
     setJobFamilyModalType
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    setCurrentEditingJobFamily: state.setCurrentEditingJobFamily,
+    setCurrentDeletingJobFamily: state.setCurrentDeletingJobFamily,
+    setJobFamilyModalType: state.setJobFamilyModalType
+  }));
 
   const transformToTableRows = () => {
     return (
@@ -120,7 +120,7 @@ const JobFamilyTable: FC<Props> = ({
   const columns = [
     { field: "jobFamily", headerName: translateText(["jobFamilyHeader"]) },
     { field: "employees", headerName: translateText(["memberHeader"]) },
-    ...(!isAdmin
+    ...(!isPeopleAdmin
       ? [{ field: "actions", headerName: translateText(["actionsHeader"]) }]
       : [])
   ];
@@ -155,7 +155,7 @@ const JobFamilyTable: FC<Props> = ({
         isLoading={isJobFamilyPending}
         skeletonRows={6}
         actionColumnIconBtnLeft={
-          isAdmin
+          isPeopleAdmin
             ? {
                 onClick: (jobFamilyData) =>
                   handleJobFamilyEditBtnClick(
@@ -167,7 +167,7 @@ const JobFamilyTable: FC<Props> = ({
             : null
         }
         actionColumnIconBtnRight={
-          isAdmin
+          isPeopleAdmin
             ? {
                 OnClick: (jobFamilyData) =>
                   handleJobFamilyDeleteBtnClick(

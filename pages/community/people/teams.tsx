@@ -1,12 +1,11 @@
 import { Box } from "@mui/material";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 import SearchBox from "~community/common/components/molecules/SearchBox/SearchBox";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import TeamsTable from "~community/people/components/molecules/TeamsTable/TeamsTable";
 import TeamModalController from "~community/people/components/organisms/TeamModalController/TeamModalController";
@@ -16,13 +15,13 @@ import { TeamModelTypes } from "~community/people/types/TeamTypes";
 const Teams: NextPage = () => {
   const translateText = useTranslator("peopleModule", "teams");
   const [teamSearchTerm, setTeamSearchTerm] = useState<string>("");
-  const { setTeamModalType, setIsTeamModalOpen } = usePeopleStore(
-    (state) => state
-  );
 
-  const { data: session } = useSession();
+  const { setTeamModalType, setIsTeamModalOpen } = usePeopleStore((state) => ({
+    setTeamModalType: state.setTeamModalType,
+    setIsTeamModalOpen: state.setIsTeamModalOpen
+  }));
 
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const { isPeopleAdmin } = useSessionData();
 
   const { data: allTeams } = useGetAllTeams();
 
@@ -32,7 +31,9 @@ const Teams: NextPage = () => {
         pageHead={translateText(["tabTitle"])}
         title={translateText(["title"])}
         primaryButtonText={
-          isAdmin && (allTeams?.length ?? 0) !== 0 && translateText(["addTeam"])
+          isPeopleAdmin &&
+          (allTeams?.length ?? 0) !== 0 &&
+          translateText(["addTeam"])
         }
         onPrimaryButtonClick={() => {
           setIsTeamModalOpen(true);
@@ -53,7 +54,7 @@ const Teams: NextPage = () => {
               setTeamModalType(TeamModelTypes.ADD_TEAM);
             }}
             teamAddButtonText={translateText(["addTeam"])}
-            isAdmin={isAdmin}
+            isAdmin={isPeopleAdmin}
           />
           <TeamModalController />
         </Box>
