@@ -125,15 +125,15 @@ const ContentLayout = ({
     useCommonEnterpriseStore((state) => state);
 
   useEffect(() => {
-    if (
-      data?.user?.tier === TierEnum.FREE &&
-      asPath !== "/remove-people" &&
-      asPath !== "/change-supervisors"
-    ) {
+    if (data?.user?.tier === TierEnum.PRO) {
       setSubscriptionEndedModalType(
         SubscriptionModalTypeEnums.SUBSCRIPTION_CANCELLED_MODAL
       );
       setIsSubscriptionEndedModalOpen(true);
+    }
+
+    if (asPath === "/remove-people" || asPath === "/change-supervisors") {
+      setIsSubscriptionEndedModalOpen(false);
     }
   }, [
     asPath,
