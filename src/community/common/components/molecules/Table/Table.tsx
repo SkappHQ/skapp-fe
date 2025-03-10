@@ -22,6 +22,7 @@ interface Props {
   actionRowTwoLeftButton?: JSX.Element;
   actionRowOneRightButton?: JSX.Element | null;
   actionRowTwoRightButton?: JSX.Element;
+  actionRowBottomRightButton?: JSX.Element;
   isCheckboxSelectionEnabled?: boolean;
   isSelectAllCheckboxEnabled?: boolean;
   selectedRows?: number[];
@@ -80,6 +81,7 @@ const Table: FC<Props> = ({
   actionRowOneRightButton,
   actionRowTwoLeftButton,
   actionRowTwoRightButton,
+  actionRowBottomRightButton,
   isCheckboxSelectionEnabled = false,
   isSelectAllCheckboxEnabled = false,
   selectedRows,
@@ -202,17 +204,20 @@ const Table: FC<Props> = ({
       </TableContainer>
 
       {isPaginationEnabled && (
-        <TablePagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPaginationChange={onPaginationChange}
-          paginationContainerStyles={paginationContainerStyles}
-          exportButtonText={exportButtonText}
-          onExportButtonClick={onExportButtonClick}
-          exportTooltipText={exportTooltipText}
-          exportButtonStyles={exportButtonStyles}
-          isDataAvailable={isDataAvailable}
-        />
+        <Stack direction={"row"} justifyContent={"space-between"}>
+          <TablePagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPaginationChange={onPaginationChange}
+            paginationContainerStyles={paginationContainerStyles}
+            exportButtonText={exportButtonText}
+            onExportButtonClick={onExportButtonClick}
+            exportTooltipText={exportTooltipText}
+            exportButtonStyles={exportButtonStyles}
+            isDataAvailable={isDataAvailable}
+          />
+          <Box>{actionRowBottomRightButton}</Box>
+        </Stack>
       )}
     </Stack>
   );
