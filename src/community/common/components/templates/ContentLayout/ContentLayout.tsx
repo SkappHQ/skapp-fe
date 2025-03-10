@@ -38,7 +38,7 @@ import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSe
 import SubscriptionEndedModalController from "~enterprise/common/components/molecules/SubscriptionEndedModalController/SubscriptionEndedModalController";
 import {
   SubscriptionModalTypeEnums,
-  TierEnum
+  TenantStatusEnums
 } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
@@ -125,11 +125,25 @@ const ContentLayout = ({
     useCommonEnterpriseStore((state) => state);
 
   useEffect(() => {
-    if (data?.user?.tier === TierEnum.PRO) {
-      setSubscriptionEndedModalType(
-        SubscriptionModalTypeEnums.SUBSCRIPTION_CANCELLED_MODAL
-      );
-      setIsSubscriptionEndedModalOpen(true);
+    switch (data?.user?.tenantStatus) {
+      case TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED:
+        setSubscriptionEndedModalType(
+          SubscriptionModalTypeEnums.SUBSCRIPTION_CANCELLED_MODAL
+        );
+        setIsSubscriptionEndedModalOpen(true);
+        break;
+      case TenantStatusEnums.FREE_TRAIL_ENDED:
+        setSubscriptionEndedModalType(
+          SubscriptionModalTypeEnums.TRIAL_EXPIRED_MODAL
+        );
+        setIsSubscriptionEndedModalOpen(true);
+        break;
+      case TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED:
+        setSubscriptionEndedModalType(
+          SubscriptionModalTypeEnums.TRIAL_EXPIRED_MODAL_USER_LIMIT_EXCEEDED
+        );
+        setIsSubscriptionEndedModalOpen(true);
+        break;
     }
 
     if (asPath === "/remove-people" || asPath === "/change-supervisors") {
@@ -137,7 +151,8 @@ const ContentLayout = ({
     }
   }, [
     asPath,
-    data?.user?.tier,
+    data?.user?.tenantStatus,
+    data?.user.tier,
     setIsSubscriptionEndedModalOpen,
     setSubscriptionEndedModalType
   ]);
