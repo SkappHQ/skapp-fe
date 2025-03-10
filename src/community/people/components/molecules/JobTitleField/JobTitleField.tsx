@@ -1,11 +1,12 @@
 import { Box, InputAdornment, Stack, Theme, useTheme } from "@mui/material";
 import { FormikErrors, FormikState } from "formik";
-import { JSX, useEffect, useState } from "react";
+import { JSX, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { characterLengths } from "~community/common/constants/stringConstants";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
@@ -24,8 +25,6 @@ import {
   handleJobTitleNameChange,
   handleTickIconBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobTitleFieldUtils";
-import { HighlightAddJobTitleBtn } from "~enterprise/common/constants/DefineJobFamiliesFlow";
-import useProductTour from "~enterprise/common/hooks/useProductTour";
 
 import styles from "./styles";
 
@@ -39,27 +38,29 @@ interface Props {
       shouldValidate?: boolean | undefined
     ) => void;
   };
-  isAdmin?: boolean;
 }
 
-const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
+const JobTitleField = ({ formik }: Props): JSX.Element => {
   const translateText = useTranslator("peopleModule", "jobFamily");
 
   const theme: Theme = useTheme();
   const classes = styles();
+
+  const { isPeopleAdmin } = useSessionData();
 
   const {
     allJobFamilies,
     previousJobTitleData,
     setPreviousJobTitleData,
     setJobFamilyModalType
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    allJobFamilies: state.allJobFamilies,
+    previousJobTitleData: state.previousJobTitleData,
+    setPreviousJobTitleData: state.setPreviousJobTitleData,
+    setJobFamilyModalType: state.setJobFamilyModalType
+  }));
 
   const { values, errors, setFieldValue, setFieldError } = formik;
-
-  const { driverObj } = useProductTour({
-    steps: HighlightAddJobTitleBtn
-  });
 
   const [hoveredInputField, setHoveredInputField] = useState<number | null>(
     null
@@ -68,17 +69,9 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
     null
   );
 
-  useEffect(() => {
-    if (values.jobTitles.length > 0) {
-      driverObj?.destroy();
-    } else {
-      driverObj?.drive();
-    }
-  }, [values.jobTitles]);
-
   return (
     <Stack>
-      {isAdmin && (
+      {isPeopleAdmin && (
         <Stack sx={classes.fieldWrapper}>
           <InputField
             id="job-title-input"
@@ -157,7 +150,7 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
                   onMouseEnter={() => setHoveredInputField(index)}
                   onMouseLeave={() => setHoveredInputField(null)}
                   endAdornment={
-                    isAdmin ? (
+                    isPeopleAdmin ? (
                       <InputAdornment
                         position="end"
                         sx={classes.inputAdornment}
