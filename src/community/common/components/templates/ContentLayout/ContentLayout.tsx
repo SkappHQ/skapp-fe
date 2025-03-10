@@ -10,7 +10,7 @@ import { type SxProps } from "@mui/system";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { JSX, memo, useEffect, useMemo, useState } from "react";
+import { JSX, memo, useEffect, useMemo } from "react";
 
 import { useGetOrganization } from "~community/common/api/OrganizationCreateApi";
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
@@ -35,8 +35,12 @@ import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
-import SubscriptionCanceledModal from "~enterprise/common/components/molecules/SubscriptionCanceledModal/SubscriptionCanceledModal";
-import { TierEnum } from "~enterprise/common/enums/Common";
+import SubscriptionEndedModalController from "~enterprise/common/components/molecules/SubscriptionEndedModalController/SubscriptionEndedModalController";
+import {
+  SubscriptionModalTypeEnums,
+  TierEnum
+} from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
@@ -111,18 +115,32 @@ const ContentLayout = ({
 
   const { data } = useSession();
 
+  const { asPath } = useRouter();
+
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
     (state) => state
   );
 
-  const [isBillingCancelledModalOpen, setIsBillingCancelledModalOpen] =
-    useState(false);
+  const { setIsSubscriptionEndedModalOpen, setSubscriptionEndedModalType } =
+    useCommonEnterpriseStore((state) => state);
 
   useEffect(() => {
-    if (data?.user?.tier === TierEnum.PRO) {
-      setIsBillingCancelledModalOpen(true);
+    if (
+      data?.user?.tier === TierEnum.FREE &&
+      asPath !== "/remove-people" &&
+      asPath !== "/change-supervisors"
+    ) {
+      setSubscriptionEndedModalType(
+        SubscriptionModalTypeEnums.SUBSCRIPTION_CANCELLED_MODAL
+      );
+      setIsSubscriptionEndedModalOpen(true);
     }
-  }, [data?.user?.tier, setIsBillingCancelledModalOpen]);
+  }, [
+    asPath,
+    data?.user?.tier,
+    setIsSubscriptionEndedModalOpen,
+    setSubscriptionEndedModalType
+  ]);
 
   const { data: organizationDetails } = useGetOrganization();
 
@@ -260,10 +278,7 @@ const ContentLayout = ({
         )}
         {children}
         <QuickSetupContainer />
-        <SubscriptionCanceledModal
-          isBillingCancelledModalOpen={isBillingCancelledModalOpen}
-          setIsBillingCancelledModalOpen={setIsBillingCancelledModalOpen}
-        />
+        <SubscriptionEndedModalController />
       </Stack>
     </>
   );
