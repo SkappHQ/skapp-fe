@@ -53,7 +53,9 @@ const TeamsTable: FC<Props> = ({
     ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
-  const { driverObj } = useProductTour({ steps: HighlightDefineTeamsBtn });
+  const { destroyDriverObj } = useProductTour({
+    steps: HighlightDefineTeamsBtn
+  });
 
   const columns = [
     { field: "teamName", headerName: translateText(["nameHeader"]) },
@@ -214,7 +216,7 @@ const TeamsTable: FC<Props> = ({
         isLoading={isTeamsLoading}
         onEmptyScreenBtnClick={() => {
           teamAddButtonButtonClick?.();
-          driverObj.destroy();
+          destroyDriverObj();
         }}
         emptyScreenButtonText={teamAddButtonText}
         skeletonRows={3}

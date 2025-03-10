@@ -91,6 +91,8 @@ const AddEditTeamModal = ({
   };
 
   const onAddSuccess = () => {
+    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_TEAMS, false);
+    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
     setIsTeamModalOpen(false);
     setTeamModalType(TeamModelTypes.ADD_TEAM);
     setToastMessage({
@@ -100,8 +102,6 @@ const AddEditTeamModal = ({
       description: translateText(["teamCreateSuccessDes"]),
       isIcon: true
     });
-    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_TEAMS, false);
-    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
   };
 
   const onAddError = () => {
@@ -177,14 +177,8 @@ const AddEditTeamModal = ({
     validateOnChange: false
   });
 
-  const {
-    values,
-    errors,
-    isValid,
-    handleSubmit,
-    setFieldValue,
-    setFieldError
-  } = teamAddForm;
+  const { values, errors, handleSubmit, setFieldValue, setFieldError } =
+    teamAddForm;
 
   const allSelectedUsers = [
     ...(values?.teamMembers || []),

@@ -41,7 +41,9 @@ const JobFamilyTable: FC<Props> = ({
 
   const { isPeopleAdmin } = useSessionData();
 
-  const { driverObj } = useProductTour({ steps: HighlightAddJobFamiliesBtn });
+  const { destroyDriverObj } = useProductTour({
+    steps: HighlightAddJobFamiliesBtn
+  });
 
   const {
     setCurrentEditingJobFamily,
@@ -149,7 +151,7 @@ const JobFamilyTable: FC<Props> = ({
         emptyScreenButtonText={translateText(["addJobFamily"])}
         onEmptyScreenBtnClick={() => {
           setJobFamilyModalType(JobFamilyActionModalEnums.ADD_JOB_FAMILY);
-          driverObj?.destroy();
+          destroyDriverObj();
         }}
         isDataAvailable={allJobFamilies && allJobFamilies?.length > 0}
         isLoading={isJobFamilyPending}

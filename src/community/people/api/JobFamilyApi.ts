@@ -24,7 +24,7 @@ import { quickSetupQueryKeys } from "~enterprise/common/api/utils/QueryKeys";
 
 export const useGetAllJobFamilies = (): UseQueryResult<AllJobFamilyType[]> => {
   return useQuery({
-    queryKey: [jobFamilyQueryKeys.ALL_JOB_FAMILIES],
+    queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES,
     queryFn: () => authFetch.get(jobFamilyEndpoints.JOB_FAMILY),
     select: (data) => {
       const allJobFamilies = data?.data?.results?.map(
@@ -62,10 +62,10 @@ export const useAddJobFamily = (onSuccess: () => void, onError: () => void) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [
-          jobFamilyQueryKeys.ALL_JOB_FAMILIES,
-          quickSetupQueryKeys.QUICK_SETUP_PROGRESS
-        ]
+        queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
+      });
+      queryClient.invalidateQueries({
+        queryKey: quickSetupQueryKeys.QUICK_SETUP_PROGRESS
       });
       onSuccess();
     },
@@ -93,7 +93,7 @@ export const useEditJobFamily = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [jobFamilyQueryKeys.ALL_JOB_FAMILIES]
+        queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
       });
       onSuccess();
     },
@@ -115,7 +115,7 @@ export const useDeleteJobFamily = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [jobFamilyQueryKeys.ALL_JOB_FAMILIES]
+        queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
       });
       onSuccess();
     },
@@ -140,7 +140,7 @@ export const useTransferMembersWithJobFamily = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [jobFamilyQueryKeys.ALL_JOB_FAMILIES]
+        queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
       });
       onSuccess();
     },
@@ -160,7 +160,7 @@ export const useDeleteJobTitle = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [jobFamilyQueryKeys.ALL_JOB_FAMILIES]
+        queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
       });
       onSuccess();
     },
@@ -185,7 +185,7 @@ export const useTransferMembersWithJobTitle = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [jobFamilyQueryKeys.ALL_JOB_FAMILIES]
+        queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
       });
       onSuccess();
     },

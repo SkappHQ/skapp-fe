@@ -36,9 +36,8 @@ const AddJobFamilyModal = ({
     setJobFamilyModalType: state.setJobFamilyModalType
   }));
 
-  const { ongoingQuickSetup, setOngoingQuickSetup, setQuickSetupModalType } =
+  const { setOngoingQuickSetup, setQuickSetupModalType } =
     useCommonEnterpriseStore((state) => ({
-      ongoingQuickSetup: state.ongoingQuickSetup,
       setOngoingQuickSetup: state.setOngoingQuickSetup,
       setQuickSetupModalType: state.setQuickSetupModalType
     }));
@@ -51,6 +50,8 @@ const AddJobFamilyModal = ({
   };
 
   const onSuccess = () => {
+    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_JOB_FAMILIES, false);
+    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
     handleJobFamilyApiResponse({
       type: JobFamilyToastEnums.ADD_JOB_FAMILY_SUCCESS,
       setToastMessage,
@@ -58,10 +59,6 @@ const AddJobFamilyModal = ({
       translateText,
       from
     });
-    if (ongoingQuickSetup.DEFINE_JOB_FAMILIES) {
-      setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_JOB_FAMILIES, false);
-      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-    }
   };
 
   const onError = () => {
