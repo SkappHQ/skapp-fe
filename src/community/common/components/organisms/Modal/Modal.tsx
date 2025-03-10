@@ -66,7 +66,7 @@ const Modal: FC<Props> = ({
           </Stack>
           {isClosable && customCloseComponent ? (
             customCloseComponent
-          ) : (
+          ) : isClosable ? (
             <IconButton
               sx={classes.closeIconBtn}
               onClick={(event) => onCloseModal(event, "backdropClick")}
@@ -77,7 +77,7 @@ const Modal: FC<Props> = ({
                 <Icon name={IconName.CLOSE_STATUS_POPUP_ICON} />
               )}
             </IconButton>
-          )}
+          ) : null}
         </Stack>
         {isDividerVisible && <Divider sx={dividerStyles} />}
         <Stack

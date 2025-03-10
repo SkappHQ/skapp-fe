@@ -44,6 +44,7 @@ interface Props {
   descriptionStyles?: SxProps;
   browseTextStyles?: SxProps;
   maxSizeOfFile?: number;
+  prioritizeCustomError?: boolean;
 }
 
 const MAX_FILE_SIZE_OF_FILE = 5000000;
@@ -63,7 +64,8 @@ const DragAndDropField: FC<Props> = ({
   label,
   descriptionStyles,
   browseTextStyles,
-  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE
+  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE,
+  prioritizeCustomError = false
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
 
@@ -301,7 +303,7 @@ const DragAndDropField: FC<Props> = ({
       </div>
       {validationError || customError ? (
         <Typography variant="body2" sx={classes.errorText}>
-          {fileUploadErrorsList?.length
+          {fileUploadErrorsList?.length && !prioritizeCustomError
             ? (getUploadError(
                 fileUploadErrorsList?.[0].errors?.[0]?.message as string
               ) ?? "")
