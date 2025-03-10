@@ -247,9 +247,8 @@ const HolidayTable: FC<Props> = ({
     return holidayData?.length === 0;
   }, [holidayData]);
 
-  const { driverObj } = useProductTour({
-    steps: HighlightAddHolidayBtnGroup,
-    delay: 100
+  const { destroyDriverObj } = useProductTour({
+    steps: HighlightAddHolidayBtnGroup
   });
 
   const AddHolidayButtonClick = () => {
@@ -257,7 +256,7 @@ const HolidayTable: FC<Props> = ({
     setIsHolidayModalOpen(true);
 
     if (ongoingQuickSetup.SETUP_HOLIDAYS) {
-      driverObj.destroy();
+      destroyDriverObj();
     }
   };
 
