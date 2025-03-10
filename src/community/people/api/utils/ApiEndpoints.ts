@@ -27,7 +27,7 @@ export const peoplesEndpoints = {
     `${moduleAPIPath.PEOPLE}/${employeeId}/is-supervised-by-me`,
   REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`,
   DELETE_USER: (employeeId: string | number) =>
-    `${moduleAPIPath.PEOPLE}/ep/employee/${employeeId}`
+    `${moduleAPIPath.PEOPLE}/user/delete/${employeeId}`
 };
 
 export const authEndpoints = {
@@ -44,7 +44,7 @@ export const fileUploadEndpoints = {
 };
 
 export const teamEndpoints = {
-  TEAMS: `/tea`,
+  TEAMS: `/teams`,
   MY_TEAMS: `/teams/me`,
   UPDATE_TEAM: (teamId: number) => `/teams/${teamId}`,
   MANAGER_ALL_TEAMS: `teams/manager`,

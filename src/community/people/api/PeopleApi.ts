@@ -662,7 +662,7 @@ export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
   const { selectedEmployeeId } = usePeopleStore((state) => state);
   return useMutation({
     mutationFn: () => {
-      return authFetch.delete(
+      return authFetch.patch(
         peoplesEndpoints.DELETE_USER(selectedEmployeeId as number)
       );
     },

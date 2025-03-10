@@ -21,26 +21,24 @@ const UserDeletionWarningModal: React.FC<Props> = ({
   message,
   onClick
 }) => {
-  const translateText = useTranslator("peopleModule", "termination");
+  const translateText = useTranslator("peopleModule", "deletion");
 
   return (
     <Modal
       isModalOpen={isOpen}
       onCloseModal={onClose}
-      title={"Alert"}
+      title={translateText(["deleteWarningTitle"])}
       icon={<Icon name={IconName.CLOSE_STATUS_POPUP_ICON} />}
     >
       <Stack spacing={2}>
         <UserPromptModal
           description={message}
           primaryBtn={{
-            label: "Okay",
+            label: translateText(["okayButtonLabel"]),
             buttonStyle: ButtonStyle.PRIMARY,
             endIcon: IconName.TICK_ICON,
             styles: { mt: "1rem" },
-            onClick: () => {
-              onClick();
-            }
+            onClick: onClick
           }}
         />
       </Stack>
