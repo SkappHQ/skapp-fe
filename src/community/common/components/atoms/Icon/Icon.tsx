@@ -1,6 +1,7 @@
 import { JSX } from "react";
 
 import AddIcon from "~community/common/assets/Icons/AddIcon";
+import ApprovedIcon from "~community/common/assets/Icons/ApprovedIcon";
 import ApprovedStatusIcon from "~community/common/assets/Icons/ApprovedStatusIcon";
 import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
@@ -27,6 +28,7 @@ import CurvedTickIcon from "~community/common/assets/Icons/CurvedTickIcon";
 import DancingWomenIcon from "~community/common/assets/Icons/DancingWomenIcon";
 import DashIcon from "~community/common/assets/Icons/DashIcon";
 import DashboardIcon from "~community/common/assets/Icons/DashboardIcon";
+import DeclinedIcon from "~community/common/assets/Icons/DeclinedIcon";
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
@@ -47,6 +49,8 @@ import GoogleCalendarIcon from "~community/common/assets/Icons/GoogleCalendarIco
 import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
+import InitialsIcon from "~community/common/assets/Icons/InitialsIcon";
+import InviteIcon from "~community/common/assets/Icons/InviteIcon";
 import LeaveIcon from "~community/common/assets/Icons/LeaveIcon";
 import LeaveModuleIcon from "~community/common/assets/Icons/LeaveModuleIcon";
 import LeftArrowIcon from "~community/common/assets/Icons/LeftArrowIcon";
@@ -64,6 +68,7 @@ import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
 import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
+import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
@@ -81,9 +86,11 @@ import SearchIcon from "~community/common/assets/Icons/SearchIcon";
 import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
+import SignatureIcon from "~community/common/assets/Icons/SignIcon";
 import SignerIcon from "~community/common/assets/Icons/SignerIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
 import SkappIcon from "~community/common/assets/Icons/SkappIcon";
+import StampIcon from "~community/common/assets/Icons/StampIcon";
 import SuccessIcon from "~community/common/assets/Icons/SuccessIcon";
 import SuperAdminIcon from "~community/common/assets/Icons/SuperAdminIcon";
 import SyncIcon from "~community/common/assets/Icons/SyncIcon";
@@ -217,7 +224,14 @@ export const IconMapping: Partial<
   [IconName.MASTER_CARD_ICON]: MasterCardIcon,
   [IconName.VISA_CARD_ICON]: VisaCardIcon,
   [IconName.GREY_ROUNDED_TICK_ICON]: GreyRoundedTickIcon,
-  [IconName.GREY_PLUS_ICON]: GreyPlusIcon
+  [IconName.GREY_PLUS_ICON]: GreyPlusIcon,
+  [IconName.INITIALS_ICON]: InitialsIcon,
+  [IconName.STAMP_ICON]: StampIcon,
+  [IconName.APPROVED_ICON]: ApprovedIcon,
+  [IconName.DECLINED_ICON]: DeclinedIcon,
+  [IconName.SIGNATURE_ICON]: SignatureIcon,
+  [IconName.INVITE_ICON]: InviteIcon,
+  [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon
   // Add more icons here as needed
 };
 

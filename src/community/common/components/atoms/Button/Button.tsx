@@ -39,6 +39,7 @@ export interface StyledButtonProps {
   onMouseLeave?: ButtonProps["onMouseLeave"];
   isDefaultIconColor?: boolean;
   isStrokeAvailable?: boolean;
+  shouldBlink?: boolean;
 }
 
 const Button = ({
@@ -60,7 +61,8 @@ const Button = ({
   onMouseEnter,
   onMouseLeave,
   isDefaultIconColor = false,
-  isStrokeAvailable = false
+  isStrokeAvailable = false,
+  shouldBlink = false
 }: StyledButtonProps): JSX.Element => {
   const theme = useTheme();
 
@@ -134,6 +136,7 @@ const Button = ({
       isdefaulticoncolor={isDefaultIconColor.toString()}
       isstrokeavailable={isStrokeAvailable.toString()}
       width={isFullWidth ? "100%" : "max-content"}
+      shouldblink={shouldBlink}
       startIcon={
         startIcon && typeof startIcon === "object" && "type" in startIcon ? (
           startIcon

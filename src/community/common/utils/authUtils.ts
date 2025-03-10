@@ -9,7 +9,10 @@ export const IsProtectedUrl = (asPath: string): boolean => {
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
     ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
-    ROUTES.SETTINGS.PAYMENT
+    ROUTES.SETTINGS.PAYMENT,
+    ROUTES.REMOVE_PEOPLE,
+    ROUTES.CHANGE_SUPERVISORS,
+    ROUTES.SUBSCRIPTION
   ];
 
   const protectedPaths = config.matcher

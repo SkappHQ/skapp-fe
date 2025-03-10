@@ -13,6 +13,8 @@ import {
   LeaveTypeModalEnums
 } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import { QuickSetupTaskEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const LeaveType: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveTypes");
@@ -26,7 +28,17 @@ const LeaveType: NextPage = () => {
     setLeaveTypeModalType,
     resetEditingLeaveType,
     setPendingNavigation
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    isLeaveTypeFormDirty: state.isLeaveTypeFormDirty,
+    isLeaveTypeModalOpen: state.isLeaveTypeModalOpen,
+    setLeaveTypeModalType: state.setLeaveTypeModalType,
+    resetEditingLeaveType: state.resetEditingLeaveType,
+    setPendingNavigation: state.setPendingNavigation
+  }));
+
+  const { setOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    setOngoingQuickSetup: state.setOngoingQuickSetup
+  }));
 
   useEffect(() => {
     const handleRouteChangeStart = (url: string) => {
@@ -37,6 +49,7 @@ const LeaveType: NextPage = () => {
         throw "routeChange aborted";
       } else {
         resetEditingLeaveType();
+        setOngoingQuickSetup(QuickSetupTaskEnums.SETUP_LEAVE_TYPES, false);
       }
     };
 
