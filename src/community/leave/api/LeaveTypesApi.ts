@@ -20,6 +20,7 @@ import {
 } from "~community/leave/types/AddLeaveTypes";
 import { LeaveTypesDropDownlistType } from "~community/leave/types/LeaveEntitlementTypes";
 import { LeaveEntitlementDropdownListType } from "~community/leave/types/LeaveTypes";
+import { quickSetupQueryKeys } from "~enterprise/common/api/utils/QueryKeys";
 
 const params = {
   filterByInUse: false,
@@ -31,7 +32,7 @@ export const useGetLeaveTypes = (
 ): UseQueryResult<LeaveTypeType[]> => {
   return useQuery({
     enabled: isEnabled,
-    queryKey: leaveTypeQueryKeys.LEAVE_TYPES(params),
+    queryKey: [leaveTypeQueryKeys.LEAVE_TYPES(params)],
     queryFn: () =>
       authFetch.get(leaveTypeEndPoints.GET_LEAVE_TYPES, {
         params: params
@@ -58,7 +59,7 @@ export const useGetPreProcessedLeaveTypes = ({
   | undefined
 > => {
   return useQuery({
-    queryKey: leaveTypeQueryKeys.LEAVE_TYPES(params),
+    queryKey: [leaveTypeQueryKeys.LEAVE_TYPES(params)],
     queryFn: () =>
       authFetch.get(leaveTypeEndPoints.GET_LEAVE_TYPES, {
         params: params
@@ -88,7 +89,10 @@ export const useAddLeaveType = (onSuccess: () => void, onError: () => void) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: leaveTypeQueryKeys.LEAVE_TYPES(params)
+        queryKey: [
+          leaveTypeQueryKeys.LEAVE_TYPES(params),
+          quickSetupQueryKeys.QUICK_SETUP_PROGRESS
+        ]
       });
       onSuccess();
     },
@@ -114,7 +118,7 @@ export const useEditLeaveType = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: leaveTypeQueryKeys.LEAVE_TYPES(params)
+        queryKey: [leaveTypeQueryKeys.LEAVE_TYPES(params)]
       });
       onSuccess();
     },

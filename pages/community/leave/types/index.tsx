@@ -19,7 +19,9 @@ const LeaveTypes: NextPage = () => {
     ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
-  const { driverObj } = useProductTour({ steps: HighlightAddLeaveTypesBtn });
+  const { destroyDriverObj } = useProductTour({
+    steps: HighlightAddLeaveTypesBtn
+  });
 
   return (
     <>
@@ -31,7 +33,7 @@ const LeaveTypes: NextPage = () => {
           router.push(
             ROUTES.LEAVE.ADD_EDIT_LEAVE_TYPES(LeaveTypeFormTypes.ADD)
           );
-          driverObj.destroy();
+          destroyDriverObj();
         }}
         isDividerVisible
         id={{

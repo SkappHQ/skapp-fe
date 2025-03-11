@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -7,6 +8,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { userBulkTemplate } from "~community/people/utils/getConstants";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const UserBulkCsvDownload = () => {
   const { setIsDirectoryModalOpen, setDirectoryModalType } = usePeopleStore(
@@ -17,6 +19,26 @@ const UserBulkCsvDownload = () => {
   const handleNextBtn = () => {
     setIsDirectoryModalOpen(true);
     setDirectoryModalType(DirectoryModalTypes.UPLOAD_CSV);
+  };
+
+  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup
+  }));
+
+  const [isDownloadBlinking, setIsDownloadBlinking] = useState(false);
+  const [isNextBlinking, setIsNextBlinking] = useState(false);
+
+  useEffect(() => {
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setIsDownloadBlinking(true);
+    }
+  }, [ongoingQuickSetup]);
+
+  const handleDownloadClick = () => {
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setIsDownloadBlinking(false);
+      setIsNextBlinking(true);
+    }
   };
 
   return (
@@ -47,6 +69,7 @@ const UserBulkCsvDownload = () => {
             download={userBulkTemplate.fileName}
             target="_blank"
             rel="noreferrer"
+            onClick={handleDownloadClick}
           >
             <Button
               label={translateText(["downloadCsvButton"])}
@@ -60,6 +83,7 @@ const UserBulkCsvDownload = () => {
                 }
               }}
               endIcon={IconName.DOWNLOAD_ICON}
+              shouldBlink={isDownloadBlinking}
             />
           </a>
         </Box>
@@ -70,6 +94,7 @@ const UserBulkCsvDownload = () => {
         buttonStyle={ButtonStyle.PRIMARY}
         styles={{ mb: "0.5rem" }}
         onClick={() => handleNextBtn()}
+        shouldBlink={isNextBlinking}
       />
     </Box>
   );

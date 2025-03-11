@@ -19,6 +19,7 @@ import {
   TeamType,
   UpdateTeamType
 } from "~community/people/types/TeamTypes";
+import { quickSetupQueryKeys } from "~enterprise/common/api/utils/QueryKeys";
 
 export const useGetAllTeams = (): UseQueryResult<TeamType[]> => {
   return useQuery({
@@ -59,7 +60,12 @@ export const useCreateTeam = (onSuccess: () => void, onError: () => void) => {
       return authFetch.post(teamEndpoints.TEAMS, formattedTeamData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: teamQueryKeys.ALL_TEAMS });
+      queryClient.invalidateQueries({
+        queryKey: teamQueryKeys.ALL_TEAMS
+      });
+      queryClient.invalidateQueries({
+        queryKey: quickSetupQueryKeys.QUICK_SETUP_PROGRESS
+      });
       onSuccess();
     },
     onError
@@ -68,6 +74,7 @@ export const useCreateTeam = (onSuccess: () => void, onError: () => void) => {
 
 export const useUpdateTeam = (onSuccess: () => void, onError: () => void) => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (teamData: UpdateTeamType) => {
       const formattedTeamData = {
@@ -83,7 +90,9 @@ export const useUpdateTeam = (onSuccess: () => void, onError: () => void) => {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: teamQueryKeys.ALL_TEAMS });
+      queryClient.invalidateQueries({
+        queryKey: teamQueryKeys.ALL_TEAMS
+      });
       onSuccess();
     },
     onError
@@ -134,7 +143,9 @@ export const useTransferTeamMembers = (
   return useMutation({
     mutationFn: transferMembers,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: teamQueryKeys.ALL_TEAMS });
+      queryClient.invalidateQueries({
+        queryKey: teamQueryKeys.ALL_TEAMS
+      });
       if (onSuccess) onSuccess();
     },
     onError: (error) => {

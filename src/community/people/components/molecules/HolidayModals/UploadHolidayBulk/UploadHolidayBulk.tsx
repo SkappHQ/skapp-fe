@@ -27,6 +27,8 @@ import {
 } from "~community/people/types/HolidayTypes";
 import { normalizeHolidayDates } from "~community/people/utils/holidayUtils/holidayDateValidation";
 import { validateHeaders } from "~community/people/utils/holidayUtils/validateHeaders";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   setBulkUploadData: Dispatch<
@@ -49,6 +51,16 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     setIsBulkUpload
   } = usePeopleStore((state) => state);
 
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    setStopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+  }));
+
   const { setIsHolidayModalOpen, setFailedCount } = usePeopleStore(
     (state) => state
   );
@@ -58,6 +70,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
   const [holidayBulkList, setHolidayBulkList] = useState<Holiday[]>([]);
   const translateText = useTranslator("peopleModule", "holidays");
   const { setToastMessage } = useToast();
+
   const onSuccess = (response: holidayBulkUploadResponse): void => {
     setBulkUploadData(response);
     if (response.bulkStatusSummary.failedCount > 0) {
@@ -85,6 +98,10 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       }
     } else {
       setHolidayModalType(holidayModalTypes.NONE);
+      if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+        setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+        setStopAllOngoingQuickSetup();
+      }
       setIsHolidayModalOpen(false);
       setToastMessage({
         title: translateText(["holidayCreateSuccessToastTitle"], {
@@ -215,6 +232,9 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       setHolidayModalType(holidayModalTypes.NONE);
       resetHolidayDetails();
     }
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      setStopAllOngoingQuickSetup();
+    }
   };
   return (
     <Box>
@@ -264,6 +284,12 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
           !(calendarAttachments?.length > 0) ||
           isInvalidFileError ||
           noRecordError
+        }
+        shouldBlink={
+          calendarAttachments?.length > 0 &&
+          !isInvalidFileError &&
+          !noRecordError &&
+          !attachmentError
         }
         label={translateText(["UploadHolidays"])}
         endIcon={<RightArrowIcon />}

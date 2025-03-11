@@ -38,6 +38,7 @@ export enum TeamModelTypes {
 }
 
 export interface AddTeamType {
+  teamId?: number;
   teamName: string;
   teamMembers: EmployeeDataType[];
   teamSupervisors: EmployeeDataType[];
@@ -81,13 +82,13 @@ export interface TeamNamesListType {
 export interface UpdateTeamType {
   teamId: number;
   teamName: string;
-  teamMembers: EmployeeType[];
-  teamSupervisors: EmployeeType[];
+  teamMembers: EmployeeDataType[];
+  teamSupervisors: EmployeeDataType[];
 }
 
 export interface TeamMemberTypes {
-  supervisor: EmployeeType[];
-  members: EmployeeType[];
+  supervisor: EmployeeDataType[];
+  members: EmployeeDataType[];
 }
 
 export interface TeamNamesType {

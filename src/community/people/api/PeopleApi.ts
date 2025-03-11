@@ -271,7 +271,7 @@ export const useGetPreprocessedRoles = (): UseQueryResult<JobFamilies[]> => {
   });
 };
 
-export const useQuickAddEmployeeMutation = () => {
+export const useQuickAddEmployeeMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
   const {
     setSharedCredentialData,
@@ -318,6 +318,9 @@ export const useQuickAddEmployeeMutation = () => {
           queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE()
         })
         .catch(rejects);
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
@@ -653,5 +656,25 @@ export const useGetSupervisedByMe = (
       await authFetch.get(peoplesEndpoints.SUPERVISED_BY_ME(employeeId)),
     select: (data) => data?.data?.results[0],
     enabled: !!employeeId
+  });
+};
+
+export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
+  const queryClient = useQueryClient();
+
+  const { selectedEmployeeId } = usePeopleStore((state) => state);
+  return useMutation({
+    mutationFn: () => {
+      return authFetch.patch(
+        peoplesEndpoints.DELETE_USER(selectedEmployeeId as number)
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: peopleQueryKeys.EMPLOYEE_BY_ID(Number(selectedEmployeeId))
+      });
+      onSuccess();
+    },
+    onError
   });
 };

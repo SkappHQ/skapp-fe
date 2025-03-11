@@ -11,6 +11,11 @@ import {
 import { usePeopleStore } from "~community/people/store/store";
 import { AddJobFamilyFormType } from "~community/people/types/JobFamilyTypes";
 import { handleJobFamilyApiResponse } from "~community/people/utils/jobFamilyUtils/apiUtils";
+import {
+  QuickSetupModalTypeEnums,
+  QuickSetupTaskEnums
+} from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   hasDataChanged: boolean;
@@ -27,7 +32,15 @@ const AddJobFamilyModal = ({
 
   const { setToastMessage } = useToast();
 
-  const { setJobFamilyModalType } = usePeopleStore((state) => state);
+  const { setJobFamilyModalType } = usePeopleStore((state) => ({
+    setJobFamilyModalType: state.setJobFamilyModalType
+  }));
+
+  const { setOngoingQuickSetup, setQuickSetupModalType } =
+    useCommonEnterpriseStore((state) => ({
+      setOngoingQuickSetup: state.setOngoingQuickSetup,
+      setQuickSetupModalType: state.setQuickSetupModalType
+    }));
 
   const addLatestFamilyLabel = (jobTitleId: number) => {
     if (from && from === "add-new-resource" && setLatestRoleLabel) {
@@ -37,6 +50,8 @@ const AddJobFamilyModal = ({
   };
 
   const onSuccess = () => {
+    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_JOB_FAMILIES, false);
+    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
     handleJobFamilyApiResponse({
       type: JobFamilyToastEnums.ADD_JOB_FAMILY_SUCCESS,
       setToastMessage,
