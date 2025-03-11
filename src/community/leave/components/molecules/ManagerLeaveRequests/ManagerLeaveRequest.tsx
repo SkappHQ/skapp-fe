@@ -268,7 +268,6 @@ const ManagerLeaveRequest: FC<Props> = ({
         <ManagerLeaveRequestFilterByBtn
           leaveTypeButtons={leaveTypeButtons}
           onClickReset={onClickReset}
-          filterArray={filterArray}
           removeFilters={removeFilters}
         />
       }

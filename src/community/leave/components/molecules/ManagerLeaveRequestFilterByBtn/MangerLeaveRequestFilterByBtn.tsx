@@ -12,14 +12,12 @@ import ShowSelectedFilters from "~community/people/components/molecules/ShowSele
 interface Props {
   leaveTypeButtons: FilterButtonTypes[];
   onClickReset: () => void;
-  filterArray: string[];
   removeFilters: (label?: string) => void;
 }
 
 const ManagerLeaveRequestFilterByBtn = ({
   leaveTypeButtons,
   onClickReset,
-  filterArray,
   removeFilters
 }: Props) => {
   const theme: Theme = useTheme();
@@ -47,7 +45,9 @@ const ManagerLeaveRequestFilterByBtn = ({
   return (
     <>
       <Stack direction="row" alignItems="center" gap={0.5}>
-        {filterArray.length > 0 && <Typography>Filter :</Typography>}
+        {leaveRequestFilterOrder.length > 0 && (
+          <Typography>Filter :</Typography>
+        )}
         <ShowSelectedFilters
           filterOptions={leaveRequestFilterOrder}
           onDeleteIcon={removeFilters}
