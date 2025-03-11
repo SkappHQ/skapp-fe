@@ -42,6 +42,11 @@ const useSessionData = () => {
     [sessionData?.user?.roles]
   );
 
+  const isPeopleAdmin = useMemo(
+    () => sessionData?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN),
+    [sessionData?.user?.roles]
+  );
+
   return {
     isFreeTier,
     isProTier,
@@ -49,7 +54,8 @@ const useSessionData = () => {
     isLeaveModuleEnabled,
     isEsignatureModuleEnabled,
     employeeDetails,
-    isSuperAdmin
+    isSuperAdmin,
+    isPeopleAdmin
   };
 };
 

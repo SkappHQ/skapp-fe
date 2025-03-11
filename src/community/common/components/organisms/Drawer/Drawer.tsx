@@ -70,7 +70,7 @@ const Drawer = (): JSX.Element => {
       getDrawerRoutes(
         sessionData?.user?.roles,
         sessionData?.user?.tier ?? "",
-        isEnterprise,
+        isEnterprise
       ),
     [sessionData, isEnterprise]
   );
