@@ -22,8 +22,6 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
           onError: async (error: any) => {
             if (
               error?.response?.data?.results?.[0]?.messageKey ===
-                COMMON_ERROR_INVALID_TOKEN ||
-              error?.response?.data?.results?.[0]?.messageKey ===
                 COMMON_ERROR_TOKEN_EXPIRED ||
               error?.response?.data?.results?.[0]?.messageKey ===
                 COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
@@ -39,6 +37,14 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
                 });
                 console.error("Failed to update session:", updateError);
               }
+            } else if (
+              error?.response?.data?.results?.[0]?.messageKey ===
+              COMMON_ERROR_INVALID_TOKEN
+            ) {
+              await signOut({
+                redirect: true,
+                callbackUrl: "/system-update"
+              });
             }
           }
         })
