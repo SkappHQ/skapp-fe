@@ -224,6 +224,11 @@ interface actionsTypes {
 
   //terminationAlertModalSlice
   setTerminationAlertModalOpen: (value: boolean) => void;
+
+  //userDeletionModalSlice
+  setDeletionConfirmationModalOpen: (value: boolean) => void;
+  setDeletionAlertMessage: (value: string) => void;
+  setDeletionAlertOpen: (value: boolean) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -337,4 +342,9 @@ export interface Store extends actionsTypes {
 
   //terminationAlertModalSlice
   isTerminationAlertModalOpen: boolean;
+
+  //userDeletionModalSlice
+  isDeletionConfirmationModalOpen: boolean;
+  deletionAlertMessage: string;
+  isDeletionAlertOpen: boolean;
 }

@@ -25,7 +25,9 @@ export const peoplesEndpoints = {
   MY_MANAGERS: `${moduleAPIPath.PEOPLE}/me/managers`,
   SUPERVISED_BY_ME: (employeeId: number) =>
     `${moduleAPIPath.PEOPLE}/${employeeId}/is-supervised-by-me`,
-  REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`
+  REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`,
+  DELETE_USER: (employeeId: string | number) =>
+    `${moduleAPIPath.PEOPLE}/user/delete/${employeeId}`
 };
 
 export const authEndpoints = {
