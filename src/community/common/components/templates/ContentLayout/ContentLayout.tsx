@@ -128,19 +128,19 @@ const ContentLayout = ({
     switch (data?.user?.tenantStatus) {
       case TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED:
         setSubscriptionEndedModalType(
-          SubscriptionModalTypeEnums.SUBSCRIPTION_CANCELLED_MODAL
+          SubscriptionModalTypeEnums.POST_SUBSCRIPTION_CANCELLATION_MODAL
         );
         setIsSubscriptionEndedModalOpen(true);
         break;
       case TenantStatusEnums.FREE_TRAIL_ENDED:
         setSubscriptionEndedModalType(
-          SubscriptionModalTypeEnums.TRIAL_EXPIRED_MODAL
+          SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL
         );
         setIsSubscriptionEndedModalOpen(true);
         break;
       case TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED:
         setSubscriptionEndedModalType(
-          SubscriptionModalTypeEnums.TRIAL_EXPIRED_MODAL_USER_LIMIT_EXCEEDED
+          SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL_USER_LIMIT_SURPASS_MODAL
         );
         setIsSubscriptionEndedModalOpen(true);
         break;
