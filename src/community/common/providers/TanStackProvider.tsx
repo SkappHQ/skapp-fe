@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider
 } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { ReactNode, useState } from "react";
 
 import {
@@ -33,6 +33,10 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
               try {
                 await update();
               } catch (updateError) {
+                await signOut({
+                  redirect: true,
+                  callbackUrl: "/system-update"
+                });
                 console.error("Failed to update session:", updateError);
               }
             }
