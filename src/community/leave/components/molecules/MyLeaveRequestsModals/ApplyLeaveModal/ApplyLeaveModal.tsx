@@ -123,7 +123,7 @@ const ApplyLeaveModal = () => {
 
   const { data: myTeams } = useGetMyTeams();
 
-  const { data: myLeaveRequests } = useGetMyRequests();
+  const { data: myLeaveRequests } = useGetMyRequests({ isExport: true });
 
   const { data: allHolidays } = useGetAllHolidays(currentYear.toString());
 
