@@ -43,7 +43,9 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
 
   const isEnterprise = environment === appModes.ENTERPRISE;
 
-  const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => state);
+  const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => ({
+    setGlobalLoginMethod: state.setGlobalLoginMethod
+  }));
 
   const { data: globalLogin } = useGetGlobalLoginMethod(
     isEnterprise,

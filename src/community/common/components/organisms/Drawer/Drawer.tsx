@@ -41,48 +41,32 @@ import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { StyledDrawer } from "./StyledDrawer";
 import { getSelectedDrawerItemColor, styles } from "./styles";
 
 const Drawer = (): JSX.Element => {
-  const translateText = useTranslator("commonComponents", "drawer");
-
-  const [orgLogo, setOrgLogo] = useState<string | null>(null);
-  const router = useRouter();
-  const environment = useGetEnvironment();
-  const { s3FileUrls, downloadS3File } = useS3Download();
-
   const theme: Theme = useTheme();
   const classes = styles({ theme });
+
+  const translateText = useTranslator("commonComponents", "drawer");
+
+  const router = useRouter();
+
+  const { data: sessionData } = useSession();
 
   const queryMatches = useMediaQuery();
   const isBelow1024 = queryMatches(MediaQueries.BELOW_1024);
 
-  const { data: sessionData } = useSession();
+  const environment = useGetEnvironment();
+
+  const { s3FileUrls, downloadS3File } = useS3Download();
 
   const { handleDrawer } = useDrawer(isBelow1024);
 
-  const isEnterprise = environment === appModes.ENTERPRISE;
-
-  const drawerRoutes = useMemo(
-    () =>
-      getDrawerRoutes(
-        sessionData?.user?.roles,
-        sessionData?.user?.tier ?? "",
-        isEnterprise
-      ),
-    [sessionData, isEnterprise]
-  );
-
   const { data: organizationDetails, isLoading: orgLoading } =
     useGetOrganization();
-
-  const updatedTheme = themeSelector(
-    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
-  );
-
-  theme.palette = updatedTheme.palette;
 
   const organizationLogo = organizationDetails?.results[0]?.organizationLogo;
   const organizationName = organizationDetails?.results[0]?.organizationName;
@@ -92,6 +76,48 @@ const Drawer = (): JSX.Element => {
     organizationLogo,
     false
   );
+
+  const {
+    isDrawerExpanded,
+    expandedDrawerListItem,
+    setExpandedDrawerListItem,
+    setOrgData
+  } = useCommonStore((state: CommonStoreTypes | any) => ({
+    isDrawerExpanded: state.isDrawerExpanded,
+    expandedDrawerListItem: state.expandedDrawerListItem,
+    setExpandedDrawerListItem: state.setExpandedDrawerListItem,
+    setOrgData: state.setOrgData
+  }));
+
+  const { globalLoginMethod } = useCommonEnterpriseStore((state) => ({
+    globalLoginMethod: state.globalLoginMethod
+  }));
+
+  const { setMyLeaveRequestModalType } = useLeaveStore((state) => ({
+    setMyLeaveRequestModalType: state.setMyLeaveRequestModalType
+  }));
+
+  const [orgLogo, setOrgLogo] = useState<string | null>(null);
+  const [hoveredDrawerItemUrl, setHoveredDrawerItemUrl] = useState<string>("");
+
+  const isEnterprise = environment === appModes.ENTERPRISE;
+
+  const drawerRoutes = useMemo(
+    () =>
+      getDrawerRoutes({
+        userRoles: sessionData?.user?.roles,
+        tier: sessionData?.user?.tier ?? "",
+        isEnterprise,
+        globalLoginMethod
+      }),
+    [sessionData, isEnterprise, globalLoginMethod]
+  );
+
+  const updatedTheme = themeSelector(
+    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
+  );
+
+  theme.palette = updatedTheme.palette;
 
   useEffect(() => {
     if (environment === appModes.COMMUNITY) {
@@ -106,22 +132,6 @@ const Drawer = (): JSX.Element => {
       downloadS3File(organizationLogo);
     }
   }, [organizationLogo]);
-
-  const {
-    isDrawerExpanded,
-    expandedDrawerListItem,
-    setExpandedDrawerListItem,
-    setOrgData
-  } = useCommonStore((state: CommonStoreTypes | any) => ({
-    isDrawerExpanded: state.isDrawerExpanded,
-    expandedDrawerListItem: state.expandedDrawerListItem,
-    setExpandedDrawerListItem: state.setExpandedDrawerListItem,
-    setOrgData: state.setOrgData
-  }));
-
-  const { setMyLeaveRequestModalType } = useLeaveStore();
-
-  const [hoveredDrawerItemUrl, setHoveredDrawerItemUrl] = useState<string>("");
 
   const handleListItemButtonClick = (
     id: string,

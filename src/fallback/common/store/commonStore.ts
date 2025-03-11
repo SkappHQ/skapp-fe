@@ -1,6 +1,8 @@
+import { GlobalLoginMethod } from "~community/common/enums/CommonEnums";
+
 interface CommonEnterpriseStore {
-  setGlobalLoginMethod: (value: string) => void;
-  globalLoginMethod: string;
+  setGlobalLoginMethod: (value: GlobalLoginMethod) => void;
+  globalLoginMethod: GlobalLoginMethod;
   ongoingQuickSetup: {
     INVITE_EMPLOYEES: boolean;
     DEFINE_TEAMS: boolean;
@@ -17,7 +19,7 @@ export const useCommonEnterpriseStore = (
 ): CommonEnterpriseStore => {
   return {
     setGlobalLoginMethod: () => {},
-    globalLoginMethod: "",
+    globalLoginMethod: GlobalLoginMethod.NONE,
     ongoingQuickSetup: {
       INVITE_EMPLOYEES: false,
       DEFINE_TEAMS: false,

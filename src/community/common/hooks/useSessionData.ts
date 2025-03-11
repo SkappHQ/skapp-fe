@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 
 import { AdminTypes, EmployeeTypes } from "~community/common/types/AuthTypes";
+import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { TierEnum } from "~enterprise/common/enums/Common";
 
 const useSessionData = () => {
@@ -47,6 +48,15 @@ const useSessionData = () => {
     [sessionData?.user?.roles]
   );
 
+  const isEmployee = useMemo(() => {
+    return !sessionData?.user?.roles?.some((role) => {
+      return [
+        ...Object.values(AdminTypes),
+        ...Object.values(ManagerTypes)
+      ].includes(role as AdminTypes | ManagerTypes);
+    });
+  }, [sessionData?.user?.roles]);
+
   return {
     isFreeTier,
     isProTier,
@@ -55,7 +65,8 @@ const useSessionData = () => {
     isEsignatureModuleEnabled,
     employeeDetails,
     isSuperAdmin,
-    isPeopleAdmin
+    isPeopleAdmin,
+    isEmployee
   };
 };
 

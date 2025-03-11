@@ -97,6 +97,7 @@
     "leaves": "Leave Requests"
   },
   "settings": {
+    "integrationPageHead": "Integrations | Skapp",
     "pageHead": "Settings | Skapp",
     "title": "Settings",
     "saveChangesBtnText": "Save changes",
