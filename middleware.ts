@@ -20,6 +20,7 @@ const commonRoutes = [
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
   ROUTES.NOTIFICATIONS,
+  ROUTES.INTEGRATIONS,
   ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
   s3Endpoints.GET_SIGNED_URL,
   s3Endpoints.DELETE_FILE
@@ -249,6 +250,7 @@ export const config = {
     "/timesheet/:path*",
     "/sign/:path*",
     "/remove-people",
+    "/integrations",
     "/subscription"
   ]
 };
