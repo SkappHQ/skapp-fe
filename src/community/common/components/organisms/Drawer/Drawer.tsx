@@ -41,7 +41,6 @@ import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
-import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { StyledDrawer } from "./StyledDrawer";
 import { getSelectedDrawerItemColor, styles } from "./styles";
@@ -64,8 +63,6 @@ const Drawer = (): JSX.Element => {
 
   const { handleDrawer } = useDrawer(isBelow1024);
 
-  const { globalLoginMethod } = useCommonEnterpriseStore((state) => state);
-
   const isEnterprise = environment === appModes.ENTERPRISE;
 
   const drawerRoutes = useMemo(
@@ -73,10 +70,9 @@ const Drawer = (): JSX.Element => {
       getDrawerRoutes(
         sessionData?.user?.roles,
         sessionData?.user?.tier ?? "",
-        isEnterprise,
-        globalLoginMethod
+        isEnterprise
       ),
-    [sessionData, globalLoginMethod, isEnterprise]
+    [sessionData, isEnterprise]
   );
 
   const { data: organizationDetails, isLoading: orgLoading } =
