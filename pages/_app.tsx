@@ -1,5 +1,4 @@
 import { Theme, ThemeProvider } from "@mui/material/styles";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { onValue, ref } from "firebase/database";
 import { SessionProvider } from "next-auth/react";
@@ -13,6 +12,7 @@ import FullScreenLoader from "~community/common/components/molecules/FullScreenL
 import BaseLayout from "~community/common/components/templates/BaseLayout/BaseLayout";
 import { appModes } from "~community/common/constants/configs";
 import ROUTES from "~community/common/constants/routes";
+import TanStackProvider from "~community/common/providers/TanStackProvider";
 import { ToastProvider } from "~community/common/providers/ToastProvider";
 import { WebSocketProvider } from "~community/common/providers/WebSocketProvider";
 import { theme } from "~community/common/theme/theme";
@@ -38,7 +38,6 @@ function MyApp({
   initialLanguage
 }: MyAppPropsType) {
   const [newTheme, setNewTheme] = useState<Theme>(theme);
-  const [queryClient] = useState(() => new QueryClient());
   useSSR(initialI18nStore, initialLanguage);
   const router = useRouter();
 
@@ -116,7 +115,7 @@ function MyApp({
     <SessionProvider session={session}>
       {shouldUseWebSocketProvider ? (
         <WebSocketProvider>
-          <QueryClientProvider client={queryClient}>
+          <TanStackProvider>
             <ThemeProvider theme={newTheme}>
               <I18nextProvider i18n={i18n}>
                 <ToastProvider>
@@ -130,10 +129,10 @@ function MyApp({
                 <ReactQueryDevtools initialIsOpen={false} position="bottom" />
               </I18nextProvider>
             </ThemeProvider>
-          </QueryClientProvider>
+          </TanStackProvider>
         </WebSocketProvider>
       ) : (
-        <QueryClientProvider client={queryClient}>
+        <TanStackProvider>
           <ThemeProvider theme={newTheme}>
             <I18nextProvider i18n={i18n}>
               <ToastProvider>
@@ -147,7 +146,7 @@ function MyApp({
               <ReactQueryDevtools initialIsOpen={false} position="bottom" />
             </I18nextProvider>
           </ThemeProvider>
-        </QueryClientProvider>
+        </TanStackProvider>
       )}
     </SessionProvider>
   );

@@ -52,21 +52,6 @@ authFetch.interceptors.response.use(
   },
 
   async (error) => {
-    if (
-      error.response.data.results[0].messageKey ===
-        COMMON_ERROR_INVALID_TOKEN ||
-      error.response.data.results[0].messageKey ===
-        COMMON_ERROR_TOKEN_EXPIRED ||
-      error.response.data.results[0].messageKey ===
-        COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
-      error.response.data.results[0].messageKey ===
-        COMMON_ERROR_USER_VERSION_MISMATCH
-    ) {
-      await signOut({
-        redirect: true,
-        callbackUrl: "/system-update"
-      });
-    }
     return await Promise.reject(error);
   }
 );
