@@ -34,7 +34,9 @@ import {
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
@@ -92,7 +94,15 @@ const AddNewResourceModal = () => {
     esignRole: Role.ESIGN_EMPLOYEE
   };
 
-  const { mutate } = useQuickAddEmployeeMutation();
+  const handleSuccess = () => {
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      setStopAllOngoingQuickSetup();
+    }
+  };
+
+  const { mutate } = useQuickAddEmployeeMutation(handleSuccess);
+
   const onSubmit = async (values: any) => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
@@ -124,6 +134,16 @@ const AddNewResourceModal = () => {
   );
 
   const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    setStopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+  }));
+
+  const {
     data: checkEmailAndIdentificationNo,
     refetch,
     isSuccess
@@ -132,6 +152,10 @@ const AddNewResourceModal = () => {
   const closeModal = () => {
     setDirectoryModalType(DirectoryModalTypes.NONE);
     setIsDirectoryModalOpen(false);
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      setStopAllOngoingQuickSetup();
+    }
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -602,6 +626,12 @@ const AddNewResourceModal = () => {
           values.lastName === ""
         }
         data-testid={peopleDirectoryTestId.buttons.quickAddSaveBtn}
+        shouldBlink={
+          ongoingQuickSetup.INVITE_EMPLOYEES &&
+          values.workEmail !== "" &&
+          values.firstName !== "" &&
+          values.lastName !== ""
+        }
       />
       <Button
         buttonStyle={ButtonStyle.TERTIARY}
