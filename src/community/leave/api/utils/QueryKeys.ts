@@ -140,7 +140,9 @@ export const leaveTypeQueryKeys = {
 
 export const myRequestsQueryKeys = {
   ALL: ["all-my-requests"],
-  MY_REQUESTS: ["my-requests"],
+  MY_REQUESTS: function (isExport: boolean) {
+    return [...(this?.ALL || []), "my-requests", isExport.toString()];
+  },
   APPLY_LEAVE: ["apply-leave"],
   RESOURCE_AVAILABILITY: function (
     teams: number | null,

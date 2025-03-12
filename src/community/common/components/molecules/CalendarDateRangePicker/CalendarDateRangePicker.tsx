@@ -17,6 +17,7 @@ import {
   getCurrentDateAtMidnight
 } from "~community/common/utils/dateTimeUtils";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
+import { useLeaveStore } from "~community/leave/store/store";
 import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
 import { Holiday } from "~community/people/types/HolidayTypes";
 
@@ -59,6 +60,10 @@ const CalendarDateRangePicker: FC<Props> = ({
 
   const { setToastMessage } = useToast();
 
+  const { setIsApplyLeaveModalBtnDisabled } = useLeaveStore((state) => ({
+    setIsApplyLeaveModalBtnDisabled: state.setIsApplyLeaveModalBtnDisabled
+  }));
+
   useEffect(() => {
     handleDateValidation({
       allowedDuration,
@@ -66,7 +71,8 @@ const CalendarDateRangePicker: FC<Props> = ({
       myLeaveRequests,
       setToastMessage,
       translateText,
-      allHolidays
+      allHolidays,
+      setIsApplyLeaveModalBtnDisabled
     });
   }, [selectedDates]);
 
