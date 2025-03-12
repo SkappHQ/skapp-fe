@@ -287,6 +287,10 @@ const nextConfig = {
       {
         source: "/subscription",
         destination: "/enterprise/subscription"
+      },
+      {
+        source:"/people/directory/edit/:id",
+        destination: "/community/people/directory/edit/:id"
       }
     ];
   },
