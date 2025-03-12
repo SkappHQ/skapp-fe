@@ -1,12 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { getSession, signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
-import {
-  COMMON_ERROR_INVALID_TOKEN,
-  COMMON_ERROR_SYSTEM_VERSION_MISMATCH,
-  COMMON_ERROR_TOKEN_EXPIRED,
-  COMMON_ERROR_USER_VERSION_MISMATCH
-} from "../constants/errorMessageKeys";
 import { getApiUrl } from "./getConstants";
 
 const getSubDomain = (url: string, multipleValues: boolean = false) => {
@@ -40,17 +34,6 @@ authFetch.interceptors.request.use(
     }
     return config;
   },
-  async (error) => {
-    return await Promise.reject(error);
-  }
-);
-
-//  response interceptor
-authFetch.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-
   async (error) => {
     return await Promise.reject(error);
   }

@@ -41,7 +41,6 @@ const Dashboard: NextPage = () => {
     setQuickSetupModalType: state.setQuickSetupModalType
   }));
 
-  const { update } = useSession();
   const billingTranslateText = useTranslator("settingEnterprise", "billing");
 
   const { setToastMessage } = useToast();
@@ -52,7 +51,6 @@ const Dashboard: NextPage = () => {
         setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
     }
     if (query.status === "success") {
-      update();
       setToastMessage({
         toastType: ToastType.SUCCESS,
         title: billingTranslateText(["subscriptionSuccessToastTitle"]),
