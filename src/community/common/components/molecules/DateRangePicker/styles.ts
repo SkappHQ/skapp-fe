@@ -4,6 +4,7 @@ import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { StyleProps } from "~community/common/types/CommonTypes";
 
 const styles = (theme: Theme): StyleProps => ({
+  wrapper: { flexDirection: "row", alignItems: "center" },
   iconWrapper: { pr: "0.4375rem" },
   chip: {
     cursor: "pointer",

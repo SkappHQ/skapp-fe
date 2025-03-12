@@ -3,12 +3,11 @@ import { Dispatch, JSX, SetStateAction } from "react";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { FilterButtonTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
-
-import { LeaveType } from "../types/CustomLeaveAllocationTypes";
+import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import {
   LeaveRequestsFilterType,
   LeaveStatusTypes
-} from "../types/LeaveRequestTypes";
+} from "~community/leave/types/LeaveRequestTypes";
 
 export const setLeaveRequestsParams = (
   leaveRequestFilterValue: LeaveRequestsFilterType,
@@ -65,9 +64,9 @@ export const removeFiltersByLabel = (
 };
 
 export const requestedLeaveTypesPreProcessor = (
-  data: LeaveType[]
+  data: LeaveTypeType[]
 ): FilterButtonTypes[] => {
-  const preProcessedLeaveTypes = data?.map((type: LeaveType) => {
+  const preProcessedLeaveTypes = data?.map((type: LeaveTypeType) => {
     return {
       id: type?.typeId?.toString(),
       text: type?.name

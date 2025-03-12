@@ -1,18 +1,12 @@
-import { Box, Stack, Theme, Typography, useTheme } from "@mui/material";
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
+import { Stack, Theme, useTheme } from "@mui/material";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 
-import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
-import FilterIcon from "~community/common/assets/Icons/FilterIcon";
-import Button from "~community/common/components/atoms/Button/Button";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
-import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
 import Table from "~community/common/components/molecules/Table/Table";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { FilterButtonTypes } from "~community/common/types/CommonTypes";
-import { MenuTypes } from "~community/common/types/MoleculeTypes";
 import {
   convertDateToFormat,
   getAsDaysString,
@@ -22,6 +16,9 @@ import {
   useGetLeaveRequestData,
   useGetLeaveTypes
 } from "~community/leave/api/LeaveApi";
+import RequestDates from "~community/leave/components/molecules/LeaveRequestRow/RequestDates";
+import ManagerLeaveRequestFilterByBtn from "~community/leave/components/molecules/ManagerLeaveRequestFilterByBtn/MangerLeaveRequestFilterByBtn";
+import ManagerLeaveRequestsSortByBtn from "~community/leave/components/molecules/ManagerLeaveRequestsSortByBtn/ManagerLeaveRequestsSortByBtn";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
   LeaveRequestItemsType,
@@ -32,10 +29,6 @@ import {
   requestTypeSelector,
   requestedLeaveTypesPreProcessor
 } from "~community/leave/utils/LeaveRequestFilterActions";
-import ShowSelectedFilters from "~community/people/components/molecules/ShowSelectedFilters/ShowSelectedFilters";
-
-import LeaveRequestMenu from "../LeaveRequestMenu/LeaveRequestMenu";
-import RequestDates from "../LeaveRequestRow/RequestDates";
 
 interface Props {
   employeeLeaveRequests: LeaveRequestItemsType[];
@@ -49,6 +42,12 @@ const ManagerLeaveRequest: FC<Props> = ({
   isLoading
 }) => {
   const theme: Theme = useTheme();
+
+  const commonTranslateText = useTranslator(
+    "commonComponents",
+    "dateRangePicker"
+  );
+
   const translateText = useTranslator(
     "leaveModule",
     "leaveRequests",
@@ -67,33 +66,38 @@ const ManagerLeaveRequest: FC<Props> = ({
     setLeaveRequestData,
     setNewLeaveId,
     newLeaveId
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    resetLeaveRequestParams: state.resetLeaveRequestParams,
+    leaveRequestsFilter: state.leaveRequestsFilter,
+    leaveRequestFilterOrder: state.leaveRequestFilterOrder,
+    setLeaveRequestFilterOrder: state.setLeaveRequestFilterOrder,
+    setLeaveRequestsFilter: state.setLeaveRequestsFilter,
+    setLeaveRequestParams: state.setLeaveRequestParams,
+    setPagination: state.setPagination,
+    setIsManagerModal: state.setIsManagerModal,
+    setLeaveRequestData: state.setLeaveRequestData,
+    setNewLeaveId: state.setNewLeaveId,
+    newLeaveId: state.newLeaveId
+  }));
 
   const currentPage: number = useLeaveStore(
     (state) => state.leaveRequestParams.page
   ) as number;
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [sortEl, setSortEl] = useState<null | HTMLElement>(null);
-  const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
-  const [sortOpen, setSortOpen] = useState<boolean>(false);
-  const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [filterArray, setFilterArray] = useState<string[]>([]);
   const [leaveTypeButtons, setLeaveTypeButtons] = useState<FilterButtonTypes[]>(
     []
   );
 
-  const filterBeOpen: boolean = filterOpen && Boolean(filterEl);
-  const filterId = filterBeOpen ? "filter-popper" : undefined;
-  const sortByOpen = sortOpen && Boolean(sortEl);
-  const sortId = sortByOpen ? "sortBy-popper" : undefined;
-
   const { data: leaveTypes, isLoading: leaveTypesLoading } = useGetLeaveTypes();
+
   const {
     refetch,
-    isSuccess: getleaveByIdSuccess,
+    isSuccess: getLeaveByIdSuccess,
     data: getLeaveByIdData
   } = useGetLeaveRequestData(newLeaveId as number);
+
   const columns = [
     {
       field: "name",
@@ -114,26 +118,6 @@ const ManagerLeaveRequest: FC<Props> = ({
     id: col.field,
     label: col.headerName
   }));
-
-  const handleSortClick = (event: MouseEvent<HTMLElement>): void => {
-    setSortEl(event.currentTarget);
-    setSortOpen((previousOpen) => !previousOpen);
-  };
-
-  const handleSortClose = (): void => {
-    setSortEl(null);
-    setSortOpen(false);
-  };
-
-  const handleFilterClick = (event: MouseEvent<HTMLElement>): void => {
-    setFilterEl(event.currentTarget);
-    setFilterOpen((previousOpen) => !previousOpen);
-  };
-
-  const handleFilterClose = (): void => {
-    setFilterEl(null);
-    setFilterOpen(false);
-  };
 
   const onClickReset = () => {
     resetLeaveRequestParams();
@@ -157,98 +141,6 @@ const ManagerLeaveRequest: FC<Props> = ({
       filterArray,
       setFilterArray,
       label
-    );
-  };
-
-  const renderSortBy = () => {
-    return (
-      <Box>
-        <Button
-          label="Sort By"
-          buttonStyle={ButtonStyle.TERTIARY}
-          styles={{
-            border: "0.0625rem solid",
-            borderColor: "grey.500",
-            py: "0.5rem",
-            px: "1rem"
-          }}
-          endIcon={<DropDownArrow />}
-          onClick={handleSortClick}
-          disabled={employeeLeaveRequests?.length === 0}
-          ariaLabel="Sort by: Pressing enter on this button opens a menu where you can choose to sort by date requested or urgency."
-          aria-describedby={sortId}
-        />
-        <LeaveRequestMenu
-          anchorEl={sortEl}
-          handleClose={handleSortClose}
-          position="bottom-start"
-          menuType={MenuTypes.SORT}
-          id={sortId}
-          open={sortOpen}
-        />
-      </Box>
-    );
-  };
-
-  const renderDateRange = () => {
-    return (
-      <Stack sx={{ flexDirection: "row", alignItems: "center" }}>
-        <Typography
-          variant="body2"
-          sx={{
-            px: "1.25rem"
-          }}
-        >
-          Date:
-        </Typography>
-        <DateRangePicker
-          selectedDates={selectedDates}
-          setSelectedDates={setSelectedDates}
-        />
-      </Stack>
-    );
-  };
-
-  const renderFilterBy = () => {
-    return (
-      <Box>
-        <Stack direction="row" alignItems="center" gap={0.5}>
-          {filterArray.length > 0 && <Typography>Filter :</Typography>}
-          <ShowSelectedFilters
-            filterOptions={leaveRequestFilterOrder}
-            onDeleteIcon={removeFilters}
-          />
-          <IconButton
-            icon={<FilterIcon />}
-            onClick={handleFilterClick}
-            buttonStyles={{
-              border: "0.0625rem solid",
-              borderColor: "grey.500",
-              bgcolor: theme.palette.grey[100],
-              p: "0.625rem 1.25rem",
-              transition: "0.2s ease",
-              "&:hover": {
-                boxShadow: `inset 0 0 0 0.125rem ${theme.palette.grey[500]}`
-              }
-            }}
-            aria-describedby={filterId}
-            dataProps={{
-              "aria-label":
-                "Filter: Pressing enter on this button opens a menu where you can choose to filter by leave status, leave type and date."
-            }}
-          />
-        </Stack>
-        <LeaveRequestMenu
-          anchorEl={filterEl}
-          handleClose={handleFilterClose}
-          position="bottom-end"
-          menuType={MenuTypes.FILTER}
-          id={filterId}
-          open={filterOpen}
-          leaveTypeButtons={leaveTypeButtons}
-          onReset={onClickReset}
-        />
-      </Box>
     );
   };
 
@@ -343,10 +235,10 @@ const ManagerLeaveRequest: FC<Props> = ({
   ]);
 
   useEffect(() => {
-    if (getleaveByIdSuccess && getLeaveByIdData) {
+    if (getLeaveByIdSuccess && getLeaveByIdData) {
       setLeaveRequestData(getLeaveByIdData);
     }
-  }, [getLeaveByIdData, getleaveByIdSuccess]);
+  }, [getLeaveByIdData, getLeaveByIdSuccess]);
 
   useEffect(() => {
     if (newLeaveId) {
@@ -361,12 +253,24 @@ const ManagerLeaveRequest: FC<Props> = ({
       tableHeaders={tableHeaders}
       tableRows={transformToTableRows()}
       actionRowOneLeftButton={
-        <Stack flexDirection={"row"}>
-          {renderSortBy()}
-          {renderDateRange()}
+        <Stack flexDirection={"row"} gap="1.25rem">
+          <ManagerLeaveRequestsSortByBtn
+            isDisabled={employeeLeaveRequests?.length === 0}
+          />
+          <DateRangePicker
+            label={commonTranslateText(["label"])}
+            selectedDates={selectedDates}
+            setSelectedDates={setSelectedDates}
+          />
         </Stack>
       }
-      actionRowOneRightButton={renderFilterBy()}
+      actionRowOneRightButton={
+        <ManagerLeaveRequestFilterByBtn
+          leaveTypeButtons={leaveTypeButtons}
+          onClickReset={onClickReset}
+          removeFilters={removeFilters}
+        />
+      }
       emptyDataDescription={translateText(["noLeaveRequestsManagerDetails"])}
       emptyDataTitle={translateText(["noLeaveRequests"])}
       skeletonRows={5}
