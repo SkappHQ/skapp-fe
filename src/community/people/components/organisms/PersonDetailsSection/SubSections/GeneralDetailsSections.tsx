@@ -320,7 +320,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <DropdownAutocomplete
                   itemList={NationalityList}
-                  inputName="nationalty"
+                  inputName="nationality"
                   label={translateText(["nationality"])}
                   value={{ label: "", value: "" }}
                   placeholder={translateText(["selectNationality"])}
