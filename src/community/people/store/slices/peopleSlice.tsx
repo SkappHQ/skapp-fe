@@ -99,7 +99,7 @@ const defaultEmployee: EmployeeType = {
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
-  setEmployee: (employee) =>
+  setEmployee: (employee: EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
   setPersonalDetails: (personal: PersonalDetailsType) =>
     set((state: PeopleSliceTypes) => ({
