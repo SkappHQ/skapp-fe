@@ -5,7 +5,12 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 
-const EditSectionButtonWrapper = () => {
+interface Props {
+  onCancelClick: () => void;
+  onSaveClick: () => void;
+}
+
+const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -24,14 +29,14 @@ const EditSectionButtonWrapper = () => {
         buttonStyle={ButtonStyle.TERTIARY}
         endIcon={IconName.CLOSE_ICON}
         isFullWidth={false}
-        onClick={() => {}}
+        onClick={onCancelClick}
       />
       <Button
         label={translateText(["saveDetails"])}
         buttonStyle={ButtonStyle.PRIMARY}
         endIcon={IconName.RIGHT_ARROW_ICON}
         isFullWidth={false}
-        onClick={() => {}}
+        onClick={onSaveClick}
       />
     </Stack>
   );
