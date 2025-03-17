@@ -1,116 +1,159 @@
-import { Grid2 as Grid } from "@mui/material";
+import { Grid2 as Grid, type SelectChangeEvent } from "@mui/material";
+import { useFormik } from "formik";
+import { forwardRef, useImperativeHandle } from "react";
 
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
+import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { BloodGroupList } from "~community/people/utils/data/employeeSetupStaticData";
+import { employeeHealthAndOtherDetailsValidation } from "~community/people/utils/peopleValidations";
 
-import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
-
-interface Props {
+interface props {
   isInputsDisabled?: boolean;
 }
-const HealthAndOtherDetailsSection = ({ isInputsDisabled }: Props) => {
-  const translateText = useTranslator(
-    "peopleModule",
-    "addResource",
-    "health&OtherDetails"
-  );
 
-  return (
-    <PeopleFormSectionWrapper
-      title={translateText(["title"])}
-      containerStyles={{
-        padding: "0",
-        margin: "0 auto",
-        height: "auto"
-      }}
-      dividerStyles={{
-        mt: "0.5rem"
-      }}
-      pageHead={translateText(["head"])}
-    >
-      <form onSubmit={() => {}}>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            mb: "2rem"
-          }}
-        >
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <DropdownList
-              inputName="bloodGroup"
-              label={translateText(["bloodGroup"])}
-              value={""}
-              placeholder={translateText(["selectBloodGroup"])}
-              onChange={() => {}}
-              onInput={() => {}}
-              error={""}
-              componentStyle={{
-                mt: "0rem"
-              }}
-              errorFocusOutlineNeeded={false}
-              itemList={BloodGroupList}
-              isDisabled={isInputsDisabled}
-            />
-          </Grid>
+const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
+  (props, ref) => {
+    const { isInputsDisabled } = props;
+    const translateText = useTranslator(
+      "peopleModule",
+      "addResource",
+      "health&OtherDetails"
+    );
 
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <InputField
-              label={translateText(["allergies"])}
-              inputType="text"
-              value={""}
-              placeHolder={translateText(["enterAllergies"])}
-              onChange={() => {}}
-              inputName="allergies"
-              error={""}
-              componentStyle={{
-                flex: 1
-              }}
-              maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
-              isDisabled={isInputsDisabled}
-            />
-          </Grid>
+    const initialValues = {
+      bloodGroup: "",
+      allergies: "",
+      dietaryRestrictions: "",
+      tshirtSize: ""
+    };
 
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <InputField
-              label={translateText(["dietaryRestrictions"])}
-              inputType="text"
-              value={""}
-              placeHolder={translateText(["enterDietaryRestrictions"])}
-              onChange={() => {}}
-              inputName="dietaryRestrictions"
-              error={""}
-              componentStyle={{
-                flex: 1
-              }}
-              maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
-              isDisabled={isInputsDisabled}
-            />
+    useImperativeHandle(ref, () => ({
+      validateForm: async () => {
+        const validationErrors = await formik.validateForm();
+        return validationErrors;
+      },
+      submitForm: async () => {
+        await formik.submitForm();
+      },
+      resetForm: () => {
+        formik.resetForm();
+      }
+    }));
+
+    const formik = useFormik({
+      initialValues,
+      validationSchema: employeeHealthAndOtherDetailsValidation,
+      onSubmit: () => {},
+      validateOnChange: false,
+      validateOnBlur: true,
+      enableReinitialize: true
+    });
+
+    const { values, errors, handleChange, setFieldError, setFieldValue } =
+      formik;
+
+    const handleInput = async (e: SelectChangeEvent) => {};
+
+    return (
+      <PeopleLayout
+        title={translateText(["title"])}
+        containerStyles={{
+          padding: "0",
+          margin: "0 auto",
+          height: "auto"
+        }}
+        dividerStyles={{
+          mt: "0.5rem"
+        }}
+        pageHead={translateText(["head"])}
+      >
+        <form onSubmit={formik.handleSubmit}>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              mb: "2rem"
+            }}
+          >
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <DropdownList
+                inputName="bloodGroup"
+                label={translateText(["bloodGroup"])}
+                value={values.bloodGroup}
+                placeholder={translateText(["selectBloodGroup"])}
+                onChange={handleChange}
+                onInput={handleInput}
+                error={errors.bloodGroup ?? ""}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                errorFocusOutlineNeeded={false}
+                itemList={BloodGroupList}
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["allergies"])}
+                inputType="text"
+                value={values.allergies}
+                placeHolder={translateText(["enterAllergies"])}
+                onChange={handleInput}
+                inputName="allergies"
+                error={errors.allergies ?? ""}
+                componentStyle={{
+                  flex: 1
+                }}
+                maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["dietaryRestrictions"])}
+                inputType="text"
+                value={values.dietaryRestrictions}
+                placeHolder={translateText(["enterDietaryRestrictions"])}
+                onChange={handleInput}
+                inputName="dietaryRestrictions"
+                error={errors.dietaryRestrictions ?? ""}
+                componentStyle={{
+                  flex: 1
+                }}
+                maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["tShirtSize"])}
+                inputType="text"
+                value={values.tshirtSize}
+                placeHolder={translateText(["enterTShirtSize"])}
+                onChange={handleInput}
+                inputName="tshirtSize"
+                error={errors.tshirtSize ?? ""}
+                componentStyle={{
+                  flex: 1
+                }}
+                tooltip={translateText(["tShirtSizeTooltip"])}
+                isDisabled={isInputsDisabled}
+                maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
+              />
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <InputField
-              label={translateText(["tShirtSize"])}
-              inputType="text"
-              value={""}
-              placeHolder={translateText(["enterTShirtSize"])}
-              onChange={() => {}}
-              inputName="tshirtSize"
-              error={""}
-              componentStyle={{
-                flex: 1
-              }}
-              tooltip={translateText(["tShirtSizeTooltip"])}
-              isDisabled={isInputsDisabled}
-              maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
-            />
-          </Grid>
-        </Grid>
-      </form>
-    </PeopleFormSectionWrapper>
-  );
-};
+        </form>
+      </PeopleLayout>
+    );
+  }
+);
+
+HealthAndOtherDetailsSection.displayName = "HealthAndOtherDetailsSection";
 
 export default HealthAndOtherDetailsSection;

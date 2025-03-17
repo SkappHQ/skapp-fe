@@ -9,12 +9,12 @@ import {
   ManagerTypes
 } from "~community/common/types/AuthTypes";
 import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
-import { EditAllInformationType } from "~community/people/types/EditEmployeeInfoTypes";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
   employeeId: number;
-  formType: EditAllInformationType;
-  setFormType: (formType: EditAllInformationType) => void;
+  formType: EditPeopleFormTypes;
+  setFormType: (formType: EditPeopleFormTypes) => void;
 }
 
 const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
@@ -81,7 +81,7 @@ const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
       : [])
   ];
 
-  const handleStepClick = (step: EditAllInformationType) => {
+  const handleStepClick = (step: EditPeopleFormTypes) => {
     setFormType(step);
   };
 
@@ -89,7 +89,7 @@ const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
     <BoxStepper
       activeStep={formType}
       steps={steps}
-      onStepClick={(step) => handleStepClick(step as EditAllInformationType)}
+      onStepClick={(step) => handleStepClick(step as EditPeopleFormTypes)}
       useStringIdentifier
       stepperStyles={{
         marginBottom: "1.75rem"

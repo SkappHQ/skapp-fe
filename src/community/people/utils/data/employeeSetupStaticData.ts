@@ -1,17 +1,15 @@
 import { PermissionTypes } from "~community/common/types/CommonTypes";
 import {
+  AccountStatusTypes,
   BloodGroupTypes,
   EEOJobCategoryTypes,
   EmploymentAllocationTypes,
-  GenderTypes,
-  MaritalStatusTypes,
-  SystemPermissionTypes
-} from "~community/people/types/AddNewResourceTypes";
-import {
-  EmploymentStatusTypes,
   EmploymentTypes,
+  GenderEnum,
+  MaritalStatusTypes,
   RelationshipTypes
-} from "~community/people/types/EmployeeTypes";
+} from "~community/people/enums/PeopleEnums";
+import { SystemPermissionTypes } from "~community/people/types/AddNewResourceTypes";
 
 export const PermissionsList = [
   { label: "Employee", value: PermissionTypes.EMPLOYEES },
@@ -27,22 +25,22 @@ export const EmployeeTypesList = [
 export const GenderList = [
   {
     label: "Male",
-    value: GenderTypes.MALE
+    value: GenderEnum.MALE
   },
   {
     label: "Female",
-    value: GenderTypes.FEMALE
+    value: GenderEnum.FEMALE
   },
   {
     label: "Other",
-    value: GenderTypes.OTHER
+    value: GenderEnum.OTHER
   }
 ];
 
 export const MaritalStatusList = [
   { label: "Single", value: MaritalStatusTypes.SINGLE },
   { label: "Married", value: MaritalStatusTypes.MARRIED },
-  { label: "Separated", value: MaritalStatusTypes.DIVORCED },
+  { label: "Separated", value: MaritalStatusTypes.SEPARATED },
   { label: "Widowed", value: MaritalStatusTypes.WIDOWED }
 ];
 
@@ -58,9 +56,9 @@ export const EmergencyContactRelationshipList = [
 ];
 
 export const EmployementStatusList = [
-  { label: "Pending", value: EmploymentStatusTypes.PENDING },
-  { label: "Active", value: EmploymentStatusTypes.ACTIVE },
-  { label: "Terminated", value: EmploymentStatusTypes.TERMINATED }
+  { label: "Pending", value: AccountStatusTypes.PENDING },
+  { label: "Active", value: AccountStatusTypes.ACTIVE },
+  { label: "Terminated", value: AccountStatusTypes.TERMINATED }
 ];
 
 export const EmployementAllocationList = [

@@ -1,11 +1,13 @@
 import { Grid2 as Grid } from "@mui/material";
+import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -13,11 +15,15 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import { isValidNamePattern } from "~community/common/utils/validation";
 import { NAME_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
+import { FamilyMemberType } from "~community/people/types/AddNewResourceTypes";
 import {
   GenderList,
   RelationshipList
 } from "~community/people/utils/data/employeeSetupStaticData";
+import { employeeFamilyDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
@@ -42,6 +48,67 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
   const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
     undefined
   );
+  const initialValues: FamilyMemberType = {
+    firstName: "",
+    lastName: "",
+    gender: "",
+    relationship: "",
+    birthDate: "",
+    parentName: ""
+  };
+
+  const tableHeaders = [
+    translateText(["firstName"]),
+    translateText(["lastName"]),
+    translateText(["gender"]),
+    translateText(["relationship"]),
+    translateText(["parentName"]),
+    translateText(["birthDate"]),
+    translateText(["age"])
+  ];
+
+  const handleEdit = (rowIndex: number) => {
+    setRowEdited(rowIndex);
+  };
+
+  const handleDelete = (rowIndex: number) => {};
+
+  const onSubmit = (values: FamilyMemberType) => {
+    resetForm();
+    setSelectedDob(undefined);
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: employeeFamilyDetailsValidation(translateText),
+    onSubmit,
+    validateOnChange: false
+  });
+
+  const {
+    values,
+    errors,
+    handleSubmit,
+    resetForm,
+    setFieldValue,
+    setFieldError,
+    handleChange
+  } = formik;
+
+  const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (isValidNamePattern(e.target.value)) {
+      await setFieldValue(e.target.name, e.target.value);
+      setFieldError(e.target.name, "");
+    }
+  };
+
+  const dateOnChange = async (
+    fieldName: string,
+    newValue: string
+  ): Promise<void> => {
+    await setFieldValue(fieldName, newValue);
+    setFieldError(fieldName, "");
+  };
 
   return (
     <PeopleFormSectionWrapper
@@ -67,11 +134,11 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <InputField
             label={translateText(["firstName"])}
             inputType="text"
-            value={""}
+            value={values.firstName}
             placeHolder={translateText(["enterFirstName"])}
-            onChange={() => {}}
+            onChange={handleInput}
             inputName="firstName"
-            error={""}
+            error={errors.firstName ?? ""}
             componentStyle={{
               flex: 1,
               mt: "0rem"
@@ -85,11 +152,11 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <InputField
             label={translateText(["lastName"])}
             inputType="text"
-            value={""}
+            value={values.lastName}
             placeHolder={translateText(["enterLastName"])}
-            onChange={() => {}}
+            onChange={handleInput}
             inputName="lastName"
-            error={""}
+            error={errors.lastName ?? ""}
             componentStyle={{
               flex: 1,
               mt: "0rem"
@@ -103,10 +170,10 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <DropdownList
             inputName="gender"
             label={translateText(["gender"])}
-            value={""}
+            value={values.gender}
             placeholder={translateText(["selectGender"])}
-            onChange={() => {}}
-            error={""}
+            onChange={handleChange}
+            error={errors.gender ?? ""}
             componentStyle={{
               mt: "0rem"
             }}
@@ -121,10 +188,10 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <DropdownList
             inputName="relationship"
             label={translateText(["relationship"])}
-            value={""}
+            value={values.relationship}
             placeholder={translateText(["selectRelationship"])}
-            onChange={() => {}}
-            error={""}
+            onChange={handleChange}
+            error={errors.relationship ?? ""}
             componentStyle={{
               mt: "0rem"
             }}
@@ -139,9 +206,14 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <InputDate
             label={translateText(["birthDate"])}
             value={DateTime.fromISO("")}
-            onchange={() => {}}
+            onchange={async (newValue: string) =>
+              await dateOnChange(
+                "birthDate",
+                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+              )
+            }
             placeholder={translateText(["selectBirthDate"])}
-            error={""}
+            error={errors.birthDate ?? ""}
             maxDate={DateTime.fromISO(new Date().toISOString())}
             componentStyle={{
               mt: "0rem"
@@ -158,11 +230,11 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["parentName"])}
               inputType="text"
-              value={""}
+              value={values.parentName}
               placeHolder={translateText(["enterParentName"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="parentName"
-              error={""}
+              error={errors.parentName ?? ""}
               isDisabled={isInputsDisabled}
               componentStyle={{
                 flex: 1,
@@ -182,7 +254,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
                   ? translateButtonText(["saveChanges"])
                   : translateButtonText(["add"])
               }
-              onClick={() => {}}
+              onClick={() => handleSubmit()}
               endIcon={rowEdited > -1 ? IconName.RIGHT_MARK : IconName.ADD_ICON}
               buttonStyle={ButtonStyle.SECONDARY}
               size={ButtonSizes.MEDIUM}
@@ -194,13 +266,15 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             />
           )}
         </Grid>
+        {/* Table data need to get from store */}
+
         {/* {employeeFamilyDetails?.familyMembers?.length === 0 ? null : (
-          <CustomTable
-            data={[]}
+          <PeopleFormTable
+            data={formatData(employeeFamilyDetails?.familyMembers)}
             actionsNeeded={true && !isInputsDisabled}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            headings={[]}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            headings={tableHeaders}
             tableStyles={{
               mt: "2rem"
             }}

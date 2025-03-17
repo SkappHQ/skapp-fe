@@ -202,3 +202,16 @@ export interface HolidayModalSliceType
     | "setIsHolidayModalOpen"
     | "setHolidayModalType"
   > {}
+
+export interface PeopleSliceTypes
+  extends Pick<
+    Store,
+    | "employee"
+    | "initialEmployee"
+    | "setEmployee"
+    | "setPersonalDetails"
+    | "setEmergencyDetails"
+    | "setEmploymentDetails"
+    | "setSystemPermissions"
+    | "setCommonDetails"
+  > {}

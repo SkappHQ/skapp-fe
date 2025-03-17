@@ -47,6 +47,14 @@ import {
 } from "./JobFamilyTypes";
 import { DirectoryModalTypes } from "./ModalTypes";
 import {
+  CommonDetailsType,
+  EmergencyDetailsType,
+  EmployeeType,
+  EmploymentFormDetailsType,
+  PersonalDetailsType,
+  SystemPermissionsType
+} from "./PeopleTypes";
+import {
   ProjectTeamsAndEmployeesType,
   ProjectTeamsModalTypes,
   TeamDetailsType,
@@ -229,6 +237,14 @@ interface actionsTypes {
   setDeletionConfirmationModalOpen: (value: boolean) => void;
   setDeletionAlertMessage: (value: string) => void;
   setDeletionAlertOpen: (value: boolean) => void;
+
+  //people slice
+  setEmployee: (employee: EmployeeType) => void;
+  setPersonalDetails: (personal: PersonalDetailsType) => void;
+  setEmergencyDetails: (emergency: EmergencyDetailsType) => void;
+  setEmploymentDetails: (employment: EmploymentFormDetailsType) => void;
+  setSystemPermissions: (systemPermissions: SystemPermissionsType) => void;
+  setCommonDetails: (common: CommonDetailsType) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -347,4 +363,8 @@ export interface Store extends actionsTypes {
   isDeletionConfirmationModalOpen: boolean;
   deletionAlertMessage: string;
   isDeletionAlertOpen: boolean;
+
+  //people slice
+  employee: EmployeeType;
+  initialEmployee: EmployeeType;
 }

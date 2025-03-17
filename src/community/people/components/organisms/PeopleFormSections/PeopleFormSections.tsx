@@ -1,20 +1,24 @@
-import { EditAllInformationType } from "~community/people/types/EditEmployeeInfoTypes";
+import {
+  EditPeopleFormStatus,
+  EditPeopleFormTypes
+} from "~community/people/types/PeopleEditTypes";
 
 import EmergencyDetailsForm from "../EmergencyDetailsSection/EmergencyDetailsForm";
 import PersonalDetailsForm from "../PersonDetailsSection/PersonalDetailsForm";
 
 interface Props {
-  formType: EditAllInformationType;
+  formType: EditPeopleFormTypes;
+  editFormStatus?: EditPeopleFormStatus;
 }
 const PeopleFormSections = ({ formType }: Props) => {
   const getSections = () => {
     switch (formType) {
-      case EditAllInformationType.personal:
-        return <PersonalDetailsForm />;
-      case EditAllInformationType.emergency:
+      case EditPeopleFormTypes.personal:
+        return <PersonalDetailsForm onNext={() => {}} />;
+      case EditPeopleFormTypes.emergency:
         return <EmergencyDetailsForm />;
       default:
-        return <PersonalDetailsForm />;
+        return;
     }
   };
 

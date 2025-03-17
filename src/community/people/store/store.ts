@@ -12,6 +12,7 @@ import { employeeDataFiltersSlice } from "./slices/employeeDataFiltersSlice";
 import holidayDataFiltersSlice from "./slices/holidayDataFilterSlice";
 import { holidayModalSlice } from "./slices/holidayModalSlice";
 import holidaySlice from "./slices/holidaySlice";
+import peopleSlice from "./slices/peopleSlice";
 import {
   projectTeamModalSlice,
   projectTeamSearchSlice
@@ -39,7 +40,9 @@ export const usePeopleStore = create<
       ...projectTeamSearchSlice(set),
       ...terminationConfirmationModalSlice(set),
       ...terminationAlertModalSlice(set),
-      ...userDeletionModalSlice(set)
+      ...userDeletionModalSlice(set),
+      ...terminationAlertModalSlice(set),
+      ...peopleSlice(set)
     }),
     { name: "peopleStore" }
   )

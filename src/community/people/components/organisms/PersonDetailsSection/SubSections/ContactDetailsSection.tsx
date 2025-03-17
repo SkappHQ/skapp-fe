@@ -1,10 +1,22 @@
 import { Grid2 as Grid } from "@mui/material";
+import { useFormik } from "formik";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  forwardRef,
+  useImperativeHandle,
+  useMemo
+} from "react";
 
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import InputPhoneNumber from "~community/common/components/molecules/InputPhoneNumber/InputPhoneNumber";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { DropdownListType } from "~community/common/types/CommonTypes";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
+import useGetCountryList from "~community/people/hooks/useGetCountryList";
+import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { employeeContactDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
@@ -12,12 +24,70 @@ interface Props {
   isInputsDisabled?: boolean;
 }
 
-const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
+const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
+  const { isInputsDisabled } = props;
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
     "contactDetails"
   );
+
+  const initialValues = useMemo(
+    () => ({
+      personalEmail: "",
+      countryCode: "",
+      phone: "",
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      country: "",
+      state: "",
+      postalCode: ""
+    }),
+    []
+  );
+
+  const countryList = useGetCountryList();
+  useImperativeHandle(ref, () => ({
+    validateForm: async () => {
+      const validationErrors = await formik.validateForm();
+      return validationErrors;
+    },
+    submitForm: async () => {
+      await formik.submitForm();
+    },
+    resetForm: () => {
+      formik.resetForm();
+    }
+  }));
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: employeeContactDetailsValidation(translateText),
+    onSubmit: () => {},
+    validateOnChange: false,
+    validateOnBlur: true,
+    enableReinitialize: true
+  });
+
+  const { values, errors, setFieldValue, setFieldError } = formik;
+
+  const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+  };
+
+  const handleCountrySelect = async (
+    e: SyntheticEvent,
+    value: DropdownListType
+  ): Promise<void> => {};
+
+  const onChangeCountry = async (countryCode: string): Promise<void> => {
+    // Setter from the store
+  };
+
+  const handlePhoneNumber = async (
+    phone: ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {};
 
   return (
     <PeopleFormSectionWrapper
@@ -34,7 +104,7 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
       }}
       pageHead={translateText(["head"])}
     >
-      <form onSubmit={() => {}}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
           spacing={2}
@@ -46,11 +116,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["personalEmail"])}
               inputType="email"
-              value={""}
+              value={values.personalEmail}
               placeHolder={translateText(["enterPersonalEmail"])}
-              onInput={() => {}}
+              onInput={handleInput}
               inputName="personalEmail"
-              error={""}
+              error={errors.personalEmail ?? ""}
               componentStyle={{
                 flex: 1,
                 mt: "0rem"
@@ -62,11 +132,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
           <Grid size={{ xs: 12, md: 6, xl: 4 }}>
             <InputPhoneNumber
               label={translateText(["contactNo"])}
-              value={""}
-              countryCodeValue={""}
-              onChangeCountry={async (countryCode: string) => {}}
-              onChange={async (phone) => {}}
-              error={""}
+              value={values.phone}
+              countryCodeValue={values.countryCode}
+              onChangeCountry={onChangeCountry}
+              onChange={handlePhoneNumber}
+              error={errors.phone ?? ""}
               inputName="phone"
               fullComponentStyle={{
                 mt: "0rem"
@@ -87,11 +157,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["addressLine1"])}
               inputType="text"
-              value={""}
+              value={values.addressLine1}
               placeHolder={translateText(["enterAddressLine1"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="addressLine1"
-              error={""}
+              error={errors.addressLine1 ?? ""}
               componentStyle={{
                 flex: 1,
                 mt: "0rem"
@@ -105,11 +175,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["addressLine2"])}
               inputType="text"
-              value={""}
+              value={values.addressLine2}
               placeHolder={translateText(["enterAddressLine2"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="addressLine2"
-              error={""}
+              error={errors.addressLine2 ?? ""}
               componentStyle={{
                 flex: 1,
                 mt: "0rem"
@@ -123,11 +193,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["city"])}
               inputType="text"
-              value={""}
+              value={values.city}
               placeHolder={translateText(["enterCity"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="city"
-              error={""}
+              error={errors.city ?? ""}
               componentStyle={{
                 flex: 1,
                 mt: "0rem"
@@ -139,13 +209,20 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
 
           <Grid size={{ xs: 12, md: 6, xl: 4 }}>
             <DropdownAutocomplete
-              itemList={[]}
+              itemList={countryList}
               inputName="country"
               label={translateText(["country"])}
-              value={{ label: "", value: "" }}
+              value={
+                values.country
+                  ? {
+                      label: values.country,
+                      value: values.country
+                    }
+                  : undefined
+              }
               placeholder={translateText(["selectCountry"])}
-              onChange={() => {}}
-              error={""}
+              onChange={handleCountrySelect}
+              error={errors.country ?? ""}
               componentStyle={{
                 mt: "0rem"
               }}
@@ -158,11 +235,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["state"])}
               inputType="text"
-              value={""}
+              value={values.state}
               placeHolder={translateText(["enterState"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="state"
-              error={""}
+              error={errors.state ?? ""}
               componentStyle={{
                 flex: 1,
                 mt: "0rem"
@@ -176,11 +253,11 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["postalCode"])}
               inputType="text"
-              value={""}
+              value={values.postalCode}
               placeHolder={translateText(["enterPostalCode"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="postalCode"
-              error={""}
+              error={errors.postalCode ?? ""}
               componentStyle={{
                 flex: 1,
                 mt: "0rem"
@@ -193,6 +270,8 @@ const ContactDetailsSection = ({ isInputsDisabled }: Props) => {
       </form>
     </PeopleFormSectionWrapper>
   );
-};
+});
+
+ContactDetailsSection.displayName = "GeneralDetailsSection";
 
 export default ContactDetailsSection;
