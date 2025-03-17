@@ -1,107 +1,108 @@
 import { SetType } from "~community/common/types/CommonTypes";
 import {
-  CommonDetailsType,
-  EmergencyDetailsType,
-  EmployeeType,
-  EmploymentFormDetailsType,
-  PersonalDetailsType,
-  SystemPermissionsType
+  L1EmployeeType,
+  L2CommonDetailsType,
+  L2EmergencyDetailsType,
+  L2EmploymentFormDetailsType,
+  L2PersonalDetailsType,
+  L2SystemPermissionsType
 } from "~community/people/types/PeopleTypes";
 import { PeopleSliceTypes } from "~community/people/types/SliceTypes";
 
-const defaultEmployee: EmployeeType = {
+const defaultEmployee: L1EmployeeType = {
   personal: {
     general: {
-      firstName: null,
-      middleName: null,
-      lastName: null,
-      gender: null,
-      dateOfBirth: null,
-      nationality: null,
-      nin: null,
-      passportNumber: null,
-      maritalStatus: null
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      gender: undefined,
+      dateOfBirth: undefined,
+      nationality: undefined,
+      nin: "",
+      passportNumber: "",
+      maritalStatus: undefined
     },
     contact: {
-      personalEmail: null,
-      countryCode: null,
-      phone: null,
-      addressLine1: null,
-      addressLine2: null,
-      city: null,
-      country: null,
-      state: null,
-      postalCode: null
+      personalEmail: "",
+      countryCode: "",
+      contactNo: "",
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      country: "",
+      state: "",
+      postalCode: ""
     },
     family: [],
     educational: [],
     socialMedia: {
-      linkedin: null,
-      facebook: null,
-      instagram: null,
-      x: null
+      linkedin: "",
+      facebook: "",
+      instagram: "",
+      x: ""
     },
     healthAndOther: {
-      bloodGroup: null,
-      allergies: null,
-      dietaryRestrictions: null,
-      tshirtSize: null
+      bloodGroup: undefined,
+      allergies: "",
+      dietaryRestrictions: "",
+      tShirtSize: ""
     }
   },
   emergency: {
     primaryEmergencyContact: {
-      name: null,
-      relationship: null,
-      countryCode: null,
-      contactNumber: null
+      name: "",
+      relationship: undefined,
+      countryCode: undefined,
+      contactNo: ""
     },
     secondaryEmergencyContact: {
-      name: null,
-      relationship: null,
-      countryCode: null,
-      contactNumber: null
+      name: "",
+      relationship: undefined,
+      countryCode: undefined,
+      contactNo: ""
     }
   },
   employment: {
     employmentDetails: {
-      employeeNo: null,
-      workEmail: null,
-      employmentAllocation: null,
-      teams: null,
-      primarySupervisor: null,
-      secondarySupervisor: null,
-      joinedDate: null,
-      probationStartDate: null,
-      probationEndDate: null,
-      workTimeZone: null
+      employeeNumber: "",
+      email: "",
+      employmentAllocation: undefined,
+      teams: undefined,
+      primarySupervisor: undefined,
+      secondarySupervisor: undefined,
+      joinedDate: undefined,
+      probationStartDate: undefined,
+      probationEndDate: undefined,
+      workTimeZone: undefined
     },
     careerProgression: [],
     identificationAndDiversityDetails: {
-      ssn: null,
-      ethnicity: null,
-      eeoJobCategory: null
+      ssn: "",
+      ethnicity: undefined,
+      eeoJobCategory: undefined
     },
     previousEmployment: [],
     visaDetails: []
   },
   systemPermissions: {
     isSuperAdmin: false,
-    peopleRole: null,
-    leaveRole: null,
-    attendanceRole: null,
-    eSignRole: null
+    peopleRole: undefined,
+    leaveRole: undefined,
+    attendanceRole: undefined,
+    eSignRole: undefined
   },
   common: {
-    authPic: null
+    image: "",
+    accountStatus: undefined
   }
 };
 
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
-  setEmployee: (employee: EmployeeType) =>
+  setEmployee: (employee: L1EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
-  setPersonalDetails: (personal: PersonalDetailsType) =>
+  setPersonalDetails: (personal: L2PersonalDetailsType) =>
     set((state: PeopleSliceTypes) => ({
       ...state,
       employee: {
@@ -109,7 +110,7 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
         personal: { ...state.employee.personal, ...personal }
       }
     })),
-  setEmergencyDetails: (emergency: EmergencyDetailsType) =>
+  setEmergencyDetails: (emergency: L2EmergencyDetailsType) =>
     set((state: PeopleSliceTypes) => ({
       ...state,
       employee: {
@@ -117,7 +118,7 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
         emergency: { ...state.employee.emergency, ...emergency }
       }
     })),
-  setEmploymentDetails: (employment: EmploymentFormDetailsType) =>
+  setEmploymentDetails: (employment: L2EmploymentFormDetailsType) =>
     set((state: PeopleSliceTypes) => ({
       ...state,
       employee: {
@@ -125,7 +126,7 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
         employment: { ...state.employee.employment, ...employment }
       }
     })),
-  setSystemPermissions: (systemPermissions: SystemPermissionsType) =>
+  setSystemPermissions: (systemPermissions: L2SystemPermissionsType) =>
     set((state: PeopleSliceTypes) => ({
       ...state,
       employee: {
@@ -136,7 +137,7 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
         }
       }
     })),
-  setCommonDetails: (common: CommonDetailsType) =>
+  setCommonDetails: (common: L2CommonDetailsType) =>
     set((state: PeopleSliceTypes) => ({
       ...state,
       employee: {

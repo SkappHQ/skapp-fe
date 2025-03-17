@@ -1,260 +1,171 @@
-export interface EmployeeType {
-  personal: PersonalDetailsType;
-  emergency: EmergencyDetailsType;
-  employment: EmploymentFormDetailsType;
-  systemPermissions: SystemPermissionsType;
-  common: CommonDetailsType;
+import {
+  AccountStatusTypes,
+  BloodGroupTypes,
+  EEOJobCategoryTypes,
+  EmploymentAllocationTypes,
+  EmploymentTypes,
+  EthnicityTypes,
+  GenderEnum,
+  MaritalStatusTypes,
+  NationalityEnum,
+  RelationshipTypes,
+  Role
+} from "../enums/PeopleEnums";
+
+//L1 Type
+export interface L1EmployeeType {
+  personal?: L2PersonalDetailsType;
+  emergency?: L2EmergencyDetailsType;
+  employment?: L2EmploymentFormDetailsType;
+  systemPermissions?: L2SystemPermissionsType;
+  common?: L2CommonDetailsType;
 }
 
-export interface PersonalDetailsType {
-  general: GeneralDetailsType;
-  contact: ContactDetailsType;
-  family: FamilyDetailsType[];
-  educational: EducationalDetailsType[];
-  socialMedia: SocialMediaDetailsType;
-  healthAndOther: HealthAndOtherDetailsType;
+//L2 Types
+export interface L2PersonalDetailsType {
+  general?: L3GeneralDetailsType;
+  contact?: L3ContactDetailsType;
+  family?: L3FamilyDetailsType[];
+  educational?: L3EducationalDetailsType[];
+  socialMedia?: L3SocialMediaDetailsType;
+  healthAndOther?: L3HealthAndOtherDetailsType;
 }
 
-export interface GeneralDetailsType {
-  firstName: string | null;
-  middleName: string | null;
-  lastName: string | null;
-  gender: GenderEnum | null;
-  dateOfBirth: string | null;
-  nationality: string | null;
-  nin: string | null;
-  passportNumber: string | null;
-  maritalStatus: string | null;
+export interface L2EmergencyDetailsType {
+  primaryEmergencyContact?: L3EmergencyContactType;
+  secondaryEmergencyContact?: L3EmergencyContactType;
 }
 
-export interface ContactDetailsType {
-  personalEmail: string | null;
-  countryCode: string | null;
-  phone: string | null;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  city: string | null;
-  country: string | null;
-  state: string | null;
-  postalCode: string | null;
+export interface L2EmploymentFormDetailsType {
+  employmentDetails?: L3EmploymentDetailsType;
+  careerProgression?: L3CareerProgressionDetailsType[];
+  identificationAndDiversityDetails?: L3IdentificationAndDiversityDetailsType;
+  previousEmployment?: L3PreviousEmploymentDetailsType[];
+  visaDetails?: L3VisaDetailsType[];
 }
 
-export interface FamilyDetailsType {
-  firstName: string | null;
-  lastName: string | null;
-  gender: GenderEnum | null;
-  relationship: RelationshipTypes | null;
-  dateOfBirth: string | null;
-  parentName: string | null;
+export interface L2SystemPermissionsType {
+  isSuperAdmin?: boolean;
+  peopleRole?: Role;
+  leaveRole?: Role;
+  attendanceRole?: Role;
+  eSignRole?: Role;
 }
 
-export interface EducationalDetailsType {
-  institutionName: string | null;
-  degree: string | null;
-  major: string | null;
-  startDate: string | null;
-  endDate: string | null;
+export interface L2CommonDetailsType {
+  image?: string;
+  accountStatus?: AccountStatusTypes;
 }
 
-export interface SocialMediaDetailsType {
-  linkedin: string | null;
-  facebook: string | null;
-  instagram: string | null;
-  x: string | null;
-}
-
-export interface HealthAndOtherDetailsType {
-  bloodGroup: BloodGroupTypes | null;
-  allergies: string | null;
-  dietaryRestrictions: string | null;
-  tshirtSize: string | null;
-}
-
-export interface EmergencyDetailsType {
-  primaryEmergencyContact: EmergencyContactType;
-  secondaryEmergencyContact: EmergencyContactType;
-}
-
-export interface EmergencyContactType {
-  name: string | null;
-  relationship: RelationshipTypes | null;
-  countryCode: string | null;
-  contactNumber: string | null;
-}
-
-export interface EmploymentFormDetailsType {
-  employmentDetails: EmploymentDetailsType;
-  careerProgression: CareerProgressionDetailsType[];
-  identificationAndDiversityDetails: IdentificationAndDiversityDetailsType;
-  previousEmployment: PreviousEmploymentDetailsType[];
-  visaDetails: VisaDetailsType[];
-}
-
-export interface EmploymentDetailsType {
-  employeeNumber: string | null;
-  workEmail: string | null;
-  employmentAllocation: EmploymentAllocationTypes | null;
-  teams: number[] | null;
-  employmentStatus: EmploymentStatusTypes;
-  primarySupervisor: ManagerType | null;
-  secondarySupervisor: ManagerType | null;
-  joinedDate: string | null;
-  probationStartDate: string | null;
-  probationEndDate: string | null;
-  workTimeZone: string | null;
-}
-
-export interface CareerProgressionDetailsType {
-  employmentType: EmploymentTypes | null;
-  jobFamily: number | string | null;
-  jobTitle: number | string | null;
-  startDate: string | null;
-  endDate: string | null;
-  currentEmployment: boolean | null;
-}
-
-export interface IdentificationAndDiversityDetailsType {
-  ssn: string | null;
-  ethnicity: EthnicityTypes | null;
-  eeoJobCategory: EEOJobCategoryTypes | null;
-}
-
-export interface PreviousEmploymentDetailsType {
-  companyName: string | null;
-  jobTitle: string | null;
-  startDate: string | null;
-  endDate: string | null;
-}
-
-export interface VisaDetailsType {
-  visaType: string | null;
-  issuingCountry: string | null;
-  issuedDate: string | null;
-  expiryDate: string | null;
-}
-
-export interface SystemPermissionsType {
-  isSuperAdmin: boolean;
-  peopleRole: Role | null;
-  leaveRole: Role | null;
-  attendanceRole: Role | null;
-  eSignRole: Role | null;
-}
-
-export interface CommonDetailsType {
-  authPic: string | null;
-}
-
-export interface ManagerType {
-  employeeId: string | number | undefined;
+//L3 Types
+export interface L3GeneralDetailsType {
   firstName: string;
+  middleName?: string;
   lastName: string;
-  avatarUrl: string;
+  gender?: GenderEnum;
+  dateOfBirth?: Date;
+  nationality?: NationalityEnum;
+  nin?: string;
+  passportNumber?: string;
+  maritalStatus?: MaritalStatusTypes;
 }
 
-export enum GenderEnum {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  OTHER = "OTHER"
+export interface L3ContactDetailsType {
+  personalEmail?: string;
+  countryCode?: string;
+  contactNo?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  country?: string;
+  state?: string;
+  postalCode?: string;
 }
 
-export enum RelationshipTypes {
-  SPOUSE = "SPOUSE",
-  CHILD = "CHILD",
-  PARENT = "PARENT",
-  FAMILY = "FAMILY",
-  FRIEND = "FRIEND",
-  GUARDIAN = "GUARDIAN"
+export interface L3FamilyDetailsType {
+  firstName?: string;
+  lastName?: string;
+  gender?: GenderEnum;
+  relationship?: RelationshipTypes;
+  dateOfBirth?: Date;
+  parentName?: string;
 }
 
-export enum BloodGroupTypes {
-  A_POSITIVE = "A_POSITIVE",
-  A_NEGATIVE = "A_NEGATIVE",
-  B_POSITIVE = "B_POSITIVE",
-  B_NEGATIVE = "B_NEGATIVE",
-  AB_POSITIVE = "AB_POSITIVE",
-  AB_NEGATIVE = "AB_NEGATIVE",
-  O_POSITIVE = "O_POSITIVE",
-  O_NEGATIVE = "O_NEGATIVE"
+export interface L3EducationalDetailsType {
+  institutionName?: string;
+  degree?: string;
+  major?: string;
+  startDate?: Date;
+  endDate?: Date;
 }
 
-export enum MaritalStatusTypes {
-  MARRIED = "MARRIED",
-  SINGLE = "SINGLE",
-  SEPARATED = "SEPARATED",
-  WIDOWED = "WIDOWED"
+export interface L3SocialMediaDetailsType {
+  linkedin?: string;
+  facebook?: string;
+  instagram?: string;
+  x?: string;
 }
 
-export enum EmploymentAllocationTypes {
-  FULL_TIME = "FULL_TIME",
-  PART_TIME = "PART_TIME"
+export interface L3HealthAndOtherDetailsType {
+  bloodGroup?: BloodGroupTypes;
+  allergies?: string;
+  dietaryRestrictions?: string;
+  tShirtSize?: string;
 }
 
-export enum EmploymentTypes {
-  PERMANENT = "PERMANENT",
-  INTERN = "INTERN",
-  CONTRACT = "CONTRACT"
+export interface L3EmergencyContactType {
+  name?: string;
+  relationship?: RelationshipTypes;
+  countryCode?: string;
+  contactNo?: string;
 }
 
-export enum EmploymentStatusTypes {
-  PENDING = "PENDING",
-  ACTIVE = "ACTIVE",
-  TERMINATED = "TERMINATED"
+export interface L3EmploymentDetailsType {
+  employeeNumber?: string;
+  email: string;
+  employmentAllocation?: EmploymentAllocationTypes;
+  teams?: number[];
+  primarySupervisor?: L4ManagerType;
+  secondarySupervisor?: L4ManagerType;
+  joinedDate?: Date;
+  probationStartDate?: Date;
+  probationEndDate?: Date;
+  workTimeZone?: string;
 }
 
-export enum EEOJobCategoryTypes {
-  EXECUTIVE = "EXECUTIVE_SENIOR_LEVEL_OFFICIALS_AND_MANAGERS",
-  FIRST_MID_LEVEL = "FIRST_MID_LEVEL_OFFICIALS_AND_MANAGERS",
-  PROFESSIONALS = "PROFESSIONALS",
-  TECHNICIANS = "TECHNICIANS",
-  SALES_WORKERS = "SALES_WORKERS",
-  SUPPORT_WORKERS = "ADMINISTRATIVE_SUPPORT_WORKERS",
-  CRAFT_WORKERS = "CRAFT_WORKERS",
-  OPERATIVES = "OPERATIVES",
-  LABORERS = "LABORERS_AND_HELPERS",
-  SERVICE_WORKERS = "SERVICE_WORKERS"
+export interface L3CareerProgressionDetailsType {
+  employmentType?: EmploymentTypes;
+  jobFamily?: number;
+  jobTitle?: number;
+  startDate?: string;
+  endDate?: string;
+  isCurrentEmployment?: boolean;
 }
 
-export enum EthnicityTypes {
-  AFRICAN = "AFRICAN",
-  CARIBBEAN = "CARIBBEAN",
-  INDIAN = "INDIAN",
-  MELANESIAN = "MELANESIAN",
-  AUSTRALASIAN_OR_ABORIGINAL = "AUSTRALASIAN_OR_ABORIGINAL",
-  CHINESE = "CHINESE",
-  GUAMANIAN = "GUAMANIAN",
-  JAPANESE = "JAPANESE",
-  KOREAN = "KOREAN",
-  POLYNESIAN = "POLYNESIAN",
-  EUROPEAN_OR_ANGLO_SAXON = "EUROPEAN_OR_ANGLO_SAXON",
-  OTHER_PACIFIC_ISLANDER = "OTHER_PACIFIC_ISLANDER",
-  LATIN_AMERICAN = "LATIN_AMERICAN",
-  ARABIC = "ARABIC",
-  VIETNAMESE = "VIETNAMESE",
-  MICRONESIAN = "MICRONESIAN",
-  DECLINED_TO_RESPOND = "DECLINED_TO_RESPOND",
-  OTHER_HISPANIC = "OTHER_HISPANIC",
-  US_OR_CANADIAN_INDIAN = "US_OR_CANADIAN_INDIAN",
-  OTHER_ASIAN = "OTHER_ASIAN",
-  PUERTO_RICAN = "PUERTO_RICAN",
-  FILIPINO = "FILIPINO",
-  MEXICAN = "MEXICAN",
-  ALASKAN_NATIVE = "ALASKAN_NATIVE",
-  CUBAN = "CUBAN"
+export interface L3IdentificationAndDiversityDetailsType {
+  ssn?: string;
+  ethnicity?: EthnicityTypes;
+  eeoJobCategory?: EEOJobCategoryTypes;
 }
 
-export enum Role {
-  SUPER_ADMIN = "SUPER_ADMIN",
-  PEOPLE_ADMIN = "PEOPLE_ADMIN",
-  PEOPLE_MANAGER = "PEOPLE_MANAGER",
-  PEOPLE_EMPLOYEE = "PEOPLE_EMPLOYEE",
-  LEAVE_ADMIN = "LEAVE_ADMIN",
-  LEAVE_MANAGER = "LEAVE_MANAGER",
-  LEAVE_EMPLOYEE = "LEAVE_EMPLOYEE",
-  ATTENDANCE_ADMIN = "ATTENDANCE_ADMIN",
-  ATTENDANCE_MANAGER = "ATTENDANCE_MANAGER",
-  ATTENDANCE_EMPLOYEE = "ATTENDANCE_EMPLOYEE",
-  ESIGN_EMPLOYEE = "ESIGN_EMPLOYEE",
-  ESIGN_SENDER = "ESIGN_SENDER",
-  ESIGN_ADMIN = "ESIGN_ADMIN"
+export interface L3PreviousEmploymentDetailsType {
+  companyName?: string;
+  jobTitle?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export interface L3VisaDetailsType {
+  visaType?: string;
+  issuingCountry?: string;
+  issuedDate?: string;
+  expiryDate?: string;
+}
+
+//L4 Types
+export interface L4ManagerType {
+  employeeId?: number;
+  firstName?: string;
+  lastName?: string;
+  authPic?: string;
 }
