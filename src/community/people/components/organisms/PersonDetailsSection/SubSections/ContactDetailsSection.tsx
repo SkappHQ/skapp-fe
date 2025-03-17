@@ -4,7 +4,6 @@ import {
   ChangeEvent,
   SyntheticEvent,
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useMemo
 } from "react";
@@ -13,16 +12,9 @@ import DropdownAutocomplete from "~community/common/components/molecules/Dropdow
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import InputPhoneNumber from "~community/common/components/molecules/InputPhoneNumber/InputPhoneNumber";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { isValidAlphaNumericString } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
-import {
-  isValidAlphaNumericNamePattern,
-  isValidEmailPattern
-} from "~community/common/utils/validation";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
-import useGetDefaultConuntryCode from "~community/people/hooks/useGetDefaultConuntryCode";
-import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { employeeContactDetailsValidation } from "~community/people/utils/peopleValidations";
 
@@ -39,12 +31,6 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
     "addResource",
     "contactDetails"
   );
-
-  const { employeeContactDetails, setEmployeeContactDetails } = usePeopleStore(
-    (state) => state
-  );
-
-  const countryCode = useGetDefaultConuntryCode();
 
   const initialValues = useMemo(
     () => ({
@@ -88,62 +74,20 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
 
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (
-      name === "personalEmail" &&
-      (value === "" || isValidEmailPattern(value))
-    ) {
-      await setFieldValue(name, value);
-      setFieldError(name, "");
-      setEmployeeContactDetails(name, value);
-    } else if (
-      ["addressLine1", "addressLine2", "state", "city"].includes(name) &&
-      (value === "" || isValidAlphaNumericNamePattern(value))
-    ) {
-      await setFieldValue(name, value);
-      setFieldError(name, "");
-      setEmployeeContactDetails(name, value);
-    } else if (
-      name === "postalCode" &&
-      (value === "" || isValidAlphaNumericString().test(value))
-    ) {
-      await setFieldValue(name, value);
-      setFieldError(name, "");
-      setEmployeeContactDetails(name, value);
-    }
   };
 
   const handleCountrySelect = async (
     e: SyntheticEvent,
     value: DropdownListType
-  ): Promise<void> => {
-    setFieldError("country", "");
-    await setFieldValue("country", value.value);
-    setEmployeeContactDetails("country", value.value as string);
-    await setFieldValue("state", "");
-    setEmployeeContactDetails("state", "");
-  };
+  ): Promise<void> => {};
 
   const onChangeCountry = async (countryCode: string): Promise<void> => {
-    setEmployeeContactDetails("countryCode", countryCode);
+    // Setter from the store
   };
 
   const handlePhoneNumber = async (
     phone: ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    await setFieldValue("phone", phone.target.value);
-    setFieldError("phone", "");
-    setEmployeeContactDetails("phone", phone.target.value);
-    if (!employeeContactDetails?.countryCode) {
-      setFieldValue("countryCode", countryCode);
-      setEmployeeContactDetails("countryCode", countryCode);
-    }
-  };
-
-  useEffect(() => {
-    if (!employeeContactDetails?.countryCode)
-      setFieldValue("countryCode", countryCode);
-  }, [countryCode, employeeContactDetails?.countryCode, setFieldValue]);
+  ): Promise<void> => {};
 
   return (
     <PeopleFormSectionWrapper
@@ -331,7 +275,3 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
 ContactDetailsSection.displayName = "GeneralDetailsSection";
 
 export default ContactDetailsSection;
-
-function setEmployeeContactDetails(name: string, value: string) {
-  throw new Error("Function not implemented.");
-}
