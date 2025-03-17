@@ -3,9 +3,10 @@ import { useMemo } from "react";
 
 import {
   AdminTypes,
-  EmployeeTypes,
-  ManagerTypes
+  ManagerTypes as AuthManagerType,
+  EmployeeTypes
 } from "~community/common/types/AuthTypes";
+import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { TierEnum } from "~enterprise/common/enums/Common";
 
 const useSessionData = () => {
@@ -46,8 +47,22 @@ const useSessionData = () => {
     [sessionData?.user?.roles]
   );
 
+  const isPeopleAdmin = useMemo(
+    () => sessionData?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN),
+    [sessionData?.user?.roles]
+  );
+
+  const isEmployee = useMemo(() => {
+    return !sessionData?.user?.roles?.some((role) => {
+      return [
+        ...Object.values(AdminTypes),
+        ...Object.values(ManagerTypes)
+      ].includes(role as AdminTypes | ManagerTypes);
+    });
+  }, [sessionData?.user?.roles]);
+
   const isPeopleManager = useMemo(
-    () => sessionData?.user?.roles?.includes(ManagerTypes.PEOPLE_MANAGER),
+    () => sessionData?.user?.roles?.includes(AuthManagerType.PEOPLE_MANAGER),
     [sessionData?.user?.roles]
   );
 
@@ -59,6 +74,8 @@ const useSessionData = () => {
     isEsignatureModuleEnabled,
     employeeDetails,
     isSuperAdmin,
+    isPeopleAdmin,
+    isEmployee,
     isPeopleManager
   };
 };

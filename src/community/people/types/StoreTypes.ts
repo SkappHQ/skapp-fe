@@ -233,6 +233,11 @@ interface actionsTypes {
   //terminationAlertModalSlice
   setTerminationAlertModalOpen: (value: boolean) => void;
 
+  //userDeletionModalSlice
+  setDeletionConfirmationModalOpen: (value: boolean) => void;
+  setDeletionAlertMessage: (value: string) => void;
+  setDeletionAlertOpen: (value: boolean) => void;
+
   //people slice
   setEmployee: (employee: EmployeeType) => void;
   setPersonalDetails: (personal: PersonalDetailsType) => void;
@@ -353,6 +358,11 @@ export interface Store extends actionsTypes {
 
   //terminationAlertModalSlice
   isTerminationAlertModalOpen: boolean;
+
+  //userDeletionModalSlice
+  isDeletionConfirmationModalOpen: boolean;
+  deletionAlertMessage: string;
+  isDeletionAlertOpen: boolean;
 
   //people slice
   employee: EmployeeType;

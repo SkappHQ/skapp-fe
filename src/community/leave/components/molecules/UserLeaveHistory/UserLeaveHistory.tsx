@@ -72,7 +72,14 @@ const UserLeaveHistory: FC<Props> = ({
     setLeaveRequestFilterOrder,
     setLeaveRequestsFilter,
     setLeaveRequestParams
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    resetLeaveRequestParams: state.resetLeaveRequestParams,
+    leaveRequestsFilter: state.leaveRequestsFilter,
+    leaveRequestFilterOrder: state.leaveRequestFilterOrder,
+    setLeaveRequestFilterOrder: state.setLeaveRequestFilterOrder,
+    setLeaveRequestsFilter: state.setLeaveRequestsFilter,
+    setLeaveRequestParams: state.setLeaveRequestParams
+  }));
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);

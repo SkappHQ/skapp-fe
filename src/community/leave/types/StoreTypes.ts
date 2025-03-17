@@ -86,6 +86,7 @@ interface actionsTypes {
   setAttachments: (value: FileUploadType[]) => void;
   setFormErrors: (key: string, value: string) => void;
   setLeaveRequestId: (leaveRequestId: number) => void;
+  setIsApplyLeaveModalBtnDisabled: (value: boolean) => void;
 
   //LeaveRequestFiltersSliceTypes
   handleLeaveRequestsSort: (key: string, value: string) => void;
@@ -179,6 +180,7 @@ export interface LeaveStore extends actionsTypes {
   attachments: FileUploadType[];
   formErrors: Record<string, string>;
   leaveRequestId: number;
+  isApplyLeaveModalBtnDisabled: boolean;
 
   //LeaveRequestFiltersSliceTypes
   leaveRequestsFilter: LeaveRequestsFilterType;

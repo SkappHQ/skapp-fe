@@ -10,13 +10,13 @@ import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { EmployeeType } from "~community/people/types/EmployeeTypes";
+import { EmployeeDataType } from "~community/people/types/EmployeeTypes";
 import { TeamMemberTypes } from "~community/people/types/TeamTypes";
 
 import styles from "./styles";
 
 interface Props {
-  allUsers: EmployeeType[];
+  allUsers: EmployeeDataType[];
   teamMembers: TeamMemberTypes;
   setTeamMembers: (teamMembers: TeamMemberTypes) => void;
   setIsSelectMembersOpen: (value: boolean) => void;
@@ -32,11 +32,13 @@ const AddTeamSelectMembers: FC<Props> = ({
   const classes = styles(theme);
   const translateText = useTranslator("peopleModule", "teams");
 
-  const [usersChecked, setUsersChecked] = useState<readonly EmployeeType[]>([]);
+  const [usersChecked, setUsersChecked] = useState<readonly EmployeeDataType[]>(
+    []
+  );
 
-  const handelToggle = (value: EmployeeType) => () => {
+  const handelToggle = (value: EmployeeDataType) => () => {
     const currentIndex: number = usersChecked?.indexOf(value);
-    const newChecked: EmployeeType[] = [...usersChecked];
+    const newChecked: EmployeeDataType[] = [...usersChecked];
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
@@ -117,7 +119,7 @@ const AddTeamSelectMembers: FC<Props> = ({
             maxHeight={"20vh"}
             overflow="auto"
           >
-            {allUsers?.map((user: EmployeeType) => {
+            {allUsers?.map((user: EmployeeDataType) => {
               return (
                 <Stack
                   key={user?.employeeId}
@@ -140,7 +142,7 @@ const AddTeamSelectMembers: FC<Props> = ({
                     chipStyles={classes.avatarChip}
                   />
                   <Typography sx={classes.jobTitle}>
-                    {`${user?.jobLevel?.name ?? ""} ${user?.jobRole?.name ?? ""}`}
+                    {`${user?.jobLevel ?? ""} ${user?.jobRole ?? ""}`}
                   </Typography>
                 </Stack>
               );

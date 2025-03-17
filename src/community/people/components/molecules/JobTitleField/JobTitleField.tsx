@@ -6,6 +6,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { characterLengths } from "~community/common/constants/stringConstants";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
@@ -37,21 +38,27 @@ interface Props {
       shouldValidate?: boolean | undefined
     ) => void;
   };
-  isAdmin?: boolean;
 }
 
-const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
+const JobTitleField = ({ formik }: Props): JSX.Element => {
   const translateText = useTranslator("peopleModule", "jobFamily");
 
   const theme: Theme = useTheme();
   const classes = styles();
+
+  const { isPeopleAdmin } = useSessionData();
 
   const {
     allJobFamilies,
     previousJobTitleData,
     setPreviousJobTitleData,
     setJobFamilyModalType
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    allJobFamilies: state.allJobFamilies,
+    previousJobTitleData: state.previousJobTitleData,
+    setPreviousJobTitleData: state.setPreviousJobTitleData,
+    setJobFamilyModalType: state.setJobFamilyModalType
+  }));
 
   const { values, errors, setFieldValue, setFieldError } = formik;
 
@@ -64,7 +71,7 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
 
   return (
     <Stack>
-      {isAdmin && (
+      {isPeopleAdmin && (
         <Stack sx={classes.fieldWrapper}>
           <InputField
             id="job-title-input"
@@ -91,6 +98,7 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
             maxLength={characterLengths.JOB_TITLE_LENGTH}
           />
           <IconButton
+            id="add-job-title-btn"
             icon={<Icon name={IconName.ADD_ICON} />}
             buttonStyles={classes.addIconBtn}
             onClick={async () => {
@@ -142,7 +150,7 @@ const JobTitleField = ({ formik, isAdmin }: Props): JSX.Element => {
                   onMouseEnter={() => setHoveredInputField(index)}
                   onMouseLeave={() => setHoveredInputField(null)}
                   endAdornment={
-                    isAdmin ? (
+                    isPeopleAdmin ? (
                       <InputAdornment
                         position="end"
                         sx={classes.inputAdornment}

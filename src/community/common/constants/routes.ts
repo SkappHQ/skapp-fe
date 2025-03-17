@@ -18,6 +18,7 @@ const ROUTES = {
     MODULE_SELECTION: "/module-selection"
   },
   NOTIFICATIONS: "/notifications",
+  INTEGRATIONS: "/integrations",
   SETTINGS: {
     BASE: "/settings",
     BILLING: "/settings/billing",

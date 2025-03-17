@@ -54,7 +54,6 @@ import {
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 import { handleLeaveTypeApiResponse } from "~community/leave/utils/leaveTypes/apiUtils";
 import { addLeaveTypeValidationSchema } from "~community/leave/utils/validations";
-import { QuickSetupTaskEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { styles } from "./styles";
@@ -519,15 +518,11 @@ const LeaveTypeForm = () => {
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
               onClick={async () => {
-                setOngoingQuickSetup(
-                  QuickSetupTaskEnums.SETUP_LEAVE_TYPES,
-                  false
-                );
                 await router.back();
               }}
-              shouldBlink={ongoingQuickSetup.SETUP_LEAVE_TYPES}
             />
             <Button
+              shouldBlink={ongoingQuickSetup.SETUP_LEAVE_TYPES}
               type={ButtonTypes.SUBMIT}
               label={translateText(["saveBtn"])}
               isFullWidth={false}

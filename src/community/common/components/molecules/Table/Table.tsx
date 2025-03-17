@@ -71,6 +71,7 @@ interface Props {
     OnClick: (data: any) => void;
   } | null;
   emptyScreenButtonType?: ButtonStyle;
+  shouldEmptyTableScreenBtnBlink?: boolean;
 }
 
 const Table: FC<Props> = ({
@@ -116,7 +117,8 @@ const Table: FC<Props> = ({
   onEmptyScreenBtnClick,
   actionColumnIconBtnLeft = null,
   actionColumnIconBtnRight = null,
-  emptyScreenButtonType
+  emptyScreenButtonType,
+  shouldEmptyTableScreenBtnBlink
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -197,6 +199,7 @@ const Table: FC<Props> = ({
             actionColumnIconBtnLeft={actionColumnIconBtnLeft}
             actionColumnIconBtnRight={actionColumnIconBtnRight}
             emptyScreenButtonType={emptyScreenButtonType}
+            shouldEmptyTableScreenBtnBlink={shouldEmptyTableScreenBtnBlink}
           />
         </MuiTable>
       </TableContainer>

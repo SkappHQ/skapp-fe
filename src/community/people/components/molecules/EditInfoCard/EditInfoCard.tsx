@@ -69,6 +69,7 @@ const EditInfoCard = ({
   const translateText = useTranslator("peopleModule", "editAllInfo");
   const translateTerminationText = useTranslator("peopleModule", "termination");
   const translateStorageText = useTranslator("StorageToastMessage");
+  const deletionTranslateText = useTranslator("peopleModule", "deletion");
 
   const AVAILABLE_FIELD_COUNT = 2;
 
@@ -89,7 +90,10 @@ const EditInfoCard = ({
     setEmployeeGeneralDetails,
     setTerminationConfirmationModalOpen,
     setAlertMessage,
-    setTerminationAlertModalOpen
+    setTerminationAlertModalOpen,
+    setDeletionAlertMessage,
+    setDeletionAlertOpen,
+    setDeletionConfirmationModalOpen
   } = usePeopleStore((state) => state);
 
   const [supervisor, setSupervisor] = useState<EmployeeManagerType | null>(
@@ -148,7 +152,47 @@ const EditInfoCard = ({
     setTerminationConfirmationModalOpen(true);
   };
 
+  const handleDeletion = () => {
+    const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
+
+    if (hasSupervisoryRoles) {
+      const condition = {
+        managers: selectedEmployee.managers?.length || 0,
+        teams: selectedEmployee.teams?.length || 0
+      };
+
+      if (condition.managers > 0) {
+        setDeletionAlertMessage(
+          deletionTranslateText(["deleteWarningPrimarySupervisorDescription"])
+        );
+      } else if (condition.teams > 0) {
+        setDeletionAlertMessage(
+          deletionTranslateText(["deleteWarningTeamSupervisorDescription"])
+        );
+      }
+
+      setDeletionAlertOpen(true);
+
+      return;
+    }
+
+    setDeletionConfirmationModalOpen(true);
+  };
+
   const kebabMenuOptions = [
+    {
+      id: selectedEmployee.employeeId || "",
+      icon: (
+        <Icon
+          name={IconName.MINUS_ICON}
+          fill={theme.palette.error.contrastText}
+        />
+      ),
+      text: translateTerminationText(["terminateButtonText"]),
+      onClickHandler: () => handleTermination(),
+      isDisabled:
+        selectedEmployee.accountStatus === AccountStatusEnums.TERMINATED
+    },
     {
       id: selectedEmployee.employeeId || "",
       icon: (
@@ -157,10 +201,8 @@ const EditInfoCard = ({
           fill={theme.palette.error.contrastText}
         />
       ),
-      text: translateTerminationText(["terminateButtonText"]),
-      onClickHandler: () => handleTermination(),
-      isDisabled:
-        selectedEmployee.accountStatus === AccountStatusEnums.TERMINATED
+      text: translateTerminationText(["deleteButtonText"]),
+      onClickHandler: () => handleDeletion()
     }
   ];
 
