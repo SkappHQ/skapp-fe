@@ -69,6 +69,7 @@ export const myRequestSlice = (
   comment: "",
   formErrors: initialFormErrors,
   leaveRequestId: 0,
+  isApplyLeaveModalBtnDisabled: false,
 
   setIsMyRequestModalOpen: (status: boolean) =>
     set((state: MyRequestSliceType) => ({
@@ -153,5 +154,10 @@ export const myRequestSlice = (
     set((state: MyRequestSliceType) => ({
       ...state,
       leaveRequestId: leaveRequestId
+    })),
+  setIsApplyLeaveModalBtnDisabled: (value: boolean) =>
+    set((state: MyRequestSliceType) => ({
+      ...state,
+      isApplyLeaveModalBtnDisabled: value
     }))
 });

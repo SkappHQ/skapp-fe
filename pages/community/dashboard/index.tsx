@@ -8,11 +8,13 @@ import AttendanceDashboard from "~community/attendance/components/organisms/Atte
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
 import VersionUpgradeModal from "~community/common/components/molecules/VersionUpgradeModal/VersionUpgradeModal";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { ToastType } from "~community/common/enums/ComponentEnums";
 import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -39,10 +41,33 @@ const Dashboard: NextPage = () => {
     setQuickSetupModalType: state.setQuickSetupModalType
   }));
 
+  const billingTranslateText = useTranslator("settingEnterprise", "billing");
+
+  const { setToastMessage } = useToast();
+
   useEffect(() => {
     if (query.isFirstTime) {
       !isBelow900 &&
         setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
+    }
+    if (query.status === "success") {
+      setToastMessage({
+        toastType: ToastType.SUCCESS,
+        title: billingTranslateText(["subscriptionSuccessToastTitle"]),
+        description: billingTranslateText([
+          "subscriptionSuccessToastDescription"
+        ]),
+        open: true
+      });
+    } else if (query.status === "cancel") {
+      setToastMessage({
+        toastType: ToastType.ERROR,
+        title: billingTranslateText(["subscriptionErrorToastTitle"]),
+        description: billingTranslateText([
+          "subscriptionErrorToastDescription"
+        ]),
+        open: true
+      });
     }
   }, [query]);
 

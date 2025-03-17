@@ -26,6 +26,7 @@ interface Props {
   onButtonClick?: () => void;
   buttonStyle?: ButtonStyle;
   wrapperStyles?: SxProps;
+  shouldEmptyTableScreenBtnBlink?: boolean;
 }
 const TableEmptyScreen: FC<Props> = ({
   title,
@@ -38,7 +39,8 @@ const TableEmptyScreen: FC<Props> = ({
   buttonStartIcon,
   onButtonClick,
   buttonStyle = ButtonStyle.PRIMARY,
-  wrapperStyles
+  wrapperStyles,
+  shouldEmptyTableScreenBtnBlink
 }) => {
   const theme: Theme = useTheme();
 
@@ -73,6 +75,8 @@ const TableEmptyScreen: FC<Props> = ({
         {buttonText && (
           <Box sx={classes.btnWrapper}>
             <Button
+              id="table-empty-screen-button"
+              shouldBlink={shouldEmptyTableScreenBtnBlink}
               label={buttonText as string}
               endIcon={<Icon name={IconName.ADD_ICON} />}
               startIcon={buttonStartIcon}

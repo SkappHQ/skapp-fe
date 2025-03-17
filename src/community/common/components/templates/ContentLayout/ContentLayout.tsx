@@ -35,6 +35,12 @@ import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
+import SubscriptionEndedModalController from "~enterprise/common/components/molecules/SubscriptionEndedModalController/SubscriptionEndedModalController";
+import {
+  SubscriptionModalTypeEnums,
+  TenantStatusEnums
+} from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
@@ -109,9 +115,47 @@ const ContentLayout = ({
 
   const { data } = useSession();
 
+  const { asPath } = useRouter();
+
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
     (state) => state
   );
+
+  const { setIsSubscriptionEndedModalOpen, setSubscriptionEndedModalType } =
+    useCommonEnterpriseStore((state) => state);
+
+  useEffect(() => {
+    switch (data?.user?.tenantStatus) {
+      case TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED:
+        setSubscriptionEndedModalType(
+          SubscriptionModalTypeEnums.POST_SUBSCRIPTION_CANCELLATION_MODAL
+        );
+        setIsSubscriptionEndedModalOpen(true);
+        break;
+      case TenantStatusEnums.FREE_TRAIL_ENDED:
+        setSubscriptionEndedModalType(
+          SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL
+        );
+        setIsSubscriptionEndedModalOpen(true);
+        break;
+      case TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED:
+        setSubscriptionEndedModalType(
+          SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL_USER_LIMIT_SURPASS_MODAL
+        );
+        setIsSubscriptionEndedModalOpen(true);
+        break;
+    }
+
+    if (asPath === "/remove-people" || asPath === "/change-supervisors") {
+      setIsSubscriptionEndedModalOpen(false);
+    }
+  }, [
+    asPath,
+    data?.user?.tenantStatus,
+    data?.user.tier,
+    setIsSubscriptionEndedModalOpen,
+    setSubscriptionEndedModalType
+  ]);
 
   const { data: organizationDetails } = useGetOrganization();
 
@@ -249,6 +293,7 @@ const ContentLayout = ({
         )}
         {children}
         <QuickSetupContainer />
+        <SubscriptionEndedModalController />
       </Stack>
     </>
   );

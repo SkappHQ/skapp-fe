@@ -4,8 +4,10 @@ import {
   ClickAwayListener,
   Paper,
   Popper,
+  Stack,
   type SxProps,
   Theme,
+  Typography,
   useTheme
 } from "@mui/material";
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
@@ -25,6 +27,7 @@ import {
 import styles from "./styles";
 
 interface Props {
+  label?: string;
   selectedDates: Date[];
   setSelectedDates: Dispatch<SetStateAction<Date[]>>;
   popperStyles?: SxProps;
@@ -37,6 +40,7 @@ interface Props {
 }
 
 const DateRangePicker: FC<Props> = ({
+  label,
   selectedDates,
   setSelectedDates,
   popperStyles,
@@ -55,99 +59,104 @@ const DateRangePicker: FC<Props> = ({
   const open: boolean = Boolean(anchorEl);
 
   return (
-    <Box>
-      <Chip
-        icon={
-          <Box sx={classes.iconWrapper}>
-            <Icon name={IconName.CALENDAR_ICON} />
-          </Box>
-        }
-        onClick={(event: MouseEvent<HTMLElement>) =>
-          setAnchorEl(event.currentTarget)
-        }
-        label={getChipLabel({
-          selectedDates,
-          isRangePicker,
-          startDate,
-          endDate
-        })}
-        sx={mergeSx([
-          classes.chip,
-          {
-            border: hasBorder ? `1px solid ${theme.palette.grey[300]}` : "none"
-          },
-          chipStyles
-        ])}
-        aria-label={`Selected date ${
-          selectedDates[0]
-            ? DateTime.fromJSDate(selectedDates[0]).toFormat("do MMMM")
-            : "None"
-        }. Press enter to change selected date`}
-        tabIndex={0}
-      />
-
-      <Popper
-        id="custom-date-picker"
-        open={open}
-        anchorEl={anchorEl}
-        placement="bottom"
-        disablePortal
-        sx={mergeSx([classes.popper, popperStyles])}
-        modifiers={[
-          {
-            name: "flip",
-            enabled: false,
-            options: {
-              altBoundary: true,
-              rootBoundary: "document",
-              padding: 8
-            }
+    <Stack sx={classes.wrapper}>
+      {label && <Typography variant="body2">{label}</Typography>}
+      <Box>
+        <Chip
+          icon={
+            <Box sx={classes.iconWrapper}>
+              <Icon name={IconName.CALENDAR_ICON} />
+            </Box>
           }
-        ]}
-        tabIndex={0}
-      >
-        <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-          <Paper>
-            <LocalizationProvider dateAdapter={AdapterLuxon}>
-              <StaticDatePicker
-                displayStaticWrapperAs="desktop"
-                value={
-                  selectedDates.length > 0
-                    ? DateTime.fromJSDate(selectedDates[selectedDates.length])
-                    : DateTime.now()
-                }
-                slots={{
-                  day: (props) =>
-                    PickersDay({
-                      pickerDaysProps: props,
-                      selectedDates,
-                      isRangePicker
-                    })
-                }}
-                slotProps={{
-                  leftArrowIcon: {
-                    sx: classes.leftArrowIcon
-                  },
-                  rightArrowIcon: {
-                    sx: classes.rightArrowIcon
+          onClick={(event: MouseEvent<HTMLElement>) =>
+            setAnchorEl(event.currentTarget)
+          }
+          label={getChipLabel({
+            selectedDates,
+            isRangePicker,
+            startDate,
+            endDate
+          })}
+          sx={mergeSx([
+            classes.chip,
+            {
+              border: hasBorder
+                ? `1px solid ${theme.palette.grey[300]}`
+                : "none"
+            },
+            chipStyles
+          ])}
+          aria-label={`Selected date ${
+            selectedDates[0]
+              ? DateTime.fromJSDate(selectedDates[0]).toFormat("do MMMM")
+              : "None"
+          }. Press enter to change selected date`}
+          tabIndex={0}
+        />
+
+        <Popper
+          id="custom-date-picker"
+          open={open}
+          anchorEl={anchorEl}
+          placement="bottom"
+          disablePortal
+          sx={mergeSx([classes.popper, popperStyles])}
+          modifiers={[
+            {
+              name: "flip",
+              enabled: false,
+              options: {
+                altBoundary: true,
+                rootBoundary: "document",
+                padding: 8
+              }
+            }
+          ]}
+          tabIndex={0}
+        >
+          <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+            <Paper>
+              <LocalizationProvider dateAdapter={AdapterLuxon}>
+                <StaticDatePicker
+                  displayStaticWrapperAs="desktop"
+                  value={
+                    selectedDates.length > 0
+                      ? DateTime.fromJSDate(selectedDates[selectedDates.length])
+                      : DateTime.now()
                   }
-                }}
-                onChange={(date: DateTime | null) =>
-                  handleDateChange({
-                    date,
-                    isRangePicker,
-                    selectedDates,
-                    setSelectedDates,
-                    setAnchorEl
-                  })
-                }
-                minDate={minDate ? DateTime.fromJSDate(minDate) : undefined}
-              />
-            </LocalizationProvider>
-          </Paper>
-        </ClickAwayListener>
-      </Popper>
-    </Box>
+                  slots={{
+                    day: (props) =>
+                      PickersDay({
+                        pickerDaysProps: props,
+                        selectedDates,
+                        isRangePicker
+                      })
+                  }}
+                  slotProps={{
+                    leftArrowIcon: {
+                      sx: classes.leftArrowIcon
+                    },
+                    rightArrowIcon: {
+                      sx: classes.rightArrowIcon
+                    }
+                  }}
+                  onChange={(date: DateTime | null) =>
+                    handleDateChange({
+                      date,
+                      isRangePicker,
+                      selectedDates,
+                      setSelectedDates,
+                      setAnchorEl
+                    })
+                  }
+                  minDate={minDate ? DateTime.fromJSDate(minDate) : undefined}
+                />
+              </LocalizationProvider>
+            </Paper>
+          </ClickAwayListener>
+        </Popper>
+      </Box>
+    </Stack>
   );
 };
 

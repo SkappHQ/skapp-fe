@@ -63,12 +63,14 @@ export const teamQueryKeys = {
   GET_ALL_TEAMS: ["get-all-teams"],
   GET_TEAM_BY_ID: ["get-team-by-id"],
   teams: function () {
-    return [...(this?.all || []), "get-teams"];
+    return [...(this?.ALL_TEAMS || []), "get-teams"];
   },
   searchedTeam: function (searchedTeams?: string) {
-    return [...(this?.all || []), "getSearchedTeams", searchedTeams].filter(
-      (val) => val !== undefined
-    );
+    return [
+      ...(this?.ALL_TEAMS || []),
+      "getSearchedTeams",
+      searchedTeams
+    ].filter((val) => val !== undefined);
   }
 };
 

@@ -91,7 +91,7 @@ const styles = (theme: Theme): StyleProps => ({
       background: `linear-gradient(90deg, transparent 50%, ${theme.palette.primary.main} 50%)`
     },
     "&:hover": {
-      backgroundColor: theme.palette.primary.light
+      backgroundColor: theme.palette.secondary.main
     }
   }
 });

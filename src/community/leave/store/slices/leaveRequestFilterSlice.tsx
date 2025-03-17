@@ -6,7 +6,7 @@ const leaveRequestFilterSlice = (
   set: SetType<LeaveRequestFiltersSliceTypes>
 ): LeaveRequestFiltersSliceTypes => ({
   leaveRequestsFilter: {
-    status: [],
+    status: [LeaveStatusTypes.PENDING],
     type: [],
     date: ""
   },

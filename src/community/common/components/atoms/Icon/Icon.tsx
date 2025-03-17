@@ -57,6 +57,7 @@ import LeftArrowIcon from "~community/common/assets/Icons/LeftArrowIcon";
 import LockIcon from "~community/common/assets/Icons/LockIcon";
 import MagnifyingGlassIcon from "~community/common/assets/Icons/MagnifyingGlassIcon";
 import MenuIcon from "~community/common/assets/Icons/MenuIcon";
+import MinusIcon from "~community/common/assets/Icons/MinusIcon";
 import MoreIcon from "~community/common/assets/Icons/MoreIcon";
 import NewWindowIcon from "~community/common/assets/Icons/NewWindowIcon";
 import NoDataIcon from "~community/common/assets/Icons/NoDataIcon";
@@ -231,7 +232,8 @@ export const IconMapping: Partial<
   [IconName.DECLINED_ICON]: DeclinedIcon,
   [IconName.SIGNATURE_ICON]: SignatureIcon,
   [IconName.INVITE_ICON]: InviteIcon,
-  [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon
+  [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon,
+  [IconName.MINUS_ICON]: MinusIcon
   // Add more icons here as needed
 };
 

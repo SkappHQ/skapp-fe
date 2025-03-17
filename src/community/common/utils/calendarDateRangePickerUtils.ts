@@ -93,6 +93,7 @@ interface HandleDateValidationProps {
   myLeaveRequests: MyLeaveRequestPayloadType[] | undefined;
   setToastMessage: (value: SetStateAction<ToastProps>) => void;
   translateText: (key: string[], data?: Record<string, unknown>) => string;
+  setIsApplyLeaveModalBtnDisabled: (value: boolean) => void;
 }
 
 export const handleDateValidation = ({
@@ -101,7 +102,8 @@ export const handleDateValidation = ({
   allHolidays,
   myLeaveRequests,
   setToastMessage,
-  translateText
+  translateText,
+  setIsApplyLeaveModalBtnDisabled
 }: HandleDateValidationProps) => {
   if (!selectedDates) return;
 
@@ -167,6 +169,8 @@ export const handleDateValidation = ({
     });
 
     const leaveRequestCount = leaveRequests?.length ?? 0;
+
+    setIsApplyLeaveModalBtnDisabled(leaveRequestCount > 0);
 
     if (leaveRequestCount > 0) {
       const hasMultipleLeaves = leaveRequestCount > 1;

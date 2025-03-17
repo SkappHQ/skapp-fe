@@ -103,6 +103,7 @@ export interface MyRequestSliceType
     | "selectedDuration"
     | "teamAvailabilityData"
     | "isMyRequestModalOpen"
+    | "isApplyLeaveModalBtnDisabled"
     | "myRequestModalType"
     | "setSelectedLeaveAllocationData"
     | "setSelectedDates"
@@ -116,6 +117,7 @@ export interface MyRequestSliceType
     | "setAttachments"
     | "setFormErrors"
     | "leaveRequestId"
+    | "setIsApplyLeaveModalBtnDisabled"
     | "setLeaveRequestId"
   > {}
 

@@ -31,7 +31,7 @@
       "noTeamTxt": "No teams assigned "
     },
     "dateRangePicker": {
-      "pickerLabel": "Select Date"
+      "label": "Date: "
     },
     "calendarDataRangePicker": {
       "label": "Select date(s)",
@@ -97,6 +97,7 @@
     "leaves": "Leave Requests"
   },
   "settings": {
+    "integrationPageHead": "Integrations | Skapp",
     "pageHead": "Settings | Skapp",
     "title": "Settings",
     "saveChangesBtnText": "Save changes",
