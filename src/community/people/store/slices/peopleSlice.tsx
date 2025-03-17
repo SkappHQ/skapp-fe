@@ -93,7 +93,8 @@ const defaultEmployee: L1EmployeeType = {
   },
   common: {
     image: "",
-    accountStatus: undefined
+    accountStatus: undefined,
+    thumbnail: ""
   }
 };
 
