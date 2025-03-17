@@ -91,10 +91,11 @@ export interface EmploymentFormDetailsType {
 }
 
 export interface EmploymentDetailsType {
-  employeeNo: string | null;
+  employeeNumber: string | null;
   workEmail: string | null;
   employmentAllocation: EmploymentAllocationTypes | null;
   teams: number[] | null;
+  employmentStatus: EmploymentStatusTypes;
   primarySupervisor: ManagerType | null;
   secondarySupervisor: ManagerType | null;
   joinedDate: string | null;
@@ -193,6 +194,12 @@ export enum EmploymentTypes {
   PERMANENT = "PERMANENT",
   INTERN = "INTERN",
   CONTRACT = "CONTRACT"
+}
+
+export enum EmploymentStatusTypes {
+  PENDING = "PENDING",
+  ACTIVE = "ACTIVE",
+  TERMINATED = "TERMINATED"
 }
 
 export enum EEOJobCategoryTypes {
