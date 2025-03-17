@@ -12,14 +12,14 @@ import { AdminTypes } from "~community/common/types/AuthTypes";
 import { getMonthName } from "~community/common/utils/dateTimeUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 import { useGetResourceAvailabilityCalendar } from "~community/leave/api/LeaveDashboard";
+import AvailabilityCalendarCard from "~community/leave/components/molecules/AvailabilityCalendar/AvailabilityCalendarCard";
+import AvailabilityWidgetSkeleton from "~community/leave/components/molecules/AvailabilityCalendar/AvailabilityWidgetSkeleton";
 import { ResourceAvailabilityRecord } from "~community/leave/types/ResourceAvailabilityTypes";
 import { getNavigateDays } from "~community/leave/utils/dashboardUtils";
 
-import AvailabilityCalendarCard from "../../molecules/AvailabilityCalendar/AvailabilityCalendarCard";
-import AvailabilityWidgetSkeleton from "../../molecules/AvailabilityCalendar/AvailabilityWidgetSkeleton";
-
-export const ResourceAvailabilityCalendar = (): JSX.Element => {
+const ResourceAvailabilityCalendar = (): JSX.Element => {
   const { data: timeConfigData } = useDefaultCapacity();
+
   let navigateDates = getNavigateDays(timeConfigData) * 2;
 
   const [month, setMonth] = useState<number>(DateTime.now().month);

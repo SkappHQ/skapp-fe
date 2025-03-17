@@ -25,7 +25,7 @@ interface AvailabilityCalendarCardProps {
   actualDate: string;
 }
 
-export const AvailabilityCalendarCard = ({
+const AvailabilityCalendarCard = ({
   day,
   dateAndMonth,
   holidays,

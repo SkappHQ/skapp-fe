@@ -6,7 +6,8 @@ const styles = (theme: Theme): StyleProps => ({
   container: {
     border: `0.0625rem solid ${theme.palette.grey[200]}`,
     p: 2,
-    borderRadius: "0.75rem"
+    borderRadius: "0.75rem",
+    width: "100%"
   },
   header: {
     display: "flex",

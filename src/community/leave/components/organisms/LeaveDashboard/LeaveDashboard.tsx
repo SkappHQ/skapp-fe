@@ -39,7 +39,6 @@ const LeaveDashboard = (): JSX.Element => {
   const {
     viewedPendingLeaveCount,
     setViewedPendingLeaveCount,
-    pendingLeaveCount,
     setPendingLeaveCount
   } = useLeaveStore((state) => state);
 
@@ -117,122 +116,118 @@ const LeaveDashboard = (): JSX.Element => {
   };
 
   return (
-    <Box>
-      <Box sx={classes.container}>
-        <Box sx={classes.header}>
-          <Typography style={{ textTransform: "uppercase" }}>
-            {` ${translateText(["records"])} ${
-              teamId === -1 ? translateText(["all"]) : `${teamName}`
-            }`}
-          </Typography>
-          <TeamSelector
-            setTeamId={setTeamId}
-            setTeamName={setTeamName}
-            moduleAdminType={AdminTypes.LEAVE_ADMIN}
-          />
-        </Box>
-        <Grid container spacing={1}>
-          <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
-            <AnalyticCard title={translateText(["todayAvailability"]) ?? ""}>
-              {todaysAvailability && resourceDetails()}
-            </AnalyticCard>
-          </Grid>
-          <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
-            <AnalyticCard
-              title={translateText(["pendingLeaves"]) ?? ""}
-              isExpandable={
-                pendingLeaves?.[0]?.items?.length > 0 ? true : false
-              }
-              onExpand={() => {
-                setPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
-                  setViewedPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
-                  router.replace(ROUTES.LEAVE.LEAVE_PENDING);
-              }}
-            >
-              {pendingLeaves?.[0]?.items?.length > 0 ? (
-                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                  <Typography sx={classes.analytic}>
-                    {pendingLeaves?.[0]?.items?.length}
-                  </Typography>
-                  {newPendingRequests > 0 && (
-                    <Stack
-                      sx={{
-                        flexDirection: "row",
-                        gap: 1,
-                        alignItems: "center",
-                        backgroundColor: theme.palette.amber.mid,
-                        padding: "0.25rem .75rem",
-                        borderRadius: 10,
-                        height: "2rem"
-                      }}
-                    >
-                      <Typography
-                        sx={{ color: theme.palette.amber.chipText }}
-                        variant="caption"
-                      >
-                        {`${newPendingRequests} ${translateText(["newRequest"])}`}
-                      </Typography>
-                    </Stack>
-                  )}
-                </div>
-              ) : (
-                <Typography sx={classes.analytic}>{"-"}</Typography>
-              )}
-            </AnalyticCard>
-          </Grid>
-
-          <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
-            <AnalyticCard title={translateText(["absenceRate"]) ?? ""}>
-              {absenceRate?.[0] ? (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Typography sx={classes.analytic}>
-                    {`${String(absenceRate[0]?.currentAbsenceRate?.toFixed(1))} %`}
-                  </Typography>
-                  <Chip
-                    icon={
-                      <TrendingUp
-                        style={{
-                          color:
-                            absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                              ? theme.palette.greens.midDark
-                              : theme.palette.error.contrastText
-                        }}
-                      />
-                    }
-                    label={`${absenceRate[0]?.monthBeforeAbsenceRate?.toFixed(
-                      0
-                    )}% ${translateText(["trend"])}`}
-                    sx={{
-                      color:
-                        absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                          ? theme.palette.greens.midDark
-                          : theme.palette.error.contrastText,
-                      backgroundColor:
-                        absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                          ? theme.palette.greens.lightBackground
-                          : theme.palette.error.light,
-                      [theme.breakpoints.down("md")]: {
-                        fontSize: "0.625rem",
-                        lineHeight: "0.625rem"
-                      },
-                      ml: 1,
-                      fontSize: "0.75rem"
-                    }}
-                  />
-                </div>
-              ) : (
-                <Typography sx={classes.analytic}>{"-"}</Typography>
-              )}
-            </AnalyticCard>
-          </Grid>
-        </Grid>
-        <AvailabilityCalendarWidget teams={teamId} />
-        <LeaveTypeBreakdownChart
-          datasets={datasets}
-          isLoading={isLoading}
-          error={error}
+    <Box sx={classes.container}>
+      <Box sx={classes.header}>
+        <Typography style={{ textTransform: "uppercase" }}>
+          {` ${translateText(["records"])} ${
+            teamId === -1 ? translateText(["all"]) : `${teamName}`
+          }`}
+        </Typography>
+        <TeamSelector
+          setTeamId={setTeamId}
+          setTeamName={setTeamName}
+          moduleAdminType={AdminTypes.LEAVE_ADMIN}
         />
       </Box>
+      <Grid container spacing={1}>
+        <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
+          <AnalyticCard title={translateText(["todayAvailability"]) ?? ""}>
+            {todaysAvailability && resourceDetails()}
+          </AnalyticCard>
+        </Grid>
+        <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
+          <AnalyticCard
+            title={translateText(["pendingLeaves"]) ?? ""}
+            isExpandable={pendingLeaves?.[0]?.items?.length > 0 ? true : false}
+            onExpand={() => {
+              setPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
+                setViewedPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
+                router.replace(ROUTES.LEAVE.LEAVE_PENDING);
+            }}
+          >
+            {pendingLeaves?.[0]?.items?.length > 0 ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <Typography sx={classes.analytic}>
+                  {pendingLeaves?.[0]?.items?.length}
+                </Typography>
+                {newPendingRequests > 0 && (
+                  <Stack
+                    sx={{
+                      flexDirection: "row",
+                      gap: 1,
+                      alignItems: "center",
+                      backgroundColor: theme.palette.amber.mid,
+                      padding: "0.25rem .75rem",
+                      borderRadius: 10,
+                      height: "2rem"
+                    }}
+                  >
+                    <Typography
+                      sx={{ color: theme.palette.amber.chipText }}
+                      variant="caption"
+                    >
+                      {`${newPendingRequests} ${translateText(["newRequest"])}`}
+                    </Typography>
+                  </Stack>
+                )}
+              </div>
+            ) : (
+              <Typography sx={classes.analytic}>{"-"}</Typography>
+            )}
+          </AnalyticCard>
+        </Grid>
+
+        <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
+          <AnalyticCard title={translateText(["absenceRate"]) ?? ""}>
+            {absenceRate?.[0] ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography sx={classes.analytic}>
+                  {`${String(absenceRate[0]?.currentAbsenceRate?.toFixed(1))} %`}
+                </Typography>
+                <Chip
+                  icon={
+                    <TrendingUp
+                      style={{
+                        color:
+                          absenceRate[0]?.monthBeforeAbsenceRate >= 0
+                            ? theme.palette.greens.midDark
+                            : theme.palette.error.contrastText
+                      }}
+                    />
+                  }
+                  label={`${absenceRate[0]?.monthBeforeAbsenceRate?.toFixed(
+                    0
+                  )}% ${translateText(["trend"])}`}
+                  sx={{
+                    color:
+                      absenceRate[0]?.monthBeforeAbsenceRate >= 0
+                        ? theme.palette.greens.midDark
+                        : theme.palette.error.contrastText,
+                    backgroundColor:
+                      absenceRate[0]?.monthBeforeAbsenceRate >= 0
+                        ? theme.palette.greens.lightBackground
+                        : theme.palette.error.light,
+                    [theme.breakpoints.down("md")]: {
+                      fontSize: "0.625rem",
+                      lineHeight: "0.625rem"
+                    },
+                    ml: 1,
+                    fontSize: "0.75rem"
+                  }}
+                />
+              </div>
+            ) : (
+              <Typography sx={classes.analytic}>{"-"}</Typography>
+            )}
+          </AnalyticCard>
+        </Grid>
+      </Grid>
+      <AvailabilityCalendarWidget teams={teamId} />
+      <LeaveTypeBreakdownChart
+        datasets={datasets}
+        isLoading={isLoading}
+        error={error}
+      />
     </Box>
   );
 };
