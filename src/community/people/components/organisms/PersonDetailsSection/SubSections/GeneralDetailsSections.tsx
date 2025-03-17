@@ -10,7 +10,6 @@ import { DateTime } from "luxon";
 import {
   SyntheticEvent,
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useState
@@ -21,12 +20,8 @@ import DropdownList from "~community/common/components/molecules/DropdownList/Dr
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
-import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { isValidAlphaNumericName } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
-import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import { isValidNamePattern } from "~community/common/utils/validation";
 import {
   NAME_MAX_CHARACTER_LENGTH,
   PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH
@@ -89,25 +84,10 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     });
     const { values, errors, setFieldValue, setFieldError } = formik;
 
-    const [age, setAge] = useState<number | string>(0);
+    const [age, setAge] = useState<number>(0);
     const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
       undefined
     );
-
-    useEffect(() => {
-      if (values.birthDate) {
-        const birthDateTime = DateTime.fromISO(values.birthDate);
-        setSelectedDob(birthDateTime);
-
-        const birthDate = new Date(values.birthDate);
-        const today = new Date();
-        const age = today.getFullYear() - birthDate.getFullYear();
-        setAge(age);
-      } else {
-        setAge("-");
-        setSelectedDob(undefined);
-      }
-    }, [values.birthDate]);
 
     useImperativeHandle(ref, () => ({
       validateForm: async () => {
@@ -124,52 +104,13 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
 
     const handleChange = async (e: SelectChangeEvent) => {
       const { name, value } = e.target;
-      if (
-        (name === "firstName" ||
-          name === "middleName" ||
-          name === "lastName") &&
-        isValidNamePattern(value)
-      ) {
-        await setFieldValue(name, value);
-        setFieldError(name, "");
-        setEmployeeGeneralDetails(name, value);
-      } else if (
-        (name === "passportNumber" || name === "nin") &&
-        (value === "" || isValidAlphaNumericName().test(value))
-      ) {
-        await setFieldValue(name, value);
-        setFieldError(name, "");
-        setEmployeeGeneralDetails(name, value);
-      } else {
-        await setFieldValue(e.target.name, e.target.value);
-        setFieldError(e.target.name, "");
-        setEmployeeGeneralDetails(e.target.name, e.target.value);
-      }
-    };
-
-    const dateOnChange = async (
-      fieldName: string,
-      newValue: string
-    ): Promise<void> => {
-      if (fieldName && newValue) {
-        const dateValue = newValue?.split("T")?.[0] ?? "";
-        if (dateValue !== undefined) {
-          await setFieldValue(fieldName, dateValue);
-          setEmployeeGeneralDetails(fieldName, dateValue);
-        }
-
-        setFieldError(fieldName, "");
-      }
     };
 
     const handleNationalitySelect = async (
       _e: SyntheticEvent<Element, Event>,
       value: DropdownListType
-    ): Promise<void> => {
-      setFieldError("nationality", "");
-      await setFieldValue("nationality", value.value);
-      setEmployeeGeneralDetails("nationality", value.value as string);
-    };
+    ): Promise<void> => {};
+
     return (
       <PeopleFormSectionWrapper
         title={translateText(["title"])}
@@ -351,17 +292,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   <InputDate
                     label={translateText(["birthDate"])}
                     value={DateTime.fromISO(values?.birthDate || "")}
-                    onchange={(newValue: string | null) => {
-                      if (newValue) {
-                        dateOnChange(
-                          "birthDate",
-                          (convertDateToFormat(
-                            new Date(newValue as string),
-                            LONG_DATE_TIME_FORMAT
-                          ) as string) ?? ""
-                        );
-                      }
-                    }}
+                    onchange={() => {}}
                     placeholder={translateText(["selectBirthDate"])}
                     error={errors?.birthDate ?? ""}
                     maxDate={DateTime.fromISO(
@@ -484,7 +415,3 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
 GeneralDetailsSection.displayName = "GeneralDetailsSection";
 
 export default GeneralDetailsSection;
-
-function setEmployeeGeneralDetails(name: string, value: string) {
-  throw new Error("Function not implemented.");
-}

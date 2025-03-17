@@ -1,7 +1,7 @@
 import { Grid2 as Grid } from "@mui/material";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { ChangeEvent, JSX, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, JSX, useCallback, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
@@ -16,10 +16,7 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import { isValidNamePattern } from "~community/common/utils/validation";
-import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
-import { usePeopleStore } from "~community/people/store/store";
 import { EducationalDetailsType } from "~community/people/types/AddNewResourceTypes";
 import { employeeEducationalDetailsValidation } from "~community/people/utils/peopleValidations";
 
@@ -46,8 +43,6 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
     "entitlementDetails"
   );
   const [rowEdited, setRowEdited] = useState(-1);
-  const { employeeEducationalDetails, setEmployeeEducationalDetails } =
-    usePeopleStore((state) => state);
 
   const initialValues = {
     institutionName: "",
@@ -55,22 +50,6 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
     major: "",
     startDate: "",
     endDate: ""
-  };
-
-  const formatData = (
-    data: EducationalDetailsType[]
-  ): EducationalDetailsType[] => {
-    if (!data?.length) return [];
-
-    return data.map((detail) => {
-      return {
-        institutionName: detail?.institutionName,
-        degree: detail?.degree,
-        major: detail?.major,
-        startDate: detail?.startDate?.split("T")[0],
-        endDate: detail?.endDate?.split("T")[0]
-      };
-    });
   };
 
   const tableHeaders = [
@@ -81,51 +60,11 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
     translateText(["endDate"])
   ];
 
-  const handleEdit = (rowIndex: number): void => {
-    setRowEdited(rowIndex);
-    const educationalDetail =
-      employeeEducationalDetails?.educationalDetails[rowIndex];
-    const { institutionName, degree, major, startDate, endDate } =
-      educationalDetail;
+  const handleEdit = (rowIndex: number): void => {};
 
-    void setFieldValue("institutionName", institutionName);
-    void setFieldValue("degree", degree);
-    void setFieldValue("major", major);
-    void setFieldValue("startDate", startDate ?? "");
-    void setFieldValue("endDate", endDate ?? "");
-  };
+  const handleDelete = (rowIndex: number): void => {};
 
-  const handleDelete = (rowIndex: number): void => {
-    const updatedEducationalDetails = [
-      ...(employeeEducationalDetails?.educationalDetails || [])
-    ];
-    updatedEducationalDetails.splice(rowIndex, 1);
-    setEmployeeEducationalDetails(updatedEducationalDetails);
-    if (rowEdited === rowIndex) {
-      setRowEdited(-1);
-      resetForm();
-    }
-  };
-
-  const onSubmit = (values: EducationalDetailsType) => {
-    if (rowEdited > -1) {
-      const details = employeeEducationalDetails?.educationalDetails || [];
-      details.splice(rowEdited, 1, {
-        educationId: details[rowEdited].educationId,
-        ...values
-      });
-      setEmployeeEducationalDetails(details);
-      setRowEdited(-1);
-    } else {
-      setEmployeeEducationalDetails([
-        ...(employeeEducationalDetails?.educationalDetails || []),
-        values
-      ]);
-    }
-    resetForm();
-    setSelectedStartDate(undefined);
-    setSelectedEndDate(undefined);
-  };
+  const onSubmit = (values: EducationalDetailsType) => {};
 
   const formik = useFormik({
     initialValues,
@@ -144,38 +83,14 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
   } = formik;
 
   const handleInput = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      if (!event.target) return;
-      if (isValidNamePattern(event.target.value)) {
-        setFieldValue(event.target.name, event.target.value);
-        setFieldError(event.target.name, "");
-      }
-    },
+    (event: ChangeEvent<HTMLInputElement>) => {},
     [setFieldError, setFieldValue]
   );
 
   const dateOnChange = async (
     fieldName: string,
     newValue: string
-  ): Promise<void> => {
-    await setFieldValue(fieldName, newValue);
-    setFieldError(fieldName, "");
-  };
-
-  useEffect(() => {
-    if (values.startDate) {
-      const startDate = DateTime.fromISO(values.startDate);
-      setSelectedStartDate(startDate);
-    } else {
-      setSelectedStartDate(undefined);
-    }
-    if (values.endDate) {
-      const endDate = DateTime.fromISO(values.endDate);
-      setSelectedEndDate(endDate);
-    } else {
-      setSelectedEndDate(undefined);
-    }
-  }, []);
+  ): Promise<void> => {};
 
   return (
     <PeopleLayout
@@ -326,7 +241,9 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             />
           )}
         </Grid>
-        {employeeEducationalDetails?.educationalDetails?.length === 0 ? null : (
+        {/* Table data need to get from store */}
+
+        {/* {employeeEducationalDetails?.educationalDetails?.length === 0 ? null : (
           <PeopleFormTable
             data={formatData(employeeEducationalDetails?.educationalDetails)}
             actionsNeeded={true && !isInputsDisabled}
@@ -337,7 +254,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
               mt: "2rem"
             }}
           />
-        )}
+        )} */}
       </Grid>
     </PeopleLayout>
   );

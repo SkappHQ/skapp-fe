@@ -6,9 +6,7 @@ import { ChangeEvent, forwardRef, useImperativeHandle } from "react";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { isValidUrlInputPattern } from "~community/common/regex/regexPatterns";
 import { SOCIAL_MEDIA_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
-import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { employeeSocialMediaDetailsValidation } from "~community/people/utils/peopleValidations";
 
@@ -26,14 +24,11 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
       "socialMediaDetails"
     );
 
-    const { employeeSocialMediaDetails, setEmployeeSocialMediaDetails } =
-      usePeopleStore((state) => state);
-
     const initialValues = {
-      linkedIn: employeeSocialMediaDetails?.linkedIn || "",
-      facebook: employeeSocialMediaDetails?.facebook || "",
-      instagram: employeeSocialMediaDetails?.instagram || "",
-      x: employeeSocialMediaDetails?.x || ""
+      linkedIn: "",
+      facebook: "",
+      instagram: "",
+      x: ""
     };
 
     useImperativeHandle(ref, () => ({
@@ -60,13 +55,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
 
     const { values, errors, setFieldError, setFieldValue } = formik;
 
-    const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
-      if (isValidUrlInputPattern().test(e.target.value)) {
-        await setFieldValue(e.target.name, e.target.value);
-        setFieldError(e.target.name, "");
-        setEmployeeSocialMediaDetails(e.target.name, e.target.value);
-      }
-    };
+    const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {};
 
     return (
       <PeopleLayout

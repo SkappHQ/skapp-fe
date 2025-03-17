@@ -6,9 +6,7 @@ import DropdownList from "~community/common/components/molecules/DropdownList/Dr
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { isValidNamePattern } from "~community/common/utils/validation";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
-import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { BloodGroupList } from "~community/people/utils/data/employeeSetupStaticData";
 import { employeeHealthAndOtherDetailsValidation } from "~community/people/utils/peopleValidations";
@@ -26,15 +24,11 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
       "health&OtherDetails"
     );
 
-    const { employeeHealthAndOtherDetails, setEmployeeHealthAndOtherDetails } =
-      usePeopleStore((state) => state);
-
     const initialValues = {
-      bloodGroup: employeeHealthAndOtherDetails?.bloodGroup || "",
-      allergies: employeeHealthAndOtherDetails?.allergies || "",
-      dietaryRestrictions:
-        employeeHealthAndOtherDetails?.dietaryRestrictions || "",
-      tshirtSize: employeeHealthAndOtherDetails?.tshirtSize || ""
+      bloodGroup: "",
+      allergies: "",
+      dietaryRestrictions: "",
+      tshirtSize: ""
     };
 
     useImperativeHandle(ref, () => ({
@@ -62,25 +56,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
     const { values, errors, handleChange, setFieldError, setFieldValue } =
       formik;
 
-    const handleInput = async (e: SelectChangeEvent) => {
-      if (
-        (e.target.name === "allergies" ||
-          e.target.name === "dietaryRestrictions") &&
-        isValidNamePattern(e.target.value)
-      ) {
-        await setFieldValue(e.target.name, e.target.value);
-        setFieldError(e.target.name, "");
-        setEmployeeHealthAndOtherDetails(e.target.name, e.target.value);
-      } else if (e.target.name === "tshirtSize") {
-        await setFieldValue(e.target.name, e.target.value);
-        setFieldError(e.target.name, "");
-        setEmployeeHealthAndOtherDetails(e.target.name, e.target.value);
-      } else if (e.target.name === "bloodGroup") {
-        await setFieldValue(e.target.name, e.target.value);
-        setFieldError(e.target.name, "");
-        setEmployeeHealthAndOtherDetails(e.target.name, e.target.value);
-      }
-    };
+    const handleInput = async (e: SelectChangeEvent) => {};
 
     return (
       <PeopleLayout
