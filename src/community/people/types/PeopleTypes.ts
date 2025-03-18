@@ -89,7 +89,7 @@ export interface L3FamilyDetailsType {
   lastName?: string;
   gender?: GenderEnum;
   relationship?: RelationshipTypes;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   parentName?: string;
 }
 

@@ -29,12 +29,21 @@ const useFamilyDetailsFormHandlers = () => {
     "familyDetails"
   );
 
-  const initialValues = useMemo<L3FamilyDetailsType>(
-    () => ({
+  const initialValues = useMemo<L3FamilyDetailsType>(() => {
+    const emptyInitialValues: L3FamilyDetailsType = {
+      firstName: "",
+      lastName: "",
+      gender: undefined,
+      relationship: undefined,
+      parentName: "",
+      dateOfBirth: ""
+    };
+
+    return {
+      ...emptyInitialValues,
       ...(rowEdited > -1 && employee?.personal?.family?.[rowEdited])
-    }),
-    [employee, rowEdited]
-  );
+    };
+  }, [employee?.personal?.family, rowEdited]);
 
   const formik = useFormik({
     initialValues,

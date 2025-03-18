@@ -19,12 +19,20 @@ const useEducationalDetailsFormHandlers = () => {
 
   const { employee, setPersonalDetails } = usePeopleStore((state) => state);
 
-  const initialValues = useMemo<L3EducationalDetailsType>(
-    () => ({
+  const initialValues = useMemo<L3EducationalDetailsType>(() => {
+    const emptyInitialValues: L3EducationalDetailsType = {
+      institutionName: "",
+      degree: "",
+      major: "",
+      startDate: "",
+      endDate: ""
+    };
+
+    return {
+      ...emptyInitialValues,
       ...(rowEdited > -1 && employee?.personal?.educational?.[rowEdited])
-    }),
-    [employee, rowEdited]
-  );
+    };
+  }, [employee?.personal?.educational, rowEdited]);
 
   const translateText = useTranslator(
     "peopleModule",
@@ -53,12 +61,12 @@ const useEducationalDetailsFormHandlers = () => {
           educational: [...(employee?.personal?.educational || []), values]
         });
       }
-      console.log("Educational Details: ", values);
       resetForm();
       setSelectedStartDate(undefined);
       setSelectedEndDate(undefined);
     },
-    validateOnChange: false
+    validateOnChange: false,
+    enableReinitialize: true
   });
 
   const {

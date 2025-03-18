@@ -42,11 +42,6 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
 
   const { employee } = usePeopleStore((state) => state);
 
-  useEffect(() => {
-    console.log("Employee data: ", employee);
-  }
-  , [employee]);
-
   const {
     rowEdited,
     selectedStartDate,
