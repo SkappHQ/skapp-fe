@@ -1,27 +1,37 @@
-import { useState, useEffect, useMemo, ChangeEvent } from "react";
-import { DateTime } from "luxon";
 import { useFormik } from "formik";
-import { usePeopleStore } from "~community/people/store/store";
-import { L3FamilyDetailsType } from "~community/people/types/PeopleTypes";
-import { employeeFamilyDetailsValidation } from "~community/people/utils/peopleValidations";
-import { RelationshipTypes } from "~community/people/types/AddNewResourceTypes";
-import { RelationshipList } from "~community/people/utils/data/employeeSetupStaticData";
+import { DateTime } from "luxon";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
+
+import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import { isValidNamePattern } from "~community/common/utils/validation";
 import { MaritalStatusTypes } from "~community/people/enums/PeopleEnums";
-import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
+import { usePeopleStore } from "~community/people/store/store";
+import { RelationshipTypes } from "~community/people/types/AddNewResourceTypes";
+import { L3FamilyDetailsType } from "~community/people/types/PeopleTypes";
+import { RelationshipList } from "~community/people/utils/data/employeeSetupStaticData";
+import { employeeFamilyDetailsValidation } from "~community/people/utils/peopleValidations";
 
 const useFamilyDetailsFormHandlers = () => {
   const [rowEdited, setRowEdited] = useState(-1);
   const [relationshipList, setRelationshipList] = useState(RelationshipList);
   const [disableParentName, setDisableParentName] = useState(false);
-  const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(undefined);
+  const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
+    undefined
+  );
 
   const { employee, setPersonalDetails } = usePeopleStore((state) => state);
 
+  const translateText = useTranslator(
+    "peopleModule",
+    "addResource",
+    "familyDetails"
+  );
+
   const initialValues = useMemo<L3FamilyDetailsType>(
     () => ({
-      ...(rowEdited > -1 && employee?.personal?.family?.[rowEdited]),
+      ...(rowEdited > -1 && employee?.personal?.family?.[rowEdited])
     }),
     [employee, rowEdited]
   );
@@ -32,31 +42,31 @@ const useFamilyDetailsFormHandlers = () => {
     onSubmit: (values: L3FamilyDetailsType) => {
       const familyData = {
         ...values,
-        dateOfBirth: values.dateOfBirth,
+        dateOfBirth: values.dateOfBirth
       };
 
       if (rowEdited > -1) {
         const members = [...(employee?.personal?.family || [])];
         members.splice(rowEdited, 1, {
           ...familyData,
-          familyMemberId: members[rowEdited]?.familyMemberId,
+          familyMemberId: members[rowEdited]?.familyMemberId
         });
         setPersonalDetails({
           general: employee?.personal?.general,
-          family: members,
+          family: members
         });
         setRowEdited(-1);
       } else {
         setPersonalDetails({
           general: employee?.personal?.general,
-          family: [...(employee?.personal?.family || []), familyData],
+          family: [...(employee?.personal?.family || []), familyData]
         });
       }
       resetForm();
       setSelectedDob(undefined);
     },
     validateOnChange: false,
-    enableReinitialize: true,
+    enableReinitialize: true
   });
 
   const {
@@ -66,7 +76,7 @@ const useFamilyDetailsFormHandlers = () => {
     resetForm,
     setFieldValue,
     setFieldError,
-    handleChange,
+    handleChange
   } = formik;
 
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +148,7 @@ const useFamilyDetailsFormHandlers = () => {
     setFieldError,
     handleChange,
     handleInput,
-    handleDateChange,
+    handleDateChange
   };
 };
 
