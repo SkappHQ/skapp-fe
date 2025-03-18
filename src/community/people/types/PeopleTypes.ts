@@ -94,11 +94,12 @@ export interface L3FamilyDetailsType {
 }
 
 export interface L3EducationalDetailsType {
+  educationId?: number;
   institutionName?: string;
   degree?: string;
   major?: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface L3SocialMediaDetailsType {
