@@ -1,13 +1,11 @@
 import { Grid2 as Grid } from "@mui/material";
-import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { ChangeEvent, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
+import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -15,21 +13,23 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import { isValidNamePattern } from "~community/common/utils/validation";
+import { getLabelByValue } from "~community/common/utils/commonUtil";
+import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
 import { NAME_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
-import { FamilyMemberType } from "~community/people/types/AddNewResourceTypes";
+import useFamilyDetailsFormHandlers from "~community/people/hooks/useFamilyDetailsFormHandlers";
+import { usePeopleStore } from "~community/people/store/store";
+import { L3FamilyDetailsType } from "~community/people/types/PeopleTypes";
 import {
   GenderList,
   RelationshipList
 } from "~community/people/utils/data/employeeSetupStaticData";
-import { employeeFamilyDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
 interface Props {
   isInputsDisabled?: boolean;
 }
+
 const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
   const translateText = useTranslator(
     "peopleModule",
@@ -42,20 +42,22 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
     "entitlementDetails"
   );
 
-  const [rowEdited, setRowEdited] = useState(-1);
-  const [relationshipList, setRelationshipList] = useState(RelationshipList);
-  const [disableParentName, setDisableParentName] = useState(false);
-  const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
-    undefined
-  );
-  const initialValues: FamilyMemberType = {
-    firstName: "",
-    lastName: "",
-    gender: "",
-    relationship: "",
-    birthDate: "",
-    parentName: ""
-  };
+  const {
+    rowEdited,
+    setRowEdited,
+    relationshipList,
+    disableParentName,
+    selectedDob,
+    setSelectedDob,
+    values,
+    errors,
+    handleSubmit,
+    resetForm,
+    setFieldValue,
+    handleChange,
+    handleInput,
+    handleDateChange
+  } = useFamilyDetailsFormHandlers();
 
   const tableHeaders = [
     translateText(["firstName"]),
@@ -63,51 +65,65 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
     translateText(["gender"]),
     translateText(["relationship"]),
     translateText(["parentName"]),
-    translateText(["birthDate"]),
+    translateText(["dateOfBirth"]),
     translateText(["age"])
   ];
 
+  const { employee, setPersonalDetails } = usePeopleStore((state) => state);
+
   const handleEdit = (rowIndex: number) => {
     setRowEdited(rowIndex);
-  };
+    const member = employee?.personal?.family?.[rowIndex];
 
-  const handleDelete = (rowIndex: number) => {};
+    if (member) {
+      void setFieldValue("firstName", member.firstName || "");
+      void setFieldValue("lastName", member.lastName || "");
+      void setFieldValue("gender", member.gender || "");
+      void setFieldValue("relationship", member.relationship || "");
+      void setFieldValue("parentName", member.parentName || "");
+      void setFieldValue("dateOfBirth", member.dateOfBirth || "");
 
-  const onSubmit = (values: FamilyMemberType) => {
-    resetForm();
-    setSelectedDob(undefined);
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema: employeeFamilyDetailsValidation(translateText),
-    onSubmit,
-    validateOnChange: false
-  });
-
-  const {
-    values,
-    errors,
-    handleSubmit,
-    resetForm,
-    setFieldValue,
-    setFieldError,
-    handleChange
-  } = formik;
-
-  const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (isValidNamePattern(e.target.value)) {
-      await setFieldValue(e.target.name, e.target.value);
-      setFieldError(e.target.name, "");
+      if (member.dateOfBirth) {
+        setSelectedDob(DateTime.fromJSDate(new Date(member.dateOfBirth)));
+      } else {
+        setSelectedDob(undefined);
+      }
     }
   };
 
-  const dateOnChange = async (
-    fieldName: string,
-    newValue: string
-  ): Promise<void> => {
-    await setFieldValue(fieldName, newValue);
-    setFieldError(fieldName, "");
+  const handleDelete = (rowIndex: number) => {
+    const updatedMembers = [...(employee?.personal?.family || [])];
+    updatedMembers.splice(rowIndex, 1);
+    setPersonalDetails({
+      general: employee?.personal?.general,
+      family: updatedMembers
+    });
+    if (rowEdited === rowIndex) {
+      setRowEdited(-1);
+      resetForm();
+      setSelectedDob(undefined);
+    }
+  };
+
+  const formatTableData = (data: L3FamilyDetailsType[]) => {
+    if (!data) return [];
+
+    return data.map((member) => {
+      return {
+        firstName: member?.firstName ?? "",
+        lastName: member?.lastName ?? "",
+        gender: getLabelByValue(GenderList, member?.gender as string) ?? "",
+        relationship:
+          getLabelByValue(RelationshipList, member?.relationship as string) ??
+          "",
+        parentName: member?.parentName,
+        dateOfBirth: member?.dateOfBirth,
+        age: member?.dateOfBirth
+          ? new Date().getFullYear() -
+            new Date(member.dateOfBirth).getFullYear()
+          : undefined
+      };
+    });
   };
 
   return (
@@ -205,21 +221,18 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["birthDate"])}
-            value={DateTime.fromISO("")}
+            value={selectedDob || DateTime.fromISO("")}
             onchange={async (newValue: string) =>
-              await dateOnChange(
-                "birthDate",
-                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
-              )
+              await handleDateChange(newValue)
             }
             placeholder={translateText(["selectBirthDate"])}
-            error={errors.birthDate ?? ""}
+            error={errors.dateOfBirth ?? ""}
             maxDate={DateTime.fromISO(new Date().toISOString())}
             componentStyle={{
               mt: "0rem"
             }}
             disabled={isInputsDisabled}
-            inputFormat="dd/MM/yyyy"
+            inputFormat={REVERSE_DATE_FORMAT}
             selectedDate={selectedDob}
             setSelectedDate={setSelectedDob}
           />
@@ -266,11 +279,12 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             />
           )}
         </Grid>
-        {/* Table data need to get from store */}
 
-        {/* {employeeFamilyDetails?.familyMembers?.length === 0 ? null : (
+        {!employee.personal.family?.length ? null : (
           <PeopleFormTable
-            data={formatData(employeeFamilyDetails?.familyMembers)}
+            data={formatTableData(
+              employee.personal.family as L3FamilyDetailsType[]
+            )}
             actionsNeeded={true && !isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
@@ -279,7 +293,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
               mt: "2rem"
             }}
           />
-        )} */}
+        )}
       </Grid>
     </PeopleFormSectionWrapper>
   );

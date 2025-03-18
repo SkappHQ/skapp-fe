@@ -47,12 +47,12 @@ import {
 } from "./JobFamilyTypes";
 import { DirectoryModalTypes } from "./ModalTypes";
 import {
-  CommonDetailsType,
-  EmergencyDetailsType,
-  EmployeeType,
-  EmploymentFormDetailsType,
-  PersonalDetailsType,
-  SystemPermissionsType
+  L2CommonDetailsType,
+  L2EmergencyDetailsType,
+  L1EmployeeType,
+  L2EmploymentFormDetailsType,
+  L2PersonalDetailsType,
+  L2SystemPermissionsType
 } from "./PeopleTypes";
 import {
   ProjectTeamsAndEmployeesType,
@@ -239,12 +239,12 @@ interface actionsTypes {
   setDeletionAlertOpen: (value: boolean) => void;
 
   //people slice
-  setEmployee: (employee: EmployeeType) => void;
-  setPersonalDetails: (personal: PersonalDetailsType) => void;
-  setEmergencyDetails: (emergency: EmergencyDetailsType) => void;
-  setEmploymentDetails: (employment: EmploymentFormDetailsType) => void;
-  setSystemPermissions: (systemPermissions: SystemPermissionsType) => void;
-  setCommonDetails: (common: CommonDetailsType) => void;
+  setEmployee: (employee: L1EmployeeType) => void;
+  setPersonalDetails: (personal: L2PersonalDetailsType) => void;
+  setEmergencyDetails: (emergency: L2EmergencyDetailsType) => void;
+  setEmploymentDetails: (employment: L2EmploymentFormDetailsType) => void;
+  setSystemPermissions: (systemPermissions: L2SystemPermissionsType) => void;
+  setCommonDetails: (common: L2CommonDetailsType) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -365,6 +365,6 @@ export interface Store extends actionsTypes {
   isDeletionAlertOpen: boolean;
 
   //people slice
-  employee: EmployeeType;
-  initialEmployee: EmployeeType;
+  employee: L1EmployeeType;
+  initialEmployee: L1EmployeeType;
 }

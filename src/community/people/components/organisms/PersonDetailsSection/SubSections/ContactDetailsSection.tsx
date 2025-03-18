@@ -1,21 +1,17 @@
 import { Grid2 as Grid } from "@mui/material";
 import { useFormik } from "formik";
-import {
-  ChangeEvent,
-  SyntheticEvent,
-  forwardRef,
-  useImperativeHandle,
-  useMemo
-} from "react";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
 
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import InputPhoneNumber from "~community/common/components/molecules/InputPhoneNumber/InputPhoneNumber";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { DropdownListType } from "~community/common/types/CommonTypes";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
+import useContactDetailsFormHandlers from "~community/people/hooks/useContactDetailsFormHandlers";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
+import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { L3ContactDetailsType } from "~community/people/types/PeopleTypes";
 import { employeeContactDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
@@ -32,22 +28,31 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
     "contactDetails"
   );
 
-  const initialValues = useMemo(
-    () => ({
-      personalEmail: "",
-      countryCode: "",
-      phone: "",
-      addressLine1: "",
-      addressLine2: "",
-      city: "",
-      country: "",
-      state: "",
-      postalCode: ""
-    }),
-    []
+  const { employee } = usePeopleStore((state) => state);
+
+  const initialValues = useMemo<L3ContactDetailsType>(
+    () => employee?.personal?.contact as L3ContactDetailsType,
+    [employee]
   );
 
   const countryList = useGetCountryList();
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: employeeContactDetailsValidation(translateText),
+    onSubmit: () => {},
+    validateOnChange: false,
+    validateOnBlur: true,
+    enableReinitialize: true
+  });
+
+  const {
+    handleInput,
+    handleCountrySelect,
+    onChangeCountry,
+    onChangePhoneNumber
+  } = useContactDetailsFormHandlers({ formik });
+
   useImperativeHandle(ref, () => ({
     validateForm: async () => {
       const validationErrors = await formik.validateForm();
@@ -61,33 +66,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
     }
   }));
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema: employeeContactDetailsValidation(translateText),
-    onSubmit: () => {},
-    validateOnChange: false,
-    validateOnBlur: true,
-    enableReinitialize: true
-  });
-
-  const { values, errors, setFieldValue, setFieldError } = formik;
-
-  const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-  };
-
-  const handleCountrySelect = async (
-    e: SyntheticEvent,
-    value: DropdownListType
-  ): Promise<void> => {};
-
-  const onChangeCountry = async (countryCode: string): Promise<void> => {
-    // Setter from the store
-  };
-
-  const handlePhoneNumber = async (
-    phone: ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {};
+  const { values, errors } = formik;
 
   return (
     <PeopleFormSectionWrapper
@@ -132,12 +111,12 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
           <Grid size={{ xs: 12, md: 6, xl: 4 }}>
             <InputPhoneNumber
               label={translateText(["contactNo"])}
-              value={values.phone}
-              countryCodeValue={values.countryCode}
+              value={values.contactNo as string}
+              countryCodeValue={values.countryCode as string}
               onChangeCountry={onChangeCountry}
-              onChange={handlePhoneNumber}
-              error={errors.phone ?? ""}
-              inputName="phone"
+              onChange={onChangePhoneNumber}
+              error={errors.contactNo ?? ""}
+              inputName="contactNo"
               fullComponentStyle={{
                 mt: "0rem"
               }}
@@ -214,18 +193,13 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               label={translateText(["country"])}
               value={
                 values.country
-                  ? {
-                      label: values.country,
-                      value: values.country
-                    }
+                  ? { label: values.country, value: values.country }
                   : undefined
               }
               placeholder={translateText(["selectCountry"])}
               onChange={handleCountrySelect}
               error={errors.country ?? ""}
-              componentStyle={{
-                mt: "0rem"
-              }}
+              componentStyle={{ mt: "0rem" }}
               isDisabled={isInputsDisabled}
               readOnly={isInputsDisabled}
             />

@@ -1,19 +1,7 @@
-import {
-  Grid2 as Grid,
-  SelectChangeEvent,
-  Stack,
-  type Theme,
-  useTheme
-} from "@mui/material";
+import { Grid2 as Grid, Stack, type Theme, useTheme } from "@mui/material";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import {
-  SyntheticEvent,
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useState
-} from "react";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
 
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
@@ -21,12 +9,14 @@ import InputDate from "~community/common/components/molecules/InputDate/InputDat
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { DropdownListType } from "~community/common/types/CommonTypes";
 import {
   NAME_MAX_CHARACTER_LENGTH,
   PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH
 } from "~community/people/constants/configs";
+import useGeneralDetailsFormHandlers from "~community/people/hooks/useGeneralDetailsFormHandlers";
+import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { L3GeneralDetailsType } from "~community/people/types/PeopleTypes";
 import {
   GenderList,
   MaritalStatusList,
@@ -54,24 +44,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       "generalDetails"
     );
 
-    // Need get data from the store
+    const { employee } = usePeopleStore((state) => state);
 
-    const initialValues = useMemo(
-      () => ({
-        authPic: "",
-        thumbnail: "",
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        gender: "",
-        birthDate: null,
-        nationality: "",
-        nin: "",
-        passportNumber: "",
-        maritalStatus: ""
-      }),
-
-      []
+    const initialValues = useMemo<L3GeneralDetailsType>(
+      () => employee?.personal?.general,
+      [employee]
     );
 
     const formik = useFormik({
@@ -82,12 +59,17 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       validateOnBlur: true,
       enableReinitialize: true
     });
-    const { values, errors, setFieldValue, setFieldError } = formik;
 
-    const [age, setAge] = useState<number>(0);
-    const [selectedDob, setSelectedDob] = useState<DateTime | undefined>(
-      undefined
-    );
+    const {
+      handleChange,
+      handleNationalitySelect,
+      handleDateChange,
+      age,
+      selectedDob,
+      setSelectedDob
+    } = useGeneralDetailsFormHandlers({ formik });
+
+    const { values, errors } = formik;
 
     useImperativeHandle(ref, () => ({
       validateForm: async () => {
@@ -101,15 +83,6 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         formik.resetForm();
       }
     }));
-
-    const handleChange = async (e: SelectChangeEvent) => {
-      const { name, value } = e.target;
-    };
-
-    const handleNationalitySelect = async (
-      _e: SyntheticEvent<Element, Event>,
-      value: DropdownListType
-    ): Promise<void> => {};
 
     return (
       <PeopleFormSectionWrapper
@@ -291,10 +264,14 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 >
                   <InputDate
                     label={translateText(["birthDate"])}
-                    value={DateTime.fromISO(values?.birthDate || "")}
-                    onchange={() => {}}
+                    value={
+                      values?.dateOfBirth
+                        ? DateTime.fromJSDate(values.dateOfBirth)
+                        : undefined
+                    }
+                    onchange={handleDateChange}
                     placeholder={translateText(["selectBirthDate"])}
-                    error={errors?.birthDate ?? ""}
+                    error={errors?.dateOfBirth ?? ""}
                     maxDate={DateTime.fromISO(
                       new Date()?.toISOString()?.split("T")[0]
                     )}
@@ -331,8 +308,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   inputName="nationality"
                   label={translateText(["nationality"])}
                   value={{
-                    label: values.nationality,
-                    value: values.nationality
+                    label: values.nationality as string,
+                    value: values.nationality as string
                   }}
                   placeholder={translateText(["selectNationality"])}
                   onChange={handleNationalitySelect}
