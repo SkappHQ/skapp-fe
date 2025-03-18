@@ -1,7 +1,7 @@
 import { Skeleton, Theme, useTheme } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 
-import LeaveTypeBreakdownMonthSelectorSkeleton from "~community/leave/components/molecules/LeaveUtilizationGraph/Skeletons/LeaveTypeBreakdownMonthSelectorSkeleton.tsx/LeaveTypeBreakdownMonthSelectorSkeleton";
+import LeaveTypeBreakdownMonthSelectorSkeleton from "~community/leave/components/molecules/LeaveUtilizationGraph/Skeletons/LeaveTypeBreakdownMonthSelectorSkeleton/LeaveTypeBreakdownMonthSelectorSkeleton";
 
 import styles from "./styles";
 

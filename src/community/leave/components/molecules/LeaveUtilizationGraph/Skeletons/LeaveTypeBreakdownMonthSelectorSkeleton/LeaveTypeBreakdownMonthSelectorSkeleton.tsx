@@ -2,6 +2,8 @@ import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { Theme, Typography, useTheme } from "@mui/material";
 import { Stack } from "@mui/system";
 
+import { getAllMonthsAsString } from "~community/common/utils/dateTimeUtils";
+
 import styles from "./styles";
 
 const LeaveTypeBreakdownMonthSelectorSkeleton = () => {
@@ -12,20 +14,7 @@ const LeaveTypeBreakdownMonthSelectorSkeleton = () => {
     <Stack sx={classes.monthSelectorContainer}>
       <ArrowBackIos sx={classes.iconText} />
       <Stack sx={classes.monthList}>
-        {[
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dev"
-        ].map((month, index) => (
+        {getAllMonthsAsString().map((month, index) => (
           <Typography key={index} component="span" sx={classes.iconText}>
             {month}
           </Typography>
