@@ -16,7 +16,7 @@ const PeopleFormSections = ({ formType }: Props) => {
   const getSections = () => {
     switch (formType) {
       case EditPeopleFormTypes.personal:
-        return <PersonalDetailsForm onNext={() => {}} />;
+        return <PersonalDetailsForm />;
       case EditPeopleFormTypes.emergency:
         return <EmergencyDetailsForm />;
       case EditPeopleFormTypes.employment:

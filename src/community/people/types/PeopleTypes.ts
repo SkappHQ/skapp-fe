@@ -14,7 +14,7 @@ import {
 
 //L1 Type
 export interface L1EmployeeType {
-  personal?: L2PersonalDetailsType;
+  personal: L2PersonalDetailsType;
   emergency?: L2EmergencyDetailsType;
   employment?: L2EmploymentFormDetailsType;
   systemPermissions?: L2SystemPermissionsType;
@@ -23,7 +23,7 @@ export interface L1EmployeeType {
 
 //L2 Types
 export interface L2PersonalDetailsType {
-  general?: L3GeneralDetailsType;
+  general: L3GeneralDetailsType;
   contact?: L3ContactDetailsType;
   family?: L3FamilyDetailsType[];
   educational?: L3EducationalDetailsType[];
@@ -55,6 +55,7 @@ export interface L2SystemPermissionsType {
 export interface L2CommonDetailsType {
   image?: string;
   accountStatus?: AccountStatusTypes;
+  thumbnail?: string;
 }
 
 //L3 Types
