@@ -1,7 +1,9 @@
 import { Grid2 as Grid } from "@mui/material";
 import { Theme, useTheme } from "@mui/system";
+import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
 
 import AvatarSearch from "~community/common/components/molecules/AvatarSearch/AvatarSearch";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
@@ -11,14 +13,21 @@ import InputField from "~community/common/components/molecules/InputField/InputF
 import InteractiveInputTrigger from "~community/common/components/molecules/InteractiveInputTrigger/InteractiveInputTrigger";
 import MultiSelectChipInput from "~community/common/components/molecules/MultiSelectChipInput";
 import MultivalueDropdownList from "~community/common/components/molecules/MultiValueDropdownList/MultivalueDropdownList";
-import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
+import {
+  LONG_DATE_TIME_FORMAT,
+  REVERSE_DATE_FORMAT
+} from "~community/common/constants/timeConstants";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { DropdownListType } from "~community/common/types/CommonTypes";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
+import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import useEmployeeDetailsFormHandler from "~community/people/hooks/useEmployeeDetailsFormHandler";
 import { usePeopleStore } from "~community/people/store/store";
-import { TeamNamesType } from "~community/people/types/TeamTypes";
+import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
+import { L3EmploymentDetailsType } from "~community/people/types/PeopleTypes";
+import { TeamModelTypes } from "~community/people/types/TeamTypes";
 import { EmployementAllocationList } from "~community/people/utils/data/employeeSetupStaticData";
+import { employeeEmploymentDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 import TeamModalController from "../../TeamModalController/TeamModalController";
@@ -46,44 +55,95 @@ const EmploymentDetailsSection = ({
     "employmentDetails"
   );
 
+  const router = useRouter();
+  const { id } = router.query;
+
   const { isPeopleManager } = useSessionData();
 
-  const [isPrimaryManagerPopperOpen, setIsPrimaryManagerPopperOpen] =
-    useState<boolean>(false);
-  const [isSecondaryManagerPopperOpen, setIsSecondaryManagerPopperOpen] =
-    useState<boolean>(false);
+  const {
+    employee,
+    isPendingInvitationListOpen,
+    setTeamModalType,
+    setIsTeamModalOpen
+  } = usePeopleStore((state) => state);
 
-  const [selectedJoinedDate, setSelectedJoinedDate] = useState<
-    DateTime | undefined
-  >(undefined);
-  const [selectedProbationStartDate, setSelectedProbationStartDate] = useState<
-    DateTime | undefined
-  >(undefined);
-  const [selectedProbationEndDate, setSelectedProbationEndDate] = useState<
-    DateTime | undefined
-  >(undefined);
+  const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
+  const [isUniqueEmployeeNo, setIsUniqueEmployeeNo] = useState<boolean>(false);
 
-  const [latestTeamId, setLatestTeamId] = useState<number | null>();
+  const onSubmit = async (): Promise<void> => {
+    setIsPrimaryManagerPopperOpen(false);
+    setIsSecondaryManagerPopperOpen(false);
+    await refetch();
+  };
 
-  const { projectTeamNames, isPendingInvitationListOpen } = usePeopleStore(
-    (state) => state
+  const initialValues = useMemo<L3EmploymentDetailsType>(
+    () =>
+      employee?.employment?.employmentDetails ||
+      ({} as L3EmploymentDetailsType),
+    [employee]
   );
 
-  const workTimeZoneDictionary: Record<string, string> = timeZonesList.reduce<
-    Record<string, string>
-  >((acc: Record<string, string>, curr: { value: string; label: string }) => {
-    acc[curr.value] = curr.label;
-    return acc;
-  }, {});
+  const context: EmployeeEmploymentContextType = {
+    isUniqueEmail,
+    isUniqueEmployeeNo,
+    isUpdate:
+      initialValues?.email !== employee?.employment?.employmentDetails?.email
+        ? false
+        : isUpdate
+  };
 
-  const projectTeamList: DropdownListType[] = projectTeamNames?.map(
-    (projectTeamName: TeamNamesType) => {
-      return {
-        label: projectTeamName.teamName,
-        value: projectTeamName.teamId
-      };
-    }
-  );
+  const formik = useFormik<L3EmploymentDetailsType>({
+    initialValues,
+    validationSchema: employeeEmploymentDetailsValidation(
+      context,
+      translateText
+    ),
+    onSubmit,
+    validateOnChange: false,
+    validateOnBlur: true,
+    enableReinitialize: true
+  });
+
+  const {
+    isPrimaryManagerPopperOpen,
+    isSecondaryManagerPopperOpen,
+    selectedJoinedDate,
+    selectedProbationStartDate,
+    selectedProbationEndDate,
+    workTimeZoneDictionary,
+    projectTeamList,
+    primaryManagerSearchTerm,
+    secondaryManagerSearchTerm,
+    primaryManagerSuggestions,
+    secondaryManagerSuggestions,
+    setIsSecondaryManagerPopperOpen,
+    setIsPrimaryManagerPopperOpen,
+    setSelectedProbationStartDate,
+    setSelectedProbationEndDate,
+    setSelectedJoinedDate,
+    setLatestTeamId,
+    handleTeamSelect,
+    handleInput,
+    handleChange,
+    dateOnChange,
+    handleWorkTimeZoneChange,
+    onPrimaryManagerSearchChange,
+    onSecondaryManagerSearchChange,
+    handlePrimaryManagerSelect,
+    handlePrimaryManagerRemove,
+    handleSecondaryManagerSelect,
+    handleSecondaryManagerRemove,
+    refetch
+  } = useEmployeeDetailsFormHandler({
+    formik,
+    id,
+    isManager,
+    isProfileView,
+    setIsUniqueEmail,
+    setIsUniqueEmployeeNo
+  });
+
+  const { values, errors } = formik;
 
   return (
     <PeopleFormSectionWrapper
@@ -112,11 +172,15 @@ const EmploymentDetailsSection = ({
               <InputField
                 label={translateText(["employeeNo"])}
                 inputType="text"
-                value={""}
+                value={values.employeeNumber}
                 placeHolder={translateText(["enterEmployeeNo"])}
-                onChange={() => {}}
+                onChange={handleInput}
                 inputName="employeeNumber"
-                error={""}
+                error={
+                  errors.employeeNumber && !isManager
+                    ? errors.employeeNumber
+                    : ""
+                }
                 componentStyle={{
                   mt: "0rem"
                 }}
@@ -131,11 +195,11 @@ const EmploymentDetailsSection = ({
             <InputField
               label={translateText(["workEmail"])}
               inputType="text"
-              value={""}
+              value={values.email}
               placeHolder={translateText(["enterWorkEmail"])}
-              onChange={() => {}}
-              inputName="workEmail"
-              error={""}
+              onChange={handleInput}
+              inputName="email"
+              error={errors.email && !isManager ? errors.email : ""}
               componentStyle={{
                 mt: "0rem"
               }}
@@ -153,10 +217,10 @@ const EmploymentDetailsSection = ({
             <DropdownList
               inputName="employmentAllocation"
               label={translateText(["employmentAllocation"])}
-              value={""}
+              value={values.employmentAllocation}
               placeholder={translateText(["selectEmploymentAllocation"])}
-              onChange={() => {}}
-              error={""}
+              onChange={handleChange}
+              error={errors.employmentAllocation ?? ""}
               componentStyle={{
                 mt: "0rem"
               }}
@@ -170,9 +234,10 @@ const EmploymentDetailsSection = ({
 
           <Grid
             size={{ xs: 12, md: 6, xl: 4 }}
-            // sx={{
-            //   display: isManager && values.teams.length === 0 ? "none" : "block"
-            // }}
+            sx={{
+              display:
+                isManager && values?.teamIds?.length === 0 ? "none" : "block"
+            }}
           >
             {projectTeamList?.length === 0 && !isManager && !isProfileView ? (
               <InteractiveInputTrigger
@@ -180,13 +245,22 @@ const EmploymentDetailsSection = ({
                 label={translateText(["teams"])}
                 placeholder={translateText(["addNewTeam"])}
                 componentStyle={{ mt: "0rem" }}
-                fieldButtonAction={() => {}}
-                error={""}
+                fieldButtonAction={() => {
+                  setIsTeamModalOpen(true);
+                  setTeamModalType(TeamModelTypes.ADD_TEAM);
+                }}
+                error={errors?.teamIds ?? ""}
                 isDisable={isInputsDisabled}
               />
             ) : isManager || isProfileView ? (
               <MultiSelectChipInput
-                chipList={[]}
+                chipList={
+                  projectTeamList
+                    .filter((project) =>
+                      values?.teamIds?.includes(project.value as number)
+                    )
+                    .map((project) => project.label) as string[]
+                }
                 chipWrapperStyles={{
                   borderWidth: 0
                 }}
@@ -210,17 +284,20 @@ const EmploymentDetailsSection = ({
               />
             ) : (
               <MultivalueDropdownList
-                inputName="teams"
+                inputName="teamIds"
                 label={translateText(["teams"])}
                 isMultiValue
-                value={[]}
+                value={values?.teamIds ?? []}
                 placeholder={translateText(["selectTeams"])}
-                onChange={() => {}}
-                error={""}
+                onChange={(value) => handleTeamSelect(value as number[])}
+                error={errors?.teamIds ?? ""}
                 componentStyle={{
                   mt: "0rem"
                 }}
-                onAddNewClickBtn={() => {}}
+                onAddNewClickBtn={() => {
+                  setIsTeamModalOpen(true);
+                  setTeamModalType(TeamModelTypes.ADD_TEAM);
+                }}
                 isCheckSelected
                 isErrorFocusOutlineNeeded={false}
                 itemList={projectTeamList}
@@ -237,15 +314,17 @@ const EmploymentDetailsSection = ({
             <AvatarSearch
               id="primary-manager-search"
               title={translateText(["primarySupervisor"])}
-              newResourceManager={undefined}
+              newResourceManager={
+                employee?.employment?.employmentDetails?.primarySupervisor
+              }
               isManagerPopperOpen={isPrimaryManagerPopperOpen}
-              managerSuggestions={[]}
-              managerSearchTerm={""}
-              handleManagerRemove={async () => {}}
-              handleManagerSelect={async () => {}}
+              managerSuggestions={primaryManagerSuggestions}
+              managerSearchTerm={primaryManagerSearchTerm}
+              handleManagerRemove={handlePrimaryManagerRemove}
+              handleManagerSelect={handlePrimaryManagerSelect}
               setIsManagerPopperOpen={setIsPrimaryManagerPopperOpen}
-              onManagerSearchChange={async () => {}}
-              errors={""}
+              onManagerSearchChange={onPrimaryManagerSearchChange}
+              errors={errors?.primarySupervisor ?? ""}
               inputName={"primarySupervisor"}
               isDisabled={isManager || isProfileView || isInputsDisabled}
               placeholder={
@@ -269,18 +348,33 @@ const EmploymentDetailsSection = ({
             <AvatarSearch
               id="secondary-manager-search"
               title={translateText(["secondarySupervisor"])}
-              newResourceManager={undefined}
+              newResourceManager={
+                employee?.employment?.employmentDetails?.secondarySupervisor
+              }
               isManagerPopperOpen={isSecondaryManagerPopperOpen}
-              managerSuggestions={[]}
-              managerSearchTerm={""}
-              handleManagerRemove={async () => {}}
-              handleManagerSelect={async () => {}}
+              managerSuggestions={secondaryManagerSuggestions}
+              managerSearchTerm={secondaryManagerSearchTerm}
+              handleManagerRemove={handleSecondaryManagerRemove}
+              handleManagerSelect={handleSecondaryManagerSelect}
               setIsManagerPopperOpen={setIsSecondaryManagerPopperOpen}
-              onManagerSearchChange={async () => {}}
-              errors={""}
+              onManagerSearchChange={onSecondaryManagerSearchChange}
+              errors={errors?.secondarySupervisor ?? ""}
               inputName={"secondarySupervisor"}
-              isDisabled={isManager || isProfileView || isInputsDisabled}
-              isDisabledLabel={isInputsDisabled}
+              isDisabled={
+                isManager ||
+                isProfileView ||
+                Number(
+                  employee?.employment?.employmentDetails?.primarySupervisor
+                    ?.employeeId ?? 0
+                ) <= 0 ||
+                isInputsDisabled
+              }
+              isDisabledLabel={
+                Number(
+                  employee?.employment?.employmentDetails?.primarySupervisor
+                    ?.employeeId ?? 0
+                ) <= 0 || isInputsDisabled
+              }
               placeholder={
                 !isManager && !isProfileView
                   ? translateText(["selectSecondarySupervisor"])
@@ -295,15 +389,26 @@ const EmploymentDetailsSection = ({
               <InputDate
                 label={translateText(["joinedDate"])}
                 placeholder={translateText(["selectJoinedDate"])}
-                value={DateTime.fromISO("")}
-                onchange={() => {}}
-                error={""}
-                // minDate={}
+                value={DateTime.fromISO(values.joinedDate ?? "")}
+                onchange={async (newValue: string) =>
+                  await dateOnChange(
+                    "joinedDate",
+                    convertDateToFormat(
+                      new Date(newValue),
+                      LONG_DATE_TIME_FORMAT
+                    )
+                  )
+                }
+                error={errors.joinedDate}
+                minDate={DateTime.fromISO(
+                  employee?.employment?.employmentDetails?.probationStartDate ??
+                    ""
+                )}
                 maxDate={DateTime.fromISO(new Date().toISOString())}
                 componentStyle={{
                   mt: "0rem"
                 }}
-                inputFormat="dd/MM/yyyy"
+                inputFormat={REVERSE_DATE_FORMAT}
                 readOnly={isManager || isProfileView}
                 disabled={isInputsDisabled}
                 selectedDate={selectedJoinedDate}
@@ -320,11 +425,21 @@ const EmploymentDetailsSection = ({
                     ? translateText(["selectProbationStartDate"])
                     : ""
                 }
-                value={DateTime.fromISO("")}
-                onchange={() => {}}
-                // minDate={}
-                error={""}
-                inputFormat="dd/MM/yyyy"
+                value={DateTime.fromISO(values.probationStartDate ?? "")}
+                onchange={async (newValue: string) =>
+                  await dateOnChange(
+                    "probationStartDate",
+                    convertDateToFormat(
+                      new Date(newValue),
+                      LONG_DATE_TIME_FORMAT
+                    )
+                  )
+                }
+                minDate={DateTime.fromISO(
+                  employee?.employment?.employmentDetails?.joinedDate ?? ""
+                )}
+                error={errors.probationStartDate}
+                inputFormat={REVERSE_DATE_FORMAT}
                 componentStyle={{
                   mt: "0rem"
                 }}
@@ -345,10 +460,25 @@ const EmploymentDetailsSection = ({
                     ? translateText(["selectProbationEndDate"])
                     : ""
                 }
-                value={DateTime.fromISO("")}
-                onchange={() => {}}
-                // minDate={}
-                error={""}
+                value={DateTime.fromISO(values.probationEndDate ?? "")}
+                onchange={async (newValue: string) =>
+                  await dateOnChange(
+                    "probationEndDate",
+                    convertDateToFormat(
+                      new Date(newValue),
+                      LONG_DATE_TIME_FORMAT
+                    )
+                  )
+                }
+                minDate={DateTime.fromISO(
+                  employee?.employment?.employmentDetails?.probationStartDate
+                    ? employee?.employment?.employmentDetails
+                        ?.probationStartDate
+                    : employee?.employment?.employmentDetails?.joinedDate
+                      ? employee?.employment?.employmentDetails?.joinedDate
+                      : ""
+                )}
+                error={errors.probationEndDate}
                 inputFormat={REVERSE_DATE_FORMAT}
                 componentStyle={{
                   mt: "0rem"
@@ -366,10 +496,17 @@ const EmploymentDetailsSection = ({
               itemList={timeZonesList}
               inputName="workTimeZone"
               label={translateText(["workTimeZone"])}
-              value={{ label: "", value: "" }}
+              value={
+                values?.workTimeZone
+                  ? {
+                      label: workTimeZoneDictionary[values.workTimeZone],
+                      value: values.workTimeZone
+                    }
+                  : undefined
+              }
               placeholder={translateText(["selectWorkTimeZone"])}
-              onChange={() => {}}
-              error={""}
+              onChange={handleWorkTimeZoneChange}
+              error={errors.workTimeZone ?? ""}
               isDisableOptionFilter={true}
               componentStyle={{
                 mt: "0rem"
