@@ -1,13 +1,17 @@
 import { Grid2 as Grid, type SelectChangeEvent } from "@mui/material";
 import { useFormik } from "formik";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
 
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { isValidNamePattern } from "~community/common/utils/validation";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
+import { BloodGroupTypes } from "~community/people/enums/PeopleEnums";
+import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { L3HealthAndOtherDetailsType } from "~community/people/types/PeopleTypes";
 import { BloodGroupList } from "~community/people/utils/data/employeeSetupStaticData";
 import { employeeHealthAndOtherDetailsValidation } from "~community/people/utils/peopleValidations";
 
@@ -24,12 +28,12 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
       "health&OtherDetails"
     );
 
-    const initialValues = {
-      bloodGroup: "",
-      allergies: "",
-      dietaryRestrictions: "",
-      tshirtSize: ""
-    };
+    const { employee, setPersonalDetails } = usePeopleStore((state) => state);
+
+    const initialValues = useMemo<L3HealthAndOtherDetailsType>(
+      () => employee?.personal?.healthAndOther as L3HealthAndOtherDetailsType,
+      [employee]
+    );
 
     useImperativeHandle(ref, () => ({
       validateForm: async () => {
@@ -56,7 +60,43 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
     const { values, errors, handleChange, setFieldError, setFieldValue } =
       formik;
 
-    const handleInput = async (e: SelectChangeEvent) => {};
+    const handleInput = async (e: SelectChangeEvent) => {
+      const { name, value } = e.target;
+      if (
+        (name === "allergies" || name === "dietaryRestrictions") &&
+        isValidNamePattern(value)
+      ) {
+        await setFieldValue(name, value);
+        setFieldError(name, "");
+        setPersonalDetails({
+          general: employee?.personal?.general,
+          healthAndOther: {
+            ...employee?.personal?.healthAndOther,
+            [name]: value
+          }
+        });
+      } else if (name === "tShirtSize") {
+        await setFieldValue(name, value);
+        setFieldError(name, "");
+        setPersonalDetails({
+          general: employee?.personal?.general,
+          healthAndOther: {
+            ...employee?.personal?.healthAndOther,
+            [name]: value
+          }
+        });
+      } else if (name === "bloodGroup") {
+        await setFieldValue(name, value);
+        setFieldError(name, "");
+        setPersonalDetails({
+          general: employee?.personal?.general,
+          healthAndOther: {
+            ...employee?.personal?.healthAndOther,
+            [name]: value as BloodGroupTypes
+          }
+        });
+      }
+    };
 
     return (
       <PeopleLayout
@@ -134,11 +174,11 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["tShirtSize"])}
                 inputType="text"
-                value={values.tshirtSize}
+                value={values.tShirtSize}
                 placeHolder={translateText(["enterTShirtSize"])}
                 onChange={handleInput}
-                inputName="tshirtSize"
-                error={errors.tshirtSize ?? ""}
+                inputName="tShirtSize"
+                error={errors.tShirtSize ?? ""}
                 componentStyle={{
                   flex: 1
                 }}
