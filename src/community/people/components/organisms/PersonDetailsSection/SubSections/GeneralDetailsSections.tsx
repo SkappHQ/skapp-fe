@@ -1,16 +1,7 @@
-import {
-  Grid2 as Grid,
-  Stack,
-  type Theme,
-  useTheme
-} from "@mui/material";
+import { Grid2 as Grid, Stack, type Theme, useTheme } from "@mui/material";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import {
-  forwardRef,
-  useImperativeHandle,
-  useMemo
-} from "react";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
 
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
@@ -22,6 +13,7 @@ import {
   NAME_MAX_CHARACTER_LENGTH,
   PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH
 } from "~community/people/constants/configs";
+import useGeneralDetailsFormHandlers from "~community/people/hooks/useGeneralDetailsFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { L3GeneralDetailsType } from "~community/people/types/PeopleTypes";
@@ -33,7 +25,6 @@ import {
 import { employeeGeneralDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
-import useGeneralDetailsFormHandlers from "~community/people/hooks/useGeneralDetailsFormHandlers";
 
 interface Props {
   isManager?: boolean;

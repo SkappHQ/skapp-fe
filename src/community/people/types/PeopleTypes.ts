@@ -84,6 +84,7 @@ export interface L3ContactDetailsType {
 }
 
 export interface L3FamilyDetailsType {
+  familyMemberId?: number;
   firstName?: string;
   lastName?: string;
   gender?: GenderEnum;

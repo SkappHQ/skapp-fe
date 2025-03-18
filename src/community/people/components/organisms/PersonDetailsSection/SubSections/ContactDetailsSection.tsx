@@ -1,6 +1,6 @@
 import { Grid2 as Grid } from "@mui/material";
 import { useFormik } from "formik";
-import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
 
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import InputField from "~community/common/components/molecules/InputField/InputField";
@@ -29,10 +29,6 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
   );
 
   const { employee } = usePeopleStore((state) => state);
-
-  useEffect(() => {
-    console.log("employee", employee);
-  }, [employee]);
 
   const initialValues = useMemo<L3ContactDetailsType>(
     () => employee?.personal?.contact as L3ContactDetailsType,
