@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -255,8 +255,12 @@ const PeopleTable: FC<Props> = ({
             )}
           </Stack>
         ),
-        jobTitle: employee?.jobLevel,
-        email: employee?.email,
+        jobTitle: (
+          <Typography sx={{ wordBreak: "break-all" }} variant="body2">
+            {employee?.jobLevel}
+          </Typography>
+        ),
+        email: <Typography variant="body2">{employee?.email}</Typography>,
         team:
           employee?.teams?.length === 0 ? (
             <>-</>
