@@ -67,7 +67,7 @@ const defaultEmployee: L1EmployeeType = {
       employeeNumber: "",
       email: "",
       employmentAllocation: undefined,
-      teams: undefined,
+      teamIds: undefined,
       primarySupervisor: undefined,
       secondarySupervisor: undefined,
       joinedDate: undefined,
@@ -92,9 +92,8 @@ const defaultEmployee: L1EmployeeType = {
     eSignRole: undefined
   },
   common: {
-    image: "",
-    accountStatus: undefined,
-    thumbnail: ""
+    authPic: "",
+    accountStatus: undefined
   }
 };
 

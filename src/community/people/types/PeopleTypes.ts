@@ -53,9 +53,8 @@ export interface L2SystemPermissionsType {
 }
 
 export interface L2CommonDetailsType {
-  image?: string;
+  authPic?: string;
   accountStatus?: AccountStatusTypes;
-  thumbnail?: string;
 }
 
 //L3 Types
@@ -127,19 +126,19 @@ export interface L3EmploymentDetailsType {
   employeeNumber?: string;
   email: string;
   employmentAllocation?: EmploymentAllocationTypes;
-  teams?: number[];
+  teamIds?: number[];
   primarySupervisor?: L4ManagerType;
   secondarySupervisor?: L4ManagerType;
-  joinedDate?: Date;
-  probationStartDate?: Date;
-  probationEndDate?: Date;
+  joinedDate?: string;
+  probationStartDate?: string;
+  probationEndDate?: string;
   workTimeZone?: string;
 }
 
 export interface L3CareerProgressionDetailsType {
   employmentType?: EmploymentTypes;
-  jobFamily?: number;
-  jobTitle?: number;
+  jobFamilyId?: number;
+  jobTitleId?: number;
   startDate?: string;
   endDate?: string;
   isCurrentEmployment?: boolean;
