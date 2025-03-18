@@ -216,7 +216,7 @@
     "tabTitle": "Leave Configuration | Skapp",
     "CustomLeaveAllocationsSectionTitle": "Custom leave allocations",
     "CustomLeaveAllocationsSectionSearchBarPlaceholder": "Search with employee name",
-    "CustomLeaveAllocationsSectionBtn": "Add allocation",
+    "CustomLeaveAllocationsSectionBtn": "Add custom allocation",
     "leaveEntitlementSectionBtn": "Add entitlements",
     "emptyEntitlementsTableDescription": "No entitlements have been added yet. Once you add entitlements, they will be displayed here.",
     "tableHeaderOne": "NAME",
