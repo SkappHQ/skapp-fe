@@ -21,7 +21,7 @@ const isDeepEqual = (obj1: any, obj2: any): boolean => {
   return true;
 };
 
-const useObjectComparison = (): boolean => {
+const useFormChangeDetector = (): boolean => {
   const [hasChanged, setHasChanged] = useState(false);
   const { employee, initialEmployee, setHasFormChanges } = usePeopleStore(
     (state) => state
@@ -43,4 +43,4 @@ const useObjectComparison = (): boolean => {
   return hasChanged;
 };
 
-export default useObjectComparison;
+export default useFormChangeDetector;

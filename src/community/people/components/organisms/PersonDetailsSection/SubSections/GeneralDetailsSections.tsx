@@ -234,7 +234,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               <DropdownList
                 inputName="gender"
                 label={translateText(["gender"])}
-                value={values.gender}
+                value={values.gender ?? ""}
                 placeholder={translateText(["selectGender"])}
                 onChange={handleChange}
                 error={errors.gender ?? ""}
@@ -303,8 +303,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 inputName="nationality"
                 label={translateText(["nationality"])}
                 value={{
-                  label: values.nationality as string,
-                  value: values.nationality as string
+                  label: values.nationality  ?? "",
+                  value: values.nationality ?? ""
                 }}
                 placeholder={translateText(["selectNationality"])}
                 onChange={handleNationalitySelect}
@@ -363,7 +363,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               <DropdownList
                 inputName="maritalStatus"
                 label={translateText(["maritalStatus"])}
-                value={values.maritalStatus}
+                value={values.maritalStatus ?? ""}
                 placeholder={translateText(["selectMaritalStatus"])}
                 onChange={handleChange}
                 error={errors.maritalStatus ?? ""}

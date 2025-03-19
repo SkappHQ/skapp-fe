@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import useObjectComparison from "~community/people/hooks/useObjectComparison";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   EditPeopleFormTypes,
@@ -22,7 +22,7 @@ interface Props {
 const EmergencyDetailsForm = ({ formType, setFormType }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
-  const hasChanged = useObjectComparison();
+  const hasChanged = useFormChangeDetector();
 
   const { stepperValue } = usePeopleStore((state) => state);
 

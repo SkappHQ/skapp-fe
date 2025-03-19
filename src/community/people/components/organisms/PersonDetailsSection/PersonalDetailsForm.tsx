@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import useObjectComparison from "~community/people/hooks/useObjectComparison";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   EditPeopleFormTypes,
@@ -29,10 +29,11 @@ const PersonalDetailsForm = ({ formType, setFormType }: Props) => {
   const socialMediaDetailsRef = useRef<FormMethods | null>(null);
   const healthAndOtherDetailsRef = useRef<FormMethods | null>(null);
 
-  const { stepperValue, setStepperValue } = usePeopleStore((state) => state);
+  const { stepperValue, setStepperValue, setEmployee, employee } =
+    usePeopleStore((state) => state);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const hasChanged = useObjectComparison();
+  const hasChanged = useFormChangeDetector();
 
   const onSave = async () => {
     const generalFormErrors = await generalDetailsRef?.current?.validateForm();
@@ -64,6 +65,7 @@ const PersonalDetailsForm = ({ formType, setFormType }: Props) => {
       healthAndOtherDetailsRef?.current?.submitForm();
       setFormType(stepperValue);
       setIsModalOpen(false);
+      setEmployee(employee);
       // Mutate the data
     } else {
       setStepperValue(formType);

@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 
 import { useGetEmployeeById } from "~community/people/api/PeopleApi";
-import { usePeopleStore } from "~community/people/store/store";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
@@ -19,10 +18,6 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
   );
 
   const { data: employee } = useGetEmployeeById(employeeId);
-
-  const { isUnSavedModalOpen, setIsUnSavedModalOpen } = usePeopleStore(
-    (state) => state
-  );
 
   return (
     <>
