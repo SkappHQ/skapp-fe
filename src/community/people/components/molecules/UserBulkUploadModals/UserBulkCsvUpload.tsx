@@ -46,11 +46,11 @@ const UserBulkCsvUpload: FC<Props> = ({
   const {
     ongoingQuickSetup,
     setQuickSetupModalType,
-    setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup
   } = useCommonEnterpriseStore((state) => ({
     ongoingQuickSetup: state.ongoingQuickSetup,
     setQuickSetupModalType: state.setQuickSetupModalType,
-    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
   const [, setAttachmentError] = useState(false);
@@ -101,7 +101,7 @@ const UserBulkCsvUpload: FC<Props> = ({
         setPopupType(DirectoryModalTypes.NONE);
         if (ongoingQuickSetup.INVITE_EMPLOYEES) {
           setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-          setStopAllOngoingQuickSetup();
+          stopAllOngoingQuickSetup();
         }
         setToastMessage({
           toastType: ToastType.SUCCESS,

@@ -16,7 +16,6 @@ import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
 import { TeamModelTypes, TeamType } from "~community/people/types/TeamTypes";
-import { HighlightDefineTeamsBtn } from "~enterprise/common/constants/DefineTeamsFlow";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -53,10 +52,7 @@ const TeamsTable: FC<Props> = ({
     ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
-  const { destroyDriverObj } = useProductTour({
-    steps: HighlightDefineTeamsBtn
-  });
-
+  const { destroyDriverObj } = useProductTour();
   const columns = [
     { field: "teamName", headerName: translateText(["nameHeader"]) },
     { field: "supervisors", headerName: translateText(["supervisorHeader"]) },

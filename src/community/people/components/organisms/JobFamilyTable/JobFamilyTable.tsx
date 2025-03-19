@@ -18,8 +18,8 @@ import {
   handleJobFamilyDeleteBtnClick,
   handleJobFamilyEditBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobFamilyTableUtils";
-import { HighlightAddJobFamiliesBtn } from "~enterprise/common/constants/DefineJobFamiliesFlow";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import styles from "./styles";
 
@@ -41,9 +41,7 @@ const JobFamilyTable: FC<Props> = ({
 
   const { isPeopleAdmin } = useSessionData();
 
-  const { destroyDriverObj } = useProductTour({
-    steps: HighlightAddJobFamiliesBtn
-  });
+  const { destroyDriverObj } = useProductTour();
 
   const {
     setCurrentEditingJobFamily,
@@ -53,6 +51,10 @@ const JobFamilyTable: FC<Props> = ({
     setCurrentEditingJobFamily: state.setCurrentEditingJobFamily,
     setCurrentDeletingJobFamily: state.setCurrentDeletingJobFamily,
     setJobFamilyModalType: state.setJobFamilyModalType
+  }));
+
+  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
   const transformToTableRows = () => {
@@ -135,6 +137,7 @@ const JobFamilyTable: FC<Props> = ({
   return (
     <Box sx={classes.wrapper}>
       <Table
+        shouldEmptyTableScreenBtnBlink={ongoingQuickSetup.DEFINE_JOB_FAMILIES}
         tableHeaders={tableHeaders}
         tableRows={transformToTableRows()}
         tableHeaderRowStyles={classes.tableHeadStyles}

@@ -23,7 +23,6 @@ import {
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
 import { getFormattedDate } from "~community/people/utils/holidayUtils/commonUtils";
-import { HighlightAddHolidayBtnGroup } from "~enterprise/common/constants/SetupHolidayFlow";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -54,8 +53,13 @@ const HolidayTable: FC<Props> = ({
 
   const { isPeopleAdmin } = useSessionData();
 
+  const { destroyDriverObj } = useProductTour();
+
   const { setIsHolidayModalOpen, setHolidayModalType } = usePeopleStore(
-    (state) => state
+    (state) => ({
+      setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+      setHolidayModalType: state.setHolidayModalType
+    })
   );
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
@@ -246,10 +250,6 @@ const HolidayTable: FC<Props> = ({
 
     return holidayData?.length === 0;
   }, [holidayData]);
-
-  const { destroyDriverObj } = useProductTour({
-    steps: HighlightAddHolidayBtnGroup
-  });
 
   const AddHolidayButtonClick = () => {
     setHolidayModalType(holidayModalTypes.ADD_CALENDAR);
