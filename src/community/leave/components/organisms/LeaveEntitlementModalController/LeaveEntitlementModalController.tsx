@@ -46,12 +46,21 @@ const LeaveEntitlementModalController: FC = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setLeaveEntitlementModalType(LeaveEntitlementModelTypes.NONE);
+
+    if (
+      leaveEntitlementModalType ===
+      LeaveEntitlementModelTypes.BULK_UPLOAD_SUMMARY
+    ) {
+      setErrorLog(null);
+    }
+  };
+
   return (
     <ModalController
       isModalOpen={isLeaveEntitlementModalOpen}
-      handleCloseModal={() =>
-        setLeaveEntitlementModalType(LeaveEntitlementModelTypes.NONE)
-      }
+      handleCloseModal={handleCloseModal}
       modalTitle={getModalTitle()}
       isClosable={
         LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION !==
@@ -78,7 +87,6 @@ const LeaveEntitlementModalController: FC = () => {
           <LeaveEntitlementBulkUploadSummary
             leaveTypes={leaveTypes}
             errorLog={errorLog}
-            setErrorLog={setErrorLog}
           />
         )}
       </>
