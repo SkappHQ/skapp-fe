@@ -34,8 +34,6 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
       async (error) => {
         if (
           error?.response?.data?.results?.[0]?.messageKey ===
-            COMMON_ERROR_TOKEN_EXPIRED ||
-          error?.response?.data?.results?.[0]?.messageKey ===
             COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
           error?.response?.data?.results?.[0]?.messageKey ===
             COMMON_ERROR_USER_VERSION_MISMATCH
@@ -51,6 +49,13 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
             redirect: true,
             callbackUrl: "/system-update"
           });
+        }
+
+        if (
+          error?.response?.data?.results?.[0]?.messageKey ===
+          COMMON_ERROR_TOKEN_EXPIRED
+        ) {
+          await signOut();
         }
 
         if (error?.response?.status === 401) {
