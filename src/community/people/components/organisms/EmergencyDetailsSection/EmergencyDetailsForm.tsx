@@ -24,7 +24,8 @@ const EmergencyDetailsForm = ({ formType, setFormType }: Props) => {
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const hasChanged = useFormChangeDetector();
 
-  const { stepperValue } = usePeopleStore((state) => state);
+  const { stepperValue, setEmployee, employee, setStepperValue } =
+    usePeopleStore((state) => state);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -45,8 +46,13 @@ const EmergencyDetailsForm = ({ formType, setFormType }: Props) => {
     if (primaryContactDetailsIsValid && secondaryContactDetailsIsValid) {
       primaryContactDetailsRef?.current?.submitForm();
       secondaryContactDetailsRef?.current?.submitForm();
+      setFormType(stepperValue);
+      setIsModalOpen(false);
+      setEmployee(employee);
       // Mutate the data
     } else {
+      setStepperValue(formType);
+      setIsModalOpen(false);
       scrollToFirstError(theme);
     }
   };

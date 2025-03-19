@@ -186,7 +186,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <DropdownList
             inputName="gender"
             label={translateText(["gender"])}
-            value={values.gender}
+            value={values.gender ?? ""}
             placeholder={translateText(["selectGender"])}
             onChange={handleChange}
             error={errors.gender ?? ""}
@@ -204,7 +204,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <DropdownList
             inputName="relationship"
             label={translateText(["relationship"])}
-            value={values.relationship}
+            value={values.relationship ?? ""}
             placeholder={translateText(["selectRelationship"])}
             onChange={handleChange}
             error={errors.relationship ?? ""}
@@ -282,10 +282,8 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
 
         {!employee.personal.family?.length ? null : (
           <PeopleFormTable
-            data={formatTableData(
-              employee.personal.family as L3FamilyDetailsType[]
-            )}
-            actionsNeeded={true && !isInputsDisabled}
+            data={formatTableData(employee.personal.family)}
+            actionsNeeded={!isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}

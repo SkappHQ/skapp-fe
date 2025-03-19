@@ -208,12 +208,8 @@ export interface PeopleSliceTypes
     Store,
     | "employee"
     | "initialEmployee"
-    | "hasFormChanges"
-    | "isUnSavedModalOpen"
     | "stepperValue"
     | "setStepperValue"
-    | "setIsUnSavedModalOpen"
-    | "setHasFormChanges"
     | "setEmployee"
     | "setPersonalDetails"
     | "setEmergencyDetails"

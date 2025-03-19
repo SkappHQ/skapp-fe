@@ -246,8 +246,6 @@ interface actionsTypes {
   setEmploymentDetails: (employment: L2EmploymentFormDetailsType) => void;
   setSystemPermissions: (systemPermissions: L2SystemPermissionsType) => void;
   setCommonDetails: (common: L2CommonDetailsType) => void;
-  setHasFormChanges: (hasFormChanges: boolean) => void;
-  setIsUnSavedModalOpen: (status: boolean) => void;
   setStepperValue: (stepperValue: EditPeopleFormTypes) => void;
 }
 
@@ -371,7 +369,5 @@ export interface Store extends actionsTypes {
   //people slice
   employee: L1EmployeeType;
   initialEmployee: L1EmployeeType;
-  hasFormChanges: boolean;
-  isUnSavedModalOpen: boolean;
   stepperValue: EditPeopleFormTypes;
 }

@@ -23,13 +23,10 @@ const isDeepEqual = (obj1: any, obj2: any): boolean => {
 
 const useFormChangeDetector = (): boolean => {
   const [hasChanged, setHasChanged] = useState(false);
-  const { employee, initialEmployee, setHasFormChanges } = usePeopleStore(
-    (state) => state
-  );
+  const { employee, initialEmployee } = usePeopleStore((state) => state);
 
   useEffect(() => {
     if (!employee || !initialEmployee) {
-      setHasFormChanges(false);
       setHasChanged(false);
       return;
     }
@@ -37,8 +34,7 @@ const useFormChangeDetector = (): boolean => {
     const objectsHasChanged = !isDeepEqual(employee, initialEmployee);
 
     setHasChanged(objectsHasChanged);
-    setHasFormChanges(objectsHasChanged);
-  }, [employee, initialEmployee, setHasFormChanges]);
+  }, [employee, initialEmployee]);
 
   return hasChanged;
 };

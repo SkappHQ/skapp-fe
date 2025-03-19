@@ -62,40 +62,24 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
 
     const handleInput = async (e: SelectChangeEvent) => {
       const { name, value } = e.target;
+
       if (
         (name === "allergies" || name === "dietaryRestrictions") &&
-        isValidNamePattern(value)
+        !isValidNamePattern(value)
       ) {
-        await setFieldValue(name, value);
-        setFieldError(name, "");
-        setPersonalDetails({
-          general: employee?.personal?.general,
-          healthAndOther: {
-            ...employee?.personal?.healthAndOther,
-            [name]: value
-          }
-        });
-      } else if (name === "tShirtSize") {
-        await setFieldValue(name, value);
-        setFieldError(name, "");
-        setPersonalDetails({
-          general: employee?.personal?.general,
-          healthAndOther: {
-            ...employee?.personal?.healthAndOther,
-            [name]: value
-          }
-        });
-      } else if (name === "bloodGroup") {
-        await setFieldValue(name, value);
-        setFieldError(name, "");
-        setPersonalDetails({
-          general: employee?.personal?.general,
-          healthAndOther: {
-            ...employee?.personal?.healthAndOther,
-            [name]: value as BloodGroupTypes
-          }
-        });
+        return;
       }
+
+      await setFieldValue(name, value);
+      setFieldError(name, "");
+
+      setPersonalDetails({
+        general: employee?.personal?.general,
+        healthAndOther: {
+          ...employee?.personal?.healthAndOther,
+          [name]: name === "bloodGroup" ? (value as BloodGroupTypes) : value
+        }
+      });
     };
 
     return (
@@ -123,7 +107,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
               <DropdownList
                 inputName="bloodGroup"
                 label={translateText(["bloodGroup"])}
-                value={values.bloodGroup}
+                value={values.bloodGroup ?? ""}
                 placeholder={translateText(["selectBloodGroup"])}
                 onChange={handleChange}
                 onInput={handleInput}
