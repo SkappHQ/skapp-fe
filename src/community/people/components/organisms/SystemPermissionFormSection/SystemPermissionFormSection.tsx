@@ -1,16 +1,14 @@
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import { appModes } from "~community/common/constants/configs";
-import { systemPermissionFormTestId } from "~community/common/constants/testIds";
 import {
-  ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
 import useSessionData from "~community/common/hooks/useSessionData";
@@ -20,14 +18,13 @@ import {
   useGetAllowedGrantablePermissions,
   useGetSuperAdminCount
 } from "~community/configurations/api/userRolesApi";
-import { Role } from "~community/people/enums/PeopleEnums";
 import { usePeopleStore } from "~community/people/store/store";
-import { EditPeopleFormStatus } from "~community/people/types/PeopleEditTypes";
 import { L2SystemPermissionsType } from "~community/people/types/PeopleTypes";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
+import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import PeopleFormSectionWrapper from "../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 import SystemCredentials from "../SystemCredentials/SystemCredentials";
 import styles from "./styles";
@@ -91,20 +88,13 @@ const SystemPermissionFormSection = ({
     isEsignatureModuleEnabled
   } = useSessionData();
 
-  const initialValues: L2SystemPermissionsType = {
-    isSuperAdmin: employee?.systemPermissions?.isSuperAdmin || false,
-    peopleRole: employee?.systemPermissions?.peopleRole || Role.PEOPLE_EMPLOYEE,
-    leaveRole: employee?.systemPermissions?.leaveRole || Role.LEAVE_EMPLOYEE,
-    attendanceRole:
-      employee?.systemPermissions?.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
-    eSignRole: employee?.systemPermissions?.eSignRole || Role.ESIGN_EMPLOYEE
-  };
+  const initialValues = useMemo<L2SystemPermissionsType>(
+    () => employee?.systemPermissions as L2SystemPermissionsType,
+    [employee]
+  );
 
   const { values, setFieldValue } = useFormik({
     initialValues,
-    // onSubmit:
-    // (values: L2SystemPermissionsType) =>
-    //   handleSystemPermissionFormSubmit({ values, setUserRoles }),
     onSubmit: () => {},
     validateOnChange: false
   });
@@ -122,53 +112,7 @@ const SystemPermissionFormSection = ({
     }
   }, [environment]);
 
-  // useEffect(() => {
-  //   if (updateEmployeeStatus === EditPeopleFormStatus.TRIGGERED) {
-  //     void handleNextBtnClick({
-  //       isUpdate,
-  //       systemPermissionsText,
-  //       employee,
-  //       setToastMessage,
-  //       superAdminCount,
-  //       setModalDescription,
-  //       setOpenModal,
-  //       values,
-  //       setUpdateEmployeeStatus,
-  //       onNext
-  //     });
-  //   }
-  // }, [updateEmployeeStatus]);
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     handleAddNewResourceSuccess({
-  //       setToastMessage,
-  //       resetEmployeeData,
-  //       router,
-  //       translateText: commonText
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSuccess]);
-
-  const handlePrimaryBtnClick = () => {
-    // if (isLeaveModuleEnabled) {
-    //   handleNextBtnClick({
-    //     isUpdate,
-    //     systemPermissionsText,
-    //     employee,
-    //     setToastMessage,
-    //     superAdminCount,
-    //     setModalDescription,
-    //     setOpenModal,
-    //     values,
-    //     setUpdateEmployeeStatus,
-    //     onNext
-    //   });
-    // } else {
-    //   onSave();
-    // }
-  };
+  const handlePrimaryBtnClick = () => {};
 
   const handleCustomChange = ({
     name,
@@ -176,47 +120,9 @@ const SystemPermissionFormSection = ({
   }: {
     name: keyof L2SystemPermissionsType;
     value: any;
-  }) => {
-    // environment === appModes.ENTERPRISE
-    //   ? handleCustomChangeEnterprise({
-    //       name,
-    //       value,
-    //       setToastMessage,
-    //       roleLimitationText,
-    //       roleLimits,
-    //       setFieldValue,
-    //       setUserRoles
-    //     })
-    //   : handleCustomChangeDefault({
-    //       name,
-    //       value,
-    //       setFieldValue,
-    //       setUserRoles
-    //     });
-  };
+  }) => {};
 
-  const handleSuperAdminChange = (event: ChangeEvent<HTMLInputElement>) => {
-    // if (environment === appModes.ENTERPRISE) {
-    //   handleSuperAdminChangeEnterprise({
-    //     event,
-    //     setFieldValue,
-    //     setUserRoles,
-    //     setToastMessage,
-    //     roleLimitationText,
-    //     roleLimits,
-    //     superAdminCount
-    //   });
-    // } else {
-    //   handleSuperAdminChangeDefault({
-    //     event,
-    //     setFieldValue,
-    //     setUserRoles,
-    //     setToastMessage,
-    //     roleLimitationText,
-    //     superAdminCount
-    //   });
-    // }
-  };
+  const handleSuperAdminChange = (event: ChangeEvent<HTMLInputElement>) => {};
 
   return (
     <PeopleFormSectionWrapper
@@ -229,7 +135,7 @@ const SystemPermissionFormSection = ({
         <SwitchRow
           label={translateText(["superAdmin"])}
           disabled={isProfileView || isInputsDisabled}
-          checked={values.isSuperAdmin}
+          checked={values.isSuperAdmin as boolean}
           onChange={handleSuperAdminChange}
           wrapperStyles={classes.switchRowWrapper}
           icon={!isInputsDisabled ? IconName.SUPER_ADMIN_ICON : undefined}
@@ -319,48 +225,11 @@ const SystemPermissionFormSection = ({
           !isInputsDisabled &&
           environment === appModes.COMMUNITY && <SystemCredentials />}
 
-        {!isInputsDisabled && (
-          <Stack sx={classes.btnWrapper}>
-            <Button
-              isFullWidth={false}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
-              buttonStyle={ButtonStyle.TERTIARY}
-              size={ButtonSizes.LARGE}
-              label={isUpdate ? commonText(["cancel"]) : commonText(["back"])}
-              startIcon={isUpdate ? <></> : IconName.LEFT_ARROW_ICON}
-              endIcon={isUpdate ? IconName.CLOSE_ICON : <></>}
-              onClick={onBack}
-              dataTestId={
-                isUpdate
-                  ? systemPermissionFormTestId.buttons.cancelBtn
-                  : systemPermissionFormTestId.buttons.backBtn
-              }
-            />
-            <Button
-              isLoading={isLoading}
-              isFullWidth={false}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
-              buttonStyle={ButtonStyle.PRIMARY}
-              size={ButtonSizes.LARGE}
-              label={
-                !isLeaveModuleEnabled || isUpdate
-                  ? commonText(["saveDetails"])
-                  : commonText(["next"])
-              }
-              endIcon={
-                !isLeaveModuleEnabled || isUpdate
-                  ? IconName.SAVE_ICON
-                  : IconName.RIGHT_ARROW_ICON
-              }
-              onClick={handlePrimaryBtnClick}
-              dataTestId={
-                !isLeaveModuleEnabled || isUpdate
-                  ? systemPermissionFormTestId.buttons.saveDetailsBtn
-                  : systemPermissionFormTestId.buttons.nextBtn
-              }
-            />
-          </Stack>
-        )}
+        <EditSectionButtonWrapper
+          onCancelClick={() => {}}
+          onSaveClick={() => {}}
+          isSaveDisabled={false}
+        />
         <Modal
           isModalOpen={openModal}
           title="Alert"

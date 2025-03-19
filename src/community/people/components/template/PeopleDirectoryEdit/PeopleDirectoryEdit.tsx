@@ -14,9 +14,7 @@ const PeopleDirectoryEdit = () => {
       isBackButtonVisible
       isDividerVisible={false}
     >
-      <>
-        <DirectoryEditSectionWrapper employeeId={Number(id)} />
-      </>
+      <DirectoryEditSectionWrapper employeeId={Number(id)} />
     </ContentLayout>
   );
 };

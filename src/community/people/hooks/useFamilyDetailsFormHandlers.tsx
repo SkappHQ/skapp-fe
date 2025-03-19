@@ -126,12 +126,12 @@ const useFamilyDetailsFormHandlers = () => {
     if (rowEdited > -1) {
       const member = employee?.personal?.family?.[rowEdited];
       if (member) {
-        void setFieldValue("firstName", member.firstName || "");
-        void setFieldValue("lastName", member.lastName || "");
-        void setFieldValue("gender", member.gender || "");
-        void setFieldValue("relationship", member.relationship || "");
-        void setFieldValue("parentName", member.parentName || "");
-        void setFieldValue("dateOfBirth", member.dateOfBirth || "");
+        setFieldValue("firstName", member.firstName ?? "");
+        setFieldValue("lastName", member.lastName ?? "");
+        setFieldValue("gender", member.gender ?? "");
+        setFieldValue("relationship", member.relationship ?? "");
+        setFieldValue("parentName", member.parentName ?? "");
+        setFieldValue("dateOfBirth", member.dateOfBirth ?? "");
 
         if (member.dateOfBirth) {
           setSelectedDob(DateTime.fromJSDate(new Date(member.dateOfBirth)));
