@@ -16,11 +16,11 @@ export const styles = (theme: Theme) => ({
     },
     "&::-webkit-scrollbar-thumb": {
       backgroundColor: "rgba(0,0,0,.2)",
-      borderRadius: "2px"
+      borderRadius: "0.125rem"
     }
   },
   boxContainer: {
-    maxWidth: "900px"
+    maxWidth: "56.25rem"
   },
   emptyScreenContainer: {
     display: "flex",
@@ -28,16 +28,14 @@ export const styles = (theme: Theme) => ({
     backgroundColor: theme.palette.grey[100]
   },
   paginationContainer: {
-    pb: "0.938rem",
+    p: "0.938rem",
     backgroundColor: theme.palette.grey[100],
     borderRadius: "0rem 0rem 0.5rem 0.5rem"
   },
   divider: {
-    color: theme.palette.grey.A100,
-    my: "1rem"
+    color: theme.palette.grey.A100
   },
   buttonStyles: {
-    mr: "1rem",
     p: "0.75rem 1rem"
   },
   headerStack: {

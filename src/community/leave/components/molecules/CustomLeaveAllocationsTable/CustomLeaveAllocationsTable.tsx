@@ -305,6 +305,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
         tableContainerStyles={tableContainerStyles(theme)}
         tableRowStyles={tableRowStyles(theme)}
         currentPage={currentPage}
+        isPaginationEnabled={(customLeaveData?.items?.length ?? 0) > 0}
         onPaginationChange={(_, value) => setCurrentPage(value - 1)}
         totalPages={customLeaveData?.totalPages || 1}
         isLoading={isLoading}
