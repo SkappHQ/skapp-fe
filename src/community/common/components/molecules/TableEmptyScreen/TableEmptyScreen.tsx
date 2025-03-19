@@ -44,7 +44,7 @@ const TableEmptyScreen: FC<Props> = ({
 
   return (
     <Stack sx={mergeSx([classes.wrapper, wrapperStyles])}>
-      <Stack component="div" role="status" sx={classes.container}>
+      <Stack component="div" role="output" sx={classes.container}>
         <Icon name={IconName.MAGNIFYING_GLASS_ICON} />
         {title && (
           <Typography variant="h3" sx={mergeSx([classes.title, titleStyles])}>
