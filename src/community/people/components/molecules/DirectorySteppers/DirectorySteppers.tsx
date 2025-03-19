@@ -1,10 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-import AreYouSureModal from "~community/common/components/molecules/AreYouSureModal/AreYouSureModal";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
-import Modal from "~community/common/components/organisms/Modal/Modal";
-import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   AdminTypes,
