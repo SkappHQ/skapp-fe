@@ -1,7 +1,10 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
+import AreYouSureModal from "~community/common/components/molecules/AreYouSureModal/AreYouSureModal";
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
+import Modal from "~community/common/components/organisms/Modal/Modal";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   AdminTypes,
@@ -9,6 +12,7 @@ import {
   ManagerTypes
 } from "~community/common/types/AuthTypes";
 import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { usePeopleStore } from "~community/people/store/store";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
@@ -23,6 +27,8 @@ const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
   const translateText = useTranslator("peopleModule");
 
   const { data: session } = useSession();
+
+  const { setStepperValue } = usePeopleStore((state) => state);
 
   const { data: supervisedData, isLoading: supervisorDataLoading } =
     useGetSupervisedByMe(Number(employeeId));
@@ -82,7 +88,7 @@ const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
   ];
 
   const handleStepClick = (step: EditPeopleFormTypes) => {
-    setFormType(step);
+    setStepperValue(step);
   };
 
   return (

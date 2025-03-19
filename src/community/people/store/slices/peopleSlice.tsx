@@ -1,4 +1,5 @@
 import { SetType } from "~community/common/types/CommonTypes";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import {
   L1EmployeeType,
   L2CommonDetailsType,
@@ -100,6 +101,15 @@ const defaultEmployee: L1EmployeeType = {
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
+  hasFormChanges: false,
+  isUnSavedModalOpen: false,
+  stepperValue: EditPeopleFormTypes.personal,
+  setStepperValue: (stepperValue: EditPeopleFormTypes) =>
+    set(() => ({ stepperValue })),
+  setIsUnSavedModalOpen: (isUnSavedModalOpen: boolean) =>
+    set(() => ({ isUnSavedModalOpen })),
+  setHasFormChanges: (hasFormChanges: boolean) =>
+    set(() => ({ hasFormChanges })),
   setEmployee: (employee: L1EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
   setPersonalDetails: (personal: L2PersonalDetailsType) =>

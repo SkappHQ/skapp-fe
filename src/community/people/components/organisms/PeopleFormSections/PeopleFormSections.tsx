@@ -1,7 +1,4 @@
-import {
-  EditPeopleFormStatus,
-  EditPeopleFormTypes
-} from "~community/people/types/PeopleEditTypes";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 import EmergencyDetailsForm from "../EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "../EmploymentFormSection/EmploymentDetailsForm";
@@ -10,15 +7,19 @@ import SystemPermissionFormSection from "../SystemPermissionFormSection/SystemPe
 
 interface Props {
   formType: EditPeopleFormTypes;
-  editFormStatus?: EditPeopleFormStatus;
+  setFormType: (formType: EditPeopleFormTypes) => void;
 }
-const PeopleFormSections = ({ formType }: Props) => {
+const PeopleFormSections = ({ formType, setFormType }: Props) => {
   const getSections = () => {
     switch (formType) {
       case EditPeopleFormTypes.personal:
-        return <PersonalDetailsForm />;
+        return (
+          <PersonalDetailsForm formType={formType} setFormType={setFormType} />
+        );
       case EditPeopleFormTypes.emergency:
-        return <EmergencyDetailsForm />;
+        return (
+          <EmergencyDetailsForm formType={formType} setFormType={setFormType} />
+        );
       case EditPeopleFormTypes.employment:
         return <EmploymentDetailsForm />;
       case EditPeopleFormTypes.permission:

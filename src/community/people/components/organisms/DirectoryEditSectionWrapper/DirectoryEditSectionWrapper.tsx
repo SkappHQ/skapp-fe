@@ -2,12 +2,12 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 
 import { useGetEmployeeById } from "~community/people/api/PeopleApi";
+import { usePeopleStore } from "~community/people/store/store";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
-import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import PeopleFormSections from "../PeopleFormSections/PeopleFormSections";
-import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
   employeeId: number;
@@ -20,6 +20,10 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
 
   const { data: employee } = useGetEmployeeById(employeeId);
 
+  const { isUnSavedModalOpen, setIsUnSavedModalOpen } = usePeopleStore(
+    (state) => state
+  );
+
   return (
     <>
       <Box sx={{ mt: "0.75rem" }}>
@@ -30,11 +34,7 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
         formType={formType}
         setFormType={setFormType}
       />
-      <PeopleFormSections formType={formType} />
-      {/* <EditSectionButtonWrapper
-        onCancelClick={() => {}}
-        onSaveClick={() => {}}
-      /> */}
+      <PeopleFormSections formType={formType} setFormType={setFormType} />
     </>
   );
 };
