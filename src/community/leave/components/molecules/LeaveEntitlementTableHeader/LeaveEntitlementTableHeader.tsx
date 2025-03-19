@@ -26,8 +26,8 @@ const LeaveEntitlementTableHeader: FC<Props> = ({ headerLabels }) => {
       <Box sx={classes.stickyColumn}>
         <Typography variant="body2">{translateText(["name"])}</Typography>
       </Box>
-      {headerLabels?.map((header, index) => (
-        <Box key={index} sx={classes.headerCell}>
+      {headerLabels?.map((header) => (
+        <Box key={header} sx={classes.headerCell}>
           <Typography variant="body2">{header?.toUpperCase()}</Typography>
         </Box>
       ))}
