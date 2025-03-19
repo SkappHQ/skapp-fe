@@ -21,7 +21,8 @@ import {
 
 export const useGetLeaveEntitlements = (
   selectedYear: string,
-  page: number
+  page: number,
+  searchKeyword: string
 ): UseQueryResult<LeaveEntitlementResponseType> => {
   const pageParams = {
     page: page - 1,
@@ -29,6 +30,7 @@ export const useGetLeaveEntitlements = (
     year: selectedYear,
     isExport: false,
     sortOrder: SortOrderTypes.ASC,
+    searchKeyword: searchKeyword,
     sortKey: SortKeyTypes.CREATED_DATE
   };
 
