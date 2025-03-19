@@ -277,6 +277,8 @@
     "deleteFailDescription": "Failed to delete custom allocation.",
     "updateSuccessTitle": "Allocation Updated",
     "updateSuccessDescription": "Custom allocation has been updated successfully.",
+    "updateErrorTitle": "Allocation Update Failed",
+    "updateErrorDescription": "The number of days cannot be lower than the used days.",
     "validToDate": "Select expiration date",
     "validFromDate": "Select effective date",
     "halfDayChip": " Half Day",
