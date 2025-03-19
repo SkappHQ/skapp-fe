@@ -14,8 +14,8 @@ const LeaveTypeBreakdownMonthSelectorSkeleton = () => {
     <Stack sx={classes.monthSelectorContainer}>
       <ArrowBackIos sx={classes.iconText} />
       <Stack sx={classes.monthList}>
-        {getAllMonthsAsString().map((month, index) => (
-          <Typography key={index} component="span" sx={classes.iconText}>
+        {getAllMonthsAsString().map((month) => (
+          <Typography key={month} component="span" sx={classes.iconText}>
             {month}
           </Typography>
         ))}

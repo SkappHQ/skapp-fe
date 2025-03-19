@@ -18,13 +18,13 @@ import {
   useGetLeaveTypeBreakdownChartData,
   useGetPendingLeavesData
 } from "~community/leave/api/LeaveDashboard";
+import AvailabilityCalendarWidget from "~community/leave/components/molecules/AvailabilityCalendar/AvailabilityCalendarWidget";
+import AvailableChip from "~community/leave/components/molecules/LeaveDashboardChips/AvailableChip";
+import AwayChip from "~community/leave/components/molecules/LeaveDashboardChips/AwayChip";
+import HolidayChip from "~community/leave/components/molecules/LeaveDashboardChips/HolidayChip";
+import LeaveTypeBreakdownChart from "~community/leave/components/molecules/LeaveUtilizationGraph/LeaveTypeBreakdownChart";
 import { useLeaveStore } from "~community/leave/store/store";
 
-import AvailabilityCalendarWidget from "../../molecules/AvailabilityCalendar/AvailabilityCalendarWidget";
-import AvailableChip from "../../molecules/LeaveDashboardChips/AvailableChip";
-import AwayChip from "../../molecules/LeaveDashboardChips/AwayChip";
-import HolidayChip from "../../molecules/LeaveDashboardChips/HolidayChip";
-import LeaveTypeBreakdownChart from "../../molecules/LeaveUtilizationGraph/LeaveTypeBreakdownChart";
 import styles from "./styles";
 
 const LeaveDashboard = (): JSX.Element => {
@@ -138,7 +138,7 @@ const LeaveDashboard = (): JSX.Element => {
         <Grid sx={{ width: { xs: "100%", md: "32.5%" } }}>
           <AnalyticCard
             title={translateText(["pendingLeaves"]) ?? ""}
-            isExpandable={pendingLeaves?.[0]?.items?.length > 0 ? true : false}
+            isExpandable={pendingLeaves?.[0]?.items?.length > 0}
             onExpand={() => {
               setPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
                 setViewedPendingLeaveCount(pendingLeaves?.[0]?.items?.length),

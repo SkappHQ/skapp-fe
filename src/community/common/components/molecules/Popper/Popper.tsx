@@ -54,16 +54,12 @@ const Popper = ({
   const classes = styles();
 
   const wrapperWidth = useMemo(() => {
-    switch (menuType) {
-      case MenuTypes.SEARCH:
-        return anchorElWidth
-          ? `${anchorElWidth}px`
-          : anchorEl
-            ? `${anchorEl.clientWidth}px`
-            : "auto";
-      default:
-        return undefined;
+    if (menuType === MenuTypes.SEARCH) {
+      if (anchorElWidth) return `${anchorElWidth}px`;
+      if (anchorEl) return `${anchorEl.clientWidth}px`;
+      return "auto";
     }
+    return undefined;
   }, [menuType, anchorElWidth, anchorEl]);
 
   const marginY = useMemo(() => {

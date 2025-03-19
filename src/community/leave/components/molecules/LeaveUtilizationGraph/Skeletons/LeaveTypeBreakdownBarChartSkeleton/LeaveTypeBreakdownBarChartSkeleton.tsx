@@ -19,9 +19,9 @@ const LeaveTypeBreakdownBarChartSkeleton = () => {
           />
         ))}
         <Stack sx={classes.barContainer}>
-          {[...Array(12)].map((_, groupIndex) => (
+          {[...Array(12)].map((value) => (
             <Skeleton
-              key={groupIndex}
+              key={value}
               variant="rectangular"
               sx={classes.barSkeleton}
               animation="wave"
