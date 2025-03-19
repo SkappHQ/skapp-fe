@@ -12,9 +12,9 @@ const LeaveTypeBreakdownBarChartSkeleton = () => {
   return (
     <Stack sx={classes.container}>
       <Stack sx={classes.chartWrapper}>
-        {[...Array(7)].map((_, index) => (
+        {[...Array(7)].map((value, index) => (
           <Box
-            key={index}
+            key={value}
             sx={{ ...classes.gridLine, bottom: `${(index / 6.5) * 100}%` }}
           />
         ))}
