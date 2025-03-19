@@ -18,6 +18,7 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
   const handleTokenRefresh = async () => {
     try {
       await update();
+      queryClient.invalidateQueries();
     } catch (error) {
       console.error("Token refresh failed:", error);
       await signOut({
