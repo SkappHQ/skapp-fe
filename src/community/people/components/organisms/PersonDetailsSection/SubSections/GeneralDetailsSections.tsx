@@ -99,12 +99,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         pageHead={translateText(["head"])}
       >
         <form onSubmit={formik.handleSubmit}>
-          <>
-            <Stack
-              direction="column"
-              sx={{ display: isManager || isAdmin ? "none" : "block" }}
-            >
-              {/* <Stack
+          <Stack
+            direction="column"
+            sx={{ display: isManager || isAdmin ? "none" : "block" }}
+          >
+            {/* <Stack
                 direction="row"
                 alignItems="center"
                 sx={{
@@ -152,237 +151,232 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   </Box>
                 </Box>
               </Stack> */}
-            </Stack>
+          </Stack>
+
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              mb: "2rem"
+            }}
+          >
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["firstName"])}
+                inputType="text"
+                value={values.firstName}
+                placeHolder={translateText(["enterFirstName"])}
+                onChange={handleChange}
+                inputName="firstName"
+                error={errors.firstName ?? ""}
+                componentStyle={{
+                  flex: 1,
+                  mt: "0rem"
+                }}
+                required={!isManager}
+                readOnly={isManager}
+                isDisabled={isInputsDisabled}
+                maxLength={NAME_MAX_CHARACTER_LENGTH}
+                data-testid={generalDetailsSectionTestId.InputFields.firstName}
+                validation-testid={
+                  generalDetailsSectionTestId.InputFields.firstNameValidation
+                }
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["middleName"])}
+                inputType="text"
+                value={values.middleName}
+                placeHolder={
+                  !isManager ? translateText(["enterMiddleName"]) : ""
+                }
+                onChange={handleChange}
+                inputName="middleName"
+                error={errors.middleName ?? ""}
+                componentStyle={{
+                  flex: 1,
+                  mt: "0rem"
+                }}
+                readOnly={isManager}
+                isDisabled={isInputsDisabled}
+                maxLength={NAME_MAX_CHARACTER_LENGTH}
+                data-testid={generalDetailsSectionTestId.InputFields.middleName}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["lastName"])}
+                inputType="text"
+                value={values.lastName}
+                placeHolder={translateText(["enterLastName"])}
+                onChange={handleChange}
+                inputName="lastName"
+                error={errors.lastName ?? ""}
+                componentStyle={{
+                  flex: 1,
+                  mt: "0rem"
+                }}
+                required={!isManager}
+                readOnly={isManager}
+                isDisabled={isInputsDisabled}
+                maxLength={NAME_MAX_CHARACTER_LENGTH}
+                data-testid={generalDetailsSectionTestId.InputFields.lastName}
+                validation-testid={
+                  generalDetailsSectionTestId.InputFields.lastNameValidation
+                }
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <DropdownList
+                inputName="gender"
+                label={translateText(["gender"])}
+                value={values.gender}
+                placeholder={translateText(["selectGender"])}
+                onChange={handleChange}
+                error={errors.gender ?? ""}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                errorFocusOutlineNeeded={false}
+                itemList={GenderList}
+                checkSelected
+                readOnly={isManager}
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "1rem"
+                }}
+              >
+                <InputDate
+                  label={translateText(["birthDate"])}
+                  value={
+                    values?.dateOfBirth
+                      ? DateTime.fromJSDate(values.dateOfBirth)
+                      : undefined
+                  }
+                  onchange={handleDateChange}
+                  placeholder={translateText(["selectBirthDate"])}
+                  error={errors?.dateOfBirth ?? ""}
+                  maxDate={DateTime.fromISO(
+                    new Date()?.toISOString()?.split("T")[0]
+                  )}
+                  componentStyle={{
+                    flex: 1,
+                    mt: "0rem"
+                  }}
+                  inputFormat="dd/MM/yyyy"
+                  disabled={isInputsDisabled}
+                  readOnly={isManager}
+                  selectedDate={selectedDob}
+                  setSelectedDate={setSelectedDob}
+                />
+                <InputField
+                  label={translateText(["age"])}
+                  inputType="text"
+                  value={age}
+                  isDisabled={true}
+                  inputName="age"
+                  componentStyle={{
+                    flex: 0.25,
+                    mt: "0rem"
+                  }}
+                  labelStyles={{
+                    color: theme.palette.grey.A100
+                  }}
+                />
+              </div>
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <DropdownAutocomplete
+                itemList={NationalityList}
+                inputName="nationality"
+                label={translateText(["nationality"])}
+                value={{
+                  label: values.nationality as string,
+                  value: values.nationality as string
+                }}
+                placeholder={translateText(["selectNationality"])}
+                onChange={handleNationalitySelect}
+                error={errors.nationality ?? ""}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                isDisabled={isInputsDisabled}
+                readOnly={isManager}
+              />
+            </Grid>
 
             <Grid
-              container
-              spacing={2}
-              sx={{
-                mb: "2rem"
-              }}
+              size={{ xs: 12, md: 6, xl: 4 }}
+              sx={{ display: isManager ? "none" : "block" }}
             >
-              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-                <InputField
-                  label={translateText(["firstName"])}
-                  inputType="text"
-                  value={values.firstName}
-                  placeHolder={translateText(["enterFirstName"])}
-                  onChange={handleChange}
-                  inputName="firstName"
-                  error={errors.firstName ?? ""}
-                  componentStyle={{
-                    flex: 1,
-                    mt: "0rem"
-                  }}
-                  required={!isManager}
-                  readOnly={isManager}
-                  isDisabled={isInputsDisabled}
-                  maxLength={NAME_MAX_CHARACTER_LENGTH}
-                  data-testid={
-                    generalDetailsSectionTestId.InputFields.firstName
-                  }
-                  validation-testid={
-                    generalDetailsSectionTestId.InputFields.firstNameValidation
-                  }
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-                <InputField
-                  label={translateText(["middleName"])}
-                  inputType="text"
-                  value={values.middleName}
-                  placeHolder={
-                    !isManager ? translateText(["enterMiddleName"]) : ""
-                  }
-                  onChange={handleChange}
-                  inputName="middleName"
-                  error={errors.middleName ?? ""}
-                  componentStyle={{
-                    flex: 1,
-                    mt: "0rem"
-                  }}
-                  readOnly={isManager}
-                  isDisabled={isInputsDisabled}
-                  maxLength={NAME_MAX_CHARACTER_LENGTH}
-                  data-testid={
-                    generalDetailsSectionTestId.InputFields.middleName
-                  }
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-                <InputField
-                  label={translateText(["lastName"])}
-                  inputType="text"
-                  value={values.lastName}
-                  placeHolder={translateText(["enterLastName"])}
-                  onChange={handleChange}
-                  inputName="lastName"
-                  error={errors.lastName ?? ""}
-                  componentStyle={{
-                    flex: 1,
-                    mt: "0rem"
-                  }}
-                  required={!isManager}
-                  readOnly={isManager}
-                  isDisabled={isInputsDisabled}
-                  maxLength={NAME_MAX_CHARACTER_LENGTH}
-                  data-testid={generalDetailsSectionTestId.InputFields.lastName}
-                  validation-testid={
-                    generalDetailsSectionTestId.InputFields.lastNameValidation
-                  }
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-                <DropdownList
-                  inputName="gender"
-                  label={translateText(["gender"])}
-                  value={values.gender}
-                  placeholder={translateText(["selectGender"])}
-                  onChange={handleChange}
-                  error={errors.gender ?? ""}
-                  componentStyle={{
-                    mt: "0rem"
-                  }}
-                  errorFocusOutlineNeeded={false}
-                  itemList={GenderList}
-                  checkSelected
-                  readOnly={isManager}
-                  isDisabled={isInputsDisabled}
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "1rem"
-                  }}
-                >
-                  <InputDate
-                    label={translateText(["birthDate"])}
-                    value={
-                      values?.dateOfBirth
-                        ? DateTime.fromJSDate(values.dateOfBirth)
-                        : undefined
-                    }
-                    onchange={handleDateChange}
-                    placeholder={translateText(["selectBirthDate"])}
-                    error={errors?.dateOfBirth ?? ""}
-                    maxDate={DateTime.fromISO(
-                      new Date()?.toISOString()?.split("T")[0]
-                    )}
-                    componentStyle={{
-                      flex: 1,
-                      mt: "0rem"
-                    }}
-                    inputFormat="dd/MM/yyyy"
-                    disabled={isInputsDisabled}
-                    readOnly={isManager}
-                    selectedDate={selectedDob}
-                    setSelectedDate={setSelectedDob}
-                  />
-                  <InputField
-                    label={translateText(["age"])}
-                    inputType="text"
-                    value={age}
-                    isDisabled={true}
-                    inputName="age"
-                    componentStyle={{
-                      flex: 0.25,
-                      mt: "0rem"
-                    }}
-                    labelStyles={{
-                      color: theme.palette.grey.A100
-                    }}
-                  />
-                </div>
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-                <DropdownAutocomplete
-                  itemList={NationalityList}
-                  inputName="nationality"
-                  label={translateText(["nationality"])}
-                  value={{
-                    label: values.nationality as string,
-                    value: values.nationality as string
-                  }}
-                  placeholder={translateText(["selectNationality"])}
-                  onChange={handleNationalitySelect}
-                  error={errors.nationality ?? ""}
-                  componentStyle={{
-                    mt: "0rem"
-                  }}
-                  isDisabled={isInputsDisabled}
-                  readOnly={isManager}
-                />
-              </Grid>
-
-              <Grid
-                size={{ xs: 12, md: 6, xl: 4 }}
-                sx={{ display: isManager ? "none" : "block" }}
-              >
-                <InputField
-                  label={translateText(["nin"])}
-                  inputType="text"
-                  value={values.nin}
-                  placeHolder={translateText(["enterNIN"])}
-                  onChange={handleChange}
-                  inputName="nin"
-                  error={errors.nin ?? ""}
-                  componentStyle={{
-                    flex: 1
-                  }}
-                  isDisabled={isInputsDisabled}
-                  maxLength={PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH}
-                />
-              </Grid>
-
-              <Grid
-                size={{ xs: 12, md: 6, xl: 4 }}
-                sx={{ display: isManager ? "none" : "block" }}
-              >
-                <InputField
-                  label={translateText(["passportNo"])}
-                  inputType="text"
-                  value={values.passportNumber}
-                  placeHolder={translateText(["enterPassportNo"])}
-                  onChange={handleChange}
-                  inputName="passportNumber"
-                  error={errors.passportNumber ?? ""}
-                  componentStyle={{
-                    flex: 1
-                  }}
-                  isDisabled={isInputsDisabled}
-                  maxLength={PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH}
-                />
-              </Grid>
-              <Grid
-                size={{ xs: 12, md: 6, xl: 4 }}
-                sx={{ display: isManager ? "none" : "block" }}
-              >
-                <DropdownList
-                  inputName="maritalStatus"
-                  label={translateText(["maritalStatus"])}
-                  value={values.maritalStatus}
-                  placeholder={translateText(["selectMaritalStatus"])}
-                  onChange={handleChange}
-                  error={errors.maritalStatus ?? ""}
-                  componentStyle={{
-                    mt: "0rem"
-                  }}
-                  errorFocusOutlineNeeded={false}
-                  itemList={MaritalStatusList}
-                  checkSelected
-                  isDisabled={isInputsDisabled}
-                />
-              </Grid>
+              <InputField
+                label={translateText(["nin"])}
+                inputType="text"
+                value={values.nin}
+                placeHolder={translateText(["enterNIN"])}
+                onChange={handleChange}
+                inputName="nin"
+                error={errors.nin ?? ""}
+                componentStyle={{
+                  flex: 1
+                }}
+                isDisabled={isInputsDisabled}
+                maxLength={PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH}
+              />
             </Grid>
-          </>
+
+            <Grid
+              size={{ xs: 12, md: 6, xl: 4 }}
+              sx={{ display: isManager ? "none" : "block" }}
+            >
+              <InputField
+                label={translateText(["passportNo"])}
+                inputType="text"
+                value={values.passportNumber}
+                placeHolder={translateText(["enterPassportNo"])}
+                onChange={handleChange}
+                inputName="passportNumber"
+                error={errors.passportNumber ?? ""}
+                componentStyle={{
+                  flex: 1
+                }}
+                isDisabled={isInputsDisabled}
+                maxLength={PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH}
+              />
+            </Grid>
+            <Grid
+              size={{ xs: 12, md: 6, xl: 4 }}
+              sx={{ display: isManager ? "none" : "block" }}
+            >
+              <DropdownList
+                inputName="maritalStatus"
+                label={translateText(["maritalStatus"])}
+                value={values.maritalStatus}
+                placeholder={translateText(["selectMaritalStatus"])}
+                onChange={handleChange}
+                error={errors.maritalStatus ?? ""}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                errorFocusOutlineNeeded={false}
+                itemList={MaritalStatusList}
+                checkSelected
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
+          </Grid>
         </form>
       </PeopleFormSectionWrapper>
     );
