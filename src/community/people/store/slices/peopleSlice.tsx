@@ -93,6 +93,7 @@ const defaultEmployee: L1EmployeeType = {
     eSignRole: undefined
   },
   common: {
+    employeeId: "",
     authPic: "",
     accountStatus: undefined
   }

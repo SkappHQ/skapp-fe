@@ -1,17 +1,23 @@
 import { Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import { appModes } from "~community/common/constants/configs";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
+import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
+import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { Role } from "~community/people/enums/PeopleEnums";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
+import { usePeopleStore } from "~community/people/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -42,6 +48,14 @@ const SystemPermissionFormSection = ({
 
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
+  const { employee, initialEmployee, isSaveButtonClicked, setEmployee } =
+    usePeopleStore((state) => state);
+  const { data: supervisedData } = useGetSupervisedByMe(
+    Number(employee.common?.employeeId)
+  );
+  const { data: superAdminCount } = useGetSuperAdminCount();
+  const { setToastMessage } = useToast();
+  const hasChanged = useFormChangeDetector();
 
   const {
     permissions,
@@ -55,6 +69,40 @@ const SystemPermissionFormSection = ({
     isLeaveModuleEnabled,
     isEsignatureModuleEnabled
   } = useSessionData();
+
+  const onSave = () => {
+    if (
+      employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
+      (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
+        initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_MANAGER)
+    ) {
+      if (supervisedData.isPrimaryManager)
+        setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
+      else if (supervisedData.isTeamSuperviso)
+        setModalDescription(translateText(["demoteUserSupervisingTeams"]));
+
+      setOpenModal(true);
+    } else if (
+      employee.systemPermissions?.isSuperAdmin &&
+      initialEmployee.systemPermissions?.isSuperAdmin &&
+      superAdminCount >= MAX_SUPERVISOR_LIMIT
+    ) {
+      setToastMessage({
+        toastType: ToastType.ERROR,
+        title: translateText(["maxSupervisorCountReached"]),
+        description: translateText(["maxSupervisorCountReachedDescription"]),
+        open: true
+      });
+    } else {
+      setEmployee(employee);
+    }
+  };
+
+  useEffect(() => {
+    if (isSaveButtonClicked) {
+      onSave();
+    }
+  }, [isSaveButtonClicked]);
 
   return (
     <PeopleFormSectionWrapper
@@ -76,7 +124,7 @@ const SystemPermissionFormSection = ({
         <Stack sx={classes.dropdownContainer}>
           <DropdownList
             inputName={"peopleRole"}
-            label="People"
+            label={translateText(["people"])}
             itemList={grantablePermission?.people || []}
             value={permissions.peopleRole}
             componentStyle={classes.dropdownListComponentStyles}
@@ -92,7 +140,7 @@ const SystemPermissionFormSection = ({
           {isLeaveModuleEnabled && (
             <DropdownList
               inputName={"leaveRole"}
-              label="Leave"
+              label={translateText(["leave"])}
               itemList={grantablePermission?.leave || []}
               value={permissions.leaveRole}
               checkSelected
@@ -109,7 +157,7 @@ const SystemPermissionFormSection = ({
           {isAttendanceModuleEnabled && (
             <DropdownList
               inputName={"attendanceRole"}
-              label="Attendance"
+              label={translateText(["attendance"])}
               itemList={grantablePermission?.attendance || []}
               value={permissions.attendanceRole}
               componentStyle={classes.dropdownListComponentStyles}
@@ -126,7 +174,7 @@ const SystemPermissionFormSection = ({
           {isEsignatureModuleEnabled && (
             <DropdownList
               inputName={"eSignRole"}
-              label="e-signature"
+              label={translateText(["eSignature"])}
               itemList={grantablePermission?.esign || []}
               value={permissions.eSignRole}
               componentStyle={classes.dropdownListComponentStyles}
@@ -147,13 +195,13 @@ const SystemPermissionFormSection = ({
 
         <EditSectionButtonWrapper
           onCancelClick={() => {}}
-          onSaveClick={() => {}}
-          isSaveDisabled={false}
+          onSaveClick={onSave}
+          isSaveDisabled={!hasChanged}
         />
 
         <Modal
           isModalOpen={openModal}
-          title="Alert"
+          title={translateText(["alert"])}
           onCloseModal={() => {
             setOpenModal(false);
             setModalDescription("");

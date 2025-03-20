@@ -53,6 +53,7 @@ export interface L2SystemPermissionsType {
 }
 
 export interface L2CommonDetailsType {
+  employeeId: string;
   authPic?: string;
   accountStatus?: AccountStatusTypes;
 }
