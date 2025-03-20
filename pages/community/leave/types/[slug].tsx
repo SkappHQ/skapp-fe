@@ -48,7 +48,6 @@ const LeaveType: NextPage = () => {
         throw "routeChange aborted";
       } else {
         resetEditingLeaveType();
-        stopAllOngoingQuickSetup();
       }
     };
 

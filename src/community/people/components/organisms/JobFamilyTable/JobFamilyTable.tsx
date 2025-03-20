@@ -53,9 +53,11 @@ const JobFamilyTable: FC<Props> = ({
     setJobFamilyModalType: state.setJobFamilyModalType
   }));
 
-  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    ongoingQuickSetup: state.ongoingQuickSetup
-  }));
+  const { ongoingQuickSetup, quickSetupCurrentFlowSteps } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      quickSetupCurrentFlowSteps: state.quickSetupCurrentFlowSteps
+    }));
 
   const transformToTableRows = () => {
     return (
@@ -142,7 +144,10 @@ const JobFamilyTable: FC<Props> = ({
             button: "add-job-family-empty-table-screen-button"
           }
         }}
-        shouldEmptyTableScreenBtnBlink={ongoingQuickSetup.DEFINE_JOB_FAMILIES}
+        shouldEmptyTableScreenBtnBlink={
+          ongoingQuickSetup.DEFINE_JOB_FAMILIES &&
+          quickSetupCurrentFlowSteps !== null
+        }
         tableHeaders={tableHeaders}
         tableRows={transformToTableRows()}
         tableHeaderRowStyles={classes.tableHeadStyles}

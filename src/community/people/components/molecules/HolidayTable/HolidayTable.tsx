@@ -64,9 +64,11 @@ const HolidayTable: FC<Props> = ({
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
 
-  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    ongoingQuickSetup: state.ongoingQuickSetup
-  }));
+  const { ongoingQuickSetup, quickSetupCurrentFlowSteps } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      quickSetupCurrentFlowSteps: state.quickSetupCurrentFlowSteps
+    }));
 
   const translateText = useTranslator("peopleModule", "holidays");
 
@@ -311,6 +313,10 @@ const HolidayTable: FC<Props> = ({
                   styles: { mr: "1rem" }
                 }
               : null
+          }
+          shouldEmptyTableScreenBtnBlink={
+            ongoingQuickSetup.SETUP_HOLIDAYS &&
+            quickSetupCurrentFlowSteps !== null
           }
           handleAllRowsCheck={handleAllCheckBoxClick}
           tableCheckboxStyles={{
