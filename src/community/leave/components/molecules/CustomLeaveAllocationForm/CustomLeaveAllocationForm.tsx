@@ -287,7 +287,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
         setIsPopperOpen={setIsPopperOpen}
         isPopperOpen={isPopperOpen}
         labelStyles={{ mb: "0.25rem" }}
-        componentStyles={{ my: 2 }}
+        componentStyles={{ mb: 2 }}
         onChange={(e) => setSearchTerm(e.target.value)}
         value={searchTerm}
         error={
