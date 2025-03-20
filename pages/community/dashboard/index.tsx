@@ -2,7 +2,7 @@ import { sendGTMEvent } from "@next/third-parties/google";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import AttendanceDashboard from "~community/attendance/components/organisms/AttendanceDashboard/AttendanceDashboard";
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
@@ -26,6 +26,7 @@ import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsVa
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
+import FiveStepLoader from "~enterprise/common/components/molecules/FiveStepLoader/FiveStepLoader";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -45,21 +46,32 @@ const Dashboard: NextPage = () => {
 
   const { setToastMessage } = useToast();
 
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    if (showLoader) {
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+        setToastMessage({
+          toastType: ToastType.SUCCESS,
+          title: billingTranslateText(["subscriptionSuccessToastTitle"]),
+          description: billingTranslateText([
+            "subscriptionSuccessToastDescription"
+          ]),
+          open: true
+        });
+      }, 9000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [billingTranslateText, setToastMessage, showLoader]);
+
   useEffect(() => {
     if (query.isFirstTime) {
       !isBelow900 &&
         setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
     }
-    if (query.status === "success") {
-      setToastMessage({
-        toastType: ToastType.SUCCESS,
-        title: billingTranslateText(["subscriptionSuccessToastTitle"]),
-        description: billingTranslateText([
-          "subscriptionSuccessToastDescription"
-        ]),
-        open: true
-      });
-    } else if (query.status === "cancel") {
+    if (query.status === "cancel") {
       setToastMessage({
         toastType: ToastType.ERROR,
         title: billingTranslateText(["subscriptionErrorToastTitle"]),
@@ -145,27 +157,31 @@ const Dashboard: NextPage = () => {
   const userRoles: RoleTypes[] = (data?.user?.roles || []) as RoleTypes[];
   const visibleTabs = getVisibleTabs(userRoles);
 
-  return (
-    <ContentLayout
-      pageHead={translateText(["pageHead"])}
-      title={
-        data?.user && visibleTabs.length === 0 ? "" : translateText(["title"])
-      }
-      isDividerVisible={data?.user && visibleTabs.length === 0 ? false : true}
-    >
-      <>
-        {data?.user && visibleTabs.length === 0 ? (
-          <div>
-            <LeaveAllocationSummary />
-          </div>
-        ) : (
-          <TabsContainer tabs={visibleTabs} />
-        )}
+  if (showLoader && query.status === "success") {
+    return <FiveStepLoader />;
+  } else {
+    return (
+      <ContentLayout
+        pageHead={translateText(["pageHead"])}
+        title={
+          data?.user && visibleTabs.length === 0 ? "" : translateText(["title"])
+        }
+        isDividerVisible={data?.user && visibleTabs.length === 0 ? false : true}
+      >
+        <>
+          {data?.user && visibleTabs.length === 0 ? (
+            <div>
+              <LeaveAllocationSummary />
+            </div>
+          ) : (
+            <TabsContainer tabs={visibleTabs} />
+          )}
 
-        <VersionUpgradeModal />
-      </>
-    </ContentLayout>
-  );
+          <VersionUpgradeModal />
+        </>
+      </ContentLayout>
+    );
+  }
 };
 
 export default Dashboard;
