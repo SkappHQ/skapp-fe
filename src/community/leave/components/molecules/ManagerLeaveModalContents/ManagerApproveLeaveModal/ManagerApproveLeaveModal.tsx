@@ -145,7 +145,7 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
       if (environment === appModes.COMMUNITY) {
         refetch();
       } else if (environment === appModes.ENTERPRISE) {
-        downloadS3File(attachment);
+        downloadS3File({ filePath: attachment });
       }
     }
   }, [attachment]);
