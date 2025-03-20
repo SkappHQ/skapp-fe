@@ -40,6 +40,7 @@ export const useGetLeaveEntitlements = (
       }),
     select: (data) => {
       const results = data.data.results ?? [];
+
       return results[0];
     }
   });

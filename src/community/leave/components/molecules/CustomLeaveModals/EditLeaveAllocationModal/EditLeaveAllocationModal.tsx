@@ -1,22 +1,22 @@
 import { Box } from "@mui/material";
 import { useFormik } from "formik";
-import React, { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import { LEAVE_ERROR_NUMBER_OF_DAYS_CANNOT_BE_LESS_THAN_USED_DAYS } from "~community/common/constants/errorMessageKeys";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useUpdateLeaveAllocation } from "~community/leave/api/LeaveApi";
+import CustomLeaveAllocationForm from "~community/leave/components/molecules/CustomLeaveAllocationForm/CustomLeaveAllocationForm";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
   CustomLeaveAllocationModalTypes,
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
-
-import CustomLeaveAllocationForm from "../../CustomLeaveAllocationForm/CustomLeaveAllocationForm";
 
 interface Props {
   setCurrentLeaveAllocationFormData: Dispatch<
@@ -39,9 +39,13 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     setCustomLeaveAllocationModalType,
     setIsLeaveAllocationModalOpen,
     currentEditingLeaveAllocation
-  } = useLeaveStore();
+  } = useLeaveStore((state) => ({
+    setCustomLeaveAllocationModalType: state.setCustomLeaveAllocationModalType,
+    setIsLeaveAllocationModalOpen: state.setIsLeaveAllocationModalOpen,
+    currentEditingLeaveAllocation: state.currentEditingLeaveAllocation
+  }));
 
-  const onUpdateSuccess = useCallback(() => {
+  const onUpdateSuccess = () => {
     setIsLeaveAllocationModalOpen(false);
     setCustomLeaveAllocationModalType(
       CustomLeaveAllocationModalTypes.EDIT_LEAVE_ALLOCATION
@@ -53,32 +57,46 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
       description: translateText(["updateSuccessDescription"]),
       isIcon: true
     });
-  }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
+  };
 
-  const { mutate, isPending } = useUpdateLeaveAllocation();
+  const onUpdateError = (error: string) => {
+    if (error === LEAVE_ERROR_NUMBER_OF_DAYS_CANNOT_BE_LESS_THAN_USED_DAYS) {
+      setToastMessage({
+        open: true,
+        toastType: "error",
+        title: translateText(["updateErrorTitle"]),
+        description: translateText(["updateErrorDescription"]),
+        isIcon: true
+      });
+    }
+  };
 
-  const onSubmit = useCallback(
-    (values: CustomLeaveAllocationType) => {
-      mutate(
-        {
-          employeeId: currentEditingLeaveAllocation?.employeeId ?? 0,
-          typeId: Number(values.typeId),
-          numberOfDaysOff: Number(values.numberOfDaysOff),
-          entitlementId: currentEditingLeaveAllocation?.entitlementId
-            ? Number(currentEditingLeaveAllocation.entitlementId)
-            : 0,
-          validFromDate: values?.validFromDate,
-          validToDate: values?.validToDate
-        },
-        {
-          onSuccess: onUpdateSuccess
-        }
-      );
-    },
-    [mutate, currentEditingLeaveAllocation, onUpdateSuccess]
-  );
+  const {
+    mutate: updateLeaveAllocation,
+    isPending: isLeaveAllocationUpdatePending
+  } = useUpdateLeaveAllocation(onUpdateSuccess, onUpdateError);
 
-  const form = useFormik({
+  const onSubmit = (values: CustomLeaveAllocationType) => {
+    updateLeaveAllocation({
+      employeeId: currentEditingLeaveAllocation?.employeeId ?? 0,
+      typeId: Number(values.typeId),
+      numberOfDaysOff: Number(values.numberOfDaysOff),
+      entitlementId: currentEditingLeaveAllocation?.entitlementId
+        ? Number(currentEditingLeaveAllocation.entitlementId)
+        : 0,
+      validFromDate: values?.validFromDate,
+      validToDate: values?.validToDate
+    });
+  };
+
+  const {
+    values,
+    errors,
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    isSubmitting
+  } = useFormik({
     initialValues: {
       assignedTo:
         initialValues.assignedTo || currentEditingLeaveAllocation?.assignedTo,
@@ -104,26 +122,19 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     onSubmit,
     enableReinitialize: true
   });
-  const {
-    values,
-    errors,
-    handleSubmit,
-    setFieldValue,
-    setFieldError,
-    isSubmitting
-  } = form;
 
   useEffect(() => {
     setCurrentLeaveAllocationFormData(values);
   }, [values, setCurrentLeaveAllocationFormData]);
 
   const isDeleteDisabled = currentEditingLeaveAllocation?.totalDaysUsed != 0;
+
   const isSaveDisabled =
     !values.employeeId ||
     !values.typeId ||
     !values.numberOfDaysOff ||
     isSubmitting ||
-    isPending;
+    isLeaveAllocationUpdatePending;
 
   return (
     <>

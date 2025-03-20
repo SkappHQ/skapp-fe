@@ -10,6 +10,7 @@ import { AxiosResponse } from "axios";
 
 import {
   CustomLeavesTypes,
+  ErrorResponse,
   SortKeyTypes,
   SortOrderTypes
 } from "~community/common/types/CommonTypes";
@@ -90,21 +91,24 @@ export const useDeleteLeaveAllocation = (): UseMutationResult<
   });
 };
 
-export const useUpdateLeaveAllocation = (): UseMutationResult<
-  unknown,
-  unknown,
-  CustomLeaveAllocationType,
-  unknown
-> => {
+export const useUpdateLeaveAllocation = (
+  onSuccess: () => void,
+  onError: (error: string) => void
+): UseMutationResult<unknown, unknown, CustomLeaveAllocationType, unknown> => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: updateCustomLeave,
     onSuccess: () => {
+      onSuccess();
       queryClient
         .invalidateQueries({
           queryKey: leaveQueryKeys.CUSTOM_LEAVES()
         })
         .catch(rejects);
+    },
+    onError: (error: ErrorResponse) => {
+      onError(error.response.data.results[0].messageKey ?? "");
     }
   });
 };
