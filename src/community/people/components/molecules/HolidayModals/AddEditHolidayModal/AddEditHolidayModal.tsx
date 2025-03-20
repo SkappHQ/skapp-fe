@@ -247,7 +247,8 @@ const AddEditHolidayModal = ({
   };
 
   const handleDuration = (selectedDuration: string): void => {
-    setDuration && setDuration(selectedDuration);
+    setDuration(selectedDuration);
+
     if (selectedDuration === translateText(["FULLDAY"])) {
       setHolidayDetails({
         ...newHolidayDetails,

@@ -38,9 +38,12 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
 
   const { data: leaveTypesData } = useGetLeaveTypes();
 
-  const { selectedYear, setLeaveEntitlementModalType } = useLeaveStore(
-    (state) => state
-  );
+  const { leaveEntitlementTableSelectedYear, setLeaveEntitlementModalType } =
+    useLeaveStore((state) => ({
+      leaveEntitlementTableSelectedYear:
+        state.leaveEntitlementTableSelectedYear,
+      setLeaveEntitlementModalType: state.setLeaveEntitlementModalType
+    }));
 
   const [customError, setCustomError] = useState<string>("");
   const [isValid, setValid] = useState<boolean>(false);
@@ -71,7 +74,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
         type: toastType,
         setToastMessage,
         translateText,
-        selectedYear,
+        selectedYear: leaveEntitlementTableSelectedYear,
         noOfRecords: errorLogs?.bulkStatusSummary?.successCount
       });
     }
@@ -101,7 +104,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
 
   const handleUploadBtnClick = () => {
     leaveEntitlementBulkUploadMutate({
-      year: selectedYear,
+      year: leaveEntitlementTableSelectedYear,
       entitlementDetailsList: leaveEntitlementBulk
     });
   };
@@ -121,7 +124,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
           setAttachment({
             acceptedFiles,
             leaveTypes,
-            selectedYear,
+            selectedYear: leaveEntitlementTableSelectedYear,
             setCustomError,
             setValid,
             setLeaveEntitlementBulk,
