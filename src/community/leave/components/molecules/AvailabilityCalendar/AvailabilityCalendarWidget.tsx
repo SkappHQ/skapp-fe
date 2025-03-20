@@ -28,7 +28,7 @@ interface AvailabilityCalendarWidgetProps {
   teams: string | number;
 }
 
-export const AvailabilityCalendarWidget = ({
+const AvailabilityCalendarWidget = ({
   teams
 }: AvailabilityCalendarWidgetProps): JSX.Element => {
   const { data: timeConfigData } = useDefaultCapacity();
