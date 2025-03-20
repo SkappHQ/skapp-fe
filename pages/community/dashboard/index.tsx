@@ -60,7 +60,7 @@ const Dashboard: NextPage = () => {
           ]),
           open: true
         });
-      }, 9000);
+      }, 4000);
 
       return () => clearTimeout(timer);
     }
