@@ -16,6 +16,11 @@ import TablePagination from "./TablePagination";
 import styles from "./styles";
 
 interface Props {
+  id?: {
+    emptyScreen?: {
+      button?: string;
+    };
+  };
   tableHeaders: any[];
   tableRows: any[];
   actionRowOneLeftButton?: JSX.Element;
@@ -75,6 +80,7 @@ interface Props {
 }
 
 const Table: FC<Props> = ({
+  id,
   tableHeaders,
   tableRows,
   actionRowOneLeftButton,
@@ -199,6 +205,7 @@ const Table: FC<Props> = ({
             actionColumnIconBtnLeft={actionColumnIconBtnLeft}
             actionColumnIconBtnRight={actionColumnIconBtnRight}
             emptyScreenButtonType={emptyScreenButtonType}
+            id={id}
             shouldEmptyTableScreenBtnBlink={shouldEmptyTableScreenBtnBlink}
           />
         </MuiTable>

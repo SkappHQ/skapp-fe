@@ -137,6 +137,11 @@ const JobFamilyTable: FC<Props> = ({
   return (
     <Box sx={classes.wrapper}>
       <Table
+        id={{
+          emptyScreen: {
+            button: "add-job-family-empty-table-screen-button"
+          }
+        }}
         shouldEmptyTableScreenBtnBlink={ongoingQuickSetup.DEFINE_JOB_FAMILIES}
         tableHeaders={tableHeaders}
         tableRows={transformToTableRows()}

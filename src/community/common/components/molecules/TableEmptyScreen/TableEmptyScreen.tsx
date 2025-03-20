@@ -12,6 +12,11 @@ import { mergeSx } from "~community/common/utils/commonUtil";
 import styles from "./styles";
 
 interface Props {
+  id?: {
+    emptyScreen?: {
+      button?: string;
+    };
+  };
   title?: string;
   description?: string;
   addNewEmployeeAction?: boolean;
@@ -27,6 +32,7 @@ interface Props {
   shouldEmptyTableScreenBtnBlink?: boolean;
 }
 const TableEmptyScreen: FC<Props> = ({
+  id,
   title,
   description,
   titleStyles,
@@ -60,7 +66,7 @@ const TableEmptyScreen: FC<Props> = ({
         </Typography>
         {buttonText && (
           <Button
-            id="table-empty-screen-button"
+            id={id?.emptyScreen?.button}
             shouldBlink={shouldEmptyTableScreenBtnBlink}
             label={buttonText as string}
             endIcon={<Icon name={IconName.ADD_ICON} />}

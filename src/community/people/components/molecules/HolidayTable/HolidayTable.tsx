@@ -264,6 +264,11 @@ const HolidayTable: FC<Props> = ({
     <Stack sx={classes.wrapper}>
       <Box sx={classes.container} ref={listInnerRef}>
         <Table
+          id={{
+            emptyScreen: {
+              button: "add-holidays-empty-table-screen-button"
+            }
+          }}
           tableHeaders={tableHeaders}
           tableRows={transformToTableRows()}
           actionRowOneLeftButton={

@@ -195,6 +195,11 @@ const TeamsTable: FC<Props> = ({
   return (
     <Box sx={classes.tableWrapper}>
       <Table
+        id={{
+          emptyScreen: {
+            button: "add-teams-empty-table-screen-button"
+          }
+        }}
         tableHeaders={tableHeaders}
         tableRows={transformToTableRows()}
         tableHeaderRowStyles={classes.tableHead}
