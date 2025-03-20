@@ -46,6 +46,7 @@ import {
   TransferMemberFormType
 } from "./JobFamilyTypes";
 import { DirectoryModalTypes } from "./ModalTypes";
+import { EditPeopleFormTypes } from "./PeopleEditTypes";
 import {
   L1EmployeeType,
   L2CommonDetailsType,
@@ -62,7 +63,6 @@ import {
   TeamNamesType,
   TeamType
 } from "./TeamTypes";
-import { EditPeopleFormTypes } from "./PeopleEditTypes";
 
 interface actionsTypes {
   // teamSlice
@@ -246,7 +246,10 @@ interface actionsTypes {
   setEmploymentDetails: (employment: L2EmploymentFormDetailsType) => void;
   setSystemPermissions: (systemPermissions: L2SystemPermissionsType) => void;
   setCommonDetails: (common: L2CommonDetailsType) => void;
-  setStepperValue: (stepperValue: EditPeopleFormTypes) => void;
+  setNextStep: (step: EditPeopleFormTypes) => void;
+  setCurrentStep: (step: EditPeopleFormTypes) => void;
+  setIsUnsavedChangesModalOpen: (status: boolean) => void;
+  setIsSaveButtonClicked: (status: boolean) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -369,5 +372,8 @@ export interface Store extends actionsTypes {
   //people slice
   employee: L1EmployeeType;
   initialEmployee: L1EmployeeType;
-  stepperValue: EditPeopleFormTypes;
+  nextStep: EditPeopleFormTypes;
+  currentStep: EditPeopleFormTypes;
+  isUnsavedChangesModalOpen: boolean;
+  isSaveButtonClicked: boolean;
 }

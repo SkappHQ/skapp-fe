@@ -14,18 +14,16 @@ import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
   employeeId: number;
-  formType: EditPeopleFormTypes;
-  setFormType: (formType: EditPeopleFormTypes) => void;
 }
 
-const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
+const DirectorySteppers = ({ employeeId }: Props) => {
   const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
   const [isTimeTabVisible, setIsTimeTabVisible] = useState(false);
   const translateText = useTranslator("peopleModule");
 
   const { data: session } = useSession();
 
-  const { setStepperValue } = usePeopleStore((state) => state);
+  const { setNextStep, currentStep } = usePeopleStore((state) => state);
 
   const { data: supervisedData, isLoading: supervisorDataLoading } =
     useGetSupervisedByMe(Number(employeeId));
@@ -85,12 +83,12 @@ const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
   ];
 
   const handleStepClick = (step: EditPeopleFormTypes) => {
-    setStepperValue(step);
+    setNextStep(step);
   };
 
   return (
     <BoxStepper
-      activeStep={formType}
+      activeStep={currentStep}
       steps={steps}
       onStepClick={(step) => handleStepClick(step as EditPeopleFormTypes)}
       useStringIdentifier

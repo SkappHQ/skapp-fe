@@ -101,9 +101,17 @@ const defaultEmployee: L1EmployeeType = {
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
-  stepperValue: EditPeopleFormTypes.personal,
-  setStepperValue: (stepperValue: EditPeopleFormTypes) =>
-    set(() => ({ stepperValue })),
+  nextStep: EditPeopleFormTypes.personal,
+  currentStep: EditPeopleFormTypes.personal,
+  isUnsavedChangesModalOpen: false,
+  isSaveButtonClicked: false,
+  setNextStep: (nextStep: EditPeopleFormTypes) => set(() => ({ nextStep })),
+  setCurrentStep: (currentStep: EditPeopleFormTypes) =>
+    set(() => ({ currentStep })),
+  setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) =>
+    set(() => ({ isUnsavedChangesModalOpen })),
+  setIsSaveButtonClicked: (isSaveButtonClicked: boolean) =>
+    set(() => ({ isSaveButtonClicked })),
   setEmployee: (employee: L1EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
   setPersonalDetails: (personal: L2PersonalDetailsType) =>

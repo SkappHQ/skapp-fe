@@ -1,33 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  EditPeopleFormTypes,
-  FormMethods
-} from "~community/people/types/PeopleEditTypes";
+import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
-import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import PrimaryContactDetailsSection from "./SubSections/PrimaryContactDetailsSection";
 import SecondaryContactDetailsSection from "./SubSections/SecondaryContactDetailsSection";
 
-interface Props {
-  formType: EditPeopleFormTypes;
-  setFormType: (formType: EditPeopleFormTypes) => void;
-}
-
-const EmergencyDetailsForm = ({ formType, setFormType }: Props) => {
+const EmergencyDetailsForm = () => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const hasChanged = useFormChangeDetector();
 
-  const { stepperValue, setEmployee, employee, setStepperValue } =
-    usePeopleStore((state) => state);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const {
+    nextStep,
+    currentStep,
+    setCurrentStep,
+    setNextStep,
+    setEmployee,
+    employee,
+    isSaveButtonClicked,
+    setIsUnsavedChangesModalOpen,
+    setIsSaveButtonClicked
+  } = usePeopleStore((state) => state);
 
   const onSave = async () => {
     const primaryContactDetailsErrors =
@@ -46,24 +44,24 @@ const EmergencyDetailsForm = ({ formType, setFormType }: Props) => {
     if (primaryContactDetailsIsValid && secondaryContactDetailsIsValid) {
       primaryContactDetailsRef?.current?.submitForm();
       secondaryContactDetailsRef?.current?.submitForm();
-      setFormType(stepperValue);
-      setIsModalOpen(false);
+      setCurrentStep(nextStep);
+      setIsUnsavedChangesModalOpen(false);
       setEmployee(employee);
+      setIsSaveButtonClicked(false);
       // Mutate the data
     } else {
-      setStepperValue(formType);
-      setIsModalOpen(false);
+      setNextStep(currentStep);
+      setIsUnsavedChangesModalOpen(false);
       scrollToFirstError(theme);
+      setIsSaveButtonClicked(false);
     }
   };
 
   useEffect(() => {
-    if (stepperValue !== formType && hasChanged) {
-      setIsModalOpen(true);
-    } else {
-      setFormType(stepperValue);
+    if (isSaveButtonClicked) {
+      onSave();
     }
-  }, [stepperValue, hasChanged, formType, setFormType]);
+  }, [isSaveButtonClicked]);
 
   return (
     <>
@@ -73,11 +71,6 @@ const EmergencyDetailsForm = ({ formType, setFormType }: Props) => {
         onCancelClick={() => {}}
         onSaveClick={onSave}
         isSaveDisabled={!hasChanged}
-      />{" "}
-      <UnsavedChangesModal
-        isOpen={isModalOpen}
-        onDiscard={() => {}}
-        onSave={onSave}
       />
     </>
   );

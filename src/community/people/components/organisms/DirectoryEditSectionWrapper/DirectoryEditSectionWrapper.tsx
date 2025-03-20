@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect } from "react";
 
 import { useGetEmployeeById } from "~community/people/api/PeopleApi";
-import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
+import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import PeopleFormSections from "../PeopleFormSections/PeopleFormSections";
 
 interface Props {
@@ -13,23 +15,48 @@ interface Props {
 }
 
 const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
-  const [formType, setFormType] = useState<EditPeopleFormTypes>(
-    EditPeopleFormTypes.personal
-  );
-
   const { data: employee } = useGetEmployeeById(employeeId);
+
+  const {
+    setIsSaveButtonClicked,
+    isUnsavedChangesModalOpen,
+    currentStep,
+    nextStep,
+    setIsUnsavedChangesModalOpen,
+    setCurrentStep
+  } = usePeopleStore((state) => state);
+
+  const hasChanged = useFormChangeDetector();
+
+  useEffect(() => {
+    if (hasChanged && currentStep !== nextStep) {
+      setIsUnsavedChangesModalOpen(true);
+    } else {
+      setCurrentStep(nextStep);
+    }
+  }, [
+    currentStep,
+    hasChanged,
+    nextStep,
+    setCurrentStep,
+    setIsSaveButtonClicked,
+    setIsUnsavedChangesModalOpen
+  ]);
 
   return (
     <>
       <Box sx={{ mt: "0.75rem" }}>
         {employee && <EditInfoCard selectedEmployee={employee} />}
       </Box>
-      <DirectorySteppers
-        employeeId={Number(employeeId)}
-        formType={formType}
-        setFormType={setFormType}
+      <DirectorySteppers employeeId={Number(employeeId)} />
+      <PeopleFormSections />
+      <UnsavedChangesModal
+        isOpen={isUnsavedChangesModalOpen}
+        onDiscard={() => {}}
+        onSave={() => {
+          setIsSaveButtonClicked(true);
+        }}
       />
-      <PeopleFormSections formType={formType} setFormType={setFormType} />
     </>
   );
 };

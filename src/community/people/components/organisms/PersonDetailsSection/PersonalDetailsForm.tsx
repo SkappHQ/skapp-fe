@@ -1,16 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  EditPeopleFormTypes,
-  FormMethods
-} from "~community/people/types/PeopleEditTypes";
+import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
-import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import ContactDetailsSection from "./SubSections/ContactDetailsSection";
 import EducationalDetailsSection from "./SubSections/EducationalDetailsSection";
 import FamilyDetailsSection from "./SubSections/FamilyDetailsSection";
@@ -18,21 +14,24 @@ import GeneralDetailsSection from "./SubSections/GeneralDetailsSections";
 import HealthAndOtherDetailsSection from "./SubSections/HealthAndOtherDetailsSection";
 import SocialMediaDetailsSection from "./SubSections/SocialMediaDetailsSection";
 
-interface Props {
-  formType: EditPeopleFormTypes;
-  setFormType: (formType: EditPeopleFormTypes) => void;
-}
-
-const PersonalDetailsForm = ({ formType, setFormType }: Props) => {
+const PersonalDetailsForm = () => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
   const socialMediaDetailsRef = useRef<FormMethods | null>(null);
   const healthAndOtherDetailsRef = useRef<FormMethods | null>(null);
 
-  const { stepperValue, setStepperValue, setEmployee, employee } =
-    usePeopleStore((state) => state);
+  const {
+    nextStep,
+    currentStep,
+    setCurrentStep,
+    setNextStep,
+    setEmployee,
+    employee,
+    isSaveButtonClicked,
+    setIsUnsavedChangesModalOpen,
+    setIsSaveButtonClicked
+  } = usePeopleStore((state) => state);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const hasChanged = useFormChangeDetector();
 
   const onSave = async () => {
@@ -63,24 +62,24 @@ const PersonalDetailsForm = ({ formType, setFormType }: Props) => {
       contactDetailsRef?.current?.submitForm();
       socialMediaDetailsRef?.current?.submitForm();
       healthAndOtherDetailsRef?.current?.submitForm();
-      setFormType(stepperValue);
-      setIsModalOpen(false);
+      setCurrentStep(nextStep);
+      setIsUnsavedChangesModalOpen(false);
       setEmployee(employee);
+      setIsSaveButtonClicked(false);
       // Mutate the data
     } else {
-      setStepperValue(formType);
-      setIsModalOpen(false);
+      setNextStep(currentStep);
+      setIsUnsavedChangesModalOpen(false);
       scrollToFirstError(theme);
+      setIsSaveButtonClicked(false);
     }
   };
 
   useEffect(() => {
-    if (stepperValue !== formType && hasChanged) {
-      setIsModalOpen(true);
-    } else {
-      setFormType(stepperValue);
+    if (isSaveButtonClicked) {
+      onSave();
     }
-  }, [stepperValue, hasChanged, formType, setFormType]);
+  }, [isSaveButtonClicked]);
 
   return (
     <>
@@ -95,11 +94,6 @@ const PersonalDetailsForm = ({ formType, setFormType }: Props) => {
         onCancelClick={() => {}}
         onSaveClick={onSave}
         isSaveDisabled={!hasChanged}
-      />
-      <UnsavedChangesModal
-        isOpen={isModalOpen}
-        onDiscard={() => {}}
-        onSave={onSave}
       />
     </>
   );
