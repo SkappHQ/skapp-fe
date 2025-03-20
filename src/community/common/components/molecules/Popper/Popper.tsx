@@ -16,6 +16,7 @@ import styles from "./styles";
 
 type Props = {
   anchorEl: null | HTMLElement;
+  anchorElWidth?: number;
   handleClose?: (e: MouseEvent | TouchEvent) => void;
   position: PopperAndTooltipPositionTypes;
   menuType?: MenuTypes;
@@ -34,6 +35,7 @@ type Props = {
 
 const Popper = ({
   anchorEl,
+  anchorElWidth,
   handleClose = () => {},
   position,
   menuType,
@@ -52,13 +54,13 @@ const Popper = ({
   const classes = styles();
 
   const wrapperWidth = useMemo(() => {
-    switch (menuType) {
-      case MenuTypes.SEARCH:
-        return anchorEl ? `${anchorEl.clientWidth}px` : "auto";
-      default:
-        return undefined;
+    if (menuType === MenuTypes.SEARCH) {
+      if (anchorElWidth) return `${anchorElWidth}px`;
+      if (anchorEl) return `${anchorEl.clientWidth}px`;
+      return "auto";
     }
-  }, [menuType, anchorEl]);
+    return undefined;
+  }, [menuType, anchorElWidth, anchorEl]);
 
   const marginY = useMemo(() => {
     switch (menuType) {
