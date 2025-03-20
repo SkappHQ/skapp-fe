@@ -80,7 +80,7 @@ const Avatar: FC<AvatarProps> = ({
 
   useEffect(() => {
     if (src || !s3FileUrls[src]) {
-      downloadS3File(src);
+      downloadS3File({ filePath: src, isProfilePic: true });
     }
   }, [src]);
 

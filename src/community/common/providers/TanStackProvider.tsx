@@ -1,7 +1,4 @@
-import {
-  QueryClient,
-  QueryClientProvider
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
 import { ReactNode, useEffect, useState } from "react";
 

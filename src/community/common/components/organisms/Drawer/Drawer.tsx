@@ -129,7 +129,7 @@ const Drawer = (): JSX.Element => {
 
   useEffect(() => {
     if (organizationLogo || !s3FileUrls[organizationLogo]) {
-      downloadS3File(organizationLogo);
+      downloadS3File({ filePath: organizationLogo });
     }
   }, [organizationLogo]);
 

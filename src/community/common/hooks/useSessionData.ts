@@ -10,7 +10,7 @@ import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { TierEnum } from "~enterprise/common/enums/Common";
 
 const useSessionData = () => {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status: sessionStatus } = useSession();
 
   const isFreeTier = useMemo(
     () => sessionData?.user?.tier === TierEnum.FREE,
@@ -76,6 +76,7 @@ const useSessionData = () => {
     isSuperAdmin,
     isPeopleAdmin,
     isEmployee,
+    sessionStatus,
     isPeopleManager
   };
 };

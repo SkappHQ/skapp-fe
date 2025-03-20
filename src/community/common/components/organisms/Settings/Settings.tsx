@@ -9,7 +9,6 @@ import {
   useTheme
 } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { FC } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
@@ -57,8 +56,6 @@ const SettingsSection: FC = () => {
   const { globalLoginMethod } = useCommonEnterpriseStore((state) => ({
     globalLoginMethod: state.globalLoginMethod
   }));
-
-  const router = useRouter();
 
   return (
     <>
@@ -207,7 +204,9 @@ const SettingsSection: FC = () => {
         </>
       )}
 
-      {isEnterpriseMode && <ManageSubscriptionSettingsSection />}
+      {isEnterpriseMode && session?.user?.roles?.includes(ROLE_SUPER_ADMIN) && (
+        <ManageSubscriptionSettingsSection />
+      )}
     </>
   );
 };

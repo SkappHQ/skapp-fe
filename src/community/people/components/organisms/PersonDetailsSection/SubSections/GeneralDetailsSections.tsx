@@ -303,7 +303,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 inputName="nationality"
                 label={translateText(["nationality"])}
                 value={{
-                  label: values.nationality  ?? "",
+                  label: values.nationality ?? "",
                   value: values.nationality ?? ""
                 }}
                 placeholder={translateText(["selectNationality"])}
