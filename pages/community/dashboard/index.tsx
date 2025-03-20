@@ -8,6 +8,8 @@ import AttendanceDashboard from "~community/attendance/components/organisms/Atte
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
 import VersionUpgradeModal from "~community/common/components/molecules/VersionUpgradeModal/VersionUpgradeModal";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { OBOARDING_LOGOCOLORLOADER_DURATION } from "~community/common/constants/commonConstants";
+import { CANCEL, SUCCESS } from "~community/common/constants/stringConstants";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import {
   MediaQueries,
@@ -26,7 +28,7 @@ import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsVa
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
-import FiveStepLoader from "~enterprise/common/components/molecules/FiveStepLoader/FiveStepLoader";
+import LogoColorLoader from "~enterprise/common/components/molecules/LogoColorLoader/LogoColorLoader";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -60,7 +62,7 @@ const Dashboard: NextPage = () => {
           ]),
           open: true
         });
-      }, 4000);
+      }, OBOARDING_LOGOCOLORLOADER_DURATION);
 
       return () => clearTimeout(timer);
     }
@@ -71,7 +73,7 @@ const Dashboard: NextPage = () => {
       !isBelow900 &&
         setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
     }
-    if (query.status === "cancel") {
+    if (query.status === CANCEL) {
       setToastMessage({
         toastType: ToastType.ERROR,
         title: billingTranslateText(["subscriptionErrorToastTitle"]),
@@ -157,8 +159,8 @@ const Dashboard: NextPage = () => {
   const userRoles: RoleTypes[] = (data?.user?.roles || []) as RoleTypes[];
   const visibleTabs = getVisibleTabs(userRoles);
 
-  if (showLoader && query.status === "success") {
-    return <FiveStepLoader />;
+  if (showLoader && query.status === SUCCESS) {
+    return <LogoColorLoader />;
   } else {
     return (
       <ContentLayout
@@ -166,7 +168,7 @@ const Dashboard: NextPage = () => {
         title={
           data?.user && visibleTabs.length === 0 ? "" : translateText(["title"])
         }
-        isDividerVisible={data?.user && visibleTabs.length === 0 ? false : true}
+        isDividerVisible={!(data?.user && visibleTabs.length === 0)}
       >
         <>
           {data?.user && visibleTabs.length === 0 ? (
