@@ -19,7 +19,6 @@ interface Props<T> {
   };
   disabledOptions: DurationSelectorDisabledOptions;
   value: T;
-  defaultValue?: T;
   onChange: (value: T) => void;
   error?: string | undefined;
   commonButtonStyles?: SxProps;
@@ -35,7 +34,6 @@ const DurationSelector = <T,>({
     halfDayEvening: false
   },
   value,
-  defaultValue,
   onChange,
   error,
   commonButtonStyles
@@ -43,7 +41,6 @@ const DurationSelector = <T,>({
   const translateText = useTranslator("commonComponents", "durationSelector");
 
   const theme: Theme = useTheme();
-
   const classes = styles(theme);
 
   const [isHalfDaySelected, setIsHalfDaySelected] = useState(false);
@@ -52,15 +49,21 @@ const DurationSelector = <T,>({
     onChange(value);
   };
 
-  const onHalfDayClick = () => {
+  const handleHalfDayClick = () => {
     setIsHalfDaySelected(true);
+
+    const halfDayOptionToSelect = disabledOptions.halfDayMorning
+      ? options.halfDayEvening
+      : options.halfDayMorning;
+
+    onChange(halfDayOptionToSelect);
   };
 
   useEffect(() => {
-    if (defaultValue === options.halfDayMorning) {
+    if (value === options.halfDayMorning || value === options.halfDayEvening) {
       setIsHalfDaySelected(true);
     }
-  }, [disabledOptions, value]);
+  }, [value, options.halfDayEvening, options.halfDayMorning]);
 
   return (
     <Stack sx={classes.wrapper}>
@@ -179,7 +182,7 @@ const DurationSelector = <T,>({
                   : "Mui-default-button"
               }
               sx={mergeSx([classes.btn, commonButtonStyles])}
-              onClick={onHalfDayClick}
+              onClick={handleHalfDayClick}
             >
               <Typography
                 className={
