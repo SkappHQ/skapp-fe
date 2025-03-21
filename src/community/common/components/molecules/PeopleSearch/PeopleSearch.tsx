@@ -2,6 +2,7 @@ import {
   Box,
   InputBase,
   Paper,
+  Stack,
   type SxProps,
   Typography
 } from "@mui/material/";
@@ -23,8 +24,13 @@ import Popper from "~community/common/components/molecules/Popper/Popper";
 import { numericPatternWithSpaces } from "~community/common/regex/regexPatterns";
 import { IconName } from "~community/common/types/IconTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
-import { removeSpecialCharacters } from "~community/common/utils/commonUtil";
+import {
+  mergeSx,
+  removeSpecialCharacters
+} from "~community/common/utils/commonUtil";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
+
+import styles from "./styles";
 
 interface Props {
   id?: string;
@@ -90,8 +96,27 @@ const PeopleSearch: FC<Props> = ({
   setIsPopperOpen
 }) => {
   const theme: Theme = useTheme();
+  const classes = styles(theme);
+
   const ref = useRef<HTMLHeadingElement | null>(null);
-  const [isUserSelected, setIsUserSelected] = useState(false);
+
+  const [isUserSelected, setIsUserSelected] = useState<boolean>(false);
+  const [width, setWidth] = useState<number>(0);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (ref.current) {
+        setWidth(ref.current.clientWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
 
   useEffect(() => {
     if (value && !isDisabled && !isUserSelected) {
@@ -128,115 +153,98 @@ const PeopleSearch: FC<Props> = ({
     }
   };
 
+  const handleFocus = () => {
+    if (onFocus) onFocus();
+    setIsUserSelected(false);
+  };
+
   return (
-    <Box sx={{ my: "1.2rem", ...componentStyles }}>
+    <Stack sx={mergeSx([classes.wrapper, componentStyles])}>
       {label && (
         <Typography
           variant="h5"
           gutterBottom
           sx={{
-            fontWeight: "500",
-            fontSize: "1rem",
             color: (theme) =>
               error
                 ? theme.palette.error.contrastText
                 : isDisabled
                   ? theme.palette.text.disabled
                   : theme.palette.common.black,
-            mb: "0.625rem",
+            ...classes.label,
             ...labelStyles
           }}
         >
-          {label} {required && <span style={{ color: "red" }}>*</span>}
+          {label} {required && <span style={classes.asterisk}>*</span>}
         </Typography>
       )}
       <Box ref={ref}>
-        <Box>
-          <Paper
-            component="div"
-            elevation={0}
+        <Paper
+          component="div"
+          elevation={0}
+          sx={{
+            background: error
+              ? theme.palette.error.light
+              : theme.palette.grey[100],
+            border: error
+              ? `0.0625rem solid ${theme.palette.error.contrastText}`
+              : "",
+            ...classes.paper,
+            ...searchBoxStyles
+          }}
+        >
+          <InputBase
+            id={id ?? "search-input"}
             sx={{
-              p: "0.5rem 0.9375rem",
-              display: "flex",
-              alignItems: "center",
-              background: error
-                ? theme.palette.error.light
-                : theme.palette.grey[100],
-              borderRadius: "0.5rem",
-              border: error
-                ? `0.0625rem solid ${theme.palette.error.contrastText}`
-                : "",
-              ...searchBoxStyles
+              ...classes.inputBase,
+              ...inputStyles
             }}
-          >
-            <InputBase
-              id={id ?? "search-input"}
-              sx={{
-                flex: 1,
-                "& input::placeholder": {
-                  fontSize: "1rem"
-                },
-                ...inputStyles
-              }}
-              placeholder={placeHolder}
-              fullWidth={isFullWidth}
-              onChange={handleInputChange}
-              value={value}
-              disabled={isDisabled}
-              autoFocus={isAutoFocus}
-              onBlur={onBlur}
-              onFocus={() => {
-                if (onFocus) onFocus();
-                setIsUserSelected(false);
-              }}
-              name={inputName}
-            />
-            {needSearchIcon && <Icon name={IconName.SEARCH_ICON} />}
-          </Paper>
-          {!!error && (
-            <Typography
-              variant="body2"
-              sx={{
-                color: theme.palette.error.contrastText,
-                fontSize: "0.875rem",
-                mt: "0.5rem",
-                lineHeight: "1rem"
-              }}
-            >
-              {error}
-            </Typography>
-          )}
-        </Box>
+            placeholder={placeHolder}
+            fullWidth={isFullWidth}
+            onChange={handleInputChange}
+            value={value}
+            disabled={isDisabled}
+            autoFocus={isAutoFocus}
+            onBlur={onBlur}
+            onFocus={handleFocus}
+            name={inputName}
+          />
+          {needSearchIcon && <Icon name={IconName.SEARCH_ICON} />}
+        </Paper>
+        {!!error && (
+          <Typography variant="body2" sx={classes.error}>
+            {error}
+          </Typography>
+        )}
       </Box>
       {(ref.current || parentRef) && !isDisabled && (
         <Popper
           open={isPopperOpen}
+          anchorElWidth={width}
           anchorEl={parentRef ? parentRef.current : ref.current}
           position={"bottom-start"}
           menuType={MenuTypes.SEARCH}
           isManager={true}
           handleClose={() => setIsPopperOpen?.(false)}
           id={"suggestionPopper"}
-          containerStyles={{ width: "100%", ...popperStyles }}
+          containerStyles={{ width: "inherit", ...popperStyles }}
         >
           <Box
-            sx={{
-              backgroundColor:
-                suggestions?.length === 0
-                  ? theme.palette.common.white
-                  : theme.palette.grey[100],
-              borderRadius: "0.75rem",
-              maxHeight: "11.25rem",
-              overflowY: "auto",
-              overflowX: "hidden",
-              width: "100%",
-              ...suggestionBoxStyles
-            }}
+            sx={mergeSx([
+              classes.suggestionBox,
+              {
+                backgroundColor:
+                  suggestions?.length === 0
+                    ? theme.palette.common.white
+                    : theme.palette.grey[100]
+              },
+              suggestionBoxStyles
+            ])}
           >
             {suggestions?.length === 0 && !error && (
               <Box
                 sx={{
-                  p: "1.25rem",
+                  ...classes.noSearchResultText,
                   ...noSearchResultTextStyles
                 }}
               >
@@ -256,17 +264,7 @@ const PeopleSearch: FC<Props> = ({
                   return (
                     <Box
                       key={user.employeeId}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        py: "0.5rem",
-                        "&:hover": {
-                          cursor: "pointer",
-                          borderRadius: "0.75rem"
-                        },
-                        ...suggestionStyles
-                      }}
+                      sx={mergeSx([classes.suggestion, suggestionStyles])}
                       onClick={() => handleSelectMember(user)}
                     >
                       <Box width="100%">
@@ -274,10 +272,7 @@ const PeopleSearch: FC<Props> = ({
                           firstName={user?.firstName}
                           lastName={user?.lastName}
                           avatarUrl={user?.avatarUrl}
-                          chipStyles={{
-                            cursor: "pointer",
-                            maxWidth: "fit-content"
-                          }}
+                          chipStyles={classes.chip}
                         />
                       </Box>
                     </Box>
@@ -287,7 +282,7 @@ const PeopleSearch: FC<Props> = ({
           </Box>
         </Popper>
       )}
-    </Box>
+    </Stack>
   );
 };
 

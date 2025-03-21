@@ -6,6 +6,7 @@ import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveTypeModalEnums } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const ExitModal = () => {
   const router = useRouter();
@@ -21,7 +22,23 @@ const ExitModal = () => {
     pendingNavigation,
     setLeaveTypeModalType,
     resetEditingLeaveType
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    leaveTypeModalType: state.leaveTypeModalType,
+    pendingNavigation: state.pendingNavigation,
+    setLeaveTypeModalType: state.setLeaveTypeModalType,
+    resetEditingLeaveType: state.resetEditingLeaveType
+  }));
+
+  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
+
+  const handleOnSecondaryBtnClick = async () => {
+    stopAllOngoingQuickSetup();
+    setLeaveTypeModalType(LeaveTypeModalEnums.NONE);
+    await router.push(pendingNavigation);
+    resetEditingLeaveType();
+  };
 
   return (
     <Modal
@@ -40,11 +57,7 @@ const ExitModal = () => {
         onPrimaryBtnClick={() =>
           setLeaveTypeModalType(LeaveTypeModalEnums.NONE)
         }
-        onSecondaryBtnClick={async () => {
-          setLeaveTypeModalType(LeaveTypeModalEnums.NONE);
-          await router.push(pendingNavigation);
-          resetEditingLeaveType();
-        }}
+        onSecondaryBtnClick={handleOnSecondaryBtnClick}
       />
     </Modal>
   );

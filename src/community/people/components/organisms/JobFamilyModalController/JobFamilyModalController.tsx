@@ -1,9 +1,8 @@
-import { useSession } from "next-auth/react";
 import { Dispatch, FC, SetStateAction, useMemo } from "react";
 
 import ModalController from "~community/common/components/organisms/ModalController/ModalController";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import AddJobFamilyModal from "~community/people/components/organisms/JobFamilyModals/JobFamilyFormModals/AddJobFamilyModal";
 import EditJobFamilyModal from "~community/people/components/organisms/JobFamilyModals/JobFamilyFormModals/EditJobFamilyModal";
 import JobFamilyTransferMembersModal from "~community/people/components/organisms/JobFamilyModals/TransferMembersModals/JobFamilyTransferMembersModal";
@@ -25,6 +24,7 @@ import {
   handleJobFamilyCloseModal,
   isClosableModalType
 } from "~community/people/utils/jobFamilyUtils/modalControllerUtils";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   setLatestRoleLabel?: Dispatch<SetStateAction<number | undefined>>;
@@ -32,9 +32,7 @@ interface Props {
 }
 
 const JobFamilyModalController: FC<Props> = ({ setLatestRoleLabel, from }) => {
-  const { data: session } = useSession();
-
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const { isPeopleAdmin } = useSessionData();
 
   const peopleTranslateText = useTranslator("peopleModule", "jobFamily");
 
@@ -45,7 +43,18 @@ const JobFamilyModalController: FC<Props> = ({ setLatestRoleLabel, from }) => {
     currentEditingJobFamily,
     allJobFamilies,
     setJobFamilyModalType
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    currentTransferMembersData: state.currentTransferMembersData,
+    isJobFamilyModalOpen: state.isJobFamilyModalOpen,
+    jobFamilyModalType: state.jobFamilyModalType,
+    currentEditingJobFamily: state.currentEditingJobFamily,
+    allJobFamilies: state.allJobFamilies,
+    setJobFamilyModalType: state.setJobFamilyModalType
+  }));
+
+  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const customStyles = useMemo(() => {
     return getCustomStyles(jobFamilyModalType);
@@ -69,16 +78,17 @@ const JobFamilyModalController: FC<Props> = ({ setLatestRoleLabel, from }) => {
     <ModalController
       isModalOpen={isJobFamilyModalOpen}
       modalTitle={
-        isAdmin
+        isPeopleAdmin
           ? getModalTitle(jobFamilyModalType, peopleTranslateText)
           : peopleTranslateText(["viewJobFamilyTitle"])
       }
       handleCloseModal={() =>
-        handleJobFamilyCloseModal(
+        handleJobFamilyCloseModal({
           hasDataChanged,
           jobFamilyModalType,
-          setJobFamilyModalType
-        )
+          setJobFamilyModalType,
+          stopAllOngoingQuickSetup
+        })
       }
       isClosable={isClosableModalType(jobFamilyModalType)}
       modalWrapperStyles={customStyles.modalWrapperStyles}

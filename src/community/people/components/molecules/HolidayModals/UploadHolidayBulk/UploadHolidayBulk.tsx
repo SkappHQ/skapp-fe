@@ -54,11 +54,11 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
   const {
     ongoingQuickSetup,
     setQuickSetupModalType,
-    setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup
   } = useCommonEnterpriseStore((state) => ({
     ongoingQuickSetup: state.ongoingQuickSetup,
     setQuickSetupModalType: state.setQuickSetupModalType,
-    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
   const { setIsHolidayModalOpen, setFailedCount } = usePeopleStore(
@@ -100,7 +100,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       setHolidayModalType(holidayModalTypes.NONE);
       if (ongoingQuickSetup.SETUP_HOLIDAYS) {
         setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-        setStopAllOngoingQuickSetup();
+        stopAllOngoingQuickSetup();
       }
       setIsHolidayModalOpen(false);
       setToastMessage({
@@ -233,7 +233,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       resetHolidayDetails();
     }
     if (ongoingQuickSetup.SETUP_HOLIDAYS) {
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
     }
   };
   return (

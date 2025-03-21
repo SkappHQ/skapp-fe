@@ -1,16 +1,21 @@
 import { Theme } from "@mui/material";
 
 const styles = (theme: Theme) => ({
+  wrapper: {
+    width: "100%"
+  },
   label: {
-    fontWeight: 500,
-    color: theme.palette.common.black,
-    mb: "0.5rem"
+    fontWeight: "500",
+    fontSize: "1rem",
+    mb: "0.625rem"
+  },
+  asterisk: {
+    color: theme.palette.error.contrastText
   },
   paper: {
     p: "0.5rem 0.9375rem",
     display: "flex",
     alignItems: "center",
-    background: theme.palette.grey[100],
     borderRadius: "0.5rem"
   },
   inputBase: {
@@ -18,6 +23,34 @@ const styles = (theme: Theme) => ({
     "& input::placeholder": {
       fontSize: "1rem"
     }
+  },
+  error: {
+    color: theme.palette.error.contrastText,
+    mt: "0.5rem"
+  },
+  suggestionBox: {
+    borderRadius: "0.75rem",
+    maxHeight: "11.25rem",
+    overflowY: "auto",
+    overflowX: "hidden",
+    width: "100%"
+  },
+  noSearchResultText: {
+    p: "1.25rem"
+  },
+  suggestion: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    py: "0.5rem",
+    "&:hover": {
+      cursor: "pointer",
+      borderRadius: "0.75rem"
+    }
+  },
+  chip: {
+    cursor: "pointer",
+    maxWidth: "fit-content"
   }
 });
 

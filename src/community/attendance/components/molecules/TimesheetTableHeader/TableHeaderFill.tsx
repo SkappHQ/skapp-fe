@@ -17,10 +17,6 @@ const TableHeaderFill = (): JSX.Element => {
         width: "100%",
         height: "4.3rem",
         background: theme.palette.grey[100],
-        borderWidth: "0.063rem 0rem",
-        borderStyle: "solid",
-        borderColor: theme.palette.grey[500],
-        borderTopStyle: "none",
         position: "absolute",
         pt: "0.75rem",
         zIndex: ZIndexEnums.MIN

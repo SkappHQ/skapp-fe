@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { type SxProps } from "@mui/system";
 import { FC, JSX, ReactNode } from "react";
@@ -12,14 +12,17 @@ import { mergeSx } from "~community/common/utils/commonUtil";
 import styles from "./styles";
 
 interface Props {
+  id?: {
+    emptyScreen?: {
+      button?: string;
+    };
+  };
   title?: string;
   description?: string;
   addNewEmployeeAction?: boolean;
   children?: ReactNode;
-  spacing?: string;
   titleStyles?: SxProps;
   descriptionStyles?: SxProps;
-  isIconTitleInline?: boolean;
   buttonText?: string | boolean;
   buttonEndIcon?: JSX.Element;
   buttonStartIcon?: JSX.Element;
@@ -29,12 +32,11 @@ interface Props {
   shouldEmptyTableScreenBtnBlink?: boolean;
 }
 const TableEmptyScreen: FC<Props> = ({
+  id,
   title,
   description,
-  spacing = "1rem",
   titleStyles,
   descriptionStyles,
-  isIconTitleInline,
   buttonText = "",
   buttonStartIcon,
   onButtonClick,
@@ -47,24 +49,14 @@ const TableEmptyScreen: FC<Props> = ({
   const classes = styles(theme);
 
   return (
-    <Stack sx={{ ...classes.wrapper, ...wrapperStyles }}>
-      <Stack
-        spacing={spacing}
-        sx={classes.container}
-        component="div"
-        role="status"
-      >
-        <Box sx={classes.titleWrapper(isIconTitleInline)}>
-          <Icon name={IconName.MAGNIFYING_GLASS_ICON} />
-          {title && (
-            <Typography
-              variant="h3"
-              sx={mergeSx([classes.title(isIconTitleInline), titleStyles])}
-            >
-              {title}
-            </Typography>
-          )}
-        </Box>
+    <Stack sx={mergeSx([classes.wrapper, wrapperStyles])}>
+      <Stack component="div" role="output" sx={classes.container}>
+        <Icon name={IconName.MAGNIFYING_GLASS_ICON} />
+        {title && (
+          <Typography variant="h3" sx={mergeSx([classes.title, titleStyles])}>
+            {title}
+          </Typography>
+        )}
         <Typography
           component="div"
           variant="body2"
@@ -73,19 +65,17 @@ const TableEmptyScreen: FC<Props> = ({
           {description}
         </Typography>
         {buttonText && (
-          <Box sx={classes.btnWrapper}>
-            <Button
-              id="table-empty-screen-button"
-              shouldBlink={shouldEmptyTableScreenBtnBlink}
-              label={buttonText as string}
-              endIcon={<Icon name={IconName.ADD_ICON} />}
-              startIcon={buttonStartIcon}
-              buttonStyle={buttonStyle}
-              isFullWidth={false}
-              onClick={onButtonClick}
-              styles={classes.buttonStyles}
-            />
-          </Box>
+          <Button
+            id={id?.emptyScreen?.button}
+            shouldBlink={shouldEmptyTableScreenBtnBlink}
+            label={buttonText as string}
+            endIcon={<Icon name={IconName.ADD_ICON} />}
+            startIcon={buttonStartIcon}
+            buttonStyle={buttonStyle}
+            isFullWidth={false}
+            onClick={onButtonClick}
+            styles={classes.buttonStyles}
+          />
         )}
       </Stack>
     </Stack>

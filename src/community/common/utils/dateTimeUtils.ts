@@ -581,3 +581,14 @@ const getDaySuffix = (day: number): string => {
       return "th";
   }
 };
+export const getAllMonthsAsString = (
+  format: "short" | "long" = "short",
+  language: string = "en"
+): string[] => {
+  const months = [];
+  for (let i = 1; i <= 12; i++) {
+    const dateTime = DateTime.fromObject({ month: i }).setLocale(language);
+    months.push(dateTime.toFormat(format === "short" ? "LLL" : "MMMM"));
+  }
+  return months;
+};

@@ -18,6 +18,7 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
   const handleTokenRefresh = async () => {
     try {
       await update();
+      queryClient.invalidateQueries();
     } catch (error) {
       console.error("Token refresh failed:", error);
       await signOut({
@@ -32,8 +33,6 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
       (response) => response,
       async (error) => {
         if (
-          error?.response?.data?.results?.[0]?.messageKey ===
-            COMMON_ERROR_TOKEN_EXPIRED ||
           error?.response?.data?.results?.[0]?.messageKey ===
             COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
           error?.response?.data?.results?.[0]?.messageKey ===
@@ -50,6 +49,13 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
             redirect: true,
             callbackUrl: "/system-update"
           });
+        }
+
+        if (
+          error?.response?.data?.results?.[0]?.messageKey ===
+          COMMON_ERROR_TOKEN_EXPIRED
+        ) {
+          await signOut();
         }
 
         if (error?.response?.status === 401) {
