@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { SetStateAction } from "react";
 
 import { ToastType } from "~community/common/enums/ComponentEnums";
+import { LeaveStates } from "~community/common/types/CommonTypes";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import {
   convertToYYYYMMDDFromDateTime,
@@ -170,9 +171,21 @@ export const handleDateValidation = ({
 
     const leaveRequestCount = leaveRequests?.length ?? 0;
 
-    setIsApplyLeaveModalBtnDisabled(leaveRequestCount > 0);
-
     if (leaveRequestCount > 0) {
+      if (selectedDates.length === 1) {
+        const isFullDayOrTwoHalfDayLeaves = leaveRequests.filter(
+          (leaveRequest) =>
+            leaveRequest.leaveState === LeaveStates.FULL_DAY ||
+            leaveRequests.length > 1
+        );
+
+        setIsApplyLeaveModalBtnDisabled(
+          isFullDayOrTwoHalfDayLeaves.length !== 0
+        );
+      } else {
+        setIsApplyLeaveModalBtnDisabled(leaveRequestCount > 0);
+      }
+
       const hasMultipleLeaves = leaveRequestCount > 1;
 
       const toastType = ToastType.WARN;
@@ -250,22 +263,24 @@ interface GetLeaveRequestsWithinDateRangeProps {
 export const getLeaveRequestsWithinDateRange = ({
   selectedDates,
   myLeaveRequests
-}: GetLeaveRequestsWithinDateRangeProps) => {
+}: GetLeaveRequestsWithinDateRangeProps): MyLeaveRequestPayloadType[] => {
   if (!myLeaveRequests) return [];
 
   const startDate = selectedDates[0];
-  const endDate = selectedDates[1] ?? selectedDates[0];
+  const endDate = selectedDates[1] ?? startDate;
 
-  const leaveRequestsWithinRange = myLeaveRequests.filter((leaveRequest) => {
-    const leaveStartDate = DateTime.fromISO(leaveRequest.startDate);
-    const leaveEndDate = DateTime.fromISO(leaveRequest.endDate);
+  const leaveRequestsWithinRange = myLeaveRequests.filter(
+    (leaveRequest: MyLeaveRequestPayloadType) => {
+      const leaveStartDate = DateTime.fromISO(leaveRequest.startDate);
+      const leaveEndDate = DateTime.fromISO(leaveRequest.endDate);
 
-    return (
-      (startDate >= leaveStartDate && startDate <= leaveEndDate) ||
-      (endDate >= leaveStartDate && endDate <= leaveEndDate) ||
-      (startDate <= leaveStartDate && endDate >= leaveEndDate)
-    );
-  });
+      return (
+        (startDate >= leaveStartDate && startDate <= leaveEndDate) ||
+        (endDate >= leaveStartDate && endDate <= leaveEndDate) ||
+        (startDate <= leaveStartDate && endDate >= leaveEndDate)
+      );
+    }
+  );
 
   return leaveRequestsWithinRange;
 };
