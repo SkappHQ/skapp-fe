@@ -116,7 +116,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
 
   const rgbForBlink = useMemo(() => {
     if (shouldblink) {
-      const rgbValues = parseHexToRgb(theme.palette.secondary.dark);
+      const rgbValues = parseHexToRgb(theme.palette.primary.dark);
 
       return `${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}`;
     }
