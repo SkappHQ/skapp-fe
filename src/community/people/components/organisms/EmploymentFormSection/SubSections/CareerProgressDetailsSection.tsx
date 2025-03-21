@@ -25,7 +25,7 @@ import useCareerProgressionFormHandler from "~community/people/hooks/useCareerPr
 import { usePeopleStore } from "~community/people/store/store";
 import { L3CareerProgressionDetailsType } from "~community/people/types/PeopleTypes";
 import { EmployeeTypesList } from "~community/people/utils/data/employeeSetupStaticData";
-import { employeeCareerDetailsValidation } from "~community/people/utils/peopleValidations";
+import { employeeCareerDetailsValidation } from "~community/people/utils/peopleFormValidation";
 
 import JobFamilyModalController from "../../JobFamilyModalController/JobFamilyModalController";
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
@@ -144,7 +144,10 @@ const CareerProgressDetailsSection = ({
         new Date(a.startDate ?? "").getTime()
     );
 
-    setEmploymentDetails({ careerProgression: positions });
+    setEmploymentDetails({
+      ...employee.employment,
+      careerProgression: positions
+    });
     resetForm();
     setSelectedEndDate(undefined);
     setSelectedStartDate(undefined);
@@ -174,10 +177,7 @@ const CareerProgressDetailsSection = ({
     setLatestRoleLabel,
     formatData,
     handleEdit,
-    handleDelete
-  } = useCareerProgressionFormHandler({ formik, isManager, isProfileView });
-
-  const {
+    handleDelete,
     values,
     errors,
     resetForm,
@@ -185,7 +185,7 @@ const CareerProgressDetailsSection = ({
     setFieldValue,
     setFieldError,
     handleSubmit
-  } = formik;
+  } = useCareerProgressionFormHandler({ formik, isManager, isProfileView });
 
   return (
     <PeopleFormSectionWrapper

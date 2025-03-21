@@ -34,7 +34,15 @@ const useCareerProgressionFormHandler = ({
   isManager,
   isProfileView
 }: Props) => {
-  const { values, setFieldValue, setFieldError, resetForm } = formik;
+  const {
+    values,
+    setFieldValue,
+    setFieldError,
+    resetForm,
+    errors,
+    handleChange,
+    handleSubmit
+  } = formik;
 
   const [jobTitle, setJobTitle] = useState<DropdownListType[]>([]);
   const [rowEdited, setRowEdited] = useState(-1);
@@ -175,6 +183,7 @@ const useCareerProgressionFormHandler = ({
     const updatedDetails = [...(copyOfEmployeeCareerDetails || [])];
     updatedDetails.splice(rowIndex, 1);
     setEmploymentDetails({
+      ...employee.employment,
       careerProgression: updatedDetails
     });
     if (rowEdited === rowIndex) {
@@ -294,7 +303,14 @@ const useCareerProgressionFormHandler = ({
     setLatestRoleLabel,
     formatData,
     handleEdit,
-    handleDelete
+    handleDelete,
+    values,
+    errors,
+    resetForm,
+    handleChange,
+    setFieldValue,
+    setFieldError,
+    handleSubmit
   };
 };
 
