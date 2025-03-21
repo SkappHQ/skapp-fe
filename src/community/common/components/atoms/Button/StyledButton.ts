@@ -16,7 +16,7 @@ interface StyledButtonProps {
   textcolor: string;
   isdefaulticoncolor: string;
   isstrokeavailable: string;
-  shouldblink?: boolean; // New prop to enable blinking outline
+  shouldblink?: boolean;
 }
 
 const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
@@ -136,7 +136,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     backgroundColor: backgroundColor(),
     border: "0.125rem solid transparent",
     outline: outline(),
-    outlineOffset: "-1px",
+    outlineOffset: shouldblink ? "-0.1875rem" : "-0.0625rem",
     borderRadius: "3.125rem",
     ".MuiTypography-root": {
       color: disabled ? theme.palette.grey[800] : textcolor
@@ -168,16 +168,22 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
       border: `0.125rem solid ${theme.palette.grey[300]}`
     },
     ...(shouldblink && {
-      animation: "blink 1.5s ease-in-out infinite",
+      animation: "blink 3s ease-in-out infinite",
       "@keyframes blink": {
         "0%": {
-          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.2)`
+        },
+        "25%": {
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.8)`
         },
         "50%": {
-          boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.2)`
+        },
+        "75%": {
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.8)`
         },
         "100%": {
-          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.2)`
         }
       }
     })
