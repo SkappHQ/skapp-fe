@@ -144,6 +144,9 @@ const ContentLayout = ({
         );
         setIsSubscriptionEndedModalOpen(true);
         break;
+      case TenantStatusEnums.ACTIVE:
+        setIsSubscriptionEndedModalOpen(false);
+        break;
     }
 
     if (asPath === "/remove-people" || asPath === "/change-supervisors") {
