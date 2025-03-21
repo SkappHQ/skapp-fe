@@ -137,6 +137,7 @@ export interface L3EmploymentDetailsType {
 }
 
 export interface L3CareerProgressionDetailsType {
+  progressionId?: number;
   employmentType?: EmploymentTypes;
   jobFamilyId?: number;
   jobTitleId?: number;
@@ -171,4 +172,17 @@ export interface L4ManagerType {
   firstName?: string;
   lastName?: string;
   authPic?: string;
+}
+
+export interface checkOverlapType {
+  positions: L3CareerProgressionDetailsType[];
+  newStartDate: number;
+  newEndDate: number | null;
+  newCurrentPosition: boolean;
+}
+
+export interface tenureType {
+  startDate: string;
+  endDate?: string;
+  currentPosition?: boolean;
 }
