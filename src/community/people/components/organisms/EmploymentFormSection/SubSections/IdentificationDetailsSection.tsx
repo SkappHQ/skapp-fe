@@ -1,12 +1,18 @@
-import { Grid2 as Grid } from "@mui/material";
+import { Grid2 as Grid, SelectChangeEvent } from "@mui/material";
+import { useFormik } from "formik";
+import { useMemo } from "react";
 
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { numberPattern } from "~community/common/regex/regexPatterns";
+import { usePeopleStore } from "~community/people/store/store";
+import { L3IdentificationAndDiversityDetailsType } from "~community/people/types/PeopleTypes";
 import {
   EEOJobCategoryList,
   EthnicityList
 } from "~community/people/utils/data/employeeSetupStaticData";
+import { employeeIdentificationDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
@@ -20,6 +26,55 @@ const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
     "addResource",
     "divesityDetails"
   );
+
+  const { employee, setEmploymentDetails } = usePeopleStore((state) => state);
+
+  const initialValues = useMemo<L3IdentificationAndDiversityDetailsType>(
+    () =>
+      employee?.employment
+        ?.identificationAndDiversityDetails as L3IdentificationAndDiversityDetailsType,
+    [employee]
+  );
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: employeeIdentificationDetailsValidation(translateText),
+    onSubmit: () => {},
+    validateOnChange: false,
+    validateOnBlur: true,
+    enableReinitialize: true
+  });
+
+  const { values, errors, handleChange, setFieldError, setFieldValue } = formik;
+
+  const handleInput = async (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+
+    if (name === "ssn") {
+      if (value === "" || numberPattern().test(value)) {
+        await setFieldValue(name, value);
+        setFieldError(name, "");
+        setEmploymentDetails({
+          ...employee?.employment,
+          identificationAndDiversityDetails: {
+            ...employee?.employment?.identificationAndDiversityDetails,
+            [name]: value
+          }
+        });
+      }
+    } else {
+      await setFieldValue(name, value);
+      setFieldError(name, "");
+      setEmploymentDetails({
+        ...employee?.employment,
+        identificationAndDiversityDetails: {
+          ...employee?.employment?.identificationAndDiversityDetails,
+          [name]: value
+        }
+      });
+    }
+  };
+
   return (
     <PeopleFormSectionWrapper
       title={translateText(["title"])}
@@ -33,7 +88,7 @@ const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
       }}
       pageHead={translateText(["head"])}
     >
-      <form onSubmit={() => {}}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
           spacing={2}
@@ -45,11 +100,11 @@ const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
             <InputField
               label={translateText(["SSN"])}
               inputType="text"
-              value={""}
+              value={values.ssn}
               placeHolder={translateText(["enterSSN"])}
-              onChange={() => {}}
+              onChange={handleInput}
               inputName="ssn"
-              error={""}
+              error={errors.ssn ?? ""}
               maxLength={11}
               componentStyle={{
                 flex: 1,
@@ -63,11 +118,11 @@ const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
             <DropdownList
               inputName="ethnicity"
               label={translateText(["ethnicity"])}
-              value={""}
+              value={values.ethnicity}
               placeholder={translateText(["selectEthnicity"])}
-              onChange={() => {}}
-              onInput={() => {}}
-              error={""}
+              onChange={handleChange}
+              onInput={handleInput}
+              error={errors.ethnicity ?? ""}
               componentStyle={{
                 mt: "0rem"
               }}
@@ -82,11 +137,11 @@ const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
             <DropdownList
               inputName="eeoJobCategory"
               label={translateText(["eeoJobCategory"])}
-              value={""}
+              value={values.eeoJobCategory}
               placeholder={translateText(["selectEEOJobCategory"])}
-              onChange={() => {}}
-              onInput={() => {}}
-              error={""}
+              onChange={handleChange}
+              onInput={handleInput}
+              error={errors.eeoJobCategory ?? ""}
               componentStyle={{
                 mt: "0rem"
               }}
