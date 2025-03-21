@@ -54,14 +54,16 @@ const Dashboard: NextPage = () => {
     if (showLoader) {
       const timer = setTimeout(() => {
         setShowLoader(false);
-        setToastMessage({
-          toastType: ToastType.SUCCESS,
-          title: billingTranslateText(["subscriptionSuccessToastTitle"]),
-          description: billingTranslateText([
-            "subscriptionSuccessToastDescription"
-          ]),
-          open: true
-        });
+        if (query.status === SUCCESS) {
+          setToastMessage({
+            toastType: ToastType.SUCCESS,
+            title: billingTranslateText(["subscriptionSuccessToastTitle"]),
+            description: billingTranslateText([
+              "subscriptionSuccessToastDescription"
+            ]),
+            open: true
+          });
+        }
       }, OBOARDING_LOGOCOLORLOADER_DURATION);
 
       return () => clearTimeout(timer);
