@@ -155,8 +155,8 @@ export interface L3IdentificationAndDiversityDetailsType {
 export interface L3PreviousEmploymentDetailsType {
   companyName?: string;
   jobTitle?: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface L3VisaDetailsType {
