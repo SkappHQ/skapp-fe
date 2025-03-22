@@ -1,12 +1,13 @@
 import { Grid2 as Grid, SelectChangeEvent } from "@mui/material";
 import { useFormik } from "formik";
-import { useMemo } from "react";
+import { forwardRef, useMemo } from "react";
 
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { numberPattern } from "~community/common/regex/regexPatterns";
 import { usePeopleStore } from "~community/people/store/store";
+import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { L3IdentificationAndDiversityDetailsType } from "~community/people/types/PeopleTypes";
 import {
   EEOJobCategoryList,
@@ -20,38 +21,51 @@ interface Props {
   isInputsDisabled?: boolean;
 }
 
-const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
-  const translateText = useTranslator(
-    "peopleModule",
-    "addResource",
-    "divesityDetails"
-  );
+const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
+  ({ isInputsDisabled }, ref) => {
+    const translateText = useTranslator(
+      "peopleModule",
+      "addResource",
+      "divesityDetails"
+    );
 
-  const { employee, setEmploymentDetails } = usePeopleStore((state) => state);
+    const { employee, setEmploymentDetails } = usePeopleStore((state) => state);
 
-  const initialValues = useMemo<L3IdentificationAndDiversityDetailsType>(
-    () =>
-      employee?.employment
-        ?.identificationAndDiversityDetails as L3IdentificationAndDiversityDetailsType,
-    [employee]
-  );
+    const initialValues = useMemo<L3IdentificationAndDiversityDetailsType>(
+      () =>
+        employee?.employment
+          ?.identificationAndDiversityDetails as L3IdentificationAndDiversityDetailsType,
+      [employee]
+    );
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema: employeeIdentificationDetailsValidation(translateText),
-    onSubmit: () => {},
-    validateOnChange: false,
-    validateOnBlur: true,
-    enableReinitialize: true
-  });
+    const formik = useFormik({
+      initialValues,
+      validationSchema: employeeIdentificationDetailsValidation(translateText),
+      onSubmit: () => {},
+      validateOnChange: false,
+      validateOnBlur: true,
+      enableReinitialize: true
+    });
 
-  const { values, errors, handleChange, setFieldError, setFieldValue } = formik;
+    const { values, errors, handleChange, setFieldError, setFieldValue } =
+      formik;
 
-  const handleInput = async (e: SelectChangeEvent) => {
-    const { name, value } = e.target;
+    const handleInput = async (e: SelectChangeEvent) => {
+      const { name, value } = e.target;
 
-    if (name === "ssn") {
-      if (value === "" || numberPattern().test(value)) {
+      if (name === "ssn") {
+        if (value === "" || numberPattern().test(value)) {
+          await setFieldValue(name, value);
+          setFieldError(name, "");
+          setEmploymentDetails({
+            ...employee?.employment,
+            identificationAndDiversityDetails: {
+              ...employee?.employment?.identificationAndDiversityDetails,
+              [name]: value
+            }
+          });
+        }
+      } else {
         await setFieldValue(name, value);
         setFieldError(name, "");
         setEmploymentDetails({
@@ -62,100 +76,92 @@ const IdentificationDetailsSection = ({ isInputsDisabled }: Props) => {
           }
         });
       }
-    } else {
-      await setFieldValue(name, value);
-      setFieldError(name, "");
-      setEmploymentDetails({
-        ...employee?.employment,
-        identificationAndDiversityDetails: {
-          ...employee?.employment?.identificationAndDiversityDetails,
-          [name]: value
-        }
-      });
-    }
-  };
+    };
 
-  return (
-    <PeopleFormSectionWrapper
-      title={translateText(["title"])}
-      containerStyles={{
-        padding: "0",
-        margin: "0 auto",
-        fontFamily: "Poppins, sans-serif"
-      }}
-      dividerStyles={{
-        mt: "0.5rem"
-      }}
-      pageHead={translateText(["head"])}
-    >
-      <form onSubmit={formik.handleSubmit}>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            mb: "2rem"
-          }}
-        >
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <InputField
-              label={translateText(["SSN"])}
-              inputType="text"
-              value={values.ssn}
-              placeHolder={translateText(["enterSSN"])}
-              onChange={handleInput}
-              inputName="ssn"
-              error={errors.ssn ?? ""}
-              maxLength={11}
-              componentStyle={{
-                flex: 1,
-                mt: "0rem"
-              }}
-              isDisabled={isInputsDisabled}
-            />
-          </Grid>
+    return (
+      <PeopleFormSectionWrapper
+        title={translateText(["title"])}
+        containerStyles={{
+          padding: "0",
+          margin: "0 auto",
+          fontFamily: "Poppins, sans-serif"
+        }}
+        dividerStyles={{
+          mt: "0.5rem"
+        }}
+        pageHead={translateText(["head"])}
+      >
+        <form onSubmit={formik.handleSubmit}>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              mb: "2rem"
+            }}
+          >
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <InputField
+                label={translateText(["SSN"])}
+                inputType="text"
+                value={values.ssn ?? ""}
+                placeHolder={translateText(["enterSSN"])}
+                onChange={handleInput}
+                inputName="ssn"
+                error={errors.ssn ?? ""}
+                maxLength={11}
+                componentStyle={{
+                  flex: 1,
+                  mt: "0rem"
+                }}
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
 
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <DropdownList
-              inputName="ethnicity"
-              label={translateText(["ethnicity"])}
-              value={values.ethnicity}
-              placeholder={translateText(["selectEthnicity"])}
-              onChange={handleChange}
-              onInput={handleInput}
-              error={errors.ethnicity ?? ""}
-              componentStyle={{
-                mt: "0rem"
-              }}
-              errorFocusOutlineNeeded={false}
-              itemList={EthnicityList}
-              checkSelected
-              isDisabled={isInputsDisabled}
-            />
-          </Grid>
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <DropdownList
+                inputName="ethnicity"
+                label={translateText(["ethnicity"])}
+                value={values.ethnicity ?? ""}
+                placeholder={translateText(["selectEthnicity"])}
+                onChange={handleChange}
+                onInput={handleInput}
+                error={errors.ethnicity ?? ""}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                errorFocusOutlineNeeded={false}
+                itemList={EthnicityList}
+                checkSelected
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
 
-          <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <DropdownList
-              inputName="eeoJobCategory"
-              label={translateText(["eeoJobCategory"])}
-              value={values.eeoJobCategory}
-              placeholder={translateText(["selectEEOJobCategory"])}
-              onChange={handleChange}
-              onInput={handleInput}
-              error={errors.eeoJobCategory ?? ""}
-              componentStyle={{
-                mt: "0rem"
-              }}
-              checkSelected
-              errorFocusOutlineNeeded={false}
-              itemList={EEOJobCategoryList}
-              tooltip={translateText(["eeoTooltip"])}
-              isDisabled={isInputsDisabled}
-            />
+            <Grid size={{ xs: 12, md: 6, xl: 4 }}>
+              <DropdownList
+                inputName="eeoJobCategory"
+                label={translateText(["eeoJobCategory"])}
+                value={values.eeoJobCategory ?? ""}
+                placeholder={translateText(["selectEEOJobCategory"])}
+                onChange={handleChange}
+                onInput={handleInput}
+                error={errors.eeoJobCategory ?? ""}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                checkSelected
+                errorFocusOutlineNeeded={false}
+                itemList={EEOJobCategoryList}
+                tooltip={translateText(["eeoTooltip"])}
+                isDisabled={isInputsDisabled}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
-    </PeopleFormSectionWrapper>
-  );
-};
+        </form>
+      </PeopleFormSectionWrapper>
+    );
+  }
+);
+
+IdentificationDetailsSection.displayName = "IdentificationDetailsSection";
 
 export default IdentificationDetailsSection;
