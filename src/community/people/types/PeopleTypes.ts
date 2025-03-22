@@ -53,9 +53,9 @@ export interface L2SystemPermissionsType {
 }
 
 export interface L2CommonDetailsType {
-  image?: string;
+  employeeId: string;
+  authPic?: string;
   accountStatus?: AccountStatusTypes;
-  thumbnail?: string;
 }
 
 //L3 Types
@@ -89,16 +89,17 @@ export interface L3FamilyDetailsType {
   lastName?: string;
   gender?: GenderEnum;
   relationship?: RelationshipTypes;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   parentName?: string;
 }
 
 export interface L3EducationalDetailsType {
+  educationId?: number;
   institutionName?: string;
   degree?: string;
   major?: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface L3SocialMediaDetailsType {
@@ -126,19 +127,20 @@ export interface L3EmploymentDetailsType {
   employeeNumber?: string;
   email: string;
   employmentAllocation?: EmploymentAllocationTypes;
-  teams?: number[];
+  teamIds?: number[];
   primarySupervisor?: L4ManagerType;
   secondarySupervisor?: L4ManagerType;
-  joinedDate?: Date;
-  probationStartDate?: Date;
-  probationEndDate?: Date;
+  joinedDate?: string;
+  probationStartDate?: string;
+  probationEndDate?: string;
   workTimeZone?: string;
 }
 
 export interface L3CareerProgressionDetailsType {
+  progressionId?: number;
   employmentType?: EmploymentTypes;
-  jobFamily?: number;
-  jobTitle?: number;
+  jobFamilyId?: number;
+  jobTitleId?: number;
   startDate?: string;
   endDate?: string;
   isCurrentEmployment?: boolean;
@@ -153,11 +155,12 @@ export interface L3IdentificationAndDiversityDetailsType {
 export interface L3PreviousEmploymentDetailsType {
   companyName?: string;
   jobTitle?: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface L3VisaDetailsType {
+  visaId?: number;
   visaType?: string;
   issuingCountry?: string;
   issuedDate?: string;
@@ -170,4 +173,17 @@ export interface L4ManagerType {
   firstName?: string;
   lastName?: string;
   authPic?: string;
+}
+
+export interface checkOverlapType {
+  positions: L3CareerProgressionDetailsType[];
+  newStartDate: number;
+  newEndDate: number | null;
+  newCurrentPosition: boolean;
+}
+
+export interface tenureType {
+  startDate: string;
+  endDate?: string;
+  currentPosition?: boolean;
 }

@@ -1,20 +1,16 @@
-import {
-  EditPeopleFormStatus,
-  EditPeopleFormTypes
-} from "~community/people/types/PeopleEditTypes";
+import { usePeopleStore } from "~community/people/store/store";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 import EmergencyDetailsForm from "../EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "../EmploymentFormSection/EmploymentDetailsForm";
 import PersonalDetailsForm from "../PersonDetailsSection/PersonalDetailsForm";
 import SystemPermissionFormSection from "../SystemPermissionFormSection/SystemPermissionFormSection";
 
-interface Props {
-  formType: EditPeopleFormTypes;
-  editFormStatus?: EditPeopleFormStatus;
-}
-const PeopleFormSections = ({ formType }: Props) => {
+const PeopleFormSections = () => {
+  const { currentStep } = usePeopleStore((state) => state);
+
   const getSections = () => {
-    switch (formType) {
+    switch (currentStep) {
       case EditPeopleFormTypes.personal:
         return <PersonalDetailsForm />;
       case EditPeopleFormTypes.emergency:

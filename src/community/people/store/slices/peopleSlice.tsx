@@ -1,4 +1,5 @@
 import { SetType } from "~community/common/types/CommonTypes";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import {
   L1EmployeeType,
   L2CommonDetailsType,
@@ -67,7 +68,7 @@ const defaultEmployee: L1EmployeeType = {
       employeeNumber: "",
       email: "",
       employmentAllocation: undefined,
-      teams: undefined,
+      teamIds: undefined,
       primarySupervisor: undefined,
       secondarySupervisor: undefined,
       joinedDate: undefined,
@@ -92,15 +93,26 @@ const defaultEmployee: L1EmployeeType = {
     eSignRole: undefined
   },
   common: {
-    image: "",
-    accountStatus: undefined,
-    thumbnail: ""
+    employeeId: "",
+    authPic: "",
+    accountStatus: undefined
   }
 };
 
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
+  nextStep: EditPeopleFormTypes.personal,
+  currentStep: EditPeopleFormTypes.personal,
+  isUnsavedChangesModalOpen: false,
+  isSaveButtonClicked: false,
+  setNextStep: (nextStep: EditPeopleFormTypes) => set(() => ({ nextStep })),
+  setCurrentStep: (currentStep: EditPeopleFormTypes) =>
+    set(() => ({ currentStep })),
+  setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) =>
+    set(() => ({ isUnsavedChangesModalOpen })),
+  setIsSaveButtonClicked: (isSaveButtonClicked: boolean) =>
+    set(() => ({ isSaveButtonClicked })),
   setEmployee: (employee: L1EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
   setPersonalDetails: (personal: L2PersonalDetailsType) =>
