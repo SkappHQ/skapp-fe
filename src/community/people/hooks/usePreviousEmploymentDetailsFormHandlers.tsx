@@ -84,10 +84,8 @@ const usePreviousEmploymentDetailsFormHandlers = () => {
   const handleInput = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
-      if (name === "companyName" && isValidAlphaNumericNamePattern(value)) {
-        await setFieldValue(name, value);
-        setFieldError(name, "");
-      } else if (name === "jobTitle" && isValidNamePattern(value)) {
+      if ((name === "companyName" && isValidAlphaNumericNamePattern(value)) ||
+          (name === "jobTitle" && isValidNamePattern(value))) {
         await setFieldValue(name, value);
         setFieldError(name, "");
       }

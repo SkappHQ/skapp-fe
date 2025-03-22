@@ -356,7 +356,7 @@ export const employeeVisaDetailsValidation = (
     visaType: Yup.string().required(translator(["requireVisaTypeError"])),
     issuingCountry: Yup.string().required(translator(["requireCountryError"])),
     issuedDate: Yup.date().required(translator(["requireIssuedDateError"])),
-    expirationDate: Yup.date()
+    expiryDate: Yup.date()
       .required(translator(["requireExpirationDateError"]))
       .test(
         "is-valid",

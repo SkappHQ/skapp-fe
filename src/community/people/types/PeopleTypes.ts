@@ -160,6 +160,7 @@ export interface L3PreviousEmploymentDetailsType {
 }
 
 export interface L3VisaDetailsType {
+  visaId?: number;
   visaType?: string;
   issuingCountry?: string;
   issuedDate?: string;
