@@ -16,16 +16,17 @@ export const handleManagerSelect = async ({
   searchTermSetter("");
   formik.setFieldError(fieldName, "");
   await formik.setFieldValue(fieldName, user?.employeeId);
+  const currentEmploymentDetails = formik.values || {};
 
   setSupervisor({
     employmentDetails: {
+      ...currentEmploymentDetails,
       [fieldName]: {
         employeeId: user?.employeeId,
         firstName: user?.firstName,
         lastName: user?.lastName,
         authPic: user?.avatarUrl ?? ""
-      },
-      email: formik.values.email || ""
+      }
     }
   });
 
@@ -40,15 +41,17 @@ export const onManagerSearchChange = async ({
 }: ManagerSearchType): Promise<void> => {
   setManagerSearchTerm(e.target.value.trimStart());
   await formik.setFieldValue(managerType, "");
+  const currentEmploymentDetails = formik.values || {};
+
   setSupervisor({
     employmentDetails: {
+      ...currentEmploymentDetails,
       [managerType]: {
         employeeId: "",
         firstName: "",
         lastName: "",
         authPic: ""
-      },
-      email: formik.values.email || ""
+      }
     }
   });
 };
@@ -65,15 +68,17 @@ export const onManagerRemove = async ({
   const prevManager =
     formik.initialValues[fieldName as keyof L3EmploymentDetailsType];
 
+  const currentEmploymentDetails = formik.values || {};
+
   setSupervisor({
     employmentDetails: {
+      ...currentEmploymentDetails,
       [fieldName]: {
         employeeId: (prevManager as L4ManagerType)?.employeeId ? -1 : undefined,
         firstName: "",
         lastName: "",
         authPic: ""
-      },
-      email: formik.values.email || ""
+      }
     }
   });
 };

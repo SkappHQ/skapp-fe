@@ -378,10 +378,6 @@ const useEmployeeDetailsFormHandler = ({
   ]);
 
   useEffect(() => {
-    console.log("employee", employee?.employment?.employmentDetails);
-  }, [employee?.employment?.employmentDetails]);
-
-  useEffect(() => {
     setIsPrimaryManagerPopperOpen(false);
     setIsSecondaryManagerPopperOpen(false);
   }, []);
@@ -428,6 +424,21 @@ const useEmployeeDetailsFormHandler = ({
       setSelectedProbationEndDate(undefined);
     }
   }, [values]);
+
+  useEffect(() => {
+    const primarySupervisor = formik?.values?.primarySupervisor;
+    const hasSecondarySupervisor =
+      formik?.values?.secondarySupervisor?.employeeId;
+
+    if (!primarySupervisor?.employeeId && hasSecondarySupervisor) {
+      onManagerRemove({
+        fieldName: "secondarySupervisor",
+        formik,
+        searchTermSetter: setSecondaryManagerSearchTerm,
+        setSupervisor: setEmploymentDetails
+      });
+    }
+  }, [formik?.values?.primarySupervisor]);
 
   return {
     isPrimaryManagerPopperOpen,
