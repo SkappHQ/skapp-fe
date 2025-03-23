@@ -239,7 +239,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               <DropdownList
                 inputName="employmentAllocation"
                 label={translateText(["employmentAllocation"])}
-                value={values.employmentAllocation}
+                value={values.employmentAllocation ?? ""}
                 placeholder={translateText(["selectEmploymentAllocation"])}
                 onChange={handleChange}
                 error={errors.employmentAllocation ?? ""}

@@ -198,19 +198,21 @@ const useEmployeeDetailsFormHandler = ({
 
   const handleTeamSelect = useCallback(
     async (newValue: number[]): Promise<void> => {
-      if (newValue !== undefined) {
-        await setFieldValue("teamIds", newValue);
-        setEmploymentDetails({
-          employmentDetails: {
-            ...employee?.employment?.employmentDetails,
-            teamIds: newValue
-          } as L3EmploymentDetailsType
-        });
-        setFieldError("teamIds", "");
-      }
+      await setFieldValue("teamIds", newValue);
+      setEmploymentDetails({
+        employmentDetails: {
+          ...employee?.employment?.employmentDetails, // Make sure to spread the existing values
+          teamIds: newValue
+        } as L3EmploymentDetailsType
+      });
+      setFieldError("teamIds", "");
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [
+      employee?.employment?.employmentDetails,
+      setEmploymentDetails,
+      setFieldError,
+      setFieldValue
+    ]
   );
 
   const onPrimaryManagerSearchChange = async (
@@ -376,6 +378,10 @@ const useEmployeeDetailsFormHandler = ({
   ]);
 
   useEffect(() => {
+    console.log("employee", employee?.employment?.employmentDetails);
+  }, [employee?.employment?.employmentDetails]);
+
+  useEffect(() => {
     setIsPrimaryManagerPopperOpen(false);
     setIsSecondaryManagerPopperOpen(false);
   }, []);
@@ -384,11 +390,15 @@ const useEmployeeDetailsFormHandler = ({
     if (latestTeamId !== null && latestTeamId !== undefined) {
       handleTeamSelect([
         ...(employee?.employment?.employmentDetails?.teamIds ?? []),
-        latestTeamId as number
+        latestTeamId
       ]).catch(rejects);
       setLatestTeamId(null);
     }
-  }, [latestTeamId]);
+  }, [
+    latestTeamId,
+    handleTeamSelect,
+    employee?.employment?.employmentDetails?.teamIds
+  ]);
 
   //   useEffect(() => {
   //     if (!isManager && !isProfileView) {

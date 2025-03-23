@@ -43,7 +43,7 @@ export const onManagerSearchChange = async ({
   setSupervisor({
     employmentDetails: {
       [managerType]: {
-        employeeId: 0,
+        employeeId: "",
         firstName: "",
         lastName: "",
         authPic: ""
