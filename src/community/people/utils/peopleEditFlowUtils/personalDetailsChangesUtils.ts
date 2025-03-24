@@ -12,12 +12,16 @@ export const isFieldDifferentAndValid = (
   newValue: string | undefined | null,
   oldValue: string | undefined | null
 ): boolean => {
-  return (
-    newValue !== oldValue &&
-    newValue !== undefined &&
-    newValue !== null &&
-    newValue !== ""
-  );
+  if (
+    (newValue === undefined || newValue === null || newValue === "") &&
+    (oldValue === undefined || oldValue === null || oldValue === "")
+  ) {
+    return false;
+  } else if (newValue !== oldValue) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 export const getGeneralDetailsChanges = (
@@ -309,8 +313,8 @@ export const getEducationalDetailsChanges = (
 export const getSocialMediaDetailsChanges = (
   newSocialMedia: L3SocialMediaDetailsType,
   previousSocialMedia: L3SocialMediaDetailsType
-): Record<string, any> => {
-  const changes: Record<string, any> = {};
+): L3SocialMediaDetailsType => {
+  const changes: L3SocialMediaDetailsType = {};
 
   if (
     isFieldDifferentAndValid(
@@ -349,8 +353,8 @@ export const getSocialMediaDetailsChanges = (
 export const getHealthAndOtherDetailsChanges = (
   newHealthAndOther: L3HealthAndOtherDetailsType,
   previousHealthAndOther: L3HealthAndOtherDetailsType
-): Record<string, any> => {
-  const changes: Record<string, any> = {};
+): L3HealthAndOtherDetailsType => {
+  const changes: L3HealthAndOtherDetailsType = {};
 
   if (
     isFieldDifferentAndValid(
@@ -394,8 +398,8 @@ export const getHealthAndOtherDetailsChanges = (
 export const getPersonalDetailsChanges = (
   newPersonalDetails: L2PersonalDetailsType,
   previousPersonalDetails: L2PersonalDetailsType
-): Record<string, any> => {
-  const changes: Record<string, any> = {};
+): L2PersonalDetailsType => {
+  const changes: L2PersonalDetailsType = {};
 
   // General Details
   const generalChanges = getGeneralDetailsChanges(
@@ -430,14 +434,14 @@ export const getPersonalDetailsChanges = (
   const socialMediaChanges = getSocialMediaDetailsChanges(
     newPersonalDetails.socialMedia as L3SocialMediaDetailsType,
     previousPersonalDetails.socialMedia as L3SocialMediaDetailsType
-  ) as L3SocialMediaDetailsType;
+  );
   Object.assign(changes, socialMediaChanges);
 
   // Health and Other Details
   const healthAndOtherChanges = getHealthAndOtherDetailsChanges(
     newPersonalDetails.healthAndOther as L3HealthAndOtherDetailsType,
     previousPersonalDetails.healthAndOther as L3HealthAndOtherDetailsType
-  ) as L3HealthAndOtherDetailsType;
+  );
   Object.assign(changes, healthAndOtherChanges);
 
   return changes;

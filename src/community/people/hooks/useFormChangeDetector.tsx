@@ -70,17 +70,17 @@ const useFormChangeDetector = (): {
       default:
         break;
     }
-
-    console.log("newApiPayload", newApiPayload);
-
-    const hasChanged = Object.keys(newApiPayload).length > 0;
-    console.log("hasChanged", hasChanged);
+    // Check if the payload contains actual changes (not just empty objects)
+    const hasRealChanges = Object.keys(newApiPayload).some((key) => {
+      const value = newApiPayload[key as keyof L1EmployeeType];
+      return (
+        value && typeof value === "object" && Object.keys(value).length > 0
+      );
+    });
 
     setState({
-      hasChanged,
-      apiPayload: {
-        ...newApiPayload
-      }
+      hasChanged: hasRealChanges,
+      apiPayload: hasRealChanges ? newApiPayload : {}
     });
   }, [currentStep, employee, initialEmployee]);
 

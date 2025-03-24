@@ -24,10 +24,17 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
     setIsUnsavedChangesModalOpen,
     setCurrentStep,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    initialEmployee,
+    employee: currentEmployee
   } = usePeopleStore((state) => state);
 
-  const { hasChanged } = useFormChangeDetector();
+  const { hasChanged, apiPayload } = useFormChangeDetector();
+
+  useEffect(() => {
+    console.log("apiPayload", apiPayload);
+    console.log("hasChanged", hasChanged);
+  }, [apiPayload]);
 
   useEffect(() => {
     if (hasChanged && currentStep !== nextStep) {

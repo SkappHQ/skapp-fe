@@ -31,6 +31,7 @@ const useFamilyDetailsFormHandlers = () => {
 
   const initialValues = useMemo<L3FamilyDetailsType>(() => {
     const emptyInitialValues: L3FamilyDetailsType = {
+      familyMemberId: undefined,
       firstName: "",
       lastName: "",
       gender: undefined,

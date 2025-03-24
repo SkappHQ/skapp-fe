@@ -53,7 +53,12 @@ interface Props {
 
 const GeneralDetailsSection = forwardRef<FormMethods, Props>(
   (
-    { isManager = false, isAdmin = false, isInputsDisabled = false }: Props,
+    {
+      isManager = false,
+      isAdmin = false,
+      isInputsDisabled = false,
+      isAddFlow
+    }: Props,
     ref
   ) => {
     const theme: Theme = useTheme();
@@ -197,59 +202,63 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         pageHead={translateText(["head"])}
       >
         <form onSubmit={formik.handleSubmit}>
-          <Stack
-            direction="column"
-            sx={{ display: isManager || isAdmin ? "none" : "block" }}
-          >
+          {isAddFlow && (
             <Stack
-              direction="row"
-              alignItems="center"
-              sx={{
-                mb: "1.5rem",
-                position: "relative"
-              }}
+              direction="column"
+              sx={{ display: isManager || isAdmin ? "none" : "block" }}
             >
-              <Avatar
-                id="avatar"
-                alt={`${values.firstName} ${values.lastName}`}
-                src={getAvatarThumbnailUrl()}
+              <Stack
+                direction="row"
+                alignItems="center"
                 sx={{
-                  width: "6.125rem",
-                  height: "6.125rem",
-                  backgroundColor: theme.palette.grey[200]
+                  mb: "1.5rem",
+                  position: "relative"
                 }}
               >
-                <Icon name={IconName.USER_UPLOAD_ICON} />
-              </Avatar>
-              <Box>
-                <input id="imageInput" {...getInputProps()} />
-                <Box
+                <Avatar
+                  id="avatar"
+                  alt={`${values.firstName} ${values.lastName}`}
+                  src={getAvatarThumbnailUrl()}
                   sx={{
-                    position: "absolute",
-                    left: "4.375rem",
-                    top: "5rem",
-                    transform: "translateY(-50%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "2rem",
-                    height: "2rem",
-                    borderRadius: "50%",
-                    backgroundColor: theme.palette.secondary.main,
-                    cursor: "pointer",
-                    zIndex: ZIndexEnums.DEFAULT
+                    width: "6.125rem",
+                    height: "6.125rem",
+                    backgroundColor: theme.palette.grey[200]
                   }}
-                  onClick={handleImageClick}
                 >
-                  {employee?.common?.authPic?.length ? (
-                    <RequestCancelCrossIcon fill={theme.palette.primary.dark} />
-                  ) : (
-                    <PlusIcon fill={theme.palette.primary.dark} />
-                  )}
+                  <Icon name={IconName.USER_UPLOAD_ICON} />
+                </Avatar>
+                <Box>
+                  <input id="imageInput" {...getInputProps()} />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      left: "4.375rem",
+                      top: "5rem",
+                      transform: "translateY(-50%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "2rem",
+                      height: "2rem",
+                      borderRadius: "50%",
+                      backgroundColor: theme.palette.secondary.main,
+                      cursor: "pointer",
+                      zIndex: ZIndexEnums.DEFAULT
+                    }}
+                    onClick={handleImageClick}
+                  >
+                    {employee?.common?.authPic?.length ? (
+                      <RequestCancelCrossIcon
+                        fill={theme.palette.primary.dark}
+                      />
+                    ) : (
+                      <PlusIcon fill={theme.palette.primary.dark} />
+                    )}
+                  </Box>
                 </Box>
-              </Box>
+              </Stack>
             </Stack>
-          </Stack>
+          )}
 
           <Grid
             container

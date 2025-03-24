@@ -16,7 +16,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { capitalizeFirstLetter } from "~community/common/utils/commonUtil";
 
 interface Props {
-  headings: string[];
+  headings: { id: number; label: string }[];
   data: any[];
   onEdit?: (index: number) => void;
   onDelete?: (index: number) => void;
@@ -86,7 +86,7 @@ const PeopleFormTable: FC<Props> = ({
         <TableRow>
           {headings?.map((heading, index) => (
             <TableCell
-              key={index}
+              key={heading.id}
               sx={{
                 alignItems: "left",
                 justifyContent: "center",
@@ -115,7 +115,7 @@ const PeopleFormTable: FC<Props> = ({
                   ...tableHeaderTextStyles
                 }}
               >
-                {heading?.toUpperCase()}
+                {heading?.label?.toUpperCase()}
               </Typography>
             </TableCell>
           ))}
@@ -145,7 +145,7 @@ const PeopleFormTable: FC<Props> = ({
       >
         {data?.map((item, rowIndex) => (
           <TableRow
-            key={rowIndex}
+            key={item.id}
             sx={{
               ...(hoverNeeded && {
                 "&.MuiTableRow-root:hover": {
