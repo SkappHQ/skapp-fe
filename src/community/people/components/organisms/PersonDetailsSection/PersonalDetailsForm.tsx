@@ -18,9 +18,7 @@ interface Props {
   isAddFlow?: boolean;
 }
 
-const PersonalDetailsForm = (
-  { isAddFlow = false }: Props
-) => {
+const PersonalDetailsForm = ({ isAddFlow = false }: Props) => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
   const socialMediaDetailsRef = useRef<FormMethods | null>(null);
@@ -40,7 +38,7 @@ const PersonalDetailsForm = (
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const hasChanged = useFormChangeDetector();
+  const { hasChanged, apiPayload } = useFormChangeDetector();
 
   const onSave = async () => {
     const generalFormErrors = await generalDetailsRef?.current?.validateForm();
@@ -111,9 +109,6 @@ const PersonalDetailsForm = (
       <EducationalDetailsSection />
       <SocialMediaDetailsSection ref={socialMediaDetailsRef} />
       <HealthAndOtherDetailsSection ref={healthAndOtherDetailsRef} />
-
-
-      
 
       <EditSectionButtonWrapper
         onCancelClick={onCancel}

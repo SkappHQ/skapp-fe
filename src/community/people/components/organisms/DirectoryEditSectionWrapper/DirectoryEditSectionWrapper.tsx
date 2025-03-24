@@ -27,7 +27,7 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const hasChanged = useFormChangeDetector();
+  const { hasChanged } = useFormChangeDetector();
 
   useEffect(() => {
     if (hasChanged && currentStep !== nextStep) {
