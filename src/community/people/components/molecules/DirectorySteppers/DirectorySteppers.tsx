@@ -14,9 +14,10 @@ import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
   employeeId: number;
+  isIndividualView?: boolean;
 }
 
-const DirectorySteppers = ({ employeeId }: Props) => {
+const DirectorySteppers = ({ employeeId, isIndividualView }: Props) => {
   const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
   const [isTimeTabVisible, setIsTimeTabVisible] = useState(false);
   const translateText = useTranslator("peopleModule");
@@ -68,10 +69,14 @@ const DirectorySteppers = ({ employeeId }: Props) => {
 
   const steps = [
     translateText(["editAllInfo", "personal"]),
-    translateText(["editAllInfo", "emergency"]),
+    ...(isIndividualView ? [] : [translateText(["editAllInfo", "emergency"])]),
     translateText(["editAllInfo", "employment"]),
-    translateText(["editAllInfo", "systemPermissions"]),
-    // translateText(["editAllInfo", "timeline"]),
+    ...(isIndividualView
+      ? []
+      : [translateText(["editAllInfo", "systemPermissions"])]),
+    // ...(isIndividualView
+    //   ? []
+    //   : [translateText(["editAllInfo", "timeline"])]),
     ...(isLeaveTabVisible &&
     session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
       ? [translateText(["editAllInfo", "leave"])]
@@ -95,7 +100,7 @@ const DirectorySteppers = ({ employeeId }: Props) => {
       stepperStyles={{
         marginBottom: "1.75rem"
       }}
-      isFullWidth
+      isFullWidth={!isIndividualView}
     />
   );
 };

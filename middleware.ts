@@ -96,6 +96,7 @@ const employeeRoutes = {
   [EmployeeTypes.PEOPLE_EMPLOYEE]: [
     ROUTES.PEOPLE.DIRECTORY,
     ROUTES.PEOPLE.INDIVIDUAL,
+    ROUTES.PEOPLE.BASE,
     ...commonRoutes
   ],
   [EmployeeTypes.LEAVE_EMPLOYEE]: [ROUTES.LEAVE.MY_REQUESTS, ...commonRoutes],

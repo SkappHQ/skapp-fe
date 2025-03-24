@@ -47,7 +47,7 @@ const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
 
     return (
       <PeopleFormSectionWrapper
-        title={translateText(["primaryTitle"])}
+        title={translateText(["secondaryTitle"])}
         containerStyles={{
           padding: "0",
           margin: "0 auto",
