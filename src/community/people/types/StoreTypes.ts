@@ -249,7 +249,8 @@ interface actionsTypes {
   setNextStep: (step: EditPeopleFormTypes) => void;
   setCurrentStep: (step: EditPeopleFormTypes) => void;
   setIsUnsavedChangesModalOpen: (status: boolean) => void;
-  setIsSaveButtonClicked: (status: boolean) => void;
+  setIsUnsavedModalSaveButtonClicked: (status: boolean) => void;
+  setIsUnsavedModalDiscardButtonClicked: (status: boolean) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -375,5 +376,6 @@ export interface Store extends actionsTypes {
   nextStep: EditPeopleFormTypes;
   currentStep: EditPeopleFormTypes;
   isUnsavedChangesModalOpen: boolean;
-  isSaveButtonClicked: boolean;
+  isUnsavedModalSaveButtonClicked: boolean;
+  isUnsavedModalDiscardButtonClicked: boolean;
 }

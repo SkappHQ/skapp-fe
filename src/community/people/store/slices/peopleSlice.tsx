@@ -105,14 +105,19 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   nextStep: EditPeopleFormTypes.personal,
   currentStep: EditPeopleFormTypes.personal,
   isUnsavedChangesModalOpen: false,
-  isSaveButtonClicked: false,
+  isUnsavedModalSaveButtonClicked: false,
+  isUnsavedModalDiscardButtonClicked: false,
   setNextStep: (nextStep: EditPeopleFormTypes) => set(() => ({ nextStep })),
   setCurrentStep: (currentStep: EditPeopleFormTypes) =>
     set(() => ({ currentStep })),
   setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) =>
     set(() => ({ isUnsavedChangesModalOpen })),
-  setIsSaveButtonClicked: (isSaveButtonClicked: boolean) =>
-    set(() => ({ isSaveButtonClicked })),
+  setIsUnsavedModalSaveButtonClicked: (
+    isUnsavedModalSaveButtonClicked: boolean
+  ) => set(() => ({ isUnsavedModalSaveButtonClicked })),
+  setIsUnsavedModalDiscardButtonClicked: (
+    isUnsavedModalDiscardButtonClicked: boolean
+  ) => set(() => ({ isUnsavedModalDiscardButtonClicked })),
   setEmployee: (employee: L1EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
   setPersonalDetails: (personal: L2PersonalDetailsType) =>

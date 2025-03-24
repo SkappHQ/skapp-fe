@@ -18,12 +18,13 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
   const { data: employee } = useGetEmployeeById(employeeId);
 
   const {
-    setIsSaveButtonClicked,
     isUnsavedChangesModalOpen,
     currentStep,
     nextStep,
     setIsUnsavedChangesModalOpen,
-    setCurrentStep
+    setCurrentStep,
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
   const hasChanged = useFormChangeDetector();
@@ -39,7 +40,8 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
     hasChanged,
     nextStep,
     setCurrentStep,
-    setIsSaveButtonClicked,
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked,
     setIsUnsavedChangesModalOpen
   ]);
 
@@ -52,9 +54,11 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
       <PeopleFormSections />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
-        onDiscard={() => {}}
+        onDiscard={() => {
+          setIsUnsavedModalDiscardButtonClicked(true);
+        }}
         onSave={() => {
-          setIsSaveButtonClicked(true);
+          setIsUnsavedModalSaveButtonClicked(true);
         }}
       />
     </>

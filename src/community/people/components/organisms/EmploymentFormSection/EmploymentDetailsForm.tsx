@@ -20,13 +20,15 @@ const EmploymentDetailsForm = () => {
   const {
     nextStep,
     currentStep,
+    employee,
+    isUnsavedModalSaveButtonClicked,
+    isUnsavedModalDiscardButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
-    employee,
-    isSaveButtonClicked,
     setIsUnsavedChangesModalOpen,
-    setIsSaveButtonClicked
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
   const hasChanged = useFormChangeDetector();
@@ -50,32 +52,44 @@ const EmploymentDetailsForm = () => {
       setCurrentStep(nextStep);
       setIsUnsavedChangesModalOpen(false);
       setEmployee(employee);
-      setIsSaveButtonClicked(false);
+      setIsUnsavedModalSaveButtonClicked(false);
       // Mutate the data
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);
       scrollToFirstError(theme);
-      setIsSaveButtonClicked(false);
+      setIsUnsavedModalSaveButtonClicked(false);
+    }
+  };
+
+  const onCancel = () => {
+    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
+      employmentDetailsRef?.current?.resetForm();
+      identificationDetailsRef?.current?.resetForm();
+
+      setIsUnsavedChangesModalOpen(false);
+      setIsUnsavedModalDiscardButtonClicked(false);
     }
   };
 
   useEffect(() => {
-    if (isSaveButtonClicked) {
+    if (isUnsavedModalSaveButtonClicked) {
       onSave();
+    } else if (isUnsavedModalDiscardButtonClicked) {
+      onCancel();
     }
-  }, [isSaveButtonClicked]);
+  }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
 
   return (
     <>
-      <EmploymentDetailsSection ref={employmentDetailsRef}/>
+      <EmploymentDetailsSection ref={employmentDetailsRef} />
       <CareerProgressDetailsSection />
-      <IdentificationDetailsSection ref={identificationDetailsRef}/>
+      <IdentificationDetailsSection ref={identificationDetailsRef} />
       <PreviousEmploymentDetailsSection />
       <VisaDetailsSection />
 
       <EditSectionButtonWrapper
-        onCancelClick={() => {}}
+        onCancelClick={onCancel}
         onSaveClick={onSave}
         isSaveDisabled={!hasChanged}
       />

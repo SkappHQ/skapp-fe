@@ -48,8 +48,16 @@ const SystemPermissionFormSection = ({
 
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
-  const { employee, initialEmployee, isSaveButtonClicked, setEmployee } =
-    usePeopleStore((state) => state);
+  const {
+    employee,
+    initialEmployee,
+    isUnsavedModalSaveButtonClicked,
+    isUnsavedModalDiscardButtonClicked,
+    setEmployee,
+    setIsUnsavedChangesModalOpen,
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked
+  } = usePeopleStore((state) => state);
   const { data: supervisedData } = useGetSupervisedByMe(
     Number(employee.common?.employeeId)
   );
@@ -94,15 +102,26 @@ const SystemPermissionFormSection = ({
         open: true
       });
     } else {
+      setIsUnsavedChangesModalOpen(false);
+      setIsUnsavedModalSaveButtonClicked(false);
       setEmployee(employee);
+    }
+  };
+  const onCancel = () => {
+    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
+      setEmployee(initialEmployee);
+      setIsUnsavedChangesModalOpen(false);
+      setIsUnsavedModalDiscardButtonClicked(false);
     }
   };
 
   useEffect(() => {
-    if (isSaveButtonClicked) {
+    if (isUnsavedModalSaveButtonClicked) {
       onSave();
+    } else if (isUnsavedModalDiscardButtonClicked) {
+      onCancel();
     }
-  }, [isSaveButtonClicked]);
+  }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
 
   return (
     <PeopleFormSectionWrapper
@@ -194,7 +213,7 @@ const SystemPermissionFormSection = ({
           environment === appModes.COMMUNITY && <SystemCredentials />}
 
         <EditSectionButtonWrapper
-          onCancelClick={() => {}}
+          onCancelClick={onCancel}
           onSaveClick={onSave}
           isSaveDisabled={!hasChanged}
         />

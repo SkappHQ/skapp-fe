@@ -18,13 +18,15 @@ const EmergencyDetailsForm = () => {
   const {
     nextStep,
     currentStep,
+    employee,
+    isUnsavedModalSaveButtonClicked,
+    isUnsavedModalDiscardButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
-    employee,
-    isSaveButtonClicked,
     setIsUnsavedChangesModalOpen,
-    setIsSaveButtonClicked
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
   const onSave = async () => {
@@ -47,28 +49,40 @@ const EmergencyDetailsForm = () => {
       setCurrentStep(nextStep);
       setIsUnsavedChangesModalOpen(false);
       setEmployee(employee);
-      setIsSaveButtonClicked(false);
+      setIsUnsavedModalSaveButtonClicked(false);
       // Mutate the data
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);
       scrollToFirstError(theme);
-      setIsSaveButtonClicked(false);
+      setIsUnsavedModalSaveButtonClicked(false);
+    }
+  };
+
+  const onCancel = () => {
+    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
+      primaryContactDetailsRef?.current?.resetForm();
+      secondaryContactDetailsRef?.current?.resetForm();
+
+      setIsUnsavedChangesModalOpen(false);
+      setIsUnsavedModalDiscardButtonClicked(false);
     }
   };
 
   useEffect(() => {
-    if (isSaveButtonClicked) {
+    if (isUnsavedModalSaveButtonClicked) {
       onSave();
+    } else if (isUnsavedModalDiscardButtonClicked) {
+      onCancel();
     }
-  }, [isSaveButtonClicked]);
+  }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
 
   return (
     <>
       <PrimaryContactDetailsSection ref={primaryContactDetailsRef} />
       <SecondaryContactDetailsSection ref={secondaryContactDetailsRef} />
       <EditSectionButtonWrapper
-        onCancelClick={() => {}}
+        onCancelClick={onCancel}
         onSaveClick={onSave}
         isSaveDisabled={!hasChanged}
       />
