@@ -13,7 +13,11 @@ import IdentificationDetailsSection from "./SubSections/IdentificationDetailsSec
 import PreviousEmploymentDetailsSection from "./SubSections/PreviousEmploymentDetailsSection";
 import VisaDetailsSection from "./SubSections/VisaDetailsSection";
 
-const EmploymentDetailsForm = () => {
+interface Props {
+  isAddFlow?: boolean;
+}
+
+const EmploymentDetailsForm = ({ isAddFlow = false }: Props) => {
   const employmentDetailsRef = useRef<FormMethods | null>(null);
   const identificationDetailsRef = useRef<FormMethods | null>(null);
 

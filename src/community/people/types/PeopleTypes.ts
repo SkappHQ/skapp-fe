@@ -14,7 +14,7 @@ import {
 
 //L1 Type
 export interface L1EmployeeType {
-  personal: L2PersonalDetailsType;
+  personal?: L2PersonalDetailsType;
   emergency?: L2EmergencyDetailsType;
   employment?: L2EmploymentFormDetailsType;
   systemPermissions?: L2SystemPermissionsType;
@@ -23,7 +23,7 @@ export interface L1EmployeeType {
 
 //L2 Types
 export interface L2PersonalDetailsType {
-  general: L3GeneralDetailsType;
+  general?: L3GeneralDetailsType;
   contact?: L3ContactDetailsType;
   family?: L3FamilyDetailsType[];
   educational?: L3EducationalDetailsType[];
@@ -53,18 +53,18 @@ export interface L2SystemPermissionsType {
 }
 
 export interface L2CommonDetailsType {
-  employeeId: string;
+  employeeId?: string;
   authPic?: string;
   accountStatus?: AccountStatusTypes;
 }
 
 //L3 Types
 export interface L3GeneralDetailsType {
-  firstName: string;
+  firstName?: string;
   middleName?: string;
-  lastName: string;
+  lastName?: string;
   gender?: GenderEnum;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   nationality?: NationalityEnum;
   nin?: string;
   passportNumber?: string;
@@ -125,7 +125,7 @@ export interface L3EmergencyContactType {
 
 export interface L3EmploymentDetailsType {
   employeeNumber?: string;
-  email: string;
+  email?: string;
   employmentAllocation?: EmploymentAllocationTypes;
   teamIds?: number[];
   primarySupervisor?: L4ManagerType;

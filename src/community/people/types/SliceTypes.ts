@@ -210,6 +210,8 @@ export interface PeopleSliceTypes
     | "initialEmployee"
     | "nextStep"
     | "currentStep"
+    | "activeStep"
+    | "setActiveStep"
     | "isUnsavedChangesModalOpen"
     | "isUnsavedModalSaveButtonClicked"
     | "isUnsavedModalDiscardButtonClicked"

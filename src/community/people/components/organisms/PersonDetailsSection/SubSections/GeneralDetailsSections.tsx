@@ -1,14 +1,31 @@
-import { Grid2 as Grid, Stack, type Theme, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid2 as Grid,
+  Stack,
+  type Theme,
+  useTheme
+} from "@mui/material";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { forwardRef, useImperativeHandle, useMemo } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react";
+import { useDropzone } from "react-dropzone";
 
+import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
+import PlusIcon from "~community/common/assets/Icons/PlusIcon";
+import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
+import Icon from "~community/common/components/atoms/Icon/Icon";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import { appModes } from "~community/common/constants/configs";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
+import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
+import { IconName } from "~community/common/types/IconTypes";
+import { NINETY_PERCENT } from "~community/common/utils/getConstants";
 import {
   NAME_MAX_CHARACTER_LENGTH,
   PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH
@@ -30,6 +47,7 @@ interface Props {
   isManager?: boolean;
   isAdmin?: boolean;
   isInputsDisabled?: boolean;
+  isAddFlow?: boolean;
 }
 
 const GeneralDetailsSection = forwardRef<FormMethods, Props>(
@@ -44,10 +62,14 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       "generalDetails"
     );
 
-    const { employee } = usePeopleStore((state) => state);
+    const translateStorageText = useTranslator("StorageToastMessage");
+
+    const { setToastMessage } = useToast();
+
+    const { employee, setCommonDetails } = usePeopleStore((state) => state);
 
     const initialValues = useMemo<L3GeneralDetailsType>(
-      () => employee?.personal?.general,
+      () => employee?.personal?.general ?? {},
       [employee]
     );
 
@@ -71,6 +93,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
 
     const { values, errors } = formik;
 
+    const { data: storageAvailabilityData } = useStorageAvailability();
+
     useImperativeHandle(ref, () => ({
       validateForm: async () => {
         const validationErrors = await formik.validateForm();
@@ -83,6 +107,74 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         formik.resetForm();
       }
     }));
+
+    const usedStoragePercentage = useMemo(() => {
+      return 100 - storageAvailabilityData?.availableSpace;
+    }, [storageAvailabilityData]);
+
+    const getAvatarThumbnailUrl = useCallback((): string => {
+      if (employee?.common?.authPic !== undefined) {
+        if (Array.isArray(employee?.common?.authPic)) {
+          return employee?.common?.authPic[0]?.preview;
+        }
+        return employee?.common?.authPic ?? "";
+      }
+
+      return "";
+    }, [employee?.common?.authPic]);
+
+    const onDrop = useCallback(
+      (acceptedFiles: File[]) => {
+        const profilePic = acceptedFiles.map((file: File) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file)
+          })
+        );
+
+        setCommonDetails({
+          authPic: profilePic[0]?.preview ?? "",
+          employeeId: employee?.common?.employeeId ?? ""
+        });
+        // generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+        //   setEmployeeGeneralDetails("thumbnail", thumbnail)
+        // );
+      },
+      [employee?.common?.employeeId]
+    );
+
+    const { open, getInputProps } = useDropzone({
+      onDrop,
+      noClick: true,
+      noKeyboard: true,
+      accept: {
+        "image/svg+xml": [],
+        "image/png": [],
+        "image/jpg": [],
+        "image/jpeg": []
+      }
+    });
+
+    const handleImageClick = () => {
+      if (employee?.common?.authPic?.length) {
+        setCommonDetails({
+          authPic: employee?.common?.authPic ?? "",
+          employeeId: employee?.common?.employeeId ?? ""
+        });
+      } else if (
+        process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
+        usedStoragePercentage >= NINETY_PERCENT
+      ) {
+        setToastMessage({
+          open: true,
+          toastType: "error",
+          title: translateStorageText(["storageTitle"]),
+          description: translateStorageText(["contactAdminText"]),
+          isIcon: true
+        });
+      } else {
+        open();
+      }
+    };
 
     return (
       <PeopleFormSectionWrapper
@@ -103,54 +195,54 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
             direction="column"
             sx={{ display: isManager || isAdmin ? "none" : "block" }}
           >
-            {/* <Stack
-                direction="row"
-                alignItems="center"
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{
+                mb: "1.5rem",
+                position: "relative"
+              }}
+            >
+              <Avatar
+                id="avatar"
+                alt={`${values.firstName} ${values.lastName}`}
+                src={getAvatarThumbnailUrl()}
                 sx={{
-                  mb: "1.5rem",
-                  position: "relative"
+                  width: "6.125rem",
+                  height: "6.125rem",
+                  backgroundColor: theme.palette.grey[200]
                 }}
               >
-                <Avatar
-                  id="avatar"
-                  alt={""}
-                  src={""}
+                <Icon name={IconName.USER_UPLOAD_ICON} />
+              </Avatar>
+              <Box>
+                <input id="imageInput" {...getInputProps()} />
+                <Box
                   sx={{
-                    width: "6.125rem",
-                    height: "6.125rem",
-                    backgroundColor: theme.palette.grey[200]
+                    position: "absolute",
+                    left: "4.375rem",
+                    top: "5rem",
+                    transform: "translateY(-50%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "2rem",
+                    height: "2rem",
+                    borderRadius: "50%",
+                    backgroundColor: theme.palette.secondary.main,
+                    cursor: "pointer",
+                    zIndex: ZIndexEnums.DEFAULT
                   }}
+                  onClick={handleImageClick}
                 >
-                  <Icon name={IconName.USER_UPLOAD_ICON} />
-                </Avatar>
-                <Box>
-                  <input id="imageInput" {...getInputProps()} />
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      left: "4.375rem",
-                      top: "5rem",
-                      transform: "translateY(-50%)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "2rem",
-                      height: "2rem",
-                      borderRadius: "50%",
-                      backgroundColor: theme.palette.secondary.main,
-                      cursor: "pointer",
-                      zIndex: ZIndexEnums.DEFAULT
-                    }}
-                    onClick={() => {}}
-                  >
-                    {employeeGeneralDetails?.authPic?.length ? (
+                  {employee?.common?.authPic?.length ? (
                     <RequestCancelCrossIcon fill={theme.palette.primary.dark} />
                   ) : (
                     <PlusIcon fill={theme.palette.primary.dark} />
                   )}
-                  </Box>
                 </Box>
-              </Stack> */}
+              </Box>
+            </Stack>
           </Stack>
 
           <Grid

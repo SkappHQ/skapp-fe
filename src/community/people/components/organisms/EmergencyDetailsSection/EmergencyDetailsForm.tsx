@@ -10,7 +10,11 @@ import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/E
 import PrimaryContactDetailsSection from "./SubSections/PrimaryContactDetailsSection";
 import SecondaryContactDetailsSection from "./SubSections/SecondaryContactDetailsSection";
 
-const EmergencyDetailsForm = () => {
+interface Props {
+  isAddFlow?: boolean;
+}
+
+const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const hasChanged = useFormChangeDetector();

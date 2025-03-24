@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { usePeopleStore } from "~community/people/store/store";
 
 import { EditPeopleFormTypes } from "../types/PeopleEditTypes";
+import { L2PersonalDetailsType } from "../types/PeopleTypes";
+import { getPersonalDetailsChanges } from "../utils/peopleEditFlowUtils";
 
 const useFormChangeDetector = (): boolean => {
   const [hasChanged, setHasChanged] = useState(false);
@@ -11,40 +13,43 @@ const useFormChangeDetector = (): boolean => {
   );
 
   useEffect(() => {
-    if (!employee || !initialEmployee) {
-      setHasChanged(false);
-      return;
-    }
+    let apiPayload: Record<string, any> = {};
 
     switch (currentStep) {
       case EditPeopleFormTypes.personal: {
-        const personalHasChanged =
-          JSON.stringify(employee.personal) !==
-          JSON.stringify(initialEmployee.personal);
-        setHasChanged(personalHasChanged);
+        const newPersonalDetails = employee?.personal as L2PersonalDetailsType;
+        const previousPersonalDetails =
+          initialEmployee?.personal as L2PersonalDetailsType;
+
+        apiPayload = {
+          ...apiPayload,
+          ...getPersonalDetailsChanges(
+            newPersonalDetails,
+            previousPersonalDetails
+          )
+        };
         break;
       }
       case EditPeopleFormTypes.employment: {
-        const employmentHasChanged =
-          JSON.stringify(employee.employment) !==
-          JSON.stringify(initialEmployee.employment);
-        setHasChanged(employmentHasChanged);
+        // Handle employment details changes
         break;
       }
       case EditPeopleFormTypes.permission: {
-        const contactHasChanged =
-          JSON.stringify(employee.systemPermissions) !==
-          JSON.stringify(initialEmployee.systemPermissions);
-        setHasChanged(contactHasChanged);
+        // Handle permission details changes
         break;
       }
       case EditPeopleFormTypes.emergency: {
-        const contactHasChanged =
-          JSON.stringify(employee.emergency) !==
-          JSON.stringify(initialEmployee.emergency);
-        setHasChanged(contactHasChanged);
+        // Handle emergency details changes
         break;
       }
+      default:
+        break;
+    }
+
+    if (Object.keys(apiPayload).length > 0) {
+      setHasChanged(true);
+    } else {
+      setHasChanged(false);
     }
   }, [currentStep, employee, initialEmployee]);
 

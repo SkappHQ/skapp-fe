@@ -14,7 +14,13 @@ import GeneralDetailsSection from "./SubSections/GeneralDetailsSections";
 import HealthAndOtherDetailsSection from "./SubSections/HealthAndOtherDetailsSection";
 import SocialMediaDetailsSection from "./SubSections/SocialMediaDetailsSection";
 
-const PersonalDetailsForm = () => {
+interface Props {
+  isAddFlow?: boolean;
+}
+
+const PersonalDetailsForm = (
+  { isAddFlow = false }: Props
+) => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
   const socialMediaDetailsRef = useRef<FormMethods | null>(null);
@@ -105,6 +111,9 @@ const PersonalDetailsForm = () => {
       <EducationalDetailsSection />
       <SocialMediaDetailsSection ref={socialMediaDetailsRef} />
       <HealthAndOtherDetailsSection ref={healthAndOtherDetailsRef} />
+
+
+      
 
       <EditSectionButtonWrapper
         onCancelClick={onCancel}

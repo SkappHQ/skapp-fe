@@ -29,12 +29,14 @@ interface Props {
   isProfileView?: boolean;
   isInputsDisabled?: boolean;
   isUpdate?: boolean;
+  isAddFlow?: boolean;
 }
 
 const SystemPermissionFormSection = ({
   isProfileView,
   isInputsDisabled,
-  isUpdate
+  isUpdate,
+  isAddFlow
 }: Props) => {
   const classes = styles();
   const environment = useGetEnvironment();

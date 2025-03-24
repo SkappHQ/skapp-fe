@@ -251,6 +251,7 @@ interface actionsTypes {
   setIsUnsavedChangesModalOpen: (status: boolean) => void;
   setIsUnsavedModalSaveButtonClicked: (status: boolean) => void;
   setIsUnsavedModalDiscardButtonClicked: (status: boolean) => void;
+  setActiveStep: (step: number) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -378,4 +379,5 @@ export interface Store extends actionsTypes {
   isUnsavedChangesModalOpen: boolean;
   isUnsavedModalSaveButtonClicked: boolean;
   isUnsavedModalDiscardButtonClicked: boolean;
+  activeStep: number;
 }

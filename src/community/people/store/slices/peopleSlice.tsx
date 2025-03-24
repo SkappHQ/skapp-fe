@@ -104,9 +104,11 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   initialEmployee: defaultEmployee,
   nextStep: EditPeopleFormTypes.personal,
   currentStep: EditPeopleFormTypes.personal,
+  activeStep: 0,
   isUnsavedChangesModalOpen: false,
   isUnsavedModalSaveButtonClicked: false,
   isUnsavedModalDiscardButtonClicked: false,
+  setActiveStep: (activeStep: number) => set(() => ({ activeStep })),
   setNextStep: (nextStep: EditPeopleFormTypes) => set(() => ({ nextStep })),
   setCurrentStep: (currentStep: EditPeopleFormTypes) =>
     set(() => ({ currentStep })),
