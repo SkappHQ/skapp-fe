@@ -1,6 +1,6 @@
 import { Grid2 as Grid } from "@mui/material";
 import { DateTime } from "luxon";
-import { JSX, useEffect } from "react";
+import { JSX } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
@@ -143,9 +143,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["startDate"])}
-            value={
-              values.startDate ? DateTime.fromISO(values.startDate) : undefined
-            }
+            value={DateTime.fromISO(values?.startDate ?? "")}
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "startDate",
@@ -168,9 +166,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["endDate"])}
-            value={
-              values.endDate ? DateTime.fromISO(values.endDate) : undefined
-            }
+            value={DateTime.fromISO(values.endDate ?? "")}
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "endDate",
@@ -221,10 +217,10 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
           )}
         </Grid>
 
-        {employee?.personal.educational?.length === 0 ? null : (
+        {employee?.personal?.educational?.length === 0 ? null : (
           <PeopleFormTable
-            data={formatTableData(employee?.personal.educational || [])}
-            actionsNeeded={true && !isInputsDisabled}
+            data={formatTableData(employee?.personal?.educational || [])}
+            actionsNeeded={!isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}

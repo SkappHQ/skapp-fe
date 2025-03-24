@@ -59,20 +59,15 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
     handleDateChange
   } = useFamilyDetailsFormHandlers();
 
-  const columns = [
-    { field: 1, headerName: translateText(["firstName"]) },
-    { field: 2, headerName: translateText(["lastName"]) },
-    { field: 3, headerName: translateText(["gender"]) },
-    { field: 4, headerName: translateText(["relationship"]) },
-    { field: 5, headerName: translateText(["parentName"]) },
-    { field: 6, headerName: translateText(["dateOfBirth"]) },
-    { field: 7, headerName: translateText(["age"]) }
+  const tableHeaders = [
+    translateText(["firstName"]),
+    translateText(["lastName"]),
+    translateText(["gender"]),
+    translateText(["relationship"]),
+    translateText(["parentName"]),
+    translateText(["dateOfBirth"]),
+    translateText(["age"])
   ];
-
-  const tableHeaders = columns.map((col) => ({
-    id: col.field,
-    label: col.headerName
-  }));
 
   const { employee, setPersonalDetails } = usePeopleStore((state) => state);
 
@@ -115,7 +110,6 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
 
     return data.map((member) => {
       return {
-        id: member?.familyMemberId,
         firstName: member?.firstName ?? "",
         lastName: member?.lastName ?? "",
         gender: getLabelByValue(GenderList, member?.gender as string) ?? "",

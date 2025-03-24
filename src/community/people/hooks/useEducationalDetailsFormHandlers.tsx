@@ -47,7 +47,7 @@ const useEducationalDetailsFormHandlers = () => {
       if (rowEdited > -1) {
         const details = employee?.personal?.educational || [];
         details.splice(rowEdited, 1, {
-          educationId: details[rowEdited].educationId,
+          educationId: rowEdited,
           ...values
         });
         setPersonalDetails({
@@ -56,9 +56,13 @@ const useEducationalDetailsFormHandlers = () => {
         });
         setRowEdited(-1);
       } else {
+        const newEducationId = (employee?.personal?.educational?.length ?? 0) + 1;
         setPersonalDetails({
           general: employee?.personal?.general,
-          educational: [...(employee?.personal?.educational || []), values]
+          educational: [
+            ...(employee?.personal?.educational || []), 
+            { ...values, educationId: newEducationId }
+          ]
         });
       }
       resetForm();

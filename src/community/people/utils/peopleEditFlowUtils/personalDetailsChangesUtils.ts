@@ -173,14 +173,15 @@ export const getContactDetailsChanges = (
 export const getFamilyDetailsChanges = (
   newFamily: L3FamilyDetailsType[],
   previousFamily: L3FamilyDetailsType[]
-): Record<string, any> => {
-  const changes: Record<string, any> = {};
-
+): L3FamilyDetailsType[] => {
+  // If the array lengths differ, return the entire new family
   if (newFamily.length !== previousFamily.length) {
-    changes.family = newFamily;
-    return changes;
+    return newFamily;
   }
 
+  const changedMembers: L3FamilyDetailsType[] = [];
+
+  // Create a map of previous family members by ID for quick lookup
   const previousFamilyMap = previousFamily.reduce(
     (map, member) => {
       if (member.familyMemberId !== undefined) {
@@ -191,23 +192,30 @@ export const getFamilyDetailsChanges = (
     {} as Record<number, L3FamilyDetailsType>
   );
 
+  // Check each new family member for changes
   newFamily.forEach((newMember) => {
     if (newMember.familyMemberId === undefined) return;
 
     const previousMember = previousFamilyMap[newMember.familyMemberId];
-
     if (!previousMember) return;
 
-    const memberId = newMember.familyMemberId;
+    // Create an object to hold changes for this member
+    let hasChanges = false;
+    const changedMember: L3FamilyDetailsType = {
+      familyMemberId: newMember.familyMemberId
+    };
 
+    // Check each field for changes
     if (
       isFieldDifferentAndValid(newMember.firstName, previousMember.firstName)
     ) {
-      changes[`${memberId}.firstName`] = newMember.firstName;
+      changedMember.firstName = newMember.firstName;
+      hasChanges = true;
     }
 
     if (isFieldDifferentAndValid(newMember.lastName, previousMember.lastName)) {
-      changes[`${memberId}.lastName`] = newMember.lastName;
+      changedMember.lastName = newMember.lastName;
+      hasChanges = true;
     }
 
     if (
@@ -216,17 +224,20 @@ export const getFamilyDetailsChanges = (
         previousMember.relationship
       )
     ) {
-      changes[`${memberId}.relationship`] = newMember.relationship;
+      changedMember.relationship = newMember.relationship;
+      hasChanges = true;
     }
 
     if (isFieldDifferentAndValid(newMember.gender, previousMember.gender)) {
-      changes[`${memberId}.gender`] = newMember.gender;
+      changedMember.gender = newMember.gender;
+      hasChanges = true;
     }
 
     if (
       isFieldDifferentAndValid(newMember.parentName, previousMember.parentName)
     ) {
-      changes[`${memberId}.parentName`] = newMember.parentName;
+      changedMember.parentName = newMember.parentName;
+      hasChanges = true;
     }
 
     if (
@@ -235,24 +246,31 @@ export const getFamilyDetailsChanges = (
         previousMember.dateOfBirth
       )
     ) {
-      changes[`${memberId}.dateOfBirth`] = newMember.dateOfBirth;
+      changedMember.dateOfBirth = newMember.dateOfBirth;
+      hasChanges = true;
+    }
+
+    // If this member has changes, add to the result array
+    if (hasChanges) {
+      changedMembers.push(changedMember);
     }
   });
 
-  return changes;
+  return changedMembers;
 };
 
 export const getEducationalDetailsChanges = (
   newEducational: L3EducationalDetailsType[],
   previousEducational: L3EducationalDetailsType[]
-): Record<string, any> => {
-  const changes: Record<string, any> = {};
-
+): L3EducationalDetailsType[] => {
+  // If the array lengths differ, return the entire new educational array
   if (newEducational.length !== previousEducational.length) {
-    changes.educational = newEducational;
-    return changes;
+    return newEducational;
   }
 
+  const changedEducations: L3EducationalDetailsType[] = [];
+
+  // Create a map of previous education entries by ID for quick lookup
   const previousEducationalMap = previousEducational.reduce(
     (map, education) => {
       if (education.educationId !== undefined) {
@@ -263,32 +281,40 @@ export const getEducationalDetailsChanges = (
     {} as Record<number, L3EducationalDetailsType>
   );
 
+  // Check each new education entry for changes
   newEducational.forEach((newEducation) => {
     if (newEducation.educationId === undefined) return;
 
     const previousEducation = previousEducationalMap[newEducation.educationId];
-
     if (!previousEducation) return;
 
-    const educationId = newEducation.educationId;
+    // Create an object to hold changes for this education entry
+    let hasChanges = false;
+    const changedEducation: L3EducationalDetailsType = {
+      educationId: newEducation.educationId
+    };
 
+    // Check each field for changes
     if (
       isFieldDifferentAndValid(
         newEducation.institutionName,
         previousEducation.institutionName
       )
     ) {
-      changes[`${educationId}.institutionName`] = newEducation.institutionName;
+      changedEducation.institutionName = newEducation.institutionName;
+      hasChanges = true;
     }
 
     if (
       isFieldDifferentAndValid(newEducation.degree, previousEducation.degree)
     ) {
-      changes[`${educationId}.degree`] = newEducation.degree;
+      changedEducation.degree = newEducation.degree;
+      hasChanges = true;
     }
 
     if (isFieldDifferentAndValid(newEducation.major, previousEducation.major)) {
-      changes[`${educationId}.major`] = newEducation.major;
+      changedEducation.major = newEducation.major;
+      hasChanges = true;
     }
 
     if (
@@ -297,17 +323,24 @@ export const getEducationalDetailsChanges = (
         previousEducation.startDate
       )
     ) {
-      changes[`${educationId}.startDate`] = newEducation.startDate;
+      changedEducation.startDate = newEducation.startDate;
+      hasChanges = true;
     }
 
     if (
       isFieldDifferentAndValid(newEducation.endDate, previousEducation.endDate)
     ) {
-      changes[`${educationId}.endDate`] = newEducation.endDate;
+      changedEducation.endDate = newEducation.endDate;
+      hasChanges = true;
+    }
+
+    // If this education entry has changes, add to the result array
+    if (hasChanges) {
+      changedEducations.push(changedEducation);
     }
   });
 
-  return changes;
+  return changedEducations;
 };
 
 export const getSocialMediaDetailsChanges = (
@@ -419,7 +452,7 @@ export const getPersonalDetailsChanges = (
   const familyChanges = getFamilyDetailsChanges(
     newPersonalDetails.family as L3FamilyDetailsType[],
     previousPersonalDetails.family as L3FamilyDetailsType[]
-  ) as L3FamilyDetailsType[];
+  );
 
   Object.assign(changes, familyChanges);
 

@@ -59,7 +59,7 @@ const useFamilyDetailsFormHandlers = () => {
         const members = [...(employee?.personal?.family || [])];
         members.splice(rowEdited, 1, {
           ...familyData,
-          familyMemberId: members[rowEdited]?.familyMemberId
+          familyMemberId: members[rowEdited]?.familyMemberId ?? rowEdited
         });
         setPersonalDetails({
           general: employee?.personal?.general,
@@ -67,9 +67,16 @@ const useFamilyDetailsFormHandlers = () => {
         });
         setRowEdited(-1);
       } else {
+        const newMemberId = (employee?.personal?.family?.length ?? 0) + 1;
         setPersonalDetails({
           general: employee?.personal?.general,
-          family: [...(employee?.personal?.family || []), familyData]
+          family: [
+            ...(employee?.personal?.family || []),
+            {
+              ...familyData,
+              familyMemberId: newMemberId
+            }
+          ]
         });
       }
       resetForm();

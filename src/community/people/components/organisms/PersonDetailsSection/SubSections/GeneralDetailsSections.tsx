@@ -366,11 +366,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               >
                 <InputDate
                   label={translateText(["birthDate"])}
-                  value={
-                    values?.dateOfBirth
-                      ? DateTime.fromJSDate(values.dateOfBirth)
-                      : undefined
-                  }
+                  value={DateTime.fromISO(values?.dateOfBirth ?? "")}
                   onchange={handleDateChange}
                   placeholder={translateText(["selectBirthDate"])}
                   error={errors?.dateOfBirth ?? ""}
