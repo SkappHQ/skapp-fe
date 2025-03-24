@@ -2,13 +2,12 @@ import { FC, useCallback } from "react";
 
 import ModalController from "~community/common/components/organisms/ModalController/ModalController";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import LeaveCarryForwardSyncConfirmation from "~community/leave/components/molecules/LeaveCarryForwardModals/LeaveCarryForwardSyncConfirmation/LeaveCarryForwardSyncConfirmation";
+import LeaveCarryForwardTypeContent from "~community/leave/components/molecules/LeaveCarryForwardModals/LeaveCarryForwardTypeContent/LeaveCarryForwardTypeContent";
+import LeaveCarryForwardUnEligible from "~community/leave/components/molecules/LeaveCarryForwardModals/LeaveCarryForwardUnEligible/LeaveCarryForwardUnEligible";
+import NoCarryForwardLeaveTypes from "~community/leave/components/molecules/LeaveCarryForwardModals/NoCarryForwardLeaveTypes/NoCarryForwardLeaveTypes";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
-
-import LeaveCarryForwardSyncConfirmation from "../../molecules/LeaveCarryForwardModals/LeaveCarryForwardSyncConfirmation/LeaveCarryForwardSyncConfirmation";
-import LeaveCarryForwardTypeContent from "../../molecules/LeaveCarryForwardModals/LeaveCarryForwardTypeContent/LeaveCarryForwardTypeContent";
-import LeaveCarryForwardUnEligible from "../../molecules/LeaveCarryForwardModals/LeaveCarryForwardUnEligible/LeaveCarryForwardUnEligible";
-import NoCarryForwardLeaveTypes from "../../molecules/LeaveCarryForwardModals/NoCarryForwardLeaveTypes/NoCarryForwardLeaveTypes";
 
 const LeaveCarryForwardModalController: FC = () => {
   const translateText = useTranslator("leaveModule", "leaveCarryForward");
@@ -41,10 +40,12 @@ const LeaveCarryForwardModalController: FC = () => {
         return "";
     }
   }, [leaveCarryForwardModalType, translateText]);
+
   const handleClose = () => {
     setIsLeaveCarryForwardModalOpen(false);
     setLeaveCarryForwardModalType(LeaveCarryForwardModalTypes.NONE);
   };
+
   return (
     <ModalController
       isModalOpen={isLeaveCarryForwardModalOpen}
