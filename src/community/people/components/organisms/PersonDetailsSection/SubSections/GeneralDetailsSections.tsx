@@ -31,6 +31,7 @@ import {
   PASSPORT_AND_NIN_MAX_CHARACTER_LENGTH
 } from "~community/people/constants/configs";
 import useGeneralDetailsFormHandlers from "~community/people/hooks/useGeneralDetailsFormHandlers";
+import useGetCountryList from "~community/people/hooks/useGetCountryList";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { L3GeneralDetailsType } from "~community/people/types/PeopleTypes";
@@ -68,8 +69,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
 
     const { employee, setCommonDetails } = usePeopleStore((state) => state);
 
-    const initialValues = useMemo<L3GeneralDetailsType>(
-      () => employee?.personal?.general ?? {},
+    const initialValues = useMemo<L3GeneralDetailsType & { country?: string }>(
+      () => ({
+        ...employee?.personal?.general,
+        country: employee?.personal?.contact?.country
+      }),
       [employee]
     );
 
@@ -175,6 +179,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         open();
       }
     };
+
+    const countryList = useGetCountryList();
 
     return (
       <PeopleFormSectionWrapper
@@ -466,6 +472,30 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={MaritalStatusList}
                 checkSelected
                 isDisabled={isInputsDisabled}
+              />
+            </Grid>
+            <Grid
+              size={{ xs: 12, md: 6, xl: 4 }}
+              sx={{ display: isManager ? "block" : "none" }}
+            >
+              <DropdownAutocomplete
+                itemList={countryList}
+                inputName="country"
+                label={translateText(["country"])}
+                value={
+                  values.country
+                    ? {
+                        label: values.country,
+                        value: values.country
+                      }
+                    : undefined
+                }
+                placeholder={translateText(["selectCountry"])}
+                componentStyle={{
+                  mt: "0rem"
+                }}
+                isDisabled={isInputsDisabled}
+                readOnly={isManager}
               />
             </Grid>
           </Grid>
