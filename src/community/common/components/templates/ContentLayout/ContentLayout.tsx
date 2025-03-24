@@ -7,7 +7,7 @@ import {
   useTheme
 } from "@mui/material";
 import { type SxProps } from "@mui/system";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, memo, useEffect, useMemo } from "react";
@@ -18,6 +18,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import VersionUpgradeBanner from "~community/common/components/molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import { appModes } from "~community/common/constants/configs";
+import ROUTES from "~community/common/constants/routes";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
   ButtonSizes,
@@ -121,44 +122,56 @@ const ContentLayout = ({
     (state) => state
   );
 
+  const isSuperAdmin = data?.user?.roles?.includes(AdminTypes.SUPER_ADMIN);
+  const tenantStatus = data?.user?.tenantStatus;
+
+  const modalTypeMap = {
+    [TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED]:
+      SubscriptionModalTypeEnums.POST_SUBSCRIPTION_CANCELLATION_MODAL,
+    [TenantStatusEnums.FREE_TRAIL_ENDED]:
+      SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL,
+    [TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED]:
+      SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL_USER_LIMIT_SURPASS_MODAL,
+    [TenantStatusEnums.ACTIVE]: null
+  };
+
   const { setIsSubscriptionEndedModalOpen, setSubscriptionEndedModalType } =
     useCommonEnterpriseStore((state) => state);
 
   useEffect(() => {
-    switch (data?.user?.tenantStatus) {
-      case TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED:
-        setSubscriptionEndedModalType(
-          SubscriptionModalTypeEnums.POST_SUBSCRIPTION_CANCELLATION_MODAL
-        );
-        setIsSubscriptionEndedModalOpen(true);
-        break;
-      case TenantStatusEnums.FREE_TRAIL_ENDED:
-        setSubscriptionEndedModalType(
-          SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL
-        );
-        setIsSubscriptionEndedModalOpen(true);
-        break;
-      case TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED:
-        setSubscriptionEndedModalType(
-          SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL_USER_LIMIT_SURPASS_MODAL
-        );
-        setIsSubscriptionEndedModalOpen(true);
-        break;
-      case TenantStatusEnums.ACTIVE:
-        setIsSubscriptionEndedModalOpen(false);
-        break;
+    if (
+      asPath === ROUTES.REMOVE_PEOPLE ||
+      asPath === ROUTES.CHANGE_SUPERVISORS
+    ) {
+      setIsSubscriptionEndedModalOpen(false);
+      return;
     }
 
-    if (asPath === "/remove-people" || asPath === "/change-supervisors") {
+    if (!tenantStatus) return;
+
+    if (
+      !isSuperAdmin &&
+      [
+        TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED,
+        TenantStatusEnums.FREE_TRAIL_ENDED,
+        TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED
+      ].includes(tenantStatus)
+    ) {
+      signOut({
+        redirect: true,
+        callbackUrl: ROUTES.AUTH.SYSTEM_UPDATE
+      });
+      return;
+    }
+
+    const modalType = modalTypeMap[tenantStatus];
+    if (modalType) {
+      setSubscriptionEndedModalType(modalType);
+      setIsSubscriptionEndedModalOpen(true);
+    } else if (tenantStatus === TenantStatusEnums.ACTIVE) {
       setIsSubscriptionEndedModalOpen(false);
     }
-  }, [
-    asPath,
-    data?.user?.tenantStatus,
-    data?.user.tier,
-    setIsSubscriptionEndedModalOpen,
-    setSubscriptionEndedModalType
-  ]);
+  }, [data?.user?.tenantStatus]);
 
   const { data: organizationDetails } = useGetOrganization();
 
