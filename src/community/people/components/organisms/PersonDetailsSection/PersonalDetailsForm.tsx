@@ -16,9 +16,13 @@ import SocialMediaDetailsSection from "./SubSections/SocialMediaDetailsSection";
 
 interface Props {
   isAddFlow?: boolean;
+  isUpdate?: boolean;
 }
 
-const PersonalDetailsForm = ({ isAddFlow = false }: Props) => {
+const PersonalDetailsForm = ({
+  isAddFlow = false,
+  isUpdate = false
+}: Props) => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
   const socialMediaDetailsRef = useRef<FormMethods | null>(null);
@@ -103,7 +107,7 @@ const PersonalDetailsForm = ({ isAddFlow = false }: Props) => {
 
   return (
     <>
-      <GeneralDetailsSection ref={generalDetailsRef} />
+      <GeneralDetailsSection ref={generalDetailsRef} isAdmin={isUpdate} />
       <ContactDetailsSection ref={contactDetailsRef} />
       <FamilyDetailsSection />
       <EducationalDetailsSection />

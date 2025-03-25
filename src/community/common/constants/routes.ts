@@ -60,7 +60,8 @@ const ROUTES = {
     ADD_NEW_RESOURCE: "/people/directory/add-new-resource",
     EDIT_ALL_INFORMATION: (id: any) =>
       `/people/directory/edit-all-information/${id}`,
-    PENDING: "/people/directory/pending"
+    PENDING: "/people/directory/pending",
+    USER_ACCOUNT: "/user-account"
   },
   CONFIGURATIONS: {
     BASE: "/configurations",

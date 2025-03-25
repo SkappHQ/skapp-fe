@@ -19,6 +19,7 @@ const commonRoutes = [
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
+  ROUTES.PEOPLE.USER_ACCOUNT,
   ROUTES.NOTIFICATIONS,
   ROUTES.INTEGRATIONS,
   ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
@@ -252,6 +253,7 @@ export const config = {
     "/sign/:path*",
     "/remove-people",
     "/integrations",
-    "/subscription"
+    "/subscription",
+    "/user-account"
   ]
 };

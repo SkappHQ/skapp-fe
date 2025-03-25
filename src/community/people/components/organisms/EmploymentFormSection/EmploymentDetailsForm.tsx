@@ -15,9 +15,15 @@ import VisaDetailsSection from "./SubSections/VisaDetailsSection";
 
 interface Props {
   isAddFlow?: boolean;
+  isUpdate?: boolean;
+  isProfileView?: boolean;
 }
 
-const EmploymentDetailsForm = ({ isAddFlow = false }: Props) => {
+const EmploymentDetailsForm = ({
+  isAddFlow = false,
+  isUpdate = false,
+  isProfileView = false
+}: Props) => {
   const employmentDetailsRef = useRef<FormMethods | null>(null);
   const identificationDetailsRef = useRef<FormMethods | null>(null);
 
@@ -86,8 +92,12 @@ const EmploymentDetailsForm = ({ isAddFlow = false }: Props) => {
 
   return (
     <>
-      <EmploymentDetailsSection ref={employmentDetailsRef} />
-      <CareerProgressDetailsSection />
+      <EmploymentDetailsSection
+        ref={employmentDetailsRef}
+        isUpdate={isUpdate}
+        isProfileView={isProfileView}
+      />
+      <CareerProgressDetailsSection isProfileView={isProfileView} />
       <IdentificationDetailsSection ref={identificationDetailsRef} />
       <PreviousEmploymentDetailsSection />
       <VisaDetailsSection />

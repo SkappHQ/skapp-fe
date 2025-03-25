@@ -303,6 +303,10 @@ const nextConfig = {
       {
         source:"/people/:id",
         destination: "/community/people/:id"
+      },
+      {
+        source: "/user-account",
+        destination: "/community/user-account"
       }
     ];
   },
