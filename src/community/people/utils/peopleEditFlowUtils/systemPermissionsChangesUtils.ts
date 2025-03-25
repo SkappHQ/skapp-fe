@@ -37,11 +37,11 @@ export const getSystemPermissionsDetailsChanges = (
 
   if (
     isFieldDifferentAndValid(
-      newSystemPermissions?.eSignRole,
-      previousSystemPermissions?.eSignRole
+      newSystemPermissions?.esignRole,
+      previousSystemPermissions?.esignRole
     )
   ) {
-    changes.eSignRole = newSystemPermissions?.eSignRole;
+    changes.esignRole = newSystemPermissions?.esignRole;
   }
 
   if (

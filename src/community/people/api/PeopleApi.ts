@@ -687,9 +687,10 @@ export const useAddEmployee = () => {
 
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
-      const response = await authFetch.post(peoplesEndpoints.ADD_EMPLOYEE, {
+      const response = await authFetch.post(
+        peoplesEndpoints.ADD_EMPLOYEE,
         employee
-      });
+      );
       return response.data;
     },
     onSuccess: () => {

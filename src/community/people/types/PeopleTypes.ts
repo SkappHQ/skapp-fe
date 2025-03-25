@@ -49,7 +49,7 @@ export interface L2SystemPermissionsType {
   peopleRole?: Role;
   leaveRole?: Role;
   attendanceRole?: Role;
-  eSignRole?: Role;
+  esignRole?: Role;
 }
 
 export interface L2CommonDetailsType {

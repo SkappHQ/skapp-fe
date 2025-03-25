@@ -195,14 +195,14 @@ const SystemPermissionFormSection = ({
 
           {isEsignatureModuleEnabled && (
             <DropdownList
-              inputName={"eSignRole"}
+              inputName={"esignRole"}
               label={translateText(["eSignature"])}
               itemList={grantablePermission?.esign || []}
-              value={permissions.eSignRole}
+              value={permissions.esignRole}
               componentStyle={classes.dropdownListComponentStyles}
               checkSelected
               onChange={(event) =>
-                handleRoleDropdown("eSignRole", event.target.value as Role)
+                handleRoleDropdown("esignRole", event.target.value as Role)
               }
               isDisabled={
                 isProfileView || permissions.isSuperAdmin || isInputsDisabled

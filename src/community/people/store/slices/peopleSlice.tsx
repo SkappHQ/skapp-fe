@@ -1,4 +1,5 @@
 import { SetType } from "~community/common/types/CommonTypes";
+import { Role } from "~community/people/enums/PeopleEnums";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import {
   L1EmployeeType,
@@ -87,10 +88,10 @@ const defaultEmployee: L1EmployeeType = {
   },
   systemPermissions: {
     isSuperAdmin: false,
-    peopleRole: undefined,
-    leaveRole: undefined,
-    attendanceRole: undefined,
-    eSignRole: undefined
+    peopleRole: Role.PEOPLE_EMPLOYEE,
+    leaveRole: Role.LEAVE_EMPLOYEE,
+    attendanceRole: Role.ATTENDANCE_EMPLOYEE,
+    esignRole: Role.ESIGN_EMPLOYEE
   },
   common: {
     employeeId: "",
