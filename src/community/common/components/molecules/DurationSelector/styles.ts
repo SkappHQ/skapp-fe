@@ -38,6 +38,11 @@ const styles = (theme: Theme) => ({
       border: `0.0625rem solid ${theme.palette.primary.dark}`,
       cursor: "pointer"
     },
+    "&.Mui-error-button": {
+      backgroundColor: theme.palette.grey[100],
+      border: `0.0625rem solid ${theme.palette.error.contrastText}`,
+      cursor: "pointer"
+    },
     "&.Mui-disabled-button": {
       backgroundColor: theme.palette.grey[100],
       cursor: "not-allowed"
@@ -50,6 +55,10 @@ const styles = (theme: Theme) => ({
     },
     "&.Mui-selected-button": {
       color: theme.palette.primary.dark,
+      cursor: "pointer"
+    },
+    "&.Mui-error-button": {
+      color: theme.palette.text.secondary,
       cursor: "pointer"
     },
     "&.Mui-disabled-button": {
@@ -80,6 +89,11 @@ const styles = (theme: Theme) => ({
     "&.Mui-selected-button": {
       backgroundColor: theme.palette.secondary.main,
       border: `0.0625rem solid ${theme.palette.primary.dark}`,
+      cursor: "pointer"
+    },
+    "&.Mui-error-button": {
+      backgroundColor: theme.palette.grey[100],
+      border: `0.0625rem solid ${theme.palette.error.contrastText}`,
       cursor: "pointer"
     },
     "&.Mui-disabled-button": {

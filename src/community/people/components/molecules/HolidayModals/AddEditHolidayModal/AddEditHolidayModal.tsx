@@ -354,6 +354,7 @@ const AddEditHolidayModal = ({
             halfDayMorning: false,
             halfDayEvening: false
           }}
+          error={errors.duration}
           commonButtonStyles={{ height: "3.1875rem" }}
           value={duration}
         />

@@ -135,7 +135,7 @@ const HolidayModalController: FC = () => {
         setModalType={setHolidayModalType}
         modalContentStyles={
           holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY
-            ? classes.modalContentStyles
+            ? classes.modalContent
             : {}
         }
       >
