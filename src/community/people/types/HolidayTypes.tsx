@@ -16,7 +16,7 @@ export interface holiday {
   id?: number;
   date?: string;
   name?: string;
-  holidayDuration?: string;
+  holidayDuration?: HolidayDurationType;
   holidayColor?: string;
 }
 export interface HolidayDataPreprocessedType {
