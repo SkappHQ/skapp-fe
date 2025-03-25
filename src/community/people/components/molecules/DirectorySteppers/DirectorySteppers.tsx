@@ -83,10 +83,12 @@ const DirectorySteppers = ({
     //   ? []
     //   : [translateText(["editAllInfo", "timeline"])]),
     ...(isLeaveTabVisible &&
+    !isAccountView &&
     session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
       ? [translateText(["editAllInfo", "leave"])]
       : []),
     ...(isTimeTabVisible &&
+    !isAccountView &&
     session?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [translateText(["editAllInfo", "timesheet"])]
       : [])

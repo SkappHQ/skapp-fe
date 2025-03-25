@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -6,10 +6,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import AccountSectionWrapper from "../../organisms/AccountSectionWrapper/AccountSectionWrapper";
 
 const PeopleAccount = () => {
-  const router = useRouter();
-  const { id } = router.query;
-
-  // const {employeeId} = useSessionData()
+  const { data } = useSession();
 
   const translateText = useTranslator("peopleModule");
 
@@ -22,7 +19,7 @@ const PeopleAccount = () => {
       title={""}
     >
       <>
-        <AccountSectionWrapper employeeId={Number(id)} />
+        <AccountSectionWrapper employeeId={Number(data?.user.userId)} />
       </>
     </ContentLayout>
   );
