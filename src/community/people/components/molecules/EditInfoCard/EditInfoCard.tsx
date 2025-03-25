@@ -33,6 +33,7 @@ import {
 } from "~community/common/utils/dateTimeUtils";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
 import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
+import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import {
@@ -48,16 +49,11 @@ import {
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
-  selectedEmployee: EmployeeDetails;
   onClick?: MouseEventHandler<HTMLDivElement>;
   styles?: SxProps;
 }
 
-const EditInfoCard = ({
-  selectedEmployee,
-  onClick,
-  styles
-}: Props): JSX.Element => {
+const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const {
     isDesktopScreen,
@@ -75,18 +71,11 @@ const EditInfoCard = ({
 
   const { data } = useSession();
 
-  const environment = useGetEnvironment();
-
-  const { setToastMessage } = useToast();
-
-  const { data: storageAvailableData } = useStorageAvailability();
-  const hasTerminationAbility =
-    data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN) &&
-    data?.user?.userId?.toString() !== selectedEmployee?.employeeId;
-
   const {
-    employeeGeneralDetails,
-    setEmployeeGeneralDetails,
+    employee,
+    setProfilePic,
+    setThumbnail,
+    setCommonDetails,
     setTerminationConfirmationModalOpen,
     setAlertMessage,
     setTerminationAlertModalOpen,
@@ -95,92 +84,88 @@ const EditInfoCard = ({
     setDeletionConfirmationModalOpen
   } = usePeopleStore((state) => state);
 
+  const environment = useGetEnvironment();
+
+  const { setToastMessage } = useToast();
+
+  const { data: storageAvailableData } = useStorageAvailability();
+  const hasTerminationAbility =
+    data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN) &&
+    data?.user?.userId?.toString() !== employee?.common?.employeeId;
+
   const [supervisor, setSupervisor] = useState<EmployeeManagerType | null>(
     null
   );
 
   const handleTermination = () => {
-    const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
-
-    if (hasSupervisoryRoles) {
-      const condition = {
-        managers: selectedEmployee.managers?.length || 0,
-        teams: selectedEmployee.teams?.length || 0
-      };
-
-      const caseKey = `${condition.managers}-${condition.teams}`;
-
-      switch (caseKey) {
-        case "1-0":
-          setAlertMessage(
-            translateTerminationText([
-              "terminateWarningModalDescriptionSingleEmployee"
-            ])
-          );
-          break;
-
-        case "0-1":
-          setAlertMessage(
-            translateTerminationText([
-              "terminateWarningModalDescriptionSingleTeam"
-            ])
-          );
-          break;
-
-        default:
-          if (condition.managers > 1) {
-            setAlertMessage(
-              translateTerminationText([
-                "terminateWarningModalDescriptionMultipleEmployees"
-              ])
-            );
-          } else if (condition.teams > 1) {
-            setAlertMessage(
-              translateTerminationText([
-                "terminateWarningModalDescriptionMultipleTeams"
-              ])
-            );
-          }
-      }
-
-      setTerminationAlertModalOpen(true);
-
-      return;
-    }
-
-    setTerminationConfirmationModalOpen(true);
+    // const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
+    // if (hasSupervisoryRoles) {
+    //   const condition = {
+    //     managers: selectedEmployee.managers?.length || 0,
+    //     teams: selectedEmployee.teams?.length || 0
+    //   };
+    //   const caseKey = `${condition.managers}-${condition.teams}`;
+    //   switch (caseKey) {
+    //     case "1-0":
+    //       setAlertMessage(
+    //         translateTerminationText([
+    //           "terminateWarningModalDescriptionSingleEmployee"
+    //         ])
+    //       );
+    //       break;
+    //     case "0-1":
+    //       setAlertMessage(
+    //         translateTerminationText([
+    //           "terminateWarningModalDescriptionSingleTeam"
+    //         ])
+    //       );
+    //       break;
+    //     default:
+    //       if (condition.managers > 1) {
+    //         setAlertMessage(
+    //           translateTerminationText([
+    //             "terminateWarningModalDescriptionMultipleEmployees"
+    //           ])
+    //         );
+    //       } else if (condition.teams > 1) {
+    //         setAlertMessage(
+    //           translateTerminationText([
+    //             "terminateWarningModalDescriptionMultipleTeams"
+    //           ])
+    //         );
+    //       }
+    //   }
+    //   setTerminationAlertModalOpen(true);
+    //   return;
+    // }
+    // setTerminationConfirmationModalOpen(true);
   };
 
   const handleDeletion = () => {
-    const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
-
-    if (hasSupervisoryRoles) {
-      const condition = {
-        managers: selectedEmployee.managers?.length || 0,
-        teams: selectedEmployee.teams?.length || 0
-      };
-
-      if (condition.managers > 0) {
-        setDeletionAlertMessage(
-          deletionTranslateText(["deleteWarningPrimarySupervisorDescription"])
-        );
-      } else if (condition.teams > 0) {
-        setDeletionAlertMessage(
-          deletionTranslateText(["deleteWarningTeamSupervisorDescription"])
-        );
-      }
-
-      setDeletionAlertOpen(true);
-
-      return;
-    }
-
-    setDeletionConfirmationModalOpen(true);
+    // const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
+    // if (hasSupervisoryRoles) {
+    //   const condition = {
+    //     managers: selectedEmployee.managers?.length || 0,
+    //     teams: selectedEmployee.teams?.length || 0
+    //   };
+    //   if (condition.managers > 0) {
+    //     setDeletionAlertMessage(
+    //       deletionTranslateText(["deleteWarningPrimarySupervisorDescription"])
+    //     );
+    //   } else if (condition.teams > 0) {
+    //     setDeletionAlertMessage(
+    //       deletionTranslateText(["deleteWarningTeamSupervisorDescription"])
+    //     );
+    //   }
+    //   setDeletionAlertOpen(true);
+    //   return;
+    // }
+    // setDeletionConfirmationModalOpen(true);
   };
 
   const kebabMenuOptions = [
     {
-      id: selectedEmployee.employeeId || "",
+      id: employee?.common?.employeeId || "",
       icon: (
         <Icon
           name={IconName.MINUS_ICON}
@@ -190,10 +175,10 @@ const EditInfoCard = ({
       text: translateTerminationText(["terminateButtonText"]),
       onClickHandler: () => handleTermination(),
       isDisabled:
-        selectedEmployee.accountStatus === AccountStatusEnums.TERMINATED
+        employee?.common?.accountStatus === AccountStatusTypes.TERMINATED
     },
     {
-      id: selectedEmployee.employeeId || "",
+      id: employee?.common?.employeeId || "",
       icon: (
         <Icon
           name={IconName.BIN_ICON}
@@ -207,27 +192,26 @@ const EditInfoCard = ({
 
   const cardData = useMemo(() => {
     return {
-      employeeId: selectedEmployee?.identificationNo?.toString() || "1",
-      authPic: selectedEmployee?.authPic || "",
-      firstName: selectedEmployee?.firstName,
-      lastName: selectedEmployee?.lastName,
+      employeeId:
+        employee?.employment?.employmentDetails?.employeeNumber || "1",
+      authPic: employee?.common?.authPic || "",
+      firstName: employee?.personal?.general?.firstName,
+      lastName: employee?.personal?.general?.lastName,
       fullName:
-        selectedEmployee?.name?.concat(
+        employee?.personal?.general?.firstName?.concat(
           " ",
-          selectedEmployee?.lastName as string
+          employee?.personal?.general?.lastName as string
         ) || "",
-      email: selectedEmployee?.email || "",
-      phone:
-        selectedEmployee?.phone?.split(" ")?.[1] ??
-        (selectedEmployee?.phone || ""),
-      countryCode: selectedEmployee?.phone?.split(" ")?.[0] || "",
-      jobFamily: selectedEmployee?.jobFamily?.name || "",
-      jobTitle: selectedEmployee?.jobTitle?.name || "",
-      teams: selectedEmployee?.teams || [],
-      joinedDate: selectedEmployee?.joinDate || "",
-      accountStatus: selectedEmployee?.accountStatus
+      email: employee?.employment?.employmentDetails?.email || "",
+      phone: employee?.personal?.contact?.contactNo || "",
+      countryCode: employee?.personal?.contact?.countryCode || "",
+      jobFamily: "",
+      jobTitle: "",
+      teams: [],
+      joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
+      accountStatus: employee?.common?.accountStatus || ""
     };
-  }, [selectedEmployee]);
+  }, [employee]);
 
   const employmentStatus = cardData?.accountStatus as AccountStatusEnums;
 
@@ -265,10 +249,13 @@ const EditInfoCard = ({
         const profilePic = acceptedFiles.map((file: File) =>
           Object.assign(file, { preview: URL.createObjectURL(file) })
         );
-        setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+        setCommonDetails({
+          authPic: profilePic[0]?.preview ?? ""
+        });
 
+        setProfilePic(profilePic as ModifiedFileType[]);
         generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
-          setEmployeeGeneralDetails("thumbnail", thumbnail)
+          setThumbnail(thumbnail)
         );
       } else {
         setToastMessage({
@@ -280,7 +267,7 @@ const EditInfoCard = ({
         });
       }
     },
-    [storageAvailableData?.availableSpace, setEmployeeGeneralDetails]
+    [storageAvailableData?.availableSpace]
   );
 
   const { open, getInputProps } = useDropzone({
@@ -296,23 +283,26 @@ const EditInfoCard = ({
   });
 
   const handleUnSelectPhoto = (): void => {
-    setEmployeeGeneralDetails("authPic", cardData?.authPic);
+    setProfilePic([]);
+    setThumbnail([]);
+    setCommonDetails({
+      authPic: ""
+    });
   };
 
-  useEffect(() => {
-    const supervisor = selectedEmployee?.employees?.find(
-      (manager: EmployeeManagerType) =>
-        manager?.managerType === ManagerTypes.PRIMARY
-    );
+  // useEffect(() => {
+  //   const supervisor = selectedEmployee?.employees?.find(
+  //     (manager: EmployeeManagerType) =>
+  //       manager?.managerType === ManagerTypes.PRIMARY
+  //   );
 
-    setSupervisor(supervisor as EmployeeManagerType);
-  }, [selectedEmployee]);
+  //   setSupervisor(supervisor as EmployeeManagerType);
+  // }, [selectedEmployee]);
 
   const openFileBrowser = () => {
     if (storageAvailableData?.availableSpace <= EIGHTY_PERCENT) {
       open();
     } else {
-      null;
       setToastMessage({
         open: true,
         toastType: "error",
@@ -324,12 +314,12 @@ const EditInfoCard = ({
   };
 
   const getAvatarThumbnailUrl = useCallback((): string => {
-    if (employeeGeneralDetails?.authPic !== undefined) {
-      if (Array.isArray(employeeGeneralDetails?.authPic)) {
-        return employeeGeneralDetails?.authPic[0]?.preview;
+    if (employee?.common?.authPic !== undefined) {
+      if (Array.isArray(employee?.common?.authPic)) {
+        return employee?.common?.authPic[0]?.preview;
       }
 
-      return employeeGeneralDetails?.authPic ?? "";
+      return employee?.common?.authPic ?? "";
     } else if (cardData?.authPic !== undefined) {
       if (Array.isArray(cardData?.authPic)) {
         return cardData?.authPic[0]?.preview;
@@ -338,7 +328,7 @@ const EditInfoCard = ({
     }
 
     return "";
-  }, [cardData?.authPic, employeeGeneralDetails?.authPic]);
+  }, [cardData?.authPic, employee?.common?.authPic]);
 
   return (
     <Stack
@@ -384,12 +374,11 @@ const EditInfoCard = ({
           handleUnSelectPhoto={handleUnSelectPhoto}
           open={openFileBrowser}
           enableEdit={
-            selectedEmployee?.accountStatus !==
+            employee?.common?.accountStatus !==
             AccountStatusEnums.TERMINATED.toUpperCase()
           }
           imageUploaded={
-            cardData?.authPic !==
-            ((employeeGeneralDetails?.authPic as string) ?? "")
+            cardData?.authPic !== ((employee?.common?.authPic as string) ?? "")
           }
         />
         <Stack direction="column" alignItems="flex-start" gap="1rem">
