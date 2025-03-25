@@ -45,6 +45,8 @@ const EmploymentDetailsForm = ({
 
   const { hasChanged, apiPayload } = useFormChangeDetector();
 
+  const { handleNext } = useStepper();
+
   const onSave = async () => {
     const employmentFormErrors =
       (await employmentDetailsRef?.current?.validateForm()) || {};
@@ -56,8 +58,6 @@ const EmploymentDetailsForm = ({
     const identificationFormIsValid =
       identificationFormErrors &&
       Object.keys(identificationFormErrors).length === 0;
-
-    const { handleNext } = useStepper();
 
     if (employmentFormIsValid && identificationFormIsValid) {
       employmentDetailsRef?.current?.submitForm();

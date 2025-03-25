@@ -1,5 +1,6 @@
 import { SetType } from "~community/common/types/CommonTypes";
 import { Role } from "~community/people/enums/PeopleEnums";
+import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import {
   L1EmployeeType,
@@ -109,6 +110,12 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   isUnsavedChangesModalOpen: false,
   isUnsavedModalSaveButtonClicked: false,
   isUnsavedModalDiscardButtonClicked: false,
+  profilePic: null,
+  setProfilePic: (profilePic: ModifiedFileType[] | null) =>
+    set(() => ({ profilePic })),
+  thumbnail: null,
+  setThumbnail: (thumbnail: ModifiedFileType[] | null) =>
+    set(() => ({ thumbnail })),
   setActiveStep: (activeStep: number) => set(() => ({ activeStep })),
   setNextStep: (nextStep: EditPeopleFormTypes) => set(() => ({ nextStep })),
   setCurrentStep: (currentStep: EditPeopleFormTypes) =>
