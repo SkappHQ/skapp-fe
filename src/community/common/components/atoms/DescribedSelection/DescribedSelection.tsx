@@ -77,7 +77,8 @@ const DescribedSelection = ({
         isAnimationOn
           ? {
               ...classes.animatedWrapper,
-              "@keyframes blink": {
+              animation: "box-shadow-blink 1.5s ease-in-out infinite",
+              "@keyframes box-shadow-blink": {
                 "0%": {
                   boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
                 },

@@ -42,11 +42,11 @@ const HolidayModalController: FC = () => {
   const {
     ongoingQuickSetup,
     setQuickSetupModalType,
-    setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup
   } = useCommonEnterpriseStore((state) => ({
     ongoingQuickSetup: state.ongoingQuickSetup,
     setQuickSetupModalType: state.setQuickSetupModalType,
-    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
   const getModalTitle = (): string => {
@@ -90,7 +90,7 @@ const HolidayModalController: FC = () => {
     }
 
     if (ongoingQuickSetup.SETUP_HOLIDAYS) {
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
       if (
         holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
         bulkUploadData &&

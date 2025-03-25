@@ -31,10 +31,7 @@ import {
   TeamModelTypes
 } from "~community/people/types/TeamTypes";
 import { addEditTeamValidationSchema } from "~community/people/utils/validation";
-import {
-  QuickSetupModalTypeEnums,
-  QuickSetupTaskEnums
-} from "~enterprise/common/enums/Common";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
@@ -70,12 +67,15 @@ const AddEditTeamModal = ({
     setIsTeamModalOpen: state.setIsTeamModalOpen
   }));
 
-  const { ongoingQuickSetup, setOngoingQuickSetup, setQuickSetupModalType } =
-    useCommonEnterpriseStore((state) => ({
-      ongoingQuickSetup: state.ongoingQuickSetup,
-      setOngoingQuickSetup: state.setOngoingQuickSetup,
-      setQuickSetupModalType: state.setQuickSetupModalType
-    }));
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -91,7 +91,7 @@ const AddEditTeamModal = ({
   };
 
   const onAddSuccess = () => {
-    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_TEAMS, false);
+    stopAllOngoingQuickSetup();
     setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
     setIsTeamModalOpen(false);
     setTeamModalType(TeamModelTypes.ADD_TEAM);
@@ -231,6 +231,7 @@ const AddEditTeamModal = ({
       setTempTeamDetails(values);
       setTeamModalType(TeamModelTypes.UNSAVED_EDIT_TEAM);
     } else {
+      stopAllOngoingQuickSetup();
       setIsTeamModalOpen(false);
       setTeamModalType(TeamModelTypes.ADD_TEAM);
     }

@@ -90,11 +90,13 @@ describe("modalControllerUtils", () => {
   describe("handleJobFamilyCloseModal", () => {
     it("should set the correct modal type when data has changed", () => {
       const setJobFamilyModalType = jest.fn();
-      handleJobFamilyCloseModal(
-        true,
-        JobFamilyActionModalEnums.ADD_JOB_FAMILY,
-        setJobFamilyModalType
-      );
+      const stopAllOngoingQuickSetup = jest.fn();
+      handleJobFamilyCloseModal({
+        hasDataChanged: true,
+        jobFamilyModalType: JobFamilyActionModalEnums.ADD_JOB_FAMILY,
+        setJobFamilyModalType: setJobFamilyModalType,
+        stopAllOngoingQuickSetup: stopAllOngoingQuickSetup
+      });
       expect(setJobFamilyModalType).toHaveBeenCalledWith(
         JobFamilyActionModalEnums.UNSAVED_CHANGES_JOB_FAMILY
       );
@@ -102,11 +104,13 @@ describe("modalControllerUtils", () => {
 
     it("should set the modal type to NONE when data has not changed", () => {
       const setJobFamilyModalType = jest.fn();
-      handleJobFamilyCloseModal(
-        false,
-        JobFamilyActionModalEnums.ADD_JOB_FAMILY,
-        setJobFamilyModalType
-      );
+      const stopAllOngoingQuickSetup = jest.fn();
+      handleJobFamilyCloseModal({
+        hasDataChanged: false,
+        jobFamilyModalType: JobFamilyActionModalEnums.ADD_JOB_FAMILY,
+        setJobFamilyModalType: setJobFamilyModalType,
+        stopAllOngoingQuickSetup: stopAllOngoingQuickSetup
+      });
       expect(setJobFamilyModalType).toHaveBeenCalledWith(
         JobFamilyActionModalEnums.NONE
       );

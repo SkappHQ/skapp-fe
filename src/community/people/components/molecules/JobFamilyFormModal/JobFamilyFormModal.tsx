@@ -47,9 +47,11 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
     setCurrentEditingJobFamily: state.setCurrentEditingJobFamily
   }));
 
-  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    ongoingQuickSetup: state.ongoingQuickSetup
-  }));
+  const { ongoingQuickSetup, stopAllOngoingQuickSetup } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+    }));
 
   const initialValues: AddJobFamilyFormType = {
     jobFamilyId: currentEditingJobFamily?.jobFamilyId ?? 0,
@@ -126,11 +128,12 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
             buttonStyle={ButtonStyle.TERTIARY}
             startIcon={IconName.LEFT_ARROW_ICON}
             onClick={() =>
-              handleJobFamilyCloseModal(
+              handleJobFamilyCloseModal({
                 hasDataChanged,
                 jobFamilyModalType,
-                setJobFamilyModalType
-              )
+                setJobFamilyModalType,
+                stopAllOngoingQuickSetup
+              })
             }
           />
         ) : (
@@ -154,11 +157,12 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
               buttonStyle={ButtonStyle.TERTIARY}
               endIcon={IconName.CLOSE_ICON}
               onClick={() =>
-                handleJobFamilyCloseModal(
+                handleJobFamilyCloseModal({
                   hasDataChanged,
                   jobFamilyModalType,
-                  setJobFamilyModalType
-                )
+                  setJobFamilyModalType,
+                  stopAllOngoingQuickSetup
+                })
               }
             />
           </>

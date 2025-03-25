@@ -1,11 +1,19 @@
 import AreYouSureModal from "~community/common/components/molecules/AreYouSureModal/AreYouSureModal";
 import { JobFamilyActionModalEnums } from "~community/people/enums/JobFamilyEnums";
 import { usePeopleStore } from "~community/people/store/store";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const UnsavedChangesModal = () => {
   const { jobFamilyModalType, setJobFamilyModalType } = usePeopleStore(
-    (state) => state
+    (state) => ({
+      jobFamilyModalType: state.jobFamilyModalType,
+      setJobFamilyModalType: state.setJobFamilyModalType
+    })
   );
+
+  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const handleCancelBtnClick = () => {
     const modalTypeMap = {
@@ -24,12 +32,15 @@ const UnsavedChangesModal = () => {
     }
   };
 
+  const handleSubmitBtnClick = () => {
+    setJobFamilyModalType(JobFamilyActionModalEnums.NONE);
+    stopAllOngoingQuickSetup();
+  };
+
   return (
     <AreYouSureModal
       onPrimaryBtnClick={handleCancelBtnClick}
-      onSecondaryBtnClick={() =>
-        setJobFamilyModalType(JobFamilyActionModalEnums.NONE)
-      }
+      onSecondaryBtnClick={handleSubmitBtnClick}
     />
   );
 };
