@@ -7,7 +7,10 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { useGetAllHolidaysInfinite } from "~community/people/api/HolidayApi";
 import AddCalendar from "~community/people/components/molecules/HolidayModals/AddCalendar/AddCalendar";
 import AddEditHolidayModal from "~community/people/components/molecules/HolidayModals/AddEditHolidayModal/AddEditHolidayModal";
+import BulkUploadSummary from "~community/people/components/molecules/HolidayModals/BulkUploadSummary/BulkUploadSummary";
 import HolidayBulkDelete from "~community/people/components/molecules/HolidayModals/HolidayBulkDelete/HolidayBulkDelete";
+import HolidayExitConfirmationModal from "~community/people/components/molecules/HolidayModals/HolidayExitConfirmationModal/HolidayConfirmationModal";
+import UploadHolidayBulk from "~community/people/components/molecules/HolidayModals/UploadHolidayBulk/UploadHolidayBulk";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   HolidayDeleteType,
@@ -16,10 +19,6 @@ import {
 } from "~community/people/types/HolidayTypes";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
-
-import BulkUploadSummary from "../../molecules/HolidayModals/BulkUploadSummary/BulkUploadSummary";
-import HolidayExitConfirmationModal from "../../molecules/HolidayModals/HolidayExitConfirmationModal/HolidayConfirmationModal";
-import UploadHolidayBulk from "../../molecules/HolidayModals/UploadHolidayBulk/UploadHolidayBulk";
 
 const HolidayModalController: FC = () => {
   const { toastMessage } = useToast();
@@ -122,7 +121,7 @@ const HolidayModalController: FC = () => {
             <AddEditHolidayModal holidays={holidays} holidayRefetch={refetch} />
           )}
           {holidayModalType === holidayModalTypes.ADD_CALENDAR && (
-            <AddCalendar setBulkUploadData={setBulkUploadData} />
+            <AddCalendar />
           )}
           {holidayModalType === holidayModalTypes.HOLIDAY_SELECTED_DELETE && (
             <HolidayBulkDelete

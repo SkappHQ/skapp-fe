@@ -37,10 +37,10 @@ interface Props {
 }
 
 const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
-  const [attachmentError, setAttachmentError] = useState(false);
-  const [calendarAttachments, setCalendarAttachments] = useState<
-    FileUploadType[]
-  >([]);
+  const { setToastMessage } = useToast();
+
+  const translateText = useTranslator("peopleModule", "holidays");
+
   const {
     newCalenderDetails,
     holidayModalType,
@@ -48,8 +48,20 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     setHolidayModalType,
     resetHolidayDetails,
     selectedYear,
-    setIsBulkUpload
-  } = usePeopleStore((state) => state);
+    setIsBulkUpload,
+    setIsHolidayModalOpen,
+    setFailedCount
+  } = usePeopleStore((state) => ({
+    newCalenderDetails: state.newCalenderDetails,
+    holidayModalType: state.holidayModalType,
+    setNewCalendarDetails: state.setNewCalendarDetails,
+    setHolidayModalType: state.setHolidayModalType,
+    resetHolidayDetails: state.resetHolidayDetails,
+    selectedYear: state.selectedYear,
+    setIsBulkUpload: state.setIsBulkUpload,
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+    setFailedCount: state.setFailedCount
+  }));
 
   const {
     ongoingQuickSetup,
@@ -61,15 +73,14 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
-  const { setIsHolidayModalOpen, setFailedCount } = usePeopleStore(
-    (state) => state
-  );
+  const [attachmentError, setAttachmentError] = useState<boolean>(false);
+  const [calendarAttachments, setCalendarAttachments] = useState<
+    FileUploadType[]
+  >([]);
 
   const [isInvalidFileError, setIsInvalidFileError] = useState<boolean>(false);
   const [noRecordError, setNoRecordError] = useState<boolean>(false);
   const [holidayBulkList, setHolidayBulkList] = useState<Holiday[]>([]);
-  const translateText = useTranslator("peopleModule", "holidays");
-  const { setToastMessage } = useToast();
 
   const onSuccess = (response: holidayBulkUploadResponse): void => {
     setBulkUploadData(response);
@@ -148,6 +159,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
         holiday.holidayDuration
       );
     });
+
   const setAttachment = async (
     acceptedFiles: FileUploadType[]
   ): Promise<void> => {
@@ -236,6 +248,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       stopAllOngoingQuickSetup();
     }
   };
+
   return (
     <Box>
       <Typography

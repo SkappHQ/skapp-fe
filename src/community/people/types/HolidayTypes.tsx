@@ -112,7 +112,7 @@ export type addedHolidays = {
 export type holidayType = {
   date: string;
   name: string;
-  holidayDuration: string;
+  holidayDuration: HolidayDurationType;
 };
 
 export interface bulkStatusSummary {
