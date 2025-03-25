@@ -82,8 +82,7 @@ const EditInfoCard = ({
   const { data: storageAvailableData } = useStorageAvailability();
   const hasTerminationAbility =
     data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN) &&
-    data?.user?.employee?.employeeId.toString() !==
-      selectedEmployee?.employeeId;
+    data?.user?.userId?.toString() !== selectedEmployee?.employeeId;
 
   const {
     employeeGeneralDetails,
