@@ -46,7 +46,7 @@ const AddSectionButtonWrapper = ({
       description: translateText(["employeeAddSuccessToastDescription"])
     });
     setIsSuccess && setIsSuccess(true);
-    // router.push(ROUTES.PEOPLE.DIRECTORY);
+    router.push(ROUTES.PEOPLE.DIRECTORY);
   };
 
   const onError = () => {

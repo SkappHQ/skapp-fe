@@ -723,3 +723,58 @@ export const useGetEmployee = (memberId: number | undefined = undefined) => {
     }
   });
 };
+
+export const useEditEmployee = (employeeId: string) => {
+  const { setToastMessage } = useToast();
+  const translateText = useTranslator(
+    "peopleModule",
+    "addResource",
+    "commonText"
+  );
+  const queryClient = useQueryClient();
+  const params = usePeopleStore((state) => state.employeeDataParams);
+  return useMutation({
+    mutationFn: async (employee: L1EmployeeType) => {
+      const response = await authFetch.patch(
+        peoplesEndpoints.EDIT_EMPLOYEE(employeeId),
+        employee
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.SUCCESS,
+        title: translateText(["editToastTitle"]),
+        description: translateText(["editToastDescription"])
+      });
+
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_COUNT()
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE(params)
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.GET_ME
+        })
+        .catch(rejects);
+    },
+    onError: () => {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["editErrorToastTitle"]),
+        description: translateText(["editErrorToastDescription"])
+      });
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries();
+    }
+  });
+};

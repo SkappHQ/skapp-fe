@@ -1,4 +1,5 @@
 import { Stack, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
@@ -12,7 +13,10 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
-import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import {
+  useEditEmployee,
+  useGetSupervisedByMe
+} from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { Role } from "~community/people/enums/PeopleEnums";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
@@ -54,20 +58,22 @@ const SystemPermissionFormSection = ({
   const [modalDescription, setModalDescription] = useState("");
   const {
     employee,
+    nextStep,
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setCurrentStep
   } = usePeopleStore((state) => state);
   const { data: supervisedData } = useGetSupervisedByMe(
     Number(employee.common?.employeeId)
   );
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { setToastMessage } = useToast();
-  const hasChanged = useFormChangeDetector();
+  const { hasChanged, apiPayload } = useFormChangeDetector();
 
   const {
     permissions,
@@ -82,6 +88,12 @@ const SystemPermissionFormSection = ({
     isEsignatureModuleEnabled
   } = useSessionData();
 
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const { mutate } = useEditEmployee(id as string);
+
   const { handleNext } = useStepper();
 
   const onSave = () => {
@@ -90,9 +102,9 @@ const SystemPermissionFormSection = ({
       (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
         initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_MANAGER)
     ) {
-      if (supervisedData.isPrimaryManager)
+      if (supervisedData?.isPrimaryManager)
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData.isTeamSuperviso)
+      else if (supervisedData?.isTeamSuperviso)
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
       setOpenModal(true);
@@ -111,8 +123,10 @@ const SystemPermissionFormSection = ({
       if (isAddFlow) {
         handleNext();
       } else {
+        setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
+        mutate(apiPayload);
       }
       setEmployee(employee);
     }
