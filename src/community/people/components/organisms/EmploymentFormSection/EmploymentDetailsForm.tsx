@@ -1,7 +1,9 @@
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
+import { useEditEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
@@ -45,6 +47,12 @@ const EmploymentDetailsForm = ({
 
   const { hasChanged, apiPayload } = useFormChangeDetector();
 
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const { mutate } = useEditEmployee(id as string);
+
   const { handleNext } = useStepper();
 
   const onSave = async () => {
@@ -68,6 +76,7 @@ const EmploymentDetailsForm = ({
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
+        mutate(apiPayload);
       }
       setEmployee(employee);
     } else {

@@ -183,7 +183,7 @@ export const employeeHealthAndOtherDetailsValidation = Yup.object({
   bloodGroup: Yup.string().nullable(),
   allergies: Yup.string().nullable(),
   dietaryRestrictions: Yup.string().nullable(),
-  tshirtSize: Yup.string()
+  tshirtSize: Yup.string().nullable()
 });
 
 export const employeeEmploymentDetailsValidation = (
