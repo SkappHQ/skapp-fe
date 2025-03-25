@@ -20,12 +20,15 @@ import {
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
+import styles from "./styles";
+
 const HolidayModalController: FC = () => {
+  const classes = styles();
+
   const { toastMessage } = useToast();
-  const [bulkUploadData, setBulkUploadData] = useState<
-    holidayBulkUploadResponse | undefined
-  >();
+
   const translateText = useTranslator("peopleModule", "holidays");
+
   const {
     newCalenderDetails,
     newHolidayDetails,
@@ -35,8 +38,16 @@ const HolidayModalController: FC = () => {
     setHolidayModalType,
     selectedYear,
     setIsBulkUpload
-  } = usePeopleStore((state) => state);
-  const { data: holidays, refetch } = useGetAllHolidaysInfinite(selectedYear);
+  } = usePeopleStore((state) => ({
+    newCalenderDetails: state.newCalenderDetails,
+    newHolidayDetails: state.newHolidayDetails,
+    isHolidayModalOpen: state.isHolidayModalOpen,
+    holidayModalType: state.holidayModalType,
+    selectedYear: state.selectedYear,
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+    setHolidayModalType: state.setHolidayModalType,
+    setIsBulkUpload: state.setIsBulkUpload
+  }));
 
   const {
     ongoingQuickSetup,
@@ -47,6 +58,12 @@ const HolidayModalController: FC = () => {
     setQuickSetupModalType: state.setQuickSetupModalType,
     stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
+
+  const [bulkUploadData, setBulkUploadData] = useState<
+    holidayBulkUploadResponse | undefined
+  >();
+
+  const { data: holidays, refetch } = useGetAllHolidaysInfinite(selectedYear);
 
   const getModalTitle = (): string => {
     switch (holidayModalType) {
@@ -70,6 +87,7 @@ const HolidayModalController: FC = () => {
         return "";
     }
   };
+
   const handleCloseModal = (): void => {
     const isEditingHoliday =
       newCalenderDetails?.acceptedFile?.length !== 0 ||
@@ -115,10 +133,18 @@ const HolidayModalController: FC = () => {
             : true
         }
         setModalType={setHolidayModalType}
+        modalContentStyles={
+          holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY
+            ? classes.modalContentStyles
+            : {}
+        }
       >
         <Fragment>
           {holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY && (
-            <AddEditHolidayModal holidays={holidays} holidayRefetch={refetch} />
+            <AddEditHolidayModal
+              holidays={holidays?.items}
+              holidayRefetch={refetch}
+            />
           )}
           {holidayModalType === holidayModalTypes.ADD_CALENDAR && (
             <AddCalendar />
