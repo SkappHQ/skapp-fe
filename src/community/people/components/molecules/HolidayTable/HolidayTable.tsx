@@ -264,14 +264,14 @@ const HolidayTable: FC<Props> = ({
     if (holidayData && holidayData?.length > 0) {
       const filteredHolidays = holidayData?.filter(
         (holiday: HolidayDataType) => {
-          return isDateGraterThanToday(holiday?.date || "");
+          return !isDateGraterThanToday(holiday?.date || "");
         }
       );
 
-      return isPeopleAdmin && filteredHolidays?.length === holidayData?.length;
+      return isPeopleAdmin && filteredHolidays?.length !== holidayData?.length;
     }
 
-    return false;
+    return isPeopleAdmin;
   }, [holidayData, isPeopleAdmin]);
 
   return (

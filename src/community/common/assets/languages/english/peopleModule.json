@@ -109,7 +109,7 @@
     "holidayDeleteModalTitle": "Confirm Delete",
     "confirmDeletion": "Confirm deletion",
     "singleHolidayDeleteModalDes": "Are you sure you want to delete the selected holiday? This action will affect any leave requests that overlap with the holiday.",
-    "selectedHolidayDeleteModalDes": "Are you sure you want to delete all the selected holidays? This action will affect any leave requests that overlap with the holidays.",
+    "selectedHolidayDeleteModalDes": "Are you sure you want to delete selected holidays? This action will affect any leave requests that overlap with the selected holidays.",
     "allHolidayDeleteModalDes": "Are you sure you want to delete all holidays? This action will affect any leave requests that overlap with the holidays.",
     "singleHolidayDeleteSuccessTitle": "Holiday Deleted",
     "singleHolidayDeleteSuccessDes": "Holiday has been deleted successfully.",
