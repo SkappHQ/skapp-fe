@@ -3,9 +3,14 @@ import { useEffect, useState } from "react";
 import { usePeopleStore } from "~community/people/store/store";
 
 import { EditPeopleFormTypes } from "../types/PeopleEditTypes";
-import { L1EmployeeType } from "../types/PeopleTypes";
+import {
+  L1EmployeeType,
+  L2EmploymentFormDetailsType
+} from "../types/PeopleTypes";
 import { getEmergencyContactDetailsChanges } from "../utils/peopleEditFlowUtils/emergencyDetailsChangesUtils";
+import { getEmploymentDetailsChanges } from "../utils/peopleEditFlowUtils/employmentDetailsChangesUtils";
 import { getPersonalDetailsChanges } from "../utils/peopleEditFlowUtils/personalDetailsChangesUtils";
+import { getSystemPermissionsDetailsChanges } from "../utils/peopleEditFlowUtils/systemPermissionsChangesUtils";
 
 const useFormChangeDetector = (): {
   hasChanged: boolean;
@@ -44,11 +49,33 @@ const useFormChangeDetector = (): {
         break;
       }
       case EditPeopleFormTypes.employment: {
-        // Handle employment details changes
+        const newEmploymentDetails = employee?.employment;
+        const previousEmploymentDetails = initialEmployee?.employment;
+
+        newApiPayload = {
+          employment: {
+            ...getEmploymentDetailsChanges(
+              newEmploymentDetails as L2EmploymentFormDetailsType,
+              previousEmploymentDetails as L2EmploymentFormDetailsType
+            )
+          }
+        };
         break;
       }
       case EditPeopleFormTypes.permission: {
-        // Handle permission details changes
+        const newSystemPermissions = employee?.systemPermissions;
+        const previousSystemPermissions = initialEmployee?.systemPermissions;
+
+        if (newSystemPermissions && previousSystemPermissions) {
+          newApiPayload = {
+            systemPermissions: {
+              ...getSystemPermissionsDetailsChanges(
+                newSystemPermissions,
+                previousSystemPermissions
+              )
+            }
+          };
+        }
         break;
       }
       case EditPeopleFormTypes.emergency: {

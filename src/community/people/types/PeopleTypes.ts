@@ -153,6 +153,7 @@ export interface L3IdentificationAndDiversityDetailsType {
 }
 
 export interface L3PreviousEmploymentDetailsType {
+  employmentId?: number;
   companyName?: string;
   jobTitle?: string;
   startDate?: string;
