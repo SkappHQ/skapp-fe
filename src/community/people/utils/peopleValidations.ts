@@ -100,7 +100,8 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
-      ),
+      )
+      .nullable(),
     passportNumber: Yup.string()
       .max(
         characterLengths.NAME_LENGTH,
@@ -109,8 +110,9 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
-      ),
-    maritalStatus: Yup.string().nullable(),
+      )
+      .nullable(),
+    maritalStatus: Yup.string().nullable()
   });
 
 export const employeeFamilyDetailsValidation = (
@@ -452,7 +454,8 @@ export const employeeContactDetailsValidation = (
   Yup.object({
     personalEmail: Yup.string()
       .trim()
-      .email(translator(["validEmailError"])),
+      .email(translator(["validEmailError"]))
+      .nullable(),
     phone: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
@@ -462,21 +465,25 @@ export const employeeContactDetailsValidation = (
         characterLengths.PHONE_NUMBER_LENGTH_MIN,
         translator(["validContactNumberError"])
       ),
-    addressLine1: Yup.string(),
-    addressLine2: Yup.string(),
-    city: Yup.string().max(
-      ADDRESS_MAX_CHARACTER_LENGTH,
-      translator(["maxCharacterCityLimitError"])
-    ),
+    addressLine1: Yup.string().nullable(),
+    addressLine2: Yup.string().nullable(),
+    city: Yup.string()
+      .max(
+        ADDRESS_MAX_CHARACTER_LENGTH,
+        translator(["maxCharacterCityLimitError"])
+      )
+      .nullable(),
     country: Yup.string(),
     state: Yup.string().max(
       ADDRESS_MAX_CHARACTER_LENGTH,
       translator(["maxCharacterLimitStateError"])
     ),
-    postalCode: Yup.string().matches(
-      isValidAlphaNumericString(),
-      translator(["validPostalCodeError"])
-    )
+    postalCode: Yup.string()
+      .matches(
+        isValidAlphaNumericString(),
+        translator(["validPostalCodeError"])
+      )
+      .nullable()
   });
 
 export const quickAddEmployeeValidations = (

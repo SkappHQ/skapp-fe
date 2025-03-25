@@ -10,12 +10,12 @@ import { FileTypes } from "~community/common/enums/CommonEnums";
 import { theme } from "~community/common/theme/theme";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
-import { EmployeeDetails } from "~community/people/types/EmployeeTypes";
+import { L1EmployeeType } from "~community/people/types/PeopleTypes";
 import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
-  selectedUser: EmployeeDetails;
+  selectedUser: L1EmployeeType;
   styles?: SxProps;
   isLoading?: boolean;
   isSuccess?: boolean;
@@ -28,23 +28,27 @@ const UserDetailsCentered: FC<Props> = ({
   enableEdit = false
 }) => {
   const [profilePicture, setProfilePicture] = useState<string>();
-  const { employeeGeneralDetails, setEmployeeGeneralDetails } = usePeopleStore(
-    (state) => state
-  );
+
+  const { employee, thumbnail, setCommonDetails, setThumbnail, setProfilePic } =
+    usePeopleStore((state) => state);
 
   const environment = useGetEnvironment();
 
   const cardData = useMemo(() => {
     return {
-      employeeId: selectedUser?.identificationNo?.toString() || "",
-      authPic: selectedUser?.authPic || "",
-      thumbnail: selectedUser?.thumbnail || "",
-      firstName: selectedUser?.firstName ?? "",
-      lastName: selectedUser?.lastName || "",
-      fullName:
-        selectedUser?.firstName?.concat(" ", selectedUser?.lastName ?? "") ||
+      employeeId:
+        selectedUser?.employment?.employmentDetails?.employeeNumber?.toString() ||
         "",
-      jobTitle: selectedUser?.jobTitle?.name || ""
+      authPic: selectedUser?.common?.authPic || "",
+      thumbnail: thumbnail || "",
+      firstName: selectedUser?.personal?.general?.firstName ?? "",
+      lastName: selectedUser?.personal?.general?.lastName || "",
+      fullName:
+        selectedUser?.personal?.general?.firstName?.concat(
+          " ",
+          selectedUser?.personal?.general?.lastName ?? ""
+        ) || "",
+      jobTitle: selectedUser?.common?.jobTitle || ""
     };
   }, [selectedUser]);
 
@@ -54,13 +58,17 @@ const UserDetailsCentered: FC<Props> = ({
         Object.assign(file, { preview: URL.createObjectURL(file) })
       );
 
-      setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+      setCommonDetails({
+        authPic: profilePic[0]?.preview ?? ""
+      });
+
+      setProfilePic(profilePic as ModifiedFileType[]);
 
       generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
-        setEmployeeGeneralDetails("thumbnail", thumbnail)
+        setThumbnail(thumbnail)
       );
     },
-    [setEmployeeGeneralDetails]
+    [employee?.common?.employeeId]
   );
 
   const { open, getInputProps } = useDropzone({
@@ -83,7 +91,11 @@ const UserDetailsCentered: FC<Props> = ({
   );
 
   const handleUnSelectPhoto = (): void => {
-    setEmployeeGeneralDetails("authPic", profilePicture);
+    setProfilePic([]);
+    setThumbnail([]);
+    setCommonDetails({
+      authPic: ""
+    });
     setProfilePicture("");
   };
 
@@ -94,17 +106,17 @@ const UserDetailsCentered: FC<Props> = ({
   }, [isLoading, uploadedImage]);
 
   const getAvatarThumbnailUrl = useCallback((): string => {
-    if (employeeGeneralDetails?.authPic !== undefined) {
-      if (Array.isArray(employeeGeneralDetails?.authPic)) {
-        return employeeGeneralDetails?.authPic[0]?.preview;
+    if (employee?.common?.authPic !== undefined) {
+      if (Array.isArray(employee?.common?.authPic)) {
+        return employee?.common?.authPic[0]?.preview;
       }
-      return employeeGeneralDetails?.authPic ?? "";
+      return employee?.common?.authPic ?? "";
     } else if (profilePicture !== undefined) {
       return profilePicture;
     }
 
     return "";
-  }, [profilePicture, employeeGeneralDetails?.authPic]);
+  }, [profilePicture, employee?.common?.authPic]);
 
   return (
     <Box
@@ -143,8 +155,7 @@ const UserDetailsCentered: FC<Props> = ({
           open={open}
           enableEdit={enableEdit}
           imageUploaded={
-            cardData?.authPic !==
-            ((employeeGeneralDetails?.authPic as string) ?? "")
+            cardData?.authPic !== ((employee?.common?.authPic as string) ?? "")
           }
           data-testid={accountPageTestId.UserDetailsCentered.profileAvatar}
         />

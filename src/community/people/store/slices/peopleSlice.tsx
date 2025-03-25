@@ -97,7 +97,8 @@ const defaultEmployee: L1EmployeeType = {
   common: {
     employeeId: "",
     authPic: "",
-    accountStatus: undefined
+    accountStatus: undefined,
+    jobTitle: ""
   }
 };
 
