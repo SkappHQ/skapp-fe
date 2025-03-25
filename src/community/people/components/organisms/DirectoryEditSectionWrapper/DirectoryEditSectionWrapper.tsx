@@ -58,7 +58,7 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
         {employee && <EditInfoCard selectedEmployee={employee} />}
       </Box>
       <DirectorySteppers employeeId={Number(employeeId)} />
-      <PeopleFormSections />
+      <PeopleFormSections employeeId={Number(employeeId)} />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
         onDiscard={() => {

@@ -1,3 +1,5 @@
+import IndividualEmployeeTimeReportSection from "~community/attendance/components/molecules/IndividualEmployeeTimeReportBody/IndividualEmployeeTimeReportBody";
+import IndividualEmployeeLeaveReportSection from "~community/leave/components/molecules/IndividualEmployeeLeaveReportSection/IndividualEmployeeLeaveReportSection";
 import { usePeopleStore } from "~community/people/store/store";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
@@ -8,11 +10,14 @@ import PersonalDetailsForm from "../PersonDetailsSection/PersonalDetailsForm";
 import SystemPermissionFormSection from "../SystemPermissionFormSection/SystemPermissionFormSection";
 
 interface Props {
+  employeeId?: number;
   isAddFlow?: boolean;
 }
 
-const PeopleFormSections = ({ isAddFlow = false }: Props) => {
-  const { currentStep, activeStep } = usePeopleStore((state) => state);
+const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
+  const { currentStep, activeStep, employee } = usePeopleStore(
+    (state) => state
+  );
 
   const getAddFlowSection = () => {
     switch (activeStep) {
@@ -38,9 +43,23 @@ const PeopleFormSections = ({ isAddFlow = false }: Props) => {
       case EditPeopleFormTypes.emergency:
         return <EmergencyDetailsForm isAddFlow={isAddFlow} />;
       case EditPeopleFormTypes.employment:
-        return <EmploymentDetailsForm isAddFlow={isAddFlow} />;
+        return <EmploymentDetailsForm isAddFlow={isAddFlow} isUpdate />;
       case EditPeopleFormTypes.permission:
         return <SystemPermissionFormSection isAddFlow={isAddFlow} />;
+      case EditPeopleFormTypes.leave:
+        return (
+          <IndividualEmployeeLeaveReportSection
+            selectedUser={Number(employeeId)}
+            employeeLastName={employee?.personal?.general?.lastName ?? ""}
+            employeeFirstName={employee?.personal?.general?.firstName ?? ""}
+          />
+        );
+      case EditPeopleFormTypes.timesheet:
+        return (
+          <IndividualEmployeeTimeReportSection
+            selectedUser={Number(employeeId)}
+          />
+        );
       default:
         return null;
     }
