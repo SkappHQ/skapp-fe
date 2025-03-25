@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -14,6 +14,8 @@ import { IconName } from "~community/common/types/IconTypes";
 import { useLeaveCarryForward } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
 
+import styles from "./styles";
+
 interface Props {
   handleClose: () => void;
 }
@@ -21,13 +23,17 @@ interface Props {
 const LeaveCarryForwardSyncConfirmation = ({
   handleClose
 }: Props): JSX.Element => {
-  const { leaveCarryForwardId } = useLeaveStore((state) => state);
+  const classes = styles();
+
   const { setToastMessage } = useToast();
-  const handleCarryForward = () => {
-    mutate(leaveCarryForwardId);
-  };
 
   const translateTexts = useTranslator("leaveModule", "leaveCarryForward");
+
+  const { leaveCarryForwardId, setLeaveCarryForwardSyncBtnStatus } =
+    useLeaveStore((state) => ({
+      leaveCarryForwardId: state.leaveCarryForwardId,
+      setLeaveCarryForwardSyncBtnStatus: state.setLeaveCarryForwardSyncBtnStatus
+    }));
 
   const onSuccess = () => {
     setToastMessage({
@@ -37,6 +43,8 @@ const LeaveCarryForwardSyncConfirmation = ({
       description: translateTexts(["leaveCarryForwardSuccessToastDescription"]),
       isIcon: true
     });
+    setLeaveCarryForwardSyncBtnStatus("isLoading", false);
+    setLeaveCarryForwardSyncBtnStatus("isDisabled", true);
     handleClose();
   };
 
@@ -48,24 +56,18 @@ const LeaveCarryForwardSyncConfirmation = ({
       description: translateTexts(["leaveCarryForwardFailToastDescription"]),
       isIcon: true
     });
+    setLeaveCarryForwardSyncBtnStatus("isLoading", false);
   };
 
-  const { mutate } = useLeaveCarryForward(onSuccess, onError);
+  const { mutate, isPending } = useLeaveCarryForward(onSuccess, onError);
+
+  useEffect(() => {
+    setLeaveCarryForwardSyncBtnStatus("isLoading", isPending);
+  }, [isPending, setLeaveCarryForwardSyncBtnStatus]);
 
   return (
-    <Stack
-      sx={{
-        minWidth: "31.25rem"
-      }}
-    >
-      <Typography
-        sx={{
-          my: "1rem",
-          color: "grey.900",
-          width: "100%"
-        }}
-        variant="body1"
-      >
+    <Stack sx={classes.wrapper}>
+      <Typography sx={classes.title} variant="body1">
         {translateTexts(["leaveCarryForwardModalDescription"]) ?? ""}
       </Typography>
       <Box>
@@ -73,7 +75,7 @@ const LeaveCarryForwardSyncConfirmation = ({
           label={translateTexts(["leaveCarryForwardModalConfirmSyncBtn"])}
           endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
           type={ButtonTypes.SUBMIT}
-          onClick={handleCarryForward}
+          onClick={() => mutate(leaveCarryForwardId)}
         />
         <Button
           buttonStyle={ButtonStyle.TERTIARY}

@@ -222,7 +222,8 @@ describe("dateTimeUtils", () => {
   test("parseStringWithCurrentYearAndConvertToDateTime should parse string and convert to DateTime", () => {
     const dateString = "10 Oct";
     const dateTime = parseStringWithCurrentYearAndConvertToDateTime(dateString);
-    expect(dateTime.toISO()).toMatch("2024-10-10T00:00:00.000+05:30");
+    const currentYear = new Date().getFullYear();
+    expect(dateTime.toISO()).toMatch(`${currentYear}-10-10T00:00:00.000+05:30`);
   });
 });
 
@@ -302,7 +303,7 @@ describe("getRecentYearsInStrings", () => {
   });
 
   it("returns an array of two string years", () => {
-    const mockCurrentYear = 2024;
+    const mockCurrentYear = new Date().getFullYear();
 
     (globalThis as any).DateTime = {
       local: jest.fn().mockReturnValue({
@@ -313,12 +314,12 @@ describe("getRecentYearsInStrings", () => {
     const result = getRecentYearsInStrings();
 
     expect(result).toHaveLength(2);
-    expect(result[0]).toBe("2024");
-    expect(result[1]).toBe("2025");
+    expect(result[0]).toBe(mockCurrentYear.toString());
+    expect(result[1]).toBe((mockCurrentYear + 1).toString());
   });
 
   it("returns correct years for end of year", () => {
-    const mockCurrentYear = 2024;
+    const mockCurrentYear = new Date().getFullYear();
 
     (global as any).DateTime = {
       local: jest.fn().mockReturnValue({
@@ -328,8 +329,8 @@ describe("getRecentYearsInStrings", () => {
 
     const result = getRecentYearsInStrings();
 
-    expect(result[0]).toBe("2024");
-    expect(result[1]).toBe("2025");
+    expect(result[0]).toBe(mockCurrentYear.toString());
+    expect(result[1]).toBe((mockCurrentYear + 1).toString());
   });
 
   it("returns years as strings", () => {

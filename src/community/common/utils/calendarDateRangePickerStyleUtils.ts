@@ -39,7 +39,7 @@ export const getHolidayClasses = (holidays: Holiday[] | null): string => {
 };
 
 interface GetLeaveRequestClassesProps {
-  leaveRequests: MyLeaveRequestPayloadType;
+  leaveRequests: MyLeaveRequestPayloadType[];
   workingDays: string[] | undefined;
   date: DateTime;
   holidays: Holiday[] | null;
@@ -82,16 +82,29 @@ export const getLeaveRequestClasses = ({
 
       return Array.from(uniqueLeaveClasses).join(" ");
     } else {
-      switch (leaveRequests.leaveState) {
-        case LeaveStates.FULL_DAY:
-          return "Mui-full-day-leave";
-        case LeaveStates.MORNING:
-          return "Mui-half-day-morning-leave";
-        case LeaveStates.EVENING:
-          return "Mui-half-day-evening-leave";
-        default:
-          return "";
+      const leaveClasses = leaveRequests?.map((request) => {
+        switch (request.leaveState) {
+          case LeaveStates.FULL_DAY:
+            return "Mui-full-day-leave";
+          case LeaveStates.MORNING:
+            return "Mui-half-day-morning-leave";
+          case LeaveStates.EVENING:
+            return "Mui-half-day-evening-leave";
+          default:
+            return "";
+        }
+      });
+
+      const uniqueLeaveClasses = new Set(leaveClasses);
+
+      if (
+        uniqueLeaveClasses.has("Mui-half-day-morning-leave") &&
+        uniqueLeaveClasses.has("Mui-half-day-evening-leave")
+      ) {
+        return "Mui-full-day-leave";
       }
+
+      return Array.from(uniqueLeaveClasses).join(" ");
     }
   }
 
