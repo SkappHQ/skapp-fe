@@ -9,8 +9,8 @@ import {
 } from "~community/people/types/PeopleTypes";
 
 export const isFieldDifferentAndValid = (
-  newValue: string | undefined | null,
-  oldValue: string | undefined | null
+  newValue: string | undefined | null | number | boolean,
+  oldValue: string | undefined | null | number | boolean
 ): boolean => {
   if (
     (newValue === undefined || newValue === null || newValue === "") &&
@@ -460,7 +460,7 @@ export const getPersonalDetailsChanges = (
   const educationalChanges = getEducationalDetailsChanges(
     newPersonalDetails.educational as L3EducationalDetailsType[],
     previousPersonalDetails.educational as L3EducationalDetailsType[]
-  ) as L3EducationalDetailsType[];
+  );
   Object.assign(changes, educationalChanges);
 
   // Social Media Details
