@@ -1,59 +1,45 @@
 import { Stack, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import Modal from "~community/common/components/organisms/Modal/Modal";
 import { appModes } from "~community/common/constants/configs";
-import { systemPermissionFormTestId } from "~community/common/constants/testIds";
-import {
-  ButtonSizes,
-  ButtonStyle
-} from "~community/common/enums/ComponentEnums";
+import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
-import {
-  useGetAllowedGrantablePermissions,
-  useGetSuperAdminCount
-} from "~community/configurations/api/userRolesApi";
+import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
+import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { Role } from "~community/people/enums/PeopleEnums";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
-import { EditPeopleFormStatus } from "~community/people/types/PeopleEditTypes";
-import { L2SystemPermissionsType } from "~community/people/types/PeopleTypes";
-import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
-import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
+import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
+import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import PeopleFormSectionWrapper from "../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 import SystemCredentials from "../SystemCredentials/SystemCredentials";
 import styles from "./styles";
 
 interface Props {
-  onBack?: () => void;
   isProfileView?: boolean;
   isInputsDisabled?: boolean;
   isUpdate?: boolean;
-  isSubmitDisabled?: boolean;
-  isLoading?: boolean;
-  isSuccess?: boolean;
+  isAddFlow?: boolean;
 }
+
 const SystemPermissionFormSection = ({
-  onBack,
   isProfileView,
   isInputsDisabled,
   isUpdate,
-  isSubmitDisabled,
-  isLoading,
-  isSuccess
+  isAddFlow
 }: Props) => {
   const classes = styles();
-
-  const router = useRouter();
-
   const environment = useGetEnvironment();
 
   const translateText = useTranslator(
@@ -62,28 +48,32 @@ const SystemPermissionFormSection = ({
     "systemPermissions"
   );
   const commonText = useTranslator("peopleModule", "addResource", "commonText");
-  const roleLimitationText = useTranslator("peopleModule", "roleLimitation");
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [modalDescription, setModalDescription] = useState<string>("");
-  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
-    leaveAdminLimitExceeded: false,
-    attendanceAdminLimitExceeded: false,
-    peopleAdminLimitExceeded: false,
-    leaveManagerLimitExceeded: false,
-    attendanceManagerLimitExceeded: false,
-    peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false,
-    esignAdminLimitExceeded: false,
-    esignSenderLimitExceeded: false
-  });
-
-  const { employee } = usePeopleStore((state) => ({
-    employee: state.employee
-  }));
-
+  const [openModal, setOpenModal] = useState(false);
+  const [modalDescription, setModalDescription] = useState("");
+  const {
+    employee,
+    initialEmployee,
+    isUnsavedModalSaveButtonClicked,
+    isUnsavedModalDiscardButtonClicked,
+    setEmployee,
+    setIsUnsavedChangesModalOpen,
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked
+  } = usePeopleStore((state) => state);
+  const { data: supervisedData } = useGetSupervisedByMe(
+    Number(employee.common?.employeeId)
+  );
   const { data: superAdminCount } = useGetSuperAdminCount();
-  const { data: grantablePermission } = useGetAllowedGrantablePermissions();
+  const { setToastMessage } = useToast();
+  const hasChanged = useFormChangeDetector();
+
+  const {
+    permissions,
+    grantablePermission,
+    handleRoleDropdown,
+    handleSuperAdminToggle
+  } = useSystemPermissionFormHandlers();
 
   const {
     isAttendanceModuleEnabled,
@@ -91,132 +81,50 @@ const SystemPermissionFormSection = ({
     isEsignatureModuleEnabled
   } = useSessionData();
 
-  const initialValues: L2SystemPermissionsType = {
-    isSuperAdmin: employee?.systemPermissions?.isSuperAdmin || false,
-    peopleRole: employee?.systemPermissions?.peopleRole || Role.PEOPLE_EMPLOYEE,
-    leaveRole: employee?.systemPermissions?.leaveRole || Role.LEAVE_EMPLOYEE,
-    attendanceRole:
-      employee?.systemPermissions?.attendanceRole || Role.ATTENDANCE_EMPLOYEE,
-    eSignRole: employee?.systemPermissions?.eSignRole || Role.ESIGN_EMPLOYEE
-  };
+  const onSave = () => {
+    if (
+      employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
+      (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
+        initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_MANAGER)
+    ) {
+      if (supervisedData.isPrimaryManager)
+        setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
+      else if (supervisedData.isTeamSuperviso)
+        setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
-  const { values, setFieldValue } = useFormik({
-    initialValues,
-    // onSubmit:
-    // (values: L2SystemPermissionsType) =>
-    //   handleSystemPermissionFormSubmit({ values, setUserRoles }),
-    onSubmit: () => {},
-    validateOnChange: false
-  });
-
-  const { mutate: checkRoleLimits } = useGetEmployeeRoleLimit(
-    (response) => setRoleLimits(response),
-    () => {
-      router.push("/_error");
+      setOpenModal(true);
+    } else if (
+      employee.systemPermissions?.isSuperAdmin &&
+      initialEmployee.systemPermissions?.isSuperAdmin &&
+      superAdminCount >= MAX_SUPERVISOR_LIMIT
+    ) {
+      setToastMessage({
+        toastType: ToastType.ERROR,
+        title: translateText(["maxSupervisorCountReached"]),
+        description: translateText(["maxSupervisorCountReachedDescription"]),
+        open: true
+      });
+    } else {
+      setIsUnsavedChangesModalOpen(false);
+      setIsUnsavedModalSaveButtonClicked(false);
+      setEmployee(employee);
     }
-  );
+  };
+  const onCancel = () => {
+    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
+      setEmployee(initialEmployee);
+      setIsUnsavedChangesModalOpen(false);
+      setIsUnsavedModalDiscardButtonClicked(false);
+    }
+  };
 
   useEffect(() => {
-    if (environment === appModes.ENTERPRISE) {
-      checkRoleLimits();
+    if (isUnsavedModalSaveButtonClicked) {
+      onSave();
+    } else if (isUnsavedModalDiscardButtonClicked) {
+      onCancel();
     }
-  }, [environment]);
-
-  // useEffect(() => {
-  //   if (updateEmployeeStatus === EditPeopleFormStatus.TRIGGERED) {
-  //     void handleNextBtnClick({
-  //       isUpdate,
-  //       systemPermissionsText,
-  //       employee,
-  //       setToastMessage,
-  //       superAdminCount,
-  //       setModalDescription,
-  //       setOpenModal,
-  //       values,
-  //       setUpdateEmployeeStatus,
-  //       onNext
-  //     });
-  //   }
-  // }, [updateEmployeeStatus]);
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     handleAddNewResourceSuccess({
-  //       setToastMessage,
-  //       resetEmployeeData,
-  //       router,
-  //       translateText: commonText
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSuccess]);
-
-  const handlePrimaryBtnClick = () => {
-    // if (isLeaveModuleEnabled) {
-    //   handleNextBtnClick({
-    //     isUpdate,
-    //     systemPermissionsText,
-    //     employee,
-    //     setToastMessage,
-    //     superAdminCount,
-    //     setModalDescription,
-    //     setOpenModal,
-    //     values,
-    //     setUpdateEmployeeStatus,
-    //     onNext
-    //   });
-    // } else {
-    //   onSave();
-    // }
-  };
-
-  const handleCustomChange = ({
-    name,
-    value
-  }: {
-    name: keyof L2SystemPermissionsType;
-    value: any;
-  }) => {
-    // environment === appModes.ENTERPRISE
-    //   ? handleCustomChangeEnterprise({
-    //       name,
-    //       value,
-    //       setToastMessage,
-    //       roleLimitationText,
-    //       roleLimits,
-    //       setFieldValue,
-    //       setUserRoles
-    //     })
-    //   : handleCustomChangeDefault({
-    //       name,
-    //       value,
-    //       setFieldValue,
-    //       setUserRoles
-    //     });
-  };
-
-  const handleSuperAdminChange = (event: ChangeEvent<HTMLInputElement>) => {
-    // if (environment === appModes.ENTERPRISE) {
-    //   handleSuperAdminChangeEnterprise({
-    //     event,
-    //     setFieldValue,
-    //     setUserRoles,
-    //     setToastMessage,
-    //     roleLimitationText,
-    //     roleLimits,
-    //     superAdminCount
-    //   });
-    // } else {
-    //   handleSuperAdminChangeDefault({
-    //     event,
-    //     setFieldValue,
-    //     setUserRoles,
-    //     setToastMessage,
-    //     roleLimitationText,
-    //     superAdminCount
-    //   });
-    // }
-  };
+  }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
 
   return (
     <PeopleFormSectionWrapper
@@ -229,8 +137,8 @@ const SystemPermissionFormSection = ({
         <SwitchRow
           label={translateText(["superAdmin"])}
           disabled={isProfileView || isInputsDisabled}
-          checked={values.isSuperAdmin}
-          onChange={handleSuperAdminChange}
+          checked={permissions.isSuperAdmin as boolean}
+          onChange={handleSuperAdminToggle}
           wrapperStyles={classes.switchRowWrapper}
           icon={!isInputsDisabled ? IconName.SUPER_ADMIN_ICON : undefined}
         />
@@ -238,38 +146,32 @@ const SystemPermissionFormSection = ({
         <Stack sx={classes.dropdownContainer}>
           <DropdownList
             inputName={"peopleRole"}
-            label="People"
+            label={translateText(["people"])}
             itemList={grantablePermission?.people || []}
-            value={values.peopleRole}
+            value={permissions.peopleRole}
             componentStyle={classes.dropdownListComponentStyles}
             checkSelected
             onChange={(event) =>
-              handleCustomChange({
-                name: "peopleRole",
-                value: event.target.value
-              })
+              handleRoleDropdown("peopleRole", event.target.value as Role)
             }
             isDisabled={
-              isProfileView || values.isSuperAdmin || isInputsDisabled
+              isProfileView || permissions.isSuperAdmin || isInputsDisabled
             }
           />
 
           {isLeaveModuleEnabled && (
             <DropdownList
               inputName={"leaveRole"}
-              label="Leave"
+              label={translateText(["leave"])}
               itemList={grantablePermission?.leave || []}
-              value={values.leaveRole}
+              value={permissions.leaveRole}
               checkSelected
               componentStyle={classes.dropdownListComponentStyles}
               onChange={(event) =>
-                handleCustomChange({
-                  name: "leaveRole",
-                  value: event.target.value
-                })
+                handleRoleDropdown("leaveRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || values.isSuperAdmin || isInputsDisabled
+                isProfileView || permissions.isSuperAdmin || isInputsDisabled
               }
             />
           )}
@@ -277,39 +179,33 @@ const SystemPermissionFormSection = ({
           {isAttendanceModuleEnabled && (
             <DropdownList
               inputName={"attendanceRole"}
-              label="Attendance"
+              label={translateText(["attendance"])}
               itemList={grantablePermission?.attendance || []}
-              value={values.attendanceRole}
+              value={permissions.attendanceRole}
               componentStyle={classes.dropdownListComponentStyles}
               checkSelected
               onChange={(event) =>
-                handleCustomChange({
-                  name: "attendanceRole",
-                  value: event.target.value
-                })
+                handleRoleDropdown("attendanceRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || values.isSuperAdmin || isInputsDisabled
+                isProfileView || permissions.isSuperAdmin || isInputsDisabled
               }
             />
           )}
 
           {isEsignatureModuleEnabled && (
             <DropdownList
-              inputName={"eSignRole"}
-              label="e-signature"
+              inputName={"esignRole"}
+              label={translateText(["eSignature"])}
               itemList={grantablePermission?.esign || []}
-              value={values.eSignRole}
+              value={permissions.esignRole}
               componentStyle={classes.dropdownListComponentStyles}
               checkSelected
               onChange={(event) =>
-                handleCustomChange({
-                  name: "eSignRole",
-                  value: event.target.value
-                })
+                handleRoleDropdown("esignRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || values.isSuperAdmin || isInputsDisabled
+                isProfileView || permissions.isSuperAdmin || isInputsDisabled
               }
             />
           )}
@@ -319,51 +215,19 @@ const SystemPermissionFormSection = ({
           !isInputsDisabled &&
           environment === appModes.COMMUNITY && <SystemCredentials />}
 
-        {!isInputsDisabled && (
-          <Stack sx={classes.btnWrapper}>
-            <Button
-              isFullWidth={false}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
-              buttonStyle={ButtonStyle.TERTIARY}
-              size={ButtonSizes.LARGE}
-              label={isUpdate ? commonText(["cancel"]) : commonText(["back"])}
-              startIcon={isUpdate ? <></> : IconName.LEFT_ARROW_ICON}
-              endIcon={isUpdate ? IconName.CLOSE_ICON : <></>}
-              onClick={onBack}
-              dataTestId={
-                isUpdate
-                  ? systemPermissionFormTestId.buttons.cancelBtn
-                  : systemPermissionFormTestId.buttons.backBtn
-              }
-            />
-            <Button
-              isLoading={isLoading}
-              isFullWidth={false}
-              disabled={isSubmitDisabled || isLoading || isInputsDisabled}
-              buttonStyle={ButtonStyle.PRIMARY}
-              size={ButtonSizes.LARGE}
-              label={
-                !isLeaveModuleEnabled || isUpdate
-                  ? commonText(["saveDetails"])
-                  : commonText(["next"])
-              }
-              endIcon={
-                !isLeaveModuleEnabled || isUpdate
-                  ? IconName.SAVE_ICON
-                  : IconName.RIGHT_ARROW_ICON
-              }
-              onClick={handlePrimaryBtnClick}
-              dataTestId={
-                !isLeaveModuleEnabled || isUpdate
-                  ? systemPermissionFormTestId.buttons.saveDetailsBtn
-                  : systemPermissionFormTestId.buttons.nextBtn
-              }
-            />
-          </Stack>
+        {isAddFlow ? (
+          <AddSectionButtonWrapper onNextClick={onSave} />
+        ) : (
+          <EditSectionButtonWrapper
+            onCancelClick={onCancel}
+            onSaveClick={onSave}
+            isSaveDisabled={!hasChanged}
+          />
         )}
+
         <Modal
           isModalOpen={openModal}
-          title="Alert"
+          title={translateText(["alert"])}
           onCloseModal={() => {
             setOpenModal(false);
             setModalDescription("");
@@ -374,15 +238,6 @@ const SystemPermissionFormSection = ({
             <Button
               buttonStyle={ButtonStyle.PRIMARY}
               label={commonText(["okay"])}
-              // onClick={() =>
-              //   handleModalClose({
-              //     employee,
-              //     setUserRoles,
-              //     setFieldValue,
-              //     setModalDescription,
-              //     setOpenModal
-              //   })
-              // }
             />
           </Stack>
         </Modal>

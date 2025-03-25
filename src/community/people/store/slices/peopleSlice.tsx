@@ -1,4 +1,6 @@
 import { SetType } from "~community/common/types/CommonTypes";
+import { Role } from "~community/people/enums/PeopleEnums";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import {
   L1EmployeeType,
   L2CommonDetailsType,
@@ -67,7 +69,7 @@ const defaultEmployee: L1EmployeeType = {
       employeeNumber: "",
       email: "",
       employmentAllocation: undefined,
-      teams: undefined,
+      teamIds: undefined,
       primarySupervisor: undefined,
       secondarySupervisor: undefined,
       joinedDate: undefined,
@@ -86,21 +88,39 @@ const defaultEmployee: L1EmployeeType = {
   },
   systemPermissions: {
     isSuperAdmin: false,
-    peopleRole: undefined,
-    leaveRole: undefined,
-    attendanceRole: undefined,
-    eSignRole: undefined
+    peopleRole: Role.PEOPLE_EMPLOYEE,
+    leaveRole: Role.LEAVE_EMPLOYEE,
+    attendanceRole: Role.ATTENDANCE_EMPLOYEE,
+    esignRole: Role.ESIGN_EMPLOYEE
   },
   common: {
-    image: "",
-    accountStatus: undefined,
-    thumbnail: ""
+    employeeId: "",
+    authPic: "",
+    accountStatus: undefined
   }
 };
 
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
+  nextStep: EditPeopleFormTypes.personal,
+  currentStep: EditPeopleFormTypes.personal,
+  activeStep: 0,
+  isUnsavedChangesModalOpen: false,
+  isUnsavedModalSaveButtonClicked: false,
+  isUnsavedModalDiscardButtonClicked: false,
+  setActiveStep: (activeStep: number) => set(() => ({ activeStep })),
+  setNextStep: (nextStep: EditPeopleFormTypes) => set(() => ({ nextStep })),
+  setCurrentStep: (currentStep: EditPeopleFormTypes) =>
+    set(() => ({ currentStep })),
+  setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) =>
+    set(() => ({ isUnsavedChangesModalOpen })),
+  setIsUnsavedModalSaveButtonClicked: (
+    isUnsavedModalSaveButtonClicked: boolean
+  ) => set(() => ({ isUnsavedModalSaveButtonClicked })),
+  setIsUnsavedModalDiscardButtonClicked: (
+    isUnsavedModalDiscardButtonClicked: boolean
+  ) => set(() => ({ isUnsavedModalDiscardButtonClicked })),
   setEmployee: (employee: L1EmployeeType) =>
     set(() => ({ employee, initialEmployee: employee })),
   setPersonalDetails: (personal: L2PersonalDetailsType) =>

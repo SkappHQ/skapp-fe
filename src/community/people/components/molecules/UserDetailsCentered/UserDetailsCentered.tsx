@@ -44,7 +44,6 @@ const UserDetailsCentered: FC<Props> = ({
       fullName:
         selectedUser?.firstName?.concat(" ", selectedUser?.lastName ?? "") ||
         "",
-      jobFamily: selectedUser?.jobFamily?.name || "",
       jobTitle: selectedUser?.jobTitle?.name || ""
     };
   }, [selectedUser]);
@@ -180,7 +179,7 @@ const UserDetailsCentered: FC<Props> = ({
               color: theme.palette.text.secondary
             }}
           >
-            {cardData?.jobTitle} {cardData?.jobFamily}
+            {cardData?.jobTitle}
           </Typography>
         </Box>
       </Box>

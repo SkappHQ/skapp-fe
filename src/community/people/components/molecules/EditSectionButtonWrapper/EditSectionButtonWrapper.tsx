@@ -8,9 +8,14 @@ import { IconName } from "~community/common/types/IconTypes";
 interface Props {
   onCancelClick: () => void;
   onSaveClick: () => void;
+  isSaveDisabled: boolean;
 }
 
-const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
+const EditSectionButtonWrapper = ({
+  onCancelClick,
+  onSaveClick,
+  isSaveDisabled
+}: Props) => {
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -37,6 +42,7 @@ const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
         endIcon={IconName.RIGHT_ARROW_ICON}
         isFullWidth={false}
         onClick={onSaveClick}
+        disabled={isSaveDisabled}
       />
     </Stack>
   );

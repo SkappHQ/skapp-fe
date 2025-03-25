@@ -63,6 +63,9 @@ export const styles = (theme: Theme) => ({
     "&& .MuiInputBase-input::placeholder": {
       color: theme.palette.grey[700],
       opacity: 1
+    },
+    "& .MuiSelect-icon": {
+      display: readOnly ? "none" : "block"
     }
   }),
 

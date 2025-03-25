@@ -53,6 +53,8 @@ import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
+import { L1EmployeeType } from "../types/PeopleTypes";
+
 const getBannerData = async (): Promise<number> => {
   const url = peoplesEndpoints.GET_PENDING_EMPLOYEE_COUNT;
   const response = await authFetch.get(url);
@@ -676,5 +678,35 @@ export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
       onSuccess();
     },
     onError
+  });
+};
+
+export const useAddEmployee = () => {
+  const queryClient = useQueryClient();
+  const params = usePeopleStore((state) => state.employeeDataParams);
+
+  return useMutation({
+    mutationFn: async (employee: L1EmployeeType) => {
+      const response = await authFetch.post(
+        peoplesEndpoints.ADD_EMPLOYEE,
+        employee
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_COUNT()
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE(params)
+        })
+        .catch(rejects);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries();
+    }
   });
 };

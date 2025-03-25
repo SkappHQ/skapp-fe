@@ -1,40 +1,73 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect } from "react";
 
 import { useGetEmployeeById } from "~community/people/api/PeopleApi";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
-import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
+import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import PeopleFormSections from "../PeopleFormSections/PeopleFormSections";
-import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
   employeeId: number;
 }
 
 const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
-  const [formType, setFormType] = useState<EditPeopleFormTypes>(
-    EditPeopleFormTypes.personal
-  );
-
   const { data: employee } = useGetEmployeeById(employeeId);
+
+  const {
+    isUnsavedChangesModalOpen,
+    currentStep,
+    nextStep,
+    setIsUnsavedChangesModalOpen,
+    setCurrentStep,
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked,
+    initialEmployee,
+    employee: currentEmployee
+  } = usePeopleStore((state) => state);
+
+  const { hasChanged, apiPayload } = useFormChangeDetector();
+
+  useEffect(() => {
+    console.log("apiPayload", apiPayload);
+    console.log("hasChanged", hasChanged);
+  }, [apiPayload]);
+
+  useEffect(() => {
+    if (hasChanged && currentStep !== nextStep) {
+      setIsUnsavedChangesModalOpen(true);
+    } else {
+      setCurrentStep(nextStep);
+    }
+  }, [
+    currentStep,
+    hasChanged,
+    nextStep,
+    setCurrentStep,
+    setIsUnsavedModalSaveButtonClicked,
+    setIsUnsavedModalDiscardButtonClicked,
+    setIsUnsavedChangesModalOpen
+  ]);
 
   return (
     <>
       <Box sx={{ mt: "0.75rem" }}>
         {employee && <EditInfoCard selectedEmployee={employee} />}
       </Box>
-      <DirectorySteppers
-        employeeId={Number(employeeId)}
-        formType={formType}
-        setFormType={setFormType}
+      <DirectorySteppers employeeId={Number(employeeId)} />
+      <PeopleFormSections />
+      <UnsavedChangesModal
+        isOpen={isUnsavedChangesModalOpen}
+        onDiscard={() => {
+          setIsUnsavedModalDiscardButtonClicked(true);
+        }}
+        onSave={() => {
+          setIsUnsavedModalSaveButtonClicked(true);
+        }}
       />
-      <PeopleFormSections formType={formType} />
-      {/* <EditSectionButtonWrapper
-        onCancelClick={() => {}}
-        onSaveClick={() => {}}
-      /> */}
     </>
   );
 };

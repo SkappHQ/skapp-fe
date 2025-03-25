@@ -822,7 +822,8 @@
       "demoteUserSupervisingEmployee": "This user is assigned as a supervisor for other employees. Please update their assignments before changing the user role.",
       "maxSupervisorCountReached": "Super Admin Count Reached.",
       "maxSupervisorCountReachedDescription": "The maximum limit of 3 Super Admins has been reached.",
-      "head": "Directory | Skapp"
+      "head": "Directory | Skapp",
+      "alert": "Alert"
     },
     "credentials": {
       "sectionOne": "Skapp Account Credentials",

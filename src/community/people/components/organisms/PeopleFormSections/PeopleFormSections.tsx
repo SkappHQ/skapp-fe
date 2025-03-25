@@ -1,34 +1,52 @@
-import {
-  EditPeopleFormStatus,
-  EditPeopleFormTypes
-} from "~community/people/types/PeopleEditTypes";
+import { usePeopleStore } from "~community/people/store/store";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
+import EntitlementsDetailsForm from "../AddNewResourceFlow/EntitlementsDetailsSection/EntitlementsDetailsForm";
 import EmergencyDetailsForm from "../EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "../EmploymentFormSection/EmploymentDetailsForm";
 import PersonalDetailsForm from "../PersonDetailsSection/PersonalDetailsForm";
 import SystemPermissionFormSection from "../SystemPermissionFormSection/SystemPermissionFormSection";
 
 interface Props {
-  formType: EditPeopleFormTypes;
-  editFormStatus?: EditPeopleFormStatus;
+  isAddFlow?: boolean;
 }
-const PeopleFormSections = ({ formType }: Props) => {
-  const getSections = () => {
-    switch (formType) {
-      case EditPeopleFormTypes.personal:
-        return <PersonalDetailsForm />;
-      case EditPeopleFormTypes.emergency:
-        return <EmergencyDetailsForm />;
-      case EditPeopleFormTypes.employment:
-        return <EmploymentDetailsForm />;
-      case EditPeopleFormTypes.permission:
-        return <SystemPermissionFormSection />;
+
+const PeopleFormSections = ({ isAddFlow = false }: Props) => {
+  const { currentStep, activeStep } = usePeopleStore((state) => state);
+
+  const getAddFlowSection = () => {
+    switch (activeStep) {
+      case 0:
+        return <PersonalDetailsForm isAddFlow={isAddFlow} />;
+      case 1:
+        return <EmergencyDetailsForm isAddFlow={isAddFlow} />;
+      case 2:
+        return <EmploymentDetailsForm isAddFlow={isAddFlow} />;
+      case 3:
+        return <SystemPermissionFormSection isAddFlow={isAddFlow} />;
+      case 4:
+        return <EntitlementsDetailsForm />;
       default:
-        return;
+        return null;
     }
   };
 
-  return <>{getSections()}</>;
+  const getEditFlowSection = () => {
+    switch (currentStep) {
+      case EditPeopleFormTypes.personal:
+        return <PersonalDetailsForm isAddFlow={isAddFlow} />;
+      case EditPeopleFormTypes.emergency:
+        return <EmergencyDetailsForm isAddFlow={isAddFlow} />;
+      case EditPeopleFormTypes.employment:
+        return <EmploymentDetailsForm isAddFlow={isAddFlow} />;
+      case EditPeopleFormTypes.permission:
+        return <SystemPermissionFormSection isAddFlow={isAddFlow} />;
+      default:
+        return null;
+    }
+  };
+
+  return <>{isAddFlow ? getAddFlowSection() : getEditFlowSection()}</>;
 };
 
 export default PeopleFormSections;

@@ -76,12 +76,12 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
     const member = employee?.personal?.family?.[rowIndex];
 
     if (member) {
-      void setFieldValue("firstName", member.firstName || "");
-      void setFieldValue("lastName", member.lastName || "");
-      void setFieldValue("gender", member.gender || "");
-      void setFieldValue("relationship", member.relationship || "");
-      void setFieldValue("parentName", member.parentName || "");
-      void setFieldValue("dateOfBirth", member.dateOfBirth || "");
+      setFieldValue("firstName", member.firstName ?? "");
+      setFieldValue("lastName", member.lastName ?? "");
+      setFieldValue("gender", member.gender ?? "");
+      setFieldValue("relationship", member.relationship ?? "");
+      setFieldValue("parentName", member.parentName ?? "");
+      setFieldValue("dateOfBirth", member.dateOfBirth ?? "");
 
       if (member.dateOfBirth) {
         setSelectedDob(DateTime.fromJSDate(new Date(member.dateOfBirth)));
@@ -116,7 +116,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
         relationship:
           getLabelByValue(RelationshipList, member?.relationship as string) ??
           "",
-        parentName: member?.parentName,
+        parentName: member?.parentName ?? "",
         dateOfBirth: member?.dateOfBirth,
         age: member?.dateOfBirth
           ? new Date().getFullYear() -
@@ -186,7 +186,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <DropdownList
             inputName="gender"
             label={translateText(["gender"])}
-            value={values.gender}
+            value={values.gender ?? ""}
             placeholder={translateText(["selectGender"])}
             onChange={handleChange}
             error={errors.gender ?? ""}
@@ -204,7 +204,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           <DropdownList
             inputName="relationship"
             label={translateText(["relationship"])}
-            value={values.relationship}
+            value={values.relationship ?? ""}
             placeholder={translateText(["selectRelationship"])}
             onChange={handleChange}
             error={errors.relationship ?? ""}
@@ -280,12 +280,10 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
           )}
         </Grid>
 
-        {!employee.personal.family?.length ? null : (
+        {!employee?.personal?.family?.length ? null : (
           <PeopleFormTable
-            data={formatTableData(
-              employee.personal.family as L3FamilyDetailsType[]
-            )}
-            actionsNeeded={true && !isInputsDisabled}
+            data={formatTableData(employee.personal.family)}
+            actionsNeeded={!isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}

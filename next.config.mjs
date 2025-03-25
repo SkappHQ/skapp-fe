@@ -293,8 +293,20 @@ const nextConfig = {
         destination: "/enterprise/subscription"
       },
       {
-        source:"/people/directory/edit/:id",
+        source: "/people/directory/edit/:id",
         destination: "/community/people/directory/edit/:id"
+      },
+      {
+        source: "/people/directory/add",
+        destination: "/community/people/directory/add"
+      },
+      {
+        source:"/people/:id",
+        destination: "/community/people/:id"
+      },
+      {
+        source: "/user-account",
+        destination: "/community/user-account"
       }
     ];
   },

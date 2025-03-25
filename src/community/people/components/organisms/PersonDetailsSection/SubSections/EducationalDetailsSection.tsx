@@ -1,13 +1,15 @@
 import { Grid2 as Grid } from "@mui/material";
-import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { ChangeEvent, JSX, useCallback, useState } from "react";
+import { JSX } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
-import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
+import {
+  LONG_DATE_TIME_FORMAT,
+  REVERSE_DATE_FORMAT
+} from "~community/common/constants/timeConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -16,9 +18,10 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
-import { EducationalDetailsType } from "~community/people/types/AddNewResourceTypes";
-import { employeeEducationalDetailsValidation } from "~community/people/utils/peopleValidations";
+import useEducationalDetailsFormHandlers from "~community/people/hooks/useEducationalDetailsFormHandlers";
+import { usePeopleStore } from "~community/people/store/store";
 
 interface Props {
   isInputsDisabled?: boolean;
@@ -26,12 +29,6 @@ interface Props {
 
 const EducationalDetailsSection = (props: Props): JSX.Element => {
   const { isInputsDisabled } = props;
-  const [selectedStartDate, setSelectedStartDate] = useState<
-    DateTime | undefined
-  >(undefined);
-  const [selectedEndDate, setSelectedEndDate] = useState<DateTime | undefined>(
-    undefined
-  );
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -42,15 +39,24 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
     "addResource",
     "entitlementDetails"
   );
-  const [rowEdited, setRowEdited] = useState(-1);
 
-  const initialValues = {
-    institutionName: "",
-    degree: "",
-    major: "",
-    startDate: "",
-    endDate: ""
-  };
+  const { employee } = usePeopleStore((state) => state);
+
+  const {
+    rowEdited,
+    selectedStartDate,
+    setSelectedStartDate,
+    selectedEndDate,
+    setSelectedEndDate,
+    values,
+    errors,
+    handleSubmit,
+    handleInput,
+    dateOnChange,
+    handleEdit,
+    handleDelete,
+    formatTableData
+  } = useEducationalDetailsFormHandlers();
 
   const tableHeaders = [
     translateText(["college"]),
@@ -59,38 +65,6 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
     translateText(["startDate"]),
     translateText(["endDate"])
   ];
-
-  const handleEdit = (rowIndex: number): void => {};
-
-  const handleDelete = (rowIndex: number): void => {};
-
-  const onSubmit = (values: EducationalDetailsType) => {};
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema: employeeEducationalDetailsValidation(translateText),
-    onSubmit,
-    validateOnChange: false
-  });
-
-  const {
-    values,
-    errors,
-    handleSubmit,
-    resetForm,
-    setFieldValue,
-    setFieldError
-  } = formik;
-
-  const handleInput = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {},
-    [setFieldError, setFieldValue]
-  );
-
-  const dateOnChange = async (
-    fieldName: string,
-    newValue: string
-  ): Promise<void> => {};
 
   return (
     <PeopleLayout
@@ -169,7 +143,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["startDate"])}
-            value={DateTime.fromISO(values.startDate ?? "")}
+            value={DateTime.fromISO(values?.startDate ?? "")}
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "startDate",
@@ -183,7 +157,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             }}
             maxDate={DateTime.fromISO(new Date().toISOString())}
             disabled={isInputsDisabled}
-            inputFormat="dd/MM/yyyy"
+            inputFormat={REVERSE_DATE_FORMAT}
             selectedDate={selectedStartDate}
             setSelectedDate={setSelectedStartDate}
           />
@@ -215,11 +189,12 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             componentStyle={{
               mt: "0rem"
             }}
-            inputFormat="dd/MM/yyyy"
+            inputFormat={REVERSE_DATE_FORMAT}
             selectedDate={selectedEndDate}
             setSelectedDate={setSelectedEndDate}
           />
         </Grid>
+
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           {!isInputsDisabled && (
             <Button
@@ -241,12 +216,11 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             />
           )}
         </Grid>
-        {/* Table data need to get from store */}
 
-        {/* {employeeEducationalDetails?.educationalDetails?.length === 0 ? null : (
+        {employee?.personal?.educational?.length === 0 ? null : (
           <PeopleFormTable
-            data={formatData(employeeEducationalDetails?.educationalDetails)}
-            actionsNeeded={true && !isInputsDisabled}
+            data={formatTableData(employee?.personal?.educational || [])}
+            actionsNeeded={!isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}
@@ -254,7 +228,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
               mt: "2rem"
             }}
           />
-        )} */}
+        )}
       </Grid>
     </PeopleLayout>
   );
