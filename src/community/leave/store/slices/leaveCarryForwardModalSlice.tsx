@@ -7,8 +7,20 @@ export const leaveCarryForwardModalSlice = (
 ): LeaveCarryForwardModalSliceType => ({
   isLeaveCarryForwardModalOpen: false,
   leaveCarryForwardModalType: LeaveCarryForwardModalTypes.NONE,
+  leaveCarryForwardSyncBtnStatus: {
+    isLoading: false,
+    isDisabled: false
+  },
   setIsLeaveCarryForwardModalOpen: (status: boolean) =>
     set((state) => ({ ...state, isLeaveCarryForwardModalOpen: status })),
   setLeaveCarryForwardModalType: (modalType: LeaveCarryForwardModalTypes) =>
-    set((state) => ({ ...state, leaveCarryForwardModalType: modalType }))
+    set((state) => ({ ...state, leaveCarryForwardModalType: modalType })),
+  setLeaveCarryForwardSyncBtnStatus: (key: string, value: boolean) =>
+    set((state) => ({
+      ...state,
+      leaveCarryForwardSyncBtnStatus: {
+        ...state.leaveCarryForwardSyncBtnStatus,
+        [key]: value
+      }
+    }))
 });
