@@ -42,19 +42,10 @@ import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
-  const { data: session } = useSession();
 
-  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
-    leaveAdminLimitExceeded: false,
-    attendanceAdminLimitExceeded: false,
-    peopleAdminLimitExceeded: false,
-    leaveManagerLimitExceeded: false,
-    attendanceManagerLimitExceeded: false,
-    peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false,
-    esignAdminLimitExceeded: false,
-    esignSenderLimitExceeded: false
-  });
+  const router = useRouter();
+
+  const { data: session } = useSession();
 
   const translateText = useTranslator(
     "peopleModule",
@@ -82,7 +73,35 @@ const AddNewResourceModal = () => {
 
   const roleLimitationTexts = useTranslator("peopleModule", "roleLimitation");
 
-  const router = useRouter();
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
+
+  const { setDirectoryModalType, setIsDirectoryModalOpen } = usePeopleStore(
+    (state) => ({
+      setDirectoryModalType: state.setDirectoryModalType,
+      setIsDirectoryModalOpen: state.setIsDirectoryModalOpen
+    })
+  );
+
+  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
+    leaveAdminLimitExceeded: false,
+    attendanceAdminLimitExceeded: false,
+    peopleAdminLimitExceeded: false,
+    leaveManagerLimitExceeded: false,
+    attendanceManagerLimitExceeded: false,
+    peopleManagerLimitExceeded: false,
+    superAdminLimitExceeded: false,
+    esignAdminLimitExceeded: false,
+    esignSenderLimitExceeded: false
+  });
+
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -97,7 +116,7 @@ const AddNewResourceModal = () => {
   const handleSuccess = () => {
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
       setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
     }
   };
 
@@ -129,19 +148,6 @@ const AddNewResourceModal = () => {
   });
 
   const { values, errors, handleChange, setFieldValue, handleSubmit } = formik;
-  const { setDirectoryModalType, setIsDirectoryModalOpen } = usePeopleStore(
-    (state) => state
-  );
-
-  const {
-    ongoingQuickSetup,
-    setQuickSetupModalType,
-    setStopAllOngoingQuickSetup
-  } = useCommonEnterpriseStore((state) => ({
-    ongoingQuickSetup: state.ongoingQuickSetup,
-    setQuickSetupModalType: state.setQuickSetupModalType,
-    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
-  }));
 
   const {
     data: checkEmailAndIdentificationNo,
@@ -154,7 +160,7 @@ const AddNewResourceModal = () => {
     setIsDirectoryModalOpen(false);
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
       setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
     }
   };
 

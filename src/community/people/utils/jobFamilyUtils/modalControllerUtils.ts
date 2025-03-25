@@ -78,11 +78,17 @@ export const getCustomStyles = (
   }
 };
 
-export const handleJobFamilyCloseModal = (
-  hasDataChanged: boolean,
-  jobFamilyModalType: JobFamilyActionModalEnums,
-  setJobFamilyModalType: (modalType: JobFamilyActionModalEnums) => void
-): void => {
+export const handleJobFamilyCloseModal = ({
+  hasDataChanged,
+  jobFamilyModalType,
+  setJobFamilyModalType,
+  stopAllOngoingQuickSetup
+}: {
+  hasDataChanged: boolean;
+  jobFamilyModalType: JobFamilyActionModalEnums;
+  setJobFamilyModalType: (modalType: JobFamilyActionModalEnums) => void;
+  stopAllOngoingQuickSetup: () => void;
+}): void => {
   let nextModalType = JobFamilyActionModalEnums.NONE;
 
   if (hasDataChanged) {
@@ -102,6 +108,8 @@ export const handleJobFamilyCloseModal = (
       default:
         break;
     }
+  } else {
+    stopAllOngoingQuickSetup();
   }
 
   setJobFamilyModalType(nextModalType);

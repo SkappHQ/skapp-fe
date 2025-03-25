@@ -79,6 +79,7 @@ export const communityAuthOptions: NextAuthOptions = {
           user.isPasswordChangedForTheFirstTime;
         token.employee = user.employee;
         token.email = user.email;
+        token.userId = user.userId;
       }
 
       if (
@@ -108,6 +109,7 @@ export const communityAuthOptions: NextAuthOptions = {
           token.isPasswordChangedForTheFirstTime;
         session.user.email = token.email;
         session.user.employee = token.employee;
+        session.user.userId = token.userId;
       }
       return session;
     }

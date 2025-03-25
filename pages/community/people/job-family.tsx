@@ -19,7 +19,12 @@ const JobFamily: NextPage = () => {
 
   const { isPeopleAdmin } = useSessionData();
 
-  const { setAllJobFamilies, setJobFamilyModalType } = usePeopleStore();
+  const { setAllJobFamilies, setJobFamilyModalType } = usePeopleStore(
+    (state) => ({
+      setAllJobFamilies: state.setAllJobFamilies,
+      setJobFamilyModalType: state.setJobFamilyModalType
+    })
+  );
 
   const [jobFamilySearchTerm, setJobFamilySearchTerm] = useState<string>("");
 

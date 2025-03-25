@@ -23,7 +23,6 @@ import {
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
 import { getFormattedDate } from "~community/people/utils/holidayUtils/commonUtils";
-import { HighlightAddHolidayBtnGroup } from "~enterprise/common/constants/SetupHolidayFlow";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -54,15 +53,22 @@ const HolidayTable: FC<Props> = ({
 
   const { isPeopleAdmin } = useSessionData();
 
+  const { destroyDriverObj } = useProductTour();
+
   const { setIsHolidayModalOpen, setHolidayModalType } = usePeopleStore(
-    (state) => state
+    (state) => ({
+      setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+      setHolidayModalType: state.setHolidayModalType
+    })
   );
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
 
-  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    ongoingQuickSetup: state.ongoingQuickSetup
-  }));
+  const { ongoingQuickSetup, quickSetupCurrentFlowSteps } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      quickSetupCurrentFlowSteps: state.quickSetupCurrentFlowSteps
+    }));
 
   const translateText = useTranslator("peopleModule", "holidays");
 
@@ -247,10 +253,6 @@ const HolidayTable: FC<Props> = ({
     return holidayData?.length === 0;
   }, [holidayData]);
 
-  const { destroyDriverObj } = useProductTour({
-    steps: HighlightAddHolidayBtnGroup
-  });
-
   const AddHolidayButtonClick = () => {
     setHolidayModalType(holidayModalTypes.ADD_CALENDAR);
     setIsHolidayModalOpen(true);
@@ -264,6 +266,11 @@ const HolidayTable: FC<Props> = ({
     <Stack sx={classes.wrapper}>
       <Box sx={classes.container} ref={listInnerRef}>
         <Table
+          id={{
+            emptyScreen: {
+              button: "add-holidays-empty-table-screen-button"
+            }
+          }}
           tableHeaders={tableHeaders}
           tableRows={transformToTableRows()}
           actionRowOneLeftButton={
@@ -306,6 +313,10 @@ const HolidayTable: FC<Props> = ({
                   styles: { mr: "1rem" }
                 }
               : null
+          }
+          shouldEmptyTableScreenBtnBlink={
+            ongoingQuickSetup.SETUP_HOLIDAYS &&
+            quickSetupCurrentFlowSteps !== null
           }
           handleAllRowsCheck={handleAllCheckBoxClick}
           tableCheckboxStyles={{

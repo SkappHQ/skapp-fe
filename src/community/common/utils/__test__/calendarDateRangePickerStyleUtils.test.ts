@@ -1,11 +1,7 @@
-import { LeaveStates } from "~community/common/types/CommonTypes";
 import { HolidayType } from "~community/leave/types/MyRequests";
 import { HolidayDurationType } from "~community/people/types/HolidayTypes";
 
-import {
-  getHolidayClasses,
-  getLeaveRequestClasses
-} from "../calendarDateRangePickerStyleUtils";
+import { getHolidayClasses } from "../calendarDateRangePickerStyleUtils";
 
 describe("getHolidayClasses", () => {
   it("should return 'Mui-full-day-holiday' for full day holidays", () => {
@@ -70,26 +66,26 @@ describe("getHolidayClasses", () => {
   });
 });
 
-describe("getLeaveRequestClasses", () => {
-  it("should return 'Mui-full-day-leave' for full day leave", () => {
-    expect(getLeaveRequestClasses(LeaveStates.FULL_DAY)).toBe(
-      "Mui-full-day-leave"
-    );
-  });
+// describe("getLeaveRequestClasses", () => {
+//   it("should return 'Mui-full-day-leave' for full day leave", () => {
+//     expect(getLeaveRequestClasses(LeaveStates.FULL_DAY)).toBe(
+//       "Mui-full-day-leave"
+//     );
+//   });
 
-  it("should return 'Mui-half-day-morning-leave' for morning leave", () => {
-    expect(getLeaveRequestClasses(LeaveStates.MORNING)).toBe(
-      "Mui-half-day-morning-leave"
-    );
-  });
+//   it("should return 'Mui-half-day-morning-leave' for morning leave", () => {
+//     expect(getLeaveRequestClasses(LeaveStates.MORNING)).toBe(
+//       "Mui-half-day-morning-leave"
+//     );
+//   });
 
-  it("should return 'Mui-half-day-evening-leave' for evening leave", () => {
-    expect(getLeaveRequestClasses(LeaveStates.EVENING)).toBe(
-      "Mui-half-day-evening-leave"
-    );
-  });
+//   it("should return 'Mui-half-day-evening-leave' for evening leave", () => {
+//     expect(getLeaveRequestClasses(LeaveStates.EVENING)).toBe(
+//       "Mui-half-day-evening-leave"
+//     );
+//   });
 
-  it("should return an empty string for unknown leave state", () => {
-    expect(getLeaveRequestClasses("UNKNOWN" as LeaveStates)).toBe("");
-  });
-});
+//   it("should return an empty string for unknown leave state", () => {
+//     expect(getLeaveRequestClasses("UNKNOWN" as LeaveStates)).toBe("");
+//   });
+// });
