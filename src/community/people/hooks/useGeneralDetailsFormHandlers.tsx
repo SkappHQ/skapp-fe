@@ -96,7 +96,7 @@ const useGeneralDetailsFormHandlers = ({ formik }: Props) => {
         setPersonalDetails({
           general: {
             ...employee?.personal?.general,
-            dateOfBirth: new Date(dateValue)
+            dateOfBirth: dateValue
           }
         });
       }

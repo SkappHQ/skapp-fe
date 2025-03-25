@@ -16,6 +16,7 @@ import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { Role } from "~community/people/enums/PeopleEnums";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
@@ -81,6 +82,8 @@ const SystemPermissionFormSection = ({
     isEsignatureModuleEnabled
   } = useSessionData();
 
+  const { handleNext } = useStepper();
+
   const onSave = () => {
     if (
       employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
@@ -105,8 +108,12 @@ const SystemPermissionFormSection = ({
         open: true
       });
     } else {
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalSaveButtonClicked(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+      }
       setEmployee(employee);
     }
   };

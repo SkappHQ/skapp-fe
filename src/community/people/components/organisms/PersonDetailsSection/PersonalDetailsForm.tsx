@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
@@ -45,6 +46,8 @@ const PersonalDetailsForm = ({
 
   const { hasChanged, apiPayload } = useFormChangeDetector();
 
+  const { handleNext } = useStepper();
+
   const onSave = async () => {
     const generalFormErrors = await generalDetailsRef?.current?.validateForm();
     const contactFormErrors = await contactDetailsRef?.current?.validateForm();
@@ -73,10 +76,14 @@ const PersonalDetailsForm = ({
       contactDetailsRef?.current?.submitForm();
       socialMediaDetailsRef?.current?.submitForm();
       healthAndOtherDetailsRef?.current?.submitForm();
-      setCurrentStep(nextStep);
-      setIsUnsavedChangesModalOpen(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+      }
       setEmployee(employee);
-      setIsUnsavedModalSaveButtonClicked(false);
       // Mutate the data
     } else {
       setNextStep(currentStep);
@@ -108,7 +115,11 @@ const PersonalDetailsForm = ({
 
   return (
     <>
-      <GeneralDetailsSection ref={generalDetailsRef} isAddFlow={isAddFlow} isAdmin={isUpdate} />
+      <GeneralDetailsSection
+        ref={generalDetailsRef}
+        isAddFlow={isAddFlow}
+        isAdmin={isUpdate}
+      />
       <ContactDetailsSection ref={contactDetailsRef} />
       <FamilyDetailsSection />
       <EducationalDetailsSection />
@@ -116,7 +127,7 @@ const PersonalDetailsForm = ({
       <HealthAndOtherDetailsSection ref={healthAndOtherDetailsRef} />
 
       {isAddFlow ? (
-        <AddSectionButtonWrapper onNextClick={onSave}/>
+        <AddSectionButtonWrapper onNextClick={onSave} />
       ) : (
         <EditSectionButtonWrapper
           onCancelClick={onCancel}

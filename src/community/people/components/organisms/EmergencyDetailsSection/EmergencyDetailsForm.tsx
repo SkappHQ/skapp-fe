@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
@@ -34,6 +35,8 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
+  const { handleNext } = useStepper();
+
   const onSave = async () => {
     const primaryContactDetailsErrors =
       await primaryContactDetailsRef?.current?.validateForm();
@@ -51,10 +54,14 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
     if (primaryContactDetailsIsValid && secondaryContactDetailsIsValid) {
       primaryContactDetailsRef?.current?.submitForm();
       secondaryContactDetailsRef?.current?.submitForm();
-      setCurrentStep(nextStep);
-      setIsUnsavedChangesModalOpen(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+      }
       setEmployee(employee);
-      setIsUnsavedModalSaveButtonClicked(false);
       // Mutate the data
     } else {
       setNextStep(currentStep);

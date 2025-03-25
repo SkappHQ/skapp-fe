@@ -43,6 +43,7 @@ import {
 import { employeeGeneralDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
+import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
 
 interface Props {
   isManager?: boolean;
@@ -377,7 +378,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                     flex: 1,
                     mt: "0rem"
                   }}
-                  inputFormat="dd/MM/yyyy"
+                  inputFormat={REVERSE_DATE_FORMAT}
                   disabled={isInputsDisabled}
                   readOnly={isManager}
                   selectedDate={selectedDob}

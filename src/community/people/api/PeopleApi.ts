@@ -681,7 +681,7 @@ export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
   });
 };
 
-export const useAddEmployee = () => {
+export const useAddEmployee = (onSuccess: () => void, onError: () => void) => {
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
 
@@ -694,6 +694,7 @@ export const useAddEmployee = () => {
       return response.data;
     },
     onSuccess: () => {
+      onSuccess();
       queryClient
         .invalidateQueries({
           queryKey: peopleQueryKeys.EMPLOYEE_COUNT()
@@ -707,6 +708,7 @@ export const useAddEmployee = () => {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
-    }
+    },
+    onError
   });
 };

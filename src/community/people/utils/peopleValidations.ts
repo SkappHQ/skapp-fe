@@ -206,7 +206,7 @@ export const employeeEmploymentDetailsValidation = (
           return context?.isUniqueEmployeeNo;
         }
       ),
-    workEmail: Yup.string()
+    email: Yup.string()
       .trim()
       .email(translator(["validEmailError"]))
       .required(translator(["requireEmailError"]))
@@ -214,7 +214,7 @@ export const employeeEmploymentDetailsValidation = (
         return context?.isUniqueEmail || context?.isUpdate;
       }),
     employmentAllocation: Yup.string(),
-    teams: Yup.array(),
+    teamIds: Yup.array(),
     joinedDate: Yup.date(),
     probationStartDate: Yup.date()
       .test(

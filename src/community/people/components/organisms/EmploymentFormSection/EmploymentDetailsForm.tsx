@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
@@ -46,9 +47,9 @@ const EmploymentDetailsForm = ({
 
   const onSave = async () => {
     const employmentFormErrors =
-      await employmentDetailsRef?.current?.validateForm();
+      (await employmentDetailsRef?.current?.validateForm()) || {};
     const identificationFormErrors =
-      await identificationDetailsRef?.current?.validateForm();
+      (await identificationDetailsRef?.current?.validateForm()) || {};
 
     const employmentFormIsValid =
       employmentFormErrors && Object.keys(employmentFormErrors).length === 0;
@@ -56,15 +57,19 @@ const EmploymentDetailsForm = ({
       identificationFormErrors &&
       Object.keys(identificationFormErrors).length === 0;
 
+    const { handleNext } = useStepper();
+
     if (employmentFormIsValid && identificationFormIsValid) {
       employmentDetailsRef?.current?.submitForm();
       identificationDetailsRef?.current?.submitForm();
-
-      setCurrentStep(nextStep);
-      setIsUnsavedChangesModalOpen(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+      }
       setEmployee(employee);
-      setIsUnsavedModalSaveButtonClicked(false);
-      // Mutate the data
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);

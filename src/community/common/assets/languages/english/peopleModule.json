@@ -477,7 +477,11 @@
       "incompleteSuperAdminToastDescriptionEmergency": "Please fill the mandatory emergency details",
       "incompleteSuperAdminToastDescriptionEmployment": "Please fill the mandatory employment details",
       "head": "Directory | Skapp",
-      "defaultErrorMsg": "Something went wrong"
+      "defaultErrorMsg": "Something went wrong",
+      "employeeAddSuccessToastTitle": "Resource added",
+      "employeeAddSuccessToastDescription": "Resource has been added successfully.",
+      "employeeAddErrorToastTitle": "Oops! Something went wrong",
+      "employeeAddErrorToastDescription": "Failed to add the resource. Please try again."
     },
     "commonValidations": {
       "lettersAllowed": "Only letters are allowed",
