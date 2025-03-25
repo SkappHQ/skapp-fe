@@ -32,6 +32,7 @@ import {
   getTimeElapsedSinceDate
 } from "~community/common/utils/dateTimeUtils";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import { usePeopleStore } from "~community/people/store/store";
@@ -40,6 +41,7 @@ import {
   EmployeeDetails,
   EmployeeManagerType
 } from "~community/people/types/EmployeeTypes";
+import { TeamType } from "~community/people/types/TeamTypes";
 import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { toPascalCase } from "~community/people/utils/jobFamilyUtils/commonUtils";
 import {
@@ -67,6 +69,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const translateStorageText = useTranslator("StorageToastMessage");
   const deletionTranslateText = useTranslator("peopleModule", "deletion");
 
+  const [teams, setTeams] = useState<TeamType[]>([]);
+
   const AVAILABLE_FIELD_COUNT = 2;
 
   const { data } = useSession();
@@ -83,6 +87,19 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     setDeletionAlertOpen,
     setDeletionConfirmationModalOpen
   } = usePeopleStore((state) => state);
+
+  const { data: teamData } = useGetAllTeams();
+
+  useEffect(() => {
+    if (teamData) {
+      const teams = teamData?.filter((project) =>
+        employee?.employment?.employmentDetails?.teamIds?.includes(
+          project.teamId as number
+        )
+      );
+      setTeams(teams);
+    }
+  }, [employee, teamData]);
 
   const environment = useGetEnvironment();
 
@@ -206,12 +223,12 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
       phone: employee?.personal?.contact?.contactNo || "",
       countryCode: employee?.personal?.contact?.countryCode || "",
       jobFamily: "",
-      jobTitle: "",
-      teams: [],
+      jobTitle: employee?.common?.jobTitle || "",
+      teams: teams || [],
       joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
       accountStatus: employee?.common?.accountStatus || ""
     };
-  }, [employee]);
+  }, [employee, teams]);
 
   const employmentStatus = cardData?.accountStatus as AccountStatusEnums;
 
@@ -232,7 +249,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   };
 
   const getTeams = (): string[] => {
-    return cardData?.teams?.map((team) => team?.team?.teamName).sort();
+    return cardData?.teams?.map((team) => team?.teamName).sort();
   };
 
   const getDate = (): string => {
