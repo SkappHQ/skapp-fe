@@ -217,7 +217,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
           )}
         </Grid>
 
-        {employee?.personal?.educational?.length === 0 ? null : (
+        {employee?.personal?.educational?.length === 0 || employee?.personal?.educational === null ? null : (
           <PeopleFormTable
             data={formatTableData(employee?.personal?.educational || [])}
             actionsNeeded={!isInputsDisabled}

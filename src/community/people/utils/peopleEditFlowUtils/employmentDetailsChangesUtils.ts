@@ -136,6 +136,8 @@ export const getCareerProgressionChanges = (
   newCareer: L3CareerProgressionDetailsType[],
   previousCareer: L3CareerProgressionDetailsType[]
 ): L3CareerProgressionDetailsType[] => {
+  if (newCareer === null || previousCareer === undefined) return [];
+
   // If the array lengths differ, return the entire new career array
   if (newCareer.length !== previousCareer.length) {
     return newCareer;
@@ -225,6 +227,12 @@ export const getIdentificationDetailsChanges = (
   const changes: L3IdentificationAndDiversityDetailsType = {};
 
   if (
+    newIdentificationDetails === null ||
+    previousIdentificationDetails === null
+  )
+    return changes;
+
+  if (
     isFieldDifferentAndValid(
       newIdentificationDetails.ssn,
       previousIdentificationDetails.ssn
@@ -258,6 +266,7 @@ export const getPreviousEmploymentChanges = (
   newEmployments: L3PreviousEmploymentDetailsType[],
   previousEmployments: L3PreviousEmploymentDetailsType[]
 ): L3PreviousEmploymentDetailsType[] => {
+  if (newEmployments === null || previousEmployments === null) return [];
   // If the array lengths differ, return the entire new array
   if (newEmployments.length !== previousEmployments.length) {
     return newEmployments;
@@ -343,6 +352,8 @@ export const getVisaDetailsChanges = (
   newVisas: L3VisaDetailsType[],
   previousVisas: L3VisaDetailsType[]
 ): L3VisaDetailsType[] => {
+  if (newVisas === null || previousVisas === null) return [];
+
   if (newVisas.length !== previousVisas.length) {
     return newVisas;
   }

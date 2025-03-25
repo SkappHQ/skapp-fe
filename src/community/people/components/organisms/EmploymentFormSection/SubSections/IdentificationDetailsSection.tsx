@@ -103,7 +103,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
               <InputField
                 label={translateText(["SSN"])}
                 inputType="text"
-                value={values.ssn ?? ""}
+                value={values?.ssn ?? ""}
                 placeHolder={translateText(["enterSSN"])}
                 onChange={handleInput}
                 inputName="ssn"
@@ -121,7 +121,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
               <DropdownList
                 inputName="ethnicity"
                 label={translateText(["ethnicity"])}
-                value={values.ethnicity ?? ""}
+                value={values?.ethnicity ?? ""}
                 placeholder={translateText(["selectEthnicity"])}
                 onChange={handleChange}
                 onInput={handleInput}
@@ -140,7 +140,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
               <DropdownList
                 inputName="eeoJobCategory"
                 label={translateText(["eeoJobCategory"])}
-                value={values.eeoJobCategory ?? ""}
+                value={values?.eeoJobCategory ?? ""}
                 placeholder={translateText(["selectEEOJobCategory"])}
                 onChange={handleChange}
                 onInput={handleInput}

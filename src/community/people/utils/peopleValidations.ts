@@ -91,7 +91,7 @@ export const employeeGeneralDetailsValidation = (
       ),
     gender: Yup.string(),
     birthDate: Yup.date().nullable(),
-    nationality: Yup.string(),
+    nationality: Yup.string().nullable(),
     nin: Yup.string()
       .max(
         characterLengths.NIN_LENGTH,
@@ -110,7 +110,7 @@ export const employeeGeneralDetailsValidation = (
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
       ),
-    maritalStatus: Yup.string()
+    maritalStatus: Yup.string().nullable(),
   });
 
 export const employeeFamilyDetailsValidation = (
@@ -178,9 +178,9 @@ export const employeeSocialMediaDetailsValidation = (
   });
 
 export const employeeHealthAndOtherDetailsValidation = Yup.object({
-  bloodGroup: Yup.string(),
-  allergies: Yup.string(),
-  dietaryRestrictions: Yup.string(),
+  bloodGroup: Yup.string().nullable(),
+  allergies: Yup.string().nullable(),
+  dietaryRestrictions: Yup.string().nullable(),
   tshirtSize: Yup.string()
 });
 

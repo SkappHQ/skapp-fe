@@ -174,6 +174,7 @@ export const getFamilyDetailsChanges = (
   newFamily: L3FamilyDetailsType[],
   previousFamily: L3FamilyDetailsType[]
 ): L3FamilyDetailsType[] => {
+  if (newFamily === null || newFamily === undefined) return [];
   // If the array lengths differ, return the entire new family
   if (newFamily.length !== previousFamily.length) {
     return newFamily;
@@ -263,6 +264,7 @@ export const getEducationalDetailsChanges = (
   newEducational: L3EducationalDetailsType[],
   previousEducational: L3EducationalDetailsType[]
 ): L3EducationalDetailsType[] => {
+  if (newEducational === null || previousEducational === undefined) return [];
   // If the array lengths differ, return the entire new educational array
   if (newEducational.length !== previousEducational.length) {
     return newEducational;

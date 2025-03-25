@@ -107,7 +107,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
               <DropdownList
                 inputName="bloodGroup"
                 label={translateText(["bloodGroup"])}
-                value={values.bloodGroup ?? ""}
+                value={values?.bloodGroup ?? ""}
                 placeholder={translateText(["selectBloodGroup"])}
                 onChange={handleChange}
                 onInput={handleInput}
@@ -125,7 +125,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["allergies"])}
                 inputType="text"
-                value={values.allergies}
+                value={values?.allergies ?? ""}
                 placeHolder={translateText(["enterAllergies"])}
                 onChange={handleInput}
                 inputName="allergies"
@@ -142,7 +142,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["dietaryRestrictions"])}
                 inputType="text"
-                value={values.dietaryRestrictions}
+                value={values?.dietaryRestrictions ?? ""}
                 placeHolder={translateText(["enterDietaryRestrictions"])}
                 onChange={handleInput}
                 inputName="dietaryRestrictions"
@@ -158,7 +158,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["tShirtSize"])}
                 inputType="text"
-                value={values.tShirtSize}
+                value={values?.tShirtSize ?? ""}
                 placeHolder={translateText(["enterTShirtSize"])}
                 onChange={handleInput}
                 inputName="tShirtSize"

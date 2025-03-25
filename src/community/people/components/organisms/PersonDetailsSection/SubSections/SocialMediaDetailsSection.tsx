@@ -103,7 +103,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["linkedIn"])}
                 inputType="text"
-                value={values.linkedin}
+                value={values?.linkedin ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <LinkedIn
@@ -129,7 +129,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["facebook"])}
                 inputType="text"
-                value={values.facebook}
+                value={values?.facebook ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <Facebook
@@ -155,7 +155,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["instagram"])}
                 inputType="text"
-                value={values.instagram}
+                value={values?.instagram ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <Instagram
@@ -181,7 +181,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["x"])}
                 inputType="text"
-                value={values.x}
+                value={values?.x ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <X

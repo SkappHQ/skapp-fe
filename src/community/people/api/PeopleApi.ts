@@ -712,3 +712,14 @@ export const useAddEmployee = (onSuccess: () => void, onError: () => void) => {
     onError
   });
 };
+
+export const useGetEmployee = (memberId: number | undefined = undefined) => {
+  return useQuery({
+    queryKey: peopleQueryKeys.EMPLOYEE_BY_ID(memberId),
+    queryFn: async () => {
+      return await authFetch.get(
+        peoplesEndpoints.EMPLOYEE_BY_ID(memberId as number)
+      );
+    }
+  });
+};
