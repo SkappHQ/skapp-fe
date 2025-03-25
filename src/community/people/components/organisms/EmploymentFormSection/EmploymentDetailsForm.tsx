@@ -6,6 +6,7 @@ import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
+import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import CareerProgressDetailsSection from "./SubSections/CareerProgressDetailsSection";
 import EmploymentDetailsSection from "./SubSections/EmploymentDetailsSection";
@@ -41,7 +42,7 @@ const EmploymentDetailsForm = ({
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const hasChanged = useFormChangeDetector();
+  const { hasChanged, apiPayload } = useFormChangeDetector();
 
   const onSave = async () => {
     const employmentFormErrors =
@@ -102,11 +103,15 @@ const EmploymentDetailsForm = ({
       <PreviousEmploymentDetailsSection />
       <VisaDetailsSection />
 
-      <EditSectionButtonWrapper
-        onCancelClick={onCancel}
-        onSaveClick={onSave}
-        isSaveDisabled={!hasChanged}
-      />
+      {isAddFlow ? (
+        <AddSectionButtonWrapper onNextClick={onSave} />
+      ) : (
+        <EditSectionButtonWrapper
+          onCancelClick={onCancel}
+          onSaveClick={onSave}
+          isSaveDisabled={!hasChanged}
+        />
+      )}
     </>
   );
 };

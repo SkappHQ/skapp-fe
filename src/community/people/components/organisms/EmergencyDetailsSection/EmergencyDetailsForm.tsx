@@ -6,6 +6,7 @@ import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
+import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import PrimaryContactDetailsSection from "./SubSections/PrimaryContactDetailsSection";
 import SecondaryContactDetailsSection from "./SubSections/SecondaryContactDetailsSection";
@@ -17,7 +18,7 @@ interface Props {
 const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
-  const hasChanged = useFormChangeDetector();
+  const { hasChanged, apiPayload } = useFormChangeDetector();
 
   const {
     nextStep,
@@ -85,11 +86,16 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
     <>
       <PrimaryContactDetailsSection ref={primaryContactDetailsRef} />
       <SecondaryContactDetailsSection ref={secondaryContactDetailsRef} />
-      <EditSectionButtonWrapper
-        onCancelClick={onCancel}
-        onSaveClick={onSave}
-        isSaveDisabled={!hasChanged}
-      />
+
+      {isAddFlow ? (
+        <AddSectionButtonWrapper onNextClick={onSave} />
+      ) : (
+        <EditSectionButtonWrapper
+          onCancelClick={onCancel}
+          onSaveClick={onSave}
+          isSaveDisabled={!hasChanged}
+        />
+      )}
     </>
   );
 };

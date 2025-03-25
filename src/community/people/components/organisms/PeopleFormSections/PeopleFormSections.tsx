@@ -1,6 +1,7 @@
 import { usePeopleStore } from "~community/people/store/store";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
+import EntitlementsDetailsForm from "../AddNewResourceFlow/EntitlementsDetailsSection/EntitlementsDetailsForm";
 import EmergencyDetailsForm from "../EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "../EmploymentFormSection/EmploymentDetailsForm";
 import PersonalDetailsForm from "../PersonDetailsSection/PersonalDetailsForm";
@@ -23,6 +24,8 @@ const PeopleFormSections = ({ isAddFlow = false }: Props) => {
         return <EmploymentDetailsForm isAddFlow={isAddFlow} />;
       case 3:
         return <SystemPermissionFormSection isAddFlow={isAddFlow} />;
+      case 4:
+        return <EntitlementsDetailsForm />;
       default:
         return null;
     }

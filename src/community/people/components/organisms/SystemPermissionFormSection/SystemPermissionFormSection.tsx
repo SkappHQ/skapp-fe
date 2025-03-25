@@ -20,6 +20,7 @@ import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPe
 import { usePeopleStore } from "~community/people/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
+import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import PeopleFormSectionWrapper from "../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 import SystemCredentials from "../SystemCredentials/SystemCredentials";
@@ -214,11 +215,15 @@ const SystemPermissionFormSection = ({
           !isInputsDisabled &&
           environment === appModes.COMMUNITY && <SystemCredentials />}
 
-        <EditSectionButtonWrapper
-          onCancelClick={onCancel}
-          onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
-        />
+        {isAddFlow ? (
+          <AddSectionButtonWrapper onNextClick={onSave} />
+        ) : (
+          <EditSectionButtonWrapper
+            onCancelClick={onCancel}
+            onSaveClick={onSave}
+            isSaveDisabled={!hasChanged}
+          />
+        )}
 
         <Modal
           isModalOpen={openModal}

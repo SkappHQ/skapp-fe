@@ -10,11 +10,11 @@ import {
 } from "~community/configurations/api/userRolesApi";
 import { usePeopleStore } from "~community/people/store/store";
 import { L2SystemPermissionsType } from "~community/people/types/PeopleTypes";
-import { useGetRoleLimits } from "~enterprise/common/api/peopleApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 import { Role } from "../enums/PeopleEnums";
+import { useGetRoleLimits } from "~enterprise/common/api/peopleApi";
 
 type RoleLimitEntry = {
   limitExceeded: boolean;

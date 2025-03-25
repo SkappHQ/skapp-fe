@@ -6,6 +6,7 @@ import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 
+import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
 import ContactDetailsSection from "./SubSections/ContactDetailsSection";
 import EducationalDetailsSection from "./SubSections/EducationalDetailsSection";
@@ -107,18 +108,22 @@ const PersonalDetailsForm = ({
 
   return (
     <>
-      <GeneralDetailsSection ref={generalDetailsRef} isAdmin={isUpdate} />
+      <GeneralDetailsSection ref={generalDetailsRef} isAddFlow={isAddFlow} isAdmin={isUpdate} />
       <ContactDetailsSection ref={contactDetailsRef} />
       <FamilyDetailsSection />
       <EducationalDetailsSection />
       <SocialMediaDetailsSection ref={socialMediaDetailsRef} />
       <HealthAndOtherDetailsSection ref={healthAndOtherDetailsRef} />
 
-      <EditSectionButtonWrapper
-        onCancelClick={onCancel}
-        onSaveClick={onSave}
-        isSaveDisabled={!hasChanged}
-      />
+      {isAddFlow ? (
+        <AddSectionButtonWrapper onNextClick={onSave}/>
+      ) : (
+        <EditSectionButtonWrapper
+          onCancelClick={onCancel}
+          onSaveClick={onSave}
+          isSaveDisabled={!hasChanged}
+        />
+      )}
     </>
   );
 };
