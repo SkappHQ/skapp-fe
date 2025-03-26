@@ -1,14 +1,11 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import { useEditEmployee } from "~community/people/api/PeopleApi";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -17,19 +14,14 @@ import SecondaryContactDetailsSection from "./SubSections/SecondaryContactDetail
 
 interface Props {
   isAddFlow?: boolean;
-  isAccountView?: boolean;
 }
 
-const EmergencyDetailsForm = ({
-  isAddFlow = false,
-  isAccountView = false
-}: Props) => {
+const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
   const {
     nextStep,
+    initialEmployee,
     currentStep,
     employee,
     isUnsavedModalSaveButtonClicked,
@@ -42,17 +34,7 @@ const EmergencyDetailsForm = ({
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const router = useRouter();
-
-  let employeeId;
-
-  const { data } = useSession();
-
-  const { id } = router.query;
-
-  employeeId = isAccountView ? data?.user?.userId : id;
-
-  const { mutate } = useEditEmployee(employeeId as string);
+  const { handleMutate } = useHandlePeopleEdit();
 
   const { handleNext } = useStepper();
 
@@ -79,7 +61,8 @@ const EmergencyDetailsForm = ({
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
-        mutate(apiPayload);
+
+        handleMutate();
       }
       setEmployee(employee);
     } else {
@@ -91,13 +74,12 @@ const EmergencyDetailsForm = ({
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      primaryContactDetailsRef?.current?.resetForm();
-      secondaryContactDetailsRef?.current?.resetForm();
+    primaryContactDetailsRef?.current?.resetForm();
+    secondaryContactDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -119,7 +101,6 @@ const EmergencyDetailsForm = ({
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>

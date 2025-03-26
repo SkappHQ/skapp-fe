@@ -1,14 +1,11 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import { useEditEmployee } from "~community/people/api/PeopleApi";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -22,14 +19,12 @@ interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
   isProfileView?: boolean;
-  isAccountView?: boolean;
 }
 
 const EmploymentDetailsForm = ({
   isAddFlow = false,
   isUpdate = false,
-  isProfileView = false,
-  isAccountView = false
+  isProfileView = false
 }: Props) => {
   const employmentDetailsRef = useRef<FormMethods | null>(null);
   const identificationDetailsRef = useRef<FormMethods | null>(null);
@@ -38,6 +33,7 @@ const EmploymentDetailsForm = ({
     nextStep,
     currentStep,
     employee,
+    initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     setCurrentStep,
@@ -48,19 +44,7 @@ const EmploymentDetailsForm = ({
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
-  const router = useRouter();
-
-  let employeeId;
-
-  const { data } = useSession();
-
-  const { id } = router.query;
-
-  employeeId = isAccountView ? data?.user?.userId : id;
-
-  const { mutate } = useEditEmployee(employeeId as string);
+  const { handleMutate } = useHandlePeopleEdit();
 
   const { handleNext } = useStepper();
 
@@ -85,7 +69,8 @@ const EmploymentDetailsForm = ({
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
-        mutate(apiPayload);
+
+        handleMutate();
       }
       setEmployee(employee);
     } else {
@@ -97,13 +82,12 @@ const EmploymentDetailsForm = ({
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      employmentDetailsRef?.current?.resetForm();
-      identificationDetailsRef?.current?.resetForm();
+    employmentDetailsRef?.current?.resetForm();
+    identificationDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -132,7 +116,6 @@ const EmploymentDetailsForm = ({
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>
