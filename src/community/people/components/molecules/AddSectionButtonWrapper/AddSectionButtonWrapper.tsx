@@ -1,12 +1,19 @@
 import { Stack } from "@mui/material";
+import { useRouter } from "next/navigation";
 
+import { useUploadImages } from "~community/common/api/FileHandleApi";
 import Button from "~community/common/components/atoms/Button/Button";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import ROUTES from "~community/common/constants/routes";
+import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useAddEmployee } from "~community/people/api/PeopleApi";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
+import { handleError } from "~community/people/utils/directoryUtils/addNewResourceFlowUtils/addNewResourceUtils";
+import uploadImage from "~community/people/utils/image/uploadImage";
+import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 interface Props {
   isSaveDisabled?: boolean;
@@ -25,20 +32,64 @@ const AddSectionButtonWrapper = ({
     "commonText"
   );
 
-  const { handleNext, handleBack, activeStep } = useStepper();
+  const { handleBack, activeStep } = useStepper();
 
-  const { mutate } = useAddEmployee();
+  const { setToastMessage } = useToast();
 
-  const { employee } = usePeopleStore((state) => state);
+  const router = useRouter();
 
-  const handleSave = () => {
+  const onSuccess = () => {
+    setToastMessage({
+      open: true,
+      toastType: ToastType.SUCCESS,
+      title: translateText(["employeeAddSuccessToastTitle"]),
+      description: translateText(["employeeAddSuccessToastDescription"])
+    });
+    setIsSuccess && setIsSuccess(true);
+    router.push(ROUTES.PEOPLE.DIRECTORY);
+  };
+
+  const onError = () => {
+    setToastMessage({
+      open: true,
+      toastType: ToastType.ERROR,
+      title: translateText(["employeeAddErrorToastTitle"]),
+      description: translateText(["employeeAddErrorToastDescription"])
+    });
+  };
+
+  const { mutate } = useAddEmployee(onSuccess, onError);
+
+  const { mutateAsync: handleUploadImagesAsync } = useUploadImages();
+
+  const { employee, profilePic, thumbnail, setCommonDetails } = usePeopleStore(
+    (state) => state
+  );
+
+  const environment = useGetEnvironment();
+
+  const translateError = useTranslator("peopleModule", "addResource");
+
+  const handleSave = async () => {
+    const newAuthPicURL = await uploadImage({
+      environment,
+      authPic: profilePic,
+      thumbnail: thumbnail,
+      imageUploadMutate: handleUploadImagesAsync,
+      onError: () =>
+        handleError({
+          message: translateError(["uploadError"]),
+          setToastMessage,
+          translateError
+        })
+    });
+
+    setCommonDetails({
+      authPic: newAuthPicURL ?? ""
+    });
+
     if (employee) {
-      mutate(employee, {
-        onSuccess: () => {
-          alert("Employee added successfully");
-          setIsSuccess && setIsSuccess(true);
-        }
-      });
+      mutate(employee);
     }
   };
 
@@ -51,7 +102,7 @@ const AddSectionButtonWrapper = ({
     >
       {activeStep > 0 && (
         <Button
-          label={"Back"}
+          label={translateText(["back"])}
           buttonStyle={ButtonStyle.TERTIARY}
           startIcon={IconName.LEFT_ARROW_ICON}
           isFullWidth={false}
@@ -61,7 +112,7 @@ const AddSectionButtonWrapper = ({
 
       {activeStep === 4 ? (
         <Button
-          label={"Save Details"}
+          label={translateText(["saveDetails"])}
           buttonStyle={ButtonStyle.PRIMARY}
           endIcon={IconName.SAVE_ICON}
           isFullWidth={false}
@@ -70,12 +121,11 @@ const AddSectionButtonWrapper = ({
         />
       ) : (
         <Button
-          label={"Next"}
+          label={translateText(["next"])}
           buttonStyle={ButtonStyle.PRIMARY}
           endIcon={IconName.RIGHT_ARROW_ICON}
           isFullWidth={false}
           onClick={() => {
-            handleNext();
             if (onNextClick) {
               onNextClick();
             }

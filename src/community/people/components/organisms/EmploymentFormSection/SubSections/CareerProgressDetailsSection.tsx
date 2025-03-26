@@ -416,7 +416,8 @@ const CareerProgressDetailsSection = ({
               </Grid>
             </>
           )}
-          {employee?.employment?.careerProgression?.length === 0 ? null : (
+          {employee?.employment?.careerProgression?.length === 0 ||
+          employee?.employment?.careerProgression === null ? null : (
             <PeopleFormTable
               data={formatData(copyOfEmployeeCareerDetails)}
               actionsNeeded={!isManager && !isProfileView && !isInputsDisabled}

@@ -197,7 +197,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             />
           )}
         </Grid>
-        {employee?.employment?.visaDetails?.length === 0 ? null : (
+        {employee?.employment?.visaDetails?.length === 0 || employee?.employment?.visaDetails === null ? null : (
           <CustomTable
             data={formatTableData(employee?.employment?.visaDetails || [])}
             actionsNeeded={!isInputsDisabled}

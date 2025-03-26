@@ -56,6 +56,7 @@ export interface L2CommonDetailsType {
   employeeId?: string;
   authPic?: string;
   accountStatus?: AccountStatusTypes;
+  jobTitle?: string;
 }
 
 //L3 Types

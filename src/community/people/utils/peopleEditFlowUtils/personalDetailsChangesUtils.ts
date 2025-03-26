@@ -174,6 +174,7 @@ export const getFamilyDetailsChanges = (
   newFamily: L3FamilyDetailsType[],
   previousFamily: L3FamilyDetailsType[]
 ): L3FamilyDetailsType[] => {
+  if (newFamily === null || newFamily === undefined) return [];
   // If the array lengths differ, return the entire new family
   if (newFamily.length !== previousFamily.length) {
     return newFamily;
@@ -263,6 +264,7 @@ export const getEducationalDetailsChanges = (
   newEducational: L3EducationalDetailsType[],
   previousEducational: L3EducationalDetailsType[]
 ): L3EducationalDetailsType[] => {
+  if (newEducational === null || previousEducational === undefined) return [];
   // If the array lengths differ, return the entire new educational array
   if (newEducational.length !== previousEducational.length) {
     return newEducational;
@@ -439,14 +441,20 @@ export const getPersonalDetailsChanges = (
     newPersonalDetails.general as L3GeneralDetailsType,
     previousPersonalDetails.general as L3GeneralDetailsType
   );
-  Object.assign(changes, generalChanges);
+
+  if (Object.keys(generalChanges).length > 0)
+    Object.assign(changes, { general: generalChanges });
+  else Object.assign(changes, generalChanges);
 
   // Contact Details
   const contactChanges = getContactDetailsChanges(
     newPersonalDetails.contact as L3ContactDetailsType,
     previousPersonalDetails.contact as L3ContactDetailsType
   );
-  Object.assign(changes, contactChanges);
+
+  if (Object.keys(contactChanges).length > 0)
+    Object.assign(changes, { contact: contactChanges });
+  else Object.assign(changes, contactChanges);
 
   // Family Details
   const familyChanges = getFamilyDetailsChanges(
@@ -454,28 +462,39 @@ export const getPersonalDetailsChanges = (
     previousPersonalDetails.family as L3FamilyDetailsType[]
   );
 
-  Object.assign(changes, familyChanges);
+  if (Object.keys(familyChanges).length > 0)
+    Object.assign(changes, { family: familyChanges });
+  else Object.assign(changes, familyChanges);
 
   // Educational Details
   const educationalChanges = getEducationalDetailsChanges(
     newPersonalDetails.educational as L3EducationalDetailsType[],
     previousPersonalDetails.educational as L3EducationalDetailsType[]
   );
-  Object.assign(changes, educationalChanges);
+
+  if (Object.keys(educationalChanges).length > 0)
+    Object.assign(changes, { educatioal: educationalChanges });
+  else Object.assign(changes, educationalChanges);
 
   // Social Media Details
   const socialMediaChanges = getSocialMediaDetailsChanges(
     newPersonalDetails.socialMedia as L3SocialMediaDetailsType,
     previousPersonalDetails.socialMedia as L3SocialMediaDetailsType
   );
-  Object.assign(changes, socialMediaChanges);
+
+  if (Object.keys(socialMediaChanges).length > 0)
+    Object.assign(changes, { socialMedia: socialMediaChanges });
+  else Object.assign(changes, socialMediaChanges);
 
   // Health and Other Details
   const healthAndOtherChanges = getHealthAndOtherDetailsChanges(
     newPersonalDetails.healthAndOther as L3HealthAndOtherDetailsType,
     previousPersonalDetails.healthAndOther as L3HealthAndOtherDetailsType
   );
-  Object.assign(changes, healthAndOtherChanges);
+
+  if (Object.keys(healthAndOtherChanges).length > 0)
+    Object.assign(changes, { healthAndOther: healthAndOtherChanges });
+  else Object.assign(changes, healthAndOtherChanges);
 
   return changes;
 };

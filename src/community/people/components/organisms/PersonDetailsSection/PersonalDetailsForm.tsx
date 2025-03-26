@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -35,6 +36,7 @@ const PersonalDetailsForm = ({
     employee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    initialEmployee,
     setCurrentStep,
     setNextStep,
     setEmployee,
@@ -43,7 +45,9 @@ const PersonalDetailsForm = ({
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const { hasChanged, apiPayload } = useFormChangeDetector();
+  const { handleMutate } = useHandlePeopleEdit();
+
+  const { handleNext } = useStepper();
 
   const onSave = async () => {
     const generalFormErrors = await generalDetailsRef?.current?.validateForm();
@@ -73,11 +77,16 @@ const PersonalDetailsForm = ({
       contactDetailsRef?.current?.submitForm();
       socialMediaDetailsRef?.current?.submitForm();
       healthAndOtherDetailsRef?.current?.submitForm();
-      setCurrentStep(nextStep);
-      setIsUnsavedChangesModalOpen(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+
+        handleMutate();
+      }
       setEmployee(employee);
-      setIsUnsavedModalSaveButtonClicked(false);
-      // Mutate the data
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);
@@ -87,15 +96,14 @@ const PersonalDetailsForm = ({
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      generalDetailsRef?.current?.resetForm();
-      contactDetailsRef?.current?.resetForm();
-      socialMediaDetailsRef?.current?.resetForm();
-      healthAndOtherDetailsRef?.current?.resetForm();
+    generalDetailsRef?.current?.resetForm();
+    contactDetailsRef?.current?.resetForm();
+    socialMediaDetailsRef?.current?.resetForm();
+    healthAndOtherDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -108,7 +116,11 @@ const PersonalDetailsForm = ({
 
   return (
     <>
-      <GeneralDetailsSection ref={generalDetailsRef} isAddFlow={isAddFlow} isAdmin={isUpdate} />
+      <GeneralDetailsSection
+        ref={generalDetailsRef}
+        isAddFlow={isAddFlow}
+        isAdmin={isUpdate}
+      />
       <ContactDetailsSection ref={contactDetailsRef} />
       <FamilyDetailsSection />
       <EducationalDetailsSection />
@@ -116,12 +128,11 @@ const PersonalDetailsForm = ({
       <HealthAndOtherDetailsSection ref={healthAndOtherDetailsRef} />
 
       {isAddFlow ? (
-        <AddSectionButtonWrapper onNextClick={onSave}/>
+        <AddSectionButtonWrapper onNextClick={onSave} />
       ) : (
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>

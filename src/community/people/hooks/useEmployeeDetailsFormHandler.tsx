@@ -113,7 +113,7 @@ const useEmployeeDetailsFormHandler = ({
     refetch,
     isSuccess
   } = useCheckEmailAndIdentificationNo(
-    values.email,
+    values.email as string,
     values.employeeNumber as string
   );
 
@@ -396,11 +396,11 @@ const useEmployeeDetailsFormHandler = ({
     employee?.employment?.employmentDetails?.teamIds
   ]);
 
-  //   useEffect(() => {
-  //     if (!isManager && !isProfileView) {
-  //       void refetch();
-  //     }
-  //   }, [values.email, values.employeeNumber]);
+  useEffect(() => {
+    if (!isManager && !isProfileView) {
+      void refetch();
+    }
+  }, [values.email, values.employeeNumber]);
 
   useEffect(() => {
     if (values.joinedDate) {

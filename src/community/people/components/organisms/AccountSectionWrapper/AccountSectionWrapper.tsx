@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useGetEmployeeById } from "~community/people/api/PeopleApi";
+import { useGetEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 
@@ -13,21 +13,25 @@ interface Props {
   employeeId: number;
 }
 const AccountSectionWrapper = ({ employeeId }: Props) => {
-  const {
-    data: employee,
-    isLoading,
-    isSuccess
-  } = useGetEmployeeById(employeeId);
+  const { data: employeeData } = useGetEmployee(employeeId);
 
   const {
     currentStep,
     nextStep,
     isUnsavedChangesModalOpen,
+    employee,
     setIsUnsavedChangesModalOpen,
     setCurrentStep,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setEmployee
   } = usePeopleStore((state) => state);
+
+  useEffect(() => {
+    if (employeeData) {
+      setEmployee(employeeData?.data?.results[0]);
+    }
+  }, [employeeData, setEmployee]);
 
   const { hasChanged } = useFormChangeDetector();
 
@@ -56,9 +60,7 @@ const AccountSectionWrapper = ({ employeeId }: Props) => {
             marginBottom: "1rem",
             marginTop: "1.5rem"
           }}
-          isLoading={isLoading}
-          isSuccess={isSuccess}
-          enableEdit={false}
+          enableEdit={true}
         />
       )}
       <DirectorySteppers employeeId={employeeId} isAccountView />

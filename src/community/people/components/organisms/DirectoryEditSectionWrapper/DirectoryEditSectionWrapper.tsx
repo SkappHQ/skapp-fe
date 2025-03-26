@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 
-import { useGetEmployeeById } from "~community/people/api/PeopleApi";
+import { useGetEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
-  const { data: employee } = useGetEmployeeById(employeeId);
+  const { data: employee } = useGetEmployee(employeeId);
 
   const {
     isUnsavedChangesModalOpen,
@@ -25,16 +25,16 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
     setCurrentStep,
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked,
-    initialEmployee,
-    employee: currentEmployee
+    setEmployee
   } = usePeopleStore((state) => state);
 
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
   useEffect(() => {
-    console.log("apiPayload", apiPayload);
-    console.log("hasChanged", hasChanged);
-  }, [apiPayload]);
+    if (employee) {
+      setEmployee(employee?.data?.results[0]);
+    }
+  }, [employee, setEmployee]);
+
+  const { hasChanged } = useFormChangeDetector();
 
   useEffect(() => {
     if (hasChanged && currentStep !== nextStep) {
@@ -58,7 +58,7 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
         {employee && <EditInfoCard selectedEmployee={employee} />}
       </Box>
       <DirectorySteppers employeeId={Number(employeeId)} />
-      <PeopleFormSections />
+      <PeopleFormSections employeeId={Number(employeeId)} />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
         onDiscard={() => {

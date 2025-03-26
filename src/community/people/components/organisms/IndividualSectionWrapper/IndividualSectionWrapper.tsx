@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useGetEmployeeById } from "~community/people/api/PeopleApi";
+import { useGetEmployee } from "~community/people/api/PeopleApi";
 import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
@@ -12,15 +12,16 @@ interface Props {
 }
 
 const IndividualSectionWrapper = ({ employeeId }: Props) => {
-  const {
-    data: employee,
-    isLoading,
-    isSuccess
-  } = useGetEmployeeById(employeeId);
+  const { data: employeeData } = useGetEmployee(employeeId);
 
-  const { currentStep, nextStep, setCurrentStep } = usePeopleStore(
-    (state) => state
-  );
+  const { currentStep, nextStep, employee, setCurrentStep, setEmployee } =
+    usePeopleStore((state) => state);
+
+  useEffect(() => {
+    if (employeeData) {
+      setEmployee(employeeData?.data?.results[0]);
+    }
+  }, [employeeData, setEmployee]);
 
   useEffect(() => {
     if (currentStep !== nextStep) {
@@ -37,8 +38,6 @@ const IndividualSectionWrapper = ({ employeeId }: Props) => {
             marginBottom: "1rem",
             marginTop: "1.5rem"
           }}
-          isLoading={isLoading}
-          isSuccess={isSuccess}
           enableEdit={false}
         />
       )}

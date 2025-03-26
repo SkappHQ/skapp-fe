@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -18,10 +19,9 @@ interface Props {
 const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
   const {
     nextStep,
+    initialEmployee,
     currentStep,
     employee,
     isUnsavedModalSaveButtonClicked,
@@ -33,6 +33,10 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
+
+  const { handleMutate } = useHandlePeopleEdit();
+
+  const { handleNext } = useStepper();
 
   const onSave = async () => {
     const primaryContactDetailsErrors =
@@ -51,11 +55,16 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
     if (primaryContactDetailsIsValid && secondaryContactDetailsIsValid) {
       primaryContactDetailsRef?.current?.submitForm();
       secondaryContactDetailsRef?.current?.submitForm();
-      setCurrentStep(nextStep);
-      setIsUnsavedChangesModalOpen(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+
+        handleMutate();
+      }
       setEmployee(employee);
-      setIsUnsavedModalSaveButtonClicked(false);
-      // Mutate the data
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);
@@ -65,13 +74,12 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      primaryContactDetailsRef?.current?.resetForm();
-      secondaryContactDetailsRef?.current?.resetForm();
+    primaryContactDetailsRef?.current?.resetForm();
+    secondaryContactDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -93,7 +101,6 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>

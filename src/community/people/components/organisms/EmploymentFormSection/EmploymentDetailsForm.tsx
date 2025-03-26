@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -32,6 +33,7 @@ const EmploymentDetailsForm = ({
     nextStep,
     currentStep,
     employee,
+    initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     setCurrentStep,
@@ -42,13 +44,15 @@ const EmploymentDetailsForm = ({
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
 
-  const { hasChanged, apiPayload } = useFormChangeDetector();
+  const { handleMutate } = useHandlePeopleEdit();
+
+  const { handleNext } = useStepper();
 
   const onSave = async () => {
     const employmentFormErrors =
-      await employmentDetailsRef?.current?.validateForm();
+      (await employmentDetailsRef?.current?.validateForm()) || {};
     const identificationFormErrors =
-      await identificationDetailsRef?.current?.validateForm();
+      (await identificationDetailsRef?.current?.validateForm()) || {};
 
     const employmentFormIsValid =
       employmentFormErrors && Object.keys(employmentFormErrors).length === 0;
@@ -59,12 +63,16 @@ const EmploymentDetailsForm = ({
     if (employmentFormIsValid && identificationFormIsValid) {
       employmentDetailsRef?.current?.submitForm();
       identificationDetailsRef?.current?.submitForm();
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
 
-      setCurrentStep(nextStep);
-      setIsUnsavedChangesModalOpen(false);
+        handleMutate();
+      }
       setEmployee(employee);
-      setIsUnsavedModalSaveButtonClicked(false);
-      // Mutate the data
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);
@@ -74,13 +82,12 @@ const EmploymentDetailsForm = ({
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      employmentDetailsRef?.current?.resetForm();
-      identificationDetailsRef?.current?.resetForm();
+    employmentDetailsRef?.current?.resetForm();
+    identificationDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -109,7 +116,6 @@ const EmploymentDetailsForm = ({
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>

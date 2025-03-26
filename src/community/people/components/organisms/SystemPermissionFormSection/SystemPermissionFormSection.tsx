@@ -15,9 +15,10 @@ import { useGetSuperAdminCount } from "~community/configurations/api/userRolesAp
 import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { Role } from "~community/people/enums/PeopleEnums";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
+import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
@@ -53,20 +54,24 @@ const SystemPermissionFormSection = ({
   const [modalDescription, setModalDescription] = useState("");
   const {
     employee,
+    nextStep,
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setCurrentStep
   } = usePeopleStore((state) => state);
+
+  const { handleMutate } = useHandlePeopleEdit();
+
   const { data: supervisedData } = useGetSupervisedByMe(
     Number(employee.common?.employeeId)
   );
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { setToastMessage } = useToast();
-  const hasChanged = useFormChangeDetector();
 
   const {
     permissions,
@@ -81,15 +86,17 @@ const SystemPermissionFormSection = ({
     isEsignatureModuleEnabled
   } = useSessionData();
 
+  const { handleNext } = useStepper();
+
   const onSave = () => {
     if (
       employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
       (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
         initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_MANAGER)
     ) {
-      if (supervisedData.isPrimaryManager)
+      if (supervisedData?.isPrimaryManager)
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData.isTeamSuperviso)
+      else if (supervisedData?.isTeamSuperviso)
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
       setOpenModal(true);
@@ -105,17 +112,22 @@ const SystemPermissionFormSection = ({
         open: true
       });
     } else {
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalSaveButtonClicked(false);
+      if (isAddFlow) {
+        handleNext();
+      } else {
+        setCurrentStep(nextStep);
+        setIsUnsavedChangesModalOpen(false);
+        setIsUnsavedModalSaveButtonClicked(false);
+
+        handleMutate();
+      }
       setEmployee(employee);
     }
   };
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      setEmployee(initialEmployee);
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -221,7 +233,6 @@ const SystemPermissionFormSection = ({
           <EditSectionButtonWrapper
             onCancelClick={onCancel}
             onSaveClick={onSave}
-            isSaveDisabled={!hasChanged}
           />
         )}
 
@@ -238,6 +249,9 @@ const SystemPermissionFormSection = ({
             <Button
               buttonStyle={ButtonStyle.PRIMARY}
               label={commonText(["okay"])}
+              onClick={() => {
+                setOpenModal(false);
+              }}
             />
           </Stack>
         </Modal>

@@ -8,11 +8,12 @@ import {
   EntitlementYears,
   leaveBulkUploadResponse
 } from "~community/leave/types/LeaveTypes";
-import {
-  EmployeeEntitlementsDetailType,
-} from "~community/people/types/AddNewResourceTypes";
+import { EmployeeEntitlementsDetailType } from "~community/people/types/AddNewResourceTypes";
 import { EntitlementInfo } from "~community/people/types/EmployeeBulkUpload";
-import { L3EmploymentDetailsType, L3GeneralDetailsType } from "~community/people/types/PeopleTypes";
+import {
+  L3EmploymentDetailsType,
+  L3GeneralDetailsType
+} from "~community/people/types/PeopleTypes";
 
 interface HandleSaveEntitlementsProps {
   isSuccess: boolean;

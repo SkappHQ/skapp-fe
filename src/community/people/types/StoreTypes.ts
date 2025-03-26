@@ -252,6 +252,8 @@ interface actionsTypes {
   setIsUnsavedModalSaveButtonClicked: (status: boolean) => void;
   setIsUnsavedModalDiscardButtonClicked: (status: boolean) => void;
   setActiveStep: (step: number) => void;
+  setProfilePic: (profilePic: ModifiedFileType[] | null) => void;
+  setThumbnail: (thumbnail: ModifiedFileType[] | null) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -380,4 +382,6 @@ export interface Store extends actionsTypes {
   isUnsavedModalSaveButtonClicked: boolean;
   isUnsavedModalDiscardButtonClicked: boolean;
   activeStep: number;
+  profilePic: ModifiedFileType[] | null;
+  thumbnail: ModifiedFileType[] | null;
 }

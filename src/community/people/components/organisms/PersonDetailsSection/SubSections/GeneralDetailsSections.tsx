@@ -21,6 +21,7 @@ import InputDate from "~community/common/components/molecules/InputDate/InputDat
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import { appModes } from "~community/common/constants/configs";
 import { generalDetailsSectionTestId } from "~community/common/constants/testIds";
+import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
@@ -33,6 +34,7 @@ import {
 import useGeneralDetailsFormHandlers from "~community/people/hooks/useGeneralDetailsFormHandlers";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
 import { usePeopleStore } from "~community/people/store/store";
+import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { L3GeneralDetailsType } from "~community/people/types/PeopleTypes";
 import {
@@ -40,6 +42,7 @@ import {
   MaritalStatusList,
   NationalityList
 } from "~community/people/utils/data/employeeSetupStaticData";
+import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { employeeGeneralDetailsValidation } from "~community/people/utils/peopleValidations";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
@@ -72,7 +75,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
 
     const { setToastMessage } = useToast();
 
-    const { employee, setCommonDetails } = usePeopleStore((state) => state);
+    const { employee, setCommonDetails, setThumbnail, setProfilePic } =
+      usePeopleStore((state) => state);
 
     const initialValues = useMemo<L3GeneralDetailsType & { country?: string }>(
       () => ({
@@ -141,12 +145,13 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
         );
 
         setCommonDetails({
-          authPic: profilePic[0]?.preview ?? "",
-          employeeId: employee?.common?.employeeId ?? ""
+          authPic: profilePic[0]?.preview ?? ""
         });
-        // generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
-        //   setEmployeeGeneralDetails("thumbnail", thumbnail)
-        // );
+
+        setProfilePic(profilePic as ModifiedFileType[]);
+        generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
+          setThumbnail(thumbnail)
+        );
       },
       [employee?.common?.employeeId]
     );
@@ -163,12 +168,17 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       }
     });
 
+    const handleUnSelectPhoto = (): void => {
+      setProfilePic([]);
+      setThumbnail([]);
+      setCommonDetails({
+        authPic: ""
+      });
+    };
+
     const handleImageClick = () => {
       if (employee?.common?.authPic?.length) {
-        setCommonDetails({
-          authPic: employee?.common?.authPic ?? "",
-          employeeId: employee?.common?.employeeId ?? ""
-        });
+        handleUnSelectPhoto();
       } else if (
         process.env.NEXT_PUBLIC_MODE === appModes.COMMUNITY &&
         usedStoragePercentage >= NINETY_PERCENT
@@ -377,7 +387,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                     flex: 1,
                     mt: "0rem"
                   }}
-                  inputFormat="dd/MM/yyyy"
+                  inputFormat={REVERSE_DATE_FORMAT}
                   disabled={isInputsDisabled}
                   readOnly={isManager}
                   selectedDate={selectedDob}

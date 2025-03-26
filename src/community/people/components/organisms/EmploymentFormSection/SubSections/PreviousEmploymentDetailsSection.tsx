@@ -197,7 +197,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             />
           )}
         </Grid>
-        {employee?.employment?.previousEmployment?.length === 0 ? null : (
+        {employee?.employment?.previousEmployment?.length === 0  || employee?.employment?.previousEmployment === null ? null : (
           <PeopleFormTable
             data={formatTableData(
               employee?.employment

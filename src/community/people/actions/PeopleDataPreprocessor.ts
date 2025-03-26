@@ -21,11 +21,14 @@ import { JobFamilies, JobFamiliesType } from "../types/JobRolesTypes";
 export function EmployeeTablePreProcessor(
   employeeList: EmployeeTableDataResponseType
 ): EmployeeDataResponse {
+  console.log("employeeList", employeeList?.results?.[0]?.items);
   const preProcessedData = employeeList?.results?.[0]?.items?.map(
     (request: EmployeeDetails) => {
       return EmployeeDataPreProcessor(request);
     }
   );
+
+  console.log("preProcessedData", preProcessedData);
 
   return {
     ...employeeList.results[0],
@@ -36,6 +39,7 @@ export function EmployeeTablePreProcessor(
 export function EmployeeDataPreProcessor(
   employee: EmployeeDetails
 ): EmployeeDataType {
+  console.log("employee", employee);
   const employeeId = employee?.employeeId as number;
   const employeeName = `${employee?.firstName} ${employee?.lastName}`;
   const firstName = employee?.firstName ?? "";
@@ -45,7 +49,7 @@ export function EmployeeDataPreProcessor(
     employee?.jobFamily === null ? undefined : employee.jobFamily?.name;
   const jobLevel =
     employee?.jobTitle === null ? undefined : employee.jobTitle?.name;
-  const teams = employee?.teams?.length !== 0 ? [...employee.teams] : [];
+  const teams = employee?.teams?.length !== 0 && employee?.teams?.length !== undefined ? [...employee.teams] : [];
   let permission = employee?.permission;
   const email = employee?.email;
   const isActive = employee?.isActive;
@@ -84,6 +88,7 @@ export function EmployeeDataPreProcessor(
     accountSignIn: employee?.accountSignIn ?? undefined,
     accountStatus
   };
+  
   return preProcessedData as EmployeeDataType;
 }
 
