@@ -12,5 +12,14 @@ export const styles = (theme: Theme): StyleProps => ({
     gap: "0.125rem"
   },
   container: { zIndex: ZIndexEnums.MIN },
-  tableHeaderCellStyles: { paddingLeft: "0rem" }
+  tableHeaderCellStyles: { paddingLeft: "0rem" },
+  dateWrapper: {
+    color: "common.black",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "start",
+    alignItems: "center",
+    gap: "0.625rem",
+    flex: 2
+  }
 });

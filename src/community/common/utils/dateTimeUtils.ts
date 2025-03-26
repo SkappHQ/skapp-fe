@@ -230,9 +230,9 @@ export const getStartAndEndOfCurrentMonth = () => {
   return { startOfMonth, endOfMonth };
 };
 
-export const isDateGraterThanToday = (data: string) => {
+export const isDateGraterThanToday = (date: string) => {
   const today = DateTime.local().startOf("day");
-  const dateToCompare = DateTime.fromISO(data);
+  const dateToCompare = DateTime.fromISO(date);
   return dateToCompare > today;
 };
 
