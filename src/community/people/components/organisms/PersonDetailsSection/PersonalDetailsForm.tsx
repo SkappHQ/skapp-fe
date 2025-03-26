@@ -1,16 +1,11 @@
-import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
-import { ToastType } from "~community/common/enums/ComponentEnums";
-import { useTranslator } from "~community/common/hooks/useTranslator";
-import { useToast } from "~community/common/providers/ToastProvider";
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import { useEditEmployee } from "~community/people/api/PeopleApi";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { handlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/handlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -41,6 +36,7 @@ const PersonalDetailsForm = ({
     employee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    initialEmployee,
     setCurrentStep,
     setNextStep,
     setEmployee,
@@ -48,14 +44,6 @@ const PersonalDetailsForm = ({
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
-
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
-  const router = useRouter();
-
-  const { id } = router.query;
-
-  const { mutate } = useEditEmployee(id as string);
 
   const { handleNext } = useStepper();
 
@@ -93,7 +81,8 @@ const PersonalDetailsForm = ({
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
-        mutate(apiPayload);
+
+        handlePeopleEdit();
       }
       setEmployee(employee);
     } else {
@@ -105,15 +94,14 @@ const PersonalDetailsForm = ({
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      generalDetailsRef?.current?.resetForm();
-      contactDetailsRef?.current?.resetForm();
-      socialMediaDetailsRef?.current?.resetForm();
-      healthAndOtherDetailsRef?.current?.resetForm();
+    generalDetailsRef?.current?.resetForm();
+    contactDetailsRef?.current?.resetForm();
+    socialMediaDetailsRef?.current?.resetForm();
+    healthAndOtherDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -143,7 +131,6 @@ const PersonalDetailsForm = ({
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>

@@ -733,6 +733,8 @@ export const useEditEmployee = (employeeId: string) => {
   );
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
+  const { setProfilePic } = usePeopleStore((state) => state);
+
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
       const response = await authFetch.patch(
@@ -742,6 +744,7 @@ export const useEditEmployee = (employeeId: string) => {
       return response.data;
     },
     onSuccess: () => {
+      setProfilePic(null)
       setToastMessage({
         open: true,
         toastType: ToastType.SUCCESS,

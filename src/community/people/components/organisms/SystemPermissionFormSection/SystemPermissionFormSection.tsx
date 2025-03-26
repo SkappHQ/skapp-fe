@@ -1,5 +1,4 @@
 import { Stack, Typography } from "@mui/material";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
@@ -14,15 +13,14 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
 import {
-  useEditEmployee,
   useGetSupervisedByMe
 } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { Role } from "~community/people/enums/PeopleEnums";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
+import { handlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/handlePeopleEdit";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
@@ -73,7 +71,6 @@ const SystemPermissionFormSection = ({
   );
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { setToastMessage } = useToast();
-  const { hasChanged, apiPayload } = useFormChangeDetector();
 
   const {
     permissions,
@@ -87,12 +84,6 @@ const SystemPermissionFormSection = ({
     isLeaveModuleEnabled,
     isEsignatureModuleEnabled
   } = useSessionData();
-
-  const router = useRouter();
-
-  const { id } = router.query;
-
-  const { mutate } = useEditEmployee(id as string);
 
   const { handleNext } = useStepper();
 
@@ -126,17 +117,16 @@ const SystemPermissionFormSection = ({
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
-        mutate(apiPayload);
+
+        handlePeopleEdit();
       }
       setEmployee(employee);
     }
   };
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      setEmployee(initialEmployee);
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -242,7 +232,6 @@ const SystemPermissionFormSection = ({
           <EditSectionButtonWrapper
             onCancelClick={onCancel}
             onSaveClick={onSave}
-            isSaveDisabled={!hasChanged}
           />
         )}
 
@@ -259,6 +248,9 @@ const SystemPermissionFormSection = ({
             <Button
               buttonStyle={ButtonStyle.PRIMARY}
               label={commonText(["okay"])}
+              onClick={() => {
+                setOpenModal(false);
+              }}
             />
           </Stack>
         </Modal>

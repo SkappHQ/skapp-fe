@@ -1,13 +1,12 @@
-import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
-import { useEditEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { handlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/handlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -21,10 +20,9 @@ interface Props {
 const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
   const {
     nextStep,
+    initialEmployee,
     currentStep,
     employee,
     isUnsavedModalSaveButtonClicked,
@@ -36,12 +34,6 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
-
-  const router = useRouter();
-
-  const { id } = router.query;
-
-  const { mutate } = useEditEmployee(id as string);
 
   const { handleNext } = useStepper();
 
@@ -68,7 +60,8 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
-        mutate(apiPayload);
+
+        handlePeopleEdit();
       }
       setEmployee(employee);
     } else {
@@ -80,13 +73,12 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      primaryContactDetailsRef?.current?.resetForm();
-      secondaryContactDetailsRef?.current?.resetForm();
+    primaryContactDetailsRef?.current?.resetForm();
+    secondaryContactDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -108,7 +100,6 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>

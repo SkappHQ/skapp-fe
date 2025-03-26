@@ -8,6 +8,7 @@ import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { handlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/handlePeopleEdit";
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
@@ -35,6 +36,7 @@ const EmploymentDetailsForm = ({
     nextStep,
     currentStep,
     employee,
+    initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     setCurrentStep,
@@ -44,14 +46,6 @@ const EmploymentDetailsForm = ({
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked
   } = usePeopleStore((state) => state);
-
-  const { hasChanged, apiPayload } = useFormChangeDetector();
-
-  const router = useRouter();
-
-  const { id } = router.query;
-
-  const { mutate } = useEditEmployee(id as string);
 
   const { handleNext } = useStepper();
 
@@ -76,7 +70,8 @@ const EmploymentDetailsForm = ({
         setCurrentStep(nextStep);
         setIsUnsavedChangesModalOpen(false);
         setIsUnsavedModalSaveButtonClicked(false);
-        mutate(apiPayload);
+
+        handlePeopleEdit();
       }
       setEmployee(employee);
     } else {
@@ -88,13 +83,12 @@ const EmploymentDetailsForm = ({
   };
 
   const onCancel = () => {
-    if (hasChanged && isUnsavedModalDiscardButtonClicked) {
-      employmentDetailsRef?.current?.resetForm();
-      identificationDetailsRef?.current?.resetForm();
+    employmentDetailsRef?.current?.resetForm();
+    identificationDetailsRef?.current?.resetForm();
 
-      setIsUnsavedChangesModalOpen(false);
-      setIsUnsavedModalDiscardButtonClicked(false);
-    }
+    setEmployee(initialEmployee);
+    setIsUnsavedChangesModalOpen(false);
+    setIsUnsavedModalDiscardButtonClicked(false);
   };
 
   useEffect(() => {
@@ -123,7 +117,6 @@ const EmploymentDetailsForm = ({
         <EditSectionButtonWrapper
           onCancelClick={onCancel}
           onSaveClick={onSave}
-          isSaveDisabled={!hasChanged}
         />
       )}
     </>
