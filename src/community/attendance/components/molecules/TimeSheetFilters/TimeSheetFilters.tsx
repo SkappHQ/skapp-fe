@@ -11,6 +11,7 @@ import TeamSelector from "~community/common/components/molecules/TeamSelector/Te
 import { DATE_FORMAT } from "~community/common/constants/timeConstants";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { AdminTypes } from "~community/common/types/AuthTypes";
 import {
   convertDateToFormat,
   getFirstDateOfYear,
@@ -168,7 +169,10 @@ const TimeSheetFilters = ({
           />
         </Stack>
         {isTeamSelectionAvailable && (
-          <TeamSelector setTeamId={setTimesheetAnalyticsTeam} />
+          <TeamSelector
+            setTeamId={setTimesheetAnalyticsTeam}
+            moduleAdminType={AdminTypes.ATTENDANCE_ADMIN}
+          />
         )}
       </Stack>
     </Box>
