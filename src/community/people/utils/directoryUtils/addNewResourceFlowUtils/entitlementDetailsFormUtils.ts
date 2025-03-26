@@ -96,7 +96,6 @@ export const handleBulkUploadResponse = ({
   translateText,
   setToastMessage
 }: HandleBulkUploadResponseProps) => {
-  console.log(responseData);
   if (responseData?.bulkStatusSummary?.failedCount === 0) {
     setSuccessFlag(true);
   } else {
