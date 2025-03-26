@@ -19,6 +19,7 @@ const commonRoutes = [
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
+  ROUTES.PEOPLE.USER_ACCOUNT,
   ROUTES.NOTIFICATIONS,
   ROUTES.INTEGRATIONS,
   ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
@@ -96,6 +97,7 @@ const employeeRoutes = {
   [EmployeeTypes.PEOPLE_EMPLOYEE]: [
     ROUTES.PEOPLE.DIRECTORY,
     ROUTES.PEOPLE.INDIVIDUAL,
+    ROUTES.PEOPLE.BASE,
     ...commonRoutes
   ],
   [EmployeeTypes.LEAVE_EMPLOYEE]: [ROUTES.LEAVE.MY_REQUESTS, ...commonRoutes],
@@ -251,6 +253,7 @@ export const config = {
     "/sign/:path*",
     "/remove-people",
     "/integrations",
-    "/subscription"
+    "/subscription",
+    "/user-account"
   ]
 };

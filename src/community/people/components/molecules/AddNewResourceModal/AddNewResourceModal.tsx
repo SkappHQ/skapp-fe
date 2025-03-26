@@ -241,12 +241,12 @@ const AddNewResourceModal = () => {
     const updatedAttendanceRole = isChecked
       ? Role.ATTENDANCE_ADMIN
       : Role.ATTENDANCE_EMPLOYEE;
-    const updateESignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
+    const updateesignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
 
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
-    setFieldValue("esignRole", updateESignRole);
+    setFieldValue("esignRole", updateesignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -449,7 +449,7 @@ const AddNewResourceModal = () => {
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
           setIsDirectoryModalOpen(false);
-          router.push(ROUTES.PEOPLE.ADD_NEW_RESOURCE);
+          router.push(ROUTES.PEOPLE.ADD);
         }}
         data-testid={peopleDirectoryTestId.buttons.addFullProfileBtn}
       />
