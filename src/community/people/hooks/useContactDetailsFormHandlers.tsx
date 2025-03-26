@@ -14,9 +14,7 @@ interface Props {
   formik: FormikProps<L3ContactDetailsType>;
 }
 
-const useContactDetailsFormHandlers = ({
-  formik
-}: Props) => {
+const useContactDetailsFormHandlers = ({ formik }: Props) => {
   const { employee, setPersonalDetails } = usePeopleStore((state) => state);
   const { setFieldValue, setFieldError } = formik;
 

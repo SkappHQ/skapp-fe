@@ -17,11 +17,11 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
+import usePreviousEmploymentDetailsFormHandlers from "~community/people/hooks/usePreviousEmploymentDetailsFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
 import { L3PreviousEmploymentDetailsType } from "~community/people/types/PeopleTypes";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
-import usePreviousEmploymentDetailsFormHandlers from "~community/people/hooks/usePreviousEmploymentDetailsFormHandlers";
 
 interface Props {
   isInputsDisabled?: boolean;
@@ -53,14 +53,14 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
     selectedEndDate,
     rowEdited,
     setSelectedStartDate,
-    setSelectedEndDate,
+    setSelectedEndDate
   } = usePreviousEmploymentDetailsFormHandlers();
 
   const tableHeaders = [
     translateText(["companyName"]),
     translateText(["jobTitle"]),
     translateText(["startDate"]),
-    translateText(["endDate"]),
+    translateText(["endDate"])
   ];
 
   return (
@@ -197,7 +197,8 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             />
           )}
         </Grid>
-        {employee?.employment?.previousEmployment?.length === 0  || employee?.employment?.previousEmployment === null ? null : (
+        {employee?.employment?.previousEmployment?.length === 0 ||
+        employee?.employment?.previousEmployment === null ? null : (
           <PeopleFormTable
             data={formatTableData(
               employee?.employment

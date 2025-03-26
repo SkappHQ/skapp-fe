@@ -56,11 +56,12 @@ const useEducationalDetailsFormHandlers = () => {
         });
         setRowEdited(-1);
       } else {
-        const newEducationId = (employee?.personal?.educational?.length ?? 0) + 1;
+        const newEducationId =
+          (employee?.personal?.educational?.length ?? 0) + 1;
         setPersonalDetails({
           general: employee?.personal?.general,
           educational: [
-            ...(employee?.personal?.educational || []), 
+            ...(employee?.personal?.educational || []),
             { ...values, educationId: newEducationId }
           ]
         });

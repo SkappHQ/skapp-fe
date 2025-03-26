@@ -110,7 +110,7 @@ const EntitlementsDetailsForm = (): JSX.Element => {
       <>
         <EntitlementsDetailsSection />
 
-        <AddSectionButtonWrapper setIsSuccess={setIsSuccess}/>
+        <AddSectionButtonWrapper setIsSuccess={setIsSuccess} />
       </>
     </PeopleLayout>
   );

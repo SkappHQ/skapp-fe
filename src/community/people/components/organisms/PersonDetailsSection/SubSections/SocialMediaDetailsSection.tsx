@@ -1,12 +1,7 @@
 import { Facebook, Instagram, LinkedIn, X } from "@mui/icons-material";
 import { Grid2 as Grid, type Theme, useTheme } from "@mui/material";
 import { useFormik } from "formik";
-import {
-  ChangeEvent,
-  forwardRef,
-  useImperativeHandle,
-  useMemo
-} from "react";
+import { ChangeEvent, forwardRef, useImperativeHandle, useMemo } from "react";
 
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";

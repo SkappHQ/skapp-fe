@@ -1,6 +1,14 @@
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
+
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { onlyLettersAndSpaces } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
@@ -10,11 +18,19 @@ import { L3VisaDetailsType } from "~community/people/types/PeopleTypes";
 import { employeeVisaDetailsValidation } from "~community/people/utils/peopleValidations";
 
 const useVisaDetailsFormHandlers = () => {
-  const translateText = useTranslator("peopleModule", "addResource", "visaDetails");
+  const translateText = useTranslator(
+    "peopleModule",
+    "addResource",
+    "visaDetails"
+  );
 
   const [rowEdited, setRowEdited] = useState(-1);
-  const [selectedExpirationDate, setSelectedExpirationDate] = useState<DateTime | undefined>(undefined);
-  const [selectedIssuedDate, setSelectedIssuedDate] = useState<DateTime | undefined>(undefined);
+  const [selectedExpirationDate, setSelectedExpirationDate] = useState<
+    DateTime | undefined
+  >(undefined);
+  const [selectedIssuedDate, setSelectedIssuedDate] = useState<
+    DateTime | undefined
+  >(undefined);
 
   const { employee, setEmploymentDetails } = usePeopleStore((state) => state);
   const countryList = useGetCountryList();
@@ -24,12 +40,12 @@ const useVisaDetailsFormHandlers = () => {
       visaType: "",
       issuingCountry: "",
       issuedDate: "",
-      expiryDate: "",
+      expiryDate: ""
     };
 
     return {
       ...emptyInitialValues,
-      ...(rowEdited > -1 && employee?.employment?.visaDetails?.[rowEdited]),
+      ...(rowEdited > -1 && employee?.employment?.visaDetails?.[rowEdited])
     };
   }, [employee?.employment?.visaDetails, rowEdited]);
 
@@ -41,11 +57,11 @@ const useVisaDetailsFormHandlers = () => {
         const visaDetails = employee?.employment?.visaDetails || [];
         visaDetails.splice(rowEdited, 1, {
           ...values,
-          visaId: visaDetails[rowEdited].visaId,
+          visaId: visaDetails[rowEdited].visaId
         });
         setEmploymentDetails({
           ...employee?.employment,
-          visaDetails: visaDetails,
+          visaDetails: visaDetails
         });
         setRowEdited(-1);
       } else {
@@ -55,16 +71,16 @@ const useVisaDetailsFormHandlers = () => {
             ...(employee?.employment?.visaDetails || []),
             {
               ...values,
-              visaId: employee?.employment?.visaDetails?.length || 0,
-            },
-          ],
+              visaId: employee?.employment?.visaDetails?.length || 0
+            }
+          ]
         });
       }
       resetForm();
       setSelectedIssuedDate(undefined);
       setSelectedExpirationDate(undefined);
     },
-    validateOnChange: false,
+    validateOnChange: false
   });
 
   const {
@@ -73,7 +89,7 @@ const useVisaDetailsFormHandlers = () => {
     handleSubmit,
     resetForm,
     setFieldValue,
-    setFieldError,
+    setFieldError
   } = formik;
 
   const handleInput = useCallback(
@@ -97,7 +113,10 @@ const useVisaDetailsFormHandlers = () => {
   );
 
   const handleCountrySelect = useCallback(
-    async (event: SyntheticEvent, newValue: DropdownListType): Promise<void> => {
+    async (
+      event: SyntheticEvent,
+      newValue: DropdownListType
+    ): Promise<void> => {
       await setFieldValue("issuingCountry", newValue.value);
       setFieldError("issuingCountry", "");
     },
@@ -140,7 +159,7 @@ const useVisaDetailsFormHandlers = () => {
       updatedDetails.splice(rowIndex, 1);
       setEmploymentDetails({
         ...employee?.employment,
-        visaDetails: updatedDetails,
+        visaDetails: updatedDetails
       });
       if (rowEdited === rowIndex) {
         setRowEdited(-1);
@@ -159,7 +178,7 @@ const useVisaDetailsFormHandlers = () => {
           visaType: detail?.visaType,
           issuingCountry: detail?.issuingCountry,
           issuedDate: detail?.issuedDate?.split("T")[0],
-          expirationDate: detail?.expiryDate?.split("T")[0],
+          expirationDate: detail?.expiryDate?.split("T")[0]
         };
       });
     },
@@ -181,7 +200,7 @@ const useVisaDetailsFormHandlers = () => {
     setSelectedExpirationDate,
     setSelectedIssuedDate,
     countryList,
-    rowEdited,
+    rowEdited
   };
 };
 
