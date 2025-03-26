@@ -473,6 +473,8 @@
       "editToastDescription": "Resource updated successfully.",
       "editProfileToastDescription": "Profile updated successfully.",
       "incompleteSuperAdminToastTitle": "Please fill the mandatory fields",
+      "editErrorToastTitle": "Oops! Something went wrong",
+      "editErrorToastDescription": "Failed to update the resource. Please try again.",
       "incompleteSuperAdminToastDescriptionPersonal": "Please fill the mandatory personal details",
       "incompleteSuperAdminToastDescriptionEmergency": "Please fill the mandatory emergency details",
       "incompleteSuperAdminToastDescriptionEmployment": "Please fill the mandatory employment details",
