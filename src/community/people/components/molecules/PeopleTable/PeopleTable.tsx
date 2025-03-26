@@ -37,6 +37,7 @@ import {
   EmployeeDataType,
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
@@ -105,7 +106,9 @@ const PeopleTable: FC<Props> = ({
     setSelectedEmployeeId,
     resetEmployeeData,
     resetEmployeeDataChanges,
-    setIsReinviteConfirmationModalOpen
+    setIsReinviteConfirmationModalOpen,
+    setCurrentStep,
+    setNextStep
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
@@ -331,15 +334,20 @@ const PeopleTable: FC<Props> = ({
       resetEmployeeDataChanges();
       resetEmployeeData();
       setSelectedEmployeeId(employee.id);
+      setCurrentStep(EditPeopleFormTypes.personal);
+      setNextStep(EditPeopleFormTypes.personal);
       router.push(ROUTES.PEOPLE.ACCOUNT);
     } else if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee.id);
+      setCurrentStep(EditPeopleFormTypes.personal);
+      setNextStep(EditPeopleFormTypes.personal);
       router.push(ROUTES.PEOPLE.EDIT(employee.id));
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-
-      const route = `${ROUTES.PEOPLE.INDIVIDUAL}?viewEmployeeId=${employee.id}`;
+      setCurrentStep(EditPeopleFormTypes.personal);
+      setNextStep(EditPeopleFormTypes.personal);
+      const route = `${ROUTES.PEOPLE.BASE}/${employee.id}`;
       router.push(route);
     }
   };

@@ -81,7 +81,8 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
-      ),
+      )
+      .nullable(),
     lastName: Yup.string()
       .required(translator(["requireLastNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
@@ -215,7 +216,7 @@ export const employeeEmploymentDetailsValidation = (
       .test("is-unique-email", translator(["uniqueEmailError"]), function () {
         return context?.isUniqueEmail || context?.isUpdate;
       }),
-    employmentAllocation: Yup.string(),
+    employmentAllocation: Yup.string().nullable(),
     teamIds: Yup.array(),
     joinedDate: Yup.date(),
     probationStartDate: Yup.date()
@@ -240,7 +241,8 @@ export const employeeEmploymentDetailsValidation = (
           }
           return true;
         }
-      ),
+      )
+      .nullable(),
     probationEndDate: Yup.date()
       .test(
         "is-valid",
@@ -275,8 +277,9 @@ export const employeeEmploymentDetailsValidation = (
           }
           return true;
         }
-      ),
-    workTimeZone: Yup.string()
+      )
+      .nullable(),
+    workTimeZone: Yup.string().nullable()
   });
 };
 

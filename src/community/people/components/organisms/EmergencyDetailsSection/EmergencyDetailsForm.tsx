@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
@@ -16,9 +17,13 @@ import SecondaryContactDetailsSection from "./SubSections/SecondaryContactDetail
 
 interface Props {
   isAddFlow?: boolean;
+  isAccountView?: boolean;
 }
 
-const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
+const EmergencyDetailsForm = ({
+  isAddFlow = false,
+  isAccountView = false
+}: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const { hasChanged, apiPayload } = useFormChangeDetector();
@@ -39,9 +44,15 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
 
   const router = useRouter();
 
+  let employeeId;
+
+  const { data } = useSession();
+
   const { id } = router.query;
 
-  const { mutate } = useEditEmployee(id as string);
+  employeeId = isAccountView ? data?.user?.userId : id;
+
+  const { mutate } = useEditEmployee(employeeId as string);
 
   const { handleNext } = useStepper();
 

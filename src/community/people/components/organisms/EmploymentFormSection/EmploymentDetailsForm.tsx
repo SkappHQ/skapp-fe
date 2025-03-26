@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
@@ -21,12 +22,14 @@ interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
   isProfileView?: boolean;
+  isAccountView?: boolean;
 }
 
 const EmploymentDetailsForm = ({
   isAddFlow = false,
   isUpdate = false,
-  isProfileView = false
+  isProfileView = false,
+  isAccountView = false
 }: Props) => {
   const employmentDetailsRef = useRef<FormMethods | null>(null);
   const identificationDetailsRef = useRef<FormMethods | null>(null);
@@ -49,9 +52,15 @@ const EmploymentDetailsForm = ({
 
   const router = useRouter();
 
+  let employeeId;
+
+  const { data } = useSession();
+
   const { id } = router.query;
 
-  const { mutate } = useEditEmployee(id as string);
+  employeeId = isAccountView ? data?.user?.userId : id;
+
+  const { mutate } = useEditEmployee(employeeId as string);
 
   const { handleNext } = useStepper();
 

@@ -187,8 +187,6 @@ const CareerProgressDetailsSection = ({
     handleSubmit
   } = useCareerProgressionFormHandler({ formik, isManager, isProfileView });
 
-  console.log("CareerProgressDetailsSection", employee?.employment?.careerProgression)
-
   return (
     <PeopleFormSectionWrapper
       title={translateText(["title"])}
@@ -418,7 +416,8 @@ const CareerProgressDetailsSection = ({
               </Grid>
             </>
           )}
-          {employee?.employment?.careerProgression?.length === 0 || employee?.employment?.careerProgression === null ? null : (
+          {employee?.employment?.careerProgression?.length === 0 ||
+          employee?.employment?.careerProgression === null ? null : (
             <PeopleFormTable
               data={formatData(copyOfEmployeeCareerDetails)}
               actionsNeeded={!isManager && !isProfileView && !isInputsDisabled}

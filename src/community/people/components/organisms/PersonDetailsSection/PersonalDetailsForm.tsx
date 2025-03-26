@@ -1,9 +1,7 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
-import { ToastType } from "~community/common/enums/ComponentEnums";
-import { useTranslator } from "~community/common/hooks/useTranslator";
-import { useToast } from "~community/common/providers/ToastProvider";
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import { useEditEmployee } from "~community/people/api/PeopleApi";
@@ -24,11 +22,13 @@ import SocialMediaDetailsSection from "./SubSections/SocialMediaDetailsSection";
 interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
+  isAccountView?: boolean;
 }
 
 const PersonalDetailsForm = ({
   isAddFlow = false,
-  isUpdate = false
+  isUpdate = false,
+  isAccountView = false
 }: Props) => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
@@ -53,9 +53,15 @@ const PersonalDetailsForm = ({
 
   const router = useRouter();
 
+  let employeeId;
+
+  const { data } = useSession();
+
   const { id } = router.query;
 
-  const { mutate } = useEditEmployee(id as string);
+  employeeId = isAccountView ? data?.user?.userId : id;
+
+  const { mutate } = useEditEmployee(employeeId as string);
 
   const { handleNext } = useStepper();
 
