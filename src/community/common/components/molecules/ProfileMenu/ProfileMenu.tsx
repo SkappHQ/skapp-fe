@@ -30,12 +30,17 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   const isPeopleManagerOrSuperAdmin = session?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
-  const { setSelectedEmployeeId, resetEmployeeData, resetEmployeeDataChanges } =
-    usePeopleStore((state) => state);
+  const {
+    setSelectedEmployeeId,
+    resetEmployeeData,
+    resetEmployeeDataChanges,
+    resetPeopleSlice
+  } = usePeopleStore((state) => state);
 
   const handelViewAccount = async () => {
     resetEmployeeDataChanges();
     resetEmployeeData();
+    resetPeopleSlice();
     if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee?.employeeId as unknown as string);
       await router.push(ROUTES.PEOPLE.EDIT(employee?.employeeId));

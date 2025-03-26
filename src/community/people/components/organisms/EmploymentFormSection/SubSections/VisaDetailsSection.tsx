@@ -9,6 +9,7 @@ import InputDate from "~community/common/components/molecules/InputDate/InputDat
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import {
+  DATE_FORMAT,
   LONG_DATE_TIME_FORMAT,
   REVERSE_DATE_FORMAT
 } from "~community/common/constants/timeConstants";
@@ -133,7 +134,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "issuedDate",
-                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+                convertDateToFormat(new Date(newValue), DATE_FORMAT)
               )
             }
             placeholder={translateText(["selectIssuedDate"])}
@@ -160,7 +161,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "expiryDate",
-                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+                convertDateToFormat(new Date(newValue), DATE_FORMAT)
               )
             }
             minDate={DateTime.fromISO(values.issuedDate ?? "")}

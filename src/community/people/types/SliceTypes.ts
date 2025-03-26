@@ -230,4 +230,5 @@ export interface PeopleSliceTypes
     | "setEmploymentDetails"
     | "setSystemPermissions"
     | "setCommonDetails"
+    | "resetPeopleSlice"
   > {}
