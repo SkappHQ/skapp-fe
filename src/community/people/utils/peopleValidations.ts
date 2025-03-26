@@ -208,7 +208,8 @@ export const employeeEmploymentDetailsValidation = (
         function () {
           return context?.isUniqueEmployeeNo;
         }
-      ),
+      )
+      .nullable(),
     email: Yup.string()
       .trim()
       .email(translator(["validEmailError"]))
@@ -217,8 +218,8 @@ export const employeeEmploymentDetailsValidation = (
         return context?.isUniqueEmail || context?.isUpdate;
       }),
     employmentAllocation: Yup.string().nullable(),
-    teamIds: Yup.array(),
-    joinedDate: Yup.date(),
+    teamIds: Yup.array().nullable(),
+    joinedDate: Yup.date().nullable(),
     probationStartDate: Yup.date()
       .test(
         "is-valid",
