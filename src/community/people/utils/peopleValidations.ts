@@ -53,7 +53,7 @@ export const employeeSecondaryEmergencyContactDetailsValidation = (
       allowsLettersAndSpecialCharactersForNames(),
       translator(["validNameError"])
     ),
-    relationship: Yup.string(),
+    relationship: Yup.string().nullable(),
     phone: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,

@@ -334,7 +334,7 @@ const PeopleTable: FC<Props> = ({
       router.push(ROUTES.PEOPLE.ACCOUNT);
     } else if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee.id);
-      router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id));
+      router.push(ROUTES.PEOPLE.EDIT(employee.id));
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);

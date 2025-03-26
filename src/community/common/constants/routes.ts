@@ -62,7 +62,8 @@ const ROUTES = {
     EDIT_ALL_INFORMATION: (id: any) =>
       `/people/directory/edit-all-information/${id}`,
     PENDING: "/people/directory/pending",
-    USER_ACCOUNT: "/user-account"
+    USER_ACCOUNT: "/user-account",
+    EDIT: (id: any) => `/people/directory/edit/${id}`
   },
   CONFIGURATIONS: {
     BASE: "/configurations",

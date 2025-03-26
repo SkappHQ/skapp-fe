@@ -204,7 +204,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
       email: employee?.employment?.employmentDetails?.email || "",
       phone: employee?.personal?.contact?.contactNo || "",
       countryCode: employee?.personal?.contact?.countryCode || "",
-      jobTitle: "Hi",
+      jobTitle: employee?.common?.jobTitle || "",
       teams: [],
       joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
       accountStatus: employee?.common?.accountStatus || ""
