@@ -165,13 +165,15 @@ const useSystemPermissionFormHandlers = () => {
         isSuperAdmin: isChecked,
         leaveRole: Role.LEAVE_ADMIN,
         attendanceRole: Role.ATTENDANCE_ADMIN,
-        peopleRole: Role.PEOPLE_ADMIN
+        peopleRole: Role.PEOPLE_ADMIN,
+        esignRole: Role.ESIGN_ADMIN
       });
       setSystemPermissions({
         isSuperAdmin: isChecked,
         leaveRole: Role.LEAVE_ADMIN,
         attendanceRole: Role.ATTENDANCE_ADMIN,
-        peopleRole: Role.PEOPLE_ADMIN
+        peopleRole: Role.PEOPLE_ADMIN,
+        esignRole: Role.ESIGN_ADMIN
       });
     },
     [
