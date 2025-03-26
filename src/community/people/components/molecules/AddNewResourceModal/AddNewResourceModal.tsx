@@ -449,7 +449,7 @@ const AddNewResourceModal = () => {
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
           setIsDirectoryModalOpen(false);
-          router.push(ROUTES.PEOPLE.ADD_NEW_RESOURCE);
+          router.push(ROUTES.PEOPLE.ADD);
         }}
         data-testid={peopleDirectoryTestId.buttons.addFullProfileBtn}
       />
