@@ -1,24 +1,31 @@
 import { Checkbox, Grid2 as Grid, Typography, useTheme } from "@mui/material";
+import { useFormik } from "formik";
 import { DateTime } from "luxon";
-import { useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InteractiveInputTrigger from "~community/common/components/molecules/InteractiveInputTrigger/InteractiveInputTrigger";
+import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
 import {
   ButtonSizes,
   ButtonStyle,
   ButtonTypes
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
-import { useGetPreprocessedRoles } from "~community/people/api/PeopleApi";
+import {
+  convertDateToFormat,
+  getDateFromTimeStamp
+} from "~community/common/utils/dateTimeUtils";
+import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
 import { JobFamilyActionModalEnums } from "~community/people/enums/JobFamilyEnums";
+import { EmploymentTypes } from "~community/people/enums/PeopleEnums";
+import useCareerProgressionFormHandler from "~community/people/hooks/useCareerProgressionFormHandler";
 import { usePeopleStore } from "~community/people/store/store";
-import { JobFamilies } from "~community/people/types/JobRolesTypes";
+import { L3CareerProgressionDetailsType } from "~community/people/types/PeopleTypes";
 import { EmployeeTypesList } from "~community/people/utils/data/employeeSetupStaticData";
+import { employeeCareerDetailsValidation } from "~community/people/utils/peopleFormValidation";
 
 import JobFamilyModalController from "../../JobFamilyModalController/JobFamilyModalController";
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
@@ -46,55 +53,139 @@ const CareerProgressDetailsSection = ({
     "entitlementDetails"
   );
 
-  const { setIsJobFamilyModalOpen, setJobFamilyModalType } = usePeopleStore(
-    (state) => state
-  );
+  const {
+    setIsJobFamilyModalOpen,
+    setJobFamilyModalType,
+    employee,
+    setEmploymentDetails
+  } = usePeopleStore((state) => state);
 
-  const [jobTitle, setJobTitle] = useState<DropdownListType[]>([]);
-  const [rowEdited, setRowEdited] = useState(-1);
-  const [latestRoleLabel, setLatestRoleLabel] = useState<number>();
-  const [selectedStartDate, setSelectedStartDate] = useState<
-    DateTime | undefined
-  >(undefined);
-  const [selectedEndDate, setSelectedEndDate] = useState<DateTime | undefined>(
-    undefined
-  );
+  const initialValues: L3CareerProgressionDetailsType = {
+    employmentType: "" as EmploymentTypes,
+    jobFamilyId: 0,
+    jobTitleId: 0,
+    startDate: "",
+    endDate: "",
+    isCurrentEmployment: false
+  };
 
-  const getPreprocessedRoles = useGetPreprocessedRoles();
+  const tableHeaders = [
+    "",
+    translateText(["employmentType"]),
+    translateText(["jobFamily"]),
+    translateText(["jobTitle"]),
+    translateText(["startDate"]),
+    translateText(["endDate"]),
+    translateText(["tenure"])
+  ];
 
-  let jobFamilies: JobFamilies[] = useMemo(() => {
-    return [];
-  }, []);
+  const onSubmit = (values: L3CareerProgressionDetailsType) => {
+    const positions = copyOfEmployeeCareerDetails || [];
+    const { startDate, endDate, isCurrentEmployment } = values;
 
-  if (!isManager && !isProfileView) {
-    const { data } = getPreprocessedRoles;
-    jobFamilies = (data as JobFamilies[]) ?? [];
-  }
+    const newStartDate = new Date(
+      getDateFromTimeStamp(startDate ?? "")
+    )?.getTime();
+    const newEndDate = isCurrentEmployment
+      ? new Date()?.getTime()
+      : new Date(getDateFromTimeStamp(endDate ?? ""))?.getTime();
 
-  const jobFamiliesList = useMemo(() => {
-    return (
-      jobFamilies?.map((jobFamily: JobFamilies) => ({
-        label: jobFamily.name,
-        value: jobFamily.jobFamilyId || ""
-      })) ?? []
-    );
-  }, [jobFamilies]);
+    const { hasOverlap, overlapType } = checkOverlap({
+      positions,
+      newStartDate,
+      newEndDate,
+      newCurrentPosition: isCurrentEmployment as boolean
+    });
 
-  const jobTitleList = useMemo(() => {
-    if (!jobTitle || jobTitle.length === 0) {
-      return [
-        {
-          label: "",
-          value: ""
-        }
-      ];
+    if (hasOverlap) {
+      if (overlapType === "startDate") {
+        setFieldError("startDate", translateText(["overlapError"]));
+      } else if (isCurrentEmployment && overlapType === "endDate") {
+        setFieldError("startDate", translateText(["overlapError"]));
+      } else if (!isCurrentEmployment && overlapType === "endDate") {
+        setFieldError("endDate", translateText(["overlapError"]));
+      }
+
+      return;
     }
 
-    return jobTitle.map((jobTitle) => ({
-      label: jobTitle.label,
-      value: jobTitle.value as number
-    }));
-  }, [jobTitle]);
+    if (isCurrentEmployment) {
+      positions?.forEach((position, index) => {
+        if (
+          position.isCurrentEmployment &&
+          startDate &&
+          position?.startDate &&
+          startDate > position?.startDate
+        ) {
+          positions[index] = {
+            ...position,
+            isCurrentEmployment: false,
+            endDate: convertDateToFormat(
+              new Date(newStartDate),
+              LONG_DATE_TIME_FORMAT
+            )
+          };
+        }
+      });
+    }
+
+    if (rowEdited > -1) {
+      positions[rowEdited] = {
+        ...positions[rowEdited],
+        ...values
+      };
+      setRowEdited(-1);
+    } else {
+      positions?.push(values);
+    }
+    positions?.sort(
+      (a, b) =>
+        new Date(b.startDate ?? "").getTime() -
+        new Date(a.startDate ?? "").getTime()
+    );
+
+    setEmploymentDetails({
+      ...employee.employment,
+      careerProgression: positions
+    });
+    resetForm();
+    setSelectedEndDate(undefined);
+    setSelectedStartDate(undefined);
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: employeeCareerDetailsValidation(translateText),
+    onSubmit,
+    validateOnChange: false
+  });
+
+  const {
+    copyOfEmployeeCareerDetails,
+    checkOverlap,
+    rowEdited,
+    setRowEdited,
+    setSelectedStartDate,
+    setSelectedEndDate,
+    handleInput,
+    jobFamiliesList,
+    jobTitleList,
+    dateOnChange,
+    selectedStartDate,
+    selectedEndDate,
+    handleCheckboxChange,
+    setLatestRoleLabel,
+    formatData,
+    handleEdit,
+    handleDelete,
+    values,
+    errors,
+    resetForm,
+    handleChange,
+    setFieldValue,
+    setFieldError,
+    handleSubmit
+  } = useCareerProgressionFormHandler({ formik, isManager, isProfileView });
 
   return (
     <PeopleFormSectionWrapper
@@ -104,19 +195,17 @@ const CareerProgressDetailsSection = ({
         margin: "0 auto",
         fontFamily: "Poppins, sans-serif",
         display:
-          isManager || isProfileView
-            ? // &&
-              // employeeCareerDetails?.positionDetails?.length === 0
-              "none"
+          (isManager || isProfileView) &&
+          employee?.employment?.careerProgression?.length === 0
+            ? "none"
             : "block"
       }}
       dividerStyles={{
         mt: "0.5rem",
         display:
-          isManager || isProfileView
-            ? // &&
-              // employeeCareerDetails?.positionDetails?.length === 0
-              "none"
+          (isManager || isProfileView) &&
+          employee?.employment?.careerProgression?.length === 0
+            ? "none"
             : "block"
       }}
       pageHead={translateText(["head"])}
@@ -133,13 +222,13 @@ const CareerProgressDetailsSection = ({
             <>
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <DropdownList
-                  inputName="employeeType"
+                  inputName="employmentType"
                   label={translateText(["employmentType"])}
-                  value={""}
+                  value={values.employmentType}
                   placeholder={translateText(["enterEmploymentType"])}
-                  onChange={() => {}}
-                  onInput={() => {}}
-                  error={""}
+                  onChange={handleChange}
+                  onInput={handleInput}
+                  error={errors.employmentType ?? ""}
                   componentStyle={{
                     mt: "0rem"
                   }}
@@ -166,13 +255,16 @@ const CareerProgressDetailsSection = ({
                   />
                 ) : (
                   <DropdownList
-                    inputName="jobFamily"
+                    inputName="jobFamilyId"
                     label={translateText(["jobFamily"])}
-                    value={""}
+                    value={values.jobFamilyId ?? ""}
                     placeholder={translateText(["selectJobFamily"])}
-                    onChange={() => {}}
-                    onInput={() => {}}
-                    error={""}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldValue("jobTitle", "");
+                    }}
+                    onInput={handleInput}
+                    error={errors.jobFamilyId ?? ""}
                     componentStyle={{ mt: "0rem" }}
                     errorFocusOutlineNeeded={false}
                     itemList={jobFamiliesList}
@@ -192,18 +284,18 @@ const CareerProgressDetailsSection = ({
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <DropdownList
                   label={translateText(["jobTitle"])}
-                  inputName="jobTitle"
+                  inputName="jobTitleId"
                   placeholder={translateText(["selectJobTitle"])}
-                  value={""}
-                  onChange={() => {}}
-                  onInput={() => {}}
-                  error={""}
+                  value={values.jobTitleId}
+                  onChange={handleChange}
+                  onInput={handleInput}
+                  error={errors.jobTitleId ?? ""}
                   componentStyle={{
                     mt: "0rem"
                   }}
                   errorFocusOutlineNeeded={false}
                   itemList={jobTitleList}
-                  isDisabled={isInputsDisabled}
+                  isDisabled={!values?.jobFamilyId || isInputsDisabled}
                   checkSelected={true}
                 />
               </Grid>
@@ -211,16 +303,24 @@ const CareerProgressDetailsSection = ({
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <InputDate
                   label={translateText(["startDate"])}
-                  value={DateTime.fromISO("")}
-                  onchange={() => {}}
+                  value={DateTime.fromISO(values.startDate ?? "")}
+                  onchange={async (newValue: string) =>
+                    await dateOnChange(
+                      "startDate",
+                      convertDateToFormat(
+                        new Date(newValue),
+                        LONG_DATE_TIME_FORMAT
+                      )
+                    )
+                  }
                   placeholder={translateText(["selectStartDate"])}
-                  error={""}
+                  error={errors.startDate ?? ""}
                   componentStyle={{
                     mt: "0rem"
                   }}
-                  //   minDate={DateTime.fromISO(
-                  //     employeeEmploymentDetails?.joinedDate ?? ""
-                  //   )}
+                  minDate={DateTime.fromISO(
+                    employee?.employment?.employmentDetails?.joinedDate ?? ""
+                  )}
                   inputFormat="dd/MM/yyyy"
                   disableMaskedInput
                   disabled={isInputsDisabled}
@@ -232,15 +332,30 @@ const CareerProgressDetailsSection = ({
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <InputDate
                   label={translateText(["endDate"])}
-                  value={DateTime.fromISO("")}
-                  onchange={() => {}}
+                  value={DateTime.fromISO(values.endDate ?? "")}
+                  onchange={async (newValue: string) =>
+                    await dateOnChange(
+                      "endDate",
+                      convertDateToFormat(
+                        new Date(newValue),
+                        LONG_DATE_TIME_FORMAT
+                      )
+                    )
+                  }
+                  minDate={DateTime.fromISO(
+                    values.startDate
+                      ? values.startDate
+                      : employee?.employment?.employmentDetails?.joinedDate
+                        ? employee?.employment?.employmentDetails?.joinedDate
+                        : ""
+                  )}
                   placeholder={translateText(["selectEndDate"])}
-                  error={""}
+                  error={errors.endDate ?? ""}
                   componentStyle={{
                     mt: "0rem"
                   }}
                   inputFormat="dd/MM/yyyy"
-                  disabled={isInputsDisabled}
+                  disabled={values.isCurrentEmployment || isInputsDisabled}
                   disableMaskedInput
                   selectedDate={selectedEndDate}
                   setSelectedDate={setSelectedEndDate}
@@ -255,7 +370,7 @@ const CareerProgressDetailsSection = ({
                         ? translateButtonText(["saveChanges"])
                         : translateButtonText(["add"])
                     }
-                    onClick={() => {}}
+                    onClick={() => handleSubmit()}
                     endIcon={
                       rowEdited > -1 ? IconName.TICK_ICON : IconName.ADD_ICON
                     }
@@ -280,9 +395,9 @@ const CareerProgressDetailsSection = ({
                 size={{ xs: 12, md: 6, xl: 4 }}
               >
                 <Checkbox
-                  //   checked={}
-                  onChange={() => {}}
-                  name="currentPosition"
+                  checked={values.isCurrentEmployment}
+                  onChange={handleCheckboxChange}
+                  name="isCurrentEmployment"
                   color="primary"
                   sx={{
                     ml: "-0.5rem",
@@ -301,13 +416,10 @@ const CareerProgressDetailsSection = ({
               </Grid>
             </>
           )}
-          {/* {employeeCareerDetails?.positionDetails.length === 0 ? null : (
+          {employee?.employment?.careerProgression?.length === 0 ||
+          employee?.employment?.careerProgression === null ? null : (
             <PeopleFormTable
-              data={
-                !isManager && !isProfileView
-                  ? formatData(copyOfData)
-                  : formatData(copyOfEmployeeCareerDetails)
-              }
+              data={formatData(copyOfEmployeeCareerDetails)}
               actionsNeeded={!isManager && !isProfileView && !isInputsDisabled}
               onEdit={handleEdit}
               onDelete={handleDelete}
@@ -316,7 +428,7 @@ const CareerProgressDetailsSection = ({
                 mt: "2rem"
               }}
             />
-          )} */}
+          )}
         </Grid>
         <JobFamilyModalController
           setLatestRoleLabel={setLatestRoleLabel}

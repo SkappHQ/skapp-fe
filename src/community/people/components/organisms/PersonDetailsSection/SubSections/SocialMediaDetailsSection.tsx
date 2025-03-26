@@ -1,13 +1,21 @@
 import { Facebook, Instagram, LinkedIn, X } from "@mui/icons-material";
 import { Grid2 as Grid, type Theme, useTheme } from "@mui/material";
 import { useFormik } from "formik";
-import { ChangeEvent, forwardRef, useImperativeHandle } from "react";
+import {
+  ChangeEvent,
+  forwardRef,
+  useImperativeHandle,
+  useMemo
+} from "react";
 
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { isValidUrlInputPattern } from "~community/common/regex/regexPatterns";
 import { SOCIAL_MEDIA_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
+import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
+import { L3SocialMediaDetailsType } from "~community/people/types/PeopleTypes";
 import { employeeSocialMediaDetailsValidation } from "~community/people/utils/peopleValidations";
 
 interface props {
@@ -24,12 +32,12 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
       "socialMediaDetails"
     );
 
-    const initialValues = {
-      linkedIn: "",
-      facebook: "",
-      instagram: "",
-      x: ""
-    };
+    const { employee, setPersonalDetails } = usePeopleStore((state) => state);
+
+    const initialValues = useMemo<L3SocialMediaDetailsType>(
+      () => employee?.personal?.contact as L3SocialMediaDetailsType,
+      [employee]
+    );
 
     useImperativeHandle(ref, () => ({
       validateForm: async () => {
@@ -55,7 +63,20 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
 
     const { values, errors, setFieldError, setFieldValue } = formik;
 
-    const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {};
+    const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      if (isValidUrlInputPattern().test(value)) {
+        await setFieldValue(name, value);
+        setFieldError(e.target.name, "");
+        setPersonalDetails({
+          general: employee?.personal?.general,
+          socialMedia: {
+            ...employee?.personal?.socialMedia,
+            [name]: value
+          }
+        });
+      }
+    };
 
     return (
       <PeopleLayout
@@ -82,7 +103,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["linkedIn"])}
                 inputType="text"
-                value={values.linkedIn}
+                value={values?.linkedin ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <LinkedIn
@@ -94,7 +115,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
                 }
                 onChange={handleInput}
                 inputName="linkedIn"
-                error={errors.linkedIn ?? ""}
+                error={errors.linkedin ?? ""}
                 componentStyle={{
                   flex: 1,
                   mt: "0rem"
@@ -108,7 +129,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["facebook"])}
                 inputType="text"
-                value={values.facebook}
+                value={values?.facebook ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <Facebook
@@ -134,7 +155,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["instagram"])}
                 inputType="text"
-                value={values.instagram}
+                value={values?.instagram ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <Instagram
@@ -160,7 +181,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["x"])}
                 inputType="text"
-                value={values.x}
+                value={values?.x ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <X

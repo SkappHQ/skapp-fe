@@ -5,7 +5,7 @@ export enum EditPeopleFormTypes {
   permission = "System Permissions",
   timeline = "Timeline",
   leave = "Leave",
-  timesheeet = "Timesheet"
+  timesheet = "Timesheet"
 }
 
 export enum EditPeopleFormStatus {

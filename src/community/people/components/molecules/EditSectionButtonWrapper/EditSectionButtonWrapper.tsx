@@ -1,9 +1,12 @@
 import { Stack } from "@mui/material";
+import { useEffect } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import { usePeopleStore } from "~community/people/store/store";
 
 interface Props {
   onCancelClick: () => void;
@@ -16,6 +19,14 @@ const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
     "addResource",
     "commonText"
   );
+
+  const { hasChanged } = useFormChangeDetector();
+
+  const { profilePic } = usePeopleStore((state) => state);
+
+  useEffect(() => {
+    console.log(profilePic);
+  }, [profilePic]);
 
   return (
     <Stack
@@ -30,6 +41,7 @@ const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
         endIcon={IconName.CLOSE_ICON}
         isFullWidth={false}
         onClick={onCancelClick}
+        disabled={!hasChanged}
       />
       <Button
         label={translateText(["saveDetails"])}
@@ -37,6 +49,7 @@ const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
         endIcon={IconName.RIGHT_ARROW_ICON}
         isFullWidth={false}
         onClick={onSaveClick}
+        disabled={!hasChanged && profilePic === null}
       />
     </Stack>
   );

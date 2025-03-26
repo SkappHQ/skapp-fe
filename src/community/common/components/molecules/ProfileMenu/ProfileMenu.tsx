@@ -38,9 +38,7 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
     resetEmployeeData();
     if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee?.employeeId as unknown as string);
-      await router.push(
-        ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee?.employeeId)
-      );
+      await router.push(ROUTES.PEOPLE.EDIT(employee?.employeeId));
     } else {
       router.push(ROUTES.PEOPLE.ACCOUNT);
     }

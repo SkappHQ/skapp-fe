@@ -1,11 +1,13 @@
-import { Grid2 as Grid, useTheme } from "@mui/material";
+import { Grid2 as Grid } from "@mui/material";
 import { DateTime } from "luxon";
-import { useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
+import {
+  LONG_DATE_TIME_FORMAT,
+  REVERSE_DATE_FORMAT
+} from "~community/common/constants/timeConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -13,15 +15,18 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
+import { usePeopleStore } from "~community/people/store/store";
+import { L3PreviousEmploymentDetailsType } from "~community/people/types/PeopleTypes";
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
+import usePreviousEmploymentDetailsFormHandlers from "~community/people/hooks/usePreviousEmploymentDetailsFormHandlers";
 
 interface Props {
   isInputsDisabled?: boolean;
 }
 const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
-  const theme = useTheme();
-
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -33,14 +38,30 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
     "entitlementDetails"
   );
 
-  const [selectedStartDate, setSelectedStartDate] = useState<
-    DateTime | undefined
-  >(undefined);
-  const [selectedEndDate, setSelectedEndDate] = useState<DateTime | undefined>(
-    undefined
-  );
+  const { employee } = usePeopleStore((state) => state);
 
-  const [rowEdited, setRowEdited] = useState(-1);
+  const {
+    values,
+    errors,
+    handleSubmit,
+    handleInput,
+    dateOnChange,
+    handleEdit,
+    handleDelete,
+    formatTableData,
+    selectedStartDate,
+    selectedEndDate,
+    rowEdited,
+    setSelectedStartDate,
+    setSelectedEndDate,
+  } = usePreviousEmploymentDetailsFormHandlers();
+
+  const tableHeaders = [
+    translateText(["companyName"]),
+    translateText(["jobTitle"]),
+    translateText(["startDate"]),
+    translateText(["endDate"]),
+  ];
 
   return (
     <PeopleFormSectionWrapper
@@ -66,11 +87,11 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
           <InputField
             label={translateText(["companyName"])}
             inputType="text"
-            value={""}
+            value={values.companyName}
             placeHolder={translateText(["companyName"])}
-            onChange={() => {}}
+            onChange={handleInput}
             inputName="companyName"
-            error={""}
+            error={errors.companyName ?? ""}
             componentStyle={{
               flex: 1,
               mt: "0rem"
@@ -84,11 +105,11 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
           <InputField
             label={translateText(["jobTitle"])}
             inputType="text"
-            value={""}
+            value={values.jobTitle}
             placeHolder={translateText(["jobTitle"])}
-            onChange={() => {}}
+            onChange={handleInput}
             inputName="jobTitle"
-            error={""}
+            error={errors.jobTitle ?? ""}
             componentStyle={{
               flex: 1,
               mt: "0rem"
@@ -101,16 +122,21 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["startDate"])}
-            value={DateTime.fromISO("")}
-            inputFormat={REVERSE_DATE_FORMAT}
-            onchange={() => {}}
+            value={DateTime.fromISO(values.startDate ?? "")}
+            inputFormat="dd/MM/yyyy"
+            onchange={async (newValue: string) =>
+              await dateOnChange(
+                "startDate",
+                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+              )
+            }
             placeholder={translateText(["selectStartDate"])}
-            error={""}
-            // maxDate={DateTime.fromISO(
-            //   employeeEmploymentDetails?.joinedDate
-            //     ? employeeEmploymentDetails?.joinedDate
-            //     : new Date().toISOString()
-            // )}
+            error={errors.startDate ?? ""}
+            maxDate={DateTime.fromISO(
+              employee?.employment?.employmentDetails?.joinedDate
+                ? employee?.employment?.employmentDetails?.joinedDate
+                : new Date().toISOString()
+            )}
             componentStyle={{
               mt: "0rem"
             }}
@@ -124,17 +150,22 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["endDate"])}
-            value={DateTime.fromISO("")}
-            inputFormat="dd/MM/yyyy"
-            onchange={() => {}}
+            value={DateTime.fromISO(values.endDate ?? "")}
+            inputFormat={REVERSE_DATE_FORMAT}
+            onchange={async (newValue: string) =>
+              await dateOnChange(
+                "endDate",
+                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+              )
+            }
             placeholder={translateText(["selectEndDate"])}
-            error={""}
-            // maxDate={DateTime.fromISO(
-            //   employeeEmploymentDetails?.joinedDate
-            //     ? employeeEmploymentDetails?.joinedDate
-            //     : new Date().toISOString()
-            // )}
-            minDate={DateTime.fromISO("")}
+            error={errors.endDate ?? ""}
+            maxDate={DateTime.fromISO(
+              employee?.employment?.employmentDetails?.joinedDate
+                ? employee?.employment?.employmentDetails?.joinedDate
+                : new Date().toISOString()
+            )}
+            minDate={DateTime.fromISO(values.startDate ?? "")}
             componentStyle={{
               mt: "0rem"
             }}
@@ -153,7 +184,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
                   ? translateButtonText(["saveChanges"])
                   : translateButtonText(["add"])
               }
-              onClick={() => {}}
+              onClick={() => handleSubmit()}
               endIcon={rowEdited > -1 ? IconName.TICK_ICON : IconName.ADD_ICON}
               isFullWidth={false}
               buttonStyle={ButtonStyle.SECONDARY}
@@ -166,13 +197,13 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             />
           )}
         </Grid>
-        {/* {employeePreviousEmploymentDetails?.previousEmploymentDetails
-          ?.length === 0 ? null : (
+        {employee?.employment?.previousEmployment?.length === 0  || employee?.employment?.previousEmployment === null ? null : (
           <PeopleFormTable
-            data={formatData(
-              employeePreviousEmploymentDetails?.previousEmploymentDetails
+            data={formatTableData(
+              employee?.employment
+                ?.previousEmployment as L3PreviousEmploymentDetailsType[]
             )}
-            actionsNeeded={true && !isInputsDisabled}
+            actionsNeeded={!isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}
@@ -180,7 +211,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
               mt: "2rem"
             }}
           />
-        )} */}
+        )}
       </Grid>
     </PeopleFormSectionWrapper>
   );

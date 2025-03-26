@@ -33,7 +33,7 @@ const useGeneralDetailsFormHandlers = ({ formik }: Props) => {
     }
 
     try {
-      const birthDate = values.dateOfBirth;
+      const birthDate = new Date(values.dateOfBirth);
       const today = new Date();
       const calculatedAge = today.getFullYear() - birthDate.getFullYear();
       setAge(calculatedAge);
@@ -96,7 +96,7 @@ const useGeneralDetailsFormHandlers = ({ formik }: Props) => {
         setPersonalDetails({
           general: {
             ...employee?.personal?.general,
-            dateOfBirth: new Date(dateValue)
+            dateOfBirth: dateValue
           }
         });
       }

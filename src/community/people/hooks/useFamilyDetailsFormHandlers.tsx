@@ -29,12 +29,22 @@ const useFamilyDetailsFormHandlers = () => {
     "familyDetails"
   );
 
-  const initialValues = useMemo<L3FamilyDetailsType>(
-    () => ({
+  const initialValues = useMemo<L3FamilyDetailsType>(() => {
+    const emptyInitialValues: L3FamilyDetailsType = {
+      familyMemberId: undefined,
+      firstName: "",
+      lastName: "",
+      gender: undefined,
+      relationship: undefined,
+      parentName: "",
+      dateOfBirth: ""
+    };
+
+    return {
+      ...emptyInitialValues,
       ...(rowEdited > -1 && employee?.personal?.family?.[rowEdited])
-    }),
-    [employee, rowEdited]
-  );
+    };
+  }, [employee?.personal?.family, rowEdited]);
 
   const formik = useFormik({
     initialValues,
@@ -49,7 +59,7 @@ const useFamilyDetailsFormHandlers = () => {
         const members = [...(employee?.personal?.family || [])];
         members.splice(rowEdited, 1, {
           ...familyData,
-          familyMemberId: members[rowEdited]?.familyMemberId
+          familyMemberId: members[rowEdited]?.familyMemberId ?? rowEdited
         });
         setPersonalDetails({
           general: employee?.personal?.general,
@@ -57,9 +67,16 @@ const useFamilyDetailsFormHandlers = () => {
         });
         setRowEdited(-1);
       } else {
+        const newMemberId = (employee?.personal?.family?.length ?? 0) + 1;
         setPersonalDetails({
           general: employee?.personal?.general,
-          family: [...(employee?.personal?.family || []), familyData]
+          family: [
+            ...(employee?.personal?.family || []),
+            {
+              ...familyData,
+              familyMemberId: newMemberId
+            }
+          ]
         });
       }
       resetForm();
@@ -117,12 +134,12 @@ const useFamilyDetailsFormHandlers = () => {
     if (rowEdited > -1) {
       const member = employee?.personal?.family?.[rowEdited];
       if (member) {
-        void setFieldValue("firstName", member.firstName || "");
-        void setFieldValue("lastName", member.lastName || "");
-        void setFieldValue("gender", member.gender || "");
-        void setFieldValue("relationship", member.relationship || "");
-        void setFieldValue("parentName", member.parentName || "");
-        void setFieldValue("dateOfBirth", member.dateOfBirth || "");
+        setFieldValue("firstName", member.firstName ?? "");
+        setFieldValue("lastName", member.lastName ?? "");
+        setFieldValue("gender", member.gender ?? "");
+        setFieldValue("relationship", member.relationship ?? "");
+        setFieldValue("parentName", member.parentName ?? "");
+        setFieldValue("dateOfBirth", member.dateOfBirth ?? "");
 
         if (member.dateOfBirth) {
           setSelectedDob(DateTime.fromJSDate(new Date(member.dateOfBirth)));

@@ -1,12 +1,17 @@
 import { Grid2 as Grid } from "@mui/material";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { JSX } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
+import CustomTable from "~community/common/components/molecules/CustomTable/CustomTable";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import { LONG_DATE_TIME_FORMAT } from "~community/common/constants/timeConstants";
+import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
+import {
+  LONG_DATE_TIME_FORMAT,
+  REVERSE_DATE_FORMAT
+} from "~community/common/constants/timeConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -15,15 +20,15 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import useGetCountryList from "~community/people/hooks/useGetCountryList";
-
-import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
+import useVisaDetailsFormHandlers from "~community/people/hooks/useVisaDetailsFormHandlers";
+import { usePeopleStore } from "~community/people/store/store";
 
 interface Props {
   isInputsDisabled?: boolean;
 }
 
-const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
+const VisaDetailsSection = (props: Props): JSX.Element => {
+  const { isInputsDisabled } = props;
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -35,18 +40,35 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
     "entitlementDetails"
   );
 
-  const [rowEdited, setRowEdited] = useState(-1);
-  const [selectedExpirationDate, setSelectedExpirationDate] = useState<
-    DateTime | undefined
-  >(undefined);
-  const [selectedIssuedDate, setSelectedIssuedDate] = useState<
-    DateTime | undefined
-  >(undefined);
+  const { employee } = usePeopleStore((state) => state);
 
-  const countryList = useGetCountryList();
+  const {
+    values,
+    errors,
+    handleSubmit,
+    handleInput,
+    dateOnChange,
+    handleCountrySelect,
+    handleEdit,
+    handleDelete,
+    formatTableData,
+    selectedExpirationDate,
+    selectedIssuedDate,
+    setSelectedExpirationDate,
+    setSelectedIssuedDate,
+    countryList,
+    rowEdited
+  } = useVisaDetailsFormHandlers();
+
+  const tableHeaders = [
+    translateText(["visaType"]),
+    translateText(["issuingCountry"]),
+    translateText(["issuedDate"]),
+    translateText(["expirationDate"])
+  ];
 
   return (
-    <PeopleFormSectionWrapper
+    <PeopleLayout
       title={translateText(["title"])}
       containerStyles={{
         padding: "0",
@@ -68,11 +90,11 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputField
             label={translateText(["visaType"])}
-            value={""}
+            value={values.visaType}
             placeHolder={translateText(["selectVisaType"])}
-            onChange={() => {}}
+            onChange={handleInput}
             inputName="visaType"
-            error={""}
+            error={errors.visaType ?? ""}
             componentStyle={{
               mt: "0rem"
             }}
@@ -86,13 +108,17 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
             itemList={countryList}
             inputName="issuingCountry"
             label={translateText(["issuingCountry"])}
-            value={{
-              label: "",
-              value: ""
-            }}
+            value={
+              values.issuingCountry
+                ? {
+                    label: values.issuingCountry,
+                    value: values.issuingCountry
+                  }
+                : undefined
+            }
             placeholder={translateText(["selectIssuingCountry"])}
-            onChange={() => {}}
-            error={""}
+            onChange={handleCountrySelect}
+            error={errors.issuingCountry ?? ""}
             componentStyle={{
               mt: "0rem"
             }}
@@ -103,17 +129,22 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["issuedDate"])}
-            value={DateTime.fromISO("")}
-            onchange={() => {}}
+            value={DateTime.fromISO(values.issuedDate ?? "")}
+            onchange={async (newValue: string) =>
+              await dateOnChange(
+                "issuedDate",
+                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+              )
+            }
             placeholder={translateText(["selectIssuedDate"])}
-            error={""}
+            error={errors.issuedDate ?? ""}
             maxDate={DateTime.fromISO(
               convertDateToFormat(new Date(), LONG_DATE_TIME_FORMAT)
             )}
             componentStyle={{
               mt: "0rem"
             }}
-            inputFormat="dd/MM/yyyy"
+            inputFormat={REVERSE_DATE_FORMAT}
             disableMaskedInput
             disabled={isInputsDisabled}
             setSelectedDate={setSelectedIssuedDate}
@@ -124,12 +155,17 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["expirationDate"])}
-            value={DateTime.fromISO("")}
-            inputFormat="dd/MM/yyyy"
-            onchange={() => {}}
-            minDate={DateTime.fromISO("")}
+            value={DateTime.fromISO(values.expiryDate ?? "")}
+            inputFormat={REVERSE_DATE_FORMAT}
+            onchange={async (newValue: string) =>
+              await dateOnChange(
+                "expiryDate",
+                convertDateToFormat(new Date(newValue), LONG_DATE_TIME_FORMAT)
+              )
+            }
+            minDate={DateTime.fromISO(values.issuedDate ?? "")}
             placeholder={translateText(["selectExpirationDate"])}
-            error={""}
+            error={errors.expiryDate ?? ""}
             componentStyle={{
               mt: "0rem"
             }}
@@ -148,7 +184,7 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
                   ? translateButtonText(["saveChanges"])
                   : translateButtonText(["add"])
               }
-              onClick={() => {}}
+              onClick={() => handleSubmit()}
               endIcon={rowEdited > -1 ? IconName.TICK_ICON : IconName.ADD_ICON}
               isFullWidth={false}
               buttonStyle={ButtonStyle.SECONDARY}
@@ -161,10 +197,10 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
             />
           )}
         </Grid>
-        {/* {employeeVisaDetails?.visaDetails?.length === 0 ? null : (
-          <PeopleFormTable
-            data={formatData(employeeVisaDetails?.visaDetails)}
-            actionsNeeded={true && !isInputsDisabled}
+        {employee?.employment?.visaDetails?.length === 0 || employee?.employment?.visaDetails === null ? null : (
+          <CustomTable
+            data={formatTableData(employee?.employment?.visaDetails || [])}
+            actionsNeeded={!isInputsDisabled}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}
@@ -172,9 +208,9 @@ const VisaDetailsSection = ({ isInputsDisabled }: Props) => {
               mt: "2rem"
             }}
           />
-        )} */}
+        )}
       </Grid>
-    </PeopleFormSectionWrapper>
+    </PeopleLayout>
   );
 };
 

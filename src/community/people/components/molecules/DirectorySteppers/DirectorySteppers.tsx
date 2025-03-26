@@ -9,20 +9,27 @@ import {
   ManagerTypes
 } from "~community/common/types/AuthTypes";
 import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { usePeopleStore } from "~community/people/store/store";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
 interface Props {
   employeeId: number;
-  formType: EditPeopleFormTypes;
-  setFormType: (formType: EditPeopleFormTypes) => void;
+  isIndividualView?: boolean;
+  isAccountView?: boolean;
 }
 
-const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
+const DirectorySteppers = ({
+  employeeId,
+  isIndividualView,
+  isAccountView
+}: Props) => {
   const [isLeaveTabVisible, setIsLeaveTabVisible] = useState(false);
   const [isTimeTabVisible, setIsTimeTabVisible] = useState(false);
   const translateText = useTranslator("peopleModule");
 
   const { data: session } = useSession();
+
+  const { setNextStep, currentStep } = usePeopleStore((state) => state);
 
   const { data: supervisedData, isLoading: supervisorDataLoading } =
     useGetSupervisedByMe(Number(employeeId));
@@ -67,34 +74,40 @@ const DirectorySteppers = ({ employeeId, formType, setFormType }: Props) => {
 
   const steps = [
     translateText(["editAllInfo", "personal"]),
-    translateText(["editAllInfo", "emergency"]),
+    ...(isIndividualView ? [] : [translateText(["editAllInfo", "emergency"])]),
     translateText(["editAllInfo", "employment"]),
-    translateText(["editAllInfo", "systemPermissions"]),
-    // translateText(["editAllInfo", "timeline"]),
+    ...(isIndividualView || isAccountView
+      ? []
+      : [translateText(["editAllInfo", "systemPermissions"])]),
+    // ...(isIndividualView || isAccountView
+    //   ? []
+    //   : [translateText(["editAllInfo", "timeline"])]),
     ...(isLeaveTabVisible &&
+    !isAccountView &&
     session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
       ? [translateText(["editAllInfo", "leave"])]
       : []),
     ...(isTimeTabVisible &&
+    !isAccountView &&
     session?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [translateText(["editAllInfo", "timesheet"])]
       : [])
   ];
 
   const handleStepClick = (step: EditPeopleFormTypes) => {
-    setFormType(step);
+    setNextStep(step);
   };
 
   return (
     <BoxStepper
-      activeStep={formType}
+      activeStep={currentStep}
       steps={steps}
       onStepClick={(step) => handleStepClick(step as EditPeopleFormTypes)}
       useStringIdentifier
       stepperStyles={{
         marginBottom: "1.75rem"
       }}
-      isFullWidth
+      isFullWidth={!(isIndividualView || isAccountView)}
     />
   );
 };

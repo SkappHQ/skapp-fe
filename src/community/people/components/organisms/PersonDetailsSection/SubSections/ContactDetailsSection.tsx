@@ -95,7 +95,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
             <InputField
               label={translateText(["personalEmail"])}
               inputType="email"
-              value={values.personalEmail}
+              value={values?.personalEmail ?? ""}
               placeHolder={translateText(["enterPersonalEmail"])}
               onInput={handleInput}
               inputName="personalEmail"
@@ -111,8 +111,8 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
           <Grid size={{ xs: 12, md: 6, xl: 4 }}>
             <InputPhoneNumber
               label={translateText(["contactNo"])}
-              value={values.contactNo as string}
-              countryCodeValue={values.countryCode as string}
+              value={values?.contactNo ?? ""}
+              countryCodeValue={values?.countryCode ?? ""}
               onChangeCountry={onChangeCountry}
               onChange={onChangePhoneNumber}
               error={errors.contactNo ?? ""}
@@ -136,7 +136,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
             <InputField
               label={translateText(["addressLine1"])}
               inputType="text"
-              value={values.addressLine1}
+              value={values?.addressLine1 ?? ""}
               placeHolder={translateText(["enterAddressLine1"])}
               onChange={handleInput}
               inputName="addressLine1"
@@ -154,7 +154,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
             <InputField
               label={translateText(["addressLine2"])}
               inputType="text"
-              value={values.addressLine2}
+              value={values?.addressLine2 ?? ""}
               placeHolder={translateText(["enterAddressLine2"])}
               onChange={handleInput}
               inputName="addressLine2"
@@ -172,7 +172,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
             <InputField
               label={translateText(["city"])}
               inputType="text"
-              value={values.city}
+              value={values?.city ?? ""}
               placeHolder={translateText(["enterCity"])}
               onChange={handleInput}
               inputName="city"
@@ -192,7 +192,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               inputName="country"
               label={translateText(["country"])}
               value={
-                values.country
+                values?.country
                   ? { label: values.country, value: values.country }
                   : undefined
               }
@@ -209,7 +209,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
             <InputField
               label={translateText(["state"])}
               inputType="text"
-              value={values.state}
+              value={values?.state ?? ""}
               placeHolder={translateText(["enterState"])}
               onChange={handleInput}
               inputName="state"
@@ -227,7 +227,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
             <InputField
               label={translateText(["postalCode"])}
               inputType="text"
-              value={values.postalCode}
+              value={values?.postalCode}
               placeHolder={translateText(["enterPostalCode"])}
               onChange={handleInput}
               inputName="postalCode"
