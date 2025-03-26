@@ -90,6 +90,8 @@ const AddNewResourceModal = () => {
     })
   );
 
+  const { resetPeopleSlice } = usePeopleStore((state) => state);
+
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
     attendanceAdminLimitExceeded: false,
@@ -126,7 +128,7 @@ const AddNewResourceModal = () => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
       lastName: values.lastName,
-      workEmail: values.workEmail,
+      email: values.workEmail,
       userRoles: {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
@@ -448,6 +450,7 @@ const AddNewResourceModal = () => {
         }
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
+          resetPeopleSlice();
           setIsDirectoryModalOpen(false);
           router.push(ROUTES.PEOPLE.ADD);
         }}

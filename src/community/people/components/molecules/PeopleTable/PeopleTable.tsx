@@ -108,7 +108,8 @@ const PeopleTable: FC<Props> = ({
     resetEmployeeDataChanges,
     setIsReinviteConfirmationModalOpen,
     setCurrentStep,
-    setNextStep
+    setNextStep,
+    resetPeopleSlice
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
@@ -327,6 +328,7 @@ const PeopleTable: FC<Props> = ({
   }, [isLoading, teamData]);
 
   const handleRowClick = async (employee: { id: number }) => {
+    resetPeopleSlice();
     if (
       currentEmployeeDetails?.employeeId === employee.id.toString() &&
       !isPeopleManagerOrSuperAdmin

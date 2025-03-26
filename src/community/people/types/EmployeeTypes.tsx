@@ -435,7 +435,7 @@ export interface EmployeeDataExists {
 export interface QuickAddEmployeePayload {
   firstName: string;
   lastName: string;
-  workEmail: string;
+  email: string;
   userRoles: EmployeeRoleType;
 }
 

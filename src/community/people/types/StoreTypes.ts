@@ -254,6 +254,7 @@ interface actionsTypes {
   setActiveStep: (step: number) => void;
   setProfilePic: (profilePic: ModifiedFileType[] | null) => void;
   setThumbnail: (thumbnail: ModifiedFileType[] | null) => void;
+  resetPeopleSlice: () => void;
 }
 
 export interface Store extends actionsTypes {

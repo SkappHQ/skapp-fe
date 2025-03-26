@@ -173,6 +173,19 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
         ...state.employee,
         common: { ...state.employee.common, ...common }
       }
+    })),
+  resetPeopleSlice: () =>
+    set(() => ({
+      employee: defaultEmployee,
+      initialEmployee: defaultEmployee,
+      nextStep: EditPeopleFormTypes.personal,
+      currentStep: EditPeopleFormTypes.personal,
+      activeStep: 0,
+      isUnsavedChangesModalOpen: false,
+      isUnsavedModalSaveButtonClicked: false,
+      isUnsavedModalDiscardButtonClicked: false,
+      profilePic: null,
+      thumbnail: null
     }))
 });
 
