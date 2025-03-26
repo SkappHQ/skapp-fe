@@ -47,6 +47,9 @@ const AddEditHolidayModal = ({
   holidayRefetch
 }: Props): JSX.Element => {
   const translateText = useTranslator("peopleModule", "holidays");
+
+  const { setToastMessage } = useToast();
+
   const {
     setIsHolidayModalOpen,
     newHolidayDetails,
@@ -55,8 +58,16 @@ const AddEditHolidayModal = ({
     resetHolidayDetails,
     setIsBulkUpload,
     selectedYear
-  } = usePeopleStore((state) => state);
-  const { setToastMessage } = useToast();
+  } = usePeopleStore((state) => ({
+    selectedYear: state.selectedYear,
+    newHolidayDetails: state.newHolidayDetails,
+    setIsBulkUpload: state.setIsBulkUpload,
+    setHolidayDetails: state.setHolidayDetails,
+    setHolidayModalType: state.setHolidayModalType,
+    resetHolidayDetails: state.resetHolidayDetails,
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen
+  }));
+
   const [duration, setDuration] = useState<string>(
     newHolidayDetails?.duration || ""
   );
@@ -66,8 +77,10 @@ const AddEditHolidayModal = ({
   const [holidayData, setHolidayData] = useState<holiday[] | undefined>(
     holidays
   );
+
   const currentYear = DateTime.now().year;
   const numericSelectedYear = parseInt(selectedYear, 10);
+
   const onSuccess = useCallback(
     (response: holidayBulkUploadResponse): void => {
       if (
@@ -137,13 +150,6 @@ const AddEditHolidayModal = ({
     setIsHolidayModalOpen(false);
   }, [newHolidayDetails, mutate]);
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema: addHolidayValidation(translateText),
-    onSubmit: handleAddNewHoliday,
-    validateOnChange: false
-  });
-
   const {
     values,
     errors,
@@ -151,7 +157,12 @@ const AddEditHolidayModal = ({
     handleSubmit,
     setFieldValue,
     setFieldError
-  } = formik;
+  } = useFormik({
+    initialValues,
+    validationSchema: addHolidayValidation(translateText),
+    onSubmit: handleAddNewHoliday,
+    validateOnChange: false
+  });
 
   const findHolidayAvailability = useCallback(
     (date: string | undefined): boolean | undefined => {
@@ -343,6 +354,7 @@ const AddEditHolidayModal = ({
             halfDayMorning: false,
             halfDayEvening: false
           }}
+          error={errors.duration}
           commonButtonStyles={{ height: "3.1875rem" }}
           value={duration}
         />

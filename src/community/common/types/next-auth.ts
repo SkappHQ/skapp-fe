@@ -28,6 +28,7 @@ declare module "next-auth" {
       tier?: TierEnum;
       tenantId?: string;
       tenantStatus?: TenantStatusEnums;
+      userId?: number;
     } & DefaultSession;
   }
 
@@ -49,6 +50,7 @@ declare module "next-auth" {
     tenantId?: string;
     tier?: TierEnum;
     tenantStatus?: TenantStatusEnums;
+    userId?: number;
   }
 }
 
@@ -67,5 +69,6 @@ declare module "next-auth/jwt" {
     tenantId?: string;
     tier?: TierEnum;
     tenantStatus?: TenantStatusEnums;
+    userId?: number;
   }
 }

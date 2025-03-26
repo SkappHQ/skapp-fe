@@ -218,13 +218,13 @@ const ApplyLeaveModal = () => {
       selectedDates,
       duration: selectedLeaveAllocationData.leaveType.leaveDuration,
       myLeaveRequests: pendingAndApprovedLeaveRequests,
-      resourceAvailability
+      allHolidays
     });
 
     return disabledOptions;
   }, [
     pendingAndApprovedLeaveRequests,
-    resourceAvailability,
+    allHolidays,
     selectedDates,
     selectedLeaveAllocationData.leaveType.leaveDuration
   ]);

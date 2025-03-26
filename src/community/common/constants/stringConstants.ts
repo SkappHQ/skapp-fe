@@ -80,3 +80,6 @@ export const BrandingBlueColor = {
     dark: "#408CE4"
   }
 };
+
+export const SUCCESS = "success";
+export const CANCEL = "cancel";

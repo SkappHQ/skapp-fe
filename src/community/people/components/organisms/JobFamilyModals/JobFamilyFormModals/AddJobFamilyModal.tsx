@@ -11,10 +11,7 @@ import {
 import { usePeopleStore } from "~community/people/store/store";
 import { AddJobFamilyFormType } from "~community/people/types/JobFamilyTypes";
 import { handleJobFamilyApiResponse } from "~community/people/utils/jobFamilyUtils/apiUtils";
-import {
-  QuickSetupModalTypeEnums,
-  QuickSetupTaskEnums
-} from "~enterprise/common/enums/Common";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
@@ -36,10 +33,10 @@ const AddJobFamilyModal = ({
     setJobFamilyModalType: state.setJobFamilyModalType
   }));
 
-  const { setOngoingQuickSetup, setQuickSetupModalType } =
+  const { setQuickSetupModalType, stopAllOngoingQuickSetup } =
     useCommonEnterpriseStore((state) => ({
-      setOngoingQuickSetup: state.setOngoingQuickSetup,
-      setQuickSetupModalType: state.setQuickSetupModalType
+      setQuickSetupModalType: state.setQuickSetupModalType,
+      stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
     }));
 
   const addLatestFamilyLabel = (jobTitleId: number) => {
@@ -50,7 +47,7 @@ const AddJobFamilyModal = ({
   };
 
   const onSuccess = () => {
-    setOngoingQuickSetup(QuickSetupTaskEnums.DEFINE_JOB_FAMILIES, false);
+    stopAllOngoingQuickSetup();
     setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
     handleJobFamilyApiResponse({
       type: JobFamilyToastEnums.ADD_JOB_FAMILY_SUCCESS,

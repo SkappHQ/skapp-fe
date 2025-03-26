@@ -28,11 +28,11 @@ const DirectoryPopupController = () => {
   const {
     ongoingQuickSetup,
     setQuickSetupModalType,
-    setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup
   } = useCommonEnterpriseStore((state) => ({
     ongoingQuickSetup: state.ongoingQuickSetup,
     setQuickSetupModalType: state.setQuickSetupModalType,
-    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
   const { data: jobFamilies } = useGetAllJobFamilies();
@@ -60,7 +60,7 @@ const DirectoryPopupController = () => {
   const handleCloseModal = (): void => {
     setBulkUploadUsers([]);
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
       if (directoryModalType === DirectoryModalTypes.UPLOAD_SUMMARY) {
         setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
       }

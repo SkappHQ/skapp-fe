@@ -27,27 +27,43 @@ const styles = (theme: Theme) => ({
     height: "3.75rem",
     "&.Mui-default-button": {
       backgroundColor: theme.palette.grey[100],
+      cursor: "pointer",
       "&:hover": {
-        backgroundColor: theme.palette.grey[200]
+        backgroundColor: theme.palette.grey[200],
+        cursor: "pointer"
       }
     },
     "&.Mui-selected-button": {
       backgroundColor: theme.palette.secondary.main,
-      border: `0.0625rem solid ${theme.palette.primary.dark}`
+      border: `0.0625rem solid ${theme.palette.primary.dark}`,
+      cursor: "pointer"
+    },
+    "&.Mui-error-button": {
+      backgroundColor: theme.palette.grey[100],
+      border: `0.0625rem solid ${theme.palette.error.contrastText}`,
+      cursor: "pointer"
     },
     "&.Mui-disabled-button": {
-      backgroundColor: theme.palette.grey[100]
+      backgroundColor: theme.palette.grey[100],
+      cursor: "not-allowed"
     }
   },
   btnText: {
     "&.Mui-default-button": {
-      color: theme.palette.text.secondary
+      color: theme.palette.text.secondary,
+      cursor: "pointer"
     },
     "&.Mui-selected-button": {
-      color: theme.palette.primary.dark
+      color: theme.palette.primary.dark,
+      cursor: "pointer"
+    },
+    "&.Mui-error-button": {
+      color: theme.palette.text.secondary,
+      cursor: "pointer"
     },
     "&.Mui-disabled-button": {
-      color: theme.palette.grey.A100
+      color: theme.palette.grey.A100,
+      cursor: "not-allowed"
     }
   },
   btnGroup: {
@@ -64,16 +80,25 @@ const styles = (theme: Theme) => ({
     width: "50%",
     "&.Mui-default-button": {
       backgroundColor: theme.palette.grey[100],
+      cursor: "pointer",
       "&:hover": {
-        backgroundColor: theme.palette.grey[200]
+        backgroundColor: theme.palette.grey[200],
+        cursor: "pointer"
       }
     },
     "&.Mui-selected-button": {
       backgroundColor: theme.palette.secondary.main,
-      border: `0.0625rem solid ${theme.palette.primary.dark}`
+      border: `0.0625rem solid ${theme.palette.primary.dark}`,
+      cursor: "pointer"
+    },
+    "&.Mui-error-button": {
+      backgroundColor: theme.palette.grey[100],
+      border: `0.0625rem solid ${theme.palette.error.contrastText}`,
+      cursor: "pointer"
     },
     "&.Mui-disabled-button": {
-      backgroundColor: theme.palette.grey[100]
+      backgroundColor: theme.palette.grey[100],
+      cursor: "not-allowed"
     }
   },
   firstHalfBtn: {

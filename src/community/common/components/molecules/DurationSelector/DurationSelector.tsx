@@ -1,5 +1,5 @@
 import { Stack, SxProps, Theme, Typography, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -45,6 +45,54 @@ const DurationSelector = <T,>({
 
   const [isHalfDaySelected, setIsHalfDaySelected] = useState(false);
 
+  useEffect(() => {
+    if (value === options.halfDayMorning || value === options.halfDayEvening) {
+      setIsHalfDaySelected(true);
+    }
+  }, [value, options.halfDayEvening, options.halfDayMorning]);
+
+  const muiFullDayClasses = useMemo(() => {
+    if (disabledOptions.fullDay) {
+      return "Mui-disabled-button";
+    } else if (value === options.fullDay) {
+      return "Mui-selected-button";
+    } else if (error) {
+      return "Mui-error-button";
+    }
+    return "Mui-default-button";
+  }, [disabledOptions.fullDay, error, options.fullDay, value]);
+
+  const muiHalfDayClasses = useMemo(() => {
+    if (disabledOptions.halfDayMorning && disabledOptions.halfDayEvening) {
+      return "Mui-disabled-button";
+    } else if (error) {
+      return "Mui-error-button";
+    }
+    return "Mui-default-button";
+  }, [disabledOptions.halfDayEvening, disabledOptions.halfDayMorning, error]);
+
+  const muiHalfDayMorningClasses = useMemo(() => {
+    if (disabledOptions.halfDayMorning) {
+      return "Mui-disabled-button";
+    } else if (value === options.halfDayMorning) {
+      return "Mui-selected-button";
+    } else if (error) {
+      return "Mui-error-button";
+    }
+    return "Mui-default-button";
+  }, [disabledOptions.halfDayMorning, error, options.halfDayMorning, value]);
+
+  const muiHalfDayEveningClasses = useMemo(() => {
+    if (disabledOptions.halfDayEvening) {
+      return "Mui-disabled-button";
+    } else if (value === options.halfDayEvening) {
+      return "Mui-selected-button";
+    } else if (error) {
+      return "Mui-error-button";
+    }
+    return "Mui-default-button";
+  }, [disabledOptions.halfDayEvening, error, options.halfDayEvening, value]);
+
   const onOptionClick = (value: T) => {
     onChange(value);
   };
@@ -59,16 +107,15 @@ const DurationSelector = <T,>({
     onChange(halfDayOptionToSelect);
   };
 
-  useEffect(() => {
-    if (value === options.halfDayMorning || value === options.halfDayEvening) {
-      setIsHalfDaySelected(true);
-    }
-  }, [value, options.halfDayEvening, options.halfDayMorning]);
-
   return (
     <Stack sx={classes.wrapper}>
       <Stack sx={classes.container}>
-        <Typography variant="body1">
+        <Typography
+          variant="body1"
+          sx={{
+            color: error ? theme.palette.error.contrastText : "common.black"
+          }}
+        >
           {label} &nbsp;
           {isRequired && (
             <Typography component="span" sx={classes.asterisk}>
@@ -78,24 +125,12 @@ const DurationSelector = <T,>({
         </Typography>
         <Stack sx={classes.btnWrapper}>
           <Stack
-            className={
-              disabledOptions.fullDay
-                ? "Mui-disabled-button"
-                : value === options.fullDay
-                  ? "Mui-selected-button"
-                  : "Mui-default-button"
-            }
+            className={muiFullDayClasses}
             sx={mergeSx([classes.btn, commonButtonStyles])}
             onClick={() => onOptionClick(options.fullDay)}
           >
             <Typography
-              className={
-                disabledOptions.fullDay
-                  ? "Mui-disabled-button"
-                  : value === options.fullDay
-                    ? "Mui-selected-button"
-                    : "Mui-default-button"
-              }
+              className={muiFullDayClasses}
               sx={classes.btnText}
               variant="body1"
             >
@@ -108,13 +143,7 @@ const DurationSelector = <T,>({
           {isHalfDaySelected ? (
             <Stack sx={classes.btnGroup}>
               <Stack
-                className={
-                  disabledOptions.halfDayMorning
-                    ? "Mui-disabled-button"
-                    : value === options.halfDayMorning
-                      ? "Mui-selected-button"
-                      : "Mui-default-button"
-                }
+                className={muiHalfDayMorningClasses}
                 sx={mergeSx([
                   classes.halfBtn,
                   classes.firstHalfBtn,
@@ -123,13 +152,7 @@ const DurationSelector = <T,>({
                 onClick={() => onOptionClick(options.halfDayMorning)}
               >
                 <Typography
-                  className={
-                    disabledOptions.halfDayMorning
-                      ? "Mui-disabled-button"
-                      : value === options.halfDayMorning
-                        ? "Mui-selected-button"
-                        : "Mui-default-button"
-                  }
+                  className={muiHalfDayMorningClasses}
                   sx={classes.btnText}
                   variant="body1"
                 >
@@ -141,13 +164,7 @@ const DurationSelector = <T,>({
                   )}
               </Stack>
               <Stack
-                className={
-                  disabledOptions.halfDayEvening
-                    ? "Mui-disabled-button"
-                    : value === options.halfDayEvening
-                      ? "Mui-selected-button"
-                      : "Mui-default-button"
-                }
+                className={muiHalfDayEveningClasses}
                 sx={mergeSx([
                   classes.halfBtn,
                   classes.lastHalfBtn,
@@ -156,13 +173,7 @@ const DurationSelector = <T,>({
                 onClick={() => onOptionClick(options.halfDayEvening)}
               >
                 <Typography
-                  className={
-                    disabledOptions.halfDayEvening
-                      ? "Mui-disabled-button"
-                      : value === options.halfDayEvening
-                        ? "Mui-selected-button"
-                        : "Mui-default-button"
-                  }
+                  className={muiHalfDayEveningClasses}
                   sx={classes.btnText}
                   variant="body1"
                 >
@@ -176,11 +187,7 @@ const DurationSelector = <T,>({
             </Stack>
           ) : (
             <Stack
-              className={
-                disabledOptions.halfDayMorning && disabledOptions.halfDayEvening
-                  ? "Mui-disabled-button"
-                  : "Mui-default-button"
-              }
+              className={muiHalfDayClasses}
               sx={mergeSx([classes.btn, commonButtonStyles])}
               onClick={handleHalfDayClick}
             >

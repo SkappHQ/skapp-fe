@@ -64,14 +64,17 @@ interface actionsTypes {
   setLeaveEntitlementModalType: (value: LeaveEntitlementModelTypes) => void;
   setSelectedYear: (value: string) => void;
   setLeaveEntitlementTableSelectedYear: (value: string) => void;
-  setLeaveCarryForwardModalType: (value: LeaveCarryForwardModalTypes) => void;
-  setIsLeaveCarryForwardModalOpen: (status: boolean) => void;
   setLeaveTypes: (value: LeaveTypeType[]) => void;
   setCarryForwardLeaveTypes: (value: LeaveTypeType[]) => void;
   setLeaveCarryForwardId: (value: number[]) => void;
   setCarryForwardPagination: (page: number) => void;
   setPage: (value: number) => void;
   setLeaveCarryForwardModalData: (leaveCarryForwardId: number[]) => void;
+
+  //leaveCarryForwardModalSlice
+  setLeaveCarryForwardModalType: (value: LeaveCarryForwardModalTypes) => void;
+  setIsLeaveCarryForwardModalOpen: (status: boolean) => void;
+  setLeaveCarryForwardSyncBtnStatus: (key: string, value: boolean) => void;
 
   //myRequestSlice
   setIsMyRequestModalOpen: (status: boolean) => void;
@@ -155,8 +158,6 @@ export interface LeaveStore extends actionsTypes {
   leaveEntitlementModalType: LeaveEntitlementModelTypes;
   selectedYear: string;
   leaveEntitlementTableSelectedYear: string;
-  isLeaveCarryForwardModalOpen: boolean;
-  leaveCarryForwardModalType: LeaveCarryForwardModalTypes;
   leaveTypes: LeaveTypeType[];
   carryForwardLeaveTypes: LeaveTypeType[];
   leaveCarryForwardId: number[];
@@ -165,6 +166,14 @@ export interface LeaveStore extends actionsTypes {
   leaveCarryForwardModalData: {
     leaveCarryForwardId: number[] | null;
     carryForwardLeaveTypes: LeaveTypeType[];
+  };
+
+  //leaveCarryForwardModalSlice
+  isLeaveCarryForwardModalOpen: boolean;
+  leaveCarryForwardModalType: LeaveCarryForwardModalTypes;
+  leaveCarryForwardSyncBtnStatus: {
+    isLoading: boolean;
+    isDisabled: boolean;
   };
 
   //myRequestSlice
