@@ -27,7 +27,6 @@ export function EmployeeTablePreProcessor(
     }
   );
 
-
   return {
     ...employeeList.results[0],
     items: preProcessedData
