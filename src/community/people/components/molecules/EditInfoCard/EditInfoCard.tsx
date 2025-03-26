@@ -1,13 +1,8 @@
 import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
-import { JSX } from "react";
-import {
-  type MouseEventHandler,
-  useCallback,
-  useMemo,
-  useState
-} from "react";
+import { JSX, useEffect } from "react";
+import { type MouseEventHandler, useCallback, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
@@ -30,18 +25,16 @@ import {
   getTimeElapsedSinceDate
 } from "~community/common/utils/dateTimeUtils";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
-import {
-  EmployeeManagerType
-} from "~community/people/types/EmployeeTypes";
+import { EmployeeManagerType } from "~community/people/types/EmployeeTypes";
+import { TeamType } from "~community/people/types/TeamTypes";
 import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { toPascalCase } from "~community/people/utils/jobFamilyUtils/commonUtils";
-import {
-  getStatusStyle
-} from "~community/people/utils/terminationUtil";
+import { getStatusStyle } from "~community/people/utils/terminationUtil";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useGetSubscriptionCancelImpact } from "~enterprise/settings/api/Billing/subscriptionCancelImpactApi";
 
@@ -64,6 +57,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const translateStorageText = useTranslator("StorageToastMessage");
   const deletionTranslateText = useTranslator("peopleModule", "deletion");
 
+  const [teams, setTeams] = useState<TeamType[]>([]);
+
   const AVAILABLE_FIELD_COUNT = 2;
 
   const { data } = useSession();
@@ -80,6 +75,19 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     setDeletionAlertOpen,
     setDeletionConfirmationModalOpen
   } = usePeopleStore((state) => state);
+
+  const { data: teamData } = useGetAllTeams();
+
+  useEffect(() => {
+    if (teamData) {
+      const teams = teamData?.filter((project) =>
+        employee?.employment?.employmentDetails?.teamIds?.includes(
+          project.teamId as number
+        )
+      );
+      setTeams(teams);
+    }
+  }, [employee, teamData]);
 
   const environment = useGetEnvironment();
 
@@ -204,12 +212,13 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
       email: employee?.employment?.employmentDetails?.email || "",
       phone: employee?.personal?.contact?.contactNo || "",
       countryCode: employee?.personal?.contact?.countryCode || "",
+      jobFamily: "",
       jobTitle: employee?.common?.jobTitle || "",
-      teams: [],
+      teams: teams || [],
       joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
       accountStatus: employee?.common?.accountStatus || ""
     };
-  }, [employee]);
+  }, [employee, teams]);
 
   const employmentStatus = cardData?.accountStatus as AccountStatusEnums;
 
@@ -230,7 +239,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   };
 
   const getTeams = (): string[] => {
-    return cardData?.teams?.map((team) => team?.team?.teamName).sort();
+    return cardData?.teams?.map((team) => team?.teamName).sort();
   };
 
   const getDate = (): string => {

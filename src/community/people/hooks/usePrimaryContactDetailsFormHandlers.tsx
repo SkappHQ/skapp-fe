@@ -1,6 +1,7 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useFormik } from "formik";
 import { ChangeEvent, useCallback, useMemo } from "react";
+
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { isValidNamePattern } from "~community/common/utils/validation";
 import { RelationshipTypes } from "~community/people/enums/PeopleEnums";
@@ -32,7 +33,7 @@ const usePrimaryContactDetailsFormHandlers = () => {
     onSubmit: () => {},
     validateOnChange: false,
     validateOnBlur: true,
-    enableReinitialize: true,
+    enableReinitialize: true
   });
 
   const { values, errors, handleChange, setFieldValue, setFieldError } = formik;
@@ -47,8 +48,8 @@ const usePrimaryContactDetailsFormHandlers = () => {
         setEmergencyDetails({
           primaryEmergencyContact: {
             ...employee?.emergency?.primaryEmergencyContact,
-            name: value,
-          },
+            name: value
+          }
         });
       } else if (name === "relationship") {
         await setFieldValue(name, value);
@@ -56,8 +57,8 @@ const usePrimaryContactDetailsFormHandlers = () => {
         setEmergencyDetails({
           primaryEmergencyContact: {
             ...employee?.emergency?.primaryEmergencyContact,
-            relationship: value as RelationshipTypes,
-          },
+            relationship: value as RelationshipTypes
+          }
         });
       }
     },
@@ -71,8 +72,8 @@ const usePrimaryContactDetailsFormHandlers = () => {
       setEmergencyDetails({
         primaryEmergencyContact: {
           ...employee?.emergency?.primaryEmergencyContact,
-          countryCode,
-        },
+          countryCode
+        }
       });
     },
     [employee, setEmergencyDetails, setFieldError, setFieldValue]
@@ -85,21 +86,11 @@ const usePrimaryContactDetailsFormHandlers = () => {
       setEmergencyDetails({
         primaryEmergencyContact: {
           ...employee?.emergency?.primaryEmergencyContact,
-          contactNo: contactNo.target.value,
-        },
+          contactNo: contactNo.target.value
+        }
       });
-
-      if (!employee?.emergency?.primaryEmergencyContact?.countryCode) {
-        setFieldValue("countryCode", countryCode);
-        setEmergencyDetails({
-          primaryEmergencyContact: {
-            ...employee?.emergency?.primaryEmergencyContact,
-            countryCode,
-          },
-        });
-      }
     },
-    [employee, countryCode, setEmergencyDetails, setFieldError, setFieldValue]
+    [employee, setEmergencyDetails, setFieldError, setFieldValue]
   );
 
   return {
@@ -109,7 +100,7 @@ const usePrimaryContactDetailsFormHandlers = () => {
     handleInput,
     onChangeCountry,
     handlePhoneNumber,
-    formik,
+    formik
   };
 };
 

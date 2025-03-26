@@ -89,18 +89,8 @@ const useSecondaryContactDetailsFormHandlers = () => {
           contactNo: contactNo.target.value
         }
       });
-
-      if (!employee?.emergency?.secondaryEmergencyContact?.countryCode) {
-        setFieldValue("countryCode", countryCode);
-        setEmergencyDetails({
-          secondaryEmergencyContact: {
-            ...employee?.emergency?.secondaryEmergencyContact,
-            countryCode
-          }
-        });
-      }
     },
-    [employee, countryCode, setEmergencyDetails, setFieldError, setFieldValue]
+    [employee, setEmergencyDetails, setFieldError, setFieldValue]
   );
 
   return {
