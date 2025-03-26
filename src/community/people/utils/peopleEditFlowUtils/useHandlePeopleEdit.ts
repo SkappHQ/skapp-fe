@@ -1,6 +1,8 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { useUploadImages } from "~community/common/api/FileHandleApi";
+import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { useEditEmployee } from "~community/people/api/PeopleApi";
@@ -22,11 +24,23 @@ export const useHandlePeopleEdit = () => {
 
   const router = useRouter();
 
+  let employeeId;
+
+  const { data } = useSession();
+
   const { id } = router.query;
+
+  const asPath = router.asPath;
+
+  if (asPath === ROUTES.PEOPLE.ACCOUNT) {
+    employeeId = data?.user?.userId;
+  } else {
+    employeeId = id;
+  }
 
   const { setToastMessage } = useToast();
 
-  const { mutate } = useEditEmployee(id as string);
+  const { mutate } = useEditEmployee(employeeId as string);
 
   const { mutateAsync: handleUploadImagesAsync } = useUploadImages();
 
