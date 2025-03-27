@@ -16,7 +16,7 @@ interface Props {
 
 const useContactDetailsFormHandlers = ({ formik }: Props) => {
   const { employee, setPersonalDetails } = usePeopleStore((state) => state);
-  const { setFieldValue, setFieldError } = formik;
+  const { setFieldValue, setFieldError, values } = formik;
 
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,13 +64,6 @@ const useContactDetailsFormHandlers = ({ formik }: Props) => {
 
   const onChangeCountry = async (countryCode: string): Promise<void> => {
     await setFieldValue("countryCode", countryCode);
-    setPersonalDetails({
-      general: employee?.personal?.general,
-      contact: {
-        ...employee?.personal?.contact,
-        countryCode
-      }
-    });
   };
 
   const onChangePhoneNumber = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +73,7 @@ const useContactDetailsFormHandlers = ({ formik }: Props) => {
       general: employee?.personal?.general,
       contact: {
         ...employee?.personal?.contact,
-        contactNo: contactNo
+        contactNo: `${values.countryCode} ${contactNo}`
       }
     });
   };
