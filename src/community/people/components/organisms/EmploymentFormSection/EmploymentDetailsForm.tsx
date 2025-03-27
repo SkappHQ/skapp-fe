@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
+import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
@@ -47,6 +48,9 @@ const EmploymentDetailsForm = ({
   const { handleMutate } = useHandlePeopleEdit();
 
   const { handleNext } = useStepper();
+
+  const isTerminatedEmployee =
+    employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = async () => {
     const employmentFormErrors =
@@ -104,20 +108,30 @@ const EmploymentDetailsForm = ({
         ref={employmentDetailsRef}
         isUpdate={isUpdate}
         isProfileView={isProfileView}
+        isInputsDisabled={isTerminatedEmployee}
       />
-      <CareerProgressDetailsSection isProfileView={isProfileView} />
-      <IdentificationDetailsSection ref={identificationDetailsRef} />
-      <PreviousEmploymentDetailsSection />
-      <VisaDetailsSection />
+      <CareerProgressDetailsSection
+        isProfileView={isProfileView}
+        isInputsDisabled={isTerminatedEmployee}
+      />
+      <IdentificationDetailsSection
+        ref={identificationDetailsRef}
+        isInputsDisabled={isTerminatedEmployee}
+      />
+      <PreviousEmploymentDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+      />
+      <VisaDetailsSection isInputsDisabled={isTerminatedEmployee} />
 
-      {isAddFlow ? (
-        <AddSectionButtonWrapper onNextClick={onSave} />
-      ) : (
-        <EditSectionButtonWrapper
-          onCancelClick={onCancel}
-          onSaveClick={onSave}
-        />
-      )}
+      {!isTerminatedEmployee &&
+        (isAddFlow ? (
+          <AddSectionButtonWrapper onNextClick={onSave} />
+        ) : (
+          <EditSectionButtonWrapper
+            onCancelClick={onCancel}
+            onSaveClick={onSave}
+          />
+        ))}
     </>
   );
 };

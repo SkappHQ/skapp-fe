@@ -30,9 +30,14 @@ import { styles } from "./styles";
 interface Props {
   tableData: LeaveEntitlementResponseType | undefined;
   isFetching: boolean;
+  searchTerm: string;
 }
 
-const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
+const LeaveEntitlementTable = ({
+  tableData,
+  isFetching,
+  searchTerm
+}: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -103,7 +108,7 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           </Box>
         )}
         <TableHeaderFill />
-        {tableData?.items?.length === 0 ? (
+        {searchTerm === "" && tableData?.items?.length === 0 ? (
           <Box sx={classes.emptyScreenContainer}>
             <TableEmptyScreen
               title={translateText(["emptyScreen", "title"], {

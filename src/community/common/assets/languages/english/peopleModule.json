@@ -527,8 +527,8 @@
       "requireEmailError": "Please enter the work email",
       "validEmailError": "Please enter a valid email",
       "head": "Directory | Skapp",
-      "quickAddSuccessTitle": "User Added",
-      "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully.",
+      "quickAddSuccessTitle": "Resource added",
+      "quickAddSuccessDescription": "Resource has been added successfully",
       "workEmailGoogle": "Work email must be a Google account.",
       "country": "Country",
       "selectCountry": "Select country"

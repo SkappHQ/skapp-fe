@@ -568,6 +568,17 @@ export const formatISODateWithSuffix = (isoString: string): string => {
   return `${day}${suffix} ${date.toFormat("MMMM yyyy")}`;
 };
 
+// Example: "2024-03-05" → "March 2024"
+export const formatISODateToMonthYear = (isoString: string): string => {
+  if (isoString !== "") {
+    const date = DateTime.fromISO(isoString, { zone: "utc" });
+
+    return `${date.toFormat("MMMM")} ${date.year}`;
+  }
+
+  return "";
+};
+
 const getDaySuffix = (day: number): string => {
   if (day > 3 && day < 21) return "th";
   switch (day % 10) {
@@ -581,6 +592,7 @@ const getDaySuffix = (day: number): string => {
       return "th";
   }
 };
+
 export const getAllMonthsAsString = (
   format: "short" | "long" = "short",
   language: string = "en"

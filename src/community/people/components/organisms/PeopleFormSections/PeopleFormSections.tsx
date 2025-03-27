@@ -3,6 +3,7 @@ import IndividualEmployeeLeaveReportSection from "~community/leave/components/mo
 import { usePeopleStore } from "~community/people/store/store";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 
+import PeopleTimeline from "../../molecules/PeopleTimeline/PeopleTimeline";
 import EntitlementsDetailsForm from "../AddNewResourceFlow/EntitlementsDetailsSection/EntitlementsDetailsForm";
 import EmergencyDetailsForm from "../EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "../EmploymentFormSection/EmploymentDetailsForm";
@@ -46,6 +47,8 @@ const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
         return <EmploymentDetailsForm isAddFlow={isAddFlow} isUpdate />;
       case EditPeopleFormTypes.permission:
         return <SystemPermissionFormSection isAddFlow={isAddFlow} />;
+      case EditPeopleFormTypes.timeline:
+        return <PeopleTimeline employeeId={employeeId} />;
       case EditPeopleFormTypes.leave:
         return (
           <IndividualEmployeeLeaveReportSection

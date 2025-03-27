@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
+import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
@@ -37,6 +38,9 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
   const { handleMutate } = useHandlePeopleEdit();
 
   const { handleNext } = useStepper();
+
+  const isTerminatedEmployee =
+    employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = async () => {
     const primaryContactDetailsErrors =
@@ -92,17 +96,24 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
 
   return (
     <>
-      <PrimaryContactDetailsSection ref={primaryContactDetailsRef} />
-      <SecondaryContactDetailsSection ref={secondaryContactDetailsRef} />
+      <PrimaryContactDetailsSection
+        ref={primaryContactDetailsRef}
+        isInputsDisabled={isTerminatedEmployee}
+      />
+      <SecondaryContactDetailsSection
+        ref={secondaryContactDetailsRef}
+        isInputsDisabled={isTerminatedEmployee}
+      />
 
-      {isAddFlow ? (
-        <AddSectionButtonWrapper onNextClick={onSave} />
-      ) : (
-        <EditSectionButtonWrapper
-          onCancelClick={onCancel}
-          onSaveClick={onSave}
-        />
-      )}
+      {!isTerminatedEmployee &&
+        (isAddFlow ? (
+          <AddSectionButtonWrapper onNextClick={onSave} />
+        ) : (
+          <EditSectionButtonWrapper
+            onCancelClick={onCancel}
+            onSaveClick={onSave}
+          />
+        ))}
     </>
   );
 };

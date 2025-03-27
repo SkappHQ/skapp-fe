@@ -16,7 +16,7 @@ export const peoplesEndpoints = {
     `${moduleAPIPath.PEOPLE}/employee/me/${employeeId}`,
   ME: `${moduleAPIPath.PEOPLE}/me`,
   EMPLOYEE_TIMELINE: (memberId: number) =>
-    `${moduleAPIPath.PEOPLE}/employees/timeline/${memberId}`,
+    `${moduleAPIPath.PEOPLE}/ep/employees/timeline/${memberId}`,
   USER_BULK_UPLOAD: `${moduleAPIPath.PEOPLE}/bulk/employees`,
   TERMINATE_EMPLOYEE: (employeeId: string | number) =>
     `${moduleAPIPath.PEOPLE}/user/terminate/${employeeId}`,

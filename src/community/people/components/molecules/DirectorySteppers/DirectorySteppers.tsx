@@ -79,9 +79,9 @@ const DirectorySteppers = ({
     ...(isIndividualView || isAccountView
       ? []
       : [translateText(["editAllInfo", "systemPermissions"])]),
-    // ...(isIndividualView || isAccountView
-    //   ? []
-    //   : [translateText(["editAllInfo", "timeline"])]),
+    ...(isIndividualView || isAccountView
+      ? []
+      : [translateText(["editAllInfo", "timeline"])]),
     ...(isLeaveTabVisible &&
     !isAccountView &&
     session?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)
