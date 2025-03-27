@@ -1,10 +1,5 @@
 import { createCSV } from "~community/common/utils/bulkUploadUtils";
-import { toCamelCase } from "~community/common/utils/commonUtil";
 import { LeaveEntitlementType } from "~community/leave/types/LeaveEntitlementTypes";
-
-export const transformCSVHeaders = (header: string) => {
-  return toCamelCase(header);
-};
 
 export const exportHolidayBulkList = (
   leaveEntitlementList: LeaveEntitlementType[]
