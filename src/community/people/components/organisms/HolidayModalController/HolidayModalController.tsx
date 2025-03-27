@@ -34,9 +34,9 @@ const HolidayModalController: FC = () => {
     newHolidayDetails,
     isHolidayModalOpen,
     holidayModalType,
+    selectedYear,
     setIsHolidayModalOpen,
     setHolidayModalType,
-    selectedYear,
     setIsBulkUpload
   } = usePeopleStore((state) => ({
     newCalenderDetails: state.newCalenderDetails,
