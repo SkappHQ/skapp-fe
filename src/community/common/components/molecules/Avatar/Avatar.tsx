@@ -79,6 +79,8 @@ const Avatar: FC<AvatarProps> = ({
   }, [logoUrl, src, s3FileUrls, environment]);
 
   useEffect(() => {
+    //NOTE: For debugging purposes, do not remove
+    console.log("src: ", src);
     if (src || !s3FileUrls[src]) {
       downloadS3File({ filePath: src, isProfilePic: true });
     }
