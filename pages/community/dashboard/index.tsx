@@ -2,12 +2,14 @@ import { sendGTMEvent } from "@next/third-parties/google";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import AttendanceDashboard from "~community/attendance/components/organisms/AttendanceDashboard/AttendanceDashboard";
 import TabsContainer from "~community/common/components/molecules/Tabs/Tabs";
 import VersionUpgradeModal from "~community/common/components/molecules/VersionUpgradeModal/VersionUpgradeModal";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
+import { OBOARDING_LOGOCOLORLOADER_DURATION } from "~community/common/constants/commonConstants";
+import { CANCEL, SUCCESS } from "~community/common/constants/stringConstants";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import {
   MediaQueries,
@@ -26,6 +28,7 @@ import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsVa
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
+import LogoColorLoader from "~enterprise/common/components/molecules/LogoColorLoader/LogoColorLoader";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -45,21 +48,34 @@ const Dashboard: NextPage = () => {
 
   const { setToastMessage } = useToast();
 
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    if (showLoader) {
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+        if (query.status === SUCCESS) {
+          setToastMessage({
+            toastType: ToastType.SUCCESS,
+            title: billingTranslateText(["subscriptionSuccessToastTitle"]),
+            description: billingTranslateText([
+              "subscriptionSuccessToastDescription"
+            ]),
+            open: true
+          });
+        }
+      }, OBOARDING_LOGOCOLORLOADER_DURATION);
+
+      return () => clearTimeout(timer);
+    }
+  }, [billingTranslateText, setToastMessage, showLoader]);
+
   useEffect(() => {
     if (query.isFirstTime) {
       !isBelow900 &&
         setQuickSetupModalType(QuickSetupModalTypeEnums.START_QUICK_SETUP);
     }
-    if (query.status === "success") {
-      setToastMessage({
-        toastType: ToastType.SUCCESS,
-        title: billingTranslateText(["subscriptionSuccessToastTitle"]),
-        description: billingTranslateText([
-          "subscriptionSuccessToastDescription"
-        ]),
-        open: true
-      });
-    } else if (query.status === "cancel") {
+    if (query.status === CANCEL) {
       setToastMessage({
         toastType: ToastType.ERROR,
         title: billingTranslateText(["subscriptionErrorToastTitle"]),
@@ -145,27 +161,31 @@ const Dashboard: NextPage = () => {
   const userRoles: RoleTypes[] = (data?.user?.roles || []) as RoleTypes[];
   const visibleTabs = getVisibleTabs(userRoles);
 
-  return (
-    <ContentLayout
-      pageHead={translateText(["pageHead"])}
-      title={
-        data?.user && visibleTabs.length === 0 ? "" : translateText(["title"])
-      }
-      isDividerVisible={data?.user && visibleTabs.length === 0 ? false : true}
-    >
-      <>
-        {data?.user && visibleTabs.length === 0 ? (
-          <div>
-            <LeaveAllocationSummary />
-          </div>
-        ) : (
-          <TabsContainer tabs={visibleTabs} />
-        )}
+  if (showLoader && query.status === SUCCESS) {
+    return <LogoColorLoader />;
+  } else {
+    return (
+      <ContentLayout
+        pageHead={translateText(["pageHead"])}
+        title={
+          data?.user && visibleTabs.length === 0 ? "" : translateText(["title"])
+        }
+        isDividerVisible={!(data?.user && visibleTabs.length === 0)}
+      >
+        <>
+          {data?.user && visibleTabs.length === 0 ? (
+            <div>
+              <LeaveAllocationSummary />
+            </div>
+          ) : (
+            <TabsContainer tabs={visibleTabs} />
+          )}
 
-        <VersionUpgradeModal />
-      </>
-    </ContentLayout>
-  );
+          <VersionUpgradeModal />
+        </>
+      </ContentLayout>
+    );
+  }
 };
 
 export default Dashboard;

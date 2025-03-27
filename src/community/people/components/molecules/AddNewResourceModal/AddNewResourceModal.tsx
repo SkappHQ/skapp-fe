@@ -42,19 +42,10 @@ import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
-  const { data: session } = useSession();
 
-  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
-    leaveAdminLimitExceeded: false,
-    attendanceAdminLimitExceeded: false,
-    peopleAdminLimitExceeded: false,
-    leaveManagerLimitExceeded: false,
-    attendanceManagerLimitExceeded: false,
-    peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false,
-    esignAdminLimitExceeded: false,
-    esignSenderLimitExceeded: false
-  });
+  const router = useRouter();
+
+  const { data: session } = useSession();
 
   const translateText = useTranslator(
     "peopleModule",
@@ -82,7 +73,37 @@ const AddNewResourceModal = () => {
 
   const roleLimitationTexts = useTranslator("peopleModule", "roleLimitation");
 
-  const router = useRouter();
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
+
+  const { setDirectoryModalType, setIsDirectoryModalOpen } = usePeopleStore(
+    (state) => ({
+      setDirectoryModalType: state.setDirectoryModalType,
+      setIsDirectoryModalOpen: state.setIsDirectoryModalOpen
+    })
+  );
+
+  const { resetPeopleSlice } = usePeopleStore((state) => state);
+
+  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
+    leaveAdminLimitExceeded: false,
+    attendanceAdminLimitExceeded: false,
+    peopleAdminLimitExceeded: false,
+    leaveManagerLimitExceeded: false,
+    attendanceManagerLimitExceeded: false,
+    peopleManagerLimitExceeded: false,
+    superAdminLimitExceeded: false,
+    esignAdminLimitExceeded: false,
+    esignSenderLimitExceeded: false
+  });
+
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -97,7 +118,7 @@ const AddNewResourceModal = () => {
   const handleSuccess = () => {
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
       setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
     }
   };
 
@@ -107,7 +128,7 @@ const AddNewResourceModal = () => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
       lastName: values.lastName,
-      workEmail: values.workEmail,
+      email: values.workEmail,
       userRoles: {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
@@ -129,19 +150,6 @@ const AddNewResourceModal = () => {
   });
 
   const { values, errors, handleChange, setFieldValue, handleSubmit } = formik;
-  const { setDirectoryModalType, setIsDirectoryModalOpen } = usePeopleStore(
-    (state) => state
-  );
-
-  const {
-    ongoingQuickSetup,
-    setQuickSetupModalType,
-    setStopAllOngoingQuickSetup
-  } = useCommonEnterpriseStore((state) => ({
-    ongoingQuickSetup: state.ongoingQuickSetup,
-    setQuickSetupModalType: state.setQuickSetupModalType,
-    setStopAllOngoingQuickSetup: state.setStopAllOngoingQuickSetup
-  }));
 
   const {
     data: checkEmailAndIdentificationNo,
@@ -154,7 +162,7 @@ const AddNewResourceModal = () => {
     setIsDirectoryModalOpen(false);
     if (ongoingQuickSetup.INVITE_EMPLOYEES) {
       setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
-      setStopAllOngoingQuickSetup();
+      stopAllOngoingQuickSetup();
     }
   };
 
@@ -235,12 +243,12 @@ const AddNewResourceModal = () => {
     const updatedAttendanceRole = isChecked
       ? Role.ATTENDANCE_ADMIN
       : Role.ATTENDANCE_EMPLOYEE;
-    const updateESignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
+    const updateesignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
 
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
-    setFieldValue("esignRole", updateESignRole);
+    setFieldValue("esignRole", updateesignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -442,8 +450,9 @@ const AddNewResourceModal = () => {
         }
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
+          resetPeopleSlice();
           setIsDirectoryModalOpen(false);
-          router.push(ROUTES.PEOPLE.ADD_NEW_RESOURCE);
+          router.push(ROUTES.PEOPLE.ADD);
         }}
         data-testid={peopleDirectoryTestId.buttons.addFullProfileBtn}
       />

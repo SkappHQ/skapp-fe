@@ -53,7 +53,7 @@ export const employeeSecondaryEmergencyContactDetailsValidation = (
       allowsLettersAndSpecialCharactersForNames(),
       translator(["validNameError"])
     ),
-    relationship: Yup.string(),
+    relationship: Yup.string().nullable(),
     phone: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
@@ -81,7 +81,8 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
-      ),
+      )
+      .nullable(),
     lastName: Yup.string()
       .required(translator(["requireLastNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
@@ -91,7 +92,7 @@ export const employeeGeneralDetailsValidation = (
       ),
     gender: Yup.string(),
     birthDate: Yup.date().nullable(),
-    nationality: Yup.string(),
+    nationality: Yup.string().nullable(),
     nin: Yup.string()
       .max(
         characterLengths.NIN_LENGTH,
@@ -100,7 +101,8 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
-      ),
+      )
+      .nullable(),
     passportNumber: Yup.string()
       .max(
         characterLengths.NAME_LENGTH,
@@ -109,8 +111,9 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
-      ),
-    maritalStatus: Yup.string()
+      )
+      .nullable(),
+    maritalStatus: Yup.string().nullable()
   });
 
 export const employeeFamilyDetailsValidation = (
@@ -178,10 +181,10 @@ export const employeeSocialMediaDetailsValidation = (
   });
 
 export const employeeHealthAndOtherDetailsValidation = Yup.object({
-  bloodGroup: Yup.string(),
-  allergies: Yup.string(),
-  dietaryRestrictions: Yup.string(),
-  tshirtSize: Yup.string()
+  bloodGroup: Yup.string().nullable(),
+  allergies: Yup.string().nullable(),
+  dietaryRestrictions: Yup.string().nullable(),
+  tshirtSize: Yup.string().nullable()
 });
 
 export const employeeEmploymentDetailsValidation = (
@@ -206,15 +209,15 @@ export const employeeEmploymentDetailsValidation = (
           return context?.isUniqueEmployeeNo;
         }
       ),
-    workEmail: Yup.string()
+    email: Yup.string()
       .trim()
       .email(translator(["validEmailError"]))
       .required(translator(["requireEmailError"]))
       .test("is-unique-email", translator(["uniqueEmailError"]), function () {
         return context?.isUniqueEmail || context?.isUpdate;
       }),
-    employmentAllocation: Yup.string(),
-    teams: Yup.array(),
+    employmentAllocation: Yup.string().nullable(),
+    teamIds: Yup.array(),
     joinedDate: Yup.date(),
     probationStartDate: Yup.date()
       .test(
@@ -238,7 +241,8 @@ export const employeeEmploymentDetailsValidation = (
           }
           return true;
         }
-      ),
+      )
+      .nullable(),
     probationEndDate: Yup.date()
       .test(
         "is-valid",
@@ -273,8 +277,9 @@ export const employeeEmploymentDetailsValidation = (
           }
           return true;
         }
-      ),
-    workTimeZone: Yup.string()
+      )
+      .nullable(),
+    workTimeZone: Yup.string().nullable()
   });
 };
 
@@ -356,7 +361,7 @@ export const employeeVisaDetailsValidation = (
     visaType: Yup.string().required(translator(["requireVisaTypeError"])),
     issuingCountry: Yup.string().required(translator(["requireCountryError"])),
     issuedDate: Yup.date().required(translator(["requireIssuedDateError"])),
-    expirationDate: Yup.date()
+    expiryDate: Yup.date()
       .required(translator(["requireExpirationDateError"]))
       .test(
         "is-valid",
@@ -452,7 +457,8 @@ export const employeeContactDetailsValidation = (
   Yup.object({
     personalEmail: Yup.string()
       .trim()
-      .email(translator(["validEmailError"])),
+      .email(translator(["validEmailError"]))
+      .nullable(),
     phone: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
@@ -462,21 +468,25 @@ export const employeeContactDetailsValidation = (
         characterLengths.PHONE_NUMBER_LENGTH_MIN,
         translator(["validContactNumberError"])
       ),
-    addressLine1: Yup.string(),
-    addressLine2: Yup.string(),
-    city: Yup.string().max(
-      ADDRESS_MAX_CHARACTER_LENGTH,
-      translator(["maxCharacterCityLimitError"])
-    ),
+    addressLine1: Yup.string().nullable(),
+    addressLine2: Yup.string().nullable(),
+    city: Yup.string()
+      .max(
+        ADDRESS_MAX_CHARACTER_LENGTH,
+        translator(["maxCharacterCityLimitError"])
+      )
+      .nullable(),
     country: Yup.string(),
     state: Yup.string().max(
       ADDRESS_MAX_CHARACTER_LENGTH,
       translator(["maxCharacterLimitStateError"])
     ),
-    postalCode: Yup.string().matches(
-      isValidAlphaNumericString(),
-      translator(["validPostalCodeError"])
-    )
+    postalCode: Yup.string()
+      .matches(
+        isValidAlphaNumericString(),
+        translator(["validPostalCodeError"])
+      )
+      .nullable()
   });
 
 export const quickAddEmployeeValidations = (

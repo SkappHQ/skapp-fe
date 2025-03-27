@@ -11,7 +11,7 @@ interface CommonEnterpriseStore {
     SETUP_LEAVE_TYPES: boolean;
   };
   setQuickSetupModalType: (value: string) => void;
-  setStopAllOngoingQuickSetup: () => void;
+  stopAllOngoingQuickSetup: () => void;
 }
 
 export const useCommonEnterpriseStore = (
@@ -28,6 +28,6 @@ export const useCommonEnterpriseStore = (
       SETUP_LEAVE_TYPES: false
     },
     setQuickSetupModalType: () => {},
-    setStopAllOngoingQuickSetup: () => {}
+    stopAllOngoingQuickSetup: () => {}
   };
 };

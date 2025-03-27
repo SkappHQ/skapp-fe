@@ -16,7 +16,7 @@ export interface holiday {
   id?: number;
   date?: string;
   name?: string;
-  holidayDuration?: string;
+  holidayDuration?: HolidayDurationType;
   holidayColor?: string;
 }
 export interface HolidayDataPreprocessedType {
@@ -112,7 +112,7 @@ export type addedHolidays = {
 export type holidayType = {
   date: string;
   name: string;
-  holidayDuration: string;
+  holidayDuration: HolidayDurationType;
 };
 
 export interface bulkStatusSummary {

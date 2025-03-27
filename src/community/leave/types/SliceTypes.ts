@@ -62,8 +62,10 @@ export interface LeaveCarryForwardModalSliceType
     LeaveStore,
     | "isLeaveCarryForwardModalOpen"
     | "leaveCarryForwardModalType"
+    | "leaveCarryForwardSyncBtnStatus"
     | "setIsLeaveCarryForwardModalOpen"
     | "setLeaveCarryForwardModalType"
+    | "setLeaveCarryForwardSyncBtnStatus"
   > {}
 
 export interface NewPendingLeaveCountSliceType

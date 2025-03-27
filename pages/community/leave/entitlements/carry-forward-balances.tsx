@@ -16,19 +16,30 @@ import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
 
 const CarryForwardBalances: NextPage = () => {
+  const router = useRouter();
+
   const translateText = useTranslator("leaveModule", "leaveCarryForward");
+
   const {
+    leaveCarryForwardSyncBtnStatus,
     carryForwardLeaveTypes,
     leaveCarryForwardId,
     setIsLeaveCarryForwardModalOpen,
     setLeaveCarryForwardModalType
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    leaveCarryForwardSyncBtnStatus: state.leaveCarryForwardSyncBtnStatus,
+    carryForwardLeaveTypes: state.carryForwardLeaveTypes,
+    leaveCarryForwardId: state.leaveCarryForwardId,
+    setIsLeaveCarryForwardModalOpen: state.setIsLeaveCarryForwardModalOpen,
+    setLeaveCarryForwardModalType: state.setLeaveCarryForwardModalType
+  }));
 
   const [checkedList] = useState<number[]>(leaveCarryForwardId);
   const [rows, setRows] = useState<any[]>([]);
-  const router = useRouter();
+
   const { data: carryForwardEntitlement } =
     useGetUseCarryForwardLeaveEntitlements(checkedList);
+
   const getLeaveTypeNames = (carryForwardLeaveTypes: any) => {
     return carryForwardLeaveTypes?.map((leaveType: any) => leaveType.name);
   };
@@ -64,9 +75,6 @@ const CarryForwardBalances: NextPage = () => {
       LeaveCarryForwardModalTypes.CARRY_FORWARD_CONFIRM_SYNCHRONIZATION
     );
   };
-  const onBackClick = () => {
-    router.push(ROUTES.LEAVE.LEAVE_ENTITLEMENTS);
-  };
 
   return (
     <>
@@ -75,7 +83,7 @@ const CarryForwardBalances: NextPage = () => {
         title={translateText(["carryForwardingBalance.title"])}
         isDividerVisible={true}
         isBackButtonVisible
-        onBackClick={onBackClick}
+        onBackClick={() => router.push(ROUTES.LEAVE.LEAVE_ENTITLEMENTS)}
       >
         <>
           <CarryForwardTable
@@ -104,6 +112,8 @@ const CarryForwardBalances: NextPage = () => {
               }
               endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
               isFullWidth={false}
+              disabled={leaveCarryForwardSyncBtnStatus.isDisabled}
+              isLoading={leaveCarryForwardSyncBtnStatus.isLoading}
               onClick={handleSync}
             />
           </Box>

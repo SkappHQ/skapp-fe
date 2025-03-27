@@ -230,9 +230,9 @@ export const getStartAndEndOfCurrentMonth = () => {
   return { startOfMonth, endOfMonth };
 };
 
-export const isDateGraterThanToday = (data: string) => {
+export const isDateGraterThanToday = (date: string) => {
   const today = DateTime.local().startOf("day");
-  const dateToCompare = DateTime.fromISO(data);
+  const dateToCompare = DateTime.fromISO(date);
   return dateToCompare > today;
 };
 
@@ -580,4 +580,15 @@ const getDaySuffix = (day: number): string => {
     default:
       return "th";
   }
+};
+export const getAllMonthsAsString = (
+  format: "short" | "long" = "short",
+  language: string = "en"
+): string[] => {
+  const months = [];
+  for (let i = 1; i <= 12; i++) {
+    const dateTime = DateTime.fromObject({ month: i }).setLocale(language);
+    months.push(dateTime.toFormat(format === "short" ? "LLL" : "MMMM"));
+  }
+  return months;
 };

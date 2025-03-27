@@ -6,7 +6,6 @@ import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import LeaveTypesTable from "~community/leave/components/molecules/LeaveTypesTable/LeaveTypesTable";
 import { LeaveTypeFormTypes } from "~community/leave/enums/LeaveTypeEnums";
-import { HighlightAddLeaveTypesBtn } from "~enterprise/common/constants/SetupLeaveTypesFlow";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -19,9 +18,7 @@ const LeaveTypes: NextPage = () => {
     ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
-  const { destroyDriverObj } = useProductTour({
-    steps: HighlightAddLeaveTypesBtn
-  });
+  const { destroyDriverObj } = useProductTour();
 
   return (
     <>

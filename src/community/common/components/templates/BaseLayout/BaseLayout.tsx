@@ -28,7 +28,7 @@ const BaseLayout = ({ children }: Props) => {
   const environment = useGetEnvironment();
   const isEnterprise = environment === appModes.ENTERPRISE;
 
-  const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => ({
     setGlobalLoginMethod: state.setGlobalLoginMethod

@@ -202,3 +202,33 @@ export interface HolidayModalSliceType
     | "setIsHolidayModalOpen"
     | "setHolidayModalType"
   > {}
+
+export interface PeopleSliceTypes
+  extends Pick<
+    Store,
+    | "employee"
+    | "initialEmployee"
+    | "nextStep"
+    | "currentStep"
+    | "activeStep"
+    | "profilePic"
+    | "setProfilePic"
+    | "thumbnail"
+    | "setThumbnail"
+    | "setActiveStep"
+    | "isUnsavedChangesModalOpen"
+    | "isUnsavedModalSaveButtonClicked"
+    | "isUnsavedModalDiscardButtonClicked"
+    | "setNextStep"
+    | "setCurrentStep"
+    | "setIsUnsavedChangesModalOpen"
+    | "setIsUnsavedModalSaveButtonClicked"
+    | "setIsUnsavedModalDiscardButtonClicked"
+    | "setEmployee"
+    | "setPersonalDetails"
+    | "setEmergencyDetails"
+    | "setEmploymentDetails"
+    | "setSystemPermissions"
+    | "setCommonDetails"
+    | "resetPeopleSlice"
+  > {}

@@ -13,7 +13,6 @@ import {
   LeaveTypeModalEnums
 } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
-import { QuickSetupTaskEnums } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const LeaveType: NextPage = () => {
@@ -36,8 +35,8 @@ const LeaveType: NextPage = () => {
     setPendingNavigation: state.setPendingNavigation
   }));
 
-  const { setOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    setOngoingQuickSetup: state.setOngoingQuickSetup
+  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
   useEffect(() => {
@@ -49,7 +48,6 @@ const LeaveType: NextPage = () => {
         throw "routeChange aborted";
       } else {
         resetEditingLeaveType();
-        setOngoingQuickSetup(QuickSetupTaskEnums.SETUP_LEAVE_TYPES, false);
       }
     };
 
@@ -67,6 +65,11 @@ const LeaveType: NextPage = () => {
     };
   }, [isLeaveTypeFormDirty, isLeaveTypeModalOpen]);
 
+  const handleBackBtnClick = () => {
+    stopAllOngoingQuickSetup();
+    router.push(ROUTES.LEAVE.LEAVE_TYPES);
+  };
+
   return (
     <>
       <ContentLayout
@@ -78,7 +81,7 @@ const LeaveType: NextPage = () => {
         pageHead={translateText(["pageHead"])}
         isDividerVisible
         isBackButtonVisible
-        onBackClick={() => router.push(ROUTES.LEAVE.LEAVE_TYPES)}
+        onBackClick={handleBackBtnClick}
         customRightContent={
           slug === LeaveTypeFormTypes.EDIT ? (
             <LeaveTypeActivationToggleButton />

@@ -45,7 +45,10 @@ export function EmployeeDataPreProcessor(
     employee?.jobFamily === null ? undefined : employee.jobFamily?.name;
   const jobLevel =
     employee?.jobTitle === null ? undefined : employee.jobTitle?.name;
-  const teams = employee?.teams?.length !== 0 ? [...employee.teams] : [];
+  const teams =
+    employee?.teams?.length !== 0 && employee?.teams?.length !== undefined
+      ? [...employee.teams]
+      : [];
   let permission = employee?.permission;
   const email = employee?.email;
   const isActive = employee?.isActive;
@@ -84,6 +87,7 @@ export function EmployeeDataPreProcessor(
     accountSignIn: employee?.accountSignIn ?? undefined,
     accountStatus
   };
+
   return preProcessedData as EmployeeDataType;
 }
 

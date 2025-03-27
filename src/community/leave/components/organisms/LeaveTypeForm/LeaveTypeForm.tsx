@@ -81,12 +81,15 @@ const LeaveTypeForm = () => {
     setLeaveTypeModalType: state.setLeaveTypeModalType
   }));
 
-  const { ongoingQuickSetup, setOngoingQuickSetup, setQuickSetupModalType } =
-    useCommonEnterpriseStore((state) => ({
-      ongoingQuickSetup: state.ongoingQuickSetup,
-      setOngoingQuickSetup: state.setOngoingQuickSetup,
-      setQuickSetupModalType: state.setQuickSetupModalType
-    }));
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const [colors, setColors] = useState<string[]>(leaveTypeColors);
   const [selectedDate, setSelectedDate] = useState<DateTime | undefined>(
@@ -103,7 +106,7 @@ const LeaveTypeForm = () => {
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
         redirect: router.push,
-        setOngoingQuickSetup,
+        stopAllOngoingQuickSetup,
         setQuickSetupModalType
       }),
       handleLeaveTypeApiResponse({
@@ -222,6 +225,11 @@ const LeaveTypeForm = () => {
       setSelectedDate(carryForwardExpirationDateTime);
     }
   }, []);
+
+  const handleCancelBtnClick = async () => {
+    stopAllOngoingQuickSetup();
+    await router.back();
+  };
 
   return (
     <>
@@ -517,9 +525,7 @@ const LeaveTypeForm = () => {
               isFullWidth={false}
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
-              onClick={async () => {
-                await router.back();
-              }}
+              onClick={handleCancelBtnClick}
             />
             <Button
               shouldBlink={ongoingQuickSetup.SETUP_LEAVE_TYPES}

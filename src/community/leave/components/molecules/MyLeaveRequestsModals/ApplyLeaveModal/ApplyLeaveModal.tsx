@@ -213,16 +213,32 @@ const ApplyLeaveModal = () => {
     endDate: startAndEndDates.end
   });
 
+  const disabledDurationSelectorOptions = useMemo(() => {
+    const disabledOptions = getDurationSelectorDisabledOptions({
+      selectedDates,
+      duration: selectedLeaveAllocationData.leaveType.leaveDuration,
+      myLeaveRequests: pendingAndApprovedLeaveRequests,
+      allHolidays
+    });
+
+    return disabledOptions;
+  }, [
+    pendingAndApprovedLeaveRequests,
+    allHolidays,
+    selectedDates,
+    selectedLeaveAllocationData.leaveType.leaveDuration
+  ]);
+
   useEffect(() => {
-    if (selectedDuration === LeaveStates.NONE) {
-      const duration = getDurationInitialValue(
-        selectedLeaveAllocationData.leaveType.leaveDuration
-      );
-      setSelectedDuration(duration);
-    }
+    const defaultDurationValue = getDurationInitialValue({
+      allowedDurations: selectedLeaveAllocationData.leaveType.leaveDuration,
+      disabledOptions: disabledDurationSelectorOptions
+    });
+
+    setSelectedDuration(defaultDurationValue);
   }, [
     selectedLeaveAllocationData.leaveType.leaveDuration,
-    selectedDuration,
+    disabledDurationSelectorOptions,
     setSelectedDuration
   ]);
 
@@ -378,12 +394,7 @@ const ApplyLeaveModal = () => {
               halfDayMorning: LeaveStates.MORNING,
               halfDayEvening: LeaveStates.EVENING
             }}
-            disabledOptions={getDurationSelectorDisabledOptions({
-              selectedDates,
-              duration: selectedLeaveAllocationData.leaveType.leaveDuration,
-              myLeaveRequests: pendingAndApprovedLeaveRequests,
-              resourceAvailability
-            })}
+            disabledOptions={disabledDurationSelectorOptions}
             value={selectedDuration}
           />
           <TextArea
