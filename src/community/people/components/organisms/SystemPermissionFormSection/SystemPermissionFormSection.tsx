@@ -14,7 +14,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
 import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
-import { Role } from "~community/people/enums/PeopleEnums";
+import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
@@ -29,14 +29,12 @@ import styles from "./styles";
 
 interface Props {
   isProfileView?: boolean;
-  isInputsDisabled?: boolean;
   isUpdate?: boolean;
   isAddFlow?: boolean;
 }
 
 const SystemPermissionFormSection = ({
   isProfileView,
-  isInputsDisabled,
   isUpdate,
   isAddFlow
 }: Props) => {
@@ -87,6 +85,9 @@ const SystemPermissionFormSection = ({
   } = useSessionData();
 
   const { handleNext } = useStepper();
+
+  const isInputsDisabled =
+    employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = () => {
     if (
@@ -227,14 +228,15 @@ const SystemPermissionFormSection = ({
           !isInputsDisabled &&
           environment === appModes.COMMUNITY && <SystemCredentials />}
 
-        {isAddFlow ? (
-          <AddSectionButtonWrapper onNextClick={onSave} />
-        ) : (
-          <EditSectionButtonWrapper
-            onCancelClick={onCancel}
-            onSaveClick={onSave}
-          />
-        )}
+        {!isInputsDisabled &&
+          (isAddFlow ? (
+            <AddSectionButtonWrapper onNextClick={onSave} />
+          ) : (
+            <EditSectionButtonWrapper
+              onCancelClick={onCancel}
+              onSaveClick={onSave}
+            />
+          ))}
 
         <Modal
           isModalOpen={openModal}

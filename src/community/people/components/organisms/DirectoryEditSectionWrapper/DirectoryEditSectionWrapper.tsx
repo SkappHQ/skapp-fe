@@ -6,8 +6,12 @@ import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector
 import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
+import EditAllInfoSkeleton from "../../molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
+import EditInfoCardSkeleton from "../../molecules/EditInfoCard/EditInfoCardSkeleton";
+import TerminationModalController from "../../molecules/TerminationModalController/TerminationModalController";
 import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
+import UserDeletionModalController from "../../molecules/UserDeletionModalController/UserDeletionModalController";
 import PeopleFormSections from "../PeopleFormSections/PeopleFormSections";
 
 interface Props {
@@ -15,7 +19,7 @@ interface Props {
 }
 
 const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
-  const { data: employee } = useGetEmployee(employeeId);
+  const { data: employee, isLoading } = useGetEmployee(employeeId);
 
   const {
     isUnsavedChangesModalOpen,
@@ -55,10 +59,16 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
   return (
     <>
       <Box sx={{ mt: "0.75rem" }}>
-        {employee && <EditInfoCard selectedEmployee={employee} />}
+        {isLoading ? <EditInfoCardSkeleton /> : <EditInfoCard />}
       </Box>
       <DirectorySteppers employeeId={Number(employeeId)} />
-      <PeopleFormSections employeeId={Number(employeeId)} />
+      {isLoading ? (
+        <EditAllInfoSkeleton />
+      ) : (
+        <PeopleFormSections employeeId={Number(employeeId)} />
+      )}
+      <TerminationModalController />
+      <UserDeletionModalController />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
         onDiscard={() => {
