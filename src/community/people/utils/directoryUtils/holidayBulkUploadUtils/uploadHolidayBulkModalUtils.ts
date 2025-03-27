@@ -15,10 +15,10 @@ const validateHeaders = async (file: File): Promise<boolean> => {
       reader.onload = (event) => {
         const text = event?.target?.result as string;
 
-        const headers = text
-          .split("\n")[0]
-          .split(",")
-          .map((header) => header.trim());
+        const formattedText = text.split("\n")[0].split(",");
+
+        const headers = formattedText.map((header) => header.trim());
+
         resolve(headers);
       };
       reader.onerror = () => reject(new Error("File reading error"));
