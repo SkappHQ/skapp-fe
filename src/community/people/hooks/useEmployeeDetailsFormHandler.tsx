@@ -114,7 +114,7 @@ const useEmployeeDetailsFormHandler = ({
     isSuccess
   } = useCheckEmailAndIdentificationNo(
     values.email as string,
-    values.employeeNumber as string
+    values.employeeNumber ?? ""
   );
 
   useEffect(() => {
