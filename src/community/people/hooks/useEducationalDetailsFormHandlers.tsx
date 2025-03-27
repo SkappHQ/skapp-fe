@@ -45,10 +45,10 @@ const useEducationalDetailsFormHandlers = () => {
     validationSchema: employeeEducationalDetailsValidation(translateText),
     onSubmit: (values: L3EducationalDetailsType) => {
       if (rowEdited > -1) {
-        const details = employee?.personal?.educational || [];
+        const details = [...(employee?.personal?.educational || [])];
         details.splice(rowEdited, 1, {
-          educationId: details[rowEdited]?.educationId ?? rowEdited,
-          ...values
+          ...values,
+          educationId: details[rowEdited]?.educationId ?? rowEdited
         });
         setPersonalDetails({
           general: employee?.personal?.general,

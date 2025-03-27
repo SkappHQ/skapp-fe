@@ -54,10 +54,10 @@ const useVisaDetailsFormHandlers = () => {
     validationSchema: employeeVisaDetailsValidation(translateText),
     onSubmit: (values: L3VisaDetailsType) => {
       if (rowEdited > -1) {
-        const visaDetails = employee?.employment?.visaDetails || [];
+        const visaDetails = [...(employee?.employment?.visaDetails || [])];
         visaDetails.splice(rowEdited, 1, {
           ...values,
-          visaId: visaDetails[rowEdited].visaId
+          visaId: visaDetails[rowEdited]?.visaId ?? rowEdited
         });
         setEmploymentDetails({
           ...employee?.employment,
