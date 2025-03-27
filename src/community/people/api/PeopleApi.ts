@@ -52,6 +52,7 @@ import {
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { EmployeeTimelineType } from "~enterprise/people/types/PeopleTypes";
 
 import { L1EmployeeType } from "../types/PeopleTypes";
 
@@ -512,18 +513,16 @@ export const useUpdateLeaveManagerData = (
 export const useGetEmployeeTimeline = (
   memberId: number,
   isEnabled: boolean = true
-) => {
+): UseQueryResult<EmployeeTimelineType[]> => {
   return useQuery({
     queryKey: ["employeeTimeline", memberId],
     queryFn: async () => {
       return await authFetch.get(peoplesEndpoints.EMPLOYEE_TIMELINE(memberId));
     },
     select: (data) => {
-      if (data?.data.results?.length) {
-        return {
-          ...data.data
-        };
-      }
+      const employeeTimeline = data?.data?.results || [];
+
+      return employeeTimeline;
     },
     enabled: isEnabled && memberId !== 0
   });

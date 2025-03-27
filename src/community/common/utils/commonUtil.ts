@@ -424,3 +424,10 @@ export const updateToggleState = ({
 
   return reorderedObj;
 };
+
+export function formatEnumString(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
