@@ -31,7 +31,7 @@ const useFamilyDetailsFormHandlers = () => {
 
   const initialValues = useMemo<L3FamilyDetailsType>(() => {
     const emptyInitialValues: L3FamilyDetailsType = {
-      familyMemberId: undefined,
+      familyId: undefined,
       firstName: "",
       lastName: "",
       gender: undefined,
@@ -59,7 +59,7 @@ const useFamilyDetailsFormHandlers = () => {
         const members = [...(employee?.personal?.family || [])];
         members.splice(rowEdited, 1, {
           ...familyData,
-          familyMemberId: members[rowEdited]?.familyMemberId ?? rowEdited
+          familyId: members[rowEdited]?.familyId ?? rowEdited
         });
         setPersonalDetails({
           general: employee?.personal?.general,
@@ -74,7 +74,7 @@ const useFamilyDetailsFormHandlers = () => {
             ...(employee?.personal?.family || []),
             {
               ...familyData,
-              familyMemberId: newMemberId
+              familyId: newMemberId
             }
           ]
         });

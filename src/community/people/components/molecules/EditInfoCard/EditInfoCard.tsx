@@ -153,8 +153,6 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   };
 
   const handleDeletion = () => {
-    console.log("handleDeletion");
-    console.log(supervisoryData);
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
