@@ -35,7 +35,7 @@ export const styles = (
     overflowY: "auto" as "auto" | "hidden" | "scroll"
   },
   orText: {
-    color: theme.palette.primary.dark
+    color: theme.palette.grey[700]
   },
   browseText: {
     color:
