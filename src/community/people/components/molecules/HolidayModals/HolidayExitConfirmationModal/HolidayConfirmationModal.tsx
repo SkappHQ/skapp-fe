@@ -8,13 +8,20 @@ import { holidayModalTypes } from "~community/people/types/HolidayTypes";
 
 const HolidayExitConfirmationModal = () => {
   const translateText = useTranslator("peopleModule", "holidays");
+
   const {
+    isBulkUpload,
     setHolidayModalType,
     setIsHolidayModalOpen,
     resetHolidayDetails,
-    setNewCalendarDetails = () => {},
-    isBulkUpload
-  } = usePeopleStore((state) => state);
+    removeAddedCalendarDetails
+  } = usePeopleStore((state) => ({
+    isBulkUpload: state.isBulkUpload,
+    setHolidayModalType: state.setHolidayModalType,
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+    resetHolidayDetails: state.resetHolidayDetails,
+    removeAddedCalendarDetails: state.removeAddedCalendarDetails
+  }));
 
   const resumeTaskHandler = () => {
     if (isBulkUpload) {
@@ -27,9 +34,14 @@ const HolidayExitConfirmationModal = () => {
   const leaveBtnOnClick = () => {
     setHolidayModalType(holidayModalTypes.NONE);
     setIsHolidayModalOpen(false);
-    resetHolidayDetails();
-    setNewCalendarDetails("acceptedFile", []);
+
+    if (isBulkUpload) {
+      removeAddedCalendarDetails();
+    } else {
+      resetHolidayDetails();
+    }
   };
+
   return (
     <Box>
       <Typography sx={{ mt: "1rem" }}>

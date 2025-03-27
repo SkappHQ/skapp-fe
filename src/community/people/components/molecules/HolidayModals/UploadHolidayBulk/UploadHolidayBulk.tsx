@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
@@ -34,20 +34,26 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
   const {
     newCalenderDetails,
     holidayModalType,
-    setNewCalendarDetails = () => {},
-    setHolidayModalType,
-    resetHolidayDetails,
+    isNewCalendarDetailsValid,
     selectedYear,
+    calendarErrors,
+    setCalendarErrors,
+    setIsNewCalendarDetailsValid,
+    setNewCalendarDetails,
+    setHolidayModalType,
     setIsBulkUpload,
     setIsHolidayModalOpen,
     setFailedCount
   } = usePeopleStore((state) => ({
+    isNewCalendarDetailsValid: state.isNewCalendarDetailsValid,
+    selectedYear: state.selectedYear,
     newCalenderDetails: state.newCalenderDetails,
     holidayModalType: state.holidayModalType,
+    calendarErrors: state.calendarErrors,
+    setCalendarErrors: state.setCalendarErrors,
+    setIsNewCalendarDetailsValid: state.setIsNewCalendarDetailsValid,
     setNewCalendarDetails: state.setNewCalendarDetails,
     setHolidayModalType: state.setHolidayModalType,
-    resetHolidayDetails: state.resetHolidayDetails,
-    selectedYear: state.selectedYear,
     setIsBulkUpload: state.setIsBulkUpload,
     setIsHolidayModalOpen: state.setIsHolidayModalOpen,
     setFailedCount: state.setFailedCount
@@ -63,8 +69,6 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
-  const [customError, setCustomError] = useState<string>("");
-  const [isValid, setValid] = useState<boolean>(false);
   const [holidayBulkList, setHolidayBulkList] = useState<HolidayDataType[]>([]);
 
   const onSuccess = (response: holidayBulkUploadResponse): void => {
@@ -112,7 +116,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       });
     }
     setHolidayBulkList([]);
-    setNewCalendarDetails("acceptedFile", []);
+    setNewCalendarDetails([]);
   };
 
   const onError = (): void => {
@@ -128,14 +132,10 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
 
   const { mutate } = useAddBulkHolidays(onSuccess, onError);
 
-  useEffect(() => {
-    setIsBulkUpload(true);
-  }, [newCalenderDetails?.acceptedFile]);
-
   const handleSaveCalendarBtn = (): void => {
     mutate({ holidayData: holidayBulkList, selectedYear });
     setIsHolidayModalOpen(false);
-    setNewCalendarDetails("acceptedFile", []);
+    setNewCalendarDetails([]);
   };
 
   const onCloseClick = () => {
@@ -143,11 +143,11 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       newCalenderDetails?.acceptedFile?.length !== 0 &&
       holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK
     ) {
+      setIsBulkUpload(true);
       setHolidayModalType(holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION);
     } else {
       setIsHolidayModalOpen(false);
       setHolidayModalType(holidayModalTypes.NONE);
-      resetHolidayDetails();
     }
     if (ongoingQuickSetup.SETUP_HOLIDAYS) {
       stopAllOngoingQuickSetup();
@@ -166,28 +166,31 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
         {translateText(["addCsvTitle"])}
       </Typography>
       <DragAndDropField
-        setAttachments={(acceptedFiles: FileUploadType[]) => {
-          setAttachment({
+        setAttachments={async (acceptedFiles: FileUploadType[]) =>
+          await setAttachment({
             acceptedFiles,
             translateText,
-            setValid,
-            setCustomError,
+            setIsNewCalendarDetailsValid,
+            setCalendarErrors,
             setHolidayBulkList,
             setNewCalendarDetails
-          });
-        }}
+          })
+        }
         accept={{
           "text/csv": [".csv"]
         }}
         uploadableFiles={newCalenderDetails.acceptedFile}
         supportedFiles={".csv"}
         maxFileSize={1}
-        customError={customError}
+        customError={calendarErrors}
       />
 
       <Button
-        disabled={!isValid}
-        shouldBlink={isValid && newCalenderDetails.acceptedFile?.length > 0}
+        disabled={!isNewCalendarDetailsValid}
+        shouldBlink={
+          isNewCalendarDetailsValid &&
+          newCalenderDetails.acceptedFile?.length > 0
+        }
         label={translateText(["UploadHolidays"])}
         endIcon={<RightArrowIcon />}
         buttonStyle={ButtonStyle.PRIMARY}

@@ -45,21 +45,21 @@ const transformCSVHeaders = (header: string) => {
 export const setAttachment = async ({
   acceptedFiles,
   translateText,
-  setValid,
-  setCustomError,
+  setIsNewCalendarDetailsValid,
+  setCalendarErrors,
   setHolidayBulkList,
   setNewCalendarDetails
 }: {
   acceptedFiles: FileUploadType[];
-  setCustomError: Dispatch<SetStateAction<string>>;
-  setValid: Dispatch<SetStateAction<boolean>>;
+  setCalendarErrors: (value: string) => void;
+  setIsNewCalendarDetailsValid: (value: boolean) => void;
   translateText: (keys: string[]) => string;
   setHolidayBulkList: Dispatch<SetStateAction<HolidayDataType[]>>;
-  setNewCalendarDetails: (key: string, value: any) => void;
+  setNewCalendarDetails: (value: FileUploadType[]) => void;
 }): Promise<void> => {
-  setNewCalendarDetails("acceptedFile", acceptedFiles);
-  setCustomError("");
-  setValid(false);
+  setIsNewCalendarDetailsValid(false);
+  setNewCalendarDetails(acceptedFiles);
+  setCalendarErrors("");
 
   if (acceptedFiles?.length > 0) {
     const areHeadersValid = await validateHeaders(
@@ -73,17 +73,17 @@ export const setAttachment = async ({
         transformHeader: transformCSVHeaders,
         complete: function (recordDetails: { data: HolidayType[] }) {
           if (recordDetails?.data?.length === 0) {
-            setCustomError(translateText(["emptyFileError"]));
+            setCalendarErrors(translateText(["emptyFileError"]));
           } else {
-            setValid(true);
+            setIsNewCalendarDetailsValid(true);
             setHolidayBulkList(recordDetails.data);
           }
         }
       });
     } else {
-      setCustomError(translateText(["invalidTemplateError"]));
+      setCalendarErrors(translateText(["invalidTemplateError"]));
     }
   } else {
-    setNewCalendarDetails("acceptedFile", []);
+    setNewCalendarDetails([]);
   }
 };
