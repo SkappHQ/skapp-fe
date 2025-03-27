@@ -11,7 +11,7 @@ import FilterButton from "~community/common/components/molecules/FilterButton/Fi
 import Table from "~community/common/components/molecules/Table/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { getAdjacentYearsWithCurrent } from "~community/common/utils/dateTimeUtils";
+import { currentYear, nextYear } from "~community/common/utils/dateTimeUtils";
 import { useGetCustomLeaves } from "~community/leave/api/LeaveApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -144,7 +144,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       }}
       selectedItem={selectedYear}
       title={selectedYear}
-      items={getAdjacentYearsWithCurrent()}
+      items={[currentYear.toString(), nextYear.toString()]}
     />
   );
 
