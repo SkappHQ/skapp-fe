@@ -460,6 +460,11 @@ export const getEmploymentDetailsChanges = (
   );
   if (Object.keys(visaDetailsChanges).length > 0)
     Object.assign(changes, { visaDetails: visaDetailsChanges });
+  else if (
+    previousEmployementDetails.visaDetails?.length !== 0 &&
+    newEmployementDetails.visaDetails?.length === 0
+  )
+    Object.assign(changes, { visaDetails: visaDetailsChanges });
   else Object.assign(changes, visaDetailsChanges);
 
   return changes;
