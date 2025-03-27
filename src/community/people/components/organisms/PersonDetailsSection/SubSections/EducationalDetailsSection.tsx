@@ -143,7 +143,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["startDate"])}
-            value={DateTime.fromISO(values?.startDate ?? "")}
+            value={selectedStartDate || DateTime.fromISO("")}
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "startDate",
@@ -166,7 +166,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
         <Grid size={{ xs: 12, md: 6, xl: 4 }}>
           <InputDate
             label={translateText(["endDate"])}
-            value={DateTime.fromISO(values.endDate ?? "")}
+            value={selectedEndDate || DateTime.fromISO("")}
             onchange={async (newValue: string) =>
               await dateOnChange(
                 "endDate",

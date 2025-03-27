@@ -185,8 +185,8 @@ export const getFamilyDetailsChanges = (
   // Create a map of previous family members by ID for quick lookup
   const previousFamilyMap = previousFamily.reduce(
     (map, member) => {
-      if (member.familyMemberId !== undefined) {
-        map[member.familyMemberId] = member;
+      if (member.familyId !== undefined) {
+        map[member.familyId] = member;
       }
       return map;
     },
@@ -195,15 +195,15 @@ export const getFamilyDetailsChanges = (
 
   // Check each new family member for changes
   newFamily.forEach((newMember) => {
-    if (newMember.familyMemberId === undefined) return;
+    if (newMember.familyId === undefined) return;
 
-    const previousMember = previousFamilyMap[newMember.familyMemberId];
+    const previousMember = previousFamilyMap[newMember.familyId];
     if (!previousMember) return;
 
     // Create an object to hold changes for this member
     let hasChanges = false;
     const changedMember: L3FamilyDetailsType = {
-      familyMemberId: newMember.familyMemberId
+      familyId: newMember.familyId
     };
 
     // Check each field for changes
@@ -464,6 +464,11 @@ export const getPersonalDetailsChanges = (
 
   if (Object.keys(familyChanges).length > 0)
     Object.assign(changes, { family: familyChanges });
+  else if (
+    previousPersonalDetails.family?.length !== 0 &&
+    newPersonalDetails.family?.length === 0
+  )
+    Object.assign(changes, { family: familyChanges });
   else Object.assign(changes, familyChanges);
 
   // Educational Details
@@ -473,7 +478,12 @@ export const getPersonalDetailsChanges = (
   );
 
   if (Object.keys(educationalChanges).length > 0)
-    Object.assign(changes, { educatioal: educationalChanges });
+    Object.assign(changes, { educational: educationalChanges });
+  else if (
+    previousPersonalDetails.educational?.length !== 0 &&
+    newPersonalDetails.educational?.length === 0
+  )
+    Object.assign(changes, { educational: educationalChanges });
   else Object.assign(changes, educationalChanges);
 
   // Social Media Details
