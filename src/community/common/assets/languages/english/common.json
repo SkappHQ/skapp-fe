@@ -8,7 +8,7 @@
       "emptyAttachmentError": "No files attached",
       "duplicateAttachmentsError": "Duplicate attachments are not allowed",
       "maxAttachmentsError": "File Limit Exceeded. The maximum file count allowed is {{maxFileSize}}.",
-      "attachmentSizeError": "10MB file size exceeded.",
+      "attachmentSizeError": "5MB file size exceeded.",
       "attachmentTypeError": "Invalid file format.",
       "attachmentImageTypeError": "Please upload files in one of the following formats: .jpg, .pdf, .png, .jpeg."
     },

@@ -5,7 +5,7 @@ const styles = (): StyleProps => ({
     minWidth: "31.25rem"
   },
   title: {
-    my: "1rem",
+    mb: "1rem",
     color: "grey.900",
     width: "100%"
   }
