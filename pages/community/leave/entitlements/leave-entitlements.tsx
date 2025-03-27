@@ -70,17 +70,19 @@ const LeaveEntitlements: NextPage = () => {
         }
       >
         <>
-          {leaveEntitlementTableData &&
-            leaveEntitlementTableData?.items.length > 0 && (
-              <SearchBox
-                placeHolder={translateText(["searchBoxPlaceholder"])}
-                value={searchTerm}
-                setSearchTerm={setSearchTerm}
-              />
-            )}
+          {(searchTerm !== "" ||
+            (leaveEntitlementTableData &&
+              leaveEntitlementTableData?.items.length !== 0)) && (
+            <SearchBox
+              placeHolder={translateText(["searchBoxPlaceholder"])}
+              value={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          )}
           <LeaveEntitlementTable
             tableData={leaveEntitlementTableData}
             isFetching={isFetching}
+            searchTerm={searchTerm}
           />
           <Divider sx={{ my: "1.5rem" }} />
           <LeaveCarryForward />
