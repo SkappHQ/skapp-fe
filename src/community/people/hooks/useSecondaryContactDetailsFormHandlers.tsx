@@ -21,10 +21,27 @@ const useSecondaryContactDetailsFormHandlers = () => {
 
   const { employee, setEmergencyDetails } = usePeopleStore((state) => state);
 
-  const initialValues = useMemo<L3EmergencyContactType>(
-    () => employee?.emergency?.secondaryEmergencyContact || {},
-    [employee]
-  );
+  const initialValues = useMemo<L3EmergencyContactType>(() => {
+    const secondaryContact =
+      employee?.emergency?.secondaryEmergencyContact || {};
+
+    if (!secondaryContact.contactNo) {
+      return {
+        ...secondaryContact,
+        countryCode,
+        contactNo: ""
+      };
+    }
+
+    const [extractedCountryCode, ...rest] =
+      secondaryContact.contactNo.split(" ");
+
+    return {
+      ...secondaryContact,
+      countryCode: extractedCountryCode || countryCode,
+      contactNo: rest.join(" ")
+    };
+  }, [employee, countryCode]);
 
   const formik = useFormik({
     initialValues,
@@ -69,28 +86,29 @@ const useSecondaryContactDetailsFormHandlers = () => {
     async (countryCode: string): Promise<void> => {
       await setFieldValue("countryCode", countryCode);
       setFieldError("countryCode", "");
-      setEmergencyDetails({
-        secondaryEmergencyContact: {
-          ...employee?.emergency?.secondaryEmergencyContact,
-          countryCode
-        }
-      });
     },
-    [employee, setEmergencyDetails, setFieldError, setFieldValue]
+    [setFieldError, setFieldValue]
   );
 
   const handlePhoneNumber = useCallback(
     async (contactNo: ChangeEvent<HTMLInputElement>): Promise<void> => {
-      await setFieldValue("contactNo", contactNo.target.value);
+      const newContactNo = contactNo.target.value;
+      await setFieldValue("contactNo", newContactNo);
       setFieldError("contactNo", "");
       setEmergencyDetails({
         secondaryEmergencyContact: {
           ...employee?.emergency?.secondaryEmergencyContact,
-          contactNo: contactNo.target.value
+          contactNo: `${values.countryCode} ${newContactNo}`
         }
       });
     },
-    [employee, setEmergencyDetails, setFieldError, setFieldValue]
+    [
+      values.countryCode,
+      employee,
+      setEmergencyDetails,
+      setFieldError,
+      setFieldValue
+    ]
   );
 
   return {

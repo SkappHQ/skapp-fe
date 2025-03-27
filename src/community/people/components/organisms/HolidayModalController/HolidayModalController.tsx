@@ -34,9 +34,9 @@ const HolidayModalController: FC = () => {
     newHolidayDetails,
     isHolidayModalOpen,
     holidayModalType,
+    selectedYear,
     setIsHolidayModalOpen,
     setHolidayModalType,
-    selectedYear,
     setIsBulkUpload
   } = usePeopleStore((state) => ({
     newCalenderDetails: state.newCalenderDetails,
@@ -98,7 +98,9 @@ const HolidayModalController: FC = () => {
     const isExitConfirmationNeeded =
       holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK ||
       holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY;
-    if (isEditingHoliday) setIsBulkUpload(false);
+
+    setIsBulkUpload(holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK);
+
     if (isEditingHoliday && isExitConfirmationNeeded) {
       setHolidayModalType(holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION);
     } else {
@@ -146,41 +148,48 @@ const HolidayModalController: FC = () => {
               holidayRefetch={refetch}
             />
           )}
+
           {holidayModalType === holidayModalTypes.ADD_CALENDAR && (
             <AddCalendar />
           )}
-          {holidayModalType === holidayModalTypes.HOLIDAY_SELECTED_DELETE && (
-            <HolidayBulkDelete
-              setIsPopupOpen={setIsHolidayModalOpen}
-              type={HolidayDeleteType.SELECTED}
-            />
+
+          {holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK && (
+            <UploadHolidayBulk setBulkUploadData={setBulkUploadData} />
           )}
-          {holidayModalType === holidayModalTypes.HOLIDAY_BULK_DELETE && (
-            <HolidayBulkDelete
-              setIsPopupOpen={setIsHolidayModalOpen}
-              type={HolidayDeleteType.ALL}
-            />
-          )}
+
+          {bulkUploadData &&
+            holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
+            bulkUploadData?.bulkStatusSummary?.failedCount > 0 && (
+              <BulkUploadSummary data={bulkUploadData} />
+            )}
+
           {holidayModalType === holidayModalTypes.HOLIDAY_INDIVIDUAL_DELETE && (
             <HolidayBulkDelete
               setIsPopupOpen={setIsHolidayModalOpen}
               type={HolidayDeleteType.INDIVIDUAL}
             />
           )}
-          {bulkUploadData &&
-            holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
-            bulkUploadData?.bulkStatusSummary?.failedCount > 0 && (
-              <BulkUploadSummary data={bulkUploadData} />
-            )}
+
+          {holidayModalType === holidayModalTypes.HOLIDAY_SELECTED_DELETE && (
+            <HolidayBulkDelete
+              setIsPopupOpen={setIsHolidayModalOpen}
+              type={HolidayDeleteType.SELECTED}
+            />
+          )}
+
+          {holidayModalType === holidayModalTypes.HOLIDAY_BULK_DELETE && (
+            <HolidayBulkDelete
+              setIsPopupOpen={setIsHolidayModalOpen}
+              type={HolidayDeleteType.ALL}
+            />
+          )}
+
           {holidayModalType === holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION && (
             <HolidayExitConfirmationModal />
           )}
-
-          {holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK && (
-            <UploadHolidayBulk setBulkUploadData={setBulkUploadData} />
-          )}
         </Fragment>
       </ModalController>
+
       <ToastMessage
         open={toastMessage.open}
         onClose={toastMessage.onClose}

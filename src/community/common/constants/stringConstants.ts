@@ -50,18 +50,6 @@ export enum AuthStatus {
 
 export const PASSWORD_STRENGTH_MULTIPLIER = 20;
 
-export enum HolidayCSVHeader {
-  NAME = "name",
-  DATE = "date",
-  HOLIDAY_DURATION = "holidayDuration"
-}
-
-export enum HolidayTableHeader {
-  NAME = "name",
-  DATE = "date",
-  HOLIDAY_DURATION = "HolidayDuration"
-}
-
 export enum EmailProvider {
   GMAIL = "Gmail",
   OUTLOOK = "Outlook",

@@ -478,10 +478,12 @@ export const employeeContactDetailsValidation = (
       )
       .nullable(),
     country: Yup.string().nullable(),
-    state: Yup.string().nullable().max(
-      ADDRESS_MAX_CHARACTER_LENGTH,
-      translator(["maxCharacterLimitStateError"])
-    ),
+    state: Yup.string()
+      .nullable()
+      .max(
+        ADDRESS_MAX_CHARACTER_LENGTH,
+        translator(["maxCharacterLimitStateError"])
+      ),
     postalCode: Yup.string()
       .matches(
         isValidAlphaNumericString(),

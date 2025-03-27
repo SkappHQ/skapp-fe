@@ -1,4 +1,7 @@
-import { FilterButtonTypes } from "~community/common/types/CommonTypes";
+import {
+  FileUploadType,
+  FilterButtonTypes
+} from "~community/common/types/CommonTypes";
 import { MenuitemsDataTypes } from "~community/common/types/filterTypes";
 
 import { JobFamilyActionModalEnums } from "../enums/JobFamilyEnums";
@@ -55,6 +58,7 @@ import {
   L2PersonalDetailsType,
   L2SystemPermissionsType
 } from "./PeopleTypes";
+import { AddCalenderInputType } from "./SliceTypes";
 import {
   ProjectTeamsAndEmployeesType,
   ProjectTeamsModalTypes,
@@ -108,8 +112,10 @@ interface actionsTypes {
   setHolidayModalType: (value: holidayModalTypes) => void;
 
   //addNewCalenderModalSlice
-  setNewCalendarDetails?: (key: string, value: any) => void;
-  removeAddedCalendarDetails?: () => void;
+  setIsNewCalendarDetailsValid: (status: boolean) => void;
+  setNewCalendarDetails: (value: FileUploadType[]) => void;
+  setCalendarErrors: (value: string) => void;
+  removeAddedCalendarDetails: () => void;
 
   //employeeDataFiltersSlice
   handleEmployeeDataSort: (key: string, value: string | boolean) => void;
@@ -310,7 +316,9 @@ export interface Store extends actionsTypes {
   holidayModalType: holidayModalTypes;
 
   //addNewCalenderModalSlice
-  newCalenderDetails: any;
+  newCalenderDetails: AddCalenderInputType;
+  isNewCalendarDetailsValid: boolean;
+  calendarErrors: string;
 
   //employeeDataFiltersSlice
   employeeDataFilter: EmployeeDataFilterTypes;

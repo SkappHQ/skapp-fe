@@ -8,35 +8,40 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { usePeopleStore } from "~community/people/store/store";
 import { holidayModalTypes } from "~community/people/types/HolidayTypes";
-import { downloadBulkCsvTemplate } from "~community/people/utils/holidayUtils/commonUtils";
+import { downloadBulkCsvTemplate } from "~community/people/utils/directoryUtils/holidayBulkUploadUtils/downloadHolidayBulkTemplateModalUtils";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const AddCalendar: FC = () => {
-  const { setHolidayModalType, setIsBulkUpload } = usePeopleStore(
-    (state) => state
-  );
+  const translateText = useTranslator("peopleModule", "holidays");
+
+  const { setHolidayModalType, setIsBulkUpload } = usePeopleStore((state) => ({
+    setHolidayModalType: state.setHolidayModalType,
+    setIsBulkUpload: state.setIsBulkUpload
+  }));
 
   const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
     ongoingQuickSetup: state.ongoingQuickSetup
   }));
 
-  const [isDownloadBlinking, setIsDownloadBlinking] = useState<boolean>(false);
-  const [isNextBlinking, setIsNextBlinking] = useState<boolean>(false);
+  const [isButtonBlinking, setIsButtonBlinking] = useState<
+    Record<string, boolean>
+  >({
+    download: false,
+    next: false
+  });
 
   useEffect(() => {
     if (ongoingQuickSetup.SETUP_HOLIDAYS) {
-      setIsDownloadBlinking(true);
+      setIsButtonBlinking({ download: true, next: false });
     }
   }, [ongoingQuickSetup]);
-
-  const translateText = useTranslator("peopleModule", "holidays");
 
   const downloadTemplateHandler = (): void => {
     downloadBulkCsvTemplate();
     setIsBulkUpload(true);
+
     if (ongoingQuickSetup.SETUP_HOLIDAYS) {
-      setIsDownloadBlinking(false);
-      setIsNextBlinking(true);
+      setIsButtonBlinking({ download: false, next: true });
     }
   };
 
@@ -58,7 +63,7 @@ const AddCalendar: FC = () => {
           styles={{ my: "0.75rem" }}
           endIcon={<DownSideArrow />}
           onClick={downloadTemplateHandler}
-          shouldBlink={isDownloadBlinking}
+          shouldBlink={isButtonBlinking.download}
         />
       </Box>
       <Divider />
@@ -70,7 +75,7 @@ const AddCalendar: FC = () => {
         onClick={() =>
           setHolidayModalType(holidayModalTypes.UPLOAD_HOLIDAY_BULK)
         }
-        shouldBlink={isNextBlinking}
+        shouldBlink={isButtonBlinking.next}
       />
     </Box>
   );

@@ -155,8 +155,12 @@ export interface JobFamilySliceType
 export interface CalendarSliceTypes
   extends Pick<
     Store,
+    | "isNewCalendarDetailsValid"
+    | "setIsNewCalendarDetailsValid"
     | "newCalenderDetails"
     | "setNewCalendarDetails"
+    | "calendarErrors"
+    | "setCalendarErrors"
     | "removeAddedCalendarDetails"
   > {}
 
