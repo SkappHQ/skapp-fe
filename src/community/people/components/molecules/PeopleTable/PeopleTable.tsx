@@ -2,7 +2,15 @@ import { Box, Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  FormEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import InviteIcon from "~community/common/assets/Icons/InviteIcon";
 import Button from "~community/common/components/atoms/Button/Button";
@@ -211,8 +219,12 @@ const PeopleTable: FC<Props> = ({
     label: col.headerName
   }));
 
-  const transformToTableRows = () => {
-    return employeeData
+  const transformToTableRows = useCallback(() => {
+    //NOTE: For debugging purposes, do not remove
+    console.log("file: PeopleTable");
+    console.log("employeeData: ", employeeData);
+
+    const tableRowData = employeeData
       ?.filter(
         (employee: EmployeeDataType) =>
           !isRemovePeople ||
@@ -320,7 +332,16 @@ const PeopleTable: FC<Props> = ({
             />
           )
       }));
-  };
+
+    console.log("tableRowData: ", tableRowData);
+
+    return tableRowData;
+  }, [
+    currentEmployeeDetails?.employeeId,
+    employeeData,
+    isPendingInvitationListOpen,
+    isRemovePeople
+  ]);
 
   useEffect(() => {
     if (!isLoading && teamData)
