@@ -17,11 +17,6 @@ import { type HolidayDataType as Holiday } from "~community/people/types/Holiday
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { getShortDayName } from "~community/people/utils/holidayUtils/commonUtils";
 
-import {
-  HolidayCSVHeader,
-  HolidayTableHeader
-} from "../constants/stringConstants";
-
 export const getLabelByValue = (
   objectArray: DropdownListType[],
   value: number | string
@@ -322,26 +317,6 @@ export const toCamelCase = (string: string) =>
     .trim()
     .toLowerCase()
     .replace(/[^a-zA-Z0-9]+(.)/g, (match, char) => char.toUpperCase());
-
-export const convertCsvHeaders = (header: string) => {
-  if (header === HolidayTableHeader.DATE) {
-    return HolidayCSVHeader.DATE;
-  } else if (header === HolidayTableHeader.NAME) {
-    return HolidayCSVHeader.NAME;
-  } else if (header === HolidayTableHeader.HOLIDAY_DURATION) {
-    return HolidayCSVHeader.HOLIDAY_DURATION;
-  }
-  return header;
-};
-
-export const removeEmptyColumns = (tableData: Holiday[]) =>
-  tableData.reduce((acc, row) => {
-    if (row.holidayType !== "") {
-      const { date, name, holidayDuration } = row;
-      acc = [...acc, { date, name, holidayDuration }];
-    }
-    return acc;
-  }, []);
 
 export const flatListValues = (obj: Record<string, any>): any[] => {
   const result: any[] = [];

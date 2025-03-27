@@ -73,14 +73,9 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
-  const [attachmentError, setAttachmentError] = useState<boolean>(false);
-  const [calendarAttachments, setCalendarAttachments] = useState<
-    FileUploadType[]
-  >([]);
-
-  const [isInvalidFileError, setIsInvalidFileError] = useState<boolean>(false);
-  const [noRecordError, setNoRecordError] = useState<boolean>(false);
-  const [holidayBulkList, setHolidayBulkList] = useState<Holiday[]>([]);
+  const [customError, setCustomError] = useState<string>("");
+  const [isValid, setValid] = useState<boolean>(false);
+  const [holidayBulkList, setHolidayBulkList] = useState<HolidayDataType[]>([]);
 
   const onSuccess = (response: holidayBulkUploadResponse): void => {
     setBulkUploadData(response);
@@ -127,7 +122,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       });
     }
     setHolidayBulkList([]);
-    setCalendarAttachments([]);
+    setNewCalendarDetails("acceptedFile", []);
   };
 
   const onError = (): void => {
@@ -143,7 +138,6 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
   const { mutate } = useAddBulkHolidays(onSuccess, onError);
 
   useEffect(() => {
-    setCalendarAttachments(newCalenderDetails?.acceptedFile);
     setIsBulkUpload(true);
   }, [newCalenderDetails?.acceptedFile]);
 
@@ -230,12 +224,11 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     mutate({ holidayData: holidayBulkList, selectedYear });
     setIsHolidayModalOpen(false);
     setNewCalendarDetails("acceptedFile", []);
-    setCalendarAttachments([]);
   };
 
   const onCloseClick = () => {
     if (
-      calendarAttachments?.length !== 0 &&
+      newCalenderDetails?.acceptedFile?.length !== 0 &&
       holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK
     ) {
       setHolidayModalType(holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION);
@@ -267,13 +260,19 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
           setAttachmentError(!!errors?.length);
         }}
         setAttachments={(acceptedFiles: FileUploadType[]) => {
-          setCalendarAttachments(acceptedFiles);
-          setAttachment(acceptedFiles);
+          setAttachment({
+            acceptedFiles,
+            translateText,
+            setValid,
+            setCustomError,
+            setHolidayBulkList,
+            setNewCalendarDetails
+          });
         }}
         accept={{
           "text/csv": [".csv"]
         }}
-        uploadableFiles={calendarAttachments}
+        uploadableFiles={newCalenderDetails.acceptedFile}
         supportedFiles={".csv"}
         maxFileSize={1}
         minFileSize={0}
@@ -292,18 +291,8 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
           </Typography>
         )}
       <Button
-        disabled={
-          attachmentError ||
-          !(calendarAttachments?.length > 0) ||
-          isInvalidFileError ||
-          noRecordError
-        }
-        shouldBlink={
-          calendarAttachments?.length > 0 &&
-          !isInvalidFileError &&
-          !noRecordError &&
-          !attachmentError
-        }
+        disabled={!isValid}
+        shouldBlink={isValid && newCalenderDetails.acceptedFile?.length > 0}
         label={translateText(["UploadHolidays"])}
         endIcon={<RightArrowIcon />}
         buttonStyle={ButtonStyle.PRIMARY}
