@@ -65,7 +65,8 @@ const DragAndDropField: FC<Props> = ({
   descriptionStyles,
   browseTextStyles,
   maxSizeOfFile = MAX_FILE_SIZE_OF_FILE,
-  prioritizeCustomError = false
+  prioritizeCustomError = false,
+  onDelete
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
 
@@ -220,86 +221,79 @@ const DragAndDropField: FC<Props> = ({
         style={classes.dragDropContainer as CSSProperties}
       >
         <input {...getInputProps()} />
-        <>
-          {isDragActive ? (
-            <Typography variant="body1">
-              {translateText(["description"])}
-            </Typography>
-          ) : (
-            <>
-              <Stack>
-                <Box sx={{ pb: "0.3125rem" }}>
-                  <Icon name={IconName.FILE_UPLOAD_ICON} />
-                </Box>
+
+        {isDragActive ? (
+          <Typography variant="body1">
+            {translateText(["description"])}
+          </Typography>
+        ) : (
+          <>
+            <Stack>
+              <Box sx={{ pb: "0.3125rem" }}>
+                <Icon name={IconName.FILE_UPLOAD_ICON} />
+              </Box>
+              <Typography
+                variant="body1"
+                sx={mergeSx([classes.desTextStyle, descriptionStyles])}
+              >
+                {translateText(["dropFileDescription"])} &nbsp;
+              </Typography>
+            </Stack>
+            <Stack>
+              <Typography
+                variant="body1"
+                sx={mergeSx([classes.orText, browseTextStyles])}
+              >
+                or
                 <Typography
-                  variant="body1"
-                  sx={mergeSx([classes.desTextStyle, descriptionStyles])}
-                >
-                  {translateText(["dropFileDescription"])} &nbsp;
-                </Typography>
-              </Stack>
-              <Stack>
-                <Typography
-                  variant="body1"
-                  sx={mergeSx([classes.orText, browseTextStyles])}
-                >
-                  or
-                  <Typography
-                    component="span"
-                    sx={{
-                      ...(classes.browseText as CSSProperties),
-                      ...browseTextStyles
-                    }}
-                  >{` Browse`}</Typography>
-                </Typography>
-              </Stack>
-            </>
-          )}
-        </>
-        <>
-          <Stack alignItems={"center"}>
-            {uploadableFiles?.length > 0 || fileName ? (
-              <>
-                <Fragment
-                  key={
+                  component="span"
+                  sx={{
+                    ...(classes.browseText as CSSProperties),
+                    ...browseTextStyles
+                  }}
+                >{` Browse`}</Typography>
+              </Typography>
+            </Stack>
+          </>
+        )}
+
+        <Stack alignItems={"center"}>
+          {uploadableFiles?.length > 0 || fileName ? (
+            <Fragment
+              key={
+                uploadableFiles[uploadableFiles?.length - 1]
+                  ? uploadableFiles[
+                      uploadableFiles?.length - 1
+                    ]?.name?.toString()
+                  : uploadableFiles[0]?.name?.toString()
+              }
+            >
+              <IconChip
+                chipStyles={classes.IconChip}
+                label={
+                  uploadableFiles[uploadableFiles?.length - 1]
+                    ? uploadableFiles[uploadableFiles?.length - 1]?.name
+                    : (uploadableFiles[0]?.name ?? "")
+                }
+                icon={<ContentCopyIcon fontSize="small" />}
+                endIcon={<CloseIcon fontSize="small" />}
+                onDelete={(event: MouseEvent<HTMLDivElement, MouseEvent>) => {
+                  event.stopPropagation();
+                  handleUnselectItem(
                     uploadableFiles[uploadableFiles?.length - 1]
-                      ? uploadableFiles[
-                          uploadableFiles?.length - 1
-                        ]?.name?.toString()
-                      : uploadableFiles[0]?.name?.toString()
-                  }
-                >
-                  <IconChip
-                    chipStyles={classes.IconChip}
-                    label={
-                      uploadableFiles[uploadableFiles?.length - 1]
-                        ? uploadableFiles[uploadableFiles?.length - 1]?.name
-                        : (uploadableFiles[0]?.name ?? "")
-                    }
-                    icon={<ContentCopyIcon fontSize="small" />}
-                    endIcon={<CloseIcon fontSize="small" />}
-                    onDelete={(
-                      event: MouseEvent<HTMLDivElement, MouseEvent>
-                    ) => {
-                      event.stopPropagation();
-                      handleUnselectItem(
-                        uploadableFiles[uploadableFiles?.length - 1]
-                          ? uploadableFiles[uploadableFiles?.length - 1]?.path
-                          : (uploadableFiles[0]?.path ?? "")
-                      );
-                    }}
-                  />
-                </Fragment>
-              </>
-            ) : (
-              <>
-                <Typography variant="body2" sx={classes.supportedFileText}>
-                  {translateText(["supportFiles"])} : {supportedFiles}
-                </Typography>
-              </>
-            )}
-          </Stack>
-        </>
+                      ? uploadableFiles[uploadableFiles?.length - 1]?.path
+                      : (uploadableFiles[0]?.path ?? "")
+                  );
+                  onDelete?.();
+                }}
+              />
+            </Fragment>
+          ) : (
+            <Typography variant="body2" sx={classes.supportedFileText}>
+              {translateText(["supportFiles"])} : {supportedFiles}
+            </Typography>
+          )}
+        </Stack>
       </div>
       {validationError || customError ? (
         <Typography variant="body2" sx={classes.errorText}>
