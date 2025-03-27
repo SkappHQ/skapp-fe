@@ -90,7 +90,7 @@ export const employeeGeneralDetailsValidation = (
         allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
-    gender: Yup.string(),
+    gender: Yup.string().nullable(),
     birthDate: Yup.date().nullable(),
     nationality: Yup.string().nullable(),
     nin: Yup.string()

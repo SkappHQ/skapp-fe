@@ -45,10 +45,10 @@ const useEducationalDetailsFormHandlers = () => {
     validationSchema: employeeEducationalDetailsValidation(translateText),
     onSubmit: (values: L3EducationalDetailsType) => {
       if (rowEdited > -1) {
-        const details = employee?.personal?.educational || [];
+        const details = [...(employee?.personal?.educational || [])];
         details.splice(rowEdited, 1, {
-          educationId: rowEdited,
-          ...values
+          ...values,
+          educationId: details[rowEdited]?.educationId ?? rowEdited
         });
         setPersonalDetails({
           general: employee?.personal?.general,
@@ -108,11 +108,23 @@ const useEducationalDetailsFormHandlers = () => {
     const { institutionName, degree, major, startDate, endDate } =
       educationalDetail;
 
-    void setFieldValue("institutionName", institutionName);
-    void setFieldValue("degree", degree);
-    void setFieldValue("major", major);
-    void setFieldValue("startDate", startDate ?? "");
-    void setFieldValue("endDate", endDate ?? "");
+    setFieldValue("institutionName", institutionName);
+    setFieldValue("degree", degree);
+    setFieldValue("major", major);
+    setFieldValue("startDate", startDate);
+    setFieldValue("endDate", endDate);
+
+    if (startDate) {
+      setSelectedStartDate(DateTime.fromISO(startDate));
+    } else {
+      setSelectedStartDate(undefined);
+    }
+
+    if (endDate) {
+      setSelectedEndDate(DateTime.fromISO(endDate));
+    } else {
+      setSelectedEndDate(undefined);
+    }
   };
 
   const handleDelete = (rowIndex: number): void => {
