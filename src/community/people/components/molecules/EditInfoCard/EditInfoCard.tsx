@@ -107,7 +107,10 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   );
 
   const handleTermination = () => {
-    if (supervisoryData?.primaryManagers?.length || supervisoryData?.teamSupervisors?.length) {
+    if (
+      supervisoryData?.primaryManagers?.length ||
+      supervisoryData?.teamSupervisors?.length
+    ) {
       const condition = {
         managers: supervisoryData?.primaryManagers?.length || 0,
         teams: supervisoryData?.teamSupervisors?.length || 0
@@ -152,7 +155,10 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const handleDeletion = () => {
     console.log("handleDeletion");
     console.log(supervisoryData);
-    if (supervisoryData?.primaryManagers?.length || supervisoryData?.teamSupervisors?.length) {
+    if (
+      supervisoryData?.primaryManagers?.length ||
+      supervisoryData?.teamSupervisors?.length
+    ) {
       const condition = {
         managers: supervisoryData?.primaryManagers?.length || 0,
         teams: supervisoryData?.teamSupervisors?.length || 0
