@@ -65,7 +65,8 @@ const DragAndDropField: FC<Props> = ({
   descriptionStyles,
   browseTextStyles,
   maxSizeOfFile = MAX_FILE_SIZE_OF_FILE,
-  prioritizeCustomError = false
+  prioritizeCustomError = false,
+  onDelete
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
 

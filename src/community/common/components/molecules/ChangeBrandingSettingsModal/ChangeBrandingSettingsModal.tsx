@@ -162,13 +162,17 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
   };
 
   const handleCancel = () => {
-    if (
-      formValues.organizationLogo !== logo &&
-      formValues.themeColor !== themeColor
-    ) {
-      formValues.organizationLogo = logo;
-      formValues.themeColor = themeColor;
-    }
+    setFileName(logo);
+    setCompanyLogo([
+      {
+        name: logo,
+        path: ""
+      }
+    ]);
+    setFormValues({
+      organizationLogo: logo,
+      themeColor: themeColor
+    });
     onClose();
   };
 
@@ -198,6 +202,14 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
             supportedFiles=".png .jpeg"
             uploadableFiles={companyLogo}
             isZeroFilesErrorRequired={false}
+            onDelete={() => {
+              setCompanyLogo([]);
+              setFileName("");
+              setFormValues((prev) => ({
+                ...prev,
+                organizationLogo: ""
+              }));
+            }}
           />
           <ColorInputField
             value={formValues.themeColor}
