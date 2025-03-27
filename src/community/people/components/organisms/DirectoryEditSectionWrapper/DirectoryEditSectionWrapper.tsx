@@ -7,7 +7,9 @@ import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
+import TerminationModalController from "../../molecules/TerminationModalController/TerminationModalController";
 import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
+import UserDeletionModalController from "../../molecules/UserDeletionModalController/UserDeletionModalController";
 import PeopleFormSections from "../PeopleFormSections/PeopleFormSections";
 
 interface Props {
@@ -55,10 +57,12 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
   return (
     <>
       <Box sx={{ mt: "0.75rem" }}>
-        {employee && <EditInfoCard selectedEmployee={employee} />}
+        <EditInfoCard />
       </Box>
       <DirectorySteppers employeeId={Number(employeeId)} />
       <PeopleFormSections employeeId={Number(employeeId)} />
+      <TerminationModalController />
+      <UserDeletionModalController />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
         onDiscard={() => {
