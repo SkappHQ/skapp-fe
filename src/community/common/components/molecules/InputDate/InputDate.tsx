@@ -77,6 +77,7 @@ interface Props {
   setSelectedDate: Dispatch<SetStateAction<DateTime | undefined>>;
   isYearHidden?: boolean;
   myLeaveRequests?: MyLeaveRequestPayloadType[];
+  initialMonthlyView?: DateTime | undefined;
 }
 
 const InputDate: FC<Props> = ({
@@ -99,7 +100,8 @@ const InputDate: FC<Props> = ({
   inputFormat,
   isYearHidden,
   readOnly = false,
-  myLeaveRequests
+  myLeaveRequests,
+  initialMonthlyView
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -373,6 +375,7 @@ const InputDate: FC<Props> = ({
                 minDate={minDate}
                 maxDate={maxDate}
                 onAccept={(e) => onAccept(e)}
+                referenceDate={initialMonthlyView}
               />
             </LocalizationProvider>
           </Paper>

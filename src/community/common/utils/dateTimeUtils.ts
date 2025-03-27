@@ -237,18 +237,19 @@ export const isDateGraterThanToday = (date: string) => {
 };
 
 export const getMinDateOfYear = (year?: number) => {
-  const currentDate = DateTime.local();
-
-  // having currentDate.year + 1 since entitlments can be added to the current year and the next year
-  if (year === currentDate.year || year === currentDate.year + 1) {
-    return DateTime.fromObject({ year, month: 1, day: 1 });
-  }
-  return currentDate.startOf("year");
+  return DateTime.fromObject({
+    year: year ?? DateTime.local().year,
+    month: 1,
+    day: 1
+  });
 };
 
-export const getMaxDateOfYear = () => {
-  const now = DateTime.local();
-  return now.endOf("year");
+export const getMaxDateOfYear = (year?: number) => {
+  return DateTime.fromObject({
+    year: year ?? DateTime.local().year,
+    month: 12,
+    day: 31
+  });
 };
 
 export const getTimeElapsedSinceDate = (startDate: string) => {

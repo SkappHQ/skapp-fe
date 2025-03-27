@@ -13,7 +13,7 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
-import { getAdjacentYearsWithCurrent } from "~community/common/utils/dateTimeUtils";
+import { currentYear, nextYear } from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -95,7 +95,7 @@ const LeaveEntitlementTable = ({
             }
             selectedItem={leaveEntitlementTableSelectedYear}
             title={leaveEntitlementTableSelectedYear}
-            items={getAdjacentYearsWithCurrent()}
+            items={[currentYear.toString(), nextYear.toString()]}
           />
         </Box>
       </Stack>
