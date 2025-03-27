@@ -9,6 +9,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "~community/people/constants/configs";
 import useContactDetailsFormHandlers from "~community/people/hooks/useContactDetailsFormHandlers";
 import useGetCountryList from "~community/people/hooks/useGetCountryList";
+import useGetDefaultConuntryCode from "~community/people/hooks/useGetDefaultConuntryCode";
 import { usePeopleStore } from "~community/people/store/store";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
 import { L3ContactDetailsType } from "~community/people/types/PeopleTypes";
@@ -28,12 +29,30 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
     "contactDetails"
   );
 
+  const countryCode = useGetDefaultConuntryCode();
+
   const { employee } = usePeopleStore((state) => state);
 
-  const initialValues = useMemo<L3ContactDetailsType>(
-    () => employee?.personal?.contact as L3ContactDetailsType,
-    [employee]
-  );
+  const initialValues = useMemo<L3ContactDetailsType>(() => {
+    const personalContact = employee?.personal?.contact || {};
+
+    if (!personalContact.contactNo) {
+      return {
+        ...personalContact,
+        countryCode,
+        contactNo: ""
+      };
+    }
+
+    const [extractedCountryCode, ...rest] =
+      personalContact.contactNo.split(" ");
+
+    return {
+      ...personalContact,
+      countryCode: extractedCountryCode || countryCode,
+      contactNo: rest.join(" ")
+    };
+  }, [employee, countryCode]);
 
   const countryList = useGetCountryList();
 

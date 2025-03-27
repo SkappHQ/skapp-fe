@@ -50,10 +50,6 @@ const EmployementSection = () => {
       title: "Employment Status",
       data: [
         {
-          label: translateText(["active"]),
-          value: EmploymentStatusTypes.ACTIVE
-        },
-        {
           label: translateText(["terminated"]),
           value: EmploymentStatusTypes.TERMINATED
         },
