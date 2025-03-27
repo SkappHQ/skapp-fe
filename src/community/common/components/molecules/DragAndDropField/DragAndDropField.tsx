@@ -232,7 +232,7 @@ const DragAndDropField: FC<Props> = ({
                   <Icon name={IconName.FILE_UPLOAD_ICON} />
                 </Box>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={mergeSx([classes.desTextStyle, descriptionStyles])}
                 >
                   {translateText(["dropFileDescription"])} &nbsp;
@@ -240,17 +240,18 @@ const DragAndDropField: FC<Props> = ({
               </Stack>
               <Stack>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={mergeSx([classes.orText, browseTextStyles])}
                 >
-                  or
+                  or &nbsp;
                   <Typography
                     component="span"
+                    variant="body2"
                     sx={{
                       ...(classes.browseText as CSSProperties),
                       ...browseTextStyles
                     }}
-                  >{` Browse`}</Typography>
+                  >{`Browse`}</Typography>
                 </Typography>
               </Stack>
             </>
