@@ -424,31 +424,43 @@ export const getEmploymentDetailsChanges = (
     newEmployementDetails.employmentDetails as L3EmploymentDetailsType,
     previousEmployementDetails.employmentDetails as L3EmploymentDetailsType
   );
-  Object.assign(changes, employmentChanges);
+  if (Object.keys(employmentChanges).length > 0)
+    Object.assign(changes, { employmentDetails: employmentChanges });
+  else Object.assign(changes, employmentChanges);
 
   const careerProgressionChanges = getCareerProgressionChanges(
     newEmployementDetails.careerProgression as L3CareerProgressionDetailsType[],
     previousEmployementDetails.careerProgression as L3CareerProgressionDetailsType[]
   );
-  Object.assign(changes, careerProgressionChanges);
+  if (careerProgressionChanges.length > 0)
+    Object.assign(changes, { careerProgression: careerProgressionChanges });
+  else Object.assign(changes, careerProgressionChanges);
 
   const identificationDetailsChanges = getIdentificationDetailsChanges(
     newEmployementDetails.identificationAndDiversityDetails as L3IdentificationAndDiversityDetailsType,
     previousEmployementDetails.identificationAndDiversityDetails as L3IdentificationAndDiversityDetailsType
   );
-  Object.assign(changes, identificationDetailsChanges);
+  if (Object.keys(identificationDetailsChanges).length > 0)
+    Object.assign(changes, {
+      identificationAndDiversityDetails: identificationDetailsChanges
+    });
+  else Object.assign(changes, identificationDetailsChanges);
 
   const previousEmploymentChanges = getPreviousEmploymentChanges(
     newEmployementDetails.previousEmployment as L3PreviousEmploymentDetailsType[],
     previousEmployementDetails.previousEmployment as L3PreviousEmploymentDetailsType[]
   );
-  Object.assign(changes, previousEmploymentChanges);
+  if (previousEmploymentChanges.length > 0)
+    Object.assign(changes, { previousEmployment: previousEmploymentChanges });
+  else Object.assign(changes, previousEmploymentChanges);
 
   const visaDetailsChanges = getVisaDetailsChanges(
     newEmployementDetails.visaDetails as L3VisaDetailsType[],
     previousEmployementDetails.visaDetails as L3VisaDetailsType[]
   );
-  Object.assign(changes, visaDetailsChanges);
+  if (Object.keys(visaDetailsChanges).length > 0)
+    Object.assign(changes, { visaDetails: visaDetailsChanges });
+  else Object.assign(changes, visaDetailsChanges);
 
   return changes;
 };
