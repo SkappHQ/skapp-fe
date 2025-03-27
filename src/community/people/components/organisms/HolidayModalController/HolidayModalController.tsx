@@ -99,7 +99,7 @@ const HolidayModalController: FC = () => {
       holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK ||
       holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY;
 
-    if (isEditingHoliday) setIsBulkUpload(false);
+    setIsBulkUpload(holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK);
 
     if (isEditingHoliday && isExitConfirmationNeeded) {
       setHolidayModalType(holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION);
