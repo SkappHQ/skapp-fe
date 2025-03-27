@@ -13,7 +13,6 @@ import {
   DefaultDayCapacityType,
   WorkingDaysTypes
 } from "~community/configurations/types/TimeConfigurationsTypes";
-import { type HolidayDataType as Holiday } from "~community/people/types/HolidayTypes";
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { getShortDayName } from "~community/people/utils/holidayUtils/commonUtils";
 
@@ -333,15 +332,6 @@ export const convertCsvHeaders = (header: string) => {
   }
   return header;
 };
-
-export const removeEmptyColumns = (tableData: Holiday[]) =>
-  tableData.reduce((acc, row) => {
-    if (row.holidayType !== "") {
-      const { date, name, holidayDuration } = row;
-      acc = [...acc, { date, name, holidayDuration }];
-    }
-    return acc;
-  }, []);
 
 export const flatListValues = (obj: Record<string, any>): any[] => {
   const result: any[] = [];

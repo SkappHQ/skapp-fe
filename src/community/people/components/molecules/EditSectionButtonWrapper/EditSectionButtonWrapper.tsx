@@ -1,5 +1,4 @@
 import { Stack } from "@mui/material";
-import { useEffect } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -23,10 +22,6 @@ const EditSectionButtonWrapper = ({ onCancelClick, onSaveClick }: Props) => {
   const { hasChanged } = useFormChangeDetector();
 
   const { profilePic } = usePeopleStore((state) => state);
-
-  useEffect(() => {
-    console.log(profilePic);
-  }, [profilePic]);
 
   return (
     <Stack
