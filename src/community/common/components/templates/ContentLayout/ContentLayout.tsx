@@ -185,7 +185,11 @@ const ContentLayout = ({
     setShowUserLimitBanner,
     showUserLimitBanner,
     setIsUserLimitExceeded
-  } = useUserLimitStore((state) => state);
+  } = useUserLimitStore((state) => ({
+    setShowUserLimitBanner: state.setShowUserLimitBanner,
+    showUserLimitBanner: state.showUserLimitBanner,
+    setIsUserLimitExceeded: state.setIsUserLimitExceeded
+  }));
 
   const { data: storageAvailabilityData } = useStorageAvailability();
 
@@ -198,7 +202,7 @@ const ContentLayout = ({
 
   useEffect(() => {
     if (isEnterpriseMode) {
-      if (isCheckUserLimitSuccess && checkUserLimit === true) {
+      if (isCheckUserLimitSuccess && checkUserLimit) {
         setIsUserLimitExceeded(true);
         setShowUserLimitBanner(true);
       }
