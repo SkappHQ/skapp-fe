@@ -476,8 +476,8 @@ export const employeeContactDetailsValidation = (
         translator(["maxCharacterCityLimitError"])
       )
       .nullable(),
-    country: Yup.string(),
-    state: Yup.string().max(
+    country: Yup.string().nullable(),
+    state: Yup.string().nullable().max(
       ADDRESS_MAX_CHARACTER_LENGTH,
       translator(["maxCharacterLimitStateError"])
     ),
