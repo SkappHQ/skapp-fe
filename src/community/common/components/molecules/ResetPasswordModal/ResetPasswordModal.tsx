@@ -6,7 +6,10 @@ import React, { FocusEvent, useState } from "react";
 import { useChangePassword } from "~community/common/api/settingsApi";
 import Form from "~community/common/components/molecules/Form/Form";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import { COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS } from "~community/common/constants/errorMessageKeys";
+import {
+  COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS,
+  COMMON_ERROR_SAME_PASSWORD
+} from "~community/common/constants/errorMessageKeys";
 import {
   ButtonStyle,
   ButtonTypes
@@ -119,7 +122,8 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const onError = (error: any) => {
     if (
       error.response.data.results[0].messageKey ===
-      COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS
+        COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS ||
+      error.response.data.results[0].messageKey === COMMON_ERROR_SAME_PASSWORD
     ) {
       setFieldError("password", translateText(["usedPreviousPasswordError"]));
     }
