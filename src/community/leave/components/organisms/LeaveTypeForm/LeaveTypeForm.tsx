@@ -96,6 +96,8 @@ const LeaveTypeForm = () => {
     undefined
   );
 
+  const isOngoingSetupLeave = ongoingQuickSetup.SETUP_LEAVE_TYPES;
+
   const { data: leaveCycle } = useGetLeaveCycle();
 
   const { mutate: addLeaveType, isPending: isAddingLeaveTypePending } =
@@ -107,7 +109,8 @@ const LeaveTypeForm = () => {
         setFormDirty: setLeaveTypeFormDirty,
         redirect: router.push,
         stopAllOngoingQuickSetup,
-        setQuickSetupModalType
+        setQuickSetupModalType,
+        isOngoingSetupLeave
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR,
