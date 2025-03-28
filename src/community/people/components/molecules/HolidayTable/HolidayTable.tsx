@@ -301,7 +301,11 @@ const HolidayTable: FC<Props> = ({
           handleRowCheck={handleCheckBoxClick}
           isLoading={isFetching && !isFetchingNextPage}
           isDataAvailable={holidayData && holidayData?.length > 0}
-          emptyDataDescription={translateText(["noHolidayDes"])}
+          emptyDataDescription={
+            isPeopleAdmin
+              ? translateText(["noHolidayDesForAdmin"])
+              : translateText(["noHolidayDesForNonAdmin"])
+          }
           emptyDataTitle={translateText(["noHolidaysTitle"], {
             selectedYear: holidaySelectedYear
           })}
