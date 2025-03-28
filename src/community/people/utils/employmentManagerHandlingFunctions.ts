@@ -1,4 +1,3 @@
-import { L3EmploymentDetailsType, L4ManagerType } from "../types/PeopleTypes";
 import {
   ManagerRemoveType,
   ManagerSearchType,
@@ -40,18 +39,13 @@ export const onManagerSearchChange = async ({
   setSupervisor
 }: ManagerSearchType): Promise<void> => {
   setManagerSearchTerm(e.target.value.trimStart());
-  await formik.setFieldValue(managerType, "");
+  await formik.setFieldValue(managerType, {});
   const currentEmploymentDetails = formik.values || {};
 
   setSupervisor({
     employmentDetails: {
       ...currentEmploymentDetails,
-      [managerType]: {
-        employeeId: "",
-        firstName: "",
-        lastName: "",
-        authPic: ""
-      }
+      [managerType]: {}
     }
   });
 };
@@ -63,22 +57,14 @@ export const onManagerRemove = async ({
   setSupervisor
 }: ManagerRemoveType): Promise<void> => {
   searchTermSetter("");
-  await formik.setFieldValue(fieldName, "");
-
-  const prevManager =
-    formik.initialValues[fieldName as keyof L3EmploymentDetailsType];
+  await formik.setFieldValue(fieldName, {});
 
   const currentEmploymentDetails = formik.values || {};
 
   setSupervisor({
     employmentDetails: {
       ...currentEmploymentDetails,
-      [fieldName]: {
-        employeeId: (prevManager as L4ManagerType)?.employeeId ? -1 : undefined,
-        firstName: "",
-        lastName: "",
-        authPic: ""
-      }
+      [fieldName]: {}
     }
   });
 };

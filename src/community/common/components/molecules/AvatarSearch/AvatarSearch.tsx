@@ -6,7 +6,13 @@ import {
   Typography
 } from "@mui/material";
 import { type FormikErrors } from "formik";
-import { ChangeEvent, Dispatch, JSX, SetStateAction, useRef } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useRef
+} from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { ManagerStoreType } from "~community/people/types/AddNewResourceTypes";
@@ -44,6 +50,7 @@ interface Props {
   needSearchIcon?: boolean;
   noSearchResultTexts?: string;
   isDisabledLabel?: boolean;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const AvatarSearch = ({
@@ -68,7 +75,8 @@ const AvatarSearch = ({
   required,
   needSearchIcon = false,
   noSearchResultTexts,
-  isDisabledLabel = false
+  isDisabledLabel = false,
+  onKeyDown
 }: Props): JSX.Element => {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const isPlaceholderAvailable = () => {
@@ -235,6 +243,7 @@ const AvatarSearch = ({
               popperStyles={{
                 width: "100%"
               }}
+              onKeyDown={onKeyDown}
             />
           </ClickAwayListener>
         </Stack>

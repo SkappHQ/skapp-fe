@@ -2,7 +2,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { rejects } from "assert";
 import { FormikProps } from "formik";
 import { DateTime } from "luxon";
-import {
+import React, {
   ChangeEvent,
   SyntheticEvent,
   useCallback,
@@ -440,6 +440,34 @@ const useEmployeeDetailsFormHandler = ({
     }
   }, [formik?.values?.primarySupervisor]);
 
+  const handleBackspacePressPrimary = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace") {
+      setPrimaryManagerSearchTerm("");
+      setEmploymentDetails({
+        employmentDetails: {
+          ...employee?.employment?.employmentDetails,
+          primarySupervisor: {}
+        }
+      });
+    }
+  };
+
+  const handleBackspacePressSecondary = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace") {
+      setSecondaryManagerSearchTerm("");
+      setEmploymentDetails({
+        employmentDetails: {
+          ...employee?.employment?.employmentDetails,
+          secondarySupervisor: {}
+        }
+      });
+    }
+  };
+
   return {
     isPrimaryManagerPopperOpen,
     isSecondaryManagerPopperOpen,
@@ -469,7 +497,9 @@ const useEmployeeDetailsFormHandler = ({
     handlePrimaryManagerRemove,
     handleSecondaryManagerSelect,
     handleSecondaryManagerRemove,
-    refetch
+    refetch,
+    handleBackspacePressPrimary,
+    handleBackspacePressSecondary
   };
 };
 
