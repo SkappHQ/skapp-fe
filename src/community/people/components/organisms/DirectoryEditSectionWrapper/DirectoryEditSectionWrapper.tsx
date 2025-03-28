@@ -9,6 +9,7 @@ import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppe
 import EditAllInfoSkeleton from "../../molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
 import EditInfoCardSkeleton from "../../molecules/EditInfoCard/EditInfoCardSkeleton";
+import RouteChangeAreYouSureModal from "../../molecules/RouteChangeAreYouSureModal/RouteChangeAreYouSureModal";
 import TerminationModalController from "../../molecules/TerminationModalController/TerminationModalController";
 import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import UserDeletionModalController from "../../molecules/UserDeletionModalController/UserDeletionModalController";
@@ -78,6 +79,7 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
           setIsUnsavedModalSaveButtonClicked(true);
         }}
       />
+      <RouteChangeAreYouSureModal />
     </>
   );
 };
