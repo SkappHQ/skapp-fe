@@ -165,19 +165,18 @@ export const employeeSocialMediaDetailsValidation = (
   translator: TranslatorFunctionType
 ) =>
   Yup.object({
-    linkedIn: Yup.string().matches(
-      isValidUrlPattern(),
-      translator(["validUrlError"])
-    ),
-    x: Yup.string().matches(isValidUrlPattern(), translator(["validUrlError"])),
-    facebook: Yup.string().matches(
-      isValidUrlPattern(),
-      translator(["validUrlError"])
-    ),
-    instagram: Yup.string().matches(
-      isValidUrlPattern(),
-      translator(["validUrlError"])
-    )
+    linkedIn: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable(),
+    x: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable(),
+    facebook: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable(),
+    instagram: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable()
   });
 
 export const employeeHealthAndOtherDetailsValidation = Yup.object({

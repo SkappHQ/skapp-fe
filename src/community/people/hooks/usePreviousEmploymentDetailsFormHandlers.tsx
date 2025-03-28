@@ -30,6 +30,7 @@ const usePreviousEmploymentDetailsFormHandlers = () => {
 
   const initialValues = useMemo<L3PreviousEmploymentDetailsType>(() => {
     const emptyInitialValues: L3PreviousEmploymentDetailsType = {
+      employmentId: undefined,
       companyName: "",
       jobTitle: "",
       startDate: "",
@@ -49,19 +50,29 @@ const usePreviousEmploymentDetailsFormHandlers = () => {
       employeePreviousEmploymentDetailsValidation(translateText),
     onSubmit: (values: L3PreviousEmploymentDetailsType) => {
       if (rowEdited > -1) {
-        const employments = employee.employment?.previousEmployment ?? [];
-        employments?.splice(rowEdited, 1, values);
+        const employments = [
+          ...(employee.employment?.previousEmployment || [])
+        ];
+        employments?.splice(rowEdited, 1, {
+          ...values,
+          employmentId: employments[rowEdited]?.employmentId ?? rowEdited
+        });
         setEmploymentDetails({
           ...employee?.employment,
           previousEmployment: employments
         });
         setRowEdited(-1);
       } else {
+        const newEmploymentId =
+          (employee?.employment?.previousEmployment?.length ?? 0) + 1;
         setEmploymentDetails({
           ...employee?.employment,
           previousEmployment: [
             ...(employee?.employment?.previousEmployment || []),
-            values
+            {
+              ...values,
+              employmentId: newEmploymentId
+            }
           ]
         });
       }
