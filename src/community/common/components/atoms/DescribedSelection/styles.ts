@@ -14,10 +14,6 @@ export const styles = (theme: Theme): StyleProps => ({
     borderRadius: "0.5rem",
     float: "inline-start"
   },
-  selectedWrapper: {
-    borderColor: theme.palette.secondary.dark,
-    background: theme.palette.secondary.main
-  },
   errorWrapper: {
     borderColor: theme.palette.error.contrastText,
     background: theme.palette.error.light
