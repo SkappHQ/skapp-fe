@@ -30,7 +30,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
     const { employee, setPersonalDetails } = usePeopleStore((state) => state);
 
     const initialValues = useMemo<L3SocialMediaDetailsType>(
-      () => employee?.personal?.contact as L3SocialMediaDetailsType,
+      () => employee?.personal?.socialMedia as L3SocialMediaDetailsType,
       [employee]
     );
 
@@ -98,7 +98,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
               <InputField
                 label={translateText(["linkedIn"])}
                 inputType="text"
-                value={values?.linkedin ?? ""}
+                value={values?.linkedIn ?? ""}
                 placeHolder={translateText(["enterAccountUrl"])}
                 startAdornment={
                   <LinkedIn
@@ -110,7 +110,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
                 }
                 onChange={handleInput}
                 inputName="linkedIn"
-                error={errors.linkedin ?? ""}
+                error={errors.linkedIn ?? ""}
                 componentStyle={{
                   flex: 1,
                   mt: "0rem"

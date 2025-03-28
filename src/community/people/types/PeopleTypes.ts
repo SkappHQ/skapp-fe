@@ -104,7 +104,7 @@ export interface L3EducationalDetailsType {
 }
 
 export interface L3SocialMediaDetailsType {
-  linkedin?: string;
+  linkedIn?: string;
   facebook?: string;
   instagram?: string;
   x?: string;
