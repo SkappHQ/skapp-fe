@@ -1,8 +1,6 @@
 import { Box } from "@mui/material";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
-import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useGetEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
@@ -23,17 +21,6 @@ interface Props {
 
 const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
   const { data: employee, isLoading } = useGetEmployee(employeeId);
-  const [isAreYouSureModalOpen, setIsAreYouSureModalOpen] = useState(false);
-  const allowRouteChangeRef = useRef<boolean>(false);
-  const targetRouteRef = useRef<string>("");
-
-  const router = useRouter();
-
-  const translateText = useTranslator(
-    "peopleModule",
-    "addResource",
-    "commonText"
-  );
 
   const {
     isUnsavedChangesModalOpen,
@@ -54,32 +41,6 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
 
   const { hasChanged } = useFormChangeDetector();
 
-  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-    if (hasChanged) {
-      e.preventDefault();
-      return "";
-    }
-  };
-
-  const handleRouteChange = (url: string) => {
-    if (allowRouteChangeRef.current) return;
-    targetRouteRef.current = url;
-    if (hasChanged && !isAreYouSureModalOpen) {
-      setIsAreYouSureModalOpen(true);
-      router.events.emit("routeChangeError");
-      throw "routeChange aborted";
-    }
-  };
-
-  useEffect(() => {
-    router.events.on("routeChangeStart", handleRouteChange);
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [handleRouteChange, handleBeforeUnload]);
-
   useEffect(() => {
     if (hasChanged && currentStep !== nextStep) {
       setIsUnsavedChangesModalOpen(true);
@@ -95,17 +56,6 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
     setIsUnsavedModalDiscardButtonClicked,
     setIsUnsavedChangesModalOpen
   ]);
-
-  const handleModalResume = () => {
-    setIsAreYouSureModalOpen(false);
-  };
-
-  const handleModalLeave = async () => {
-    setIsAreYouSureModalOpen(false);
-    allowRouteChangeRef.current = true;
-    const targetRoute = targetRouteRef.current;
-    await router.push(targetRoute);
-  };
 
   return (
     <>
@@ -129,12 +79,7 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
           setIsUnsavedModalSaveButtonClicked(true);
         }}
       />
-      <RouteChangeAreYouSureModal
-        isOpen={isAreYouSureModalOpen}
-        onResume={handleModalResume}
-        onLeave={handleModalLeave}
-        title={translateText(["areYouSureModalTitle"])}
-      />
+      <RouteChangeAreYouSureModal />
     </>
   );
 };

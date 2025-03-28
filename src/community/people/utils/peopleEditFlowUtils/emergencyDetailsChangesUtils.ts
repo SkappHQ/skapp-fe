@@ -11,21 +11,21 @@ export const getEmergencyContactChanges = (
 ): Record<string, any> => {
   const changes: Record<string, any> = {};
 
-  if (isFieldDifferentAndValid(newContact.name, previousContact.name)) {
-    changes.name = newContact.name;
+  if (isFieldDifferentAndValid(newContact?.name, previousContact?.name)) {
+    changes.name = newContact?.name;
   }
   if (
     isFieldDifferentAndValid(
-      newContact.relationship,
-      previousContact.relationship
+      newContact?.relationship,
+      previousContact?.relationship
     )
   ) {
-    changes.relationship = newContact.relationship;
+    changes.relationship = newContact?.relationship;
   }
   if (
-    isFieldDifferentAndValid(newContact.contactNo, previousContact.contactNo)
+    isFieldDifferentAndValid(newContact?.contactNo, previousContact?.contactNo)
   ) {
-    changes.contactNo = newContact.contactNo;
+    changes.contactNo = newContact?.contactNo;
   }
 
   return changes;
@@ -37,30 +37,21 @@ export const getEmergencyContactDetailsChanges = (
 ): L2EmergencyDetailsType => {
   const changes: L2EmergencyDetailsType = {};
 
-  if (
-    newEmergencyDetails.primaryEmergencyContact &&
-    previousEmergencyDetails.primaryEmergencyContact
-  ) {
-    const primaryContactChanges = getEmergencyContactChanges(
-      newEmergencyDetails.primaryEmergencyContact,
-      previousEmergencyDetails.primaryEmergencyContact
-    );
-    if (Object.keys(primaryContactChanges).length > 0) {
-      changes.primaryEmergencyContact = primaryContactChanges;
-    }
+  const primaryContactChanges = getEmergencyContactChanges(
+    newEmergencyDetails.primaryEmergencyContact as L3EmergencyContactType,
+    previousEmergencyDetails.primaryEmergencyContact as L3EmergencyContactType
+  );
+
+  if (Object.keys(primaryContactChanges).length > 0) {
+    changes.primaryEmergencyContact = primaryContactChanges;
   }
 
-  if (
-    newEmergencyDetails.secondaryEmergencyContact &&
-    previousEmergencyDetails.secondaryEmergencyContact
-  ) {
-    const secondaryContactChanges = getEmergencyContactChanges(
-      newEmergencyDetails.secondaryEmergencyContact,
-      previousEmergencyDetails.secondaryEmergencyContact
-    );
-    if (Object.keys(secondaryContactChanges).length > 0) {
-      changes.secondaryEmergencyContact = secondaryContactChanges;
-    }
+  const secondaryContactChanges = getEmergencyContactChanges(
+    newEmergencyDetails.secondaryEmergencyContact as L3EmergencyContactType,
+    previousEmergencyDetails.secondaryEmergencyContact as L3EmergencyContactType
+  );
+  if (Object.keys(secondaryContactChanges).length > 0) {
+    changes.secondaryEmergencyContact = secondaryContactChanges;
   }
 
   return changes;

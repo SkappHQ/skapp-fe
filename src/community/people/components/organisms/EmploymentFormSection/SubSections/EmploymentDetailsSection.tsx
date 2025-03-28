@@ -139,7 +139,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       handlePrimaryManagerRemove,
       handleSecondaryManagerSelect,
       handleSecondaryManagerRemove,
-      refetch
+      refetch,
+      handleBackspacePressPrimary,
+      handleBackspacePressSecondary
     } = useEmployeeDetailsFormHandler({
       formik,
       id,
@@ -360,6 +362,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 componentStyle={{
                   width: "100%"
                 }}
+                onKeyDown={handleBackspacePressPrimary}
               />
             </Grid>
 
@@ -404,6 +407,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 }
                 needSearchIcon={!isManager && !isProfileView}
                 noSearchResultTexts={translateText(["noSearchResults"])}
+                onKeyDown={handleBackspacePressSecondary}
               />
             </Grid>
             {isPeopleManager && (
