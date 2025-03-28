@@ -48,6 +48,7 @@ interface Props {
   paginationContainerStyles?: SxProps;
   exportButtonStyles?: SxProps;
   tableWrapperStyles?: SxProps;
+  paginationWithNumOfRowsStyles?: SxProps;
   isLoading?: boolean;
   skeletonRows?: number;
   emptySearchTitle?: string;
@@ -107,6 +108,7 @@ const Table: FC<Props> = ({
   paginationContainerStyles,
   exportButtonStyles,
   tableWrapperStyles,
+  paginationWithNumOfRowsStyles,
   isLoading,
   skeletonRows = 6,
   emptySearchTitle,
@@ -204,7 +206,7 @@ const Table: FC<Props> = ({
       </TableContainer>
 
       {isPaginationEnabled && (
-        <Stack direction={"row"} justifyContent={"space-between"}>
+        <Stack direction={"row"} sx={paginationWithNumOfRowsStyles}>
           <TablePagination
             totalPages={totalPages}
             currentPage={currentPage}
