@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import ColorPaletteSkeleton from "~community/common/components/atoms/ColorPaletteSkeleton/ColorPaletteSkeleton";
+import DescribedSelection from "~community/common/components/atoms/DescribedSelection/DescribedSelection";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import ColorPalette from "~community/common/components/molecules/ColorPalette/ColorPalette";
@@ -34,7 +35,6 @@ import {
   useAddLeaveType,
   useEditLeaveType
 } from "~community/leave/api/LeaveTypesApi";
-import LeaveDurationTypeCard from "~community/leave/components/molecules/LeaveDurationTypeCard/LeaveDurationTypeCard";
 import ConfirmLeaveTypeStatusUpdateModal from "~community/leave/components/molecules/UserPromptModals/ConfirmLeaveTypeStatusUpdateModal/ConfirmLeaveTypeStatusUpdateModal";
 import { leaveTypeColors } from "~community/leave/constants/configs";
 import {
@@ -54,6 +54,7 @@ import {
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 import { handleLeaveTypeApiResponse } from "~community/leave/utils/leaveTypes/apiUtils";
 import { addLeaveTypeValidationSchema } from "~community/leave/utils/validations";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { styles } from "./styles";
 
@@ -73,12 +74,29 @@ const LeaveTypeForm = () => {
     editingLeaveType,
     setLeaveTypeFormDirty,
     setLeaveTypeModalType
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    allLeaveTypes: state.allLeaveTypes,
+    editingLeaveType: state.editingLeaveType,
+    setLeaveTypeFormDirty: state.setLeaveTypeFormDirty,
+    setLeaveTypeModalType: state.setLeaveTypeModalType
+  }));
+
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const [colors, setColors] = useState<string[]>(leaveTypeColors);
   const [selectedDate, setSelectedDate] = useState<DateTime | undefined>(
     undefined
   );
+
+  const isOngoingSetupLeave = ongoingQuickSetup.SETUP_LEAVE_TYPES;
 
   const { data: leaveCycle } = useGetLeaveCycle();
 
@@ -89,7 +107,10 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.push
+        redirect: router.push,
+        stopAllOngoingQuickSetup,
+        setQuickSetupModalType,
+        isOngoingSetupLeave
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR,
@@ -208,6 +229,11 @@ const LeaveTypeForm = () => {
     }
   }, []);
 
+  const handleCancelBtnClick = async () => {
+    stopAllOngoingQuickSetup();
+    await router.back();
+  };
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -298,7 +324,7 @@ const LeaveTypeForm = () => {
           </Stack>
 
           <Stack sx={classes.cardContainer}>
-            <LeaveDurationTypeCard
+            <DescribedSelection
               title={translateText(["halfDay"])}
               description={translateText(["halfDayDescription"])}
               selected={
@@ -315,8 +341,18 @@ const LeaveTypeForm = () => {
                 )
               }
               isError={Boolean(errors.leaveDuration)}
+              typographyStyles={{
+                variant: {
+                  title: "h4",
+                  description: "body1"
+                },
+                color: {
+                  title: theme.palette.common.black,
+                  description: theme.palette.common.black
+                }
+              }}
             />
-            <LeaveDurationTypeCard
+            <DescribedSelection
               title={translateText(["fullDay"])}
               description={translateText(["fullDayDescription"])}
               selected={
@@ -333,6 +369,16 @@ const LeaveTypeForm = () => {
                 )
               }
               isError={Boolean(errors.leaveDuration)}
+              typographyStyles={{
+                variant: {
+                  title: "h4",
+                  description: "body1"
+                },
+                color: {
+                  title: theme.palette.common.black,
+                  description: theme.palette.common.black
+                }
+              }}
             />
           </Stack>
 
@@ -482,9 +528,10 @@ const LeaveTypeForm = () => {
               isFullWidth={false}
               endIcon={IconName.CLOSE_ICON}
               buttonStyle={ButtonStyle.TERTIARY}
-              onClick={async () => await router.back()}
+              onClick={handleCancelBtnClick}
             />
             <Button
+              shouldBlink={ongoingQuickSetup.SETUP_LEAVE_TYPES}
               type={ButtonTypes.SUBMIT}
               label={translateText(["saveBtn"])}
               isFullWidth={false}

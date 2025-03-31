@@ -13,6 +13,7 @@ import { FC } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
 import { appModes } from "~community/common/constants/configs";
+import { GlobalLoginMethod } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
@@ -24,6 +25,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { SettingsModalTypes } from "~community/common/types/SettingsTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import ManageSubscriptionSettingsSection from "~enterprise/settings/components/molecules/ManageSubscriptionSettingsSection/ManageSubscriptionSettingsSection";
 
 import Button from "../../atoms/Button/Button";
 import NotificationSettings from "../../molecules/NotificationSettinngs/NotificationSettinngs";
@@ -51,7 +53,9 @@ const SettingsSection: FC = () => {
     )
     .some((role) => managerRoles.includes(role));
 
-  const { globalLoginMethod } = useCommonEnterpriseStore((state) => state);
+  const { globalLoginMethod } = useCommonEnterpriseStore((state) => ({
+    globalLoginMethod: state.globalLoginMethod
+  }));
 
   return (
     <>
@@ -167,32 +171,41 @@ const SettingsSection: FC = () => {
               />
             </Box>
           </Box>
+
           <Divider />
         </>
       )}
 
-      {globalLoginMethod === "CREDENTIALS" && (
-        <Box sx={{ py: "1.5rem" }}>
-          <Typography variant="h2" sx={{ pb: "0.75rem" }}>
-            {translatedText(["securitySettingsTitle"])}
-          </Typography>
+      {globalLoginMethod === GlobalLoginMethod.CREDENTIALS && (
+        <>
+          <Box sx={{ py: "1.5rem" }}>
+            <Typography variant="h2" sx={{ pb: "0.75rem" }}>
+              {translatedText(["securitySettingsTitle"])}
+            </Typography>
 
-          <Typography variant="body1">
-            {translatedText(["securitySettingsDescription"])}
-          </Typography>
+            <Typography variant="body1">
+              {translatedText(["securitySettingsDescription"])}
+            </Typography>
 
-          <Button
-            label={translatedText(["resetPasswordButtonText"])}
-            startIcon={IconName.LOCK_ICON}
-            isFullWidth={false}
-            styles={{ mt: "1.25rem", px: "1.75rem" }}
-            buttonStyle={ButtonStyle.TERTIARY}
-            onClick={() => {
-              setModalType(SettingsModalTypes.RESET_PASSWORD);
-              setModalOpen(true);
-            }}
-          />
-        </Box>
+            <Button
+              label={translatedText(["resetPasswordButtonText"])}
+              startIcon={IconName.LOCK_ICON}
+              isFullWidth={false}
+              styles={{ mt: "1.25rem", px: "1.75rem" }}
+              buttonStyle={ButtonStyle.TERTIARY}
+              onClick={() => {
+                setModalType(SettingsModalTypes.RESET_PASSWORD);
+                setModalOpen(true);
+              }}
+            />
+          </Box>
+
+          <Divider />
+        </>
+      )}
+
+      {isEnterpriseMode && session?.user?.roles?.includes(ROLE_SUPER_ADMIN) && (
+        <ManageSubscriptionSettingsSection />
       )}
     </>
   );

@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { parse } from "papaparse";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
@@ -9,24 +8,17 @@ import DragAndDropField from "~community/common/components/molecules/DragAndDrop
 import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { theme } from "~community/common/theme/theme";
-import {
-  type FileRejectionType,
-  type FileUploadType
-} from "~community/common/types/CommonTypes";
-import {
-  convertCsvHeaders,
-  removeEmptyColumns
-} from "~community/common/utils/commonUtil";
+import { type FileUploadType } from "~community/common/types/CommonTypes";
 import { useAddBulkHolidays } from "~community/people/api/HolidayApi";
 import { usePeopleStore } from "~community/people/store/store";
 import {
-  type HolidayDataType as Holiday,
+  HolidayDataType,
   holidayBulkUploadResponse,
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
-import { normalizeHolidayDates } from "~community/people/utils/holidayUtils/holidayDateValidation";
-import { validateHeaders } from "~community/people/utils/holidayUtils/validateHeaders";
+import { setAttachment } from "~community/people/utils/directoryUtils/holidayBulkUploadUtils/uploadHolidayBulkModalUtils";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   setBulkUploadData: Dispatch<
@@ -35,29 +27,50 @@ interface Props {
 }
 
 const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
-  const [attachmentError, setAttachmentError] = useState(false);
-  const [calendarAttachments, setCalendarAttachments] = useState<
-    FileUploadType[]
-  >([]);
+  const { setToastMessage } = useToast();
+
+  const translateText = useTranslator("peopleModule", "holidays");
+
   const {
     newCalenderDetails,
     holidayModalType,
-    setNewCalendarDetails = () => {},
-    setHolidayModalType,
-    resetHolidayDetails,
+    isNewCalendarDetailsValid,
     selectedYear,
-    setIsBulkUpload
-  } = usePeopleStore((state) => state);
+    calendarErrors,
+    setCalendarErrors,
+    setIsNewCalendarDetailsValid,
+    setNewCalendarDetails,
+    setHolidayModalType,
+    setIsBulkUpload,
+    setIsHolidayModalOpen,
+    setFailedCount
+  } = usePeopleStore((state) => ({
+    isNewCalendarDetailsValid: state.isNewCalendarDetailsValid,
+    selectedYear: state.selectedYear,
+    newCalenderDetails: state.newCalenderDetails,
+    holidayModalType: state.holidayModalType,
+    calendarErrors: state.calendarErrors,
+    setCalendarErrors: state.setCalendarErrors,
+    setIsNewCalendarDetailsValid: state.setIsNewCalendarDetailsValid,
+    setNewCalendarDetails: state.setNewCalendarDetails,
+    setHolidayModalType: state.setHolidayModalType,
+    setIsBulkUpload: state.setIsBulkUpload,
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+    setFailedCount: state.setFailedCount
+  }));
 
-  const { setIsHolidayModalOpen, setFailedCount } = usePeopleStore(
-    (state) => state
-  );
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
-  const [isInvalidFileError, setIsInvalidFileError] = useState<boolean>(false);
-  const [noRecordError, setNoRecordError] = useState<boolean>(false);
-  const [holidayBulkList, setHolidayBulkList] = useState<Holiday[]>([]);
-  const translateText = useTranslator("peopleModule", "holidays");
-  const { setToastMessage } = useToast();
+  const [holidayBulkList, setHolidayBulkList] = useState<HolidayDataType[]>([]);
+
   const onSuccess = (response: holidayBulkUploadResponse): void => {
     setBulkUploadData(response);
     if (response.bulkStatusSummary.failedCount > 0) {
@@ -85,6 +98,10 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       }
     } else {
       setHolidayModalType(holidayModalTypes.NONE);
+      if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+        setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+        stopAllOngoingQuickSetup();
+      }
       setIsHolidayModalOpen(false);
       setToastMessage({
         title: translateText(["holidayCreateSuccessToastTitle"], {
@@ -99,7 +116,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       });
     }
     setHolidayBulkList([]);
-    setCalendarAttachments([]);
+    setNewCalendarDetails([]);
   };
 
   const onError = (): void => {
@@ -112,173 +129,73 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
       open: true
     });
   };
+
   const { mutate } = useAddBulkHolidays(onSuccess, onError);
-
-  useEffect(() => {
-    setCalendarAttachments(newCalenderDetails?.acceptedFile);
-    setIsBulkUpload(true);
-  }, [newCalenderDetails?.acceptedFile]);
-
-  const isArrayOfTypeHoliday = (holidayArray: Holiday[]) =>
-    Array.isArray(holidayArray) &&
-    holidayArray.every((holiday) => {
-      return (
-        typeof holiday.date === "string" &&
-        holiday.date &&
-        typeof holiday.name === "string" &&
-        holiday.name &&
-        typeof holiday.holidayDuration === "string" &&
-        holiday.holidayDuration
-      );
-    });
-  const setAttachment = async (
-    acceptedFiles: FileUploadType[]
-  ): Promise<void> => {
-    setIsInvalidFileError(false);
-    if (acceptedFiles?.[0]?.file) {
-      if (acceptedFiles[0].file.size === 0) {
-        setToastMessage({
-          title: translateText(["noRecordCSVTitle"]),
-          description: translateText(["noRecordCSVDes"]),
-          isIcon: true,
-          toastType: ToastType.ERROR,
-          open: true
-        });
-        setNoRecordError(true);
-        return;
-      }
-      parse(acceptedFiles[0].file, {
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: convertCsvHeaders,
-        complete: function (results) {
-          const holidays = removeEmptyColumns(results.data as Holiday[]);
-
-          if (results.data.length === 0) {
-            setToastMessage({
-              title: translateText(["noRecordCSVTitle"]),
-              description: translateText(["noRecordCSVDes"]),
-              isIcon: true,
-              toastType: ToastType.ERROR,
-              open: true
-            });
-            setNoRecordError(true);
-            return;
-          }
-
-          if (isArrayOfTypeHoliday(holidays) && holidays.length > 0) {
-            const validHolidays = normalizeHolidayDates(holidays);
-
-            const isHeadersValid = validateHeaders(
-              acceptedFiles[0].file as File
-            );
-
-            if (!validHolidays || !isHeadersValid) {
-              setIsInvalidFileError(true);
-              return;
-            }
-
-            setHolidayBulkList(validHolidays);
-
-            if (setNewCalendarDetails) {
-              setNewCalendarDetails("acceptedFile", acceptedFiles);
-            }
-
-            setIsInvalidFileError(false);
-          } else {
-            setIsInvalidFileError(true);
-          }
-        }
-      });
-    } else {
-      if (setNewCalendarDetails) {
-        setNewCalendarDetails("acceptedFile", acceptedFiles);
-      }
-    }
-  };
 
   const handleSaveCalendarBtn = (): void => {
     mutate({ holidayData: holidayBulkList, selectedYear });
     setIsHolidayModalOpen(false);
-    setNewCalendarDetails("acceptedFile", []);
-    setCalendarAttachments([]);
+    setNewCalendarDetails([]);
   };
 
   const onCloseClick = () => {
     if (
-      calendarAttachments?.length !== 0 &&
+      newCalenderDetails?.acceptedFile?.length !== 0 &&
       holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK
     ) {
+      setIsBulkUpload(true);
       setHolidayModalType(holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION);
     } else {
       setIsHolidayModalOpen(false);
       setHolidayModalType(holidayModalTypes.NONE);
-      resetHolidayDetails();
+    }
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      stopAllOngoingQuickSetup();
     }
   };
+
   return (
     <Box>
       <Typography
         sx={{
           fontWeight: 400,
           fontSize: "1rem",
-          marginTop: "1rem",
           marginBottom: "0.5rem"
         }}
       >
         {translateText(["addCsvTitle"])}
       </Typography>
       <DragAndDropField
-        isDisableColor={true}
-        setAttachmentErrors={(errors: FileRejectionType[]) => {
-          setAttachmentError(!!errors?.length);
-        }}
-        setAttachments={(acceptedFiles: FileUploadType[]) => {
-          setCalendarAttachments(acceptedFiles);
-          setAttachment(acceptedFiles);
-        }}
+        setAttachments={async (acceptedFiles: FileUploadType[]) =>
+          await setAttachment({
+            acceptedFiles,
+            translateText,
+            setIsNewCalendarDetailsValid,
+            setCalendarErrors,
+            setHolidayBulkList,
+            setNewCalendarDetails
+          })
+        }
         accept={{
           "text/csv": [".csv"]
         }}
-        uploadableFiles={calendarAttachments}
+        uploadableFiles={newCalenderDetails.acceptedFile}
         supportedFiles={".csv"}
         maxFileSize={1}
-        minFileSize={0}
-        isZeroFilesErrorRequired={false}
-        descriptionStyles={{ color: theme.palette.grey[700] }}
-        browseTextStyles={{ color: theme.palette.grey[700] }}
+        customError={calendarErrors}
       />
-      {calendarAttachments?.[0]?.file &&
-        isInvalidFileError &&
-        !attachmentError && (
-          <Typography
-            variant="body2"
-            sx={{ color: theme.palette.error.contrastText, mt: 1 }}
-          >
-            {translateText(["csvTemplateError"])}
-          </Typography>
-        )}
+
       <Button
-        disabled={
-          attachmentError ||
-          !(calendarAttachments?.length > 0) ||
-          isInvalidFileError ||
-          noRecordError
+        disabled={!isNewCalendarDetailsValid}
+        shouldBlink={
+          isNewCalendarDetailsValid &&
+          newCalenderDetails.acceptedFile?.length > 0
         }
         label={translateText(["UploadHolidays"])}
         endIcon={<RightArrowIcon />}
         buttonStyle={ButtonStyle.PRIMARY}
         styles={{ mt: "1rem" }}
         onClick={() => handleSaveCalendarBtn()}
-        // TODO: Remove if not needed
-        // textStyles={{
-        //   color:
-        //     attachmentError ||
-        //     !(calendarAttachments?.length > 0) ||
-        //     isInvalidFileError
-        //       ? theme.palette.grey[800]
-        //       : theme.palette.primary.contrastText
-        // }}
       />
       <Button
         label={translateText(["cancelBtnText"])}

@@ -47,46 +47,26 @@ import { StyledDrawer } from "./StyledDrawer";
 import { getSelectedDrawerItemColor, styles } from "./styles";
 
 const Drawer = (): JSX.Element => {
-  const translateText = useTranslator("commonComponents", "drawer");
-
-  const [orgLogo, setOrgLogo] = useState<string | null>(null);
-  const router = useRouter();
-  const environment = useGetEnvironment();
-  const { s3FileUrls, downloadS3File } = useS3Download();
-
   const theme: Theme = useTheme();
   const classes = styles({ theme });
+
+  const translateText = useTranslator("commonComponents", "drawer");
+
+  const router = useRouter();
+
+  const { data: sessionData } = useSession();
 
   const queryMatches = useMediaQuery();
   const isBelow1024 = queryMatches(MediaQueries.BELOW_1024);
 
-  const { data: sessionData } = useSession();
+  const environment = useGetEnvironment();
+
+  const { s3FileUrls, downloadS3File } = useS3Download();
 
   const { handleDrawer } = useDrawer(isBelow1024);
 
-  const { globalLoginMethod } = useCommonEnterpriseStore((state) => state);
-
-  const isEnterprise = environment === appModes.ENTERPRISE;
-
-  const drawerRoutes = useMemo(
-    () =>
-      getDrawerRoutes(
-        sessionData?.user?.roles,
-        sessionData?.user?.tier ?? "",
-        isEnterprise,
-        globalLoginMethod
-      ),
-    [sessionData, globalLoginMethod, isEnterprise]
-  );
-
   const { data: organizationDetails, isLoading: orgLoading } =
     useGetOrganization();
-
-  const updatedTheme = themeSelector(
-    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
-  );
-
-  theme.palette = updatedTheme.palette;
 
   const organizationLogo = organizationDetails?.results[0]?.organizationLogo;
   const organizationName = organizationDetails?.results[0]?.organizationName;
@@ -96,20 +76,6 @@ const Drawer = (): JSX.Element => {
     organizationLogo,
     false
   );
-
-  useEffect(() => {
-    if (environment === appModes.COMMUNITY) {
-      if (logoUrl) setOrgLogo(logoUrl);
-    } else if (environment === appModes.ENTERPRISE) {
-      setOrgLogo(s3FileUrls[organizationLogo]);
-    }
-  }, [logoUrl, organizationLogo, s3FileUrls, environment]);
-
-  useEffect(() => {
-    if (organizationLogo || !s3FileUrls[organizationLogo]) {
-      downloadS3File(organizationLogo);
-    }
-  }, [organizationLogo]);
 
   const {
     isDrawerExpanded,
@@ -123,9 +89,49 @@ const Drawer = (): JSX.Element => {
     setOrgData: state.setOrgData
   }));
 
-  const { setMyLeaveRequestModalType } = useLeaveStore();
+  const { globalLoginMethod } = useCommonEnterpriseStore((state) => ({
+    globalLoginMethod: state.globalLoginMethod
+  }));
 
+  const { setMyLeaveRequestModalType } = useLeaveStore((state) => ({
+    setMyLeaveRequestModalType: state.setMyLeaveRequestModalType
+  }));
+
+  const [orgLogo, setOrgLogo] = useState<string | null>(null);
   const [hoveredDrawerItemUrl, setHoveredDrawerItemUrl] = useState<string>("");
+
+  const isEnterprise = environment === appModes.ENTERPRISE;
+
+  const drawerRoutes = useMemo(
+    () =>
+      getDrawerRoutes({
+        userRoles: sessionData?.user?.roles,
+        tier: sessionData?.user?.tier ?? "",
+        isEnterprise,
+        globalLoginMethod
+      }),
+    [sessionData, isEnterprise, globalLoginMethod]
+  );
+
+  const updatedTheme = themeSelector(
+    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
+  );
+
+  theme.palette = updatedTheme.palette;
+
+  useEffect(() => {
+    if (environment === appModes.COMMUNITY) {
+      if (logoUrl) setOrgLogo(logoUrl);
+    } else if (environment === appModes.ENTERPRISE) {
+      setOrgLogo(s3FileUrls[organizationLogo]);
+    }
+  }, [logoUrl, organizationLogo, s3FileUrls, environment]);
+
+  useEffect(() => {
+    if (organizationLogo || !s3FileUrls[organizationLogo]) {
+      downloadS3File({ filePath: organizationLogo });
+    }
+  }, [organizationLogo]);
 
   const handleListItemButtonClick = (
     id: string,

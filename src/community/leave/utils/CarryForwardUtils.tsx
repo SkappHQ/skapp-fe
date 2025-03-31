@@ -39,7 +39,7 @@ export const downloadCarryForwardDataCSV = (
     }
   });
 
-  createCSV(stream, "leave-carried-forward-data");
+  createCSV(stream, "CarryForwardingBalances");
 };
 
 export const sortLeaveTypesInAlphabeticalOrder = (

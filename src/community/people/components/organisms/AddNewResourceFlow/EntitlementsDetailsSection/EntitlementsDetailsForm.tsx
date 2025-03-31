@@ -1,18 +1,18 @@
-import { Stack } from "@mui/material";
 import { useRouter } from "next/router";
 import { JSX, useEffect, useState } from "react";
 
-import Button from "~community/common/components/atoms/Button/Button";
 import PeopleLayout from "~community/common/components/templates/PeopleLayout/PeopleLayout";
-import { entitlementsDetailsFormTestId } from "~community/common/constants/testIds";
-import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
+import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { IconName } from "~community/common/types/IconTypes";
 import { leaveBulkUploadResponse } from "~community/leave/types/LeaveTypes";
 import { useAddUserBulkEntitlementsWithoutCSV } from "~community/people/api/PeopleApi";
+import AddSectionButtonWrapper from "~community/people/components/molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import { usePeopleStore } from "~community/people/store/store";
-import { handleAddNewResourceSuccess } from "~community/people/utils/directoryUtils/addNewResourceFlowUtils/addNewResourceUtils";
+import {
+  L3EmploymentDetailsType,
+  L3GeneralDetailsType
+} from "~community/people/types/PeopleTypes";
 import {
   handleBulkUploadResponse,
   handleSaveEntitlements
@@ -21,26 +21,14 @@ import {
 import EntitlementsDetailsSection from "./EntitlementsDetailsSection";
 import styles from "./styles";
 
-interface Props {
-  onNext: () => void;
-  onSave: () => void;
-  onBack: () => void;
-  isLoading: boolean;
-  isSuccess: boolean;
-}
-
-const EntitlementsDetailsForm = ({
-  onNext,
-  onSave,
-  onBack,
-  isLoading,
-  isSuccess
-}: Props): JSX.Element => {
+const EntitlementsDetailsForm = (): JSX.Element => {
   const classes = styles();
 
   const router = useRouter();
 
   const { setToastMessage } = useToast();
+
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const translateText = useTranslator(
     "peopleModule",
@@ -48,17 +36,9 @@ const EntitlementsDetailsForm = ({
     "commonText"
   );
 
-  const {
-    employeeGeneralDetails,
-    employeeEmploymentDetails,
-    employeeEntitlementsDetails,
-    resetEmployeeData
-  } = usePeopleStore((state) => ({
-    employeeGeneralDetails: state.employeeGeneralDetails,
-    employeeEmploymentDetails: state.employeeEmploymentDetails,
-    employeeEntitlementsDetails: state.employeeEntitlementsDetails,
-    resetEmployeeData: state.resetEmployeeData
-  }));
+  const { employee, employeeEntitlementsDetails } = usePeopleStore(
+    (state) => state
+  );
 
   const [currentYearSuccessFlag, setCurrentYearSuccessFlag] =
     useState<boolean>(false);
@@ -96,6 +76,11 @@ const EntitlementsDetailsForm = ({
   const { mutate: nextYearMutation, isPending: nextYearEntitlementsLoading } =
     useAddUserBulkEntitlementsWithoutCSV(onNextYearSuccess, onError);
 
+  const employeeGeneralDetails = employee.personal
+    ?.general as L3GeneralDetailsType;
+  const employeeEmploymentDetails = employee.employment
+    ?.employmentDetails as L3EmploymentDetailsType;
+
   useEffect(() => {
     if (isSuccess) {
       handleSaveEntitlements({
@@ -115,24 +100,6 @@ const EntitlementsDetailsForm = ({
     // NOTE: Adding Missing Dependencies will cause a rerendering issue.
   }, [isSuccess]);
 
-  useEffect(() => {
-    if (isSuccess && currentYearSuccessFlag && nextYearSuccessFlag) {
-      handleAddNewResourceSuccess({
-        setToastMessage,
-        resetEmployeeData,
-        router,
-        translateText
-      });
-    }
-
-    // NOTE: Adding Missing Dependencies will cause a rerendering issue.
-  }, [isSuccess, currentYearSuccessFlag, nextYearSuccessFlag]);
-
-  const handleNext = () => {
-    onNext();
-    !isSuccess && onSave();
-  };
-
   return (
     <PeopleLayout
       title={translateText(["entitlements"])}
@@ -142,29 +109,8 @@ const EntitlementsDetailsForm = ({
     >
       <>
         <EntitlementsDetailsSection />
-        <Stack sx={classes.buttonWrapper}>
-          <Button
-            dataTestId={entitlementsDetailsFormTestId.buttons.backBtn}
-            isFullWidth={false}
-            label={translateText(["back"])}
-            onClick={onBack}
-            startIcon={IconName.LEFT_ARROW_ICON}
-            buttonStyle={ButtonStyle.TERTIARY}
-          />
-          <Button
-            dataTestId={entitlementsDetailsFormTestId.buttons.saveDetailsBtn}
-            isFullWidth={false}
-            isLoading={
-              isLoading ||
-              currentYearEntitlementsLoading ||
-              nextYearEntitlementsLoading
-            }
-            label={translateText(["saveDetails"])}
-            onClick={handleNext}
-            endIcon={IconName.SAVE_ICON}
-            buttonStyle={ButtonStyle.PRIMARY}
-          />
-        </Stack>
+
+        <AddSectionButtonWrapper setIsSuccess={setIsSuccess} />
       </>
     </PeopleLayout>
   );

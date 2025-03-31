@@ -2,15 +2,11 @@ import { Theme } from "@mui/material/styles";
 
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 
-export const tableHeaderStyles = (theme: Theme) => ({
+const styles = (theme: Theme) => ({
   headerContainer: {
     width: "max-content",
     height: "4.3rem",
     background: theme.palette.grey[100],
-    borderWidth: "0.063rem 0rem",
-    borderStyle: "solid",
-    borderColor: theme.palette.grey[500],
-    borderTopStyle: "none",
     position: "relative",
     [theme.breakpoints.down("xl")]: {
       width: "max-content"
@@ -43,9 +39,11 @@ export const tableHeaderStyles = (theme: Theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
     flex: 1,
     minWidth: "6.5rem",
-    zIndex: ZIndexEnums.DEFAULT,
-    paddingTop: "1.1rem"
+    zIndex: ZIndexEnums.DEFAULT
   }
 });
+
+export default styles;

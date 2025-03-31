@@ -50,18 +50,6 @@ export enum AuthStatus {
 
 export const PASSWORD_STRENGTH_MULTIPLIER = 20;
 
-export enum HolidayCSVHeader {
-  NAME = "name",
-  DATE = "date",
-  HOLIDAY_DURATION = "holidayDuration"
-}
-
-export enum HolidayTableHeader {
-  NAME = "name",
-  DATE = "date",
-  HOLIDAY_DURATION = "HolidayDuration"
-}
-
 export enum EmailProvider {
   GMAIL = "Gmail",
   OUTLOOK = "Outlook",
@@ -69,3 +57,17 @@ export enum EmailProvider {
 }
 export const DEFAULT_PORT = "587";
 export const DISABLED_PORT = "-";
+
+export const BrandingBlueColor = {
+  primary: {
+    main: "#93C5FD",
+    dark: "#2A61A0"
+  },
+  secondary: {
+    main: "#DBEAFE",
+    dark: "#408CE4"
+  }
+};
+
+export const SUCCESS = "success";
+export const CANCEL = "cancel";

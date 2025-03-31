@@ -1,5 +1,5 @@
 import { Box, Divider, Typography } from "@mui/material";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC, useEffect, useState } from "react";
 
 import DownSideArrow from "~community/common/assets/Icons/DownSideArrow";
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
@@ -7,31 +7,44 @@ import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  holidayBulkUploadResponse,
-  holidayModalTypes,
-  holidayType
-} from "~community/people/types/HolidayTypes";
-import { downloadBulkCsvTemplate } from "~community/people/utils/holidayUtils/commonUtils";
-import HolidayDummyData from "~community/people/utils/holidayUtils/holidayDummyData.json";
+import { holidayModalTypes } from "~community/people/types/HolidayTypes";
+import { downloadBulkCsvTemplate } from "~community/people/utils/directoryUtils/holidayBulkUploadUtils/downloadHolidayBulkTemplateModalUtils";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
-interface Props {
-  setBulkUploadData: Dispatch<
-    SetStateAction<holidayBulkUploadResponse | undefined>
-  >;
-}
-
-const AddCalendar: FC<Props> = ({ setBulkUploadData }) => {
-  const { setHolidayModalType, setIsBulkUpload } = usePeopleStore(
-    (state) => state
-  );
-
+const AddCalendar: FC = () => {
   const translateText = useTranslator("peopleModule", "holidays");
 
+  const { setHolidayModalType, setIsBulkUpload } = usePeopleStore((state) => ({
+    setHolidayModalType: state.setHolidayModalType,
+    setIsBulkUpload: state.setIsBulkUpload
+  }));
+
+  const { ongoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup
+  }));
+
+  const [isButtonBlinking, setIsButtonBlinking] = useState<
+    Record<string, boolean>
+  >({
+    download: false,
+    next: false
+  });
+
+  useEffect(() => {
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      setIsButtonBlinking({ download: true, next: false });
+    }
+  }, [ongoingQuickSetup]);
+
   const downloadTemplateHandler = (): void => {
-    downloadBulkCsvTemplate(HolidayDummyData as holidayType[]);
+    downloadBulkCsvTemplate();
     setIsBulkUpload(true);
+
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      setIsButtonBlinking({ download: false, next: true });
+    }
   };
+
   return (
     <Box>
       <Box>
@@ -50,6 +63,7 @@ const AddCalendar: FC<Props> = ({ setBulkUploadData }) => {
           styles={{ my: "0.75rem" }}
           endIcon={<DownSideArrow />}
           onClick={downloadTemplateHandler}
+          shouldBlink={isButtonBlinking.download}
         />
       </Box>
       <Divider />
@@ -61,6 +75,7 @@ const AddCalendar: FC<Props> = ({ setBulkUploadData }) => {
         onClick={() =>
           setHolidayModalType(holidayModalTypes.UPLOAD_HOLIDAY_BULK)
         }
+        shouldBlink={isButtonBlinking.next}
       />
     </Box>
   );

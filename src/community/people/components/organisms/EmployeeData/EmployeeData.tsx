@@ -3,9 +3,14 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import Button from "~community/common/components/atoms/Button/Button";
 import SearchBox from "~community/common/components/molecules/SearchBox/SearchBox";
 import ROUTES from "~community/common/constants/routes";
 import { peopleDirectoryTestId } from "~community/common/constants/testIds";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -21,8 +26,13 @@ import {
   EmployeeDataType,
   EmploymentStatusTypes
 } from "~community/people/types/EmployeeTypes";
+import RemovePeopleCountBanner from "~enterprise/settings/components/molecules/RemovePeopleCountBanner/RemovePeopleCountBanner";
 
-const EmployeeData = () => {
+interface EmployeeDataProps {
+  isRemovePeople: boolean;
+}
+
+const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   const translateText = useTranslator("peopleModule", "peoples");
   const router = useRouter();
   const { data } = useSession();
@@ -48,6 +58,8 @@ const EmployeeData = () => {
 
   const {
     isPendingInvitationListOpen,
+    selectedEmployees,
+    employeeDataParams,
     setSearchKeyword,
     setEmployeeDataParams,
     resetEmployeeDataParams
@@ -61,6 +73,10 @@ const EmployeeData = () => {
   };
 
   useEffect(() => {
+    //NOTE: For debugging purposes, do not remove
+    console.log("file: EmployeeData");
+    console.log("employeeData: ", employeeData);
+
     if (employeeData?.pages) {
       const employeeDataItems = employeeData?.pages
         ?.map((page: any) => page?.items)
@@ -102,6 +118,7 @@ const EmployeeData = () => {
         data-testid={peopleDirectoryTestId.searchInput}
       />
       {bannerData &&
+      !isRemovePeople &&
       bannerData > 0 &&
       !isPendingInvitationListOpen &&
       isPeopleManagerOrSuperAdmin ? (
@@ -117,6 +134,60 @@ const EmployeeData = () => {
         <Box sx={{ height: "1.5rem" }} />
       )}
 
+      {isRemovePeople && (
+        <>
+          <Stack direction="row" gap={1} justifyContent="flex-start">
+            <Button
+              label={translateText([
+                "filters",
+                "selectedFiltersFilterItems",
+                "active"
+              ])}
+              isFullWidth={false}
+              buttonStyle={
+                employeeDataParams?.accountStatus?.includes(
+                  EmploymentStatusTypes.ACTIVE
+                )
+                  ? ButtonStyle.SECONDARY
+                  : ButtonStyle.TERTIARY
+              }
+              size={ButtonSizes.MEDIUM}
+              onClick={() =>
+                setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
+                  EmploymentStatusTypes.ACTIVE
+                ])
+              }
+            />
+            <Button
+              label={translateText([
+                "filters",
+                "selectedFiltersFilterItems",
+                "pending"
+              ])}
+              isFullWidth={false}
+              buttonStyle={
+                employeeDataParams?.accountStatus?.includes(
+                  EmploymentStatusTypes.PENDING
+                )
+                  ? ButtonStyle.SECONDARY
+                  : ButtonStyle.TERTIARY
+              }
+              size={ButtonSizes.MEDIUM}
+              onClick={() =>
+                setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
+                  EmploymentStatusTypes.PENDING
+                ])
+              }
+            />
+          </Stack>
+
+          <RemovePeopleCountBanner
+            startingIcon={IconName.REMOVE_PEOPLE_ICON}
+            selectedCount={selectedEmployees.length}
+          />
+        </>
+      )}
+
       <PeopleTable
         employeeData={employeeDataItems}
         fetchNextPage={fetchNextPage}
@@ -124,6 +195,7 @@ const EmployeeData = () => {
         isFetchingNextPage={isFetchingNextPage}
         onSearch={searchTerm?.length > 0}
         hasNextPage={hasNextPage}
+        isRemovePeople={isRemovePeople}
       />
     </Stack>
   );

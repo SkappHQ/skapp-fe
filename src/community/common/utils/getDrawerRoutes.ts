@@ -1,32 +1,45 @@
 import ROUTES from "~community/common/constants/routes";
+import { GlobalLoginMethod } from "~community/common/enums/CommonEnums";
 import {
   AdminTypes,
   EmployeeTypes,
   ManagerTypes,
-  SenderRoleTypes,
+  SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import { TierEnum } from "~enterprise/common/enums/CommonEum";
-import enterpriseRoutes from "~enterprise/common/utils/data/enterpriseRoutes";
-
-import routes from "./data/routes";
+import routes from "~community/common/utils/data/routes";
+import getEnterpriseDrawerRoutes from "~community/common/utils/getEnterpriseDrawerRoutes";
+import { TierEnum } from "~enterprise/common/enums/Common";
 
 type Role = AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType;
 
-const getDrawerRoutes = (
-  userRoles: Role[] | undefined,
-  tier: string,
-  isEnterprise: boolean,
-  globalLoginMethod?: string
-) => {
-  const allRoutes = isEnterprise ? enterpriseRoutes : routes;
+interface Props {
+  userRoles: Role[] | undefined;
+  tier: string;
+  isEnterprise: boolean;
+  globalLoginMethod: GlobalLoginMethod;
+}
+
+const getDrawerRoutes = ({
+  userRoles,
+  tier,
+  isEnterprise,
+  globalLoginMethod
+}: Props) => {
+  const allRoutes = isEnterprise
+    ? getEnterpriseDrawerRoutes({
+        userRoles,
+        globalLoginMethod
+      })
+    : routes;
+
   const userSpecificRoutes = allRoutes
     ?.map((route) => {
       const isAuthorized = route?.requiredAuthLevel?.some((requiredRole) =>
         userRoles?.includes(requiredRole as Role)
       );
 
-      if (route.name === "Dashboard") {
+      if (route?.name === "Dashboard") {
         if (
           !userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE) &&
           !userRoles?.includes(ManagerTypes.PEOPLE_MANAGER) &&
@@ -53,10 +66,10 @@ const getDrawerRoutes = (
 
           if (hasAdditionalRolesForLeaveEmployee) {
             return {
-              id: route.id,
-              name: route.name,
+              id: route?.id,
+              name: route?.name,
               url: ROUTES.DASHBOARD.BASE,
-              icon: route.icon,
+              icon: route?.icon,
               hasSubTree: false
             };
           }
@@ -65,7 +78,7 @@ const getDrawerRoutes = (
         }
       }
 
-      if (route.name === "People") {
+      if (route?.name === "People") {
         const isNotPeopleEmployee = userRoles?.some((role) =>
           [AdminTypes.PEOPLE_ADMIN, ManagerTypes.PEOPLE_MANAGER].includes(
             role as AdminTypes | ManagerTypes
@@ -77,16 +90,16 @@ const getDrawerRoutes = (
           userRoles?.includes(EmployeeTypes.PEOPLE_EMPLOYEE)
         ) {
           return {
-            id: route.id,
-            name: route.name,
+            id: route?.id,
+            name: route?.name,
             url: ROUTES.PEOPLE.DIRECTORY,
-            icon: route.icon,
+            icon: route?.icon,
             hasSubTree: false
           };
         }
       }
 
-      if (route.name === "Timesheet") {
+      if (route?.name === "Timesheet") {
         if (!userRoles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)) {
           return null;
         }
@@ -103,16 +116,16 @@ const getDrawerRoutes = (
           userRoles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
         ) {
           return {
-            id: route.id,
-            name: route.name,
+            id: route?.id,
+            name: route?.name,
             url: ROUTES.TIMESHEET.MY_TIMESHEET,
-            icon: route.icon,
+            icon: route?.icon,
             hasSubTree: false
           };
         }
       }
 
-      if (route.name === "Leave") {
+      if (route?.name === "Leave") {
         if (!userRoles?.includes(EmployeeTypes.LEAVE_EMPLOYEE)) {
           return null;
         }
@@ -138,10 +151,10 @@ const getDrawerRoutes = (
 
           if (hasAdditionalRolesForLeaveEmployee) {
             return {
-              id: route.id,
+              id: route?.id,
               name: "Leave Requests",
               url: ROUTES.LEAVE.MY_REQUESTS,
-              icon: route.icon,
+              icon: route?.icon,
               hasSubTree: false
             };
           }
@@ -150,57 +163,48 @@ const getDrawerRoutes = (
         }
       }
 
-      if (route.name === "Settings") {
-        const isEmployee = userRoles?.every((role) =>
-          Object.values(EmployeeTypes).includes(role as EmployeeTypes)
-        );
-
+      if (route?.name === "Settings") {
         const isSuperAdmin = userRoles?.includes(AdminTypes.SUPER_ADMIN);
 
-        const isGoogle = globalLoginMethod === "GOOGLE";
-
-        if (isEmployee && isGoogle) {
-          return null;
-        }
-
         if (isSuperAdmin) {
-          const subRoutes = route.subTree?.filter((subRoute) => {
-            if (subRoute.name === "Integrations" && tier != TierEnum.PRO) {
-              return false;
+          const subRoutes = route?.subTree?.filter((subRoute) => {
+            if (subRoute.name === "Integrations") {
+              return tier === TierEnum.PRO;
             }
+
             return subRoute.requiredAuthLevel?.some((requiredRole) =>
               userRoles?.includes(requiredRole as Role)
             );
           });
 
           return {
-            id: route.id,
-            name: route.name,
-            url: ROUTES.SETTINGS.ACCOUNT,
-            icon: route.icon,
-            hasSubTree: route.hasSubTree,
+            id: route?.id,
+            name: route?.name,
+            url: ROUTES.SETTINGS.BASE,
+            icon: route?.icon,
+            hasSubTree: route?.hasSubTree,
             subTree: subRoutes
           };
         }
 
         if (!isSuperAdmin) {
           return {
-            id: route.id,
-            name: route.name,
+            id: route?.id,
+            name: route?.name,
             url: ROUTES.SETTINGS.ACCOUNT,
-            icon: route.icon,
+            icon: route?.icon,
             hasSubTree: false
           };
         }
       }
 
-      if (route.name === "Configurations") {
+      if (route?.name === "Configurations") {
         const isSuperAdmin = userRoles?.some((role) =>
           [AdminTypes.SUPER_ADMIN].includes(role as AdminTypes)
         );
 
         if (isSuperAdmin) {
-          const subRoutes = route.subTree?.filter((subRoute) => {
+          const subRoutes = route?.subTree?.filter((subRoute) => {
             if (
               subRoute.name === "Attendance" &&
               !userRoles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
@@ -213,43 +217,41 @@ const getDrawerRoutes = (
           });
 
           return {
-            id: route.id,
-            name: route.name,
+            id: route?.id,
+            name: route?.name,
             url: ROUTES.CONFIGURATIONS.BASE,
-            icon: route.icon,
-            hasSubTree: route.hasSubTree,
+            icon: route?.icon,
+            hasSubTree: route?.hasSubTree,
             subTree: subRoutes
           };
         }
       }
 
-      if (route.name === "Sign") {
-        const isFeatureEnabled =
-          process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-        if (isFeatureEnabled) {
-          const isEsignEmployeeWithoutManagerOrAdminRole = userRoles?.some(
-            (role) =>
-              [SenderRoleTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
-                role as AdminTypes | SenderRoleTypes
-              )
-          );
-
-          if (!isEsignEmployeeWithoutManagerOrAdminRole) {
-            return {
-              id: route.id,
-              name: route.name,
-              url: ROUTES.SIGN.INBOX,
-              icon: route.icon,
-              hasSubTree: false
-            };
-          }
-        } else {
+      if (route?.name === "Sign") {
+        if (!userRoles?.includes(EmployeeTypes.ESIGN_EMPLOYEE)) {
           return null;
+        }
+
+        const isEsignEmployeeWithoutManagerOrAdminRole = userRoles?.some(
+          (role) =>
+            [SenderTypes.ESIGN_SENDER, AdminTypes.ESIGN_ADMIN].includes(
+              role as AdminTypes | SenderTypes
+            )
+        );
+
+        if (!isEsignEmployeeWithoutManagerOrAdminRole) {
+          return {
+            id: route?.id,
+            name: route?.name,
+            url: ROUTES.SIGN.INBOX,
+            icon: route?.icon,
+            hasSubTree: false
+          };
         }
       }
 
       if (isAuthorized && route?.hasSubTree) {
-        const subRoutes = route.subTree?.filter((subRoute) =>
+        const subRoutes = route?.subTree?.filter((subRoute) =>
           subRoute.requiredAuthLevel?.some((requiredRole) =>
             userRoles?.includes(requiredRole as Role)
           )
@@ -257,21 +259,21 @@ const getDrawerRoutes = (
 
         if (subRoutes && subRoutes?.length > 0) {
           return {
-            id: route.id,
-            name: route.name,
-            url: route.url,
-            icon: route.icon,
-            hasSubTree: route.hasSubTree,
+            id: route?.id,
+            name: route?.name,
+            url: route?.url,
+            icon: route?.icon,
+            hasSubTree: route?.hasSubTree,
             subTree: subRoutes
           };
         }
       } else if (isAuthorized) {
         return {
-          id: route.id,
-          name: route.name,
-          url: route.url,
-          icon: route.icon,
-          hasSubTree: route.hasSubTree
+          id: route?.id,
+          name: route?.name,
+          url: route?.url,
+          icon: route?.icon,
+          hasSubTree: route?.hasSubTree
         };
       }
     })

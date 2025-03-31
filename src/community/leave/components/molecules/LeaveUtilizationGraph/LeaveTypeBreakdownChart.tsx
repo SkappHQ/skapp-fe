@@ -13,7 +13,8 @@ import { LeaveTypeBreakDownReturnTypes } from "~community/leave/types/LeaveUtili
 import { useLeaveUtilizationChartOptions } from "~community/leave/utils/eChartOptions/leaveUtilizationChartOptions";
 
 import LeaveTypeBreakdownButtons from "./LeaveTypeBreakdownButtons";
-import LeaveTypeBreakdownSkeleton from "./LeaveTypeBreakdownSkeleton";
+import LeaveTypeBreakdownSkeleton from "./Skeletons/LeaveTypeBreakdownSkeleton/LeaveTypeBreakdownSkeleton";
+import styles from "./styles";
 
 interface Props {
   isLoading: boolean;
@@ -25,9 +26,10 @@ const LeaveTypeBreakdownChart = ({
   error,
   datasets
 }: Props): JSX.Element => {
-  const chartRef = useRef();
+  const chartRef = useRef<ReactECharts>(null);
 
   const theme: Theme = useTheme();
+  const classes = styles(theme);
 
   const translateTexts = useTranslator("leaveModule", "dashboard");
 
@@ -64,30 +66,9 @@ const LeaveTypeBreakdownChart = ({
   return (
     <>
       {!isLoading ? (
-        <Stack
-          sx={{
-            backgroundColor: theme.palette.grey[100],
-            borderRadius: ".75rem",
-            display: "flex",
-            flexDirection: "column",
-            padding: ".9375rem 1.5rem",
-            minHeight: "18.6875rem"
-          }}
-        >
-          <Stack
-            sx={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between"
-            }}
-          >
-            <Stack
-              direction={"row"}
-              sx={{
-                justifyContent: "space-between"
-              }}
-            >
+        <Stack sx={classes.container}>
+          <Stack sx={classes.innerContainer}>
+            <Stack sx={classes.header}>
               <Typography variant="h4">
                 {translateTexts(["leaveUtilization"])}
               </Typography>
@@ -102,25 +83,9 @@ const LeaveTypeBreakdownChart = ({
               />
             </Stack>
             {isLoading || toggle === undefined ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  width: "100%"
-                }}
-              />
+              <Box sx={classes.loadingPlaceholder} />
             ) : error ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  width: "100%"
-                }}
-              >
+              <Box sx={classes.errorContainer}>
                 <Typography>
                   {translateTexts(["somethingWentWrong"])}
                 </Typography>

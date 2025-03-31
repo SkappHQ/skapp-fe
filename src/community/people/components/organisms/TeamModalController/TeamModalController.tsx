@@ -1,13 +1,13 @@
-import { useSession } from "next-auth/react";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 
 import ModalController from "~community/common/components/organisms/ModalController/ModalController";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import AddEditTeamModal from "~community/people/components/molecules/TeamModals/AddEditTeamModal/AddEditTeamModal";
 import DeleteConfirmModal from "~community/people/components/molecules/TeamModals/DeleteConfirmModal/DeleteConfirmModal";
 import ReassignMembersModal from "~community/people/components/molecules/TeamModals/ReassignMembersModal/ReassignMembersModal";
+import TeamActionModal from "~community/people/components/molecules/TeamModals/TeamActionModal/TeamActionModal";
 import UnsavedAddTeamModal from "~community/people/components/molecules/TeamModals/UnsavedAddTeamModal/UnsavedAddTeamModal";
 import UnsavedEditTeamModal from "~community/people/components/molecules/TeamModals/UnsavedEditTeamModal/UnsavedEditTeamModal";
 import { usePeopleStore } from "~community/people/store/store";
@@ -16,8 +16,7 @@ import {
   TeamModelTypes,
   TeamNamesType
 } from "~community/people/types/TeamTypes";
-
-import TeamActionModal from "../../molecules/TeamModals/TeamActionModal/TeamActionModal";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   setLatestTeamId?: Dispatch<SetStateAction<number | null | undefined>>;
@@ -26,8 +25,8 @@ interface Props {
 
 const TeamModalController: FC<Props> = ({ setLatestTeamId }) => {
   const translateText = useTranslator("peopleModule", "teams");
-  const { data: session } = useSession();
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+
+  const { isPeopleAdmin } = useSessionData();
 
   const {
     isTeamModalOpen,
@@ -35,13 +34,27 @@ const TeamModalController: FC<Props> = ({ setLatestTeamId }) => {
     currentEditingTeam,
     setTeamModalType,
     setIsTeamModalOpen,
-    currentDeletingTeam
-  } = usePeopleStore((state) => state);
+    currentDeletingTeam,
+    setProjectTeamNames
+  } = usePeopleStore((state) => ({
+    isTeamModalOpen: state.isTeamModalOpen,
+    teamModalType: state.teamModalType,
+    currentEditingTeam: state.currentEditingTeam,
+    setTeamModalType: state.setTeamModalType,
+    setIsTeamModalOpen: state.setIsTeamModalOpen,
+    currentDeletingTeam: state.currentDeletingTeam,
+    setProjectTeamNames: state.setProjectTeamNames
+  }));
+
+  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const [tempTeamDetails, setTempTeamDetails] = useState<AddTeamType>();
   const [currentTeamFormData, setCurrentTeamFormData] = useState<AddTeamType>();
-  const { setProjectTeamNames } = usePeopleStore((state) => state);
+
   const { isLoading: teamsIsLoading, data } = useGetAllTeams();
+
   const getModalTitle = (): string => {
     switch (teamModalType) {
       case TeamModelTypes.ADD_TEAM:
@@ -109,6 +122,7 @@ const TeamModalController: FC<Props> = ({ setLatestTeamId }) => {
     ) {
       setTeamModalType(TeamModelTypes.UNSAVED_EDIT_TEAM);
     } else {
+      stopAllOngoingQuickSetup();
       setIsTeamModalOpen(false);
       setTeamModalType(TeamModelTypes.NONE);
     }
@@ -123,7 +137,7 @@ const TeamModalController: FC<Props> = ({ setLatestTeamId }) => {
       isModalOpen={isTeamModalOpen}
       handleCloseModal={handleCloseModal}
       modalTitle={
-        isAdmin ? getModalTitle() : translateText(["viewTeamModalTitle"])
+        isPeopleAdmin ? getModalTitle() : translateText(["viewTeamModalTitle"])
       }
       isClosable={
         teamModalType !== TeamModelTypes.UNSAVED_ADD_TEAM &&

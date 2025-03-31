@@ -34,6 +34,8 @@ import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import { LeaveState } from "~community/leave/types/EmployeeLeaveRequestTypes";
+import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
 import {
   addedHolidays,
   holiday,
@@ -74,6 +76,8 @@ interface Props {
   selectedDate: DateTime | undefined;
   setSelectedDate: Dispatch<SetStateAction<DateTime | undefined>>;
   isYearHidden?: boolean;
+  myLeaveRequests?: MyLeaveRequestPayloadType[];
+  initialMonthlyView?: DateTime | undefined;
 }
 
 const InputDate: FC<Props> = ({
@@ -95,15 +99,19 @@ const InputDate: FC<Props> = ({
   setSelectedDate,
   inputFormat,
   isYearHidden,
-  readOnly = false
+  readOnly = false,
+  myLeaveRequests,
+  initialMonthlyView
 }) => {
   const theme: Theme = useTheme();
-  const classes = styles();
+  const classes = styles(theme);
 
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     holidayType[]
   >([]);
-
+  const [leaveRequests, setLeaveRequests] = useState<
+    { date: string; leaveStates: string }[]
+  >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [placement, setPlacement] = useState<PopperPlacementType>("bottom"); // TODO: Use enums
   const open: boolean = Boolean(anchorEl);
@@ -120,7 +128,15 @@ const InputDate: FC<Props> = ({
       );
       setAlreadyAppliedHolidays(appliedHolidays);
     }
-  }, [holidays]);
+
+    if (myLeaveRequests) {
+      const appliedLeaves = myLeaveRequests?.map((leave) => ({
+        date: leave.startDate,
+        leaveStates: leave.leaveState
+      }));
+      setLeaveRequests(appliedLeaves);
+    }
+  }, [holidays, myLeaveRequests]);
 
   // TODO: Move the isHoliday function to a separate file and write tests for it
   const isHoliday = (day: DateTime) => {
@@ -134,12 +150,23 @@ const InputDate: FC<Props> = ({
     });
   };
 
+  const isLeave = (day: DateTime) => {
+    return leaveRequests?.find((leave) => {
+      const leaveDate = DateTime.fromISO(leave?.date);
+      if (!leaveDate.isValid) {
+        return false;
+      }
+      return leaveDate.hasSame(day, "day");
+    });
+  };
+
   // TODO: Move the HolidayPickersDay to a separate file and fix the type issues
   const HolidayPickersDay = (props: PickersDayProps<DateTime>) => {
     const { day, outsideCurrentMonth, ...other } = props;
     let backgroundStyle = {};
 
     const appliedHoliday = alreadyAppliedHolidays && isHoliday(day);
+    const appliedLeave = leaveRequests && isLeave(day);
 
     if (appliedHoliday) {
       if (appliedHoliday?.holidayType === "FULL_DAY") {
@@ -153,6 +180,18 @@ const InputDate: FC<Props> = ({
       } else if (appliedHoliday.holidayType === "HALF_DAY_EVENING") {
         backgroundStyle = {
           background: `linear-gradient(90deg, transparent 50%, ${theme.palette.grey[200]} 50%)`
+        };
+      }
+    }
+
+    if (appliedLeave) {
+      if (appliedLeave.leaveStates === LeaveState.FULL_DAY) {
+        backgroundStyle = { ...classes.fullDayLeave };
+      } else if (appliedLeave.leaveStates === LeaveState.HALF_DAY_MORNING) {
+        backgroundStyle = { ...classes.halfDayMorningLeave };
+      } else if (appliedLeave.leaveStates === LeaveState.HALF_DAY_EVENING) {
+        backgroundStyle = {
+          ...classes.halfDayEveningLeave
         };
       }
     }
@@ -336,6 +375,7 @@ const InputDate: FC<Props> = ({
                 minDate={minDate}
                 maxDate={maxDate}
                 onAccept={(e) => onAccept(e)}
+                referenceDate={initialMonthlyView}
               />
             </LocalizationProvider>
           </Paper>

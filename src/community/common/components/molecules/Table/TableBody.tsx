@@ -22,6 +22,11 @@ const DELETE_BUTTON_ICON_WIDTH = "10";
 const DELETE_BUTTON_ICON_HEIGHT = "12";
 
 interface Props {
+  id?: {
+    emptyScreen?: {
+      button?: string;
+    };
+  };
   tableHeaders: any[];
   tableRows: any[];
   isCheckboxSelectionEnabled?: boolean;
@@ -57,9 +62,11 @@ interface Props {
     OnClick: (data: any) => void;
   } | null;
   emptyScreenButtonType?: ButtonStyle;
+  shouldEmptyTableScreenBtnBlink?: boolean;
 }
 
 const TableBody: FC<Props> = ({
+  id,
   tableHeaders,
   tableRows,
   isLoading,
@@ -82,7 +89,8 @@ const TableBody: FC<Props> = ({
   isActionColumnEnabled = false,
   actionColumnIconBtnLeft,
   actionColumnIconBtnRight,
-  emptyScreenButtonType
+  emptyScreenButtonType,
+  shouldEmptyTableScreenBtnBlink
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -215,16 +223,19 @@ const TableBody: FC<Props> = ({
           >
             {isDataAvailable ? (
               <TableEmptyScreen
+                id={id}
                 title={emptySearchTitle}
                 description={emptySearchDescription}
               />
             ) : (
               <TableEmptyScreen
+                id={id}
                 title={emptyDataTitle}
                 description={emptyDataDescription}
                 buttonText={emptyScreenButtonText}
                 onButtonClick={onEmptyScreenBtnClick}
                 buttonStyle={emptyScreenButtonType}
+                shouldEmptyTableScreenBtnBlink={shouldEmptyTableScreenBtnBlink}
               />
             )}
           </TableCell>

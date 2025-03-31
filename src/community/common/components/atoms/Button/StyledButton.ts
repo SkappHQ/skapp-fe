@@ -2,6 +2,7 @@ import { Button, type ButtonProps } from "@mui/material";
 import { styled } from "@mui/system";
 import { useMemo } from "react";
 
+import { BrandingBlueColor } from "~community/common/constants/stringConstants";
 import {
   ButtonSizes,
   ButtonStyle
@@ -15,7 +16,7 @@ interface StyledButtonProps {
   textcolor: string;
   isdefaulticoncolor: string;
   isstrokeavailable: string;
-  shouldblink?: boolean; // New prop to enable blinking outline
+  shouldblink?: boolean;
 }
 
 const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
@@ -48,6 +49,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return theme.palette.primary.main;
       case ButtonStyle.SECONDARY:
         return theme.palette.secondary.main;
+      case ButtonStyle.BLUE_OUTLINED:
+        return BrandingBlueColor.secondary.main;
       case ButtonStyle.TERTIARY:
       case ButtonStyle.TERTIARY_OUTLINED:
         return theme.palette.grey[100];
@@ -64,6 +67,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return `0.125rem solid ${theme.palette.secondary.dark}`;
       case ButtonStyle.SECONDARY:
         return `0.125rem solid ${theme.palette.secondary.dark}`;
+      case ButtonStyle.BLUE_OUTLINED:
+        return `0.125rem solid ${BrandingBlueColor.secondary.dark}`;
       case ButtonStyle.TERTIARY:
       case ButtonStyle.TERTIARY_OUTLINED:
         return `0.125rem solid ${theme.palette.grey[500]}`;
@@ -80,6 +85,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return theme.palette.primary.dark;
       case ButtonStyle.SECONDARY:
         return theme.palette.secondary.dark;
+      case ButtonStyle.BLUE_OUTLINED:
+        return BrandingBlueColor.secondary.dark;
       case ButtonStyle.TERTIARY:
       case ButtonStyle.TERTIARY_OUTLINED:
         return theme.palette.grey[500];
@@ -98,6 +105,8 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
         return "none";
       case ButtonStyle.SECONDARY:
         return `0.0625rem solid ${theme.palette.secondary.dark}`;
+      case ButtonStyle.BLUE_OUTLINED:
+        return `0.0625rem solid ${BrandingBlueColor.secondary.dark}`;
       case ButtonStyle.TERTIARY_OUTLINED:
         return `0.0625rem solid ${theme.palette.grey[500]}`;
       default:
@@ -107,7 +116,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
 
   const rgbForBlink = useMemo(() => {
     if (shouldblink) {
-      const rgbValues = parseHexToRgb(theme.palette.secondary.dark);
+      const rgbValues = parseHexToRgb(theme.palette.primary.dark);
 
       return `${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}`;
     }
@@ -127,7 +136,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     backgroundColor: backgroundColor(),
     border: "0.125rem solid transparent",
     outline: outline(),
-    outlineOffset: "-1px",
+    outlineOffset: shouldblink ? "-0.1875rem" : "-0.0625rem",
     borderRadius: "3.125rem",
     ".MuiTypography-root": {
       color: disabled ? theme.palette.grey[800] : textcolor
@@ -159,16 +168,22 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
       border: `0.125rem solid ${theme.palette.grey[300]}`
     },
     ...(shouldblink && {
-      animation: "blink 1.5s ease-in-out infinite",
+      animation: "blink 3s ease-in-out infinite",
       "@keyframes blink": {
         "0%": {
-          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.2)`
+        },
+        "25%": {
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.8)`
         },
         "50%": {
-          boxShadow: `0 0 0.5rem 0.25rem rgb(${rgbForBlink})`
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.2)`
+        },
+        "75%": {
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.8)`
         },
         "100%": {
-          boxShadow: `0 0 0.25rem 0.125rem rgb(${rgbForBlink})`
+          outline: `0.1875rem solid rgba(${rgbForBlink}, 0.2)`
         }
       }
     })

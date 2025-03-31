@@ -81,13 +81,22 @@ export const useGetResourceAvailability = ({
   });
 };
 
-export const useGetMyRequests = (): UseQueryResult<
-  MyLeaveRequestPayloadType[]
-> => {
+export const useGetMyRequests = ({
+  isExport = false
+}: {
+  isExport: boolean;
+}): UseQueryResult<MyLeaveRequestPayloadType[]> => {
   return useQuery({
-    queryKey: myRequestsQueryKeys.MY_REQUESTS,
+    queryKey: myRequestsQueryKeys.MY_REQUESTS(isExport),
     queryFn: async () => {
-      const response = await authFetch.get(myRequestsEndPoints.GET_MY_REQUESTS);
+      const response = await authFetch.get(
+        myRequestsEndPoints.GET_MY_REQUESTS,
+        {
+          params: {
+            isExport: isExport
+          }
+        }
+      );
       return response;
     },
     select: (response) => {

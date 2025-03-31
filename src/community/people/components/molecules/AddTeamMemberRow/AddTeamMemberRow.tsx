@@ -1,7 +1,7 @@
 import { Box, Stack, Theme, Typography, useTheme } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { FC, useEffect, useState } from "react";
 import * as React from "react";
+import { FC, useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -16,14 +16,14 @@ import { IconName } from "~community/common/types/IconTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
 import { MAX_NUM_OF_SUPERVISORS_PER_TEAM } from "~community/people/constants/configs";
 import { MemberTypes } from "~community/people/enums/TeamEnums";
-import { EmployeeType } from "~community/people/types/EmployeeTypes";
+import { EmployeeDataType } from "~community/people/types/EmployeeTypes";
 import { TeamMemberTypes } from "~community/people/types/TeamTypes";
 
 import styles from "./styles";
 
 interface Props {
   id: string;
-  employeeData: EmployeeType;
+  employeeData: EmployeeDataType;
   userType: MemberTypes.MEMBER | MemberTypes.SUPERVISOR;
   teamMembers: TeamMemberTypes;
   setTeamMembers: (teamMembers: TeamMemberTypes) => void;
@@ -64,10 +64,10 @@ const AddTeamMemberRow: FC<Props> = ({
     const newValue: MemberTypes = e.currentTarget.innerText as MemberTypes;
 
     const updatedMembers = teamMembers?.members?.filter(
-      (user: EmployeeType) => user?.employeeId !== employeeData?.employeeId
+      (user: EmployeeDataType) => user?.employeeId !== employeeData?.employeeId
     );
     const updatedSupervisors = teamMembers?.supervisor?.filter(
-      (user: EmployeeType) => user?.employeeId !== employeeData?.employeeId
+      (user: EmployeeDataType) => user?.employeeId !== employeeData?.employeeId
     );
 
     if (newValue === MemberTypes.SUPERVISOR) {
@@ -136,7 +136,7 @@ const AddTeamMemberRow: FC<Props> = ({
           />
         </Box>
         <Typography sx={classes.jobTitle}>
-          {`${employeeData?.jobLevel?.name ?? ""} ${employeeData?.jobRole?.name ?? ""}`}
+          {`${employeeData?.jobLevel ?? ""} ${employeeData?.jobRole ?? ""}`}
         </Typography>
       </Stack>
       <Button

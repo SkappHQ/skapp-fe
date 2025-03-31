@@ -1,6 +1,8 @@
 import { type Theme } from "@mui/material";
 
-const styles = (theme: Theme) => ({
+import { StyleProps } from "~community/common/types/CommonTypes";
+
+const styles = (theme: Theme): StyleProps => ({
   outermostStack: {
     flexDirection: "column",
     marginTop: "1.25rem",
@@ -12,6 +14,9 @@ const styles = (theme: Theme) => ({
     fontSize: "1.25rem",
     lineHeight: "1.875rem",
     marginBottom: "1.5rem"
+  },
+  eventContainer: {
+    flexDirection: "column"
   },
   eventStack: {
     flexDirection: "row",
@@ -72,10 +77,12 @@ const styles = (theme: Theme) => ({
   eventTitleTypography: {
     fontWeight: 400,
     fontSize: "1rem",
-    lineHeight: "1.5rem"
+    lineHeight: "1.5rem",
+    marginLeft: "2rem"
   },
   eventDataStack: {
-    flexDirection: "row",
+    flexDirection: { xs: "column", sm: "row" },
+    gap: { xs: "0.625rem", sm: "0rem" },
     alignItems: "center",
     width: "100%",
     justifyContent: "space-between"
@@ -83,7 +90,8 @@ const styles = (theme: Theme) => ({
   eventNameStack: {
     flexDirection: "row",
     gap: "1rem",
-    flex: 2
+    width: "max-content",
+    justifyContent: { xs: "flex-start", sm: "center" }
   },
   rightArrowBox: {
     display: "flex",
@@ -102,7 +110,8 @@ const styles = (theme: Theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-end",
-    gap: "0.125rem"
+    gap: "0.125rem",
+    alignSelf: "end"
   },
   createdByTypography: {
     fontWeight: 400,

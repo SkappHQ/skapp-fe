@@ -32,9 +32,8 @@ const LeaveEntitlementModalController: FC = () => {
   const getModalTitle = (): string => {
     switch (leaveEntitlementModalType) {
       case LeaveEntitlementModelTypes.DOWNLOAD_CSV:
-        return translateText(["downloadCsvModalTitle"]);
       case LeaveEntitlementModelTypes.UPLOAD_CSV:
-        return translateText(["uploadCsvModalTitle"]);
+        return translateText(["addEntitlementsModalTitle"]);
       case LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION:
         return translateText(["overrideConfirmationModalTitle"], {
           uploadingYear: selectedYear
@@ -46,12 +45,21 @@ const LeaveEntitlementModalController: FC = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setLeaveEntitlementModalType(LeaveEntitlementModelTypes.NONE);
+
+    if (
+      leaveEntitlementModalType ===
+      LeaveEntitlementModelTypes.BULK_UPLOAD_SUMMARY
+    ) {
+      setErrorLog(null);
+    }
+  };
+
   return (
     <ModalController
       isModalOpen={isLeaveEntitlementModalOpen}
-      handleCloseModal={() =>
-        setLeaveEntitlementModalType(LeaveEntitlementModelTypes.NONE)
-      }
+      handleCloseModal={handleCloseModal}
       modalTitle={getModalTitle()}
       isClosable={
         LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION !==
@@ -78,7 +86,6 @@ const LeaveEntitlementModalController: FC = () => {
           <LeaveEntitlementBulkUploadSummary
             leaveTypes={leaveTypes}
             errorLog={errorLog}
-            setErrorLog={setErrorLog}
           />
         )}
       </>

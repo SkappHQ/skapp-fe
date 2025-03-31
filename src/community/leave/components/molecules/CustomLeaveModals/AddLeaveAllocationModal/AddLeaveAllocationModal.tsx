@@ -75,15 +75,19 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
     onAddError
   );
 
-  const onSubmit = useCallback(
-    (values: CustomLeaveAllocationType) => {
+  const onSubmit = async (
+    values: CustomLeaveAllocationType,
+    onAddSuccess: () => void,
+    onAddError: () => void
+  ) => {
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (!hasErrors) {
       mutate(values, {
         onSuccess: onAddSuccess,
         onError: onAddError
       });
-    },
-    [mutate, onAddSuccess, onAddError]
-  );
+    }
+  };
 
   const validationSchema = useMemo(
     () => customLeaveAllocationValidation(translateText),
@@ -93,7 +97,9 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
   const form = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: async (values) => {
+      onSubmit(values, onAddSuccess, onAddError);
+    },
     enableReinitialize: true,
     validateOnChange: false
   });
@@ -133,7 +139,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
           styles={{ mt: "1rem" }}
           buttonStyle={ButtonStyle.PRIMARY}
           endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
-          onClick={() => onSubmit(values)}
+          onClick={() => onSubmit(values, onAddSuccess, onAddError)}
           disabled={isSaveDisabled}
         />
         <Button

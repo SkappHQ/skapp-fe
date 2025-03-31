@@ -125,6 +125,7 @@ export interface EmployeeDataParamsTypes {
   sortOrder?: string;
   searchKeyword?: string;
   isExport?: boolean;
+  accountStatus?: EmploymentStatusTypes;
 }
 
 export interface JobRole {
@@ -434,7 +435,7 @@ export interface EmployeeDataExists {
 export interface QuickAddEmployeePayload {
   firstName: string;
   lastName: string;
-  workEmail: string;
+  email: string;
   userRoles: EmployeeRoleType;
 }
 

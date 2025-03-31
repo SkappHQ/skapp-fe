@@ -21,7 +21,8 @@ import {
 
 export const useGetLeaveEntitlements = (
   selectedYear: string,
-  page: number
+  page: number,
+  keyword: string
 ): UseQueryResult<LeaveEntitlementResponseType> => {
   const pageParams = {
     page: page - 1,
@@ -29,6 +30,7 @@ export const useGetLeaveEntitlements = (
     year: selectedYear,
     isExport: false,
     sortOrder: SortOrderTypes.ASC,
+    keyword: keyword,
     sortKey: SortKeyTypes.CREATED_DATE
   };
 
@@ -40,6 +42,7 @@ export const useGetLeaveEntitlements = (
       }),
     select: (data) => {
       const results = data.data.results ?? [];
+
       return results[0];
     }
   });

@@ -1,125 +1,91 @@
-import { Stack } from "@mui/material";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
-import TimeWidgetPopupController from "~community/attendance/components/organisms/TimeWidgetPopupController/TimeWidgetPopupController";
-import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
-import AppBar from "~community/common/components/organisms/AppBar/AppBar";
-import Drawer from "~community/common/components/organisms/Drawer/Drawer";
+import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
+import ProtectedContent from "~community/common/components/organisms/ProtectedContent/ProtectedContent";
+import UnProtectedContent from "~community/common/components/organisms/UnProtectedContent/UnProtectedContent";
 import { appModes } from "~community/common/constants/configs";
-import ROUTES from "~community/common/constants/routes";
-import {
-  initialState,
-  useToast
-} from "~community/common/providers/ToastProvider";
-import { IsProtectedUrl } from "~community/common/utils/authUtils";
+import useSessionData from "~community/common/hooks/useSessionData";
+import { IsAProtectedUrlWithDrawer } from "~community/common/utils/authUtils";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
-import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
 import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
 import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 
-import styles from "./styles";
-
-interface BaseLayoutProps {
+interface Props {
   children: ReactNode;
 }
 
-const BaseLayout = ({ children }: BaseLayoutProps) => {
-  const classes = styles();
-
-  const { toastMessage, setToastMessage } = useToast();
+const BaseLayout = ({ children }: Props) => {
   const { asPath } = useRouter();
+
+  const { sessionStatus } = useSessionData();
 
   const { token } = useFcmToken();
 
-  const [isClient, setIsClient] = useState(false);
-  const [isProtected, setIsProtected] = useState(false);
-
   const environment = useGetEnvironment();
-
   const isEnterprise = environment === appModes.ENTERPRISE;
 
-  const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => state);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
-  const { data: globalLogin } = useGetGlobalLoginMethod(
-    isEnterprise,
-    tenantID as string
-  );
+  const { setGlobalLoginMethod } = useCommonEnterpriseStore((state) => ({
+    setGlobalLoginMethod: state.setGlobalLoginMethod
+  }));
 
-  useEffect(() => {
-    if (globalLogin) {
-      setGlobalLoginMethod(globalLogin);
-    }
-  }, [globalLogin, setGlobalLoginMethod]);
+  const { data: globalLogin, isLoading: isGlobalLoginMethodLoading } =
+    useGetGlobalLoginMethod(isEnterprise, tenantID as string);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (isClient) {
-      setIsProtected(IsProtectedUrl(asPath));
+    if (globalLogin) {
+      setGlobalLoginMethod(globalLogin);
     }
+  }, [globalLogin]);
+
+  const isProtectedRouteWithDrawer = useMemo(() => {
+    return isClient ? IsAProtectedUrlWithDrawer(asPath) : false;
   }, [asPath, isClient]);
 
   useEffect(() => {
-    if (isProtected && token) {
+    if (isProtectedRouteWithDrawer && token) {
       setDeviceToken(token);
     }
-  }, [isProtected, token]);
+  }, [isProtectedRouteWithDrawer, token]);
 
-  if (
-    isProtected &&
-    asPath !== ROUTES.SIGN.CREATE_DOCUMENT &&
-    (!isEnterprise || globalLogin)
-  ) {
-    return (
-      <>
-        <Stack sx={classes.protectedWrapper}>
-          <Drawer />
-          <Stack sx={classes.contentWrapper}>
-            <AppBar />
-            {children}
-          </Stack>
-        </Stack>
-        <ToastMessage
-          key={toastMessage.key}
-          open={toastMessage.open}
-          title={toastMessage.title}
-          description={toastMessage.description}
-          toastType={toastMessage.toastType}
-          autoHideDuration={toastMessage.autoHideDuration}
-          handleToastClick={toastMessage.handleToastClick}
-          isIcon={toastMessage.isIcon}
-          onClose={() => setToastMessage(initialState)}
-        />
-        <TimeWidgetPopupController />
-        <MyRequestModalController />
-      </>
-    );
-  }
+  const renderComponent = useMemo(() => {
+    switch (sessionStatus) {
+      case "loading":
+        return <FullScreenLoader />;
+      case "authenticated": {
+        if (isEnterprise && isGlobalLoginMethodLoading) {
+          return <FullScreenLoader />;
+        }
 
-  return (
-    <>
-      <Stack sx={classes.unProtectedWrapper}>
-        {children}
-        <ToastMessage
-          key={toastMessage.key}
-          open={toastMessage.open}
-          title={toastMessage.title}
-          description={toastMessage.description}
-          toastType={toastMessage.toastType}
-          autoHideDuration={toastMessage.autoHideDuration}
-          handleToastClick={toastMessage.handleToastClick}
-          isIcon={toastMessage.isIcon}
-          onClose={() => setToastMessage(initialState)}
-        />
-      </Stack>
-    </>
-  );
+        if (isProtectedRouteWithDrawer) {
+          return <ProtectedContent>{children}</ProtectedContent>;
+        }
+
+        return <UnProtectedContent>{children}</UnProtectedContent>;
+      }
+      case "unauthenticated":
+        return <UnProtectedContent>{children}</UnProtectedContent>;
+      default:
+        return <></>;
+    }
+  }, [
+    sessionStatus,
+    children,
+    isEnterprise,
+    isGlobalLoginMethodLoading,
+    isProtectedRouteWithDrawer
+  ]);
+
+  return renderComponent;
 };
 
 export default BaseLayout;

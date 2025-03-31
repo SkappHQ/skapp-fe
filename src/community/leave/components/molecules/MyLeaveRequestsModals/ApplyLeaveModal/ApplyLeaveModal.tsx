@@ -81,6 +81,7 @@ const ApplyLeaveModal = () => {
     selectedDates,
     selectedDuration,
     selectedLeaveAllocationData,
+    isApplyLeaveModalBtnDisabled,
     setComment,
     setSelectedTeam,
     setSelectedDates,
@@ -90,7 +91,28 @@ const ApplyLeaveModal = () => {
     setAttachments,
     setMyLeaveRequestModalType,
     setLeaveRequestId
-  } = useLeaveStore();
+  } = useLeaveStore((state) => ({
+    comment: state.comment,
+    attachments: state.attachments,
+    formErrors: state.formErrors,
+    selectedTeam: state.selectedTeam,
+    selectedYear: state.selectedYear,
+    selectedMonth: state.selectedMonth,
+    selectedDates: state.selectedDates,
+    selectedDuration: state.selectedDuration,
+    selectedLeaveAllocationData: state.selectedLeaveAllocationData,
+    isApplyLeaveModalBtnDisabled: state.isApplyLeaveModalBtnDisabled,
+    setComment: state.setComment,
+    setSelectedTeam: state.setSelectedTeam,
+    setSelectedDates: state.setSelectedDates,
+    setSelectedMonth: state.setSelectedMonth,
+    setSelectedDuration: state.setSelectedDuration,
+    setFormErrors: state.setFormErrors,
+    setAttachments: state.setAttachments,
+    setMyLeaveRequestModalType: state.setMyLeaveRequestModalType,
+    setLeaveRequestId: state.setLeaveRequestId,
+    setIsMyRequestModalOpen: state.setIsMyRequestModalOpen
+  }));
 
   const firstDateOfYear = useMemo(
     () => getFirstDateOfYear(DateTime.now().year).toJSDate(),
@@ -103,7 +125,7 @@ const ApplyLeaveModal = () => {
 
   const { data: myTeams } = useGetMyTeams();
 
-  const { data: myLeaveRequests } = useGetMyRequests();
+  const { data: myLeaveRequests } = useGetMyRequests({ isExport: true });
 
   const { data: allHolidays } = useGetAllHolidays(currentYear.toString());
 
@@ -191,16 +213,32 @@ const ApplyLeaveModal = () => {
     endDate: startAndEndDates.end
   });
 
+  const disabledDurationSelectorOptions = useMemo(() => {
+    const disabledOptions = getDurationSelectorDisabledOptions({
+      selectedDates,
+      duration: selectedLeaveAllocationData.leaveType.leaveDuration,
+      myLeaveRequests: pendingAndApprovedLeaveRequests,
+      allHolidays
+    });
+
+    return disabledOptions;
+  }, [
+    pendingAndApprovedLeaveRequests,
+    allHolidays,
+    selectedDates,
+    selectedLeaveAllocationData.leaveType.leaveDuration
+  ]);
+
   useEffect(() => {
-    if (selectedDuration === LeaveStates.NONE) {
-      const duration = getDurationInitialValue(
-        selectedLeaveAllocationData.leaveType.leaveDuration
-      );
-      setSelectedDuration(duration);
-    }
+    const defaultDurationValue = getDurationInitialValue({
+      allowedDurations: selectedLeaveAllocationData.leaveType.leaveDuration,
+      disabledOptions: disabledDurationSelectorOptions
+    });
+
+    setSelectedDuration(defaultDurationValue);
   }, [
     selectedLeaveAllocationData.leaveType.leaveDuration,
-    selectedDuration,
+    disabledDurationSelectorOptions,
     setSelectedDuration
   ]);
 
@@ -356,12 +394,7 @@ const ApplyLeaveModal = () => {
               halfDayMorning: LeaveStates.MORNING,
               halfDayEvening: LeaveStates.EVENING
             }}
-            disabledOptions={getDurationSelectorDisabledOptions({
-              selectedDates,
-              duration: selectedLeaveAllocationData.leaveType.leaveDuration,
-              myLeaveRequests: pendingAndApprovedLeaveRequests,
-              resourceAvailability
-            })}
+            disabledOptions={disabledDurationSelectorOptions}
             value={selectedDuration}
           />
           <TextArea
@@ -425,6 +458,7 @@ const ApplyLeaveModal = () => {
           endIcon={IconName.TICK_ICON}
           onClick={onSubmit}
           isLoading={isLeaveApplyPending}
+          disabled={isApplyLeaveModalBtnDisabled}
         />
         <Button
           label={translateText(["cancelBtn"])}

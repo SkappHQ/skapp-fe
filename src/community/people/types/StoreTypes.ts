@@ -1,4 +1,7 @@
-import { FilterButtonTypes } from "~community/common/types/CommonTypes";
+import {
+  FileUploadType,
+  FilterButtonTypes
+} from "~community/common/types/CommonTypes";
 import { MenuitemsDataTypes } from "~community/common/types/filterTypes";
 
 import { JobFamilyActionModalEnums } from "../enums/JobFamilyEnums";
@@ -46,6 +49,16 @@ import {
   TransferMemberFormType
 } from "./JobFamilyTypes";
 import { DirectoryModalTypes } from "./ModalTypes";
+import { EditPeopleFormTypes } from "./PeopleEditTypes";
+import {
+  L1EmployeeType,
+  L2CommonDetailsType,
+  L2EmergencyDetailsType,
+  L2EmploymentFormDetailsType,
+  L2PersonalDetailsType,
+  L2SystemPermissionsType
+} from "./PeopleTypes";
+import { AddCalenderInputType } from "./SliceTypes";
 import {
   ProjectTeamsAndEmployeesType,
   ProjectTeamsModalTypes,
@@ -99,8 +112,10 @@ interface actionsTypes {
   setHolidayModalType: (value: holidayModalTypes) => void;
 
   //addNewCalenderModalSlice
-  setNewCalendarDetails?: (key: string, value: any) => void;
-  removeAddedCalendarDetails?: () => void;
+  setIsNewCalendarDetailsValid: (status: boolean) => void;
+  setNewCalendarDetails: (value: FileUploadType[]) => void;
+  setCalendarErrors: (value: string) => void;
+  removeAddedCalendarDetails: () => void;
 
   //employeeDataFiltersSlice
   handleEmployeeDataSort: (key: string, value: string | boolean) => void;
@@ -204,6 +219,7 @@ interface actionsTypes {
   setIsLeaveTabVisible: (value: boolean) => void;
   setIsTimeTabVisible: (value: boolean) => void;
   setIsReinviteConfirmationModalOpen: (value: boolean) => void;
+  setSelectedEmployees: (value: number[]) => void;
 
   //projectTeamModalSlice
   setProjectTeamsModalOpen: (value: boolean) => void;
@@ -223,6 +239,28 @@ interface actionsTypes {
 
   //terminationAlertModalSlice
   setTerminationAlertModalOpen: (value: boolean) => void;
+
+  //userDeletionModalSlice
+  setDeletionConfirmationModalOpen: (value: boolean) => void;
+  setDeletionAlertMessage: (value: string) => void;
+  setDeletionAlertOpen: (value: boolean) => void;
+
+  //people slice
+  setEmployee: (employee: L1EmployeeType) => void;
+  setPersonalDetails: (personal: L2PersonalDetailsType) => void;
+  setEmergencyDetails: (emergency: L2EmergencyDetailsType) => void;
+  setEmploymentDetails: (employment: L2EmploymentFormDetailsType) => void;
+  setSystemPermissions: (systemPermissions: L2SystemPermissionsType) => void;
+  setCommonDetails: (common: L2CommonDetailsType) => void;
+  setNextStep: (step: EditPeopleFormTypes) => void;
+  setCurrentStep: (step: EditPeopleFormTypes) => void;
+  setIsUnsavedChangesModalOpen: (status: boolean) => void;
+  setIsUnsavedModalSaveButtonClicked: (status: boolean) => void;
+  setIsUnsavedModalDiscardButtonClicked: (status: boolean) => void;
+  setActiveStep: (step: number) => void;
+  setProfilePic: (profilePic: ModifiedFileType[] | null) => void;
+  setThumbnail: (thumbnail: ModifiedFileType[] | null) => void;
+  resetPeopleSlice: () => void;
 }
 
 export interface Store extends actionsTypes {
@@ -278,7 +316,9 @@ export interface Store extends actionsTypes {
   holidayModalType: holidayModalTypes;
 
   //addNewCalenderModalSlice
-  newCalenderDetails: any;
+  newCalenderDetails: AddCalenderInputType;
+  isNewCalendarDetailsValid: boolean;
+  calendarErrors: string;
 
   //employeeDataFiltersSlice
   employeeDataFilter: EmployeeDataFilterTypes;
@@ -287,6 +327,7 @@ export interface Store extends actionsTypes {
   menuItems: MenuitemsDataTypes[];
   searchedItems: string[];
   isPendingInvitationListOpen: boolean;
+  selectedEmployees: number[];
 
   //directoryModalSlice
   isDirectoryModalOpen: boolean;
@@ -335,4 +376,21 @@ export interface Store extends actionsTypes {
 
   //terminationAlertModalSlice
   isTerminationAlertModalOpen: boolean;
+
+  //userDeletionModalSlice
+  isDeletionConfirmationModalOpen: boolean;
+  deletionAlertMessage: string;
+  isDeletionAlertOpen: boolean;
+
+  //people slice
+  employee: L1EmployeeType;
+  initialEmployee: L1EmployeeType;
+  nextStep: EditPeopleFormTypes;
+  currentStep: EditPeopleFormTypes;
+  isUnsavedChangesModalOpen: boolean;
+  isUnsavedModalSaveButtonClicked: boolean;
+  isUnsavedModalDiscardButtonClicked: boolean;
+  activeStep: number;
+  profilePic: ModifiedFileType[] | null;
+  thumbnail: ModifiedFileType[] | null;
 }

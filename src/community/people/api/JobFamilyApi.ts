@@ -20,6 +20,7 @@ import {
   sortJobFamilyArrayInAscendingOrder,
   sortJobTitlesArrayInAscendingOrder
 } from "~community/people/utils/jobFamilyUtils/commonUtils";
+import { quickSetupQueryKeys } from "~enterprise/common/api/utils/QueryKeys";
 
 export const useGetAllJobFamilies = (): UseQueryResult<AllJobFamilyType[]> => {
   return useQuery({
@@ -62,6 +63,9 @@ export const useAddJobFamily = (onSuccess: () => void, onError: () => void) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: jobFamilyQueryKeys.ALL_JOB_FAMILIES
+      });
+      queryClient.invalidateQueries({
+        queryKey: quickSetupQueryKeys.QUICK_SETUP_PROGRESS
       });
       onSuccess();
     },
