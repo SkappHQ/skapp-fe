@@ -25,6 +25,8 @@ const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
 
   const isReadOnly = !isPeopleAdmin && userId !== employeeId;
 
+  const isSystemPermissionsReadOnly = !isPeopleAdmin;
+
   const getAddFlowSection = () => {
     switch (activeStep) {
       case 0:
@@ -53,7 +55,7 @@ const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
       case EditPeopleFormTypes.employment:
         return <EmploymentDetailsForm isAddFlow={isAddFlow} isReadOnly={isReadOnly} isUpdate />;
       case EditPeopleFormTypes.permission:
-        return <SystemPermissionFormSection isAddFlow={isAddFlow} isReadOnly={isReadOnly} />;
+        return <SystemPermissionFormSection isAddFlow={isAddFlow} isReadOnly={isSystemPermissionsReadOnly} />;
       case EditPeopleFormTypes.timeline:
         return <PeopleTimeline employeeId={employeeId} />;
       case EditPeopleFormTypes.leave:
