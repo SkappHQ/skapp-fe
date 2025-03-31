@@ -14,9 +14,15 @@ import { handleError } from "../directoryUtils/addNewResourceFlowUtils/addNewRes
 import uploadImage from "../image/uploadImage";
 
 export const useHandlePeopleEdit = () => {
-  const { profilePic, thumbnail, setCommonDetails } = usePeopleStore(
-    (state) => state
-  );
+  const {
+    profilePic,
+    thumbnail,
+    employee,
+    initialEmployee,
+    isReinviteConfirmationModalOpen,
+    setIsReinviteConfirmationModalOpen,
+    setCommonDetails
+  } = usePeopleStore((state) => state);
 
   const environment = useGetEnvironment();
 
@@ -46,6 +52,16 @@ export const useHandlePeopleEdit = () => {
 
   const translateError = useTranslator("peopleModule", "addResource");
   const handleMutate = async () => {
+    if (
+      employee.employment?.employmentDetails?.email !==
+        initialEmployee.employment?.employmentDetails?.email &&
+      !isReinviteConfirmationModalOpen
+    ) {
+      setIsReinviteConfirmationModalOpen(true);
+      return;
+    }
+    setIsReinviteConfirmationModalOpen(false);
+
     if (profilePic !== null) {
       const newAuthPicURL = await uploadImage({
         environment,

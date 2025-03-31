@@ -90,7 +90,6 @@ const PersonalDetailsForm = ({
 
         handleMutate();
       }
-      setEmployee(employee);
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);

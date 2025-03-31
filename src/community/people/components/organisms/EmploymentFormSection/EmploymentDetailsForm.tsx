@@ -76,7 +76,6 @@ const EmploymentDetailsForm = ({
 
         handleMutate();
       }
-      setEmployee(employee);
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);

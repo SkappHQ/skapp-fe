@@ -18,9 +18,7 @@ const PeopleAccount = () => {
       pageHead={translateText(["editAllInfo", "tabTitle"])}
       title={""}
     >
-      <>
-        <AccountSectionWrapper employeeId={Number(data?.user.userId)} />
-      </>
+      <AccountSectionWrapper employeeId={Number(data?.user.userId)} />
     </ContentLayout>
   );
 };

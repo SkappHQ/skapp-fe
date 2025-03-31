@@ -5,6 +5,8 @@ import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector
 import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
+import EditAllInfoSkeleton from "../../molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
+import RouteChangeAreYouSureModal from "../../molecules/RouteChangeAreYouSureModal/RouteChangeAreYouSureModal";
 import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import UserDetailsCentered from "../../molecules/UserDetailsCentered/UserDetailsCentered";
 import PeopleAccountSection from "../PeopleAccountSection/PeopleAccountSection";
@@ -13,7 +15,7 @@ interface Props {
   employeeId: number;
 }
 const AccountSectionWrapper = ({ employeeId }: Props) => {
-  const { data: employeeData } = useGetEmployee(employeeId);
+  const { data: employeeData, isLoading } = useGetEmployee(employeeId);
 
   const {
     currentStep,
@@ -64,7 +66,7 @@ const AccountSectionWrapper = ({ employeeId }: Props) => {
         />
       )}
       <DirectorySteppers employeeId={employeeId} isAccountView />
-      <PeopleAccountSection />
+      {isLoading ? <EditAllInfoSkeleton /> : <PeopleAccountSection />}
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
         onDiscard={() => {
@@ -74,6 +76,7 @@ const AccountSectionWrapper = ({ employeeId }: Props) => {
           setIsUnsavedModalSaveButtonClicked(true);
         }}
       />
+      <RouteChangeAreYouSureModal />
     </>
   );
 };

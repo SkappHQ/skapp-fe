@@ -68,7 +68,6 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
 
         handleMutate();
       }
-      setEmployee(employee);
     } else {
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);

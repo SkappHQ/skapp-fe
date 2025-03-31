@@ -732,7 +732,7 @@ export const useEditEmployee = (employeeId: string) => {
   );
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
-  const { setProfilePic } = usePeopleStore((state) => state);
+  const { setProfilePic, resetPeopleSlice } = usePeopleStore((state) => state);
 
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
@@ -744,6 +744,7 @@ export const useEditEmployee = (employeeId: string) => {
     },
     onSuccess: () => {
       setProfilePic(null);
+      resetPeopleSlice();
       setToastMessage({
         open: true,
         toastType: ToastType.SUCCESS,

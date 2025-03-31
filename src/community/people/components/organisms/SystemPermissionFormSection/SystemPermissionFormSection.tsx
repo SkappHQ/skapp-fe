@@ -122,7 +122,6 @@ const SystemPermissionFormSection = ({
 
         handleMutate();
       }
-      setEmployee(employee);
     }
   };
   const onCancel = () => {
