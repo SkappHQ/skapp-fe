@@ -25,8 +25,12 @@ import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormS
 
 interface Props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
-const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
+const PreviousEmploymentDetailsSection = ({
+  isInputsDisabled,
+  isReadOnly = false
+}: Props) => {
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -98,6 +102,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             }}
             isDisabled={isInputsDisabled}
             maxLength={50}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -116,6 +121,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             }}
             isDisabled={isInputsDisabled}
             maxLength={50}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -144,6 +150,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             disabled={isInputsDisabled}
             selectedDate={selectedStartDate}
             setSelectedDate={setSelectedStartDate}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -173,6 +180,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
             disabled={isInputsDisabled}
             setSelectedDate={setSelectedEndDate}
             selectedDate={selectedEndDate}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -193,7 +201,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
                 mt: "2rem"
               }}
               type={ButtonTypes.SUBMIT}
-              disabled={isInputsDisabled}
+              disabled={isInputsDisabled || isReadOnly}
             />
           )}
         </Grid>
@@ -204,7 +212,7 @@ const PreviousEmploymentDetailsSection = ({ isInputsDisabled }: Props) => {
               employee?.employment
                 ?.previousEmployment as L3PreviousEmploymentDetailsType[]
             )}
-            actionsNeeded={!isInputsDisabled}
+            actionsNeeded={!isInputsDisabled && !isReadOnly}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}

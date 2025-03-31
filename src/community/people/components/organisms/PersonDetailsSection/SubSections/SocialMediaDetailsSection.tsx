@@ -15,11 +15,12 @@ import { employeeSocialMediaDetailsValidation } from "~community/people/utils/pe
 
 interface props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
 const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
   (props, ref) => {
-    const { isInputsDisabled } = props;
+    const { isInputsDisabled, isReadOnly = false } = props;
     const theme: Theme = useTheme();
     const translateText = useTranslator(
       "peopleModule",
@@ -117,6 +118,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
                 }}
                 isDisabled={isInputsDisabled}
                 maxLength={SOCIAL_MEDIA_MAX_CHARACTER_LENGTH}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -143,6 +145,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
                 }}
                 isDisabled={isInputsDisabled}
                 maxLength={SOCIAL_MEDIA_MAX_CHARACTER_LENGTH}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -169,6 +172,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
                 }}
                 isDisabled={isInputsDisabled}
                 maxLength={SOCIAL_MEDIA_MAX_CHARACTER_LENGTH}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -195,6 +199,7 @@ const SocialMediaDetailsSection = forwardRef<FormMethods, props>(
                 }}
                 isDisabled={isInputsDisabled}
                 maxLength={SOCIAL_MEDIA_MAX_CHARACTER_LENGTH}
+                readOnly={isReadOnly}
               />
             </Grid>
           </Grid>

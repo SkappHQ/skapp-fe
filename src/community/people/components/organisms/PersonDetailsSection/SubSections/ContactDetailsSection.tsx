@@ -19,10 +19,11 @@ import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormS
 
 interface Props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
 const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
-  const { isInputsDisabled } = props;
+  const { isInputsDisabled, isReadOnly = false } = props;
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -124,6 +125,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
                 mt: "0rem"
               }}
               isDisabled={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
 
@@ -141,7 +143,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               }}
               placeHolder={translateText(["enterContactNo"])}
               isDisabled={isInputsDisabled}
-              readOnly={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
           <Grid
@@ -166,6 +168,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               }}
               maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
               isDisabled={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
 
@@ -184,6 +187,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               }}
               maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
               isDisabled={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
 
@@ -202,6 +206,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               }}
               maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
               isDisabled={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
 
@@ -220,7 +225,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               error={errors.country ?? ""}
               componentStyle={{ mt: "0rem" }}
               isDisabled={isInputsDisabled}
-              readOnly={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
 
@@ -239,6 +244,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               }}
               maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
               isDisabled={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
 
@@ -257,6 +263,7 @@ const ContactDetailsSection = forwardRef<FormMethods, Props>((props, ref) => {
               }}
               maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
               isDisabled={isInputsDisabled}
+              readOnly={isReadOnly}
             />
           </Grid>
         </Grid>
