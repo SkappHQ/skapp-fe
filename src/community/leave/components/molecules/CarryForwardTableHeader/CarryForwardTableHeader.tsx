@@ -30,7 +30,9 @@ const CarryForwardTableHeader: FC<Props> = ({ leaveHeaders }) => {
         </Box>
         {leaveHeaders?.map((header, index) => (
           <Box sx={styles.headerCell} key={index}>
-            <Typography variant="body2">{header?.toUpperCase()}</Typography>
+            <Typography variant="body2" sx={styles.label}>
+              {header?.toUpperCase()}
+            </Typography>
           </Box>
         ))}
       </Stack>

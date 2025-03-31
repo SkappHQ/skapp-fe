@@ -35,8 +35,7 @@ export const carryForwardTableHeaderStyles = (theme: Theme) => ({
       flex: 0.5,
       minWidth: "10rem"
     },
-    height: "100%",
-    borderRightColor: theme.palette.grey[500]
+    height: "100%"
   },
   columnText: {
     letterSpacing: "0.03em",
@@ -47,24 +46,23 @@ export const carryForwardTableHeaderStyles = (theme: Theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
     flex: 1,
-    minWidth: "8.5rem",
-    zIndex: ZIndexEnums.DEFAULT,
-    borderRadius: "0.5rem"
+    boxSizing: "border-box",
+    padding: "0rem 1rem",
+    width: "6.9rem",
+    zIndex: ZIndexEnums.DEFAULT
   },
-  headerDateText: {
-    letterSpacing: "0.03em",
-    color: theme.palette.text.secondary,
-    whiteSpace: "nowrap",
+  label: {
+    width: "100%",
     textAlign: "center",
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
+    whiteSpace: "normal",
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
     overflow: "hidden",
     textOverflow: "ellipsis"
-  },
-  emojiChipContainer: {
-    pr: "0.25rem",
-    borderColor: theme.palette.grey[500]
-  },
-  emojiTitle: {
-    fontSize: "0.625rem"
   }
 });
