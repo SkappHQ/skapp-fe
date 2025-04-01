@@ -71,6 +71,7 @@ const ROUTES = {
     ATTENDANCE: "/configurations/attendance",
     TIME: "/configurations/time",
     USER_ROLES: "/configurations/user-roles",
+    SIGN: "/configurations/esign",
     USER_ROLES_MODULE: (module: string) =>
       `/configurations/user-roles/${module}`
   },
