@@ -19,10 +19,11 @@ import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormS
 
 interface Props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
 const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
-  ({ isInputsDisabled }, ref) => {
+  ({ isInputsDisabled, isReadOnly = false }, ref) => {
     const translateText = useTranslator(
       "peopleModule",
       "addResource",
@@ -114,6 +115,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
                   mt: "0rem"
                 }}
                 isDisabled={isInputsDisabled}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -133,6 +135,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={EthnicityList}
                 checkSelected
                 isDisabled={isInputsDisabled}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -153,6 +156,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={EEOJobCategoryList}
                 tooltip={translateText(["eeoTooltip"])}
                 isDisabled={isInputsDisabled}
+                readOnly={isReadOnly}
               />
             </Grid>
           </Grid>

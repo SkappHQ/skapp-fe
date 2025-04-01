@@ -15,9 +15,10 @@ import SecondaryContactDetailsSection from "./SubSections/SecondaryContactDetail
 
 interface Props {
   isAddFlow?: boolean;
+  isReadOnly?: boolean;
 }
 
-const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
+const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const {
@@ -99,10 +100,12 @@ const EmergencyDetailsForm = ({ isAddFlow = false }: Props) => {
       <PrimaryContactDetailsSection
         ref={primaryContactDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <SecondaryContactDetailsSection
         ref={secondaryContactDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly} 
       />
 
       {!isTerminatedEmployee &&

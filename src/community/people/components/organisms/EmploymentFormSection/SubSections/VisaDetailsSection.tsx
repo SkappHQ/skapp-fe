@@ -3,7 +3,6 @@ import { DateTime } from "luxon";
 import { JSX } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
-import CustomTable from "~community/common/components/molecules/CustomTable/CustomTable";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
@@ -21,15 +20,17 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import PeopleFormTable from "~community/people/components/molecules/PeopleFormTable/PeopleFormTable";
 import useVisaDetailsFormHandlers from "~community/people/hooks/useVisaDetailsFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
 
 interface Props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
 const VisaDetailsSection = (props: Props): JSX.Element => {
-  const { isInputsDisabled } = props;
+  const { isInputsDisabled, isReadOnly = false } = props;
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -101,6 +102,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             }}
             maxLength={50}
             isDisabled={isInputsDisabled}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -124,6 +126,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
               mt: "0rem"
             }}
             isDisabled={isInputsDisabled}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -150,6 +153,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             disabled={isInputsDisabled}
             setSelectedDate={setSelectedIssuedDate}
             selectedDate={selectedIssuedDate}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -174,6 +178,7 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             disabled={isInputsDisabled}
             setSelectedDate={setSelectedExpirationDate}
             selectedDate={selectedExpirationDate}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -194,15 +199,15 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
                 mt: "2rem"
               }}
               type={ButtonTypes.SUBMIT}
-              disabled={isInputsDisabled}
+              disabled={isInputsDisabled || isReadOnly}
             />
           )}
         </Grid>
         {employee?.employment?.visaDetails?.length === 0 ||
         employee?.employment?.visaDetails === null ? null : (
-          <CustomTable
+          <PeopleFormTable
             data={formatTableData(employee?.employment?.visaDetails || [])}
-            actionsNeeded={!isInputsDisabled}
+            actionsNeeded={!isInputsDisabled && !isReadOnly}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}

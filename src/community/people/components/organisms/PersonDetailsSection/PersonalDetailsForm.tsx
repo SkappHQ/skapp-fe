@@ -20,11 +20,13 @@ import SocialMediaDetailsSection from "./SubSections/SocialMediaDetailsSection";
 interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
+  isReadOnly?: boolean;
 }
 
 const PersonalDetailsForm = ({
   isAddFlow = false,
-  isUpdate = false
+  isUpdate = false,
+  isReadOnly = false
 }: Props) => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
@@ -125,20 +127,30 @@ const PersonalDetailsForm = ({
         isAddFlow={isAddFlow}
         isAdmin={isUpdate}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <ContactDetailsSection
         ref={contactDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
-      <FamilyDetailsSection isInputsDisabled={isTerminatedEmployee} />
-      <EducationalDetailsSection isInputsDisabled={isTerminatedEmployee} />
+      <FamilyDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
+      />
+      <EducationalDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
+      />
       <SocialMediaDetailsSection
         ref={socialMediaDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <HealthAndOtherDetailsSection
         ref={healthAndOtherDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
 
       {!isTerminatedEmployee &&
