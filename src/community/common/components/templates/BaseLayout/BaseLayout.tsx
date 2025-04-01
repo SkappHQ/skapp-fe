@@ -9,6 +9,7 @@ import useSessionData from "~community/common/hooks/useSessionData";
 import { IsAProtectedUrlWithDrawer } from "~community/common/utils/authUtils";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
 import { setDeviceToken } from "~enterprise/common/api/setDeviceTokenApi";
+import LogoColorLoader from "~enterprise/common/components/molecules/LogoColorLoader/LogoColorLoader";
 import useFcmToken from "~enterprise/common/hooks/useFCMToken";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const BaseLayout = ({ children }: Props) => {
-  const { asPath } = useRouter();
+  const { asPath, query } = useRouter();
 
   const { sessionStatus } = useSessionData();
 
@@ -60,9 +61,13 @@ const BaseLayout = ({ children }: Props) => {
   const renderComponent = useMemo(() => {
     switch (sessionStatus) {
       case "loading":
+        if (asPath === "/enterprise/settings/account?status=success")
+          return <LogoColorLoader />;
         return <FullScreenLoader />;
       case "authenticated": {
         if (isEnterprise && isGlobalLoginMethodLoading) {
+          if (asPath === "/enterprise/settings/account?status=success")
+            return <LogoColorLoader />;
           return <FullScreenLoader />;
         }
 
