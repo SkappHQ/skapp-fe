@@ -18,7 +18,10 @@ interface Props {
   isReadOnly?: boolean;
 }
 
-const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) => {
+const EmergencyDetailsForm = ({
+  isAddFlow = false,
+  isReadOnly = false
+}: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const {
@@ -105,7 +108,7 @@ const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) 
       <SecondaryContactDetailsSection
         ref={secondaryContactDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly} 
+        isReadOnly={isReadOnly}
       />
 
       {!isTerminatedEmployee &&

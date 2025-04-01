@@ -51,11 +51,24 @@ const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
           <PersonalDetailsForm isAddFlow={isAddFlow} isReadOnly={isReadOnly} />
         );
       case EditPeopleFormTypes.emergency:
-        return <EmergencyDetailsForm isAddFlow={isAddFlow} isReadOnly={isReadOnly} />;
+        return (
+          <EmergencyDetailsForm isAddFlow={isAddFlow} isReadOnly={isReadOnly} />
+        );
       case EditPeopleFormTypes.employment:
-        return <EmploymentDetailsForm isAddFlow={isAddFlow} isReadOnly={isReadOnly} isUpdate />;
+        return (
+          <EmploymentDetailsForm
+            isAddFlow={isAddFlow}
+            isReadOnly={isReadOnly}
+            isUpdate
+          />
+        );
       case EditPeopleFormTypes.permission:
-        return <SystemPermissionFormSection isAddFlow={isAddFlow} isReadOnly={isSystemPermissionsReadOnly} />;
+        return (
+          <SystemPermissionFormSection
+            isAddFlow={isAddFlow}
+            isReadOnly={isSystemPermissionsReadOnly}
+          />
+        );
       case EditPeopleFormTypes.timeline:
         return <PeopleTimeline employeeId={employeeId} />;
       case EditPeopleFormTypes.leave:

@@ -263,7 +263,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   isReadOnly && values?.teamIds?.length === 0 ? "none" : "block"
               }}
             >
-              {projectTeamList?.length === 0 && !isReadOnly && !isProfileView ? (
+              {projectTeamList?.length === 0 &&
+              !isReadOnly &&
+              !isProfileView ? (
                 <InteractiveInputTrigger
                   id="add-new-team-button"
                   label={translateText(["teams"])}
