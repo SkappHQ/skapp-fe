@@ -191,7 +191,3 @@ export function areCommasPresentInString(input: string): boolean {
   const regex = /,/;
   return regex.test(input);
 }
-
-export function isEmailEndingDotCheckPattern(): RegExp {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-}
