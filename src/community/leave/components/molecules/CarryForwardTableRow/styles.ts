@@ -22,68 +22,42 @@ export const carryForwardTableRowStyles = (theme: Theme) => ({
     zIndex: ZIndexEnums.LEVEL_2,
     padding: "0.5rem 1rem",
     minWidth: "15rem",
+    maxWidth: "15rem",
     background: theme.palette.grey[50],
     position: "sticky",
     left: 0,
     [theme.breakpoints.down("lg")]: {
       flex: 0.5,
-      minWidth: "10rem"
+      minWidth: "10rem",
+      maxWidth: "10rem"
     },
     height: "100%",
     borderRightWidth: "0.063rem",
     borderRightStyle: "solid",
     borderRightColor: theme.palette.grey[500]
   },
-  cell: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    minWidth: "8.5rem",
-    maxWidth: "6.9rem",
-    [theme.breakpoints.down("xl")]: {
-      maxWidth: "6.9rem"
-    },
-    [theme.breakpoints.down("lg")]: {
-      maxWidth: "2rem"
-    },
-    bgcolor: theme.palette.grey[100],
-    height: "4.3rem",
-    zIndex: ZIndexEnums.DEFAULT
-  },
   headerCell: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
     flex: 1,
-    minWidth: "8.5rem",
-    zIndex: ZIndexEnums.DEFAULT,
-    paddingTop: "0.75rem"
+    boxSizing: "border-box",
+    padding: "0rem 1rem",
+    width: "6.9rem",
+    zIndex: ZIndexEnums.DEFAULT
   },
-  holidayText: {
-    letterSpacing: "0.03em",
-    color: theme.palette.text.secondary,
-    whiteSpace: "nowrap",
+  label: {
+    width: "100%",
     textAlign: "center",
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
+    whiteSpace: "normal",
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
     overflow: "hidden",
     textOverflow: "ellipsis"
-  },
-  errorBox: {
-    backgroundColor: theme.palette.error.main,
-    px: "1rem",
-    py: "0.25rem",
-    borderRadius: "0.75rem"
-  },
-  headerRowCell: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    minWidth: "8.5rem",
-    zIndex: ZIndexEnums.DEFAULT,
-    paddingTop: "0.75rem"
   }
 });
