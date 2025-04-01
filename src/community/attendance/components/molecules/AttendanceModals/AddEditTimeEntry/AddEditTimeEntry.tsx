@@ -400,7 +400,9 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
             <BasicChip
               label={
                 durationSelector[
-                  selectedDailyRecord?.leaveRequest?.leaveState as string
+                  selectedDailyRecord?.holiday
+                    ? selectedDailyRecord?.holiday?.holidayDuration
+                    : (selectedDailyRecord?.leaveRequest?.leaveState as string)
                 ]
               }
               chipStyles={classes.leaveStateChip}
@@ -417,8 +419,16 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
               {translateText(["leaveTypeLabel"])}
             </Typography>
             <IconChip
-              label={selectedDailyRecord?.leaveRequest?.leaveType?.name}
-              icon={selectedDailyRecord?.leaveRequest?.leaveType?.emojiCode}
+              label={
+                selectedDailyRecord?.holiday
+                  ? selectedDailyRecord?.holiday?.name
+                  : selectedDailyRecord?.leaveRequest?.leaveType?.name
+              }
+              icon={
+                selectedDailyRecord?.holiday
+                  ? "1f3d6-fe0f"
+                  : selectedDailyRecord?.leaveRequest?.leaveType?.emojiCode
+              }
               chipStyles={classes.leaveStateChip}
               isTruncated={false}
             />
