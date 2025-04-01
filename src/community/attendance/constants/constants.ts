@@ -21,12 +21,15 @@ export const TIME_LENGTH = 8;
 export const durationSelector: Record<string, string> = {
   FULLDAY: "Full Day",
   HALFDAY_EVENING: "Half Day - Evening",
-  HALFDAY_MORNING: "Half Day - Morning",
-  FULL_DAY: "Full Day",
-  HALF_DAY_EVENING: "Half Day - Evening",
-  HALF_DAY_MORNING: "Half Day - Morning"
+  HALFDAY_MORNING: "Half Day - Morning"
 };
 
 export const TIME_FORMAT_AM_PM = "hh:mm a"; //eg: 12:00 AM
 
 export const DEFAULT_TOTAL_HOURS = 8;
+
+export const holidayDurationSelector: Record<string, string> = {
+  FULL_DAY: "Full Day",
+  HALF_DAY_EVENING: "Half Day - Evening",
+  HALF_DAY_MORNING: "Half Day - Morning"
+};

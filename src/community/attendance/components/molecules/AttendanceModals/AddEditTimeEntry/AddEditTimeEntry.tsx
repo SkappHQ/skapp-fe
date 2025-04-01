@@ -8,7 +8,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useGetPeriodAvailability } from "~community/attendance/api/AttendanceEmployeeApi";
 import {
   TIME_LENGTH,
-  durationSelector
+  durationSelector,
+  holidayDurationSelector
 } from "~community/attendance/constants/constants";
 import { EmployeeTimesheetModalTypes } from "~community/attendance/enums/timesheetEnums";
 import useAddEntry from "~community/attendance/hooks/useAddEntry";
@@ -399,11 +400,13 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
             </Typography>
             <BasicChip
               label={
-                durationSelector[
-                  selectedDailyRecord?.holiday
-                    ? selectedDailyRecord?.holiday?.holidayDuration
-                    : (selectedDailyRecord?.leaveRequest?.leaveState as string)
-                ]
+                selectedDailyRecord?.holiday
+                  ? holidayDurationSelector[
+                      selectedDailyRecord?.holiday?.holidayDuration
+                    ]
+                  : durationSelector[
+                      selectedDailyRecord?.leaveRequest?.leaveState as string
+                    ]
               }
               chipStyles={classes.leaveStateChip}
             />
