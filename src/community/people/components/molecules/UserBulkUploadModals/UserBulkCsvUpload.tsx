@@ -127,7 +127,11 @@ const UserBulkCsvUpload: FC<Props> = ({
     setPopupType(DirectoryModalTypes.NONE);
   };
 
-  const { mutate } = useAddBulkUsers(bulkUploadUsers, onSuccess, onError);
+  const { mutate, isPending } = useAddBulkUsers(
+    bulkUploadUsers,
+    onSuccess,
+    onError
+  );
 
   const handleUploadBtn = () => {
     mutate();
@@ -181,7 +185,7 @@ const UserBulkCsvUpload: FC<Props> = ({
         buttonStyle={ButtonStyle.PRIMARY}
         styles={{ mb: "1rem" }}
         onClick={() => handleUploadBtn()}
-        isLoading={false}
+        isLoading={isPending}
         disabled={bulkUserAttachment?.length === 0}
         shouldBlink={bulkUserAttachment?.length > 0}
       />
