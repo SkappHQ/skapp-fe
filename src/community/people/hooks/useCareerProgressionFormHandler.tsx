@@ -72,10 +72,9 @@ const useCareerProgressionFormHandler = ({
     return [];
   }, []);
 
-  if (!isManager && !isProfileView) {
-    const { data } = getPreprocessedRoles;
-    jobFamilies = (data as JobFamilies[]) ?? [];
-  }
+  const { data } = getPreprocessedRoles;
+
+  jobFamilies = (data as JobFamilies[]) ?? [];
 
   const jobFamiliesList = useMemo(() => {
     return (
@@ -139,20 +138,14 @@ const useCareerProgressionFormHandler = ({
           EmployeeTypesList,
           position?.employmentType as string
         ),
-        jobFamily:
-          !isManager && !isProfileView
-            ? getJobRoleByJobRoleId(
-                position?.jobFamilyId as number,
-                jobFamilies
-              )
-            : position?.jobFamilyId,
-        jobTitle:
-          !isManager && !isProfileView
-            ? getJobLevelByJobLevelId(
-                position?.jobTitleId as number,
-                jobFamilies
-              )
-            : position?.jobTitleId,
+        jobFamily: getJobRoleByJobRoleId(
+          position?.jobFamilyId as number,
+          jobFamilies
+        ),
+        jobTitle: getJobLevelByJobLevelId(
+          position?.jobTitleId as number,
+          jobFamilies
+        ),
         startDate: position?.startDate?.split("T")[0],
         endDate: position?.endDate?.split("T")[0] ?? "-",
         tenure
