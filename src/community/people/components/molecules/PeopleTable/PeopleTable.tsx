@@ -537,18 +537,18 @@ const PeopleTable: FC<Props> = ({
           isLoading={isFetching && !isFetchingNextPage}
           skeletonRows={5}
           emptyDataTitle={
-            !employeeData?.length && onSearch
+            !employeeData?.length || (employeeData?.length === 1 && isRemovePeople) && onSearch
               ? translateText(["emptySearchResult", "title"])
               : !employeeData?.length && filter
                 ? isPendingInvitationListOpen
                   ? translateText(["emptyPendingList", "title"])
                   : translateText(["emptyFilterResult", "title"])
-                : !employeeData?.length
+                : !employeeData?.length || (employeeData?.length === 1 && isRemovePeople)
                   ? translateText(["emptyEmployeeData", "title"])
                   : undefined
           }
           emptyDataDescription={
-            !employeeData?.length && onSearch
+            !employeeData?.length || (employeeData?.length === 1 && isRemovePeople) && onSearch
               ? translateText(["emptySearchResult", "description"])
               : !employeeData?.length && filter
                 ? isPendingInvitationListOpen
