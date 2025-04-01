@@ -11,7 +11,11 @@ import FilterButton from "~community/common/components/molecules/FilterButton/Fi
 import Table from "~community/common/components/molecules/Table/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { currentYear, nextYear } from "~community/common/utils/dateTimeUtils";
+import {
+  currentYear,
+  getAdjacentYearsWithCurrent,
+  nextYear
+} from "~community/common/utils/dateTimeUtils";
 import { useGetCustomLeaves } from "~community/leave/api/LeaveApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -144,7 +148,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       }}
       selectedItem={selectedYear}
       title={selectedYear}
-      items={[currentYear.toString(), nextYear.toString()]}
+      items={getAdjacentYearsWithCurrent()}
     />
   );
 
@@ -295,6 +299,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
     setIsLeaveAllocationModalOpen(true);
   };
 
+  const showEmptyTableButton =
+    selectedYear === currentYear.toString() ||
+    selectedYear === nextYear.toString();
+
   return (
     <Box>
       <Table
@@ -320,9 +328,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           "emptyCustomLeaveScreen",
           "description"
         ])}
-        emptyScreenButtonText={translateText([
-          "CustomLeaveAllocationsSectionBtn"
-        ])}
+        emptyScreenButtonText={
+          showEmptyTableButton &&
+          translateText(["CustomLeaveAllocationsSectionBtn"])
+        }
         isDataAvailable={
           !!customLeaveData?.items?.length ||
           !!searchTerm ||
