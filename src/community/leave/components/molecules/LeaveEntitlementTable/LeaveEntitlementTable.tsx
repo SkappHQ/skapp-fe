@@ -87,7 +87,7 @@ const LeaveEntitlementTable = ({
     return <TableSkeleton rows={4} />;
   }
 
-  const showButton =
+  const showEmptyTableButton =
     leaveEntitlementTableSelectedYear === currentYear.toString() ||
     leaveEntitlementTableSelectedYear === nextYear.toString();
 
@@ -124,7 +124,8 @@ const LeaveEntitlementTable = ({
               })}
               description={translateText(["emptyScreen", "description"])}
               buttonText={
-                showButton && translateText(["emptyScreen", "buttonText"])
+                showEmptyTableButton &&
+                translateText(["emptyScreen", "buttonText"])
               }
               onButtonClick={() => {
                 setLeaveEntitlementModalType(

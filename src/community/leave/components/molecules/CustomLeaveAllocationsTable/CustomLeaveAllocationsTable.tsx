@@ -299,7 +299,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
     setIsLeaveAllocationModalOpen(true);
   };
 
-  const showButton =
+  const showEmptyTableButton =
     selectedYear === currentYear.toString() ||
     selectedYear === nextYear.toString();
 
@@ -329,7 +329,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           "description"
         ])}
         emptyScreenButtonText={
-          showButton && translateText(["CustomLeaveAllocationsSectionBtn"])
+          showEmptyTableButton &&
+          translateText(["CustomLeaveAllocationsSectionBtn"])
         }
         isDataAvailable={
           !!customLeaveData?.items?.length ||
