@@ -72,7 +72,6 @@ const DescribedSelection = ({
       sx={mergeSx([
         classes.wrapper,
         cardWrapperStyles,
-        selected ? classes.selectedWrapper : {},
         isError ? classes.errorWrapper : {},
         isAnimationOn
           ? {
