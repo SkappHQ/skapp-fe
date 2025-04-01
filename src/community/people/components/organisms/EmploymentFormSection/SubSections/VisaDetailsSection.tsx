@@ -111,14 +111,10 @@ const VisaDetailsSection = (props: Props): JSX.Element => {
             itemList={countryList}
             inputName="issuingCountry"
             label={translateText(["issuingCountry"])}
-            value={
-              values.issuingCountry
-                ? {
-                    label: values.issuingCountry,
-                    value: values.issuingCountry
-                  }
-                : undefined
-            }
+            value={{
+              label: values.issuingCountry || "",
+              value: values.issuingCountry || ""
+            }}
             placeholder={translateText(["selectIssuingCountry"])}
             onChange={handleCountrySelect}
             error={errors.issuingCountry ?? ""}
