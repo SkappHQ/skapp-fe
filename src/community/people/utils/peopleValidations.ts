@@ -7,6 +7,7 @@ import {
   allowsOnlyNumbersAndOptionalDecimal,
   datePatternReverse,
   isValidAlphaNumericString,
+  isValidEmailPattern,
   isValidNameWithAccentsAndApostrophes,
   isValidUrlPattern
 } from "~community/common/regex/regexPatterns";
@@ -212,6 +213,7 @@ export const employeeEmploymentDetailsValidation = (
     email: Yup.string()
       .trim()
       .email(translator(["validEmailError"]))
+      .matches(isValidEmailPattern(), translator(["validEmailError"]))
       .required(translator(["requireEmailError"]))
       .test("is-unique-email", translator(["uniqueEmailError"]), function () {
         return context?.isUniqueEmail || context?.isUpdate;
