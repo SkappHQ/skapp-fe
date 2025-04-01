@@ -193,5 +193,5 @@ export function areCommasPresentInString(input: string): boolean {
 }
 
 export function isValidEmailPattern(): RegExp {
-  return /^[^@]+@[^@]+\.[^@]+$/;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 }
