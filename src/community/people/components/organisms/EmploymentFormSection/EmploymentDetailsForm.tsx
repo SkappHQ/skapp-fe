@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 
-import useSessionData from "~community/common/hooks/useSessionData";
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
@@ -49,8 +48,6 @@ const EmploymentDetailsForm = ({
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
-
-  const { isPeopleAdmin } = useSessionData();
 
   const { handleNext } = useStepper();
 
@@ -114,25 +111,25 @@ const EmploymentDetailsForm = ({
         isUpdate={isUpdate}
         isProfileView={isProfileView}
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly || !isPeopleAdmin}
+        isReadOnly={isReadOnly}
       />
       <CareerProgressDetailsSection
         isProfileView={isProfileView}
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly || !isPeopleAdmin}
+        isReadOnly={isReadOnly}
       />
       <IdentificationDetailsSection
         ref={identificationDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly || !isPeopleAdmin}
+        isReadOnly={isReadOnly}
       />
       <PreviousEmploymentDetailsSection
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly || !isPeopleAdmin}
+        isReadOnly={isReadOnly}
       />
       <VisaDetailsSection
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly || !isPeopleAdmin}
+        isReadOnly={isReadOnly}
       />
 
       {!isTerminatedEmployee &&
