@@ -21,6 +21,7 @@ import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useEmployeeDetailsFormHandler from "~community/people/hooks/useEmployeeDetailsFormHandler";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
@@ -65,12 +66,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
 
     const { isPeopleManager } = useSessionData();
 
-    const {
-      employee,
-      isPendingInvitationListOpen,
-      setTeamModalType,
-      setIsTeamModalOpen
-    } = usePeopleStore((state) => state);
+    const { employee, setTeamModalType, setIsTeamModalOpen } = usePeopleStore(
+      (state) => state
+    );
 
     const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
     const [isUniqueEmployeeNo, setIsUniqueEmployeeNo] =
@@ -230,7 +228,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                     isUpdate ||
                     isProfileView ||
                     isInputsDisabled) &&
-                  !isPendingInvitationListOpen
+                  employee?.common?.accountStatus !== AccountStatusTypes.PENDING
                 }
                 isDisabled={isInputsDisabled}
                 maxLength={100}
