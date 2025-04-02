@@ -261,6 +261,34 @@ const nextConfig = {
         destination: "/enterprise/sign/complete"
       },
       {
+        source: "/sign/all-done",
+        destination: "/enterprise/sign/all-done"
+      },
+      {
+        source: "/sign/completed-document",
+        destination: "/enterprise/sign/completed-document"
+      },
+      {
+        source: "/sign/declined-document",
+        destination: "/enterprise/sign/declined-document"
+      },
+      {
+        source: "/sign/document-not-found",
+        destination: "/enterprise/sign/document-not-found"
+      },
+      {
+        source: "/sign/expired-link",
+        destination: "/enterprise/sign/expired-link"
+      },
+      {
+        source: "/sign/session-expired",
+        destination: "/enterprise/sign/session-expired"
+      },
+      {
+        source: "/sign/updated-link",
+        destination: "/enterprise/sign/updated-link"
+      },
+      {
         source: "/settings/modules",
         destination: "/enterprise/settings/modules"
       },
