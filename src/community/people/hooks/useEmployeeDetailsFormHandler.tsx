@@ -16,7 +16,6 @@ import {
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { filterByValue } from "~community/common/utils/commonUtil";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
-import { isValidEmailPattern } from "~community/common/utils/validation";
 import { usePeopleStore } from "~community/people/store/store";
 import { L3EmploymentDetailsType } from "~community/people/types/PeopleTypes";
 import { TeamNamesType } from "~community/people/types/TeamTypes";
