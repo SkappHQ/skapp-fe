@@ -10,9 +10,7 @@ import React, {
   useState
 } from "react";
 
-import {
-  allowsAlphaNumericWithHyphenAndUnderscore
-} from "~community/common/regex/regexPatterns";
+import { allowsAlphaNumericWithHyphenAndUnderscore } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { filterByValue } from "~community/common/utils/commonUtil";
 import { timeZonesList } from "~community/common/utils/data/timeZones";

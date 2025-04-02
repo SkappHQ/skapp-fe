@@ -517,8 +517,15 @@ export const quickAddEmployeeValidations = (
         isValidNameWithAccentsAndApostrophes(),
         translator(["validNameError"])
       ),
-    workEmail: Yup.string()
+    email: Yup.string()
       .trim()
-      .email(translator(["validEmailError"]))
+      .test(
+        "valid-email-format",
+        translator(["validEmailError"]),
+        function (value) {
+          return isValidEmailPattern(value as string);
+        }
+      )
+
       .required(translator(["requireEmailError"]))
   });
