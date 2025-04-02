@@ -245,13 +245,13 @@ export const getPreviousEmploymentChanges = (
   );
 
   // Check each new employment for changes
-  newEmployments.forEach((newEmployment) => {
-    if (newEmployment.employmentId === undefined) return;
+  for (const newEmployment of newEmployments) {
+    if (newEmployment.employmentId === undefined) continue;
 
     const previousEmployment =
       previousEmploymentMap[newEmployment.employmentId];
 
-    if (!previousEmployment) return;
+    if (!previousEmployment) continue;
 
     if (
       isFieldDifferentAndValid(
@@ -271,9 +271,9 @@ export const getPreviousEmploymentChanges = (
         previousEmployment.endDate
       )
     ) {
-      return newEmployment;
+      return newEmployments;
     }
-  });
+  }
 
   return [];
 };
