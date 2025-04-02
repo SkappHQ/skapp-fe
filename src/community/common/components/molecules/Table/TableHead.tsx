@@ -1,99 +1,92 @@
 import {
-  Checkbox,
   TableHead as MuiTableHead,
-  type SxProps,
+  SxProps,
   TableCell,
   TableRow,
+  Theme,
   Typography,
   useTheme
 } from "@mui/material";
-import { ChangeEvent, FC } from "react";
+import { FC } from "react";
+
+import { TableHeader } from "~community/common/types/CommonTypes";
+import { mergeSx } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
 
-interface Props {
-  tableHeaders: any[];
-  tableRows: any[];
-  isCheckboxSelectionEnabled?: boolean;
-  isSelectAllCheckboxEnabled?: boolean;
-  selectedRows?: number[];
-  handleAllRowsCheck?: (event: ChangeEvent<HTMLInputElement>) => void;
-  isRowDisabled?: (row: any) => boolean;
-  tableHeaderRowStyles?: SxProps;
-  tableHeaderCellStyles?: SxProps;
-  tableCheckboxStyles?: SxProps;
-  tableHeaderTypographyStyles?: SxProps;
-  isActionColumnEnabled?: boolean;
+export interface TableHeadersProps {
+  headers: TableHeader[];
 }
 
-const TableHead: FC<Props> = ({
-  tableHeaders,
-  tableRows,
-  isCheckboxSelectionEnabled = false,
-  isSelectAllCheckboxEnabled = false,
-  selectedRows,
-  handleAllRowsCheck,
-  isRowDisabled = () => false,
-  tableHeaderRowStyles,
-  tableHeaderCellStyles,
-  tableCheckboxStyles,
-  tableHeaderTypographyStyles,
-  isActionColumnEnabled = false
+export interface TableHeadProps {
+  customStyles?: {
+    head?: SxProps<Theme>;
+    row?: SxProps<Theme>;
+    cell?: SxProps<Theme>;
+    typography?: SxProps<Theme>;
+  };
+}
+
+export interface TableHeadActionColumnProps {
+  actionColumn?: {
+    isEnabled?: boolean;
+    styles?: {
+      cell?: SxProps<Theme>;
+      typography?: SxProps<Theme>;
+    };
+  };
+}
+
+const TableHead: FC<
+  TableHeadProps & TableHeadersProps & TableHeadActionColumnProps
+> = ({
+  headers,
+  customStyles,
+  actionColumn = {
+    isEnabled: false,
+    styles: {
+      cell: {},
+      typography: {}
+    }
+  }
 }) => {
   const theme = useTheme();
   const classes = styles(theme);
 
   return (
-    <MuiTableHead sx={classes.tableHeaderStyles}>
-      <TableRow sx={classes.tableHeaderRowStyles(tableHeaderRowStyles)}>
-        {isCheckboxSelectionEnabled && (
-          <TableCell
-            sx={
-              classes.tableHeaderCheckboxCellStyles(
-                tableHeaderCellStyles
-              ) as SxProps
-            }
-          >
-            {isSelectAllCheckboxEnabled && (
-              <Checkbox
-                checked={
-                  (tableRows?.length > 0 &&
-                    tableRows
-                      ?.filter((row) => !isRowDisabled(row))
-                      ?.every((row) => selectedRows?.includes(row.id))) ||
-                  false
-                }
-                onChange={handleAllRowsCheck}
-                color="primary"
-                sx={classes.tableCheckboxStyles(tableCheckboxStyles)}
-              />
-            )}
-          </TableCell>
-        )}
-
-        {tableHeaders?.map((header) => (
+    <MuiTableHead sx={mergeSx([classes.tableHead.head, customStyles?.head])}>
+      <TableRow sx={mergeSx([classes.tableHead.row, customStyles?.row])}>
+        {headers?.map((header) => (
           <TableCell
             key={header?.id}
-            sx={classes.tableHeaderCellStyles(tableHeaderCellStyles)}
+            sx={mergeSx([classes.tableHead.cell, customStyles?.cell])}
           >
-            <Typography
-              sx={classes.tableHeaderTypographyStyles(
-                tableHeaderTypographyStyles
-              )}
-            >
-              {header?.label}
-            </Typography>
+            {header?.label && (
+              <Typography
+                sx={mergeSx([
+                  classes.tableHead.typography,
+                  customStyles?.typography
+                ])}
+              >
+                {header?.label}
+              </Typography>
+            )}
+            {header?.element && header?.element}
           </TableCell>
         ))}
 
-        {isActionColumnEnabled && (
+        {actionColumn.isEnabled && (
           <TableCell
-            sx={classes.tableHeaderActionCellStyles(tableHeaderCellStyles)}
+            sx={mergeSx([
+              classes.tableHead.actionColumn?.cell,
+              customStyles?.cell
+            ])}
           >
             <Typography
-              sx={classes.tableHeaderTypographyStyles(
-                tableHeaderTypographyStyles
-              )}
+              sx={mergeSx([
+                classes.tableHead.typography,
+                customStyles?.typography
+              ])}
             >
               Actions
             </Typography>
