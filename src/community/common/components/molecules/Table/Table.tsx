@@ -8,7 +8,10 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 
-import { TableHeader } from "~community/common/types/CommonTypes";
+import {
+  TableHeaderTypes,
+  TableTypes
+} from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import TableBody, { TableBodyProps } from "./TableBody";
@@ -20,6 +23,7 @@ import TableHeadActionToolbar, {
 import styles from "./styles";
 
 interface Props {
+  tableName: string;
   actionToolbar?: TableHeadActionRowProps;
   tableHead: TableHeadProps;
   tableBody: TableBodyProps;
@@ -33,11 +37,12 @@ interface Props {
 
 export interface CommonTableProps {
   isLoading?: boolean;
-  headers: TableHeader[];
+  headers: TableHeaderTypes[];
   rows: any[];
 }
 
-const Table: FC<Props & CommonTableProps> = ({
+const Table: FC<Props & CommonTableProps & TableTypes> = ({
+  tableName,
   isLoading,
   headers,
   rows,
@@ -51,19 +56,28 @@ const Table: FC<Props & CommonTableProps> = ({
   const classes = styles(theme);
 
   return (
-    <Stack sx={mergeSx([classes.wrapper, customStyles?.wrapper])}>
+    <Stack
+      sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
+      role="region"
+      aria-label={`${tableName}-table-wrapper`}
+    >
       <TableHeadActionToolbar
         firstRow={actionToolbar?.firstRow}
         secondRow={actionToolbar?.secondRow}
         customStyles={actionToolbar?.customStyles}
+        tableName={tableName}
       />
 
       <TableContainer
         sx={mergeSx([classes.container, customStyles?.container])}
+        role="region"
+        aria-label={`${tableName}-table-container`}
       >
         <MuiTable
           stickyHeader
           sx={mergeSx([classes.table, customStyles?.table])}
+          role="table"
+          aria-label={tableName}
         >
           <TableHead
             headers={headers}
@@ -73,6 +87,7 @@ const Table: FC<Props & CommonTableProps> = ({
                 tableBody.actionColumn.actionBtns.left !== null ||
                 tableBody.actionColumn.actionBtns.right !== null
             }}
+            tableName={tableName}
           />
           <TableBody
             isLoading={isLoading}
@@ -84,6 +99,7 @@ const Table: FC<Props & CommonTableProps> = ({
             customStyles={tableBody.customStyles}
             onRowClick={tableBody.onRowClick}
             isRowDisabled={tableBody.isRowDisabled}
+            tableName={tableName}
           />
         </MuiTable>
       </TableContainer>
@@ -92,6 +108,7 @@ const Table: FC<Props & CommonTableProps> = ({
         customStyles={tableFoot?.customStyles}
         pagination={tableFoot?.pagination}
         exportBtn={tableFoot?.exportBtn}
+        tableName={tableName}
       />
     </Stack>
   );

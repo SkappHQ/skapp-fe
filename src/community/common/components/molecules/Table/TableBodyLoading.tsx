@@ -1,6 +1,7 @@
 import { SxProps, TableCell, TableRow, Theme, useTheme } from "@mui/material";
 import { FC, JSX } from "react";
 
+import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import TableSkeleton from "./TableSkeleton";
@@ -21,14 +22,15 @@ export interface TableBodyLoadingStateProps {
   isActionColumnEnabled?: boolean;
 }
 
-const TableBodyLoadingState: FC<TableBodyLoadingStateProps> = ({
+const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
   headers,
   loadingState = {
     skeleton: {
       rows: 4
     }
   },
-  isActionColumnEnabled = false
+  isActionColumnEnabled = false,
+  tableName
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -39,6 +41,8 @@ const TableBodyLoadingState: FC<TableBodyLoadingStateProps> = ({
         classes.tableBody.loadingState.row,
         loadingState?.customStyles?.row
       ])}
+      role="row"
+      aria-label={`${tableName}-table-body-loading-state-row`}
     >
       <TableCell
         colSpan={headers?.length + (isActionColumnEnabled ? 1 : 0)}
@@ -46,6 +50,8 @@ const TableBodyLoadingState: FC<TableBodyLoadingStateProps> = ({
           classes.tableBody.loadingState.cell,
           loadingState?.customStyles?.cell
         ])}
+        role="cell"
+        aria-label={`${tableName}-table-body-loading-state-cell`}
       >
         <TableSkeleton rows={loadingState?.skeleton?.rows} />
       </TableCell>

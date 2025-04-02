@@ -4,6 +4,7 @@ import { FC, JSX } from "react";
 import TableEmptyScreen, {
   TableEmptyScreenProps
 } from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
+import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
@@ -22,7 +23,8 @@ export interface TableBodyEmptyStateProps {
   isDataAvailable: boolean;
 }
 
-const TableBodyEmptyState: FC<TableBodyEmptyStateProps> = ({
+const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
+  tableName,
   headers,
   emptyState,
   isDataAvailable
@@ -36,6 +38,8 @@ const TableBodyEmptyState: FC<TableBodyEmptyStateProps> = ({
         classes.tableBody.emptyState.row,
         emptyState?.customStyles?.row
       ])}
+      role="row"
+      aria-label={`${tableName}-table-body-empty-state-row`}
     >
       <TableCell
         colSpan={headers?.length + 2}
@@ -43,6 +47,8 @@ const TableBodyEmptyState: FC<TableBodyEmptyStateProps> = ({
           classes.tableBody.emptyState.cell,
           emptyState?.customStyles?.cell
         ])}
+        role="cell"
+        aria-label={`${tableName}-table-body-empty-state-cell`}
       >
         {isDataAvailable ? (
           <TableEmptyScreen

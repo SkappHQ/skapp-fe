@@ -10,6 +10,7 @@ import {
 import { FC } from "react";
 
 import { TableEmptyScreenProps } from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
+import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import { CommonTableProps } from "./Table";
@@ -46,7 +47,7 @@ export interface TableBodyProps {
   isRowDisabled?: (row: any) => boolean;
 }
 
-const TableBody: FC<TableBodyProps & CommonTableProps> = ({
+const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   isLoading,
   headers,
   rows,
@@ -55,7 +56,8 @@ const TableBody: FC<TableBodyProps & CommonTableProps> = ({
   actionColumn,
   customStyles,
   isRowDisabled = () => false,
-  onRowClick
+  onRowClick,
+  tableName
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -74,12 +76,17 @@ const TableBody: FC<TableBodyProps & CommonTableProps> = ({
   };
 
   return (
-    <MuiTableBody sx={mergeSx([classes.tableBody.body, customStyles?.body])}>
+    <MuiTableBody
+      sx={mergeSx([classes.tableBody.body, customStyles?.body])}
+      role="rowgroup"
+      aria-label={`${tableName}-table-body`}
+    >
       {isLoading ? (
         <TableBodyLoadingState
           headers={headers}
           loadingState={loadingState}
           isActionColumnEnabled={actionColumn.isEnabled}
+          tableName={tableName}
         />
       ) : rows?.length ? (
         rows.map((row) => (
@@ -95,6 +102,8 @@ const TableBody: FC<TableBodyProps & CommonTableProps> = ({
               },
               customStyles?.row
             ])}
+            role="row"
+            aria-label={`${tableName}-table-body-row-${row.id}`}
           >
             {headers?.map((header) => (
               <TableCell
@@ -103,6 +112,8 @@ const TableBody: FC<TableBodyProps & CommonTableProps> = ({
                   classes.tableBody.cell.wrapper,
                   customStyles?.cell.wrapper
                 ])}
+                role="cell"
+                aria-label={`${tableName}-table-body-${header?.label}-cell-${row.id}`}
               >
                 {typeof row[header?.id] === "function" ? (
                   row[header?.id]()
@@ -123,6 +134,7 @@ const TableBody: FC<TableBodyProps & CommonTableProps> = ({
               row={row}
               isEnabled={actionColumn.isEnabled}
               actionBtns={actionColumn.actionBtns}
+              tableName={tableName}
             />
           </TableRow>
         ))
@@ -131,6 +143,7 @@ const TableBody: FC<TableBodyProps & CommonTableProps> = ({
           headers={headers}
           emptyState={emptyState}
           isDataAvailable={!!rows?.length}
+          tableName={tableName}
         />
       )}
     </MuiTableBody>

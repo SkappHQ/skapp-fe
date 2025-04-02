@@ -9,13 +9,16 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 
-import { TableHeader } from "~community/common/types/CommonTypes";
+import {
+  TableHeaderTypes,
+  TableTypes
+} from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
 
 export interface TableHeadersProps {
-  headers: TableHeader[];
+  headers: TableHeaderTypes[];
 }
 
 export interface TableHeadProps {
@@ -38,8 +41,9 @@ export interface TableHeadActionColumnProps {
 }
 
 const TableHead: FC<
-  TableHeadProps & TableHeadersProps & TableHeadActionColumnProps
+  TableTypes & TableHeadProps & TableHeadersProps & TableHeadActionColumnProps
 > = ({
+  tableName,
   headers,
   customStyles,
   actionColumn = {
@@ -54,12 +58,22 @@ const TableHead: FC<
   const classes = styles(theme);
 
   return (
-    <MuiTableHead sx={mergeSx([classes.tableHead.head, customStyles?.head])}>
-      <TableRow sx={mergeSx([classes.tableHead.row, customStyles?.row])}>
+    <MuiTableHead
+      sx={mergeSx([classes.tableHead.head, customStyles?.head])}
+      role="rowgroup"
+      aria-label={`${tableName}-table-head`}
+    >
+      <TableRow
+        sx={mergeSx([classes.tableHead.row, customStyles?.row])}
+        role="row"
+        aria-label={`${tableName}-table-head-row`}
+      >
         {headers?.map((header) => (
           <TableCell
             key={header?.id}
             sx={mergeSx([classes.tableHead.cell, customStyles?.cell])}
+            role="columnheader"
+            aria-label={`${tableName}-table-head-${header?.label}-cell`}
           >
             {header?.label && (
               <Typography
@@ -81,6 +95,8 @@ const TableHead: FC<
               classes.tableHead.actionColumn?.cell,
               customStyles?.cell
             ])}
+            role="columnheader"
+            aria-label={`${tableName}-table-head-actions-column-cell`}
           >
             <Typography
               sx={mergeSx([
