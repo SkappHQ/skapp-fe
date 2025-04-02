@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 
 import { useAddManualTimeEntry } from "~community/attendance/api/AttendanceEmployeeApi";
-import { durationSelector } from "~community/attendance/constants/constants";
+import { holidayDurationSelector } from "~community/attendance/constants/constants";
 import { EmployeeTimesheetModalTypes } from "~community/attendance/enums/timesheetEnums";
 import { useAttendanceStore } from "~community/attendance/store/attendanceStore";
 import {
@@ -83,7 +83,7 @@ const HolidayEntryConfirmation = ({ fromDateTime, toDateTime }: Props) => {
         </Typography>
         <BasicChip
           label={
-            durationSelector[
+            holidayDurationSelector[
               timeAvailabilityForPeriod?.holiday?.[0]?.holidayDuration
             ]
           }

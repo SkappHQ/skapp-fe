@@ -65,13 +65,14 @@ const useVisaDetailsFormHandlers = () => {
         });
         setRowEdited(-1);
       } else {
+        const newVisaId = (employee?.employment?.visaDetails?.length ?? 0) + 1;
         setEmploymentDetails({
           ...employee?.employment,
           visaDetails: [
             ...(employee?.employment?.visaDetails || []),
             {
               ...values,
-              visaId: employee?.employment?.visaDetails?.length || 0
+              visaId: newVisaId
             }
           ]
         });
