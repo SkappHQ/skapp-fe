@@ -11,13 +11,11 @@ const PeopleAccountSection = () => {
   const getSections = () => {
     switch (currentStep) {
       case EditPeopleFormTypes.personal:
-        return <PersonalDetailsForm isUpdate isAccountView />;
+        return <PersonalDetailsForm isUpdate />;
       case EditPeopleFormTypes.emergency:
-        return <EmergencyDetailsForm isAccountView />;
+        return <EmergencyDetailsForm />;
       case EditPeopleFormTypes.employment:
-        return (
-          <EmploymentDetailsForm isUpdate isProfileView={true} isAccountView />
-        );
+        return <EmploymentDetailsForm isUpdate isProfileView />;
       default:
         return;
     }
