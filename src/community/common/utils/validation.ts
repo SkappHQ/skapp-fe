@@ -142,7 +142,39 @@ export const isValidAlphaNumericNamePattern = (value: string): boolean => {
 };
 
 export const isValidEmailPattern = (value: string): boolean => {
-  return emailPattern().test(value);
+  console.log("value", value);
+  // First check the basic pattern
+  if (!emailPattern().test(value)) {
+    console.log("value");
+
+    return false;
+  }
+  // Additional validation for consecutive periods and period placement
+  const localPart = value.split("@")[0];
+  if (
+    localPart.includes("..") ||
+    localPart.startsWith(".") ||
+    localPart.endsWith(".")
+  ) {
+    return false;
+  }
+
+  // Domain validation
+  const domainPart = value.split("@")[1];
+  if (
+    !domainPart.includes(".") ||
+    domainPart.startsWith(".") ||
+    domainPart.endsWith(".")
+  ) {
+    return false;
+  }
+
+  // Ensure length constraint
+  if (value.length > 100) {
+    return false;
+  }
+
+  return true;
 };
 
 export const passwordValidationSchema = (

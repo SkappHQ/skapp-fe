@@ -14,6 +14,7 @@ import {
   convertDateToDateTime,
   getDateFromTimeStamp
 } from "~community/common/utils/dateTimeUtils";
+import { isValidEmailPattern } from "~community/common/utils/validation";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { LeaveEntitlementDropdownListType } from "~community/leave/types/LeaveTypes";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
@@ -211,11 +212,24 @@ export const employeeEmploymentDetailsValidation = (
       .nullable(),
     email: Yup.string()
       .trim()
-      .email(translator(["validEmailError"]))
+      .max(100, translator(["maxLengthError"]))
       .required(translator(["requireEmailError"]))
-      .test("is-unique-email", translator(["uniqueEmailError"]), function () {
-        return context?.isUniqueEmail || context?.isUpdate;
-      }),
+      // .test(
+      //   "valid-email-format",
+      //   translator(["validEmailError"]),
+      //   function (value) {
+      //     console.log("isValidEmailPattern(value)", isValidEmailPattern(value));
+      //     return isValidEmailPattern(value);
+      //   }
+      // )
+      // .test("is-unique-email", translator(["uniqueEmailError"]), function () {
+      //   console.log("context?.isUniqueEmail", context?.isUniqueEmail);
+      //   console.log("context?.isUpdate", context?.isUpdate);
+      //   return (
+      //     this.parent.context?.isUniqueEmail || this.parent.context?.isUpdate
+      //   );
+      // }),
+      ,
     employmentAllocation: Yup.string().nullable(),
     teamIds: Yup.array().nullable(),
     joinedDate: Yup.date().nullable(),

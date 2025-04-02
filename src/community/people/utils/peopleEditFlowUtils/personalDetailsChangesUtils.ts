@@ -180,8 +180,6 @@ export const getFamilyDetailsChanges = (
     return newFamily;
   }
 
-  const changedMembers: L3FamilyDetailsType[] = [];
-
   // Create a map of previous family members by ID for quick lookup
   const previousFamilyMap = previousFamily.reduce(
     (map, member) => {
@@ -200,64 +198,29 @@ export const getFamilyDetailsChanges = (
     const previousMember = previousFamilyMap[newMember.familyId];
     if (!previousMember) return;
 
-    // Create an object to hold changes for this member
-    let hasChanges = false;
-    const changedMember: L3FamilyDetailsType = {
-      familyId: newMember.familyId
-    };
-
     // Check each field for changes
     if (
-      isFieldDifferentAndValid(newMember.firstName, previousMember.firstName)
-    ) {
-      changedMember.firstName = newMember.firstName;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newMember.lastName, previousMember.lastName)) {
-      changedMember.lastName = newMember.lastName;
-      hasChanges = true;
-    }
-
-    if (
+      isFieldDifferentAndValid(newMember.firstName, previousMember.firstName) ||
+      isFieldDifferentAndValid(newMember.lastName, previousMember.lastName) ||
       isFieldDifferentAndValid(
         newMember.relationship,
         previousMember.relationship
-      )
-    ) {
-      changedMember.relationship = newMember.relationship;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newMember.gender, previousMember.gender)) {
-      changedMember.gender = newMember.gender;
-      hasChanges = true;
-    }
-
-    if (
-      isFieldDifferentAndValid(newMember.parentName, previousMember.parentName)
-    ) {
-      changedMember.parentName = newMember.parentName;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
+      isFieldDifferentAndValid(newMember.gender, previousMember.gender) ||
+      isFieldDifferentAndValid(
+        newMember.parentName,
+        previousMember.parentName
+      ) ||
       isFieldDifferentAndValid(
         newMember.dateOfBirth,
         previousMember.dateOfBirth
       )
     ) {
-      changedMember.dateOfBirth = newMember.dateOfBirth;
-      hasChanges = true;
-    }
-
-    // If this member has changes, add to the result array
-    if (hasChanges) {
-      changedMembers.push(changedMember);
+      return newFamily;
     }
   });
 
-  return changedMembers;
+  return [];
 };
 
 export const getEducationalDetailsChanges = (
