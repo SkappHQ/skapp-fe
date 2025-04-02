@@ -99,7 +99,7 @@ const SystemPermissionFormSection = ({
     ) {
       if (supervisedData?.isPrimaryManager)
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData?.isTeamSuperviso)
+      else if (supervisedData?.isTeamSupervisor)
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
       setOpenModal(true);

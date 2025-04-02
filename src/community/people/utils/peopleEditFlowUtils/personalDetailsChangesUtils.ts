@@ -192,11 +192,11 @@ export const getFamilyDetailsChanges = (
   );
 
   // Check each new family member for changes
-  newFamily.forEach((newMember) => {
-    if (newMember.familyId === undefined) return;
+  for (const newMember of newFamily) {
+    if (newMember.familyId === undefined) continue;
 
     const previousMember = previousFamilyMap[newMember.familyId];
-    if (!previousMember) return;
+    if (!previousMember) continue;
 
     // Check each field for changes
     if (
@@ -218,8 +218,7 @@ export const getFamilyDetailsChanges = (
     ) {
       return newFamily;
     }
-  });
-
+  }
   return [];
 };
 
@@ -233,8 +232,6 @@ export const getEducationalDetailsChanges = (
     return newEducational;
   }
 
-  const changedEducations: L3EducationalDetailsType[] = [];
-
   // Create a map of previous education entries by ID for quick lookup
   const previousEducationalMap = previousEducational.reduce(
     (map, education) => {
@@ -247,65 +244,31 @@ export const getEducationalDetailsChanges = (
   );
 
   // Check each new education entry for changes
-  newEducational.forEach((newEducation) => {
-    if (newEducation.educationId === undefined) return;
+  for (const newEducation of newEducational) {
+    if (newEducation.educationId === undefined) continue;
 
     const previousEducation = previousEducationalMap[newEducation.educationId];
-    if (!previousEducation) return;
-
-    // Create an object to hold changes for this education entry
-    let hasChanges = false;
-    const changedEducation: L3EducationalDetailsType = {
-      educationId: newEducation.educationId
-    };
+    if (!previousEducation) continue;
 
     // Check each field for changes
     if (
       isFieldDifferentAndValid(
         newEducation.institutionName,
         previousEducation.institutionName
-      )
-    ) {
-      changedEducation.institutionName = newEducation.institutionName;
-      hasChanges = true;
-    }
-
-    if (
-      isFieldDifferentAndValid(newEducation.degree, previousEducation.degree)
-    ) {
-      changedEducation.degree = newEducation.degree;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newEducation.major, previousEducation.major)) {
-      changedEducation.major = newEducation.major;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
+      isFieldDifferentAndValid(newEducation.degree, previousEducation.degree) ||
+      isFieldDifferentAndValid(newEducation.major, previousEducation.major) ||
       isFieldDifferentAndValid(
         newEducation.startDate,
         previousEducation.startDate
-      )
-    ) {
-      changedEducation.startDate = newEducation.startDate;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
       isFieldDifferentAndValid(newEducation.endDate, previousEducation.endDate)
     ) {
-      changedEducation.endDate = newEducation.endDate;
-      hasChanges = true;
+      return newEducational;
     }
+  }
 
-    // If this education entry has changes, add to the result array
-    if (hasChanges) {
-      changedEducations.push(changedEducation);
-    }
-  });
-
-  return changedEducations;
+  return [];
 };
 
 export const getSocialMediaDetailsChanges = (

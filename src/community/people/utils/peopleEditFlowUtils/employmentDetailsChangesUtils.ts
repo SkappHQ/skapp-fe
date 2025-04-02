@@ -179,8 +179,6 @@ export const getCareerProgressionChanges = (
       return newCareer;
     }
   }
-
-  // If we get here, no changes were found
   return [];
 };
 
@@ -300,11 +298,11 @@ export const getVisaDetailsChanges = (
     {} as Record<number, L3VisaDetailsType>
   );
 
-  newVisas.forEach((newVisa) => {
-    if (newVisa.visaId === undefined) return;
+  for (const newVisa of newVisas) {
+    if (newVisa.visaId === undefined) continue;
 
     const previousVisa = previousVisaMap[newVisa.visaId];
-    if (!previousVisa) return;
+    if (!previousVisa) continue;
 
     if (
       isFieldDifferentAndValid(newVisa.visaType, previousVisa.visaType) ||
@@ -315,9 +313,9 @@ export const getVisaDetailsChanges = (
       isFieldDifferentAndValid(newVisa.issuedDate, previousVisa.issuedDate) ||
       isFieldDifferentAndValid(newVisa.expiryDate, previousVisa.expiryDate)
     ) {
-      return newVisa;
+      return newVisas;
     }
-  });
+  }
 
   return [];
 };
