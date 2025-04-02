@@ -35,7 +35,7 @@ export const emailPattern = (): RegExp => {
   // Pattern allows:
   // - Before @: 0-9, A-Z, a-z, +, -, _, ~, and . (no consecutive periods)
   // - After @: Standard domain format
-  return /^[a-zA-Z0-9+\-_~.]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+  return /^[a-zA-Z0-9+\-_~.]+@[a-zA-Z0-9]+\.[a-zA-Z]/;
 };
 
 export function isValidAlphaNumericName(): RegExp {

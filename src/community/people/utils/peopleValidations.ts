@@ -214,22 +214,16 @@ export const employeeEmploymentDetailsValidation = (
       .trim()
       .max(100, translator(["maxLengthError"]))
       .required(translator(["requireEmailError"]))
-      // .test(
-      //   "valid-email-format",
-      //   translator(["validEmailError"]),
-      //   function (value) {
-      //     console.log("isValidEmailPattern(value)", isValidEmailPattern(value));
-      //     return isValidEmailPattern(value);
-      //   }
-      // )
-      // .test("is-unique-email", translator(["uniqueEmailError"]), function () {
-      //   console.log("context?.isUniqueEmail", context?.isUniqueEmail);
-      //   console.log("context?.isUpdate", context?.isUpdate);
-      //   return (
-      //     this.parent.context?.isUniqueEmail || this.parent.context?.isUpdate
-      //   );
-      // }),
-      ,
+      .test(
+        "valid-email-format",
+        translator(["validEmailError"]),
+        function (value) {
+          return isValidEmailPattern(value);
+        }
+      )
+      .test("is-unique-email", translator(["uniqueEmailError"]), function () {
+        return context?.isUniqueEmail || context?.isUpdate;
+      }),
     employmentAllocation: Yup.string().nullable(),
     teamIds: Yup.array().nullable(),
     joinedDate: Yup.date().nullable(),

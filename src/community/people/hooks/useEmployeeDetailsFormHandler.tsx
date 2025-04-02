@@ -10,7 +10,9 @@ import React, {
   useState
 } from "react";
 
-import { allowsAlphaNumericWithHyphenAndUnderscore } from "~community/common/regex/regexPatterns";
+import {
+  allowsAlphaNumericWithHyphenAndUnderscore
+} from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { filterByValue } from "~community/common/utils/commonUtil";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
@@ -140,10 +142,7 @@ const useEmployeeDetailsFormHandler = ({
           [name]: value
         } as L3EmploymentDetailsType
       });
-    } else if (
-      name === "email" &&
-      (value === "" || isValidEmailPattern(value))
-    ) {
+    } else if (name === "email") {
       await setFieldValue(name, value);
       setFieldError(name, "");
       setEmploymentDetails({
