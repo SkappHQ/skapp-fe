@@ -452,6 +452,48 @@ const PeopleTable: FC<Props> = ({
     }
   };
 
+  const getEmptyDataTitle = () => {
+    if (
+      !employeeData?.length ||
+      (employeeData?.length === 1 && isRemovePeople && onSearch)
+    ) {
+      return translateText(["emptySearchResult", "title"]);
+    }
+    if (!employeeData?.length && filter) {
+      return isPendingInvitationListOpen
+        ? translateText(["emptyPendingList", "title"])
+        : translateText(["emptyFilterResult", "title"]);
+    }
+    if (
+      !employeeData?.length ||
+      (employeeData?.length === 1 && isRemovePeople)
+    ) {
+      return translateText(["emptyEmployeeData", "title"]);
+    }
+    return "";
+  };
+
+  const getEmptyDataDescription = () => {
+    if (
+      !employeeData?.length ||
+      (employeeData?.length === 1 && isRemovePeople && onSearch)
+    ) {
+      return translateText(["emptySearchResult", "description"]);
+    }
+
+    if (!employeeData?.length && filter) {
+      return isPendingInvitationListOpen
+        ? translateText(["emptyPendingList", "description"])
+        : translateText(["emptyFilterResult", "description"]);
+    }
+
+    if (!employeeData?.length) {
+      return translateText(["emptyEmployeeData", "description"]);
+    }
+
+    return "";
+  };
+
   return (
     <Box
       sx={{
@@ -498,9 +540,7 @@ const PeopleTable: FC<Props> = ({
           isCheckboxSelectionEnabled={
             isPendingInvitationListOpen || isRemovePeople
           }
-          isSelectAllCheckboxEnabled={
-            isPendingInvitationListOpen || isRemovePeople
-          }
+          isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
           handleAllRowsCheck={handleAllCheckBoxClick}
           handleRowCheck={handleCheckBoxClick}
           actionRowOneRightButton={
@@ -536,28 +576,8 @@ const PeopleTable: FC<Props> = ({
           }
           isLoading={isFetching && !isFetchingNextPage}
           skeletonRows={5}
-          emptyDataTitle={
-            !employeeData?.length && onSearch
-              ? translateText(["emptySearchResult", "title"])
-              : !employeeData?.length && filter
-                ? isPendingInvitationListOpen
-                  ? translateText(["emptyPendingList", "title"])
-                  : translateText(["emptyFilterResult", "title"])
-                : !employeeData?.length
-                  ? translateText(["emptyEmployeeData", "title"])
-                  : undefined
-          }
-          emptyDataDescription={
-            !employeeData?.length && onSearch
-              ? translateText(["emptySearchResult", "description"])
-              : !employeeData?.length && filter
-                ? isPendingInvitationListOpen
-                  ? translateText(["emptyPendingList", "description"])
-                  : translateText(["emptyFilterResult", "description"])
-                : !employeeData?.length
-                  ? translateText(["emptyEmployeeData", "description"])
-                  : ""
-          }
+          emptyDataTitle={getEmptyDataTitle()}
+          emptyDataDescription={getEmptyDataDescription()}
         />
       </Box>
       <ReinviteConfirmationModal
