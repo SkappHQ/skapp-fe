@@ -1,19 +1,21 @@
 import { createTheme } from "@mui/material/styles";
 import * as React from "react";
 
+export interface OpacityPalette {
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+}
+
 declare module "@mui/material/styles" {
   interface Palette {
-    opacity: {
-      10: string;
-      20: string;
-      30: string;
-      40: string;
-      50: string;
-      60: string;
-      70: string;
-      80: string;
-      90: string;
-    };
+    opacity: OpacityPalette;
     notifyBadge: {
       main: string;
       contrastText: string;
@@ -106,17 +108,7 @@ declare module "@mui/material/styles" {
     }[];
   }
   interface PaletteOptions {
-    opacity: {
-      10: string;
-      20: string;
-      30: string;
-      40: string;
-      50: string;
-      60: string;
-      70: string;
-      80: string;
-      90: string;
-    };
+    opacity: OpacityPalette;
     notifyBadge: {
       main: string;
       contrastText: string;
