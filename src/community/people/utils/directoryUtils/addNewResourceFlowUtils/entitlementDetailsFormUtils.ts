@@ -8,9 +8,9 @@ import {
   EntitlementYears,
   leaveBulkUploadResponse
 } from "~community/leave/types/LeaveTypes";
-import { EmployeeEntitlementsDetailType } from "~community/people/types/AddNewResourceTypes";
 import { EntitlementInfo } from "~community/people/types/EmployeeBulkUpload";
 import {
+  EntitlementDetailType,
   L3EmploymentDetailsType,
   L3GeneralDetailsType
 } from "~community/people/types/PeopleTypes";
@@ -19,7 +19,7 @@ interface HandleSaveEntitlementsProps {
   isSuccess: boolean;
   employeeGeneralDetails: L3GeneralDetailsType;
   employeeEmploymentDetails: L3EmploymentDetailsType;
-  employeeEntitlementsDetails: EmployeeEntitlementsDetailType[];
+  entitlementDetails: EntitlementDetailType[];
   currentYearMutation: UseMutateFunction<
     leaveBulkUploadResponse,
     Error,
@@ -42,7 +42,7 @@ export const handleSaveEntitlements = ({
   isSuccess,
   employeeGeneralDetails,
   employeeEmploymentDetails,
-  employeeEntitlementsDetails,
+  entitlementDetails,
   currentYearMutation,
   currentYearSuccessFlag,
   setCurrentYearSuccessFlag,
@@ -58,14 +58,14 @@ export const handleSaveEntitlements = ({
     requiredYear: EntitlementYears.CURRENT,
     employeeName: employeeGeneralDetails?.firstName ?? "",
     email: employeeEmploymentDetails?.email ?? "",
-    employeeEntitlementsDetails: employeeEntitlementsDetails
+    employeeEntitlementsDetails: entitlementDetails
   });
 
   const nextYearPayload = processEntitlementPayload({
     requiredYear: EntitlementYears.NEXT,
     employeeName: employeeGeneralDetails?.firstName ?? "",
     email: employeeEmploymentDetails?.email ?? "",
-    employeeEntitlementsDetails: employeeEntitlementsDetails
+    employeeEntitlementsDetails: entitlementDetails
   });
 
   !currentYearPayload?.entitlementDetailsList?.[0]?.entitlements?.length &&

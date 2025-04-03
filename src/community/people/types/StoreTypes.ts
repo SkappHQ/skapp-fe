@@ -51,6 +51,7 @@ import {
 import { DirectoryModalTypes } from "./ModalTypes";
 import { EditPeopleFormTypes } from "./PeopleEditTypes";
 import {
+  EntitlementDetailType,
   L1EmployeeType,
   L2CommonDetailsType,
   L2EmergencyDetailsType,
@@ -261,6 +262,7 @@ interface actionsTypes {
   setProfilePic: (profilePic: ModifiedFileType[] | null) => void;
   setThumbnail: (thumbnail: ModifiedFileType[] | null) => void;
   resetPeopleSlice: () => void;
+  setEntitlementDetails: (entitlement: EntitlementDetailType[]) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -393,4 +395,5 @@ export interface Store extends actionsTypes {
   activeStep: number;
   profilePic: ModifiedFileType[] | null;
   thumbnail: ModifiedFileType[] | null;
+  entitlementDetails: EntitlementDetailType[];
 }
