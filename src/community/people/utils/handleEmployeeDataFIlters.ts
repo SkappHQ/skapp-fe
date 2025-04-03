@@ -34,7 +34,9 @@ export const handleApplyFilterPrams = (
         : [EmploymentStatusTypes.ACTIVE]
     );
   } else {
-    setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, "");
+    setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
+      EmploymentStatusTypes.ACTIVE
+    ]);
   }
 
   if (
