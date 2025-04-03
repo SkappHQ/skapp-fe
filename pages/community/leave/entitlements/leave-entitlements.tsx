@@ -1,6 +1,6 @@
 import { Divider } from "@mui/material";
 import { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import LeaveCarryForward from "~community/common/components/molecules/LeaveCarryForward/LeaveCarryForward";
 import SearchBox from "~community/common/components/molecules/SearchBox/SearchBox";
@@ -21,20 +21,32 @@ const LeaveEntitlements: NextPage = () => {
 
   const { data: leaveTypesList } = useGetLeaveTypes(false, true);
 
-  const { setLeaveTypes } = useLeaveStore((state) => state);
-
-  useEffect(() => {
-    setLeaveTypes(leaveTypesList ?? []);
-  }, [leaveTypesList, setLeaveTypes]);
+  const { setLeaveTypes } = useLeaveStore((state) => ({
+    setLeaveTypes: state.setLeaveTypes
+  }));
 
   const {
     page,
     leaveEntitlementTableSelectedYear,
     setLeaveEntitlementModalType
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    page: state.page,
+    leaveEntitlementTableSelectedYear: state.leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementModalType: state.setLeaveEntitlementModalType
+  }));
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  useEffect(() => {
+    setLeaveTypes(leaveTypesList ?? []);
+  }, [leaveTypesList, setLeaveTypes]);
 
   const { data: leaveEntitlementTableData, isFetching } =
-    useGetLeaveEntitlements(leaveEntitlementTableSelectedYear, page);
+    useGetLeaveEntitlements(
+      leaveEntitlementTableSelectedYear,
+      page,
+      searchTerm
+    );
 
   return (
     <>
@@ -58,15 +70,19 @@ const LeaveEntitlements: NextPage = () => {
         }
       >
         <>
-          {leaveEntitlementTableData &&
-            leaveEntitlementTableData?.items.length > 0 && (
-              <SearchBox
-                placeHolder={translateText(["searchBoxPlaceholder"])}
-              />
-            )}
+          {(searchTerm !== "" ||
+            (leaveEntitlementTableData &&
+              leaveEntitlementTableData?.items.length !== 0)) && (
+            <SearchBox
+              placeHolder={translateText(["searchBoxPlaceholder"])}
+              value={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          )}
           <LeaveEntitlementTable
             tableData={leaveEntitlementTableData}
             isFetching={isFetching}
+            searchTerm={searchTerm}
           />
           <Divider sx={{ my: "1.5rem" }} />
           <LeaveCarryForward />

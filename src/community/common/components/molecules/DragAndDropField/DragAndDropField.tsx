@@ -36,7 +36,6 @@ interface Props {
   maxFileSize?: number;
   minFileSize?: number;
   fileName?: string;
-  onDelete?: () => void;
   isZeroFilesErrorRequired?: boolean;
   isDisableColor?: boolean;
   customError?: string;
@@ -44,7 +43,6 @@ interface Props {
   descriptionStyles?: SxProps;
   browseTextStyles?: SxProps;
   maxSizeOfFile?: number;
-  prioritizeCustomError?: boolean;
 }
 
 const MAX_FILE_SIZE_OF_FILE = 5000000;
@@ -64,8 +62,7 @@ const DragAndDropField: FC<Props> = ({
   label,
   descriptionStyles,
   browseTextStyles,
-  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE,
-  prioritizeCustomError = false
+  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
 
@@ -82,7 +79,7 @@ const DragAndDropField: FC<Props> = ({
 
   const [, setChipLabel] = useState<string | undefined>("");
 
-  const [validationError, setValidationError] = useState(false);
+  const [validationError, setValidationError] = useState<boolean>(false);
   const [fileUploadErrorsList, setFileUploadErrorsList] = useState<
     Partial<FileRejection>[]
   >([]);
@@ -193,6 +190,7 @@ const DragAndDropField: FC<Props> = ({
       (error: string): string => {
         switch (error) {
           case FileUploadErrorTypes.INVALID_TEXT_OR_CSV_FILE_TYPE_ERROR:
+          case FileUploadErrorTypes.INVALID_IMAGE_TYPE_ERROR:
             return errors.fileTypeError;
           case FileUploadErrorTypes.TOO_MANY_FILES_ERROR:
             return errors.maxFileLengthError;
@@ -232,7 +230,7 @@ const DragAndDropField: FC<Props> = ({
                   <Icon name={IconName.FILE_UPLOAD_ICON} />
                 </Box>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={mergeSx([classes.desTextStyle, descriptionStyles])}
                 >
                   {translateText(["dropFileDescription"])} &nbsp;
@@ -240,17 +238,18 @@ const DragAndDropField: FC<Props> = ({
               </Stack>
               <Stack>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={mergeSx([classes.orText, browseTextStyles])}
                 >
-                  or
+                  or &nbsp;
                   <Typography
                     component="span"
+                    variant="body2"
                     sx={{
                       ...(classes.browseText as CSSProperties),
                       ...browseTextStyles
                     }}
-                  >{` Browse`}</Typography>
+                  >{`Browse`}</Typography>
                 </Typography>
               </Stack>
             </>
@@ -303,7 +302,7 @@ const DragAndDropField: FC<Props> = ({
       </div>
       {validationError || customError ? (
         <Typography variant="body2" sx={classes.errorText}>
-          {fileUploadErrorsList?.length && !prioritizeCustomError
+          {fileUploadErrorsList?.length
             ? (getUploadError(
                 fileUploadErrorsList?.[0].errors?.[0]?.message as string
               ) ?? "")

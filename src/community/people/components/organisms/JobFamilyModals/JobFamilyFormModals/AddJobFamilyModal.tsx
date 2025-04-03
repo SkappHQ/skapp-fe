@@ -33,11 +33,15 @@ const AddJobFamilyModal = ({
     setJobFamilyModalType: state.setJobFamilyModalType
   }));
 
-  const { setQuickSetupModalType, stopAllOngoingQuickSetup } =
-    useCommonEnterpriseStore((state) => ({
-      setQuickSetupModalType: state.setQuickSetupModalType,
-      stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
-    }));
+  const {
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup,
+    ongoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const addLatestFamilyLabel = (jobTitleId: number) => {
     if (from && from === "add-new-resource" && setLatestRoleLabel) {
@@ -47,8 +51,10 @@ const AddJobFamilyModal = ({
   };
 
   const onSuccess = () => {
-    stopAllOngoingQuickSetup();
-    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+    if (ongoingQuickSetup.DEFINE_JOB_FAMILIES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      stopAllOngoingQuickSetup();
+    }
     handleJobFamilyApiResponse({
       type: JobFamilyToastEnums.ADD_JOB_FAMILY_SUCCESS,
       setToastMessage,

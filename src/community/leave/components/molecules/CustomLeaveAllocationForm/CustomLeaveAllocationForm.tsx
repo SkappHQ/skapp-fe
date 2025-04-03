@@ -13,7 +13,8 @@ import { getEmoji } from "~community/common/utils/commonUtil";
 import {
   formatDateToISO,
   getMaxDateOfYear,
-  getMinDateOfYear
+  getMinDateOfYear,
+  nextYear
 } from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
@@ -54,11 +55,15 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
   >(undefined);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { customLeaveAllocationModalType, currentEditingLeaveAllocation } =
-    useLeaveStore((state) => ({
-      customLeaveAllocationModalType: state.customLeaveAllocationModalType,
-      currentEditingLeaveAllocation: state.currentEditingLeaveAllocation
-    }));
+  const {
+    customLeaveAllocationModalType,
+    currentEditingLeaveAllocation,
+    selectedYear
+  } = useLeaveStore((state) => ({
+    customLeaveAllocationModalType: state.customLeaveAllocationModalType,
+    currentEditingLeaveAllocation: state.currentEditingLeaveAllocation,
+    selectedYear: state.selectedYear
+  }));
 
   useEffect(() => {
     if (
@@ -367,13 +372,14 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
           maxDate={
             values.validToDate
               ? DateTime.fromISO(values.validToDate)
-              : getMaxDateOfYear()
+              : getMaxDateOfYear(nextYear)
           }
           inputFormat="dd/MM/yyyy"
           disableMaskedInput
           isPreviousHolidayDisabled
           selectedDate={selectedValidFromDate}
           setSelectedDate={setSelectedValidFromDate}
+          initialMonthlyView={getMinDateOfYear(Number(selectedYear))}
         />
         <InputDate
           label={translateText(["expirationDate"])}
@@ -386,12 +392,13 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
               ? DateTime.fromISO(values.validFromDate)
               : getMinDateOfYear()
           }
-          maxDate={getMaxDateOfYear()}
+          maxDate={getMaxDateOfYear(nextYear)}
           inputFormat="dd/MM/yyyy"
           disableMaskedInput
           isPreviousHolidayDisabled
           selectedDate={selectedValidToDate}
           setSelectedDate={setSelectedValidToDate}
+          initialMonthlyView={getMaxDateOfYear(Number(selectedYear))}
         />
       </Stack>
     </Form>

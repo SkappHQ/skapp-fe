@@ -7,13 +7,25 @@ import {
   COMMON_ERROR_SYSTEM_VERSION_MISMATCH,
   COMMON_ERROR_TOKEN_EXPIRED,
   COMMON_ERROR_USER_VERSION_MISMATCH
-} from "../constants/errorMessageKeys";
-import authFetch from "../utils/axiosInterceptor";
+} from "~community/common/constants/errorMessageKeys";
+import authFetch from "~community/common/utils/axiosInterceptor";
 
 const TanStackProvider = ({ children }: { children: ReactNode }) => {
   const { update, data: session } = useSession();
 
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => {
+    return new QueryClient({
+      defaultOptions: {
+        mutations: {
+          onMutate: async () => {
+            if (!navigator.onLine) {
+              throw new Error("Network error: No internet connection");
+            }
+          }
+        }
+      }
+    });
+  });
 
   const handleTokenRefresh = async () => {
     try {

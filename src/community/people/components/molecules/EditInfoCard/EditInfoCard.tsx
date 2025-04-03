@@ -1,14 +1,8 @@
 import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
-import { JSX } from "react";
-import {
-  type MouseEventHandler,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from "react";
+import { JSX, useEffect } from "react";
+import { type MouseEventHandler, useCallback, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
@@ -25,39 +19,31 @@ import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
-import { ManagerTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   formatDateWithOrdinalIndicator,
   getTimeElapsedSinceDate
 } from "~community/common/utils/dateTimeUtils";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { AccountStatusEnums } from "~community/people/enums/DirectoryEnums";
+import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import { usePeopleStore } from "~community/people/store/store";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
-import {
-  EmployeeDetails,
-  EmployeeManagerType
-} from "~community/people/types/EmployeeTypes";
+import { EmployeeManagerType } from "~community/people/types/EmployeeTypes";
+import { TeamType } from "~community/people/types/TeamTypes";
 import generateThumbnail from "~community/people/utils/image/thumbnailGenerator";
 import { toPascalCase } from "~community/people/utils/jobFamilyUtils/commonUtils";
-import {
-  findHasSupervisoryRoles,
-  getStatusStyle
-} from "~community/people/utils/terminationUtil";
+import { getStatusStyle } from "~community/people/utils/terminationUtil";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { useGetSubscriptionCancelImpact } from "~enterprise/settings/api/Billing/subscriptionCancelImpactApi";
 
 interface Props {
-  selectedEmployee: EmployeeDetails;
   onClick?: MouseEventHandler<HTMLDivElement>;
   styles?: SxProps;
 }
 
-const EditInfoCard = ({
-  selectedEmployee,
-  onClick,
-  styles
-}: Props): JSX.Element => {
+const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const {
     isDesktopScreen,
@@ -71,23 +57,17 @@ const EditInfoCard = ({
   const translateStorageText = useTranslator("StorageToastMessage");
   const deletionTranslateText = useTranslator("peopleModule", "deletion");
 
+  const [teams, setTeams] = useState<TeamType[]>([]);
+
   const AVAILABLE_FIELD_COUNT = 2;
 
   const { data } = useSession();
 
-  const environment = useGetEnvironment();
-
-  const { setToastMessage } = useToast();
-
-  const { data: storageAvailableData } = useStorageAvailability();
-  const hasTerminationAbility =
-    data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN) &&
-    data?.user?.employee?.employeeId.toString() !==
-      selectedEmployee?.employeeId;
-
   const {
-    employeeGeneralDetails,
-    setEmployeeGeneralDetails,
+    employee,
+    setProfilePic,
+    setThumbnail,
+    setCommonDetails,
     setTerminationConfirmationModalOpen,
     setAlertMessage,
     setTerminationAlertModalOpen,
@@ -96,21 +76,46 @@ const EditInfoCard = ({
     setDeletionConfirmationModalOpen
   } = usePeopleStore((state) => state);
 
+  const { data: teamData } = useGetAllTeams();
+
+  useEffect(() => {
+    if (teamData) {
+      const teams = teamData?.filter((project) =>
+        employee?.employment?.employmentDetails?.teamIds?.includes(
+          project.teamId as number
+        )
+      );
+      setTeams(teams);
+    }
+  }, [employee, teamData]);
+
+  const environment = useGetEnvironment();
+
+  const { setToastMessage } = useToast();
+
+  const { data: supervisoryData } = useGetSubscriptionCancelImpact([
+    Number(employee?.common?.employeeId)
+  ]);
+
+  const { data: storageAvailableData } = useStorageAvailability();
+  const hasTerminationAbility =
+    data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN) &&
+    data?.user?.userId !== employee?.common?.employeeId;
+
   const [supervisor, setSupervisor] = useState<EmployeeManagerType | null>(
     null
   );
 
   const handleTermination = () => {
-    const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
-
-    if (hasSupervisoryRoles) {
+    if (
+      supervisoryData?.primaryManagers?.length ||
+      supervisoryData?.teamSupervisors?.length
+    ) {
       const condition = {
-        managers: selectedEmployee.managers?.length || 0,
-        teams: selectedEmployee.teams?.length || 0
+        managers: supervisoryData?.primaryManagers?.length || 0,
+        teams: supervisoryData?.teamSupervisors?.length || 0
       };
-
       const caseKey = `${condition.managers}-${condition.teams}`;
-
       switch (caseKey) {
         case "1-0":
           setAlertMessage(
@@ -119,7 +124,6 @@ const EditInfoCard = ({
             ])
           );
           break;
-
         case "0-1":
           setAlertMessage(
             translateTerminationText([
@@ -127,7 +131,6 @@ const EditInfoCard = ({
             ])
           );
           break;
-
         default:
           if (condition.managers > 1) {
             setAlertMessage(
@@ -143,24 +146,21 @@ const EditInfoCard = ({
             );
           }
       }
-
       setTerminationAlertModalOpen(true);
-
       return;
     }
-
     setTerminationConfirmationModalOpen(true);
   };
 
   const handleDeletion = () => {
-    const hasSupervisoryRoles = findHasSupervisoryRoles(selectedEmployee);
-
-    if (hasSupervisoryRoles) {
+    if (
+      supervisoryData?.primaryManagers?.length ||
+      supervisoryData?.teamSupervisors?.length
+    ) {
       const condition = {
-        managers: selectedEmployee.managers?.length || 0,
-        teams: selectedEmployee.teams?.length || 0
+        managers: supervisoryData?.primaryManagers?.length || 0,
+        teams: supervisoryData?.teamSupervisors?.length || 0
       };
-
       if (condition.managers > 0) {
         setDeletionAlertMessage(
           deletionTranslateText(["deleteWarningPrimarySupervisorDescription"])
@@ -170,18 +170,15 @@ const EditInfoCard = ({
           deletionTranslateText(["deleteWarningTeamSupervisorDescription"])
         );
       }
-
       setDeletionAlertOpen(true);
-
       return;
     }
-
     setDeletionConfirmationModalOpen(true);
   };
 
   const kebabMenuOptions = [
     {
-      id: selectedEmployee.employeeId || "",
+      id: employee?.common?.employeeId || "",
       icon: (
         <Icon
           name={IconName.MINUS_ICON}
@@ -191,10 +188,10 @@ const EditInfoCard = ({
       text: translateTerminationText(["terminateButtonText"]),
       onClickHandler: () => handleTermination(),
       isDisabled:
-        selectedEmployee.accountStatus === AccountStatusEnums.TERMINATED
+        employee?.common?.accountStatus === AccountStatusTypes.TERMINATED
     },
     {
-      id: selectedEmployee.employeeId || "",
+      id: employee?.common?.employeeId || "",
       icon: (
         <Icon
           name={IconName.BIN_ICON}
@@ -208,27 +205,26 @@ const EditInfoCard = ({
 
   const cardData = useMemo(() => {
     return {
-      employeeId: selectedEmployee?.identificationNo?.toString() || "1",
-      authPic: selectedEmployee?.authPic || "",
-      firstName: selectedEmployee?.firstName,
-      lastName: selectedEmployee?.lastName,
+      employeeId:
+        employee?.employment?.employmentDetails?.employeeNumber || "1",
+      authPic: employee?.common?.authPic || "",
+      firstName: employee?.personal?.general?.firstName,
+      lastName: employee?.personal?.general?.lastName,
       fullName:
-        selectedEmployee?.name?.concat(
+        employee?.personal?.general?.firstName?.concat(
           " ",
-          selectedEmployee?.lastName as string
+          employee?.personal?.general?.lastName as string
         ) || "",
-      email: selectedEmployee?.email || "",
-      phone:
-        selectedEmployee?.phone?.split(" ")?.[1] ??
-        (selectedEmployee?.phone || ""),
-      countryCode: selectedEmployee?.phone?.split(" ")?.[0] || "",
-      jobFamily: selectedEmployee?.jobFamily?.name || "",
-      jobTitle: selectedEmployee?.jobTitle?.name || "",
-      teams: selectedEmployee?.teams || [],
-      joinedDate: selectedEmployee?.joinDate || "",
-      accountStatus: selectedEmployee?.accountStatus
+      email: employee?.employment?.employmentDetails?.email || "",
+      phone: employee?.personal?.contact?.contactNo || "",
+      countryCode: employee?.personal?.contact?.countryCode || "",
+      jobFamily: "",
+      jobTitle: employee?.common?.jobTitle || "",
+      teams: teams || [],
+      joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
+      accountStatus: employee?.common?.accountStatus || ""
     };
-  }, [selectedEmployee]);
+  }, [employee, teams]);
 
   const employmentStatus = cardData?.accountStatus as AccountStatusEnums;
 
@@ -249,7 +245,7 @@ const EditInfoCard = ({
   };
 
   const getTeams = (): string[] => {
-    return cardData?.teams?.map((team) => team?.team?.teamName).sort();
+    return cardData?.teams?.map((team) => team?.teamName).sort();
   };
 
   const getDate = (): string => {
@@ -266,10 +262,13 @@ const EditInfoCard = ({
         const profilePic = acceptedFiles.map((file: File) =>
           Object.assign(file, { preview: URL.createObjectURL(file) })
         );
-        setEmployeeGeneralDetails("authPic", profilePic as ModifiedFileType[]);
+        setCommonDetails({
+          authPic: profilePic[0]?.preview ?? ""
+        });
 
+        setProfilePic(profilePic as ModifiedFileType[]);
         generateThumbnail(profilePic[0] as ModifiedFileType).then((thumbnail) =>
-          setEmployeeGeneralDetails("thumbnail", thumbnail)
+          setThumbnail(thumbnail)
         );
       } else {
         setToastMessage({
@@ -281,7 +280,7 @@ const EditInfoCard = ({
         });
       }
     },
-    [storageAvailableData?.availableSpace, setEmployeeGeneralDetails]
+    [storageAvailableData?.availableSpace]
   );
 
   const { open, getInputProps } = useDropzone({
@@ -297,23 +296,26 @@ const EditInfoCard = ({
   });
 
   const handleUnSelectPhoto = (): void => {
-    setEmployeeGeneralDetails("authPic", cardData?.authPic);
+    setProfilePic([]);
+    setThumbnail([]);
+    setCommonDetails({
+      authPic: ""
+    });
   };
 
-  useEffect(() => {
-    const supervisor = selectedEmployee?.employees?.find(
-      (manager: EmployeeManagerType) =>
-        manager?.managerType === ManagerTypes.PRIMARY
-    );
+  // useEffect(() => {
+  //   const supervisor = selectedEmployee?.employees?.find(
+  //     (manager: EmployeeManagerType) =>
+  //       manager?.managerType === ManagerTypes.PRIMARY
+  //   );
 
-    setSupervisor(supervisor as EmployeeManagerType);
-  }, [selectedEmployee]);
+  //   setSupervisor(supervisor as EmployeeManagerType);
+  // }, [selectedEmployee]);
 
   const openFileBrowser = () => {
     if (storageAvailableData?.availableSpace <= EIGHTY_PERCENT) {
       open();
     } else {
-      null;
       setToastMessage({
         open: true,
         toastType: "error",
@@ -325,12 +327,12 @@ const EditInfoCard = ({
   };
 
   const getAvatarThumbnailUrl = useCallback((): string => {
-    if (employeeGeneralDetails?.authPic !== undefined) {
-      if (Array.isArray(employeeGeneralDetails?.authPic)) {
-        return employeeGeneralDetails?.authPic[0]?.preview;
+    if (employee?.common?.authPic !== undefined) {
+      if (Array.isArray(employee?.common?.authPic)) {
+        return employee?.common?.authPic[0]?.preview;
       }
 
-      return employeeGeneralDetails?.authPic ?? "";
+      return employee?.common?.authPic ?? "";
     } else if (cardData?.authPic !== undefined) {
       if (Array.isArray(cardData?.authPic)) {
         return cardData?.authPic[0]?.preview;
@@ -339,7 +341,7 @@ const EditInfoCard = ({
     }
 
     return "";
-  }, [cardData?.authPic, employeeGeneralDetails?.authPic]);
+  }, [cardData?.authPic, employee?.common?.authPic]);
 
   return (
     <Stack
@@ -385,12 +387,11 @@ const EditInfoCard = ({
           handleUnSelectPhoto={handleUnSelectPhoto}
           open={openFileBrowser}
           enableEdit={
-            selectedEmployee?.accountStatus !==
+            employee?.common?.accountStatus !==
             AccountStatusEnums.TERMINATED.toUpperCase()
           }
           imageUploaded={
-            cardData?.authPic !==
-            ((employeeGeneralDetails?.authPic as string) ?? "")
+            cardData?.authPic !== ((employee?.common?.authPic as string) ?? "")
           }
         />
         <Stack direction="column" alignItems="flex-start" gap="1rem">

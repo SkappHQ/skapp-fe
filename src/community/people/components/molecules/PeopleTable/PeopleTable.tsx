@@ -2,7 +2,15 @@ import { Box, Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  FormEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import InviteIcon from "~community/common/assets/Icons/InviteIcon";
 import Button from "~community/common/components/atoms/Button/Button";
@@ -37,6 +45,7 @@ import {
   EmployeeDataType,
   TeamResultsType
 } from "~community/people/types/EmployeeTypes";
+import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
@@ -105,7 +114,10 @@ const PeopleTable: FC<Props> = ({
     setSelectedEmployeeId,
     resetEmployeeData,
     resetEmployeeDataChanges,
-    setIsReinviteConfirmationModalOpen
+    setIsReinviteConfirmationModalOpen,
+    setCurrentStep,
+    setNextStep,
+    resetPeopleSlice
   } = usePeopleStore((state) => state);
 
   const { data: teamData, isLoading } = useGetAllTeams();
@@ -207,8 +219,12 @@ const PeopleTable: FC<Props> = ({
     label: col.headerName
   }));
 
-  const transformToTableRows = () => {
-    return employeeData
+  const transformToTableRows = useCallback(() => {
+    //NOTE: For debugging purposes, do not remove
+    console.log("file: PeopleTable");
+    console.log("employeeData: ", employeeData);
+
+    const tableRowData = employeeData
       ?.filter(
         (employee: EmployeeDataType) =>
           !isRemovePeople ||
@@ -316,7 +332,16 @@ const PeopleTable: FC<Props> = ({
             />
           )
       }));
-  };
+
+    console.log("tableRowData: ", tableRowData);
+
+    return tableRowData;
+  }, [
+    currentEmployeeDetails?.employeeId,
+    employeeData,
+    isPendingInvitationListOpen,
+    isRemovePeople
+  ]);
 
   useEffect(() => {
     if (!isLoading && teamData)
@@ -324,6 +349,7 @@ const PeopleTable: FC<Props> = ({
   }, [isLoading, teamData]);
 
   const handleRowClick = async (employee: { id: number }) => {
+    resetPeopleSlice();
     if (
       currentEmployeeDetails?.employeeId === employee.id.toString() &&
       !isPeopleManagerOrSuperAdmin
@@ -331,15 +357,20 @@ const PeopleTable: FC<Props> = ({
       resetEmployeeDataChanges();
       resetEmployeeData();
       setSelectedEmployeeId(employee.id);
+      setCurrentStep(EditPeopleFormTypes.personal);
+      setNextStep(EditPeopleFormTypes.personal);
       router.push(ROUTES.PEOPLE.ACCOUNT);
     } else if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee.id);
-      router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id));
+      setCurrentStep(EditPeopleFormTypes.personal);
+      setNextStep(EditPeopleFormTypes.personal);
+      router.push(ROUTES.PEOPLE.EDIT(employee.id));
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-
-      const route = `${ROUTES.PEOPLE.INDIVIDUAL}?viewEmployeeId=${employee.id}`;
+      setCurrentStep(EditPeopleFormTypes.personal);
+      setNextStep(EditPeopleFormTypes.personal);
+      const route = `${ROUTES.PEOPLE.BASE}/${employee.id}`;
       router.push(route);
     }
   };
@@ -421,6 +452,48 @@ const PeopleTable: FC<Props> = ({
     }
   };
 
+  const getEmptyDataTitle = () => {
+    if (
+      !employeeData?.length ||
+      (employeeData?.length === 1 && isRemovePeople && onSearch)
+    ) {
+      return translateText(["emptySearchResult", "title"]);
+    }
+    if (!employeeData?.length && filter) {
+      return isPendingInvitationListOpen
+        ? translateText(["emptyPendingList", "title"])
+        : translateText(["emptyFilterResult", "title"]);
+    }
+    if (
+      !employeeData?.length ||
+      (employeeData?.length === 1 && isRemovePeople)
+    ) {
+      return translateText(["emptyEmployeeData", "title"]);
+    }
+    return "";
+  };
+
+  const getEmptyDataDescription = () => {
+    if (
+      !employeeData?.length ||
+      (employeeData?.length === 1 && isRemovePeople && onSearch)
+    ) {
+      return translateText(["emptySearchResult", "description"]);
+    }
+
+    if (!employeeData?.length && filter) {
+      return isPendingInvitationListOpen
+        ? translateText(["emptyPendingList", "description"])
+        : translateText(["emptyFilterResult", "description"]);
+    }
+
+    if (!employeeData?.length) {
+      return translateText(["emptyEmployeeData", "description"]);
+    }
+
+    return "";
+  };
+
   return (
     <Box
       sx={{
@@ -467,9 +540,7 @@ const PeopleTable: FC<Props> = ({
           isCheckboxSelectionEnabled={
             isPendingInvitationListOpen || isRemovePeople
           }
-          isSelectAllCheckboxEnabled={
-            isPendingInvitationListOpen || isRemovePeople
-          }
+          isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
           handleAllRowsCheck={handleAllCheckBoxClick}
           handleRowCheck={handleCheckBoxClick}
           actionRowOneRightButton={
@@ -505,28 +576,8 @@ const PeopleTable: FC<Props> = ({
           }
           isLoading={isFetching && !isFetchingNextPage}
           skeletonRows={5}
-          emptyDataTitle={
-            !employeeData?.length && onSearch
-              ? translateText(["emptySearchResult", "title"])
-              : !employeeData?.length && filter
-                ? isPendingInvitationListOpen
-                  ? translateText(["emptyPendingList", "title"])
-                  : translateText(["emptyFilterResult", "title"])
-                : !employeeData?.length
-                  ? translateText(["emptyEmployeeData", "title"])
-                  : undefined
-          }
-          emptyDataDescription={
-            !employeeData?.length && onSearch
-              ? translateText(["emptySearchResult", "description"])
-              : !employeeData?.length && filter
-                ? isPendingInvitationListOpen
-                  ? translateText(["emptyPendingList", "description"])
-                  : translateText(["emptyFilterResult", "description"])
-                : !employeeData?.length
-                  ? translateText(["emptyEmployeeData", "description"])
-                  : ""
-          }
+          emptyDataTitle={getEmptyDataTitle()}
+          emptyDataDescription={getEmptyDataDescription()}
         />
       </Box>
       <ReinviteConfirmationModal

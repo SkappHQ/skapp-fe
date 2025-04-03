@@ -10,7 +10,7 @@ import {
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import { type Theme, useTheme } from "@mui/material/styles";
-import {
+import React, {
   ChangeEvent,
   Dispatch,
   FC,
@@ -95,6 +95,7 @@ interface Props {
   onSelectTabValue?: (searchTab: string) => void;
   required?: boolean;
   needSearchIcon?: boolean;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Search: FC<Props> = ({
@@ -135,7 +136,8 @@ const Search: FC<Props> = ({
   isManagerSearch = false,
   onSelectTabValue,
   required = false,
-  needSearchIcon = true
+  needSearchIcon = true,
+  onKeyDown
 }) => {
   const theme: Theme = useTheme();
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -287,6 +289,7 @@ const Search: FC<Props> = ({
               onBlur={onBlur}
               onFocus={onFocus}
               name={inputName}
+              onKeyDown={onKeyDown}
             />
             {needSearchIcon && <SearchIcon />}
           </Paper>

@@ -90,6 +90,8 @@ const AddNewResourceModal = () => {
     })
   );
 
+  const { resetPeopleSlice } = usePeopleStore((state) => state);
+
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
     attendanceAdminLimitExceeded: false,
@@ -126,7 +128,7 @@ const AddNewResourceModal = () => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
       lastName: values.lastName,
-      workEmail: values.workEmail,
+      email: values.workEmail,
       userRoles: {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
@@ -241,12 +243,12 @@ const AddNewResourceModal = () => {
     const updatedAttendanceRole = isChecked
       ? Role.ATTENDANCE_ADMIN
       : Role.ATTENDANCE_EMPLOYEE;
-    const updateESignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
+    const updateesignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
 
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
-    setFieldValue("esignRole", updateESignRole);
+    setFieldValue("esignRole", updateesignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -448,8 +450,9 @@ const AddNewResourceModal = () => {
         }
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
+          resetPeopleSlice();
           setIsDirectoryModalOpen(false);
-          router.push(ROUTES.PEOPLE.ADD_NEW_RESOURCE);
+          router.push(ROUTES.PEOPLE.ADD);
         }}
         data-testid={peopleDirectoryTestId.buttons.addFullProfileBtn}
       />

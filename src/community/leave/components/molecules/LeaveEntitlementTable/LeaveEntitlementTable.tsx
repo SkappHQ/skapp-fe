@@ -13,7 +13,11 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
-import { getAdjacentYearsWithCurrent } from "~community/common/utils/dateTimeUtils";
+import {
+  currentYear,
+  getAdjacentYearsWithCurrent,
+  nextYear
+} from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -30,9 +34,14 @@ import { styles } from "./styles";
 interface Props {
   tableData: LeaveEntitlementResponseType | undefined;
   isFetching: boolean;
+  searchTerm: string;
 }
 
-const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
+const LeaveEntitlementTable = ({
+  tableData,
+  isFetching,
+  searchTerm
+}: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -78,6 +87,10 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
     return <TableSkeleton rows={4} />;
   }
 
+  const showEmptyTableButton =
+    leaveEntitlementTableSelectedYear === currentYear.toString() ||
+    leaveEntitlementTableSelectedYear === nextYear.toString();
+
   return (
     <>
       <Stack sx={classes.headerStack}>
@@ -103,14 +116,17 @@ const LeaveEntitlementTable = ({ tableData, isFetching }: Props) => {
           </Box>
         )}
         <TableHeaderFill />
-        {tableData?.items?.length === 0 ? (
+        {searchTerm === "" && tableData?.items?.length === 0 ? (
           <Box sx={classes.emptyScreenContainer}>
             <TableEmptyScreen
               title={translateText(["emptyScreen", "title"], {
                 selectedYear: leaveEntitlementTableSelectedYear
               })}
               description={translateText(["emptyScreen", "description"])}
-              buttonText={translateText(["emptyScreen", "buttonText"])}
+              buttonText={
+                showEmptyTableButton &&
+                translateText(["emptyScreen", "buttonText"])
+              }
               onButtonClick={() => {
                 setLeaveEntitlementModalType(
                   tableData?.items?.length === 0

@@ -8,18 +8,18 @@ import {
   EntitlementYears,
   leaveBulkUploadResponse
 } from "~community/leave/types/LeaveTypes";
-import {
-  EmployeeEmploymentDetailsTypes,
-  EmployeeEntitlementsDetailType,
-  EmployeeGeneralDetailsTypes
-} from "~community/people/types/AddNewResourceTypes";
 import { EntitlementInfo } from "~community/people/types/EmployeeBulkUpload";
+import {
+  EntitlementDetailType,
+  L3EmploymentDetailsType,
+  L3GeneralDetailsType
+} from "~community/people/types/PeopleTypes";
 
 interface HandleSaveEntitlementsProps {
   isSuccess: boolean;
-  employeeGeneralDetails: EmployeeGeneralDetailsTypes;
-  employeeEmploymentDetails: EmployeeEmploymentDetailsTypes;
-  employeeEntitlementsDetails: EmployeeEntitlementsDetailType[];
+  employeeGeneralDetails: L3GeneralDetailsType;
+  employeeEmploymentDetails: L3EmploymentDetailsType;
+  entitlementDetails: EntitlementDetailType[];
   currentYearMutation: UseMutateFunction<
     leaveBulkUploadResponse,
     Error,
@@ -42,7 +42,7 @@ export const handleSaveEntitlements = ({
   isSuccess,
   employeeGeneralDetails,
   employeeEmploymentDetails,
-  employeeEntitlementsDetails,
+  entitlementDetails,
   currentYearMutation,
   currentYearSuccessFlag,
   setCurrentYearSuccessFlag,
@@ -57,15 +57,15 @@ export const handleSaveEntitlements = ({
   const currentYearPayload = processEntitlementPayload({
     requiredYear: EntitlementYears.CURRENT,
     employeeName: employeeGeneralDetails?.firstName ?? "",
-    email: employeeEmploymentDetails?.workEmail ?? "",
-    employeeEntitlementsDetails: employeeEntitlementsDetails
+    email: employeeEmploymentDetails?.email ?? "",
+    employeeEntitlementsDetails: entitlementDetails
   });
 
   const nextYearPayload = processEntitlementPayload({
     requiredYear: EntitlementYears.NEXT,
     employeeName: employeeGeneralDetails?.firstName ?? "",
-    email: employeeEmploymentDetails?.workEmail ?? "",
-    employeeEntitlementsDetails: employeeEntitlementsDetails
+    email: employeeEmploymentDetails?.email ?? "",
+    employeeEntitlementsDetails: entitlementDetails
   });
 
   !currentYearPayload?.entitlementDetailsList?.[0]?.entitlements?.length &&

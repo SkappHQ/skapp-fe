@@ -1,16 +1,16 @@
 import { EntitlementsDtoType } from "~community/common/types/BulkUploadTypes";
 import { EntitlementYears } from "~community/leave/types/LeaveTypes";
-import { EmployeeEntitlementsDetailType } from "~community/people/types/AddNewResourceTypes";
 import {
   EntitlementDetails,
   EntitlementInfo
 } from "~community/people/types/EmployeeBulkUpload";
+import { EntitlementDetailType } from "~community/people/types/PeopleTypes";
 
 interface ProcessEntitlementPayloadProps {
   requiredYear: EntitlementYears;
   employeeName: string;
   email: string;
-  employeeEntitlementsDetails: EmployeeEntitlementsDetailType[];
+  employeeEntitlementsDetails: EntitlementDetailType[];
 }
 
 export const processEntitlementPayload = ({
@@ -44,7 +44,7 @@ export const processEntitlementPayload = ({
 };
 
 const processEntitlementDetails = (
-  employeeEntitlementsDetails: EmployeeEntitlementsDetailType[],
+  employeeEntitlementsDetails: EntitlementDetailType[],
   year: string
 ): EntitlementsDtoType[] => {
   return employeeEntitlementsDetails?.reduce((acc, entitlement) => {

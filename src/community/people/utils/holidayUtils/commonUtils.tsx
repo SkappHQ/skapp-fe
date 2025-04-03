@@ -2,10 +2,7 @@ import { DateTime } from "luxon";
 
 import { BulkRecordErrorLogType } from "~community/common/types/BulkUploadTypes";
 import { createCSV } from "~community/common/utils/bulkUploadUtils";
-import {
-  holidayBulkUploadResponse,
-  holidayType
-} from "~community/people/types/HolidayTypes";
+import { holidayBulkUploadResponse } from "~community/people/types/HolidayTypes";
 
 export const getFormattedYear = (date: string): string => {
   const dateFormate = new Date(date);
@@ -68,28 +65,6 @@ export const getFormattedDate = (date: string, fullDate = false): string => {
   }
 
   return dayWithSuffix;
-};
-
-export const downloadBulkCsvTemplate = (holidayData: holidayType[]) => {
-  const headers = ["date", "name", "HolidayDuration"];
-
-  const stream = new ReadableStream({
-    start(controller) {
-      controller.enqueue(headers.join(",") + "\n");
-      for (const holidayDetails of holidayData) {
-        const rowData = [
-          holidayDetails?.date,
-          holidayDetails?.name,
-          holidayDetails?.holidayDuration
-        ];
-        controller.enqueue(rowData.join(",") + "\n");
-      }
-
-      controller.close();
-    }
-  });
-
-  createCSV(stream, "HolidayBulkTemplate");
 };
 
 export const downloadHolidayBulkUploadErrorLogsCSV = (

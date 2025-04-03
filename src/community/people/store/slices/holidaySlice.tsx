@@ -85,6 +85,7 @@ const holidaySlice = (set: SetType<HolidaySliceTypes>): HolidaySliceTypes => ({
       successCount: initialSuccessCount
     });
   },
+
   setIsBulkUpload: (value: boolean) => {
     set((state: HolidaySliceTypes) => ({
       ...state,

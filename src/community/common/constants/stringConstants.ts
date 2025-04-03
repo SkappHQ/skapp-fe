@@ -7,7 +7,7 @@ export enum characterLengths {
   ORGANIZATION_NAME_LENGTH = 100,
   EMPLOYEE_ID_LENGTH = 20,
   LEAVE_TYPE_LENGTH = 20,
-  NIN_LENGTH = 14,
+  NIN_LENGTH = 15,
   STATE_LENGTH = 50,
   PHONE_NUMBER_LENGTH_MAX = 14,
   PHONE_NUMBER_LENGTH_MIN = 4
@@ -50,18 +50,6 @@ export enum AuthStatus {
 
 export const PASSWORD_STRENGTH_MULTIPLIER = 20;
 
-export enum HolidayCSVHeader {
-  NAME = "name",
-  DATE = "date",
-  HOLIDAY_DURATION = "holidayDuration"
-}
-
-export enum HolidayTableHeader {
-  NAME = "name",
-  DATE = "date",
-  HOLIDAY_DURATION = "HolidayDuration"
-}
-
 export enum EmailProvider {
   GMAIL = "Gmail",
   OUTLOOK = "Outlook",
@@ -83,3 +71,6 @@ export const BrandingBlueColor = {
 
 export const SUCCESS = "success";
 export const CANCEL = "cancel";
+
+export const APP = "app";
+export const LOCALHOST = "localhost";

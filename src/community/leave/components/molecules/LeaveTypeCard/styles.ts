@@ -15,7 +15,7 @@ const styles = (theme: Theme): StyleProps => ({
     transition: "0.3s",
     "&:hover": {
       background: theme.palette.secondary.main,
-      border: `0.0625rem solid ${theme.palette.secondary.dark}`
+      outline: `0.0625rem solid ${theme.palette.secondary.dark}`
     }
   },
   disabledCard: {

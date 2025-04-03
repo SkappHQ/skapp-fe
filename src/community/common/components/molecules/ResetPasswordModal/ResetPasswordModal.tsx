@@ -6,7 +6,11 @@ import React, { FocusEvent, useState } from "react";
 import { useChangePassword } from "~community/common/api/settingsApi";
 import Form from "~community/common/components/molecules/Form/Form";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import { COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS } from "~community/common/constants/errorMessageKeys";
+import {
+  COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS,
+  COMMON_ERROR_OLD_PASSWORD_INCORRECT,
+  COMMON_ERROR_SAME_PASSWORD
+} from "~community/common/constants/errorMessageKeys";
 import {
   ButtonStyle,
   ButtonTypes
@@ -117,11 +121,27 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
   } = formik;
 
   const onError = (error: any) => {
-    if (
-      error.response.data.results[0].messageKey ===
-      COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS
-    ) {
-      setFieldError("password", translateText(["usedPreviousPasswordError"]));
+    switch (error.response.data.results[0].messageKey) {
+      case COMMON_ERROR_CANNOT_USE_PREVIOUS_PASSWORDS:
+        setFieldError("password", translateText(["usedPreviousPasswordError"]));
+        break;
+      case COMMON_ERROR_SAME_PASSWORD:
+        setFieldError("password", translateText(["usedPreviousPasswordError"]));
+        break;
+      case COMMON_ERROR_OLD_PASSWORD_INCORRECT:
+        setFieldError(
+          "currentPassword",
+          translateText(["currentPasswordError"])
+        );
+        break;
+      default:
+        setToastMessage({
+          open: true,
+          toastType: "error",
+          title: translateText(["passwordChangeFailedTitle"]),
+          description: translateText(["passwordChangeFailedDescription"]),
+          isIcon: true
+        });
     }
   };
 

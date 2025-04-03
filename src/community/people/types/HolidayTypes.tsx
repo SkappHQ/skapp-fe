@@ -16,7 +16,7 @@ export interface holiday {
   id?: number;
   date?: string;
   name?: string;
-  holidayDuration?: string;
+  holidayDuration?: HolidayDurationType;
   holidayColor?: string;
 }
 export interface HolidayDataPreprocessedType {
@@ -109,10 +109,10 @@ export type addedHolidays = {
   holidayType?: string;
 };
 
-export type holidayType = {
+export type HolidayType = {
   date: string;
   name: string;
-  holidayDuration: string;
+  holidayDuration: HolidayDurationType;
 };
 
 export interface bulkStatusSummary {
@@ -120,15 +120,15 @@ export interface bulkStatusSummary {
   failedCount: number;
 }
 
-export interface holidayBulkRecordErrorLogType {
+export interface HolidayBulkRecordErrorLogType {
   status: string;
   errorMessage: string;
-  holiday?: holidayType;
+  holiday?: HolidayType;
 }
 
 export interface holidayBulkUploadResponse {
   bulkStatusSummary: bulkStatusSummary;
-  bulkRecordErrorLogs: holidayBulkRecordErrorLogType[];
+  bulkRecordErrorLogs: HolidayBulkRecordErrorLogType[];
 }
 
 export type Holiday = {

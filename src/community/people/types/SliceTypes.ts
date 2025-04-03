@@ -155,8 +155,12 @@ export interface JobFamilySliceType
 export interface CalendarSliceTypes
   extends Pick<
     Store,
+    | "isNewCalendarDetailsValid"
+    | "setIsNewCalendarDetailsValid"
     | "newCalenderDetails"
     | "setNewCalendarDetails"
+    | "calendarErrors"
+    | "setCalendarErrors"
     | "removeAddedCalendarDetails"
   > {}
 
@@ -201,4 +205,36 @@ export interface HolidayModalSliceType
     | "holidayModalType"
     | "setIsHolidayModalOpen"
     | "setHolidayModalType"
+  > {}
+
+export interface PeopleSliceTypes
+  extends Pick<
+    Store,
+    | "employee"
+    | "initialEmployee"
+    | "nextStep"
+    | "currentStep"
+    | "activeStep"
+    | "profilePic"
+    | "setProfilePic"
+    | "thumbnail"
+    | "setThumbnail"
+    | "setActiveStep"
+    | "isUnsavedChangesModalOpen"
+    | "isUnsavedModalSaveButtonClicked"
+    | "isUnsavedModalDiscardButtonClicked"
+    | "setNextStep"
+    | "setCurrentStep"
+    | "setIsUnsavedChangesModalOpen"
+    | "setIsUnsavedModalSaveButtonClicked"
+    | "setIsUnsavedModalDiscardButtonClicked"
+    | "setEmployee"
+    | "setPersonalDetails"
+    | "setEmergencyDetails"
+    | "setEmploymentDetails"
+    | "setSystemPermissions"
+    | "setCommonDetails"
+    | "resetPeopleSlice"
+    | "entitlementDetails"
+    | "setEntitlementDetails"
   > {}
