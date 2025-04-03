@@ -20,6 +20,7 @@ import { LeaveEntitlementDropdownListType } from "~community/leave/types/LeaveTy
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
 
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "../constants/configs";
+import { EMAIL_MAX_LENGTH } from "../constants/stringConstants";
 
 type TranslatorFunctionType = (
   suffixes: string[],
@@ -212,7 +213,7 @@ export const employeeEmploymentDetailsValidation = (
       .nullable(),
     email: Yup.string()
       .trim()
-      .max(100, translator(["maxLengthError"]))
+      .max(EMAIL_MAX_LENGTH, translator(["maxLengthError"]))
       .required(translator(["requireEmailError"]))
       .test(
         "valid-email-format",

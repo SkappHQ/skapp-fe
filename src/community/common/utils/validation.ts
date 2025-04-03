@@ -9,6 +9,7 @@ import {
   isValidEmail,
   onlyLettersAndSpaces
 } from "~community/common/regex/regexPatterns";
+import { EMAIL_MAX_LENGTH } from "~community/people/constants/stringConstants";
 
 import {
   confirmPasswordValidation,
@@ -142,11 +143,8 @@ export const isValidAlphaNumericNamePattern = (value: string): boolean => {
 };
 
 export const isValidEmailPattern = (value: string): boolean => {
-  console.log("value", value);
   // First check the basic pattern
   if (!emailPattern().test(value)) {
-    console.log("value");
-
     return false;
   }
   // Additional validation for consecutive periods and period placement
@@ -170,7 +168,7 @@ export const isValidEmailPattern = (value: string): boolean => {
   }
 
   // Ensure length constraint
-  if (value.length > 100) {
+  if (value.length > EMAIL_MAX_LENGTH) {
     return false;
   }
 

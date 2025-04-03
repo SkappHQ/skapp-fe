@@ -194,7 +194,3 @@ export function areCommasPresentInString(input: string): boolean {
   const regex = /,/;
   return regex.test(input);
 }
-
-export function isValidEmailPattern(): RegExp {
-  return /^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-}
