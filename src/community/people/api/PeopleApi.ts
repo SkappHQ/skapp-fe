@@ -660,6 +660,18 @@ export const useGetSupervisedByMe = (
   });
 };
 
+export const useHasSupervisorRoles = (
+  employeeId: number
+): UseQueryResult<any> => {
+  return useQuery({
+    queryKey: [peopleQueryKeys.HAS_SUPERVISOR_ROLES, employeeId],
+    queryFn: async () =>
+      await authFetch.get(peoplesEndpoints.HAS_SUPERVISOR_ROLES(employeeId)),
+    select: (data) => data?.data?.results[0],
+    enabled: !!employeeId
+  });
+};
+
 export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
   const queryClient = useQueryClient();
 
