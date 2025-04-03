@@ -353,11 +353,11 @@ export const getSocialMediaDetailsChanges = (
 
   if (
     isFieldDifferentAndValid(
-      newSocialMedia?.linkedin,
-      previousSocialMedia?.linkedin
+      newSocialMedia?.linkedIn,
+      previousSocialMedia?.linkedIn
     )
   ) {
-    changes.linkedin = newSocialMedia?.linkedin;
+    changes.linkedIn = newSocialMedia?.linkedIn;
   }
 
   if (
