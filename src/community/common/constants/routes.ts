@@ -90,14 +90,7 @@ const ROUTES = {
     CREATE_DOCUMENT: "/sign/create",
     SIGN: "/sign/sign",
     REDIRECT: "/sign/redirect",
-    COMPLETE: "/sign/complete",
-    ALL_DONE: "/sign/all-done",
-    COMPLETE_DOCUMENT: "/sign/complete-document",
-    DECLINED_DOCUMENT: "/sign/declined-document",
-    DOCUMENT_NOT_FOUND: "/sign/document-not-found",
-    EXPIRED_LINK: "/sign/expired-link",
-    SESSION_EXPIRED: "/sign/session-expired",
-    UPDATED_LINK: "/sign/updated-link"
+    COMPLETE: "/sign/complete"
   },
   REMOVE_PEOPLE: "/remove-people",
   CHANGE_SUPERVISORS: "/change-supervisors",
