@@ -20,7 +20,8 @@ const styles = () => ({
     marginTop: 5
   },
   dropdownListComponentStyles: {
-    flex: 1
+    flex: 1,
+    maxWidth: "29rem"
   },
   btnWrapper: {
     display: "flex",

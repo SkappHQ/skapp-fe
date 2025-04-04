@@ -33,7 +33,9 @@ const useSystemPermissionFormHandlers = () => {
 
   const environment = useGetEnvironment();
   const { setToastMessage } = useToast();
-  const { employee, setSystemPermissions } = usePeopleStore((state) => state);
+  const { employee, setSystemPermissions, initialEmployee } = usePeopleStore(
+    (state) => state
+  );
 
   const [permissions, setPermissions] = useState<L2SystemPermissionsType>(
     employee?.systemPermissions || {}
@@ -158,8 +160,6 @@ const useSystemPermissionFormHandlers = () => {
         }
       }
 
-      setSuperAdminCount(newSuperAdminCount);
-
       if (!isChecked && newSuperAdminCount === 0) {
         setToastMessage({
           open: true,
@@ -171,7 +171,11 @@ const useSystemPermissionFormHandlers = () => {
         return;
       }
 
-      if (isChecked && roleLimits.superAdminLimitExceeded) {
+      if (
+        isChecked &&
+        !initialEmployee?.systemPermissions?.isSuperAdmin &&
+        roleLimits.superAdminLimitExceeded
+      ) {
         setToastMessage({
           open: true,
           toastType: ToastType.ERROR,
@@ -181,6 +185,8 @@ const useSystemPermissionFormHandlers = () => {
         });
         return;
       }
+
+      setSuperAdminCount(newSuperAdminCount);
 
       setPermissions({
         isSuperAdmin: isChecked,
@@ -202,7 +208,8 @@ const useSystemPermissionFormHandlers = () => {
       roleLimits,
       setSystemPermissions,
       setToastMessage,
-      translateText
+      translateText,
+      initialEmployee
     ]
   );
 
@@ -210,7 +217,8 @@ const useSystemPermissionFormHandlers = () => {
     permissions,
     grantablePermission,
     handleRoleDropdown,
-    handleSuperAdminToggle
+    handleSuperAdminToggle,
+    roleLimitMapping
   };
 };
 
