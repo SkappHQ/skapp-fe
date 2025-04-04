@@ -12,6 +12,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
+import { AllowedGrantableRolesType } from "~community/configurations/types/UserRolesTypes";
 import { useHasSupervisorRoles } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
@@ -127,7 +128,7 @@ const SystemPermissionFormSection = ({
           description: roleTranslateText(["userRoleLimitationDescription"]),
           isIcon: true
         });
-      } else {
+      } else if (errorsToShow.length === 1) {
         setToastMessage({
           open: true,
           toastType: ToastType.ERROR,
@@ -202,6 +203,15 @@ const SystemPermissionFormSection = ({
     }
   }, [isCancelModalConfirmButtonClicked]);
 
+  const isRoleMissing = (
+    category: keyof AllowedGrantableRolesType,
+    roleLabel: string
+  ) => {
+    return !grantablePermission?.[category]?.some(
+      (role) => role.label === roleLabel
+    );
+  };
+
   return (
     <PeopleFormSectionWrapper
       title={translateText(["title"])}
@@ -220,63 +230,73 @@ const SystemPermissionFormSection = ({
         />
 
         <Stack sx={classes.dropdownContainer}>
-          <DropdownList
-            inputName={"peopleRole"}
-            label={translateText(["people"])}
-            itemList={grantablePermission?.people || []}
-            value={permissions.peopleRole}
-            componentStyle={classes.dropdownListComponentStyles}
-            checkSelected
-            onChange={(event) =>
-              handleRoleDropdown("peopleRole", event.target.value as Role)
-            }
-            isDisabled={
-              isProfileView ||
-              permissions.isSuperAdmin ||
-              isInputsDisabled ||
-              isReadOnly
-            }
-          />
+          {!isRoleMissing("people", "Admin") &&
+            !isRoleMissing("people", "Manager") && (
+              <DropdownList
+                inputName={"peopleRole"}
+                label={translateText(["people"])}
+                itemList={grantablePermission?.people || []}
+                value={permissions.peopleRole}
+                componentStyle={classes.dropdownListComponentStyles}
+                checkSelected
+                onChange={(event) =>
+                  handleRoleDropdown("peopleRole", event.target.value as Role)
+                }
+                isDisabled={
+                  isProfileView ||
+                  permissions.isSuperAdmin ||
+                  isInputsDisabled ||
+                  isReadOnly
+                }
+              />
+            )}
 
-          {isLeaveModuleEnabled && (
-            <DropdownList
-              inputName={"leaveRole"}
-              label={translateText(["leave"])}
-              itemList={grantablePermission?.leave || []}
-              value={permissions.leaveRole}
-              checkSelected
-              componentStyle={classes.dropdownListComponentStyles}
-              onChange={(event) =>
-                handleRoleDropdown("leaveRole", event.target.value as Role)
-              }
-              isDisabled={
-                isProfileView ||
-                permissions.isSuperAdmin ||
-                isInputsDisabled ||
-                isReadOnly
-              }
-            />
-          )}
+          {isLeaveModuleEnabled &&
+            !isRoleMissing("leave", "Admin") &&
+            !isRoleMissing("leave", "Manager") && (
+              <DropdownList
+                inputName={"leaveRole"}
+                label={translateText(["leave"])}
+                itemList={grantablePermission?.leave || []}
+                value={permissions.leaveRole}
+                checkSelected
+                componentStyle={classes.dropdownListComponentStyles}
+                onChange={(event) =>
+                  handleRoleDropdown("leaveRole", event.target.value as Role)
+                }
+                isDisabled={
+                  isProfileView ||
+                  permissions.isSuperAdmin ||
+                  isInputsDisabled ||
+                  isReadOnly
+                }
+              />
+            )}
 
-          {isAttendanceModuleEnabled && (
-            <DropdownList
-              inputName={"attendanceRole"}
-              label={translateText(["attendance"])}
-              itemList={grantablePermission?.attendance || []}
-              value={permissions.attendanceRole}
-              componentStyle={classes.dropdownListComponentStyles}
-              checkSelected
-              onChange={(event) =>
-                handleRoleDropdown("attendanceRole", event.target.value as Role)
-              }
-              isDisabled={
-                isProfileView ||
-                permissions.isSuperAdmin ||
-                isInputsDisabled ||
-                isReadOnly
-              }
-            />
-          )}
+          {isAttendanceModuleEnabled &&
+            !isRoleMissing("attendance", "Admin") &&
+            !isRoleMissing("attendance", "Manager") && (
+              <DropdownList
+                inputName={"attendanceRole"}
+                label={translateText(["attendance"])}
+                itemList={grantablePermission?.attendance || []}
+                value={permissions.attendanceRole}
+                componentStyle={classes.dropdownListComponentStyles}
+                checkSelected
+                onChange={(event) =>
+                  handleRoleDropdown(
+                    "attendanceRole",
+                    event.target.value as Role
+                  )
+                }
+                isDisabled={
+                  isProfileView ||
+                  permissions.isSuperAdmin ||
+                  isInputsDisabled ||
+                  isReadOnly
+                }
+              />
+            )}
 
           {isEsignatureModuleEnabled && (
             <DropdownList
