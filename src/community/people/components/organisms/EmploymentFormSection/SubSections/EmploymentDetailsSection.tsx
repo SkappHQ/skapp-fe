@@ -186,7 +186,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               mb: "2rem"
             }}
           >
-            {isPeopleManager && (
+            {(isPeopleManager || isProfileView) && (
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <InputField
                   label={translateText(["employeeNo"])}

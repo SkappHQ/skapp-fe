@@ -21,11 +21,15 @@ const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
     (state) => state
   );
 
-  const { isPeopleAdmin, userId } = useSessionData();
+  const { isPeopleAdmin, userId, isPeopleManager, isSuperAdmin } =
+    useSessionData();
 
   const isReadOnly = !isPeopleAdmin && userId !== employeeId;
 
   const isSystemPermissionsReadOnly = !isPeopleAdmin;
+
+  const isPeopleManagerOnly =
+    isPeopleManager && !isPeopleAdmin && !isSuperAdmin;
 
   const getAddFlowSection = () => {
     switch (activeStep) {
@@ -59,6 +63,7 @@ const PeopleFormSections = ({ employeeId, isAddFlow = false }: Props) => {
           <EmploymentDetailsForm
             isAddFlow={isAddFlow}
             isReadOnly={isReadOnly}
+            isProfileView={isPeopleManagerOnly}
             isUpdate
           />
         );

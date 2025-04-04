@@ -54,7 +54,8 @@ export const peopleQueryKeys = {
       identificationNo
     ].filter((val) => val !== undefined);
   },
-  SUPERVISED_BY_ME: ["supervised-by-me"]
+  SUPERVISED_BY_ME: ["supervised-by-me"],
+  HAS_SUPERVISOR_ROLES: ["has-supervisor-roles"]
 };
 
 export const teamQueryKeys = {

@@ -12,7 +12,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
-import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { useHasSupervisorRoles } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
@@ -67,9 +67,10 @@ const SystemPermissionFormSection = ({
 
   const { handleMutate } = useHandlePeopleEdit();
 
-  const { data: supervisedData } = useGetSupervisedByMe(
+  const { data: supervisedData } = useHasSupervisorRoles(
     Number(employee.common?.employeeId)
   );
+
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { setToastMessage } = useToast();
 

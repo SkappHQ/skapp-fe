@@ -27,7 +27,9 @@ export const peoplesEndpoints = {
     `${moduleAPIPath.PEOPLE}/${employeeId}/is-supervised-by-me`,
   REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`,
   DELETE_USER: (employeeId: string | number) =>
-    `${moduleAPIPath.PEOPLE}/user/delete/${employeeId}`
+    `${moduleAPIPath.PEOPLE}/user/delete/${employeeId}`,
+  HAS_SUPERVISOR_ROLES: (employeeId: number) =>
+    `${moduleAPIPath.PEOPLE}/${employeeId}/has-supervisory-roles`
 };
 
 export const authEndpoints = {
