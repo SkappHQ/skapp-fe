@@ -58,11 +58,14 @@ const SystemPermissionFormSection = ({
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    isCancelModalConfirmButtonClicked,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked,
-    setCurrentStep
+    setCurrentStep,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
@@ -100,7 +103,7 @@ const SystemPermissionFormSection = ({
     ) {
       if (supervisedData?.isPrimaryManager)
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData?.isTeamSuperviso)
+      else if (supervisedData?.isTeamSupervisor)
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
       setOpenModal(true);
@@ -132,6 +135,12 @@ const SystemPermissionFormSection = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -141,6 +150,12 @@ const SystemPermissionFormSection = ({
       onCancel();
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
+
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
 
   return (
     <PeopleFormSectionWrapper
@@ -248,7 +263,7 @@ const SystemPermissionFormSection = ({
             <AddSectionButtonWrapper onNextClick={onSave} />
           ) : (
             <EditSectionButtonWrapper
-              onCancelClick={onCancel}
+              onCancelClick={handleCancel}
               onSaveClick={onSave}
             />
           ))}

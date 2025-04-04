@@ -263,6 +263,8 @@ interface actionsTypes {
   setThumbnail: (thumbnail: ModifiedFileType[] | null) => void;
   resetPeopleSlice: () => void;
   setEntitlementDetails: (entitlement: EntitlementDetailType[]) => void;
+  setIsCancelChangesModalOpen: (status: boolean) => void;
+  setIsCancelModalConfirmButtonClicked: (status: boolean) => void;
 }
 
 export interface Store extends actionsTypes {
@@ -396,4 +398,6 @@ export interface Store extends actionsTypes {
   profilePic: ModifiedFileType[] | null;
   thumbnail: ModifiedFileType[] | null;
   entitlementDetails: EntitlementDetailType[];
+  isCancelChangesModalOpen: boolean;
+  isCancelModalConfirmButtonClicked: boolean;
 }

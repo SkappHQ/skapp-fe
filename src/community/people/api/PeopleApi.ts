@@ -744,7 +744,9 @@ export const useEditEmployee = (employeeId: string) => {
   );
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
-  const { setProfilePic } = usePeopleStore((state) => state);
+  const { setProfilePic, setIsReinviteConfirmationModalOpen } = usePeopleStore(
+    (state) => state
+  );
 
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
@@ -755,6 +757,7 @@ export const useEditEmployee = (employeeId: string) => {
       return response.data;
     },
     onSuccess: () => {
+      setIsReinviteConfirmationModalOpen(false);
       setProfilePic(null);
       setToastMessage({
         open: true,

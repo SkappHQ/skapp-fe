@@ -229,6 +229,9 @@ const useCareerProgressionFormHandler = ({
   };
 
   const handleInput = async (e: SelectChangeEvent) => {
+    if (e.target.name === "jobFamilyId") {
+      setFieldValue("jobTitleId", "");
+    }
     await setFieldValue(e.target.name, e.target.value);
     setFieldError(e.target.name, "");
   };
