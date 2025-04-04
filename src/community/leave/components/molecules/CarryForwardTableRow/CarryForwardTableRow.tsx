@@ -7,13 +7,9 @@ import AvatarChip from "~community/common/components/molecules/AvatarChip/Avatar
 
 import { carryForwardTableRowStyles } from "./styles";
 
-interface RecordDataType {
-  name: string;
-  entitlements: number[];
-}
 interface Props {
   name: string;
-  recordData: RecordDataType[];
+  recordData: number[];
 }
 
 const CarryForwardTableRow: FC<Props> = ({ name, recordData }) => {
@@ -52,8 +48,8 @@ const CarryForwardTableRow: FC<Props> = ({ name, recordData }) => {
 
       {recordData.map((value, entryIndex) => (
         <Box key={entryIndex} sx={styles.rowContainer}>
-          <Box sx={styles.headerRowCell}>
-            <Typography variant="body2" sx={styles.holidayText}>
+          <Box sx={styles.headerCell}>
+            <Typography variant="body2" sx={styles.label}>
               {value}
             </Typography>
           </Box>

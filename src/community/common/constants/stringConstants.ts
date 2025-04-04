@@ -71,3 +71,6 @@ export const BrandingBlueColor = {
 
 export const SUCCESS = "success";
 export const CANCEL = "cancel";
+
+export const APP = "app";
+export const LOCALHOST = "localhost";

@@ -34,7 +34,7 @@ import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormS
 import TeamModalController from "../../TeamModalController/TeamModalController";
 
 interface Props {
-  isManager?: boolean;
+  isReadOnly?: boolean;
   isUpdate?: boolean;
   isProfileView?: boolean;
   isInputsDisabled?: boolean;
@@ -44,7 +44,7 @@ interface Props {
 const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
   (
     {
-      isManager = false,
+      isReadOnly = false,
       isUpdate = false,
       isProfileView = false,
       isInputsDisabled = false,
@@ -145,7 +145,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     } = useEmployeeDetailsFormHandler({
       formik,
       id,
-      isManager,
+      isManager: isReadOnly,
       isProfileView,
       setIsUniqueEmail,
       setIsUniqueEmployeeNo
@@ -198,14 +198,14 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   onChange={handleInput}
                   inputName="employeeNumber"
                   error={
-                    errors.employeeNumber && !isManager
+                    errors.employeeNumber && !isReadOnly
                       ? errors.employeeNumber
                       : ""
                   }
                   componentStyle={{
                     mt: "0rem"
                   }}
-                  readOnly={isManager || isProfileView || isInputsDisabled}
+                  readOnly={isReadOnly || isProfileView || isInputsDisabled}
                   maxLength={10}
                   isDisabled={isInputsDisabled}
                 />
@@ -220,13 +220,13 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 placeHolder={translateText(["enterWorkEmail"])}
                 onChange={handleInput}
                 inputName="email"
-                error={errors.email && !isManager ? errors.email : ""}
+                error={errors.email && !isReadOnly ? errors.email : ""}
                 componentStyle={{
                   mt: "0rem"
                 }}
-                required={!isManager && !isProfileView}
+                required={!isReadOnly && !isProfileView}
                 readOnly={
-                  (isManager ||
+                  (isReadOnly ||
                     isUpdate ||
                     isProfileView ||
                     isInputsDisabled) &&
@@ -250,7 +250,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 }}
                 errorFocusOutlineNeeded={false}
                 itemList={EmployementAllocationList}
-                readOnly={isManager || isProfileView}
+                readOnly={isReadOnly || isProfileView}
                 isDisabled={isInputsDisabled}
                 checkSelected
               />
@@ -260,10 +260,10 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               size={{ xs: 12, md: 6, xl: 4 }}
               sx={{
                 display:
-                  isManager && values?.teamIds?.length === 0 ? "none" : "block"
+                  isReadOnly && values?.teamIds?.length === 0 ? "none" : "block"
               }}
             >
-              {projectTeamList?.length === 0 && !isManager && !isProfileView ? (
+              {projectTeamList?.length === 0 && !isReadOnly && !isProfileView ? (
                 <InteractiveInputTrigger
                   id="add-new-team-button"
                   label={translateText(["teams"])}
@@ -276,7 +276,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   error={errors?.teamIds ?? ""}
                   isDisable={isInputsDisabled}
                 />
-              ) : isManager || isProfileView ? (
+              ) : isReadOnly || isProfileView ? (
                 <MultiSelectChipInput
                   chipList={
                     projectTeamList
@@ -325,7 +325,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   isCheckSelected
                   isErrorFocusOutlineNeeded={false}
                   itemList={projectTeamList}
-                  isDisabled={isManager || isProfileView || isInputsDisabled}
+                  isDisabled={isReadOnly || isProfileView || isInputsDisabled}
                   addNewClickBtnText={translateText(["addNewTeam"])}
                 />
               )}
@@ -350,13 +350,13 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 onManagerSearchChange={onPrimaryManagerSearchChange}
                 errors={errors?.primarySupervisor ?? ""}
                 inputName={"primarySupervisor"}
-                isDisabled={isManager || isProfileView || isInputsDisabled}
+                isDisabled={isReadOnly || isProfileView || isInputsDisabled}
                 placeholder={
-                  !isManager && !isProfileView
+                  !isReadOnly && !isProfileView
                     ? translateText(["selectPrimarySupervisor"])
                     : ""
                 }
-                needSearchIcon={!isManager && !isProfileView}
+                needSearchIcon={!isReadOnly && !isProfileView}
                 noSearchResultTexts={translateText(["noSearchResults"])}
                 isDisabledLabel={isInputsDisabled}
                 componentStyle={{
@@ -386,7 +386,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 errors={errors?.secondarySupervisor ?? ""}
                 inputName={"secondarySupervisor"}
                 isDisabled={
-                  isManager ||
+                  isReadOnly ||
                   isProfileView ||
                   Number(
                     employee?.employment?.employmentDetails?.primarySupervisor
@@ -401,11 +401,11 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   ) <= 0 || isInputsDisabled
                 }
                 placeholder={
-                  !isManager && !isProfileView
+                  !isReadOnly && !isProfileView
                     ? translateText(["selectSecondarySupervisor"])
                     : ""
                 }
-                needSearchIcon={!isManager && !isProfileView}
+                needSearchIcon={!isReadOnly && !isProfileView}
                 noSearchResultTexts={translateText(["noSearchResults"])}
                 onKeyDown={handleBackspacePressSecondary}
               />
@@ -435,7 +435,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                     mt: "0rem"
                   }}
                   inputFormat={REVERSE_DATE_FORMAT}
-                  readOnly={isManager || isProfileView}
+                  readOnly={isReadOnly || isProfileView}
                   disabled={isInputsDisabled}
                   selectedDate={selectedJoinedDate}
                   setSelectedDate={setSelectedJoinedDate}
@@ -447,7 +447,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 <InputDate
                   label={translateText(["probationStartDate"])}
                   placeholder={
-                    !isManager && !isProfileView
+                    !isReadOnly && !isProfileView
                       ? translateText(["selectProbationStartDate"])
                       : ""
                   }
@@ -469,7 +469,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   componentStyle={{
                     mt: "0rem"
                   }}
-                  readOnly={isManager || isProfileView}
+                  readOnly={isReadOnly || isProfileView}
                   disableMaskedInput
                   disabled={isInputsDisabled}
                   selectedDate={selectedProbationStartDate}
@@ -482,7 +482,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 <InputDate
                   label={translateText(["probationEndDate"])}
                   placeholder={
-                    !isManager && !isProfileView
+                    !isReadOnly && !isProfileView
                       ? translateText(["selectProbationEndDate"])
                       : ""
                   }
@@ -509,7 +509,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   componentStyle={{
                     mt: "0rem"
                   }}
-                  readOnly={isManager || isProfileView}
+                  readOnly={isReadOnly || isProfileView}
                   disabled={isInputsDisabled}
                   selectedDate={selectedProbationEndDate}
                   setSelectedDate={setSelectedProbationEndDate}
@@ -538,11 +538,11 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   mt: "0rem"
                 }}
                 isDisabled={isInputsDisabled}
-                readOnly={isManager}
+                readOnly={isReadOnly}
               />
             </Grid>
           </Grid>
-          {!isManager && !isProfileView && (
+          {!isReadOnly && !isProfileView && (
             <TeamModalController setLatestTeamId={setLatestTeamId} />
           )}
         </form>

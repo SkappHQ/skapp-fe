@@ -25,10 +25,11 @@ import { usePeopleStore } from "~community/people/store/store";
 
 interface Props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
 const EducationalDetailsSection = (props: Props): JSX.Element => {
-  const { isInputsDisabled } = props;
+  const { isInputsDisabled, isReadOnly = false } = props;
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -101,6 +102,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             }}
             maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
             isDisabled={isInputsDisabled}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -119,6 +121,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             }}
             maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
             isDisabled={isInputsDisabled}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -137,6 +140,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             }}
             maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
             isDisabled={isInputsDisabled}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -160,6 +164,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             inputFormat={REVERSE_DATE_FORMAT}
             selectedDate={selectedStartDate}
             setSelectedDate={setSelectedStartDate}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -192,6 +197,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
             inputFormat={REVERSE_DATE_FORMAT}
             selectedDate={selectedEndDate}
             setSelectedDate={setSelectedEndDate}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -211,7 +217,7 @@ const EducationalDetailsSection = (props: Props): JSX.Element => {
               styles={{
                 mt: "2rem"
               }}
-              disabled={isInputsDisabled}
+              disabled={isInputsDisabled || isReadOnly}
               type={ButtonTypes.SUBMIT}
             />
           )}

@@ -31,12 +31,14 @@ interface Props {
   isProfileView?: boolean;
   isUpdate?: boolean;
   isAddFlow?: boolean;
+  isReadOnly?: boolean;
 }
 
 const SystemPermissionFormSection = ({
   isProfileView,
   isUpdate,
-  isAddFlow
+  isAddFlow,
+  isReadOnly = false
 }: Props) => {
   const classes = styles();
   const environment = useGetEnvironment();
@@ -149,7 +151,7 @@ const SystemPermissionFormSection = ({
       <>
         <SwitchRow
           label={translateText(["superAdmin"])}
-          disabled={isProfileView || isInputsDisabled}
+          disabled={isProfileView || isInputsDisabled || isReadOnly}
           checked={permissions.isSuperAdmin as boolean}
           onChange={handleSuperAdminToggle}
           wrapperStyles={classes.switchRowWrapper}
@@ -168,7 +170,10 @@ const SystemPermissionFormSection = ({
               handleRoleDropdown("peopleRole", event.target.value as Role)
             }
             isDisabled={
-              isProfileView || permissions.isSuperAdmin || isInputsDisabled
+              isProfileView ||
+              permissions.isSuperAdmin ||
+              isInputsDisabled ||
+              isReadOnly
             }
           />
 
@@ -184,7 +189,10 @@ const SystemPermissionFormSection = ({
                 handleRoleDropdown("leaveRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || permissions.isSuperAdmin || isInputsDisabled
+                isProfileView ||
+                permissions.isSuperAdmin ||
+                isInputsDisabled ||
+                isReadOnly
               }
             />
           )}
@@ -201,7 +209,10 @@ const SystemPermissionFormSection = ({
                 handleRoleDropdown("attendanceRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || permissions.isSuperAdmin || isInputsDisabled
+                isProfileView ||
+                permissions.isSuperAdmin ||
+                isInputsDisabled ||
+                isReadOnly
               }
             />
           )}
@@ -218,7 +229,10 @@ const SystemPermissionFormSection = ({
                 handleRoleDropdown("esignRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || permissions.isSuperAdmin || isInputsDisabled
+                isProfileView ||
+                permissions.isSuperAdmin ||
+                isInputsDisabled ||
+                isReadOnly
               }
             />
           )}

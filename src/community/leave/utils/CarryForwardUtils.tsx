@@ -1,4 +1,5 @@
 import { createCSV } from "~community/common/utils/bulkUploadUtils";
+import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import {
   LeaveType,
   carryForwardLeaveEntitlementsType
@@ -6,7 +7,7 @@ import {
 
 export const downloadCarryForwardDataCSV = (
   data: carryForwardLeaveEntitlementsType[],
-  leaveTypes: LeaveType[]
+  leaveTypes: LeaveTypeType[]
 ) => {
   const nameArray = leaveTypes.map((leaveType) => leaveType.name);
   const leaveTypeString = nameArray.join(",");
@@ -21,7 +22,7 @@ export const downloadCarryForwardDataCSV = (
     });
 
     return {
-      employee: item.employeeData,
+      employee: item.employee,
       entitlements: entitlementsByLeaveType
     };
   });
@@ -31,7 +32,7 @@ export const downloadCarryForwardDataCSV = (
       controller.enqueue(`EMPLOYEE ID,NAME,${leaveTypeString}\n`);
       for (const item of formattedData) {
         const { entitlements, employee } = item;
-        const row = `${employee?.id || "N/A"},${employee?.name || "N/A"},${entitlements.join(",")}\n`;
+        const row = `${employee?.employeeId || "N/A"},${employee?.name || "N/A"},${entitlements.join(",")}\n`;
         controller.enqueue(row);
       }
 

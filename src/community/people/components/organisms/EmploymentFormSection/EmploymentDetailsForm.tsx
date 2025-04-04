@@ -20,12 +20,14 @@ interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
   isProfileView?: boolean;
+  isReadOnly?: boolean;
 }
 
 const EmploymentDetailsForm = ({
   isAddFlow = false,
   isUpdate = false,
-  isProfileView = false
+  isProfileView = false,
+  isReadOnly = false
 }: Props) => {
   const employmentDetailsRef = useRef<FormMethods | null>(null);
   const identificationDetailsRef = useRef<FormMethods | null>(null);
@@ -109,19 +111,26 @@ const EmploymentDetailsForm = ({
         isUpdate={isUpdate}
         isProfileView={isProfileView}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <CareerProgressDetailsSection
         isProfileView={isProfileView}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <IdentificationDetailsSection
         ref={identificationDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <PreviousEmploymentDetailsSection
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
-      <VisaDetailsSection isInputsDisabled={isTerminatedEmployee} />
+      <VisaDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
+      />
 
       {!isTerminatedEmployee &&
         (isAddFlow ? (

@@ -13,7 +13,11 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
-import { currentYear, nextYear } from "~community/common/utils/dateTimeUtils";
+import {
+  currentYear,
+  getAdjacentYearsWithCurrent,
+  nextYear
+} from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -83,6 +87,10 @@ const LeaveEntitlementTable = ({
     return <TableSkeleton rows={4} />;
   }
 
+  const showEmptyTableButton =
+    leaveEntitlementTableSelectedYear === currentYear.toString() ||
+    leaveEntitlementTableSelectedYear === nextYear.toString();
+
   return (
     <>
       <Stack sx={classes.headerStack}>
@@ -95,7 +103,7 @@ const LeaveEntitlementTable = ({
             }
             selectedItem={leaveEntitlementTableSelectedYear}
             title={leaveEntitlementTableSelectedYear}
-            items={[currentYear.toString(), nextYear.toString()]}
+            items={getAdjacentYearsWithCurrent()}
           />
         </Box>
       </Stack>
@@ -115,7 +123,10 @@ const LeaveEntitlementTable = ({
                 selectedYear: leaveEntitlementTableSelectedYear
               })}
               description={translateText(["emptyScreen", "description"])}
-              buttonText={translateText(["emptyScreen", "buttonText"])}
+              buttonText={
+                showEmptyTableButton &&
+                translateText(["emptyScreen", "buttonText"])
+              }
               onButtonClick={() => {
                 setLeaveEntitlementModalType(
                   tableData?.items?.length === 0

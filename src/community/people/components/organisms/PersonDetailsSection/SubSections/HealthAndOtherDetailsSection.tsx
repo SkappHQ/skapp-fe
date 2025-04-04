@@ -17,11 +17,12 @@ import { employeeHealthAndOtherDetailsValidation } from "~community/people/utils
 
 interface props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
 const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
   (props, ref) => {
-    const { isInputsDisabled } = props;
+    const { isInputsDisabled, isReadOnly = false } = props;
     const translateText = useTranslator(
       "peopleModule",
       "addResource",
@@ -118,6 +119,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
                 errorFocusOutlineNeeded={false}
                 itemList={BloodGroupList}
                 isDisabled={isInputsDisabled}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -135,6 +137,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
                 }}
                 maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
                 isDisabled={isInputsDisabled}
+                readOnly={isReadOnly}
               />
             </Grid>
 
@@ -152,6 +155,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
                 }}
                 maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
                 isDisabled={isInputsDisabled}
+                readOnly={isReadOnly}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6, xl: 4 }}>
@@ -169,6 +173,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
                 tooltip={translateText(["tShirtSizeTooltip"])}
                 isDisabled={isInputsDisabled}
                 maxLength={ADDRESS_MAX_CHARACTER_LENGTH}
+                readOnly={isReadOnly}
               />
             </Grid>
           </Grid>

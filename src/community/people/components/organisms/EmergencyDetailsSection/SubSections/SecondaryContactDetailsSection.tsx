@@ -12,11 +12,11 @@ import { EmergencyContactRelationshipList } from "~community/people/utils/data/e
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
 interface Props {
-  isManager?: boolean;
+  isReadOnly?: boolean;
   isInputsDisabled?: boolean;
 }
 const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
-  ({ isManager = false, isInputsDisabled = false }: Props, ref) => {
+  ({ isReadOnly = false, isInputsDisabled = false }: Props, ref) => {
     const translateText = useTranslator(
       "peopleModule",
       "addResource",
@@ -82,7 +82,7 @@ const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
                   flex: 1,
                   mt: "0rem"
                 }}
-                readOnly={isManager || isInputsDisabled}
+                readOnly={isReadOnly || isInputsDisabled}
                 isDisabled={isInputsDisabled}
               />
             </Grid>
@@ -102,7 +102,7 @@ const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
                 errorFocusOutlineNeeded={false}
                 checkSelected={true}
                 itemList={EmergencyContactRelationshipList}
-                readOnly={isManager || isInputsDisabled}
+                readOnly={isReadOnly || isInputsDisabled}
                 isDisabled={isInputsDisabled}
               />
             </Grid>
@@ -120,8 +120,8 @@ const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
                 fullComponentStyle={{
                   mt: "0rem"
                 }}
-                readOnly={isManager || isInputsDisabled}
-                isDisabled={isManager || isInputsDisabled}
+                readOnly={isReadOnly || isInputsDisabled}
+                isDisabled={isReadOnly || isInputsDisabled}
               />
             </Grid>
           </Grid>

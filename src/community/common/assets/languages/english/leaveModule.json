@@ -464,7 +464,7 @@
     "leaveCarryForwardSectionDescription": "Sync eligible carried forward leave balances of the entire organization to the next leave cycle.",
     "leaveCarryForwardSectionBtn": "Start the sync",
     "leaveCarryForwardSuccessToastTitle": "Sync Successful",
-    "leaveCarryForwardSuccessToastDescription": "Carried Forward Leave balances synced to the next cycle.",
+    "leaveCarryForwardSuccessToastDescription": "Carried Forward Leave balances have been synced successfully.",
     "leaveCarryForwardFailToastTitle": "Oops! Something Went Wrong",
     "leaveCarryForwardFailToastDescription": "Failed to sync the balances. Please try again.",
     "leaveCarryForwardModalHeading": "Confirm synchronization",
