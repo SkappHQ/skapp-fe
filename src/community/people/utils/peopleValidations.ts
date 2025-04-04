@@ -14,11 +14,13 @@ import {
   convertDateToDateTime,
   getDateFromTimeStamp
 } from "~community/common/utils/dateTimeUtils";
+import { isValidEmailPattern } from "~community/common/utils/validation";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { LeaveEntitlementDropdownListType } from "~community/leave/types/LeaveTypes";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
 
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "../constants/configs";
+import { EMAIL_MAX_LENGTH } from "../constants/stringConstants";
 
 type TranslatorFunctionType = (
   suffixes: string[],
@@ -211,8 +213,15 @@ export const employeeEmploymentDetailsValidation = (
       .nullable(),
     email: Yup.string()
       .trim()
-      .email(translator(["validEmailError"]))
+      .max(EMAIL_MAX_LENGTH, translator(["maxLengthError"]))
       .required(translator(["requireEmailError"]))
+      .test(
+        "valid-email-format",
+        translator(["validEmailError"]),
+        function (value) {
+          return isValidEmailPattern(value);
+        }
+      )
       .test("is-unique-email", translator(["uniqueEmailError"]), function () {
         return context?.isUniqueEmail || context?.isUpdate;
       }),
@@ -509,8 +518,15 @@ export const quickAddEmployeeValidations = (
         isValidNameWithAccentsAndApostrophes(),
         translator(["validNameError"])
       ),
-    workEmail: Yup.string()
+    email: Yup.string()
       .trim()
-      .email(translator(["validEmailError"]))
+      .test(
+        "valid-email-format",
+        translator(["validEmailError"]),
+        function (value) {
+          return isValidEmailPattern(value as string);
+        }
+      )
+
       .required(translator(["requireEmailError"]))
   });
