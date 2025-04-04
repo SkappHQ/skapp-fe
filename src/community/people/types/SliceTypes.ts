@@ -237,4 +237,8 @@ export interface PeopleSliceTypes
     | "resetPeopleSlice"
     | "entitlementDetails"
     | "setEntitlementDetails"
+    | "isCancelChangesModalOpen"
+    | "isCancelModalConfirmButtonClicked"
+    | "setIsCancelChangesModalOpen"
+    | "setIsCancelModalConfirmButtonClicked"
   > {}

@@ -42,6 +42,7 @@ const EmploymentDetailsForm = ({
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     isReinviteConfirmationModalOpen,
+    isCancelModalConfirmButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
@@ -49,7 +50,9 @@ const EmploymentDetailsForm = ({
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked,
     setIsReinviteConfirmationModalOpen,
-    setEmploymentDetails
+    setEmploymentDetails,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
@@ -110,6 +113,12 @@ const EmploymentDetailsForm = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -119,6 +128,12 @@ const EmploymentDetailsForm = ({
       onCancel();
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
+
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
 
   return (
     <>
@@ -175,7 +190,7 @@ const EmploymentDetailsForm = ({
           <AddSectionButtonWrapper onNextClick={onSave} />
         ) : (
           <EditSectionButtonWrapper
-            onCancelClick={onCancel}
+            onCancelClick={handleCancel}
             onSaveClick={onSave}
           />
         ))}

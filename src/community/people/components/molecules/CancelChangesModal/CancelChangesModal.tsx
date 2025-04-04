@@ -10,41 +10,41 @@ import { IconName } from "~community/common/types/IconTypes";
 
 interface Props {
   isOpen: boolean;
-  onDiscard: () => void;
-  onSave: () => void;
+  onCancel: () => void;
+  onConfirm: () => void;
 }
 
-const UnsavedChangesModal: React.FC<Props> = ({
+const CancelChangesModal: React.FC<Props> = ({
   isOpen,
-  onDiscard,
-  onSave
+  onCancel,
+  onConfirm
 }) => {
   const translateText = useTranslator("peopleModule", "peoples");
 
   return (
     <Modal
       isModalOpen={isOpen}
-      onCloseModal={onDiscard}
+      onCloseModal={onCancel}
       isClosable={false}
       title={translateText(["unsavedModalTitle"])}
       icon={<Icon name={IconName.CLOSE_STATUS_POPUP_ICON} />}
     >
       <Stack spacing={2}>
         <UserPromptModal
-          description={translateText(["unsavedModalDescription"])}
+          description={translateText(["cancelChangesModalDescription"])}
           primaryBtn={{
-            label: translateText(["unsavedModalSaveButton"]),
+            label: translateText(["cancelChangesModalConfirmButton"]),
             buttonStyle: ButtonStyle.PRIMARY,
             endIcon: IconName.RIGHT_MARK,
             styles: { mt: "1rem" },
-            onClick: onSave
+            onClick: onConfirm
           }}
           secondaryBtn={{
-            label: translateText(["unsavedModalDiscardButton"]),
+            label: translateText(["cancelChangesModalCancelButton"]),
             buttonStyle: ButtonStyle.TERTIARY,
             endIcon: IconName.CLOSE_ICON,
             styles: { mt: "1rem" },
-            onClick: onDiscard
+            onClick: onCancel
           }}
         />
       </Stack>
@@ -52,4 +52,4 @@ const UnsavedChangesModal: React.FC<Props> = ({
   );
 };
 
-export default UnsavedChangesModal;
+export default CancelChangesModal;
