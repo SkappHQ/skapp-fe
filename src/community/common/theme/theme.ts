@@ -193,6 +193,7 @@ declare module "@mui/material/styles" {
     placeholder: React.CSSProperties;
     smallTitle: React.CSSProperties;
     allVariants: React.CSSProperties;
+    kpiValue: React.CSSProperties;
   }
   interface TypographyVariantsOptions {
     onboardingHeader?: React.CSSProperties;
@@ -201,6 +202,7 @@ declare module "@mui/material/styles" {
     placeholder?: React.CSSProperties;
     smallTitle?: React.CSSProperties;
     allVariants: React.CSSProperties;
+    kpiValue?: React.CSSProperties;
   }
 }
 declare module "@mui/material/Badge" {
@@ -239,6 +241,7 @@ declare module "@mui/material/Typography" {
     h6: false;
     subtitle1: false;
     subtitle2: false;
+    kpiValue: true;
     body1: true;
     body2: true;
     button: false;
@@ -480,6 +483,11 @@ export const theme = createTheme({
     smallTitle: {
       fontWeight: 600,
       fontSize: "0.75rem" // 12px
+    },
+    //KPI value
+    kpiValue: {
+      fontWeight: 700,
+      fontSize: "2rem" //32px
     }
   },
   breakpoints: {
