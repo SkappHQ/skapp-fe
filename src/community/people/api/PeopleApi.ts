@@ -52,6 +52,9 @@ import {
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { EmployeeTimelineType } from "~enterprise/people/types/PeopleTypes";
+
+import { L1EmployeeType } from "../types/PeopleTypes";
 
 const getBannerData = async (): Promise<number> => {
   const url = peoplesEndpoints.GET_PENDING_EMPLOYEE_COUNT;
@@ -510,18 +513,16 @@ export const useUpdateLeaveManagerData = (
 export const useGetEmployeeTimeline = (
   memberId: number,
   isEnabled: boolean = true
-) => {
+): UseQueryResult<EmployeeTimelineType[]> => {
   return useQuery({
     queryKey: ["employeeTimeline", memberId],
     queryFn: async () => {
       return await authFetch.get(peoplesEndpoints.EMPLOYEE_TIMELINE(memberId));
     },
     select: (data) => {
-      if (data?.data.results?.length) {
-        return {
-          ...data.data
-        };
-      }
+      const employeeTimeline = data?.data?.results || [];
+
+      return employeeTimeline;
     },
     enabled: isEnabled && memberId !== 0
   });
@@ -659,6 +660,18 @@ export const useGetSupervisedByMe = (
   });
 };
 
+export const useHasSupervisorRoles = (
+  employeeId: number
+): UseQueryResult<any> => {
+  return useQuery({
+    queryKey: [peopleQueryKeys.HAS_SUPERVISOR_ROLES, employeeId],
+    queryFn: async () =>
+      await authFetch.get(peoplesEndpoints.HAS_SUPERVISOR_ROLES(employeeId)),
+    select: (data) => data?.data?.results[0],
+    enabled: !!employeeId
+  });
+};
+
 export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
   const queryClient = useQueryClient();
 
@@ -676,5 +689,109 @@ export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
       onSuccess();
     },
     onError
+  });
+};
+
+export const useAddEmployee = (onSuccess: () => void, onError: () => void) => {
+  const queryClient = useQueryClient();
+  const params = usePeopleStore((state) => state.employeeDataParams);
+
+  return useMutation({
+    mutationFn: async (employee: L1EmployeeType) => {
+      const response = await authFetch.post(
+        peoplesEndpoints.ADD_EMPLOYEE,
+        employee
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      onSuccess();
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_COUNT()
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE(params)
+        })
+        .catch(rejects);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries();
+    },
+    onError
+  });
+};
+
+export const useGetEmployee = (memberId: number | undefined = undefined) => {
+  return useQuery({
+    queryKey: peopleQueryKeys.EMPLOYEE_BY_ID(memberId),
+    queryFn: async () => {
+      return await authFetch.get(
+        peoplesEndpoints.EMPLOYEE_BY_ID(memberId as number)
+      );
+    }
+  });
+};
+
+export const useEditEmployee = (employeeId: string) => {
+  const { setToastMessage } = useToast();
+  const translateText = useTranslator(
+    "peopleModule",
+    "addResource",
+    "commonText"
+  );
+  const queryClient = useQueryClient();
+  const params = usePeopleStore((state) => state.employeeDataParams);
+  const { setProfilePic, setIsReinviteConfirmationModalOpen } = usePeopleStore(
+    (state) => state
+  );
+
+  return useMutation({
+    mutationFn: async (employee: L1EmployeeType) => {
+      const response = await authFetch.patch(
+        peoplesEndpoints.EDIT_EMPLOYEE(employeeId),
+        employee
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      setIsReinviteConfirmationModalOpen(false);
+      setProfilePic(null);
+      setToastMessage({
+        open: true,
+        toastType: ToastType.SUCCESS,
+        title: translateText(["editToastTitle"]),
+        description: translateText(["editToastDescription"])
+      });
+
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_COUNT()
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE(params)
+        })
+        .catch(rejects);
+      queryClient
+        .invalidateQueries({
+          queryKey: peopleQueryKeys.GET_ME
+        })
+        .catch(rejects);
+    },
+    onError: () => {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["editErrorToastTitle"]),
+        description: translateText(["editErrorToastDescription"])
+      });
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries();
+    }
   });
 };

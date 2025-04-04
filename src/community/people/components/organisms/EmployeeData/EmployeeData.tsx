@@ -73,6 +73,10 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   };
 
   useEffect(() => {
+    //NOTE: For debugging purposes, do not remove
+    console.log("file: EmployeeData");
+    console.log("employeeData: ", employeeData);
+
     if (employeeData?.pages) {
       const employeeDataItems = employeeData?.pages
         ?.map((page: any) => page?.items)
@@ -99,11 +103,16 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   useEffect(() => {
     setSearchTerm("");
     if (isPendingInvitationListOpen) {
+      setEmployeeDataParams(DataFilterEnums.PERMISSION, []);
       setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
         EmploymentStatusTypes.PENDING
       ]);
     }
-  }, [isPendingInvitationListOpen, setEmployeeDataParams]);
+  }, [
+    isPendingInvitationListOpen,
+    resetEmployeeDataParams,
+    setEmployeeDataParams
+  ]);
 
   return (
     <Stack>

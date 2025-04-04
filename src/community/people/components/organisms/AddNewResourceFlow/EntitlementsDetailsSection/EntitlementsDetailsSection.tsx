@@ -48,8 +48,8 @@ const EntitlementsDetailsSection = (): JSX.Element => {
     employeeEmploymentDetails,
     setEmployeeEntitlementsDetails
   } = usePeopleStore((state) => ({
-    employeeEntitlementsDetails: state.employeeEntitlementsDetails,
-    setEmployeeEntitlementsDetails: state.setEmployeeEntitlementsDetails,
+    employeeEntitlementsDetails: state.entitlementDetails,
+    setEmployeeEntitlementsDetails: state.setEntitlementDetails,
     employeeEmploymentDetails: state.employeeEmploymentDetails
   }));
 

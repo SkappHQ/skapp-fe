@@ -91,8 +91,10 @@ const AddEditTeamModal = ({
   };
 
   const onAddSuccess = () => {
-    stopAllOngoingQuickSetup();
-    setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+    if (ongoingQuickSetup.DEFINE_TEAMS) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      stopAllOngoingQuickSetup();
+    }
     setIsTeamModalOpen(false);
     setTeamModalType(TeamModelTypes.ADD_TEAM);
     setToastMessage({

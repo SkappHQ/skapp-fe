@@ -87,12 +87,12 @@ const LeaveRequests: NextPage = () => {
       )
     ) {
       setSelectedEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id)}?tab=leave`;
+      const url = `${ROUTES.PEOPLE.EDIT(employee.id)}?tab=leave`;
       await router.push(url);
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.INDIVIDUAL}?tab=leave&viewEmployeeId=${employee.id}`;
+      const url = `${ROUTES.PEOPLE.BASE}/${employee.id}?tab=leave`;
       await router.push(url);
     }
   };

@@ -23,7 +23,7 @@ const LeaveCarryForwardUnEligible = (): JSX.Element => {
     >
       <Typography
         sx={{
-          my: "1rem",
+          mb: "1rem",
           color: "grey.900",
           width: "100%"
         }}

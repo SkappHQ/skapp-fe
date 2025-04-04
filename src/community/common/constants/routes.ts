@@ -11,7 +11,8 @@ const ROUTES = {
     VERIFY: "/verify/email",
     VERIFY_SUCCESS: "/verify/success",
     VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/reset-password",
-    FORGET_PASSWORD: "/forget-password"
+    FORGET_PASSWORD: "/forget-password",
+    SYSTEM_UPDATE: "/system-update"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization",
@@ -60,7 +61,10 @@ const ROUTES = {
     ADD_NEW_RESOURCE: "/people/directory/add-new-resource",
     EDIT_ALL_INFORMATION: (id: any) =>
       `/people/directory/edit-all-information/${id}`,
-    PENDING: "/people/directory/pending"
+    PENDING: "/people/directory/pending",
+    USER_ACCOUNT: "/user-account",
+    EDIT: (id: any) => `/people/directory/edit/${id}`,
+    ADD: "/people/directory/add"
   },
   CONFIGURATIONS: {
     BASE: "/configurations",

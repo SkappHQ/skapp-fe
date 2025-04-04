@@ -336,7 +336,7 @@ const SystemPermissionForm = ({
 
           {isEsignatureModuleEnabled && (
             <DropdownList
-              inputName={"eSignRole"}
+              inputName={"esignRole"}
               label="e-signature"
               itemList={grantablePermission?.esign || []}
               value={values.esignRole}

@@ -2,7 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -90,6 +90,8 @@ const AddNewResourceModal = () => {
     })
   );
 
+  const { resetPeopleSlice } = usePeopleStore((state) => state);
+
   const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
     leaveAdminLimitExceeded: false,
     attendanceAdminLimitExceeded: false,
@@ -105,7 +107,7 @@ const AddNewResourceModal = () => {
   const initialValues = {
     firstName: "",
     lastName: "",
-    workEmail: "",
+    email: "",
     isSuperAdmin: false,
     peopleRole: Role.PEOPLE_EMPLOYEE,
     leaveRole: Role.LEAVE_EMPLOYEE,
@@ -126,7 +128,7 @@ const AddNewResourceModal = () => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
       lastName: values.lastName,
-      workEmail: values.workEmail,
+      email: values.email,
       userRoles: {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
@@ -147,13 +149,13 @@ const AddNewResourceModal = () => {
     validateOnBlur: true
   });
 
-  const { values, errors, handleChange, setFieldValue, handleSubmit } = formik;
+  const { values, errors, setFieldValue, setFieldError, handleSubmit } = formik;
 
   const {
     data: checkEmailAndIdentificationNo,
     refetch,
     isSuccess
-  } = useCheckEmailAndIdentificationNoForQuickAdd(values.workEmail, "");
+  } = useCheckEmailAndIdentificationNoForQuickAdd(values.email, "");
 
   const closeModal = () => {
     setDirectoryModalType(DirectoryModalTypes.NONE);
@@ -178,13 +180,13 @@ const AddNewResourceModal = () => {
   const validateWorkEmail = () => {
     const updatedData = checkEmailAndIdentificationNo;
     if (updatedData?.isWorkEmailExists) {
-      formik.setFieldError("workEmail", translateText(["uniqueEmailError"]));
+      setFieldError("email", translateText(["uniqueEmailError"]));
       return false;
     }
 
     if (isEnterpriseMode) {
       if (globalLogin == "GOOGLE" && !updatedData?.isGoogleDomain) {
-        formik.setFieldError("workEmail", translateText(["workEmailGoogle"]));
+        setFieldError("email", translateText(["workEmailGoogle"]));
         return false;
       }
     }
@@ -216,6 +218,11 @@ const AddNewResourceModal = () => {
     }
   }, [env]);
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(e.target.name, e.target.value);
+    setFieldError(e.target.name, "");
+  };
+
   const handleSuperAdminChangeEnterprise = (isChecked: boolean) => {
     if (isChecked && roleLimits.superAdminLimitExceeded) {
       setToastMessage({
@@ -241,12 +248,12 @@ const AddNewResourceModal = () => {
     const updatedAttendanceRole = isChecked
       ? Role.ATTENDANCE_ADMIN
       : Role.ATTENDANCE_EMPLOYEE;
-    const updateESignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
+    const updateesignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
 
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
-    setFieldValue("esignRole", updateESignRole);
+    setFieldValue("esignRole", updateesignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -419,9 +426,9 @@ const AddNewResourceModal = () => {
         />
       </Stack>
       <InputField
-        inputName="workEmail"
-        value={values.workEmail}
-        error={errors.workEmail}
+        inputName="email"
+        value={values.email}
+        error={errors.email}
         label="Work email"
         placeHolder={employmentDetailsTexts(["enterWorkEmail"])}
         required
@@ -448,8 +455,9 @@ const AddNewResourceModal = () => {
         }
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
+          resetPeopleSlice();
           setIsDirectoryModalOpen(false);
-          router.push(ROUTES.PEOPLE.ADD_NEW_RESOURCE);
+          router.push(ROUTES.PEOPLE.ADD);
         }}
         data-testid={peopleDirectoryTestId.buttons.addFullProfileBtn}
       />
@@ -627,14 +635,14 @@ const AddNewResourceModal = () => {
         }}
         onClick={() => refetch()}
         disabled={
-          values.workEmail === "" ||
+          values.email === "" ||
           values.firstName === "" ||
           values.lastName === ""
         }
         data-testid={peopleDirectoryTestId.buttons.quickAddSaveBtn}
         shouldBlink={
           ongoingQuickSetup.INVITE_EMPLOYEES &&
-          values.workEmail !== "" &&
+          values.email !== "" &&
           values.firstName !== "" &&
           values.lastName !== ""
         }

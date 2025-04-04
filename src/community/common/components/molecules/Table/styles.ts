@@ -77,6 +77,10 @@ const styles = (theme: Theme) => ({
       transition: "100ms",
       height: "79px",
       gap: "0.5rem",
+      "&:hover": {
+        cursor: "pointer",
+        background: theme.palette.grey.A200
+      },
       ...tableRowStyles
     }) as const,
   tableHeaderCheckboxCellStyles: (tableHeaderCellStyles?: SxProps) =>

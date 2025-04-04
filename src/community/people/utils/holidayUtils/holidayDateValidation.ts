@@ -1,7 +1,5 @@
 import { DateTime } from "luxon";
 
-import { Holiday } from "~community/people/types/HolidayTypes";
-
 import { DATE_FORMAT } from "../constants/constants";
 
 export const normalizeDate = (inputDate: string): string | null => {
@@ -29,14 +27,4 @@ export const normalizeDate = (inputDate: string): string | null => {
   }
 
   return null;
-};
-
-export const normalizeHolidayDates = (holidays: Holiday[]): Holiday[] => {
-  return holidays.map((holiday) => {
-    const normalizedDate = normalizeDate(holiday.date);
-    return {
-      ...holiday,
-      date: normalizedDate ?? holiday.date
-    };
-  });
 };

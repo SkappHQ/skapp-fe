@@ -36,35 +36,28 @@ export const tableRowStyles = (theme: Theme) => ({
     borderRightStyle: "solid",
     borderRightColor: theme.palette.grey[500]
   },
-  cell: {
+  headerCell: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
     flex: 1,
-    minWidth: "6.5rem",
-    maxWidth: "6.9rem",
-    [theme.breakpoints.down("xl")]: {
-      maxWidth: "6.9rem"
-    },
-    [theme.breakpoints.down("lg")]: {
-      maxWidth: "2rem"
-    },
-    height: "4.3rem",
+    boxSizing: "border-box",
+    padding: "0rem 1rem",
+    width: "6.9rem",
     zIndex: ZIndexEnums.DEFAULT
   },
-  holidayText: {
-    letterSpacing: "0.03em",
-    color: theme.palette.text.secondary,
-    whiteSpace: "nowrap",
+  label: {
+    width: "100%",
     textAlign: "center",
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
+    whiteSpace: "normal",
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
     overflow: "hidden",
     textOverflow: "ellipsis"
-  },
-  errorBox: {
-    backgroundColor: theme.palette.error.main,
-    px: "1rem",
-    py: "0.25rem",
-    borderRadius: "0.75rem"
   }
 });

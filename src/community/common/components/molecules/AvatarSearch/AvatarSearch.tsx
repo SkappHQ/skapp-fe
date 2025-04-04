@@ -6,11 +6,18 @@ import {
   Typography
 } from "@mui/material";
 import { type FormikErrors } from "formik";
-import { ChangeEvent, Dispatch, JSX, SetStateAction, useRef } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useRef
+} from "react";
 
 import { theme } from "~community/common/theme/theme";
 import { ManagerStoreType } from "~community/people/types/AddNewResourceTypes";
 import { EmployeeDataType } from "~community/people/types/EmployeeTypes";
+import { L4ManagerType } from "~community/people/types/PeopleTypes";
 
 import AvatarChip from "../AvatarChip/AvatarChip";
 import Search from "../Search/Search";
@@ -20,7 +27,7 @@ interface Props {
   id?: string;
   title: string;
   placeholder?: string;
-  newResourceManager?: ManagerStoreType;
+  newResourceManager?: L4ManagerType;
   newResourceManagerList?: ManagerStoreType[];
   isManagerPopperOpen: boolean;
   managerSuggestions: EmployeeDataType[];
@@ -43,6 +50,7 @@ interface Props {
   needSearchIcon?: boolean;
   noSearchResultTexts?: string;
   isDisabledLabel?: boolean;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const AvatarSearch = ({
@@ -67,7 +75,8 @@ const AvatarSearch = ({
   required,
   needSearchIcon = false,
   noSearchResultTexts,
-  isDisabledLabel = false
+  isDisabledLabel = false,
+  onKeyDown
 }: Props): JSX.Element => {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const isPlaceholderAvailable = () => {
@@ -118,7 +127,7 @@ const AvatarSearch = ({
               key={newResourceManager?.employeeId}
               firstName={newResourceManager?.firstName ?? ""}
               lastName={newResourceManager?.lastName ?? ""}
-              avatarUrl={newResourceManager?.avatarUrl}
+              avatarUrl={newResourceManager?.authPic}
               isResponsiveLayout={false}
               isDeleteAvailable={false}
               chipStyles={{
@@ -234,6 +243,7 @@ const AvatarSearch = ({
               popperStyles={{
                 width: "100%"
               }}
+              onKeyDown={onKeyDown}
             />
           </ClickAwayListener>
         </Stack>

@@ -135,7 +135,8 @@ const DropdownAutocomplete: FC<Props> = ({
               : "none"
           },
           "& .MuiAutocomplete-popupIndicator": {
-            mr: ".3125rem"
+            mr: ".3125rem",
+            display: readOnly ? "none" : "block"
           },
           ...selectStyles
         }}

@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import Button from "~community/common/components/atoms/Button/Button";
@@ -14,6 +14,7 @@ import {
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
+import { isDateGraterThanToday } from "~community/common/utils/dateTimeUtils";
 import SortByDropDown from "~community/people/components/molecules/SortByDropDown/SortByDropDown";
 import { usePeopleStore } from "~community/people/store/store";
 import {
@@ -51,18 +52,29 @@ const HolidayTable: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const listInnerRef = useRef<HTMLDivElement>();
+
+  const supportsPassive = testPassiveEventSupport();
+
   const { isPeopleAdmin } = useSessionData();
 
   const { destroyDriverObj } = useProductTour();
 
-  const { setIsHolidayModalOpen, setHolidayModalType } = usePeopleStore(
-    (state) => ({
-      setIsHolidayModalOpen: state.setIsHolidayModalOpen,
-      setHolidayModalType: state.setHolidayModalType
-    })
-  );
+  const translateText = useTranslator("peopleModule", "holidays");
 
-  const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
+  const {
+    setIsHolidayModalOpen,
+    setHolidayModalType,
+    setIndividualDeleteId,
+    selectedDeleteIds,
+    setSelectedDeleteIds
+  } = usePeopleStore((state) => ({
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+    setHolidayModalType: state.setHolidayModalType,
+    setIndividualDeleteId: state.setIndividualDeleteId,
+    selectedDeleteIds: state.selectedDeleteIds,
+    setSelectedDeleteIds: state.setSelectedDeleteIds
+  }));
 
   const { ongoingQuickSetup, quickSetupCurrentFlowSteps } =
     useCommonEnterpriseStore((state) => ({
@@ -70,13 +82,7 @@ const HolidayTable: FC<Props> = ({
       quickSetupCurrentFlowSteps: state.quickSetupCurrentFlowSteps
     }));
 
-  const translateText = useTranslator("peopleModule", "holidays");
-
-  const listInnerRef = useRef<HTMLDivElement>();
-  const supportsPassive = testPassiveEventSupport();
-
-  const { setIndividualDeleteId, selectedDeleteIds, setSelectedDeleteIds } =
-    usePeopleStore((state) => state);
+  const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
 
   const columns = [
     { field: "date", headerName: translateText(["tableDateColumnTitle"]) },
@@ -91,7 +97,7 @@ const HolidayTable: FC<Props> = ({
     label: col.headerName
   }));
 
-  const returnDurationLabel = (duration: string): string => {
+  const returnDurationLabel = (duration: HolidayDurationType): string => {
     switch (duration) {
       case HolidayDurationType.FULLDAY:
         return translateText(["fullDay"]);
@@ -143,22 +149,14 @@ const HolidayTable: FC<Props> = ({
         holidayData.map((holiday) => ({
           id: holiday.id,
           date: (
-            <Box
-              sx={{
-                color: "common.black",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "start",
-                alignItems: "center",
-                gap: "0.625rem",
-                flex: 2
-              }}
-            >
+            <Box sx={classes.dateWrapper}>
               <Typography variant="body1">
                 {getFormattedDate(holiday?.date || "", true)}
               </Typography>
               <BasicChip
-                label={returnDurationLabel(holiday?.holidayDuration || "")}
+                label={returnDurationLabel(
+                  holiday?.holidayDuration || HolidayDurationType.NONE
+                )}
                 chipStyles={{ mx: "0.3125rem" }}
               />
             </Box>
@@ -262,6 +260,20 @@ const HolidayTable: FC<Props> = ({
     }
   };
 
+  const isCheckboxSelectionEnabled = useMemo(() => {
+    if (holidayData && holidayData?.length > 0) {
+      const filteredHolidays = holidayData?.filter(
+        (holiday: HolidayDataType) => {
+          return !isDateGraterThanToday(holiday?.date || "");
+        }
+      );
+
+      return isPeopleAdmin && filteredHolidays?.length !== holidayData?.length;
+    }
+
+    return isPeopleAdmin;
+  }, [holidayData, isPeopleAdmin]);
+
   return (
     <Stack sx={classes.wrapper}>
       <Box sx={classes.container} ref={listInnerRef}>
@@ -289,7 +301,11 @@ const HolidayTable: FC<Props> = ({
           handleRowCheck={handleCheckBoxClick}
           isLoading={isFetching && !isFetchingNextPage}
           isDataAvailable={holidayData && holidayData?.length > 0}
-          emptyDataDescription={translateText(["noHolidayDes"])}
+          emptyDataDescription={
+            isPeopleAdmin
+              ? translateText(["noHolidayDesForAdmin"])
+              : translateText(["noHolidayDesForNonAdmin"])
+          }
           emptyDataTitle={translateText(["noHolidaysTitle"], {
             selectedYear: holidaySelectedYear
           })}
@@ -298,13 +314,17 @@ const HolidayTable: FC<Props> = ({
           }
           tableContainerStyles={{ border: 0, maxHeight: "32rem" }}
           tableHeaderTypographyStyles={{
-            paddingLeft: isPeopleAdmin ? "0rem" : "1rem"
+            paddingLeft: isCheckboxSelectionEnabled ? "0rem" : "1rem"
           }}
-          tableRowCellStyles={{ paddingLeft: isPeopleAdmin ? "0rem" : "1rem" }}
-          tableRowStyles={{ paddingLeft: isPeopleAdmin ? "0rem" : "1rem" }}
+          tableRowCellStyles={{
+            paddingLeft: isCheckboxSelectionEnabled ? "0rem" : "1rem"
+          }}
+          tableRowStyles={{
+            paddingLeft: isCheckboxSelectionEnabled ? "0rem" : "1rem"
+          }}
           onEmptyScreenBtnClick={AddHolidayButtonClick}
           isPaginationEnabled={false}
-          isCheckboxSelectionEnabled={isPeopleAdmin}
+          isCheckboxSelectionEnabled={isCheckboxSelectionEnabled}
           isSelectAllCheckboxEnabled={holidayData?.length === 0 ? false : true}
           actionColumnIconBtnRight={
             isPeopleAdmin

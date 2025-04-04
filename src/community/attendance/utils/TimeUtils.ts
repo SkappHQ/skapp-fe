@@ -118,9 +118,9 @@ export const convert24TimeTo12Hour = (time: string) => {
 };
 
 export const addHoursToTime = (time: string, hoursToAdd: number) => {
-  const hours = +time.slice(0, 2) + hoursToAdd;
-  const newTime = hours.toString() + time.slice(2, time.length);
-  return convert24TimeTo12Hour(newTime);
+  let dateTime = DateTime.fromISO(time);
+  dateTime = dateTime.plus({ hours: hoursToAdd });
+  return dateTime.toFormat("hh:mm a");
 };
 
 export const getTotalSlotTypeHours = (

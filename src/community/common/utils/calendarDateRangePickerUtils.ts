@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { SetStateAction } from "react";
 
 import { ToastType } from "~community/common/enums/ComponentEnums";
+import { LeaveStates } from "~community/common/types/CommonTypes";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import {
   convertToYYYYMMDDFromDateTime,
@@ -37,7 +38,7 @@ export const getMyLeaveRequestForDay = ({
   date
 }: GetMyLeaveRequestForDayProps) => {
   if (myLeaveRequests !== undefined) {
-    const myLeaveRequestForDay = myLeaveRequests?.find((leaveRequest) => {
+    const myLeaveRequestForDay = myLeaveRequests?.filter((leaveRequest) => {
       const startDate = DateTime.fromISO(leaveRequest.startDate);
       const endDate = DateTime.fromISO(leaveRequest.endDate);
 
@@ -70,16 +71,25 @@ export const handleDateChange = ({
   if (!date) return;
 
   if (isRangePicker) {
-    if (selectedDates.length === 2) {
-      setSelectedDates([date]);
-    } else if (selectedDates.length === 1) {
-      if (date > selectedDates[0]) {
-        setSelectedDates([selectedDates[0], date]);
-      } else {
-        setSelectedDates([date, selectedDates[0]]);
-      }
-    } else {
-      setSelectedDates([date]);
+    switch (selectedDates.length) {
+      case 0:
+        setSelectedDates([date]);
+        break;
+      case 1:
+        if (date !== selectedDates[0]) {
+          if (date > selectedDates[0]) {
+            setSelectedDates([selectedDates[0], date]);
+          } else {
+            setSelectedDates([date, selectedDates[0]]);
+          }
+        }
+        break;
+      case 2:
+        setSelectedDates([date]);
+        break;
+      default:
+        setSelectedDates([date]);
+        break;
     }
   } else {
     setSelectedDates([date]);
@@ -107,8 +117,12 @@ export const handleDateValidation = ({
 }: HandleDateValidationProps) => {
   if (!selectedDates) return;
 
+  let isApplyLeaveModalBtnDisabled = false;
+
   if (allowedDuration === LeaveDurationTypes.HALF_DAY) {
     if (selectedDates.length > 1) {
+      isApplyLeaveModalBtnDisabled = true;
+
       setToastMessage({
         key: MyRequestsToastMsgKeyEnums.ONLY_HALF_DAY_LEAVE_ALLOWED,
         open: true,
@@ -132,6 +146,8 @@ export const handleDateValidation = ({
       const holidayCount = holidays.length;
 
       if (holidayCount > 0) {
+        isApplyLeaveModalBtnDisabled = true;
+
         const hasMultipleHolidays = holidayCount > 1;
 
         const toastType = ToastType.WARN;
@@ -170,9 +186,23 @@ export const handleDateValidation = ({
 
     const leaveRequestCount = leaveRequests?.length ?? 0;
 
-    setIsApplyLeaveModalBtnDisabled(leaveRequestCount > 0);
-
     if (leaveRequestCount > 0) {
+      if (selectedDates.length === 1 || selectedDates[0] === selectedDates[1]) {
+        const leaveStates = leaveRequests.map(
+          (leaveRequest) => leaveRequest.leaveState
+        );
+
+        const hasFullDayLeave = leaveStates.includes(LeaveStates.FULL_DAY);
+        const hasHalfDayMorningAndEvening =
+          leaveStates.includes(LeaveStates.MORNING) &&
+          leaveStates.includes(LeaveStates.EVENING);
+
+        isApplyLeaveModalBtnDisabled =
+          hasFullDayLeave || hasHalfDayMorningAndEvening;
+      } else {
+        isApplyLeaveModalBtnDisabled = true;
+      }
+
       const hasMultipleLeaves = leaveRequestCount > 1;
 
       const toastType = ToastType.WARN;
@@ -196,6 +226,8 @@ export const handleDateValidation = ({
         description
       });
     }
+
+    setIsApplyLeaveModalBtnDisabled(isApplyLeaveModalBtnDisabled);
   }
 };
 
@@ -250,22 +282,24 @@ interface GetLeaveRequestsWithinDateRangeProps {
 export const getLeaveRequestsWithinDateRange = ({
   selectedDates,
   myLeaveRequests
-}: GetLeaveRequestsWithinDateRangeProps) => {
+}: GetLeaveRequestsWithinDateRangeProps): MyLeaveRequestPayloadType[] => {
   if (!myLeaveRequests) return [];
 
   const startDate = selectedDates[0];
   const endDate = selectedDates[1] ?? selectedDates[0];
 
-  const leaveRequestsWithinRange = myLeaveRequests.filter((leaveRequest) => {
-    const leaveStartDate = DateTime.fromISO(leaveRequest.startDate);
-    const leaveEndDate = DateTime.fromISO(leaveRequest.endDate);
+  const leaveRequestsWithinRange = myLeaveRequests.filter(
+    (leaveRequest: MyLeaveRequestPayloadType) => {
+      const leaveStartDate = DateTime.fromISO(leaveRequest.startDate);
+      const leaveEndDate = DateTime.fromISO(leaveRequest.endDate);
 
-    return (
-      (startDate >= leaveStartDate && startDate <= leaveEndDate) ||
-      (endDate >= leaveStartDate && endDate <= leaveEndDate) ||
-      (startDate <= leaveStartDate && endDate >= leaveEndDate)
-    );
-  });
+      return (
+        (startDate >= leaveStartDate && startDate <= leaveEndDate) ||
+        (endDate >= leaveStartDate && endDate <= leaveEndDate) ||
+        (startDate <= leaveStartDate && endDate >= leaveEndDate)
+      );
+    }
+  );
 
   return leaveRequestsWithinRange;
 };

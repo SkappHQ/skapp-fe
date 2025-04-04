@@ -8,7 +8,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useGetPeriodAvailability } from "~community/attendance/api/AttendanceEmployeeApi";
 import {
   TIME_LENGTH,
-  durationSelector
+  durationSelector,
+  holidayDurationSelector
 } from "~community/attendance/constants/constants";
 import { EmployeeTimesheetModalTypes } from "~community/attendance/enums/timesheetEnums";
 import useAddEntry from "~community/attendance/hooks/useAddEntry";
@@ -399,9 +400,13 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
             </Typography>
             <BasicChip
               label={
-                durationSelector[
-                  selectedDailyRecord?.leaveRequest?.leaveState as string
-                ]
+                selectedDailyRecord?.holiday
+                  ? holidayDurationSelector[
+                      selectedDailyRecord?.holiday?.holidayDuration
+                    ]
+                  : durationSelector[
+                      selectedDailyRecord?.leaveRequest?.leaveState as string
+                    ]
               }
               chipStyles={classes.leaveStateChip}
             />
@@ -417,8 +422,16 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
               {translateText(["leaveTypeLabel"])}
             </Typography>
             <IconChip
-              label={selectedDailyRecord?.leaveRequest?.leaveType?.name}
-              icon={selectedDailyRecord?.leaveRequest?.leaveType?.emojiCode}
+              label={
+                selectedDailyRecord?.holiday
+                  ? selectedDailyRecord?.holiday?.name
+                  : selectedDailyRecord?.leaveRequest?.leaveType?.name
+              }
+              icon={
+                selectedDailyRecord?.holiday
+                  ? "1f3d6-fe0f"
+                  : selectedDailyRecord?.leaveRequest?.leaveType?.emojiCode
+              }
               chipStyles={classes.leaveStateChip}
               isTruncated={false}
             />
