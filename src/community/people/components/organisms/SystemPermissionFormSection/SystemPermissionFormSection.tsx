@@ -18,6 +18,7 @@ import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
+import { L2SystemPermissionsType } from "~community/people/types/PeopleTypes";
 import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
@@ -49,6 +50,7 @@ const SystemPermissionFormSection = ({
     "systemPermissions"
   );
   const commonText = useTranslator("peopleModule", "addResource", "commonText");
+  const roleTranslateText = useTranslator("peopleModule", "roleLimitation");
 
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
@@ -81,7 +83,8 @@ const SystemPermissionFormSection = ({
     permissions,
     grantablePermission,
     handleRoleDropdown,
-    handleSuperAdminToggle
+    handleSuperAdminToggle,
+    roleLimitMapping
   } = useSystemPermissionFormHandlers();
 
   const {
@@ -96,6 +99,48 @@ const SystemPermissionFormSection = ({
     employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = () => {
+    if (!employee.systemPermissions?.isSuperAdmin) {
+      const rolesToAssign = {
+        peopleRole: employee?.systemPermissions?.peopleRole,
+        leaveRole: employee?.systemPermissions?.leaveRole,
+        attendanceRole: employee?.systemPermissions?.attendanceRole,
+        esignRole: employee?.systemPermissions?.esignRole
+      };
+
+      const errorsToShow = [];
+
+      for (const [roleKey, roleValue] of Object.entries(rolesToAssign)) {
+        const roleData =
+          roleLimitMapping[roleKey as keyof L2SystemPermissionsType]?.[
+            roleValue as Role
+          ];
+        if (roleData?.limitExceeded) {
+          errorsToShow.push(roleData);
+        }
+      }
+
+      if (errorsToShow.length > 1) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleTranslateText(["userRoleLimitationTitle"]),
+          description: roleTranslateText(["userRoleLimitationDescription"]),
+          isIcon: true
+        });
+      } else {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleTranslateText([errorsToShow[0]?.title]),
+          description: roleTranslateText([errorsToShow[0]?.description]),
+          isIcon: true
+        });
+      }
+
+      if (errorsToShow.length > 0) {
+        return;
+      }
+    }
     if (
       employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
       (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
