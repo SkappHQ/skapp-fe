@@ -59,16 +59,17 @@ const useSystemPermissionFormHandlers = () => {
   const [superAdminCount, setSuperAdminCount] = useState(superAdminCountData);
 
   useEffect(() => {
-    if (superAdminCountData) {
-      setSuperAdminCount(superAdminCountData);
-    }
-  }, [superAdminCountData]);
-
-  useEffect(() => {
     if (roleLimitsData) {
       setRoleLimits(roleLimitsData);
     }
   }, [roleLimitsData]);
+
+  useEffect(() => {
+    setPermissions(employee?.systemPermissions || {});
+    if (superAdminCountData) {
+      setSuperAdminCount(superAdminCountData);
+    }
+  }, [employee, superAdminCountData]);
 
   const roleLimitMapping: RoleLimitMapping = {
     peopleRole: {

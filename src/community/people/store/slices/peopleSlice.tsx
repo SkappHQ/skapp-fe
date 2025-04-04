@@ -116,6 +116,8 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   isUnsavedModalDiscardButtonClicked: false,
   profilePic: null,
   entitlementDetails: entitlementDetails,
+  isCancelChangesModalOpen: false,
+  isCancelModalConfirmButtonClicked: false,
   setProfilePic: (profilePic: ModifiedFileType[] | null) =>
     set(() => ({ profilePic })),
   thumbnail: null,
@@ -184,6 +186,11 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
       entitlementDetails: value
     }));
   },
+  setIsCancelChangesModalOpen: (isCancelChangesModalOpen: boolean) =>
+    set(() => ({ isCancelChangesModalOpen })),
+  setIsCancelModalConfirmButtonClicked: (
+    isCancelModalConfirmButtonClicked: boolean
+  ) => set(() => ({ isCancelModalConfirmButtonClicked })),
   resetPeopleSlice: () =>
     set(() => ({
       employee: defaultEmployee,
@@ -196,7 +203,9 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
       isUnsavedModalDiscardButtonClicked: false,
       profilePic: null,
       thumbnail: null,
-      entitlementDetails: entitlementDetails
+      entitlementDetails: entitlementDetails,
+      isCancelChangesModalOpen: false,
+      isCancelModalConfirmButtonClicked: false
     }))
 });
 
