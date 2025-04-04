@@ -105,6 +105,7 @@ import UpArrowIcon from "~community/common/assets/Icons/UpArrowIcon";
 import UpgradeInfoIcon from "~community/common/assets/Icons/UpgradeInfoIcon";
 import UserUploadIcon from "~community/common/assets/Icons/UserUploadIcon";
 import ViewIcon from "~community/common/assets/Icons/ViewIcon";
+import WaitingStatusIcon from "~community/common/assets/Icons/WaitingStatusIcon";
 import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
@@ -233,7 +234,8 @@ export const IconMapping: Partial<
   [IconName.SIGNATURE_ICON]: SignatureIcon,
   [IconName.INVITE_ICON]: InviteIcon,
   [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon,
-  [IconName.MINUS_ICON]: MinusIcon
+  [IconName.MINUS_ICON]: MinusIcon,
+  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon
   // Add more icons here as needed
 };
 
