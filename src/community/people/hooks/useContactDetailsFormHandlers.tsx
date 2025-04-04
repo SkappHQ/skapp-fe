@@ -1,7 +1,10 @@
 import { FormikProps } from "formik";
 import { ChangeEvent, SyntheticEvent } from "react";
 
-import { isValidAlphaNumericString } from "~community/common/regex/regexPatterns";
+import {
+  isValidAlphaNumericString,
+  isValidCityStateString
+} from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import {
   isValidAlphaNumericNamePattern,
@@ -25,10 +28,10 @@ const useContactDetailsFormHandlers = ({ formik }: Props) => {
 
     if (name === "personalEmail") {
       isValid = value === "" || isValidEmailPattern(value);
-    } else if (
-      ["addressLine1", "addressLine2", "state", "city"].includes(name)
-    ) {
+    } else if (["addressLine1", "addressLine2"].includes(name)) {
       isValid = value === "" || isValidAlphaNumericNamePattern(value);
+    } else if (["state", "city"].includes(name)) {
+      isValid = value === "" || isValidCityStateString().test(value);
     } else if (name === "postalCode") {
       isValid = value === "" || isValidAlphaNumericString().test(value);
     }

@@ -75,12 +75,12 @@ const AllTimesheetsPage: NextPage = () => {
       )
     ) {
       setSelectedEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.EDIT_ALL_INFORMATION(employee.id)}?tab=timesheet`;
+      const url = `${ROUTES.PEOPLE.EDIT(employee.id)}?tab=timesheet`;
       await router.push(url);
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.INDIVIDUAL}?tab=timesheet&viewEmployeeId=${employee.id}`;
+      const url = `${ROUTES.PEOPLE.BASE}/${employee.id}?tab=timesheet`;
       await router.push(url);
     }
   };

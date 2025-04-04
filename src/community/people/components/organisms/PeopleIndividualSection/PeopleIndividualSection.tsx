@@ -43,18 +43,18 @@ const PeopleIndividualSection = ({ employeeId }: Props) => {
       case EditPeopleFormTypes.personal:
         return (
           <>
-            <GeneralDetailsSection isManager={true} />
+            <GeneralDetailsSection isReadOnly={true} />
             {isManager && (
               <>
-                <PrimaryContactDetailsSection isManager={true} />
-                <SecondaryContactDetailsSection isManager={true} />
+                <PrimaryContactDetailsSection isReadOnly={true} />
+                <SecondaryContactDetailsSection isReadOnly={true} />
               </>
             )}
           </>
         );
       case EditPeopleFormTypes.employment:
         return (
-          <EmploymentDetailsSection isManager={true} isEmployee={isEmployee} />
+          <EmploymentDetailsSection isReadOnly={true} isEmployee={isEmployee} />
         );
       case EditPeopleFormTypes.timesheet:
         return (

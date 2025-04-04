@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { JSX } from "react";
 
 import ROUTES from "~community/common/constants/routes";
@@ -30,6 +30,9 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   const isPeopleManagerOrSuperAdmin = session?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN
   );
+
+  const asPath = router.asPath;
+
   const {
     setSelectedEmployeeId,
     resetEmployeeData,
@@ -38,9 +41,12 @@ const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   } = usePeopleStore((state) => state);
 
   const handelViewAccount = async () => {
-    resetEmployeeDataChanges();
-    resetEmployeeData();
-    resetPeopleSlice();
+    if (asPath !== ROUTES.PEOPLE.ACCOUNT) {
+      resetEmployeeDataChanges();
+      resetEmployeeData();
+      resetPeopleSlice();
+    }
+
     if (isPeopleManagerOrSuperAdmin) {
       setSelectedEmployeeId(employee?.employeeId as unknown as string);
       await router.push(ROUTES.PEOPLE.EDIT(employee?.employeeId));

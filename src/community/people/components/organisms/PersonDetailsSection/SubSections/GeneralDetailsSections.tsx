@@ -52,7 +52,6 @@ interface Props {
   isAdmin?: boolean;
   isInputsDisabled?: boolean;
   isAddFlow?: boolean;
-  isReadOnly?: boolean;
 }
 
 const GeneralDetailsSection = forwardRef<FormMethods, Props>(

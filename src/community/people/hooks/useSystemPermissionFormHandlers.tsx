@@ -50,17 +50,26 @@ const useSystemPermissionFormHandlers = () => {
     esignSenderLimitExceeded: false
   });
 
-  const { data: superAdminCount } = useGetSuperAdminCount();
+  const { data: superAdminCountData } = useGetSuperAdminCount();
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
   const { data: roleLimitsData } = useGetRoleLimits(
     environment === appModes.ENTERPRISE
   );
+
+  const [superAdminCount, setSuperAdminCount] = useState(superAdminCountData);
 
   useEffect(() => {
     if (roleLimitsData) {
       setRoleLimits(roleLimitsData);
     }
   }, [roleLimitsData]);
+
+  useEffect(() => {
+    setPermissions(employee?.systemPermissions || {});
+    if (superAdminCountData) {
+      setSuperAdminCount(superAdminCountData);
+    }
+  }, [employee, superAdminCountData]);
 
   const roleLimitMapping: RoleLimitMapping = {
     peopleRole: {
@@ -139,7 +148,19 @@ const useSystemPermissionFormHandlers = () => {
     (event: ChangeEvent<HTMLInputElement>) => {
       const isChecked = event.target.checked;
 
-      if (!isChecked && superAdminCount === 1) {
+      let newSuperAdminCount = superAdminCount;
+
+      if (isChecked) {
+        newSuperAdminCount++;
+      } else {
+        if (newSuperAdminCount > 0) {
+          newSuperAdminCount--;
+        }
+      }
+
+      setSuperAdminCount(newSuperAdminCount);
+
+      if (!isChecked && newSuperAdminCount === 0) {
         setToastMessage({
           open: true,
           toastType: ToastType.ERROR,

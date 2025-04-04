@@ -3,6 +3,7 @@ import { Role } from "~community/people/enums/PeopleEnums";
 import { ModifiedFileType } from "~community/people/types/AddNewResourceTypes";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
 import {
+  EntitlementDetailType,
   L1EmployeeType,
   L2CommonDetailsType,
   L2EmergencyDetailsType,
@@ -39,7 +40,7 @@ const defaultEmployee: L1EmployeeType = {
     family: [],
     educational: [],
     socialMedia: {
-      linkedin: "",
+      linkedIn: "",
       facebook: "",
       instagram: "",
       x: ""
@@ -102,6 +103,8 @@ const defaultEmployee: L1EmployeeType = {
   }
 };
 
+const entitlementDetails: EntitlementDetailType[] = [];
+
 const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   employee: defaultEmployee,
   initialEmployee: defaultEmployee,
@@ -112,6 +115,9 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
   isUnsavedModalSaveButtonClicked: false,
   isUnsavedModalDiscardButtonClicked: false,
   profilePic: null,
+  entitlementDetails: entitlementDetails,
+  isCancelChangesModalOpen: false,
+  isCancelModalConfirmButtonClicked: false,
   setProfilePic: (profilePic: ModifiedFileType[] | null) =>
     set(() => ({ profilePic })),
   thumbnail: null,
@@ -174,6 +180,17 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
         common: { ...state.employee.common, ...common }
       }
     })),
+  setEntitlementDetails: (value: EntitlementDetailType[]) => {
+    set((state) => ({
+      ...state,
+      entitlementDetails: value
+    }));
+  },
+  setIsCancelChangesModalOpen: (isCancelChangesModalOpen: boolean) =>
+    set(() => ({ isCancelChangesModalOpen })),
+  setIsCancelModalConfirmButtonClicked: (
+    isCancelModalConfirmButtonClicked: boolean
+  ) => set(() => ({ isCancelModalConfirmButtonClicked })),
   resetPeopleSlice: () =>
     set(() => ({
       employee: defaultEmployee,
@@ -185,7 +202,10 @@ const peopleSlice = (set: SetType<PeopleSliceTypes>): PeopleSliceTypes => ({
       isUnsavedModalSaveButtonClicked: false,
       isUnsavedModalDiscardButtonClicked: false,
       profilePic: null,
-      thumbnail: null
+      thumbnail: null,
+      entitlementDetails: entitlementDetails,
+      isCancelChangesModalOpen: false,
+      isCancelModalConfirmButtonClicked: false
     }))
 });
 

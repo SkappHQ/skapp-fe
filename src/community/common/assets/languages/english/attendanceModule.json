@@ -37,7 +37,7 @@
     "addTimeEntryErrorDes": "Failed to submit the time log. Please try again",
     "dateInputLabel": "Date",
     "durationLabel": "Duration:",
-    "leaveTypeLabel": "Leave Type:",
+    "leaveTypeLabel": "Type:",
     "fromTimeLabel": "From",
     "toTimeLabel": "To",
     "clockInLabel": "Clock in",

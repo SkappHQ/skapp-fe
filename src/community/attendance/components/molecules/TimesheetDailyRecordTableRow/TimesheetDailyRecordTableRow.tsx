@@ -58,7 +58,7 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
     setSelectedDailyRecord(record);
     if (
       !record?.timeRecordId &&
-      record.leaveRequest &&
+      (record.leaveRequest || record?.holiday) &&
       !record.timeSlots.length
     ) {
       setIsEmployeeTimesheetModalOpen(true);
@@ -67,7 +67,7 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       );
     } else if (
       record?.timeRecordId &&
-      record.leaveRequest &&
+      (record.leaveRequest || record?.holiday) &&
       record.timeSlots.length
     ) {
       setIsEmployeeTimesheetModalOpen(true);
