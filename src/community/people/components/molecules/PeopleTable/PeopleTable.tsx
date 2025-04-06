@@ -465,99 +465,121 @@ const PeopleTable: FC<Props> = ({
     >
       <Box ref={listInnerRef}>
         <Table
-          tableHeaders={tableHeaders}
-          tableRows={transformToTableRows()}
-          tableHeaderRowStyles={tableHeadStyles}
-          tableWrapperStyles={{
-            overflow: "hidden"
+          tableName="people-table"
+          headers={tableHeaders}
+          rows={transformToTableRows()}
+          isLoading={isFetching && !isFetchingNextPage}
+          selectedRows={selectedPeople}
+          checkboxSelection={{
+            isEnabled: isPendingInvitationListOpen || isRemovePeople,
+            isSelectAllEnabled: isPendingInvitationListOpen || isRemovePeople,
+            handleIndividualCheck: handleCheckBoxClick,
+            handleSelectAllCheckbox: handleAllCheckBoxClick
           }}
-          tableContainerStyles={tableContainerStyles}
-          isPaginationEnabled={false}
-          tableHeaderCellStyles={tableHeaderCellStyles}
-          onRowClick={isRemovePeople ? undefined : handleRowClick}
-          tableRowStyles={{
-            "&:hover": {
-              cursor: isRemovePeople ? "default" : "pointer"
+          customStyles={{
+            wrapper: {
+              overflow: "hidden"
+            },
+            container: tableContainerStyles
+          }}
+          actionToolbar={{
+            firstRow: {
+              leftButton:
+                isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
+                  <PeopleTableSortBy
+                    sortEl={sortEl}
+                    handleSortClose={handleSortClose}
+                    scrollToTop={scrollToTop}
+                    sortOpen={sortOpen}
+                    sortId={sortId}
+                    sortType={sortType}
+                    handleSortClick={handleSortClick}
+                    disabled={employeeData?.length === 0}
+                  />
+                ) : undefined,
+              rightButton: isPendingInvitationListOpen ? (
+                <Button
+                  label={translateText(["reinviteButtonTitle"])}
+                  buttonStyle={ButtonStyle.SECONDARY}
+                  size={ButtonSizes.MEDIUM}
+                  endIcon={<InviteIcon />}
+                  onClick={() => {
+                    setIsReinviteConfirmationModalOpen(true);
+                  }}
+                  isStrokeAvailable={true}
+                  disabled={selectedPeople.length === 0}
+                />
+              ) : isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
+                <PeopleTableFilterBy
+                  filterEl={filterEl}
+                  handleFilterClose={handleFilterClose}
+                  handleFilterClick={handleFilterClick}
+                  disabled={isPendingInvitationListOpen}
+                  filterId={filterId}
+                  filterOpen={filterOpen}
+                  scrollToTop={scrollToTop}
+                  teams={
+                    teamData && !isLoading && GetTeamPreProcessor(teamData)
+                  }
+                  jobFamilies={
+                    jobFamilyData &&
+                    !jobFamilyLoading &&
+                    GetFamilyFilterPreProcessor(jobFamilyData)
+                  }
+                />
+              ) : undefined
             }
           }}
-          selectedRows={selectedPeople}
-          actionRowOneLeftButton={
-            isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
-              <PeopleTableSortBy
-                sortEl={sortEl}
-                handleSortClose={handleSortClose}
-                scrollToTop={scrollToTop}
-                sortOpen={sortOpen}
-                sortId={sortId}
-                sortType={sortType}
-                handleSortClick={handleSortClick}
-                disabled={employeeData?.length === 0}
-              />
-            ) : undefined
-          }
-          isCheckboxSelectionEnabled={
-            isPendingInvitationListOpen || isRemovePeople
-          }
-          isSelectAllCheckboxEnabled={
-            isPendingInvitationListOpen || isRemovePeople
-          }
-          handleAllRowsCheck={handleAllCheckBoxClick}
-          handleRowCheck={handleCheckBoxClick}
-          actionRowOneRightButton={
-            isPendingInvitationListOpen ? (
-              <Button
-                label={translateText(["reinviteButtonTitle"])}
-                buttonStyle={ButtonStyle.SECONDARY}
-                size={ButtonSizes.MEDIUM}
-                endIcon={<InviteIcon />}
-                onClick={() => {
-                  setIsReinviteConfirmationModalOpen(true);
-                }}
-                isStrokeAvailable={true}
-                disabled={selectedPeople.length === 0}
-              />
-            ) : isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
-              <PeopleTableFilterBy
-                filterEl={filterEl}
-                handleFilterClose={handleFilterClose}
-                handleFilterClick={handleFilterClick}
-                disabled={isPendingInvitationListOpen}
-                filterId={filterId}
-                filterOpen={filterOpen}
-                scrollToTop={scrollToTop}
-                teams={teamData && !isLoading && GetTeamPreProcessor(teamData)}
-                jobFamilies={
-                  jobFamilyData &&
-                  !jobFamilyLoading &&
-                  GetFamilyFilterPreProcessor(jobFamilyData)
+          tableHead={{
+            customStyles: {
+              row: tableHeadStyles,
+              cell: tableHeaderCellStyles
+            }
+          }}
+          tableBody={{
+            loadingState: {
+              skeleton: {
+                rows: 5
+              }
+            },
+            emptyState: {
+              noData: {
+                title:
+                  !employeeData?.length && onSearch
+                    ? translateText(["emptySearchResult", "title"])
+                    : !employeeData?.length && filter
+                      ? isPendingInvitationListOpen
+                        ? translateText(["emptyPendingList", "title"])
+                        : translateText(["emptyFilterResult", "title"])
+                      : !employeeData?.length
+                        ? translateText(["emptyEmployeeData", "title"])
+                        : undefined,
+                description:
+                  !employeeData?.length && onSearch
+                    ? translateText(["emptySearchResult", "description"])
+                    : !employeeData?.length && filter
+                      ? isPendingInvitationListOpen
+                        ? translateText(["emptyPendingList", "description"])
+                        : translateText(["emptyFilterResult", "description"])
+                      : !employeeData?.length
+                        ? translateText(["emptyEmployeeData", "description"])
+                        : undefined
+              }
+            },
+            onRowClick: !isRemovePeople ? handleRowClick : undefined,
+            customStyles: {
+              row: {
+                "&:hover": {
+                  cursor: isRemovePeople ? "default" : "pointer"
                 }
-              />
-            ) : null
-          }
-          isLoading={isFetching && !isFetchingNextPage}
-          skeletonRows={5}
-          emptyDataTitle={
-            !employeeData?.length && onSearch
-              ? translateText(["emptySearchResult", "title"])
-              : !employeeData?.length && filter
-                ? isPendingInvitationListOpen
-                  ? translateText(["emptyPendingList", "title"])
-                  : translateText(["emptyFilterResult", "title"])
-                : !employeeData?.length
-                  ? translateText(["emptyEmployeeData", "title"])
-                  : undefined
-          }
-          emptyDataDescription={
-            !employeeData?.length && onSearch
-              ? translateText(["emptySearchResult", "description"])
-              : !employeeData?.length && filter
-                ? isPendingInvitationListOpen
-                  ? translateText(["emptyPendingList", "description"])
-                  : translateText(["emptyFilterResult", "description"])
-                : !employeeData?.length
-                  ? translateText(["emptyEmployeeData", "description"])
-                  : ""
-          }
+              }
+            }
+          }}
+          tableFoot={{
+            pagination: {
+              isEnabled: false
+            }
+          }}
         />
       </Box>
       <ReinviteConfirmationModal

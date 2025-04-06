@@ -25,7 +25,6 @@ import styles from "./styles";
 export interface TableBodyProps {
   emptyState?: {
     noData?: TableEmptyScreenProps;
-    noRecordsFound?: TableEmptyScreenProps;
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
   loadingState?: {
@@ -43,7 +42,7 @@ export interface TableBodyProps {
     };
     typography?: SxProps<Theme>;
   };
-  actionColumn: TableBodyActionColumnProps;
+  actionColumn?: TableBodyActionColumnProps;
   onRowClick?: (row: any) => void;
 }
 
@@ -87,7 +86,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
         <TableBodyLoadingState
           headers={headers}
           loadingState={loadingState}
-          isActionColumnEnabled={actionColumn.isEnabled}
+          isActionColumnEnabled={actionColumn?.isEnabled}
           tableName={tableName}
         />
       ) : rows?.length ? (
@@ -157,8 +156,8 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
 
             <TableBodyActionColumn
               row={row}
-              isEnabled={actionColumn.isEnabled}
-              actionBtns={actionColumn.actionBtns}
+              isEnabled={actionColumn?.isEnabled}
+              actionBtns={actionColumn?.actionBtns}
               tableName={tableName}
             />
           </TableRow>
@@ -167,7 +166,6 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
         <TableBodyEmptyState
           headers={headers}
           emptyState={emptyState}
-          isDataAvailable={!!rows?.length}
           tableName={tableName}
         />
       )}

@@ -17,17 +17,14 @@ export interface TableBodyEmptyStateProps {
   }[];
   emptyState?: {
     noData?: TableEmptyScreenProps;
-    noRecordsFound?: TableEmptyScreenProps;
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
-  isDataAvailable: boolean;
 }
 
 const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
   tableName,
   headers,
-  emptyState,
-  isDataAvailable
+  emptyState
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -50,21 +47,12 @@ const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
         role="cell"
         aria-label={`${tableName}-table-body-empty-state-cell`}
       >
-        {isDataAvailable ? (
-          <TableEmptyScreen
-            title={emptyState?.noRecordsFound?.title}
-            description={emptyState?.noRecordsFound?.description}
-            button={emptyState?.noRecordsFound?.button}
-            customStyles={emptyState?.noRecordsFound?.customStyles}
-          />
-        ) : (
-          <TableEmptyScreen
-            title={emptyState?.noData?.title}
-            description={emptyState?.noData?.description}
-            button={emptyState?.noData?.button}
-            customStyles={emptyState?.noData?.customStyles}
-          />
-        )}
+        <TableEmptyScreen
+          title={emptyState?.noData?.title}
+          description={emptyState?.noData?.description}
+          button={emptyState?.noData?.button}
+          customStyles={emptyState?.noData?.customStyles}
+        />
       </TableCell>
     </TableRow>
   );
