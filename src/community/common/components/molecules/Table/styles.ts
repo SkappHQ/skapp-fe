@@ -4,6 +4,10 @@ interface StylesType {
   wrapper: SxProps<Theme>;
   container: SxProps<Theme>;
   table: SxProps<Theme>;
+  checkboxSelection: {
+    cell: SxProps<Theme>;
+    checkbox: SxProps<Theme>;
+  };
   actionToolbar: {
     wrapper: SxProps<Theme>;
     row: SxProps<Theme>;
@@ -13,6 +17,9 @@ interface StylesType {
     row: SxProps<Theme>;
     cell: SxProps<Theme>;
     typography: SxProps<Theme>;
+    checkboxSelection: {
+      cell: SxProps<Theme>;
+    };
     actionColumn: {
       cell: SxProps<Theme>;
     };
@@ -31,6 +38,9 @@ interface StylesType {
     };
     loadingState: {
       row: SxProps<Theme>;
+      cell: SxProps<Theme>;
+    };
+    checkboxSelection: {
       cell: SxProps<Theme>;
     };
     actionColumn: {
@@ -64,6 +74,22 @@ const styles = (theme: Theme): StylesType => ({
   },
   table: {
     background: theme.palette.grey[100]
+  },
+  checkboxSelection: {
+    cell: {
+      alignItems: "center",
+      justifyContent: "center",
+      maxWidth: "4rem",
+      padding: "0.5rem 1rem",
+      position: "sticky",
+      left: 0
+    },
+    checkbox: {
+      color: theme.palette.primary.main,
+      "&.Mui-checked": {
+        color: "primary.main"
+      }
+    }
   },
   actionToolbar: {
     wrapper: {
@@ -110,6 +136,13 @@ const styles = (theme: Theme): StylesType => ({
       color: theme.palette.text.secondary,
       textTransform: "uppercase"
     },
+    checkboxSelection: {
+      cell: {
+        border: "none",
+        width: "6.25rem",
+        background: theme.palette.grey[100]
+      }
+    },
     actionColumn: {
       cell: {
         textAlign: "left",
@@ -146,6 +179,14 @@ const styles = (theme: Theme): StylesType => ({
       }
     },
     typography: {},
+    checkboxSelection: {
+      cell: {
+        background: "inherit",
+        "&:hover": {
+          backgroundColor: "inherit"
+        }
+      }
+    },
     actionColumn: {
       cell: {
         textAlign: "left",

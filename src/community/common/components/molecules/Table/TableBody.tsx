@@ -1,5 +1,6 @@
 import {
   Box,
+  Checkbox,
   TableBody as MuiTableBody,
   SxProps,
   TableCell,
@@ -28,32 +29,33 @@ export interface TableBodyProps {
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
   loadingState?: {
-    skeleton: {
-      rows: number;
+    skeleton?: {
+      rows?: number;
     };
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
   customStyles?: {
     body?: SxProps<Theme>;
     row?: SxProps<Theme>;
-    cell: {
-      wrapper: SxProps<Theme>;
-      container: SxProps<Theme>;
+    cell?: {
+      wrapper?: SxProps<Theme>;
+      container?: SxProps<Theme>;
     };
     typography?: SxProps<Theme>;
   };
   actionColumn: TableBodyActionColumnProps;
   onRowClick?: (row: any) => void;
-  isRowDisabled?: (row: any) => boolean;
 }
 
 const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   isLoading,
   headers,
   rows,
+  selectedRows,
   emptyState,
   loadingState,
   actionColumn,
+  checkboxSelection,
   customStyles,
   isRowDisabled = () => false,
   onRowClick,
@@ -105,12 +107,35 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
             role="row"
             aria-label={`${tableName}-table-body-row-${row.id}`}
           >
+            {checkboxSelection?.isEnabled && (
+              <TableCell
+                onClick={(e) => e.stopPropagation()}
+                sx={mergeSx([
+                  classes.checkboxSelection.cell,
+                  classes.tableBody.checkboxSelection.cell,
+                  checkboxSelection?.customStyles?.cell
+                ])}
+              >
+                <Checkbox
+                  color="primary"
+                  disabled={isRowDisabled ? isRowDisabled(row) : false}
+                  checked={selectedRows?.includes(row.id) || false}
+                  onChange={() =>
+                    checkboxSelection?.handleIndividualCheck?.(row.id)
+                  }
+                  sx={mergeSx([
+                    classes.checkboxSelection.checkbox,
+                    checkboxSelection?.customStyles?.checkbox
+                  ])}
+                />
+              </TableCell>
+            )}
             {headers?.map((header) => (
               <TableCell
                 key={header.id}
                 sx={mergeSx([
                   classes.tableBody.cell.wrapper,
-                  customStyles?.cell.wrapper
+                  customStyles?.cell?.wrapper
                 ])}
                 role="cell"
                 aria-label={`${tableName}-table-body-${header?.label}-cell-${row.id}`}
@@ -121,7 +146,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
                   <Box
                     sx={mergeSx([
                       classes.tableBody.cell.container,
-                      customStyles?.cell.container
+                      customStyles?.cell?.container
                     ])}
                   >
                     {row[header?.id]}

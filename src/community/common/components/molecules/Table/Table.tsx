@@ -25,13 +25,13 @@ import styles from "./styles";
 interface Props {
   tableName: string;
   actionToolbar?: TableHeadActionRowProps;
-  tableHead: TableHeadProps;
+  tableHead?: TableHeadProps;
   tableBody: TableBodyProps;
   tableFoot?: TableFootProps;
   customStyles?: {
     wrapper?: SxProps<Theme>;
     container?: SxProps<Theme>;
-    table: SxProps<Theme>;
+    table?: SxProps<Theme>;
   };
 }
 
@@ -39,6 +39,16 @@ export interface CommonTableProps {
   isLoading?: boolean;
   headers: TableHeaderTypes[];
   rows: any[];
+  isRowDisabled?: (row: any) => boolean;
+  selectedRows?: number[];
+  checkboxSelection?: {
+    //NOTE: If you want to disable individual checkbox, you have to use isRowDisabled prop and disable the entire row
+    isEnabled?: boolean;
+    isSelectAllEnabled?: boolean;
+    handleIndividualCheck?: (id: number) => void;
+    handleSelectAllCheckbox?: () => void;
+    customStyles?: { cell?: SxProps<Theme>; checkbox?: SxProps<Theme> };
+  };
 }
 
 const Table: FC<Props & CommonTableProps & TableTypes> = ({
@@ -46,6 +56,9 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   isLoading,
   headers,
   rows,
+  isRowDisabled,
+  selectedRows,
+  checkboxSelection,
   actionToolbar,
   tableHead,
   tableBody,
@@ -80,26 +93,32 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
           aria-label={tableName}
         >
           <TableHead
+            tableName={tableName}
             headers={headers}
-            customStyles={tableHead.customStyles}
+            rows={rows}
+            checkboxSelection={checkboxSelection}
+            selectedRows={selectedRows}
+            isRowDisabled={isRowDisabled}
             actionColumn={{
               isEnabled:
-                tableBody.actionColumn.actionBtns.left !== null ||
-                tableBody.actionColumn.actionBtns.right !== null
+                tableBody?.actionColumn?.actionBtns?.left !== null ||
+                tableBody?.actionColumn?.actionBtns?.right !== null
             }}
-            tableName={tableName}
+            customStyles={tableHead?.customStyles}
           />
           <TableBody
+            tableName={tableName}
             isLoading={isLoading}
             headers={headers}
             rows={rows}
+            checkboxSelection={checkboxSelection}
+            selectedRows={selectedRows}
+            isRowDisabled={isRowDisabled}
             actionColumn={tableBody.actionColumn}
             emptyState={tableBody.emptyState}
             loadingState={tableBody.loadingState}
             customStyles={tableBody.customStyles}
             onRowClick={tableBody.onRowClick}
-            isRowDisabled={tableBody.isRowDisabled}
-            tableName={tableName}
           />
         </MuiTable>
       </TableContainer>

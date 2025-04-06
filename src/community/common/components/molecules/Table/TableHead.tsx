@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   TableHead as MuiTableHead,
   SxProps,
   TableCell,
@@ -15,6 +16,7 @@ import {
 } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
+import { CommonTableProps } from "./Table";
 import styles from "./styles";
 
 export interface TableHeadersProps {
@@ -33,19 +35,19 @@ export interface TableHeadProps {
 export interface TableHeadActionColumnProps {
   actionColumn?: {
     isEnabled?: boolean;
-    styles?: {
-      cell?: SxProps<Theme>;
-      typography?: SxProps<Theme>;
-    };
   };
 }
 
 const TableHead: FC<
-  TableTypes & TableHeadProps & TableHeadersProps & TableHeadActionColumnProps
+  TableTypes & TableHeadProps & CommonTableProps & TableHeadActionColumnProps
 > = ({
   tableName,
+  rows,
   headers,
+  isRowDisabled,
+  selectedRows,
   customStyles,
+  checkboxSelection,
   actionColumn = {
     isEnabled: false,
     styles: {
@@ -68,6 +70,33 @@ const TableHead: FC<
         role="row"
         aria-label={`${tableName}-table-head-row`}
       >
+        {checkboxSelection?.isEnabled && (
+          <TableCell
+            sx={mergeSx([
+              classes.checkboxSelection.cell,
+              classes.tableHead.checkboxSelection.cell,
+              customStyles?.cell
+            ])}
+          >
+            <Checkbox
+              color="primary"
+              disabled={!checkboxSelection?.isSelectAllEnabled}
+              checked={
+                (rows?.length > 0 &&
+                  rows
+                    ?.filter((row) => !isRowDisabled?.(row))
+                    ?.every((row) => selectedRows?.includes(row.id))) ||
+                false
+              }
+              onChange={() => checkboxSelection?.handleSelectAllCheckbox?.()}
+              sx={mergeSx([
+                classes.checkboxSelection.checkbox,
+                checkboxSelection?.customStyles?.checkbox
+              ])}
+            />
+          </TableCell>
+        )}
+
         {headers?.map((header) => (
           <TableCell
             key={header?.id}

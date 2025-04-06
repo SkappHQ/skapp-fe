@@ -14,8 +14,8 @@ export interface TableBodyLoadingStateProps {
     element?: JSX.Element;
   }[];
   loadingState?: {
-    skeleton: {
-      rows: number;
+    skeleton?: {
+      rows?: number;
     };
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
@@ -24,11 +24,7 @@ export interface TableBodyLoadingStateProps {
 
 const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
   headers,
-  loadingState = {
-    skeleton: {
-      rows: 4
-    }
-  },
+  loadingState,
   isActionColumnEnabled = false,
   tableName
 }) => {
@@ -53,7 +49,7 @@ const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
         role="cell"
         aria-label={`${tableName}-table-body-loading-state-cell`}
       >
-        <TableSkeleton rows={loadingState?.skeleton?.rows} />
+        <TableSkeleton rows={loadingState?.skeleton?.rows || 4} />
       </TableCell>
     </TableRow>
   );

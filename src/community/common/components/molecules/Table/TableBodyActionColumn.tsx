@@ -10,21 +10,21 @@ import { mergeSx } from "~community/common/utils/commonUtil";
 import styles from "./styles";
 
 export interface TableBodyActionColumnProps {
-  isEnabled: boolean;
-  actionBtns: {
-    left: {
-      iconName: IconName;
-      width: string;
-      height: string;
-      styles: SxProps<Theme>;
-      onClick: (data: any) => {};
+  isEnabled?: boolean;
+  actionBtns?: {
+    left?: {
+      iconName?: IconName;
+      width?: string;
+      height?: string;
+      styles?: SxProps<Theme>;
+      onClick: (data: any) => void;
     };
-    right: {
-      iconName: IconName;
-      width: string;
-      height: string;
-      styles: SxProps<Theme>;
-      onClick: (data: any) => {};
+    right?: {
+      iconName?: IconName;
+      width?: string;
+      height?: string;
+      styles?: SxProps<Theme>;
+      onClick: (data: any) => void;
     };
   };
 }
@@ -49,7 +49,7 @@ const TableBodyActionColumn: FC<
         role="cell"
         aria-label={`${tableName}-table-body-action-column-cell-${row.id}`}
       >
-        {actionBtns.left && (
+        {actionBtns?.left && (
           <IconButton
             icon={
               <Icon
@@ -62,25 +62,27 @@ const TableBodyActionColumn: FC<
             hoverEffect={false}
             buttonStyles={mergeSx([
               classes.tableBody.actionColumn.icons.left,
-              actionBtns.left.styles
+              actionBtns?.left.styles
             ])}
             onClick={() => actionBtns?.left?.onClick(row.actionData)}
           />
         )}
-        {actionBtns.right && (
+        {actionBtns?.right && (
           <IconButton
             icon={
               <Icon
-                name={actionBtns.right?.iconName ?? IconName.DELETE_BUTTON_ICON}
-                width={actionBtns.right?.width ?? DELETE_BUTTON_ICON_WIDTH}
-                height={actionBtns.right?.height ?? DELETE_BUTTON_ICON_HEIGHT}
+                name={
+                  actionBtns?.right?.iconName ?? IconName.DELETE_BUTTON_ICON
+                }
+                width={actionBtns?.right?.width ?? DELETE_BUTTON_ICON_WIDTH}
+                height={actionBtns?.right?.height ?? DELETE_BUTTON_ICON_HEIGHT}
               />
             }
             id={`${tableName}-table-body-action-column-icon-btn-right-${row.id}`}
             hoverEffect={false}
             buttonStyles={mergeSx([
               classes.tableBody.actionColumn.icons.right,
-              actionBtns.right.styles
+              actionBtns?.right.styles
             ])}
             onClick={() => actionBtns?.right?.onClick(row.actionData)}
           />
