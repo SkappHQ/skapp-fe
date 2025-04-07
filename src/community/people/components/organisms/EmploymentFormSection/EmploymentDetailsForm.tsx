@@ -68,7 +68,8 @@ const EmploymentDetailsForm = ({
     if (
       employee?.employment?.employmentDetails?.email !==
         initialEmployee?.employment?.employmentDetails?.email &&
-      !isReinviteConfirmationModalOpen
+      !isReinviteConfirmationModalOpen &&
+      !isAddFlow
     ) {
       setIsReinviteConfirmationModalOpen(true);
       return;

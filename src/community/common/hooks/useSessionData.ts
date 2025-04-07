@@ -71,6 +71,16 @@ const useSessionData = () => {
     [sessionData?.user?.userId]
   );
 
+  const isLeaveEmployee = useMemo(
+    () => sessionData?.user?.roles?.includes(EmployeeTypes.LEAVE_EMPLOYEE),
+    [sessionData?.user?.roles]
+  );
+
+  const isAttendanceEmployee = useMemo(
+    () => sessionData?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE),
+    [sessionData?.user?.roles]
+  );
+
   return {
     isFreeTier,
     isProTier,
@@ -83,7 +93,9 @@ const useSessionData = () => {
     isEmployee,
     sessionStatus,
     isPeopleManager,
-    userId
+    userId,
+    isLeaveEmployee,
+    isAttendanceEmployee
   };
 };
 
