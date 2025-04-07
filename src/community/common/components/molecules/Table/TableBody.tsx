@@ -35,7 +35,10 @@ export interface TableBodyProps {
   };
   customStyles?: {
     body?: SxProps<Theme>;
-    row?: SxProps<Theme>;
+    row?: {
+      active?: SxProps<Theme>;
+      disabled?: SxProps<Theme>;
+    };
     cell?: {
       wrapper?: SxProps<Theme>;
       container?: SxProps<Theme>;
@@ -64,7 +67,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   const classes = styles(theme);
 
   const handleTableRowClick = (row: any) => {
-    if (isRowDisabled?.(row)) {
+    if (isRowDisabled?.(row.id)) {
       return;
     }
 
@@ -95,13 +98,13 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
             key={row.id}
             onClick={() => handleTableRowClick(row)}
             sx={mergeSx([
-              classes.tableBody.row,
-              {
-                background: isRowDisabled?.(row)
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[50]
-              },
-              customStyles?.row
+              classes.tableBody.row.default,
+              classes.tableBody.row?.[
+                isRowDisabled?.(row.id) ? "disabled" : "active"
+              ],
+              customStyles?.row?.[
+                isRowDisabled?.(row.id) ? "disabled" : "active"
+              ]
             ])}
             role="row"
             aria-label={`${tableName}-table-body-row-${row.id}`}
@@ -117,11 +120,11 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               >
                 <Checkbox
                   color="primary"
-                  disabled={isRowDisabled ? isRowDisabled(row) : false}
+                  disabled={isRowDisabled ? isRowDisabled(row.id) : false}
                   checked={selectedRows?.includes(row.id) || false}
-                  onChange={() =>
-                    checkboxSelection?.handleIndividualCheck?.(row.id)
-                  }
+                  onChange={checkboxSelection?.handleIndividualSelectClick?.(
+                    row.id
+                  )}
                   sx={mergeSx([
                     classes.checkboxSelection.checkbox,
                     checkboxSelection?.customStyles?.checkbox
@@ -159,6 +162,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               isEnabled={actionColumn?.isEnabled}
               actionBtns={actionColumn?.actionBtns}
               tableName={tableName}
+              isRowDisabled={isRowDisabled}
             />
           </TableRow>
         ))

@@ -210,7 +210,7 @@ const EmployeeTimesheetRequestTable: FC<Props> = ({
       </Typography>
       <TimesheetRequestsFilters />
       <Table
-        tableName="employee-timesheet-request-table"
+        tableName="employee-timesheet-request"
         headers={tableHeaders}
         rows={transformToTableRows() || []}
         isLoading={isRequestLoading}

@@ -8,6 +8,7 @@ import {
   MouseEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
@@ -452,6 +453,10 @@ const PeopleTable: FC<Props> = ({
     }
   };
 
+  const isSelectAllCheckboxChecked = useMemo(() => {
+    return selectedPeople?.length === employeeData?.length;
+  }, [selectedPeople, employeeData]);
+
   return (
     <Box
       sx={{
@@ -473,8 +478,9 @@ const PeopleTable: FC<Props> = ({
           checkboxSelection={{
             isEnabled: isPendingInvitationListOpen || isRemovePeople,
             isSelectAllEnabled: isPendingInvitationListOpen || isRemovePeople,
-            handleIndividualCheck: handleCheckBoxClick,
-            handleSelectAllCheckbox: handleAllCheckBoxClick
+            isSelectAllChecked: isSelectAllCheckboxChecked,
+            handleIndividualSelectClick: handleCheckBoxClick,
+            handleSelectAllClick: handleAllCheckBoxClick
           }}
           customStyles={{
             wrapper: {
@@ -569,8 +575,10 @@ const PeopleTable: FC<Props> = ({
             onRowClick: !isRemovePeople ? handleRowClick : undefined,
             customStyles: {
               row: {
-                "&:hover": {
-                  cursor: isRemovePeople ? "default" : "pointer"
+                active: {
+                  "&:hover": {
+                    cursor: isRemovePeople ? "default" : "pointer"
+                  }
                 }
               }
             }

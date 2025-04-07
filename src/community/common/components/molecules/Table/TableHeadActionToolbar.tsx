@@ -16,8 +16,8 @@ export interface TableHeadActionRowProps {
     rightButton?: JSX.Element;
   };
   customStyles?: {
-    wrapper: SxProps<Theme>;
-    row: SxProps<Theme>;
+    wrapper?: SxProps<Theme>;
+    row?: SxProps<Theme>;
   };
 }
 

@@ -44,8 +44,6 @@ const TableHead: FC<
   tableName,
   rows,
   headers,
-  isRowDisabled,
-  selectedRows,
   customStyles,
   checkboxSelection,
   actionColumn = {
@@ -70,7 +68,7 @@ const TableHead: FC<
         role="row"
         aria-label={`${tableName}-table-head-row`}
       >
-        {checkboxSelection?.isEnabled && (
+        {rows?.length > 0 && checkboxSelection?.isEnabled && (
           <TableCell
             sx={mergeSx([
               classes.checkboxSelection.cell,
@@ -78,22 +76,18 @@ const TableHead: FC<
               customStyles?.cell
             ])}
           >
-            <Checkbox
-              color="primary"
-              disabled={!checkboxSelection?.isSelectAllEnabled}
-              checked={
-                (rows?.length > 0 &&
-                  rows
-                    ?.filter((row) => !isRowDisabled?.(row))
-                    ?.every((row) => selectedRows?.includes(row.id))) ||
-                false
-              }
-              onChange={() => checkboxSelection?.handleSelectAllCheckbox?.()}
-              sx={mergeSx([
-                classes.checkboxSelection.checkbox,
-                checkboxSelection?.customStyles?.checkbox
-              ])}
-            />
+            {checkboxSelection?.isSelectAllEnabled && (
+              <Checkbox
+                color="primary"
+                disabled={!checkboxSelection?.isSelectAllEnabled}
+                checked={checkboxSelection?.isSelectAllChecked}
+                onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+                sx={mergeSx([
+                  classes.checkboxSelection.checkbox,
+                  checkboxSelection?.customStyles?.checkbox
+                ])}
+              />
+            )}
           </TableCell>
         )}
 

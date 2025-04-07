@@ -250,37 +250,56 @@ const ManagerLeaveRequest: FC<Props> = ({
 
   return (
     <Table
-      tableHeaders={tableHeaders}
-      tableRows={transformToTableRows()}
-      actionRowOneLeftButton={
-        <Stack flexDirection={"row"} gap="1.25rem">
-          <ManagerLeaveRequestsSortByBtn
-            isDisabled={employeeLeaveRequests?.length === 0}
-          />
-          <DateRangePicker
-            label={commonTranslateText(["label"])}
-            selectedDates={selectedDates}
-            setSelectedDates={setSelectedDates}
-          />
-        </Stack>
-      }
-      actionRowOneRightButton={
-        <ManagerLeaveRequestFilterByBtn
-          leaveTypeButtons={leaveTypeButtons}
-          onClickReset={onClickReset}
-          removeFilters={removeFilters}
-        />
-      }
-      emptyDataDescription={translateText(["noLeaveRequestsManagerDetails"])}
-      emptyDataTitle={translateText(["noLeaveRequests"])}
-      skeletonRows={5}
+      tableName="manager-leave-requests-table"
+      headers={tableHeaders}
+      rows={transformToTableRows()}
+      tableBody={{
+        emptyState: {
+          noData: {
+            title: translateText(["noLeaveRequests"]),
+            description: translateText(["noLeaveRequestsManagerDetails"])
+          }
+        },
+        loadingState: {
+          skeleton: {
+            rows: 5
+          }
+        },
+        onRowClick: handelRowClick
+      }}
+      tableFoot={{
+        pagination: {
+          isEnabled: true,
+          totalPages: totalPages,
+          currentPage: currentPage,
+          onChange: (_event: ChangeEvent<unknown>, value: number) =>
+            setPagination(value - 1)
+        }
+      }}
+      actionToolbar={{
+        firstRow: {
+          leftButton: (
+            <Stack flexDirection={"row"} gap="1.25rem">
+              <ManagerLeaveRequestsSortByBtn
+                isDisabled={employeeLeaveRequests?.length === 0}
+              />
+              <DateRangePicker
+                label={commonTranslateText(["label"])}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+              />
+            </Stack>
+          ),
+          rightButton: (
+            <ManagerLeaveRequestFilterByBtn
+              leaveTypeButtons={leaveTypeButtons}
+              onClickReset={onClickReset}
+              removeFilters={removeFilters}
+            />
+          )
+        }
+      }}
       isLoading={isLoading}
-      totalPages={totalPages}
-      currentPage={currentPage}
-      onPaginationChange={(_event: ChangeEvent<unknown>, value: number) =>
-        setPagination(value - 1)
-      }
-      onRowClick={handelRowClick}
     />
   );
 };

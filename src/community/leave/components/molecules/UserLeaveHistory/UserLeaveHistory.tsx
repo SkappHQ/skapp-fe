@@ -472,36 +472,55 @@ const UserLeaveHistory: FC<Props> = ({
       </Typography>
 
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        actionRowOneLeftButton={renderDateRange()}
-        actionRowOneRightButton={renderFilterBy()}
-        skeletonRows={5}
-        isLoading={isLoading}
-        totalPages={employeeLeaveHistoryData.totalPages}
-        currentPage={employeeLeaveHistoryData.currentPage}
-        onPaginationChange={(_event: ChangeEvent<unknown>, value: number) =>
-          setCurrentPage(value - 1)
-        }
-        emptyDataDescription={
-          filterArray.length > 0
-            ? translateText(["tableHeaders.emptyHistoryForFiltersDes"])
-            : translateText(["tableHeaders.emptyHistoryDes"])
-        }
-        emptyDataTitle={
-          filterArray.length > 0
-            ? translateText(["tableHeaders.emptyHistoryForFiltersTitle"])
-            : translateText(["tableHeaders.emptyHistoryTitle"])
-        }
-        exportButtonText={translateText(["tableHeaders.exportReport"])}
-        onExportButtonClick={async () => {
-          downloadDataAsCSV(
-            {
-              data: exportHistoryData?.items
-            },
-            `${employeeFirstName ?? ""}-${employeeLastName ?? ""}`
-          );
+        tableName="user-leave-history-table"
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title:
+                filterArray.length > 0
+                  ? translateText(["tableHeaders.emptyHistoryForFiltersTitle"])
+                  : translateText(["tableHeaders.emptyHistoryTitle"]),
+              description:
+                filterArray.length > 0
+                  ? translateText(["tableHeaders.emptyHistoryForFiltersDes"])
+                  : translateText(["tableHeaders.emptyHistoryDes"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 5
+            }
+          }
         }}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: employeeLeaveHistoryData.totalPages,
+            currentPage: employeeLeaveHistoryData.currentPage,
+            onChange: (_event: ChangeEvent<unknown>, value: number) =>
+              setCurrentPage(value - 1)
+          },
+          exportBtn: {
+            label: translateText(["tableHeaders.exportReport"]),
+            onClick: async () => {
+              downloadDataAsCSV(
+                {
+                  data: exportHistoryData?.items
+                },
+                `${employeeFirstName ?? ""}-${employeeLastName ?? ""}`
+              );
+            }
+          }
+        }}
+        actionToolbar={{
+          firstRow: {
+            leftButton: renderDateRange(),
+            rightButton: renderFilterBy()
+          }
+        }}
+        isLoading={isLoading}
       />
     </Box>
   );

@@ -18,9 +18,9 @@ import { isDateGraterThanToday } from "~community/common/utils/dateTimeUtils";
 import SortByDropDown from "~community/people/components/molecules/SortByDropDown/SortByDropDown";
 import { usePeopleStore } from "~community/people/store/store";
 import {
+  Holiday,
   HolidayDataType,
   HolidayDurationType,
-  holiday,
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
 import { getFormattedDate } from "~community/people/utils/holidayUtils/commonUtils";
@@ -30,7 +30,7 @@ import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { styles } from "./styles";
 
 interface Props {
-  holidayData?: holiday[];
+  holidayData: Holiday[];
   setPopupTitle?: (title: string) => string | undefined;
   isHolidayLoading?: boolean;
   holidaySelectedYear?: string;
@@ -84,31 +84,51 @@ const HolidayTable: FC<Props> = ({
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
 
-  const columns = [
-    { field: "date", headerName: translateText(["tableDateColumnTitle"]) },
+  const tableHeaders = [
+    { id: "date", label: translateText(["tableDateColumnTitle"]) },
     {
-      field: "holidayName",
-      headerName: translateText(["tableHolidayNameColumnTitle"])
+      id: "holidayName",
+      label: translateText(["tableHolidayNameColumnTitle"])
     }
   ];
 
-  const tableHeaders = columns.map((col) => ({
-    id: col.field,
-    label: col.headerName
-  }));
+  const transformToTableRows = useCallback(() => {
+    const returnDurationLabel = (duration: HolidayDurationType): string => {
+      switch (duration) {
+        case HolidayDurationType.FULLDAY:
+          return translateText(["fullDay"]);
+        case HolidayDurationType.HALFDAY_MORNING:
+          return translateText(["halfDayMorning"]);
+        case HolidayDurationType.HALFDAY_EVENING:
+          return translateText(["halfDayEvening"]);
+        default:
+          return duration;
+      }
+    };
 
-  const returnDurationLabel = (duration: HolidayDurationType): string => {
-    switch (duration) {
-      case HolidayDurationType.FULLDAY:
-        return translateText(["fullDay"]);
-      case HolidayDurationType.HALFDAY_MORNING:
-        return translateText(["halfDayMorning"]);
-      case HolidayDurationType.HALFDAY_EVENING:
-        return translateText(["halfDayEvening"]);
-      default:
-        return duration;
-    }
-  };
+    return (
+      (Array.isArray(holidayData) &&
+        holidayData.map((holiday) => ({
+          id: holiday.id,
+          date: (
+            <Box sx={classes.dateWrapper}>
+              <Typography variant="body1">
+                {getFormattedDate(holiday?.date || "", true)}
+              </Typography>
+              <BasicChip
+                label={returnDurationLabel(
+                  holiday?.holidayDuration || HolidayDurationType.NONE
+                )}
+                chipStyles={{ mx: "0.3125rem" }}
+              />
+            </Box>
+          ),
+          holidayName: holiday?.name,
+          actionData: holiday?.id
+        }))) ||
+      []
+    );
+  }, [classes.dateWrapper, holidayData, translateText]);
 
   const onScroll = () => {
     if (listInnerRef.current) {
@@ -143,33 +163,8 @@ const HolidayTable: FC<Props> = ({
     }
   }, [isFetchingNextPage, hasNextPage]);
 
-  const transformToTableRows = () => {
-    return (
-      (Array.isArray(holidayData) &&
-        holidayData.map((holiday) => ({
-          id: holiday.id,
-          date: (
-            <Box sx={classes.dateWrapper}>
-              <Typography variant="body1">
-                {getFormattedDate(holiday?.date || "", true)}
-              </Typography>
-              <BasicChip
-                label={returnDurationLabel(
-                  holiday?.holidayDuration || HolidayDurationType.NONE
-                )}
-                chipStyles={{ mx: "0.3125rem" }}
-              />
-            </Box>
-          ),
-          holidayName: holiday?.name,
-          actionData: holiday?.id
-        }))) ||
-      []
-    );
-  };
-
   const renderDeleteAllButton = () => {
-    return (
+    return holidayData && holidayData?.length > 0 && isPeopleAdmin ? (
       <Box>
         <Button
           label={
@@ -184,7 +179,7 @@ const HolidayTable: FC<Props> = ({
           disabled={isDeleteButtonDisabled()}
         />
       </Box>
-    );
+    ) : undefined;
   };
 
   const handleBulkDelete = () => {
@@ -205,33 +200,14 @@ const HolidayTable: FC<Props> = ({
     }
   };
 
-  const handleCheckBoxClick = (holidayId: number) => () => {
+  const handleIndividualSelectClick = (id: number) => () => {
     setSelectedHolidays((prevSelectedHolidays) => {
-      if (!prevSelectedHolidays.includes(holidayId)) {
-        return [...prevSelectedHolidays, holidayId];
+      if (!prevSelectedHolidays.includes(id)) {
+        return [...prevSelectedHolidays, id];
       } else {
-        return prevSelectedHolidays.filter(
-          (selectedId) => selectedId !== holidayId
-        );
+        return prevSelectedHolidays.filter((selectedId) => selectedId !== id);
       }
     });
-  };
-
-  const handleAllCheckBoxClick = () => {
-    if (selectedHolidays.length === holidayData?.length) {
-      setSelectedHolidays([]);
-    } else {
-      setSelectedHolidays(holidayData?.map((holiday) => holiday.id || 0) || []);
-    }
-  };
-
-  const handleIndividualDelete = (holidayId: number) => {
-    setIndividualDeleteId(holidayId);
-    if (setPopupTitle && setIsHolidayModalOpen && setHolidayModalType) {
-      setPopupTitle(translateText(["holidayDeleteModalTitle"]));
-      setHolidayModalType(holidayModalTypes.HOLIDAY_INDIVIDUAL_DELETE);
-      setIsHolidayModalOpen(true);
-    }
   };
 
   useEffect(() => {
@@ -260,92 +236,134 @@ const HolidayTable: FC<Props> = ({
     }
   };
 
-  const isCheckboxSelectionEnabled = useMemo(() => {
+  const futureHolidays = useMemo(() => {
     if (holidayData && holidayData?.length > 0) {
       const filteredHolidays = holidayData?.filter(
         (holiday: HolidayDataType) => {
-          return !isDateGraterThanToday(holiday?.date || "");
+          return isDateGraterThanToday(holiday?.date || "");
         }
       );
 
-      return isPeopleAdmin && filteredHolidays?.length !== holidayData?.length;
+      return filteredHolidays;
+    }
+
+    return [];
+  }, [holidayData]);
+
+  const isSelectAllCheckboxEnabled = useMemo(() => {
+    if (holidayData && holidayData?.length > 0) {
+      return isPeopleAdmin && futureHolidays?.length !== holidayData?.length;
     }
 
     return isPeopleAdmin;
-  }, [holidayData, isPeopleAdmin]);
+  }, [futureHolidays?.length, holidayData, isPeopleAdmin]);
+
+  const isSelectAllCheckboxChecked = useMemo(() => {
+    return selectedHolidays?.length === futureHolidays?.length;
+  }, [selectedHolidays, futureHolidays]);
+
+  const isRowDisabled = useCallback(
+    (id: number) => {
+      const holiday = holidayData.find((holiday) => holiday.id === id);
+
+      return !isDateGraterThanToday(holiday?.date || "");
+    },
+    [holidayData]
+  );
+
+  const handleSelectAllCheckboxClick = () => {
+    if (selectedHolidays.length === futureHolidays?.length) {
+      setSelectedHolidays([]);
+    } else {
+      setSelectedHolidays(
+        futureHolidays?.map((holiday) => holiday.id || 0) || []
+      );
+    }
+  };
+
+  const handleIndividualDelete = (holidayId: number) => {
+    setIndividualDeleteId(holidayId);
+    if (setPopupTitle && setIsHolidayModalOpen && setHolidayModalType) {
+      setPopupTitle(translateText(["holidayDeleteModalTitle"]));
+      setHolidayModalType(holidayModalTypes.HOLIDAY_INDIVIDUAL_DELETE);
+      setIsHolidayModalOpen(true);
+    }
+  };
 
   return (
     <Stack sx={classes.wrapper}>
       <Box sx={classes.container} ref={listInnerRef}>
         <Table
-          id={{
-            emptyScreen: {
-              button: "add-holidays-empty-table-screen-button"
+          tableName="holidays"
+          headers={tableHeaders}
+          isLoading={isFetching && !isFetchingNextPage}
+          rows={transformToTableRows()}
+          isRowDisabled={isRowDisabled}
+          selectedRows={selectedHolidays}
+          checkboxSelection={{
+            isEnabled: true,
+            isSelectAllEnabled: isSelectAllCheckboxEnabled,
+            isSelectAllChecked: isSelectAllCheckboxChecked,
+            handleIndividualSelectClick: handleIndividualSelectClick,
+            handleSelectAllClick: handleSelectAllCheckboxClick
+          }}
+          actionToolbar={{
+            firstRow: {
+              leftButton: (
+                <SortByDropDown
+                  listInnerRef={listInnerRef}
+                  holidayData={holidayData}
+                />
+              ),
+              rightButton: renderDeleteAllButton()
             }
           }}
-          tableHeaders={tableHeaders}
-          tableRows={transformToTableRows()}
-          actionRowOneLeftButton={
-            <SortByDropDown
-              listInnerRef={listInnerRef}
-              holidayData={holidayData}
-            />
-          }
-          actionRowOneRightButton={
-            holidayData && holidayData?.length > 0 && isPeopleAdmin
-              ? renderDeleteAllButton()
-              : null
-          }
-          selectedRows={selectedHolidays}
-          skeletonRows={5}
-          handleRowCheck={handleCheckBoxClick}
-          isLoading={isFetching && !isFetchingNextPage}
-          isDataAvailable={holidayData && holidayData?.length > 0}
-          emptyDataDescription={
-            isPeopleAdmin
-              ? translateText(["noHolidayDesForAdmin"])
-              : translateText(["noHolidayDesForNonAdmin"])
-          }
-          emptyDataTitle={translateText(["noHolidaysTitle"], {
-            selectedYear: holidaySelectedYear
-          })}
-          emptyScreenButtonText={
-            isPeopleAdmin ? translateText(["addHolidaysBtn"]) : ""
-          }
-          tableContainerStyles={{ border: 0, maxHeight: "32rem" }}
-          tableHeaderTypographyStyles={{
-            paddingLeft: isCheckboxSelectionEnabled ? "0rem" : "1rem"
+          tableBody={{
+            actionColumn: {
+              isEnabled: Boolean(isPeopleAdmin),
+              actionBtns: {
+                right: isPeopleAdmin
+                  ? {
+                      styles: { mr: "1rem" },
+                      onClick: (data) => handleIndividualDelete(data)
+                    }
+                  : undefined
+              }
+            },
+            emptyState: {
+              noData: {
+                title: translateText(["noHolidaysTitle"], {
+                  selectedYear: holidaySelectedYear
+                }),
+                description: isPeopleAdmin
+                  ? translateText(["noHolidayDesForAdmin"])
+                  : translateText(["noHolidayDesForNonAdmin"]),
+                button: isPeopleAdmin
+                  ? {
+                      id: "add-holidays-empty-table-screen-button",
+                      label: translateText(["addHolidaysBtn"]),
+                      onClick: AddHolidayButtonClick,
+                      shouldBlink:
+                        ongoingQuickSetup.SETUP_HOLIDAYS &&
+                        quickSetupCurrentFlowSteps !== null
+                    }
+                  : undefined
+              }
+            },
+            loadingState: {
+              skeleton: {
+                rows: 5
+              }
+            }
           }}
-          tableRowCellStyles={{
-            paddingLeft: isCheckboxSelectionEnabled ? "0rem" : "1rem"
+          tableFoot={{
+            pagination: {
+              isEnabled: false
+            }
           }}
-          tableRowStyles={{
-            paddingLeft: isCheckboxSelectionEnabled ? "0rem" : "1rem"
+          customStyles={{
+            container: { border: 0, maxHeight: "32rem" }
           }}
-          onEmptyScreenBtnClick={AddHolidayButtonClick}
-          isPaginationEnabled={false}
-          isCheckboxSelectionEnabled={isCheckboxSelectionEnabled}
-          isSelectAllCheckboxEnabled={holidayData?.length === 0 ? false : true}
-          actionColumnIconBtnRight={
-            isPeopleAdmin
-              ? {
-                  OnClick: (data) => handleIndividualDelete(data),
-                  styles: { mr: "1rem" }
-                }
-              : null
-          }
-          shouldEmptyTableScreenBtnBlink={
-            ongoingQuickSetup.SETUP_HOLIDAYS &&
-            quickSetupCurrentFlowSteps !== null
-          }
-          handleAllRowsCheck={handleAllCheckBoxClick}
-          tableCheckboxStyles={{
-            color: selectedHolidays
-              ? theme.palette.grey[600]
-              : theme.palette.primary.main,
-            marginRight: "0rem"
-          }}
-          tableHeaderCellStyles={classes.tableHeaderCellStyles}
         />
       </Box>
     </Stack>

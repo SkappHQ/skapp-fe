@@ -195,33 +195,52 @@ const TeamsTable: FC<Props> = ({
   return (
     <Box sx={classes.tableWrapper}>
       <Table
-        id={{
-          emptyScreen: {
-            button: "add-teams-empty-table-screen-button"
+        tableName="teams"
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            row: classes.tableHead,
+            cell: classes.tableHeaderCellStyles
           }
         }}
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={classes.tableHead}
-        tableContainerStyles={classes.tableContainer}
-        isPaginationEnabled={false}
-        tableHeaderCellStyles={classes.tableHeaderCellStyles}
-        emptySearchTitle={translateText(["emptySearchResult", "title"])}
-        emptySearchDescription={translateText([
-          "emptySearchResult",
-          "description"
-        ])}
-        emptyDataTitle={translateText(["emptyScreen", "title"])}
-        emptyDataDescription={translateText(["emptyScreen", "description"])}
-        isDataAvailable={allTeams && allTeams?.length > 0}
-        isLoading={isTeamsLoading}
-        onEmptyScreenBtnClick={() => {
-          teamAddButtonButtonClick?.();
-          destroyDriverObj();
+        tableBody={{
+          emptyState: {
+            noData: {
+              title:
+                allTeams && allTeams?.length > 0
+                  ? translateText(["emptyScreen", "title"])
+                  : translateText(["emptySearchResult", "title"]),
+              description:
+                allTeams && allTeams?.length > 0
+                  ? translateText(["emptyScreen", "description"])
+                  : translateText(["emptySearchResult", "description"]),
+              button: {
+                id: "add-teams-empty-table-screen-button",
+                label: teamAddButtonText,
+                onClick: () => {
+                  teamAddButtonButtonClick?.();
+                  destroyDriverObj();
+                },
+                shouldBlink: ongoingQuickSetup.DEFINE_TEAMS
+              }
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 3
+            }
+          }
         }}
-        emptyScreenButtonText={teamAddButtonText}
-        skeletonRows={3}
-        shouldEmptyTableScreenBtnBlink={ongoingQuickSetup.DEFINE_TEAMS}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainer
+        }}
+        isLoading={isTeamsLoading}
       />
     </Box>
   );

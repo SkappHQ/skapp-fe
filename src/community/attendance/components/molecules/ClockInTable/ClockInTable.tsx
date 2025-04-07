@@ -294,13 +294,6 @@ const ClockInTable: FC<Props> = ({
             }
           }}
           tableBody={{
-            customStyles: {
-              row: {
-                "&:hover": {
-                  backgroundColor: theme.palette.secondary.main
-                }
-              }
-            },
             emptyState: {
               noData: {
                 title: translateTexts([

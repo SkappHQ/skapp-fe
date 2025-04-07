@@ -350,28 +350,50 @@ const LeaveRequests: FC = () => {
       </Typography>
       <Divider sx={{ mb: "1rem" }} />
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        actionRowOneLeftButton={sortButton}
-        actionRowOneRightButton={filterButton}
-        isPaginationEnabled={true}
-        totalPages={leaveRequests?.totalPages}
-        currentPage={currentPage as number}
-        onPaginationChange={(_event: ChangeEvent<unknown>, value: number) =>
-          setPagination(value - 1)
-        }
-        onRowClick={handleRowClick}
-        tableHeaderTypographyStyles={tableHeaderTypographyStyles}
-        emptyDataTitle={translateText([
-          "myLeaveRequests",
-          "emptyLeaveRequestTitle"
-        ])}
-        emptyDataDescription={translateText([
-          "myLeaveRequests",
-          "emptyLeaveRequestDes"
-        ])}
+        tableName="leave-requests-table"
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            typography: tableHeaderTypographyStyles
+          }
+        }}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText([
+                "myLeaveRequests",
+                "emptyLeaveRequestTitle"
+              ]),
+              description: translateText([
+                "myLeaveRequests",
+                "emptyLeaveRequestDes"
+              ])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 5
+            }
+          },
+          onRowClick: handleRowClick
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: leaveRequests?.totalPages || 1,
+            currentPage: currentPage as number,
+            onChange: (_event: ChangeEvent<unknown>, value: number) =>
+              setPagination(value - 1)
+          }
+        }}
+        actionToolbar={{
+          firstRow: {
+            leftButton: sortButton,
+            rightButton: filterButton
+          }
+        }}
         isLoading={isLoading}
-        skeletonRows={5}
       />
     </Box>
   );

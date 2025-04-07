@@ -26,7 +26,11 @@ interface StylesType {
   };
   tableBody: {
     body: SxProps<Theme>;
-    row: SxProps<Theme>;
+    row: {
+      default: SxProps<Theme>;
+      active: SxProps<Theme>;
+      disabled: SxProps<Theme>;
+    };
     cell: {
       wrapper: SxProps<Theme>;
       container: SxProps<Theme>;
@@ -157,12 +161,20 @@ const styles = (theme: Theme): StylesType => ({
   tableBody: {
     body: { width: "100%" },
     row: {
-      transition: "100ms",
-      height: "79px",
-      gap: "0.5rem",
-      "&:hover": {
-        cursor: "pointer",
-        background: theme.palette.grey.A200
+      default: {
+        background: theme.palette.grey[50],
+        height: "79px",
+        gap: "0.5rem"
+      },
+      active: {
+        transition: "100ms",
+        "&:hover": {
+          cursor: "pointer",
+          background: theme.palette.grey[100]
+        }
+      },
+      disabled: {
+        cursor: "not-allowed"
       }
     },
     cell: {

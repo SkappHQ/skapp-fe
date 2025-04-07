@@ -26,7 +26,7 @@ interface Props {
   tableName: string;
   actionToolbar?: TableHeadActionRowProps;
   tableHead?: TableHeadProps;
-  tableBody: TableBodyProps;
+  tableBody?: TableBodyProps;
   tableFoot?: TableFootProps;
   customStyles?: {
     wrapper?: SxProps<Theme>;
@@ -45,8 +45,9 @@ export interface CommonTableProps {
     //NOTE: If you want to disable individual checkbox, you have to use isRowDisabled prop and disable the entire row
     isEnabled?: boolean;
     isSelectAllEnabled?: boolean;
-    handleIndividualCheck?: (id: number) => void;
-    handleSelectAllCheckbox?: () => void;
+    isSelectAllChecked?: boolean;
+    handleIndividualSelectClick?: (id: number) => () => void;
+    handleSelectAllClick?: () => void;
     customStyles?: { cell?: SxProps<Theme>; checkbox?: SxProps<Theme> };
   };
 }
@@ -97,8 +98,6 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             headers={headers}
             rows={rows}
             checkboxSelection={checkboxSelection}
-            selectedRows={selectedRows}
-            isRowDisabled={isRowDisabled}
             actionColumn={{
               isEnabled:
                 tableBody?.actionColumn?.actionBtns?.left !== null ||
@@ -114,11 +113,11 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             checkboxSelection={checkboxSelection}
             selectedRows={selectedRows}
             isRowDisabled={isRowDisabled}
-            actionColumn={tableBody.actionColumn}
-            emptyState={tableBody.emptyState}
-            loadingState={tableBody.loadingState}
-            customStyles={tableBody.customStyles}
-            onRowClick={tableBody.onRowClick}
+            actionColumn={tableBody?.actionColumn}
+            emptyState={tableBody?.emptyState}
+            loadingState={tableBody?.loadingState}
+            customStyles={tableBody?.customStyles}
+            onRowClick={tableBody?.onRowClick}
           />
         </MuiTable>
       </TableContainer>

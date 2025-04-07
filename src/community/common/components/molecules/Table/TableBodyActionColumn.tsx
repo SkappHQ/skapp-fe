@@ -30,6 +30,7 @@ export interface TableBodyActionColumnProps {
 }
 
 export interface TableRowDataProps {
+  isRowDisabled?: (row: any) => boolean;
   row: any;
 }
 
@@ -38,7 +39,7 @@ const DELETE_BUTTON_ICON_HEIGHT = "12";
 
 const TableBodyActionColumn: FC<
   TableTypes & TableBodyActionColumnProps & TableRowDataProps
-> = ({ row, isEnabled = false, actionBtns, tableName }) => {
+> = ({ row, isEnabled = false, actionBtns, tableName, isRowDisabled }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -64,6 +65,7 @@ const TableBodyActionColumn: FC<
               classes.tableBody.actionColumn.icons.left,
               actionBtns?.left.styles
             ])}
+            disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.left?.onClick(row.actionData)}
           />
         )}
@@ -84,6 +86,7 @@ const TableBodyActionColumn: FC<
               classes.tableBody.actionColumn.icons.right,
               actionBtns?.right.styles
             ])}
+            disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.right?.onClick(row.actionData)}
           />
         )}
