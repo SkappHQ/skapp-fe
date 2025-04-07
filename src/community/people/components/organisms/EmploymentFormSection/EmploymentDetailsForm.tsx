@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
@@ -10,6 +11,7 @@ import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
+import ReinviteConfirmationModal from "../../molecules/ReinviteConfirmationModal/ReinviteConfirmationModal";
 import CareerProgressDetailsSection from "./SubSections/CareerProgressDetailsSection";
 import EmploymentDetailsSection from "./SubSections/EmploymentDetailsSection";
 import IdentificationDetailsSection from "./SubSections/IdentificationDetailsSection";
@@ -39,15 +41,23 @@ const EmploymentDetailsForm = ({
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    isReinviteConfirmationModalOpen,
+    isCancelModalConfirmButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setIsReinviteConfirmationModalOpen,
+    setEmploymentDetails,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
+
+  const translateText = useTranslator("peopleModule");
 
   const { handleNext } = useStepper();
 
@@ -55,6 +65,16 @@ const EmploymentDetailsForm = ({
     employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = async () => {
+    if (
+      employee?.employment?.employmentDetails?.email !==
+        initialEmployee?.employment?.employmentDetails?.email &&
+      !isReinviteConfirmationModalOpen &&
+      !isAddFlow
+    ) {
+      setIsReinviteConfirmationModalOpen(true);
+      return;
+    }
+
     const employmentFormErrors =
       (await employmentDetailsRef?.current?.validateForm()) || {};
     const identificationFormErrors =
@@ -94,6 +114,12 @@ const EmploymentDetailsForm = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -103,6 +129,12 @@ const EmploymentDetailsForm = ({
       onCancel();
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
+
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
 
   return (
     <>
@@ -132,12 +164,34 @@ const EmploymentDetailsForm = ({
         isReadOnly={isReadOnly}
       />
 
+      <ReinviteConfirmationModal
+        onCancel={() => {
+          setIsReinviteConfirmationModalOpen(false);
+
+          setEmploymentDetails({
+            employmentDetails: {
+              ...employee?.employment?.employmentDetails,
+              email: initialEmployee?.employment?.employmentDetails?.email
+            }
+          });
+        }}
+        onClick={onSave}
+        title={translateText([
+          "peoples",
+          "workEmailChangingReinvitationConfirmationModalTitle"
+        ])}
+        description={translateText([
+          "peoples",
+          "workEmailChangingReinvitationConfirmationModalDescription"
+        ])}
+      />
+
       {!isTerminatedEmployee &&
         (isAddFlow ? (
           <AddSectionButtonWrapper onNextClick={onSave} />
         ) : (
           <EditSectionButtonWrapper
-            onCancelClick={onCancel}
+            onCancelClick={handleCancel}
             onSaveClick={onSave}
           />
         ))}

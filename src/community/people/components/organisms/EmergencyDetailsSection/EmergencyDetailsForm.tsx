@@ -18,7 +18,10 @@ interface Props {
   isReadOnly?: boolean;
 }
 
-const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) => {
+const EmergencyDetailsForm = ({
+  isAddFlow = false,
+  isReadOnly = false
+}: Props) => {
   const primaryContactDetailsRef = useRef<FormMethods | null>(null);
   const secondaryContactDetailsRef = useRef<FormMethods | null>(null);
   const {
@@ -28,12 +31,15 @@ const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) 
     employee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    isCancelModalConfirmButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
@@ -85,6 +91,12 @@ const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) 
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -94,6 +106,12 @@ const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) 
       onCancel();
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
+
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
 
   return (
     <>
@@ -105,7 +123,7 @@ const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) 
       <SecondaryContactDetailsSection
         ref={secondaryContactDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
-        isReadOnly={isReadOnly} 
+        isReadOnly={isReadOnly}
       />
 
       {!isTerminatedEmployee &&
@@ -113,7 +131,7 @@ const EmergencyDetailsForm = ({ isAddFlow = false, isReadOnly = false }: Props) 
           <AddSectionButtonWrapper onNextClick={onSave} />
         ) : (
           <EditSectionButtonWrapper
-            onCancelClick={onCancel}
+            onCancelClick={handleCancel}
             onSaveClick={onSave}
           />
         ))}

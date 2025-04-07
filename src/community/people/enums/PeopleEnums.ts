@@ -27,7 +27,7 @@ export enum BloodGroupTypes {
 export enum MaritalStatusTypes {
   MARRIED = "MARRIED",
   SINGLE = "SINGLE",
-  SEPARATED = "SEPARATED",
+  SEPARATED = "DIVORCED",
   WIDOWED = "WIDOWED"
 }
 
@@ -281,4 +281,15 @@ export enum NationalityEnum {
   VIETNAMESE = "Vietnamese",
   ZAMBIAN = "Zambian",
   ZIMBABWEAN = "Zimbabwean"
+}
+
+export enum RoleModuleEnum {
+  PEOPLE = "people",
+  LEAVE = "leave",
+  ATTENDANCE = "attendance"
+}
+
+export enum RoleNameEnum {
+  ADMIN = "Admin",
+  MANAGER = "Manager"
 }

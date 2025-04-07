@@ -177,6 +177,7 @@
     "passwordChangeSuccessTitle": "Password Changed",
     "passwordChangeSuccessDescription": "Password has been changed successfully.",
     "usedPreviousPasswordError": "Please Choose a password you have not used before.",
+    "currentPasswordError": "Current password is incorrect",
     "uploadLogoLabel": "Upload company logo/brandmark",
     "timezoneLabel": "Timezone",
     "companyDomainLabel": "Company domain",

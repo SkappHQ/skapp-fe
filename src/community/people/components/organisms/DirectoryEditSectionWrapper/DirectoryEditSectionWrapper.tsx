@@ -5,6 +5,7 @@ import { useGetEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 
+import CancelChangesModal from "../../molecules/CancelChangesModal/CancelChangesModal";
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
 import EditAllInfoSkeleton from "../../molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
@@ -26,11 +27,14 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
     isUnsavedChangesModalOpen,
     currentStep,
     nextStep,
+    isCancelChangesModalOpen,
     setIsUnsavedChangesModalOpen,
     setCurrentStep,
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked,
-    setEmployee
+    setEmployee,
+    setIsCancelModalConfirmButtonClicked,
+    setIsCancelChangesModalOpen
   } = usePeopleStore((state) => state);
 
   useEffect(() => {
@@ -77,6 +81,15 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
         }}
         onSave={() => {
           setIsUnsavedModalSaveButtonClicked(true);
+        }}
+      />
+      <CancelChangesModal
+        isOpen={isCancelChangesModalOpen}
+        onCancel={() => {
+          setIsCancelChangesModalOpen(false);
+        }}
+        onConfirm={() => {
+          setIsCancelModalConfirmButtonClicked(true);
         }}
       />
       <RouteChangeAreYouSureModal />

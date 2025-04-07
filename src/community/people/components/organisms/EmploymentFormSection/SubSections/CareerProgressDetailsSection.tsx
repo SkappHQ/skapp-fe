@@ -185,7 +185,11 @@ const CareerProgressDetailsSection = ({
     setFieldValue,
     setFieldError,
     handleSubmit
-  } = useCareerProgressionFormHandler({ formik, isManager: isReadOnly, isProfileView });
+  } = useCareerProgressionFormHandler({
+    formik,
+    isManager: isReadOnly,
+    isProfileView
+  });
 
   return (
     <PeopleFormSectionWrapper

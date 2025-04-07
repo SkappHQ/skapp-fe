@@ -12,12 +12,19 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
-import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { AllowedGrantableRolesType } from "~community/configurations/types/UserRolesTypes";
+import { useHasSupervisorRoles } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
-import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
+import {
+  AccountStatusTypes,
+  Role,
+  RoleModuleEnum,
+  RoleNameEnum
+} from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
+import { L2SystemPermissionsType } from "~community/people/types/PeopleTypes";
 import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils/useHandlePeopleEdit";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 
@@ -49,6 +56,7 @@ const SystemPermissionFormSection = ({
     "systemPermissions"
   );
   const commonText = useTranslator("peopleModule", "addResource", "commonText");
+  const roleTranslateText = useTranslator("peopleModule", "roleLimitation");
 
   const [openModal, setOpenModal] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
@@ -58,18 +66,22 @@ const SystemPermissionFormSection = ({
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    isCancelModalConfirmButtonClicked,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked,
-    setCurrentStep
+    setCurrentStep,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
 
-  const { data: supervisedData } = useGetSupervisedByMe(
+  const { data: supervisedData } = useHasSupervisorRoles(
     Number(employee.common?.employeeId)
   );
+
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { setToastMessage } = useToast();
 
@@ -77,7 +89,8 @@ const SystemPermissionFormSection = ({
     permissions,
     grantablePermission,
     handleRoleDropdown,
-    handleSuperAdminToggle
+    handleSuperAdminToggle,
+    roleLimitMapping
   } = useSystemPermissionFormHandlers();
 
   const {
@@ -92,6 +105,48 @@ const SystemPermissionFormSection = ({
     employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = () => {
+    if (!employee.systemPermissions?.isSuperAdmin) {
+      const rolesToAssign = {
+        peopleRole: employee?.systemPermissions?.peopleRole,
+        leaveRole: employee?.systemPermissions?.leaveRole,
+        attendanceRole: employee?.systemPermissions?.attendanceRole,
+        esignRole: employee?.systemPermissions?.esignRole
+      };
+
+      const errorsToShow = [];
+
+      for (const [roleKey, roleValue] of Object.entries(rolesToAssign)) {
+        const roleData =
+          roleLimitMapping[roleKey as keyof L2SystemPermissionsType]?.[
+            roleValue as Role
+          ];
+        if (roleData?.limitExceeded) {
+          errorsToShow.push(roleData);
+        }
+      }
+
+      if (errorsToShow.length > 1) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleTranslateText(["userRoleLimitationTitle"]),
+          description: roleTranslateText(["userRoleLimitationDescription"]),
+          isIcon: true
+        });
+      } else if (errorsToShow.length === 1) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.ERROR,
+          title: roleTranslateText([errorsToShow[0]?.title]),
+          description: roleTranslateText([errorsToShow[0]?.description]),
+          isIcon: true
+        });
+      }
+
+      if (errorsToShow.length > 0) {
+        return;
+      }
+    }
     if (
       employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
       (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
@@ -99,7 +154,7 @@ const SystemPermissionFormSection = ({
     ) {
       if (supervisedData?.isPrimaryManager)
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData?.isTeamSuperviso)
+      else if (supervisedData?.isTeamSupervisor)
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
       setOpenModal(true);
@@ -131,6 +186,12 @@ const SystemPermissionFormSection = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -140,6 +201,21 @@ const SystemPermissionFormSection = ({
       onCancel();
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
+
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
+
+  const isRoleMissing = (
+    category: keyof AllowedGrantableRolesType,
+    roleLabel: string
+  ) => {
+    return !grantablePermission?.[category]?.some(
+      (role) => role.label === roleLabel
+    );
+  };
 
   return (
     <PeopleFormSectionWrapper
@@ -159,63 +235,73 @@ const SystemPermissionFormSection = ({
         />
 
         <Stack sx={classes.dropdownContainer}>
-          <DropdownList
-            inputName={"peopleRole"}
-            label={translateText(["people"])}
-            itemList={grantablePermission?.people || []}
-            value={permissions.peopleRole}
-            componentStyle={classes.dropdownListComponentStyles}
-            checkSelected
-            onChange={(event) =>
-              handleRoleDropdown("peopleRole", event.target.value as Role)
-            }
-            isDisabled={
-              isProfileView ||
-              permissions.isSuperAdmin ||
-              isInputsDisabled ||
-              isReadOnly
-            }
-          />
+          {!isRoleMissing(RoleModuleEnum.PEOPLE, RoleNameEnum.ADMIN) &&
+            !isRoleMissing(RoleModuleEnum.PEOPLE, RoleNameEnum.MANAGER) && (
+              <DropdownList
+                inputName={"peopleRole"}
+                label={translateText(["people"])}
+                itemList={grantablePermission?.people || []}
+                value={permissions.peopleRole}
+                componentStyle={classes.dropdownListComponentStyles}
+                checkSelected
+                onChange={(event) =>
+                  handleRoleDropdown("peopleRole", event.target.value as Role)
+                }
+                isDisabled={
+                  isProfileView ||
+                  permissions.isSuperAdmin ||
+                  isInputsDisabled ||
+                  isReadOnly
+                }
+              />
+            )}
 
-          {isLeaveModuleEnabled && (
-            <DropdownList
-              inputName={"leaveRole"}
-              label={translateText(["leave"])}
-              itemList={grantablePermission?.leave || []}
-              value={permissions.leaveRole}
-              checkSelected
-              componentStyle={classes.dropdownListComponentStyles}
-              onChange={(event) =>
-                handleRoleDropdown("leaveRole", event.target.value as Role)
-              }
-              isDisabled={
-                isProfileView ||
-                permissions.isSuperAdmin ||
-                isInputsDisabled ||
-                isReadOnly
-              }
-            />
-          )}
+          {isLeaveModuleEnabled &&
+            !isRoleMissing(RoleModuleEnum.LEAVE, RoleNameEnum.ADMIN) &&
+            !isRoleMissing(RoleModuleEnum.LEAVE, RoleNameEnum.MANAGER) && (
+              <DropdownList
+                inputName={"leaveRole"}
+                label={translateText(["leave"])}
+                itemList={grantablePermission?.leave || []}
+                value={permissions.leaveRole}
+                checkSelected
+                componentStyle={classes.dropdownListComponentStyles}
+                onChange={(event) =>
+                  handleRoleDropdown("leaveRole", event.target.value as Role)
+                }
+                isDisabled={
+                  isProfileView ||
+                  permissions.isSuperAdmin ||
+                  isInputsDisabled ||
+                  isReadOnly
+                }
+              />
+            )}
 
-          {isAttendanceModuleEnabled && (
-            <DropdownList
-              inputName={"attendanceRole"}
-              label={translateText(["attendance"])}
-              itemList={grantablePermission?.attendance || []}
-              value={permissions.attendanceRole}
-              componentStyle={classes.dropdownListComponentStyles}
-              checkSelected
-              onChange={(event) =>
-                handleRoleDropdown("attendanceRole", event.target.value as Role)
-              }
-              isDisabled={
-                isProfileView ||
-                permissions.isSuperAdmin ||
-                isInputsDisabled ||
-                isReadOnly
-              }
-            />
-          )}
+          {isAttendanceModuleEnabled &&
+            !isRoleMissing(RoleModuleEnum.ATTENDANCE, RoleNameEnum.ADMIN) &&
+            !isRoleMissing(RoleModuleEnum.ATTENDANCE, RoleNameEnum.MANAGER) && (
+              <DropdownList
+                inputName={"attendanceRole"}
+                label={translateText(["attendance"])}
+                itemList={grantablePermission?.attendance || []}
+                value={permissions.attendanceRole}
+                componentStyle={classes.dropdownListComponentStyles}
+                checkSelected
+                onChange={(event) =>
+                  handleRoleDropdown(
+                    "attendanceRole",
+                    event.target.value as Role
+                  )
+                }
+                isDisabled={
+                  isProfileView ||
+                  permissions.isSuperAdmin ||
+                  isInputsDisabled ||
+                  isReadOnly
+                }
+              />
+            )}
 
           {isEsignatureModuleEnabled && (
             <DropdownList
@@ -247,7 +333,7 @@ const SystemPermissionFormSection = ({
             <AddSectionButtonWrapper onNextClick={onSave} />
           ) : (
             <EditSectionButtonWrapper
-              onCancelClick={onCancel}
+              onCancelClick={handleCancel}
               onSaveClick={onSave}
             />
           ))}

@@ -235,4 +235,10 @@ export interface PeopleSliceTypes
     | "setSystemPermissions"
     | "setCommonDetails"
     | "resetPeopleSlice"
+    | "entitlementDetails"
+    | "setEntitlementDetails"
+    | "isCancelChangesModalOpen"
+    | "isCancelModalConfirmButtonClicked"
+    | "setIsCancelChangesModalOpen"
+    | "setIsCancelModalConfirmButtonClicked"
   > {}
