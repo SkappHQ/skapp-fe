@@ -15,7 +15,12 @@ import { useGetSuperAdminCount } from "~community/configurations/api/userRolesAp
 import { AllowedGrantableRolesType } from "~community/configurations/types/UserRolesTypes";
 import { useHasSupervisorRoles } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
-import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
+import {
+  AccountStatusTypes,
+  Role,
+  RoleModuleEnum,
+  RoleNameEnum
+} from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
 import useSystemPermissionFormHandlers from "~community/people/hooks/useSystemPermissionFormHandlers";
 import { usePeopleStore } from "~community/people/store/store";
@@ -230,8 +235,8 @@ const SystemPermissionFormSection = ({
         />
 
         <Stack sx={classes.dropdownContainer}>
-          {!isRoleMissing("people", "Admin") &&
-            !isRoleMissing("people", "Manager") && (
+          {!isRoleMissing(RoleModuleEnum.PEOPLE, RoleNameEnum.ADMIN) &&
+            !isRoleMissing(RoleModuleEnum.PEOPLE, RoleNameEnum.MANAGER) && (
               <DropdownList
                 inputName={"peopleRole"}
                 label={translateText(["people"])}
@@ -252,8 +257,8 @@ const SystemPermissionFormSection = ({
             )}
 
           {isLeaveModuleEnabled &&
-            !isRoleMissing("leave", "Admin") &&
-            !isRoleMissing("leave", "Manager") && (
+            !isRoleMissing(RoleModuleEnum.LEAVE, RoleNameEnum.ADMIN) &&
+            !isRoleMissing(RoleModuleEnum.LEAVE, RoleNameEnum.MANAGER) && (
               <DropdownList
                 inputName={"leaveRole"}
                 label={translateText(["leave"])}
@@ -274,8 +279,8 @@ const SystemPermissionFormSection = ({
             )}
 
           {isAttendanceModuleEnabled &&
-            !isRoleMissing("attendance", "Admin") &&
-            !isRoleMissing("attendance", "Manager") && (
+            !isRoleMissing(RoleModuleEnum.ATTENDANCE, RoleNameEnum.ADMIN) &&
+            !isRoleMissing(RoleModuleEnum.ATTENDANCE, RoleNameEnum.MANAGER) && (
               <DropdownList
                 inputName={"attendanceRole"}
                 label={translateText(["attendance"])}
