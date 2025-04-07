@@ -121,6 +121,9 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
 
   const onError = (): void => {
     setIsHolidayModalOpen(false);
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      stopAllOngoingQuickSetup();
+    }
     setToastMessage({
       title: translateText(["holidayCreateFailTitle"]),
       description: translateText(["holidayCreateFailDes"]),
