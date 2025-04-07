@@ -65,7 +65,6 @@ const useUserBulkValidation = () => {
       user?.joinedDate &&
       dateValidation(user?.joinedDate) &&
       (!user?.primaryManager || isEmailInputValid(user?.primaryManager)) &&
-      (!user?.secondaryManager || isEmailInputValid(user?.secondaryManager)) &&
       (!user?.startDate || dateValidation(user?.startDate)) &&
       (!user?.endDate || dateValidation(user?.endDate)) &&
       user?.passportNo
@@ -78,7 +77,7 @@ const useUserBulkValidation = () => {
 
   const isCsvValid = (userArray: BulkUploadUser[]) => {
     const headerList = Object.keys(userArray?.[0]);
-
+    console.log("headerList", headerList);
     return (
       headerList?.length === USER_BULK_HEADERS?.length &&
       USER_BULK_HEADERS?.every((header) => headerList?.includes(header))

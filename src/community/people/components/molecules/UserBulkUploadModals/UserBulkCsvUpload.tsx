@@ -83,6 +83,11 @@ const UserBulkCsvUpload: FC<Props> = ({
             );
             setBulkUploadUsers(newUserArray);
           } else {
+            console.log(
+              "is csv valid",
+              isCsvValid(results?.data as BulkUploadUser[])
+            );
+            console.log(results?.data);
             setFileError(translateText(["templateError"]));
           }
         }

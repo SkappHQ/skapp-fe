@@ -34,7 +34,6 @@ export const USER_BULK_HEADERS = [
   "joinedDate",
   "teams",
   "primaryManager",
-  "secondaryManager",
   "startDate",
   "endDate",
   "timeZone",
