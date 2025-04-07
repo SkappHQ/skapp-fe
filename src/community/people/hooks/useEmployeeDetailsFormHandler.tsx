@@ -65,7 +65,7 @@ const useEmployeeDetailsFormHandler = ({
     );
   const [secondaryManagerSearchTerm, setSecondaryManagerSearchTerm] =
     useState<string>(
-      employee?.employment?.employmentDetails?.secondarySupervisor
+      employee?.employment?.employmentDetails?.otherSupervisors?.[0]
         ?.firstName as string
     );
 
@@ -216,7 +216,7 @@ const useEmployeeDetailsFormHandler = ({
   ): Promise<void> => {
     await onManagerSearchChange({
       managerType: "primarySupervisor",
-      e,
+      searchTerm: e.target.value.trimStart(),
       setManagerSearchTerm: setPrimaryManagerSearchTerm,
       formik,
       setSupervisor: setEmploymentDetails
@@ -224,11 +224,11 @@ const useEmployeeDetailsFormHandler = ({
   };
 
   const onSecondaryManagerSearchChange = async (
-    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    searchTerm: string
   ): Promise<void> => {
     await onManagerSearchChange({
       managerType: "secondarySupervisor",
-      e,
+      searchTerm,
       setManagerSearchTerm: setSecondaryManagerSearchTerm,
       formik,
       setSupervisor: setEmploymentDetails
@@ -267,14 +267,18 @@ const useEmployeeDetailsFormHandler = ({
       );
     }
     if (
-      employee?.employment?.employmentDetails?.secondarySupervisor?.employeeId
+      employee?.employment?.employmentDetails?.otherSupervisors?.length
     ) {
-      newManagerList = filterByValue(
-        newManagerList,
-        employee?.employment?.employmentDetails?.secondarySupervisor
-          ?.employeeId,
-        "employeeId"
-      );
+      // Filter out all manager IDs from the otherSupervisors array
+      employee?.employment?.employmentDetails?.otherSupervisors.forEach(supervisor => {
+        if (supervisor.employeeId) {
+          newManagerList = filterByValue(
+            newManagerList,
+            supervisor.employeeId,
+            "employeeId"
+          );
+        }
+      });
     }
 
     return newManagerList;
@@ -308,7 +312,7 @@ const useEmployeeDetailsFormHandler = ({
       searchTermSetter: setPrimaryManagerSearchTerm,
       setSupervisor: setEmploymentDetails
     });
-    formik?.values?.secondarySupervisor &&
+    formik?.values?.otherSupervisors &&
       (await onManagerRemove({
         fieldName: "secondarySupervisor",
         formik,
@@ -424,7 +428,7 @@ const useEmployeeDetailsFormHandler = ({
   useEffect(() => {
     const primarySupervisor = formik?.values?.primarySupervisor;
     const hasSecondarySupervisor =
-      formik?.values?.secondarySupervisor?.employeeId;
+      formik?.values?.otherSupervisors?.[0]?.employeeId;
 
     if (!primarySupervisor?.employeeId && hasSecondarySupervisor) {
       onManagerRemove({
@@ -458,7 +462,7 @@ const useEmployeeDetailsFormHandler = ({
       setEmploymentDetails({
         employmentDetails: {
           ...employee?.employment?.employmentDetails,
-          secondarySupervisor: {}
+          otherSupervisors: []
         }
       });
     }

@@ -33,12 +33,12 @@ export const handleManagerSelect = async ({
 };
 export const onManagerSearchChange = async ({
   managerType,
-  e,
+  searchTerm,
   setManagerSearchTerm,
   formik,
   setSupervisor
 }: ManagerSearchType): Promise<void> => {
-  setManagerSearchTerm(e.target.value.trimStart());
+  setManagerSearchTerm(searchTerm);
   await formik.setFieldValue(managerType, {});
   const currentEmploymentDetails = formik.values || {};
 

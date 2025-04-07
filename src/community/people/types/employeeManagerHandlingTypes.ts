@@ -18,7 +18,7 @@ export interface ManagerSelectType {
 
 export interface ManagerSearchType {
   managerType: string;
-  e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>;
+  searchTerm: string;
   setManagerSearchTerm: (searchTerm: string) => void;
   formik: FormikProps<L3EmploymentDetailsType>;
   setSupervisor: (value: L2EmploymentFormDetailsType) => void;
