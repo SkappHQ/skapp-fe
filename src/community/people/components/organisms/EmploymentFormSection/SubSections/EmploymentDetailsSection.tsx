@@ -6,12 +6,15 @@ import { useRouter } from "next/router";
 import {
   MouseEvent,
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState
 } from "react";
 
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import AvatarSearch from "~community/common/components/molecules/AvatarSearch/AvatarSearch";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
@@ -27,7 +30,10 @@ import {
 } from "~community/common/constants/timeConstants";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { MenuTypes } from "~community/common/types/MoleculeTypes";
+import {
+  AvatarPropTypes,
+  MenuTypes
+} from "~community/common/types/MoleculeTypes";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import MultiSelectManagerSearch from "~community/people/components/molecules/MultiSelectManagerSearch/MultiSelectManagerSearch";
@@ -77,20 +83,33 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
     const [filterOpen, setFilterOpen] = useState<boolean>(false);
     const filterBeOpen: boolean = filterOpen && Boolean(filterEl);
+    const boxRef = useRef<HTMLDivElement>(null);
+    const [boxWidth, setBoxWidth] = useState(0);
     const filterId: string | undefined = filterBeOpen
       ? "filter-popper"
       : undefined;
 
-    const [selectedManagers, setSelectedManagers] = useState<number[]>([]);
+    const [selectedManagers, setSelectedManagers] = useState<L4ManagerType[]>(
+      []
+    );
+
+    useEffect(() => {
+      if (boxRef.current) {
+        setBoxWidth(boxRef.current.clientWidth);
+      }
+    }, [filterOpen]);
 
     const router = useRouter();
     const { id } = router.query;
 
     const { isPeopleManager } = useSessionData();
 
-    const { employee, setTeamModalType, setIsTeamModalOpen } = usePeopleStore(
-      (state) => state
-    );
+    const {
+      employee,
+      setTeamModalType,
+      setIsTeamModalOpen,
+      setEmploymentDetails
+    } = usePeopleStore((state) => state);
 
     const handleFilterClose = (): void => {
       setFilterOpen(false);
@@ -189,6 +208,15 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
         formik.resetForm();
       }
     }));
+
+    useEffect(() => {
+      setEmploymentDetails({
+        employmentDetails: {
+          ...employee,
+          otherSupervisors: selectedManagers
+        }
+      });
+    }, [selectedManagers]);
 
     return (
       <PeopleFormSectionWrapper
@@ -396,45 +424,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               size={{ xs: 12, md: 6, xl: 4 }}
               sx={{ display: isEmployee ? "none" : "block" }}
             >
-              {/* <AvatarSearch
-                id="secondary-manager-search"
-                title={translateText(["secondarySupervisor"])}
-                newResourceManager={
-                  employee?.employment?.employmentDetails?.secondarySupervisor
-                }
-                isManagerPopperOpen={isSecondaryManagerPopperOpen}
-                managerSuggestions={secondaryManagerSuggestions}
-                managerSearchTerm={secondaryManagerSearchTerm}
-                handleManagerRemove={handleSecondaryManagerRemove}
-                handleManagerSelect={handleSecondaryManagerSelect}
-                setIsManagerPopperOpen={setIsSecondaryManagerPopperOpen}
-                onManagerSearchChange={onSecondaryManagerSearchChange}
-                errors={errors?.secondarySupervisor ?? ""}
-                inputName={"secondarySupervisor"}
-                isDisabled={
-                  isReadOnly ||
-                  isProfileView ||
-                  Number(
-                    employee?.employment?.employmentDetails?.primarySupervisor
-                      ?.employeeId ?? 0
-                  ) <= 0 ||
-                  isInputsDisabled
-                }
-                isDisabledLabel={
-                  Number(
-                    employee?.employment?.employmentDetails?.primarySupervisor
-                      ?.employeeId ?? 0
-                  ) <= 0 || isInputsDisabled
-                }
-                placeholder={
-                  !isReadOnly && !isProfileView
-                    ? translateText(["selectSecondarySupervisor"])
-                    : ""
-                }
-                needSearchIcon={!isReadOnly && !isProfileView}
-                noSearchResultTexts={translateText(["noSearchResults"])}
-                onKeyDown={handleBackspacePressSecondary}
-              /> */}
               <Stack
                 direction="row"
                 alignItems="center"
@@ -455,52 +444,96 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 </Typography>
               </Stack>
               <Box
+                ref={boxRef}
                 alignItems={"center"}
                 sx={{
                   backgroundColor: theme.palette.grey[100],
                   height: "3rem",
-                  borderRadius: "0.5rem"
+                  borderRadius: "0.5rem",
+                  flexDirection: "row",
+                  display: "flex",
+                  width: "100%"
                 }}
-                justifyContent={"flex-start"}
                 onClick={(event: MouseEvent<HTMLElement>): void => {
                   setFilterEl(event.currentTarget);
                   setFilterOpen((previousOpen) => !previousOpen);
                 }}
               >
-                {employee?.employment?.employmentDetails?.otherSupervisors?.map(
-                  (manager: L4ManagerType) => (
-                    <Box
-                      sx={{ height: "3.125rem", pt: "0.3125rem" }}
-                      key={manager?.employeeId}
-                    >
-                      <AvatarChip
-                        firstName={manager?.firstName ?? ""}
-                        lastName={manager?.lastName ?? ""}
-                        avatarUrl={manager?.authPic}
-                        isResponsiveLayout={false}
-                        isDeleteAvailable={true}
-                        chipStyles={{
-                          backgroundColor: "common.white",
-                          color: "common.black",
-                          height: "2.5rem",
-                          "& .MuiChip-deleteIcon": {
-                            mr: "0.9375rem"
-                          },
-                          "& .MuiChip-label": {
-                            pl: "0.5rem",
-                            ml: "0.25rem",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden !important",
-                            textOverflow: "ellipsis",
-                            maxWidth: "11.25rem"
-                          },
-                          mt: "0rem",
-                          ml: "0.75rem"
-                        }}
-                        isDisabled={isInputsDisabled}
-                      />
-                    </Box>
+                {(
+                  employee?.employment?.employmentDetails?.otherSupervisors ||
+                  []
+                ).length < 3 ? (
+                  employee?.employment?.employmentDetails?.otherSupervisors?.map(
+                    (manager: L4ManagerType) => (
+                      <Box
+                        sx={{ height: "3.125rem", pt: "0.3125rem" }}
+                        key={manager?.employeeId}
+                      >
+                        <AvatarChip
+                          firstName={manager?.firstName ?? ""}
+                          lastName={
+                            employee?.employment?.employmentDetails
+                              ?.otherSupervisors?.length === 1
+                              ? (manager?.lastName ?? "")
+                              : ""
+                          }
+                          avatarUrl={manager?.authPic}
+                          isResponsiveLayout={false}
+                          isDeleteAvailable={true}
+                          chipStyles={{
+                            backgroundColor: "common.white",
+                            color: "common.black",
+                            height: "2.5rem",
+                            "& .MuiChip-deleteIcon": {
+                              mr: "0.9375rem"
+                            },
+                            "& .MuiChip-label": {
+                              pl: "0.5rem",
+                              ml: "0.25rem",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden !important",
+                              textOverflow: "ellipsis",
+                              maxWidth: "11.25rem"
+                            },
+                            mt: "0rem",
+                            ml: "0.75rem"
+                          }}
+                          isDisabled={isInputsDisabled}
+                        />
+                      </Box>
+                    )
                   )
+                ) : (
+                    employee?.employment?.employmentDetails?.otherSupervisors ||
+                    []
+                  ).length === 0 ? (
+                  <Typography
+                    variant="placeholder"
+                    gutterBottom
+                    sx={{
+                      color: theme.palette.grey[400],
+                      ml: "0.5rem",
+                      fontSize: "1rem"
+                    }}
+                  >
+                    Select supervisors
+                  </Typography>
+                ) : (
+                  <AvatarGroup
+                    avatars={
+                      employee?.employment?.employmentDetails?.otherSupervisors
+                        ? employee?.employment?.employmentDetails?.otherSupervisors?.map(
+                            (manager: L4ManagerType) =>
+                              ({
+                                firstName: manager?.firstName,
+                                lastName: manager?.lastName,
+                                image: manager?.authPic
+                              }) as AvatarPropTypes
+                          )
+                        : []
+                    }
+                    max={6}
+                  />
                 )}
               </Box>
               <Popper
@@ -513,7 +546,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 timeout={300}
                 containerStyles={{
                   maxHeight: "20.25rem",
-                  width: "20rem",
+                  width: `${boxWidth}px`,
                   backgroundColor: theme.palette.notifyBadge.contrastText
                 }}
               >
@@ -521,10 +554,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   selectedManagers={selectedManagers}
                   setSelectedManagers={setSelectedManagers}
                   managerSuggestions={secondaryManagerSuggestions}
-                  setManagers={() => {}}
                   onManagerSearchChange={onSecondaryManagerSearchChange}
                   managerSearchTerm={secondaryManagerSearchTerm}
-                  setManagerSearchTerm={() => {}}
                 />
               </Popper>
             </Grid>
