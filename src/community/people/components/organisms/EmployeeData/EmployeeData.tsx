@@ -103,11 +103,16 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   useEffect(() => {
     setSearchTerm("");
     if (isPendingInvitationListOpen) {
+      setEmployeeDataParams(DataFilterEnums.PERMISSION, []);
       setEmployeeDataParams(DataFilterEnums.ACCOUNT_STATUS, [
         EmploymentStatusTypes.PENDING
       ]);
     }
-  }, [isPendingInvitationListOpen, setEmployeeDataParams]);
+  }, [
+    isPendingInvitationListOpen,
+    resetEmployeeDataParams,
+    setEmployeeDataParams
+  ]);
 
   return (
     <Stack>

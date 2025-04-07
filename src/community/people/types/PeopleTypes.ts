@@ -189,3 +189,12 @@ export interface tenureType {
   endDate?: string;
   currentPosition?: boolean;
 }
+
+export interface EntitlementDetailType {
+  year: string;
+  leaveType: string;
+  leaveName: string;
+  numDays: string;
+  effectiveFrom: string;
+  expirationDate: string;
+}

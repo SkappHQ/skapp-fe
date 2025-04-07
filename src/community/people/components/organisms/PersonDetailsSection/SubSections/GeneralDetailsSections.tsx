@@ -48,7 +48,7 @@ import { employeeGeneralDetailsValidation } from "~community/people/utils/people
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
 interface Props {
-  isManager?: boolean;
+  isReadOnly?: boolean;
   isAdmin?: boolean;
   isInputsDisabled?: boolean;
   isAddFlow?: boolean;
@@ -57,7 +57,7 @@ interface Props {
 const GeneralDetailsSection = forwardRef<FormMethods, Props>(
   (
     {
-      isManager = false,
+      isReadOnly = false,
       isAdmin = false,
       isInputsDisabled = false,
       isAddFlow
@@ -215,7 +215,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
           {isAddFlow && (
             <Stack
               direction="column"
-              sx={{ display: isManager || isAdmin ? "none" : "block" }}
+              sx={{ display: isReadOnly || isAdmin ? "none" : "block" }}
             >
               <Stack
                 direction="row"
@@ -290,8 +290,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   flex: 1,
                   mt: "0rem"
                 }}
-                required={!isManager}
-                readOnly={isManager}
+                required={!isReadOnly}
+                readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
                 maxLength={NAME_MAX_CHARACTER_LENGTH}
                 data-testid={generalDetailsSectionTestId.InputFields.firstName}
@@ -307,7 +307,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 inputType="text"
                 value={values.middleName}
                 placeHolder={
-                  !isManager ? translateText(["enterMiddleName"]) : ""
+                  !isReadOnly ? translateText(["enterMiddleName"]) : ""
                 }
                 onChange={handleChange}
                 inputName="middleName"
@@ -316,7 +316,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   flex: 1,
                   mt: "0rem"
                 }}
-                readOnly={isManager}
+                readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
                 maxLength={NAME_MAX_CHARACTER_LENGTH}
                 data-testid={generalDetailsSectionTestId.InputFields.middleName}
@@ -336,8 +336,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   flex: 1,
                   mt: "0rem"
                 }}
-                required={!isManager}
-                readOnly={isManager}
+                required={!isReadOnly}
+                readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
                 maxLength={NAME_MAX_CHARACTER_LENGTH}
                 data-testid={generalDetailsSectionTestId.InputFields.lastName}
@@ -361,7 +361,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 errorFocusOutlineNeeded={false}
                 itemList={GenderList}
                 checkSelected
-                readOnly={isManager}
+                readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
               />
             </Grid>
@@ -389,7 +389,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   }}
                   inputFormat={REVERSE_DATE_FORMAT}
                   disabled={isInputsDisabled}
-                  readOnly={isManager}
+                  readOnly={isReadOnly}
                   selectedDate={selectedDob}
                   setSelectedDate={setSelectedDob}
                 />
@@ -426,13 +426,13 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   mt: "0rem"
                 }}
                 isDisabled={isInputsDisabled}
-                readOnly={isManager}
+                readOnly={isReadOnly}
               />
             </Grid>
 
             <Grid
               size={{ xs: 12, md: 6, xl: 4 }}
-              sx={{ display: isManager ? "none" : "block" }}
+              sx={{ display: isReadOnly ? "none" : "block" }}
             >
               <InputField
                 label={translateText(["nin"])}
@@ -452,7 +452,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
 
             <Grid
               size={{ xs: 12, md: 6, xl: 4 }}
-              sx={{ display: isManager ? "none" : "block" }}
+              sx={{ display: isReadOnly ? "none" : "block" }}
             >
               <InputField
                 label={translateText(["passportNo"])}
@@ -471,7 +471,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
             </Grid>
             <Grid
               size={{ xs: 12, md: 6, xl: 4 }}
-              sx={{ display: isManager ? "none" : "block" }}
+              sx={{ display: isReadOnly ? "none" : "block" }}
             >
               <DropdownList
                 inputName="maritalStatus"
@@ -491,7 +491,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
             </Grid>
             <Grid
               size={{ xs: 12, md: 6, xl: 4 }}
-              sx={{ display: isManager ? "block" : "none" }}
+              sx={{ display: isReadOnly ? "block" : "none" }}
             >
               <DropdownAutocomplete
                 itemList={countryList}
@@ -510,7 +510,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   mt: "0rem"
                 }}
                 isDisabled={isInputsDisabled}
-                readOnly={isManager}
+                readOnly={isReadOnly}
               />
             </Grid>
           </Grid>

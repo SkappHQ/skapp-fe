@@ -12,7 +12,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetSuperAdminCount } from "~community/configurations/api/userRolesApi";
-import { useGetSupervisedByMe } from "~community/people/api/PeopleApi";
+import { useHasSupervisorRoles } from "~community/people/api/PeopleApi";
 import { MAX_SUPERVISOR_LIMIT } from "~community/people/constants/configs";
 import { AccountStatusTypes, Role } from "~community/people/enums/PeopleEnums";
 import useStepper from "~community/people/hooks/useStepper";
@@ -31,12 +31,14 @@ interface Props {
   isProfileView?: boolean;
   isUpdate?: boolean;
   isAddFlow?: boolean;
+  isReadOnly?: boolean;
 }
 
 const SystemPermissionFormSection = ({
   isProfileView,
   isUpdate,
-  isAddFlow
+  isAddFlow,
+  isReadOnly = false
 }: Props) => {
   const classes = styles();
   const environment = useGetEnvironment();
@@ -56,18 +58,22 @@ const SystemPermissionFormSection = ({
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    isCancelModalConfirmButtonClicked,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
     setIsUnsavedModalDiscardButtonClicked,
-    setCurrentStep
+    setCurrentStep,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
 
-  const { data: supervisedData } = useGetSupervisedByMe(
+  const { data: supervisedData } = useHasSupervisorRoles(
     Number(employee.common?.employeeId)
   );
+
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { setToastMessage } = useToast();
 
@@ -97,7 +103,7 @@ const SystemPermissionFormSection = ({
     ) {
       if (supervisedData?.isPrimaryManager)
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData?.isTeamSuperviso)
+      else if (supervisedData?.isTeamSupervisor)
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
 
       setOpenModal(true);
@@ -129,6 +135,12 @@ const SystemPermissionFormSection = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -138,6 +150,12 @@ const SystemPermissionFormSection = ({
       onCancel();
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
+
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
 
   return (
     <PeopleFormSectionWrapper
@@ -149,7 +167,7 @@ const SystemPermissionFormSection = ({
       <>
         <SwitchRow
           label={translateText(["superAdmin"])}
-          disabled={isProfileView || isInputsDisabled}
+          disabled={isProfileView || isInputsDisabled || isReadOnly}
           checked={permissions.isSuperAdmin as boolean}
           onChange={handleSuperAdminToggle}
           wrapperStyles={classes.switchRowWrapper}
@@ -168,7 +186,10 @@ const SystemPermissionFormSection = ({
               handleRoleDropdown("peopleRole", event.target.value as Role)
             }
             isDisabled={
-              isProfileView || permissions.isSuperAdmin || isInputsDisabled
+              isProfileView ||
+              permissions.isSuperAdmin ||
+              isInputsDisabled ||
+              isReadOnly
             }
           />
 
@@ -184,7 +205,10 @@ const SystemPermissionFormSection = ({
                 handleRoleDropdown("leaveRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || permissions.isSuperAdmin || isInputsDisabled
+                isProfileView ||
+                permissions.isSuperAdmin ||
+                isInputsDisabled ||
+                isReadOnly
               }
             />
           )}
@@ -201,7 +225,10 @@ const SystemPermissionFormSection = ({
                 handleRoleDropdown("attendanceRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || permissions.isSuperAdmin || isInputsDisabled
+                isProfileView ||
+                permissions.isSuperAdmin ||
+                isInputsDisabled ||
+                isReadOnly
               }
             />
           )}
@@ -218,7 +245,10 @@ const SystemPermissionFormSection = ({
                 handleRoleDropdown("esignRole", event.target.value as Role)
               }
               isDisabled={
-                isProfileView || permissions.isSuperAdmin || isInputsDisabled
+                isProfileView ||
+                permissions.isSuperAdmin ||
+                isInputsDisabled ||
+                isReadOnly
               }
             />
           )}
@@ -233,7 +263,7 @@ const SystemPermissionFormSection = ({
             <AddSectionButtonWrapper onNextClick={onSave} />
           ) : (
             <EditSectionButtonWrapper
-              onCancelClick={onCancel}
+              onCancelClick={handleCancel}
               onSaveClick={onSave}
             />
           ))}

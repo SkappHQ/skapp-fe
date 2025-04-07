@@ -36,9 +36,7 @@ const EntitlementsDetailsForm = (): JSX.Element => {
     "commonText"
   );
 
-  const { employee, employeeEntitlementsDetails } = usePeopleStore(
-    (state) => state
-  );
+  const { employee, entitlementDetails } = usePeopleStore((state) => state);
 
   const [currentYearSuccessFlag, setCurrentYearSuccessFlag] =
     useState<boolean>(false);
@@ -87,7 +85,7 @@ const EntitlementsDetailsForm = (): JSX.Element => {
         isSuccess,
         employeeGeneralDetails,
         employeeEmploymentDetails,
-        employeeEntitlementsDetails,
+        entitlementDetails,
         currentYearMutation,
         currentYearSuccessFlag,
         setCurrentYearSuccessFlag,

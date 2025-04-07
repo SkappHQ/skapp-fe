@@ -14,7 +14,6 @@ import { allowsAlphaNumericWithHyphenAndUnderscore } from "~community/common/reg
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { filterByValue } from "~community/common/utils/commonUtil";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
-import { isValidEmailPattern } from "~community/common/utils/validation";
 import { usePeopleStore } from "~community/people/store/store";
 import { L3EmploymentDetailsType } from "~community/people/types/PeopleTypes";
 import { TeamNamesType } from "~community/people/types/TeamTypes";
@@ -140,10 +139,7 @@ const useEmployeeDetailsFormHandler = ({
           [name]: value
         } as L3EmploymentDetailsType
       });
-    } else if (
-      name === "email" &&
-      (value === "" || isValidEmailPattern(value))
-    ) {
+    } else if (name === "email") {
       await setFieldValue(name, value);
       setFieldError(name, "");
       setEmploymentDetails({

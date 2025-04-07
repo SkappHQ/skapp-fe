@@ -143,8 +143,6 @@ export const getCareerProgressionChanges = (
     return newCareer;
   }
 
-  const changedItems: L3CareerProgressionDetailsType[] = [];
-
   // Create a map of previous career items by ID for quick lookup
   const previousCareerMap = previousCareer.reduce(
     (map, item) => {
@@ -157,67 +155,31 @@ export const getCareerProgressionChanges = (
   );
 
   // Check each new career item for changes
-  newCareer.forEach((newItem) => {
-    if (newItem.progressionId === undefined) return;
+  for (const newItem of newCareer) {
+    if (newItem.progressionId === undefined) continue;
 
     const previousItem = previousCareerMap[newItem.progressionId];
-    if (!previousItem) return;
-
-    // Create an object to hold changes for this item
-    let hasChanges = false;
-    const changedItem: L3CareerProgressionDetailsType = {
-      progressionId: newItem.progressionId
-    };
+    if (!previousItem) continue;
 
     // Check each field for changes
     if (
       isFieldDifferentAndValid(
         newItem.employmentType,
         previousItem.employmentType
-      )
-    ) {
-      changedItem.employmentType = newItem.employmentType;
-      hasChanges = true;
-    }
-
-    if (
-      isFieldDifferentAndValid(newItem.jobFamilyId, previousItem.jobFamilyId)
-    ) {
-      changedItem.jobFamilyId = newItem.jobFamilyId;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newItem.jobTitleId, previousItem.jobTitleId)) {
-      changedItem.jobTitleId = newItem.jobTitleId;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newItem.startDate, previousItem.startDate)) {
-      changedItem.startDate = newItem.startDate;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newItem.endDate, previousItem.endDate)) {
-      changedItem.endDate = newItem.endDate;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
+      isFieldDifferentAndValid(newItem.jobFamilyId, previousItem.jobFamilyId) ||
+      isFieldDifferentAndValid(newItem.jobTitleId, previousItem.jobTitleId) ||
+      isFieldDifferentAndValid(newItem.startDate, previousItem.startDate) ||
+      isFieldDifferentAndValid(newItem.endDate, previousItem.endDate) ||
       isFieldDifferentAndValid(
         newItem.isCurrentEmployment,
         previousItem.isCurrentEmployment
       )
     ) {
-      changedItem.isCurrentEmployment = newItem.isCurrentEmployment;
-      hasChanges = true;
+      return newCareer;
     }
-
-    if (hasChanges) {
-      changedItems.push(changedItem);
-    }
-  });
-
-  return changedItems;
+  }
+  return [];
 };
 
 export const getIdentificationDetailsChanges = (
@@ -271,9 +233,6 @@ export const getPreviousEmploymentChanges = (
   if (newEmployments.length !== previousEmployments.length) {
     return newEmployments;
   }
-
-  const changedEmployments: L3PreviousEmploymentDetailsType[] = [];
-
   // Create a map of previous employments by ID for quick lookup
   const previousEmploymentMap = previousEmployments.reduce(
     (map, employment) => {
@@ -286,66 +245,37 @@ export const getPreviousEmploymentChanges = (
   );
 
   // Check each new employment for changes
-  newEmployments.forEach((newEmployment) => {
-    if (newEmployment.employmentId === undefined) return;
+  for (const newEmployment of newEmployments) {
+    if (newEmployment.employmentId === undefined) continue;
 
     const previousEmployment =
       previousEmploymentMap[newEmployment.employmentId];
 
-    if (!previousEmployment) return;
-
-    let hasChanges = false;
-
-    const changedEmployment: L3PreviousEmploymentDetailsType = {
-      employmentId: newEmployment.employmentId
-    };
+    if (!previousEmployment) continue;
 
     if (
       isFieldDifferentAndValid(
         newEmployment.companyName,
         previousEmployment.companyName
-      )
-    ) {
-      changedEmployment.companyName = newEmployment.companyName;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
       isFieldDifferentAndValid(
         newEmployment.jobTitle,
         previousEmployment.jobTitle
-      )
-    ) {
-      changedEmployment.jobTitle = newEmployment.jobTitle;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
       isFieldDifferentAndValid(
         newEmployment.startDate,
         previousEmployment.startDate
-      )
-    ) {
-      changedEmployment.startDate = newEmployment.startDate;
-      hasChanges = true;
-    }
-
-    if (
+      ) ||
       isFieldDifferentAndValid(
         newEmployment.endDate,
         previousEmployment.endDate
       )
     ) {
-      changedEmployment.endDate = newEmployment.endDate;
-      hasChanges = true;
+      return newEmployments;
     }
+  }
 
-    if (hasChanges) {
-      changedEmployments.push(changedEmployment);
-    }
-  });
-
-  return changedEmployments;
+  return [];
 };
 
 export const getVisaDetailsChanges = (
@@ -358,8 +288,6 @@ export const getVisaDetailsChanges = (
     return newVisas;
   }
 
-  const changedVisas: L3VisaDetailsType[] = [];
-
   const previousVisaMap = previousVisas.reduce(
     (map, visa) => {
       if (visa.visaId !== undefined) {
@@ -370,48 +298,26 @@ export const getVisaDetailsChanges = (
     {} as Record<number, L3VisaDetailsType>
   );
 
-  newVisas.forEach((newVisa) => {
-    if (newVisa.visaId === undefined) return;
+  for (const newVisa of newVisas) {
+    if (newVisa.visaId === undefined) continue;
 
     const previousVisa = previousVisaMap[newVisa.visaId];
-    if (!previousVisa) return;
-
-    let hasChanges = false;
-    const changedVisa: L3VisaDetailsType = {
-      visaId: newVisa.visaId
-    };
-
-    if (isFieldDifferentAndValid(newVisa.visaType, previousVisa.visaType)) {
-      changedVisa.visaType = newVisa.visaType;
-      hasChanges = true;
-    }
+    if (!previousVisa) continue;
 
     if (
+      isFieldDifferentAndValid(newVisa.visaType, previousVisa.visaType) ||
       isFieldDifferentAndValid(
         newVisa.issuingCountry,
         previousVisa.issuingCountry
-      )
+      ) ||
+      isFieldDifferentAndValid(newVisa.issuedDate, previousVisa.issuedDate) ||
+      isFieldDifferentAndValid(newVisa.expiryDate, previousVisa.expiryDate)
     ) {
-      changedVisa.issuingCountry = newVisa.issuingCountry;
-      hasChanges = true;
+      return newVisas;
     }
+  }
 
-    if (isFieldDifferentAndValid(newVisa.issuedDate, previousVisa.issuedDate)) {
-      changedVisa.issuedDate = newVisa.issuedDate;
-      hasChanges = true;
-    }
-
-    if (isFieldDifferentAndValid(newVisa.expiryDate, previousVisa.expiryDate)) {
-      changedVisa.expiryDate = newVisa.expiryDate;
-      hasChanges = true;
-    }
-
-    if (hasChanges) {
-      changedVisas.push(changedVisa);
-    }
-  });
-
-  return changedVisas;
+  return [];
 };
 
 export const getEmploymentDetailsChanges = (

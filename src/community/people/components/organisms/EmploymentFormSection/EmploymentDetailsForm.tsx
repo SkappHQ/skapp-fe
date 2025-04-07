@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 import { scrollToFirstError } from "~community/common/utils/commonUtil";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
@@ -10,6 +11,7 @@ import { useHandlePeopleEdit } from "~community/people/utils/peopleEditFlowUtils
 
 import AddSectionButtonWrapper from "../../molecules/AddSectionButtonWrapper/AddSectionButtonWrapper";
 import EditSectionButtonWrapper from "../../molecules/EditSectionButtonWrapper/EditSectionButtonWrapper";
+import ReinviteConfirmationModal from "../../molecules/ReinviteConfirmationModal/ReinviteConfirmationModal";
 import CareerProgressDetailsSection from "./SubSections/CareerProgressDetailsSection";
 import EmploymentDetailsSection from "./SubSections/EmploymentDetailsSection";
 import IdentificationDetailsSection from "./SubSections/IdentificationDetailsSection";
@@ -20,12 +22,14 @@ interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
   isProfileView?: boolean;
+  isReadOnly?: boolean;
 }
 
 const EmploymentDetailsForm = ({
   isAddFlow = false,
   isUpdate = false,
-  isProfileView = false
+  isProfileView = false,
+  isReadOnly = false
 }: Props) => {
   const employmentDetailsRef = useRef<FormMethods | null>(null);
   const identificationDetailsRef = useRef<FormMethods | null>(null);
@@ -37,15 +41,23 @@ const EmploymentDetailsForm = ({
     initialEmployee,
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
+    isReinviteConfirmationModalOpen,
+    isCancelModalConfirmButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setIsReinviteConfirmationModalOpen,
+    setEmploymentDetails,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
+
+  const translateText = useTranslator("peopleModule");
 
   const { handleNext } = useStepper();
 
@@ -53,6 +65,15 @@ const EmploymentDetailsForm = ({
     employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = async () => {
+    if (
+      employee?.employment?.employmentDetails?.email !==
+        initialEmployee?.employment?.employmentDetails?.email &&
+      !isReinviteConfirmationModalOpen
+    ) {
+      setIsReinviteConfirmationModalOpen(true);
+      return;
+    }
+
     const employmentFormErrors =
       (await employmentDetailsRef?.current?.validateForm()) || {};
     const identificationFormErrors =
@@ -92,6 +113,12 @@ const EmploymentDetailsForm = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -102,6 +129,12 @@ const EmploymentDetailsForm = ({
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
 
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
+
   return (
     <>
       <EmploymentDetailsSection
@@ -109,26 +142,55 @@ const EmploymentDetailsForm = ({
         isUpdate={isUpdate}
         isProfileView={isProfileView}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <CareerProgressDetailsSection
         isProfileView={isProfileView}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <IdentificationDetailsSection
         ref={identificationDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <PreviousEmploymentDetailsSection
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
-      <VisaDetailsSection isInputsDisabled={isTerminatedEmployee} />
+      <VisaDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
+      />
+
+      <ReinviteConfirmationModal
+        onCancel={() => {
+          setIsReinviteConfirmationModalOpen(false);
+
+          setEmploymentDetails({
+            employmentDetails: {
+              ...employee?.employment?.employmentDetails,
+              email: initialEmployee?.employment?.employmentDetails?.email
+            }
+          });
+        }}
+        onClick={onSave}
+        title={translateText([
+          "peoples",
+          "workEmailChangingReinvitationConfirmationModalTitle"
+        ])}
+        description={translateText([
+          "peoples",
+          "workEmailChangingReinvitationConfirmationModalDescription"
+        ])}
+      />
 
       {!isTerminatedEmployee &&
         (isAddFlow ? (
           <AddSectionButtonWrapper onNextClick={onSave} />
         ) : (
           <EditSectionButtonWrapper
-            onCancelClick={onCancel}
+            onCancelClick={handleCancel}
             onSaveClick={onSave}
           />
         ))}

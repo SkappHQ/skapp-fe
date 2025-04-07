@@ -45,6 +45,7 @@ const CarryForwardTable: React.FC<Props> = ({
   const handleExportToCsv = () => {
     downloadCarryForwardDataCSV(recordData, leaveTypes);
   };
+
   return (
     <>
       {isRecordLoading || !recordData ? (
@@ -113,7 +114,7 @@ const CarryForwardTable: React.FC<Props> = ({
               }
             />
             <Button
-              buttonStyle={ButtonStyle.OUTLINE}
+              buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
               label={translateTexts(["exportBtnTxt"])}
               endIcon={<Icon name={IconName.DOWNLOAD_ICON} />}
               isFullWidth={false}

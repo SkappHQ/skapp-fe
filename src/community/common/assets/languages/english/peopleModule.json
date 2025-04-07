@@ -420,7 +420,14 @@
     "reInvitenConfirmationModalDescription": "This action will send a new invitation to all selected users, allowing them to complete their first-time login. Are you sure you want to proceed?",
     "confirmAndInviteButtonTitle": "Confirm and Invite",
     "confirmAndInviteCancelButtonTitle": "Cancel",
-    "reinviteButtonTitle": "Reinvite"
+    "reinviteButtonTitle": "Reinvite",
+    "unsavedModalTitle": "Unsaved changes",
+    "unsavedModalDescription": "You have unsaved changes. To proceed, would you like to save or discard them?",
+    "unsavedModalSaveButton": "Save Changes",
+    "unsavedModalDiscardButton": "Discard",
+    "cancelChangesModalDescription": "Are you sure you want to cancel? All unsaved changes will be discarded.",
+    "cancelChangesModalConfirmButton": "Confirm",
+    "cancelChangesModalCancelButton": "Cancel"
   },
 
   "addResource": {

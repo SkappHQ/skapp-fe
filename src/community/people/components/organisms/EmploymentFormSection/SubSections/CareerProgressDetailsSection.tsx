@@ -31,13 +31,13 @@ import JobFamilyModalController from "../../JobFamilyModalController/JobFamilyMo
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 
 interface Props {
-  isManager?: boolean;
+  isReadOnly?: boolean;
   isProfileView?: boolean;
   isInputsDisabled?: boolean;
 }
 
 const CareerProgressDetailsSection = ({
-  isManager = false,
+  isReadOnly = false,
   isProfileView = false,
   isInputsDisabled = false
 }: Props) => {
@@ -185,7 +185,11 @@ const CareerProgressDetailsSection = ({
     setFieldValue,
     setFieldError,
     handleSubmit
-  } = useCareerProgressionFormHandler({ formik, isManager, isProfileView });
+  } = useCareerProgressionFormHandler({
+    formik,
+    isManager: isReadOnly,
+    isProfileView
+  });
 
   return (
     <PeopleFormSectionWrapper
@@ -195,7 +199,7 @@ const CareerProgressDetailsSection = ({
         margin: "0 auto",
         fontFamily: "Poppins, sans-serif",
         display:
-          (isManager || isProfileView) &&
+          (isReadOnly || isProfileView) &&
           employee?.employment?.careerProgression?.length === 0
             ? "none"
             : "block"
@@ -203,7 +207,7 @@ const CareerProgressDetailsSection = ({
       dividerStyles={{
         mt: "0.5rem",
         display:
-          (isManager || isProfileView) &&
+          (isReadOnly || isProfileView) &&
           employee?.employment?.careerProgression?.length === 0
             ? "none"
             : "block"
@@ -218,7 +222,7 @@ const CareerProgressDetailsSection = ({
             mb: "2rem"
           }}
         >
-          {!isManager && !isProfileView && (
+          {!isReadOnly && !isProfileView && (
             <>
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>
                 <DropdownList
@@ -420,7 +424,7 @@ const CareerProgressDetailsSection = ({
           employee?.employment?.careerProgression === null ? null : (
             <PeopleFormTable
               data={formatData(copyOfEmployeeCareerDetails)}
-              actionsNeeded={!isManager && !isProfileView && !isInputsDisabled}
+              actionsNeeded={!isReadOnly && !isProfileView && !isInputsDisabled}
               onEdit={handleEdit}
               onDelete={handleDelete}
               headings={tableHeaders}

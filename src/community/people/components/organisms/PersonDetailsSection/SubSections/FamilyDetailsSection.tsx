@@ -28,9 +28,13 @@ import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormS
 
 interface Props {
   isInputsDisabled?: boolean;
+  isReadOnly?: boolean;
 }
 
-const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
+const FamilyDetailsSection = ({
+  isInputsDisabled,
+  isReadOnly = false
+}: Props) => {
   const translateText = useTranslator(
     "peopleModule",
     "addResource",
@@ -161,6 +165,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             }}
             isDisabled={isInputsDisabled}
             maxLength={NAME_MAX_CHARACTER_LENGTH}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -179,6 +184,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             }}
             isDisabled={isInputsDisabled}
             maxLength={NAME_MAX_CHARACTER_LENGTH}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -197,6 +203,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             errorFocusOutlineNeeded={false}
             itemList={GenderList}
             checkSelected
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -215,6 +222,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             errorFocusOutlineNeeded={false}
             itemList={relationshipList}
             checkSelected
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -235,6 +243,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
             inputFormat={REVERSE_DATE_FORMAT}
             selectedDate={selectedDob}
             setSelectedDate={setSelectedDob}
+            readOnly={isReadOnly}
           />
         </Grid>
 
@@ -254,6 +263,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
                 mt: "0rem"
               }}
               maxLength={NAME_MAX_CHARACTER_LENGTH}
+              readOnly={isReadOnly}
             />
           </Grid>
         )}
@@ -274,7 +284,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
               styles={{
                 mt: disableParentName ? "2rem" : "1rem"
               }}
-              disabled={isInputsDisabled}
+              disabled={isInputsDisabled || isReadOnly}
               type={ButtonTypes.SUBMIT}
             />
           )}
@@ -283,7 +293,7 @@ const FamilyDetailsSection = ({ isInputsDisabled }: Props) => {
         {!employee?.personal?.family?.length ? null : (
           <PeopleFormTable
             data={formatTableData(employee.personal.family)}
-            actionsNeeded={!isInputsDisabled}
+            actionsNeeded={!isInputsDisabled && !isReadOnly}
             onEdit={handleEdit}
             onDelete={handleDelete}
             headings={tableHeaders}

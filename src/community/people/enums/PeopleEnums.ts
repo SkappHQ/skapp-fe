@@ -27,7 +27,7 @@ export enum BloodGroupTypes {
 export enum MaritalStatusTypes {
   MARRIED = "MARRIED",
   SINGLE = "SINGLE",
-  SEPARATED = "SEPARATED",
+  SEPARATED = "DIVORCED",
   WIDOWED = "WIDOWED"
 }
 

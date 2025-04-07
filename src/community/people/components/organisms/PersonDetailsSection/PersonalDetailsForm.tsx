@@ -20,11 +20,13 @@ import SocialMediaDetailsSection from "./SubSections/SocialMediaDetailsSection";
 interface Props {
   isAddFlow?: boolean;
   isUpdate?: boolean;
+  isReadOnly?: boolean;
 }
 
 const PersonalDetailsForm = ({
   isAddFlow = false,
-  isUpdate = false
+  isUpdate = false,
+  isReadOnly = false
 }: Props) => {
   const generalDetailsRef = useRef<FormMethods | null>(null);
   const contactDetailsRef = useRef<FormMethods | null>(null);
@@ -38,12 +40,15 @@ const PersonalDetailsForm = ({
     isUnsavedModalSaveButtonClicked,
     isUnsavedModalDiscardButtonClicked,
     initialEmployee,
+    isCancelModalConfirmButtonClicked,
     setCurrentStep,
     setNextStep,
     setEmployee,
     setIsUnsavedChangesModalOpen,
     setIsUnsavedModalSaveButtonClicked,
-    setIsUnsavedModalDiscardButtonClicked
+    setIsUnsavedModalDiscardButtonClicked,
+    setIsCancelChangesModalOpen,
+    setIsCancelModalConfirmButtonClicked
   } = usePeopleStore((state) => state);
 
   const { handleMutate } = useHandlePeopleEdit();
@@ -108,6 +113,12 @@ const PersonalDetailsForm = ({
     setEmployee(initialEmployee);
     setIsUnsavedChangesModalOpen(false);
     setIsUnsavedModalDiscardButtonClicked(false);
+    setIsCancelChangesModalOpen(false);
+    setIsCancelModalConfirmButtonClicked(false);
+  };
+
+  const handleCancel = () => {
+    setIsCancelChangesModalOpen(true);
   };
 
   useEffect(() => {
@@ -118,6 +129,12 @@ const PersonalDetailsForm = ({
     }
   }, [isUnsavedModalDiscardButtonClicked, isUnsavedModalSaveButtonClicked]);
 
+  useEffect(() => {
+    if (isCancelModalConfirmButtonClicked) {
+      onCancel();
+    }
+  }, [isCancelModalConfirmButtonClicked]);
+
   return (
     <>
       <GeneralDetailsSection
@@ -125,20 +142,30 @@ const PersonalDetailsForm = ({
         isAddFlow={isAddFlow}
         isAdmin={isUpdate}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <ContactDetailsSection
         ref={contactDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
-      <FamilyDetailsSection isInputsDisabled={isTerminatedEmployee} />
-      <EducationalDetailsSection isInputsDisabled={isTerminatedEmployee} />
+      <FamilyDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
+      />
+      <EducationalDetailsSection
+        isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
+      />
       <SocialMediaDetailsSection
         ref={socialMediaDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
       <HealthAndOtherDetailsSection
         ref={healthAndOtherDetailsRef}
         isInputsDisabled={isTerminatedEmployee}
+        isReadOnly={isReadOnly}
       />
 
       {!isTerminatedEmployee &&
@@ -146,7 +173,7 @@ const PersonalDetailsForm = ({
           <AddSectionButtonWrapper onNextClick={onSave} />
         ) : (
           <EditSectionButtonWrapper
-            onCancelClick={onCancel}
+            onCancelClick={handleCancel}
             onSaveClick={onSave}
           />
         ))}

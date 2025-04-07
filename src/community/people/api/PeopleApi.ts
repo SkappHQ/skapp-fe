@@ -660,6 +660,18 @@ export const useGetSupervisedByMe = (
   });
 };
 
+export const useHasSupervisorRoles = (
+  employeeId: number
+): UseQueryResult<any> => {
+  return useQuery({
+    queryKey: [peopleQueryKeys.HAS_SUPERVISOR_ROLES, employeeId],
+    queryFn: async () =>
+      await authFetch.get(peoplesEndpoints.HAS_SUPERVISOR_ROLES(employeeId)),
+    select: (data) => data?.data?.results[0],
+    enabled: !!employeeId
+  });
+};
+
 export const useDeleteUser = (onSuccess: () => void, onError: () => void) => {
   const queryClient = useQueryClient();
 
@@ -732,7 +744,9 @@ export const useEditEmployee = (employeeId: string) => {
   );
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
-  const { setProfilePic } = usePeopleStore((state) => state);
+  const { setProfilePic, setIsReinviteConfirmationModalOpen } = usePeopleStore(
+    (state) => state
+  );
 
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
@@ -743,6 +757,7 @@ export const useEditEmployee = (employeeId: string) => {
       return response.data;
     },
     onSuccess: () => {
+      setIsReinviteConfirmationModalOpen(false);
       setProfilePic(null);
       setToastMessage({
         open: true,

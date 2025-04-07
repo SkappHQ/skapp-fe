@@ -38,6 +38,7 @@ import DragIcon from "~community/common/assets/Icons/DragIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import EditIcon from "~community/common/assets/Icons/EditIcon";
+import EmailIcon from "~community/common/assets/Icons/EmailIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
 import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
@@ -103,8 +104,10 @@ import UnCheckedIcon from "~community/common/assets/Icons/UnCheckedIcon";
 import UndoIcon from "~community/common/assets/Icons/UndoIcon";
 import UpArrowIcon from "~community/common/assets/Icons/UpArrowIcon";
 import UpgradeInfoIcon from "~community/common/assets/Icons/UpgradeInfoIcon";
+import UserIcon from "~community/common/assets/Icons/UserIcon";
 import UserUploadIcon from "~community/common/assets/Icons/UserUploadIcon";
 import ViewIcon from "~community/common/assets/Icons/ViewIcon";
+import WaitingStatusIcon from "~community/common/assets/Icons/WaitingStatusIcon";
 import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
@@ -233,7 +236,10 @@ export const IconMapping: Partial<
   [IconName.SIGNATURE_ICON]: SignatureIcon,
   [IconName.INVITE_ICON]: InviteIcon,
   [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon,
-  [IconName.MINUS_ICON]: MinusIcon
+  [IconName.MINUS_ICON]: MinusIcon,
+  [IconName.USER_ICON]: UserIcon,
+  [IconName.EMAIL_ICON]: EmailIcon,
+  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon
   // Add more icons here as needed
 };
 
