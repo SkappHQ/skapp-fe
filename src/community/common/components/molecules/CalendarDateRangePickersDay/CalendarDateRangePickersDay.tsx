@@ -65,7 +65,14 @@ const CalendarDateRangePickersDay = ({
     }
 
     if (myLeaveRequestForDay) {
-      classNames.push(getLeaveRequestClasses(myLeaveRequestForDay.leaveState));
+      classNames.push(
+        getLeaveRequestClasses({
+          date: day,
+          workingDays,
+          leaveRequests: myLeaveRequestForDay,
+          holidays: holidaysForDay
+        })
+      );
     }
 
     if (isRangePicker) {

@@ -33,6 +33,7 @@ import EditInfoCardSkeleton from "~community/people/components/molecules/EditInf
 import PeopleTimeline from "~community/people/components/molecules/PeopleTimeline/PeopleTimeline";
 import ReinviteConfirmationModal from "~community/people/components/molecules/ReinviteConfirmationModal/ReinviteConfirmationModal";
 import TerminationModalController from "~community/people/components/molecules/TerminationModalController/TerminationModalController";
+import UserDeletionModalController from "~community/people/components/molecules/UserDeletionModalController/UserDeletionModalController";
 import EmergencyDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmergencyDetailsSection/EmergencyDetailsForm";
 import EmploymentDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/EmploymentDetailsSection/EmploymentDetailsForm";
 import PersonalDetailsForm from "~community/people/components/organisms/AddNewResourceFlow/PersonalDetailsSection/PersonalDetailsForm";
@@ -125,6 +126,7 @@ const EditAllInformation: NextPage = () => {
     employeeDataChanges,
     userRoles,
     setEmployeeGeneralDetails,
+    setEmployeeEmploymentDetails,
     resetEmployeeDataChanges,
     setIsReinviteConfirmationModalOpen,
     isReinviteConfirmationModalOpen
@@ -649,7 +651,10 @@ const EditAllInformation: NextPage = () => {
         </Stack>
       </ContentLayout>
       <ReinviteConfirmationModal
-        onClose={() => setIsReinviteConfirmationModalOpen(false)}
+        onCancel={() => {
+          setIsReinviteConfirmationModalOpen(false);
+          setEmployeeEmploymentDetails("workEmail", employee?.email);
+        }}
         onClick={handleSave}
         title={translateText([
           "peoples",
@@ -661,6 +666,7 @@ const EditAllInformation: NextPage = () => {
         ])}
       />
       <TerminationModalController />
+      <UserDeletionModalController />
       {isDiscardChangesModal.isModalOpen && (
         <Modal
           open={isDiscardChangesModal.isModalOpen}

@@ -1,5 +1,5 @@
 import { Box, SxProps, Typography } from "@mui/material";
-import { JSX } from "react";
+import { JSX, ReactNode } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -8,7 +8,8 @@ import { IconName } from "~community/common/types/IconTypes";
 import styles from "./styles";
 
 interface Props {
-  description: string | JSX.Element;
+  customComponent?: ReactNode;
+  description?: string | JSX.Element;
   primaryBtn: {
     label: string;
     onClick: () => void;
@@ -29,17 +30,23 @@ interface Props {
   };
 }
 
-const UserPromptModal = ({ description, primaryBtn, secondaryBtn }: Props) => {
+const UserPromptModal = ({
+  customComponent,
+  description,
+  primaryBtn,
+  secondaryBtn
+}: Props) => {
   const classes = styles();
 
   return (
     <Box component="div">
+      {customComponent}
       <Typography>{description}</Typography>
       <Button
         label={primaryBtn.label}
         styles={{ ...classes.btn, ...primaryBtn.styles } as SxProps}
         buttonStyle={primaryBtn.buttonStyle ?? ButtonStyle.PRIMARY}
-        startIcon={secondaryBtn?.startIcon}
+        startIcon={primaryBtn?.startIcon}
         endIcon={primaryBtn.endIcon}
         disabled={primaryBtn.isDisabled ?? false}
         onClick={primaryBtn.onClick}

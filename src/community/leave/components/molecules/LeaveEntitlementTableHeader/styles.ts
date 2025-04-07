@@ -2,13 +2,16 @@ import { Theme } from "@mui/material/styles";
 
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 
-export const tableHeaderStyles = (theme: Theme) => ({
+const styles = (theme: Theme) => ({
   headerContainer: {
     width: "max-content",
     height: "4.3rem",
+    alignItems: "center",
+    justifyContent: "center",
     background: theme.palette.grey[100],
     borderWidth: "0.063rem 0rem",
     borderStyle: "solid",
+    borderRadius: "0.5rem",
     borderColor: theme.palette.grey[500],
     borderTopStyle: "none",
     position: "relative",
@@ -43,9 +46,25 @@ export const tableHeaderStyles = (theme: Theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
     flex: 1,
-    minWidth: "6.5rem",
-    zIndex: ZIndexEnums.DEFAULT,
-    paddingTop: "1.1rem"
+    boxSizing: "border-box",
+    padding: "0rem 1rem",
+    width: "6.9rem",
+    zIndex: ZIndexEnums.DEFAULT
+  },
+  label: {
+    width: "100%",
+    textAlign: "center",
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
+    whiteSpace: "normal",
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
+    overflow: "hidden",
+    textOverflow: "ellipsis"
   }
 });
+
+export default styles;

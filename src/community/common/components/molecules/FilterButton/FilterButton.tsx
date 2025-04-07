@@ -14,6 +14,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { FilterButtonTypes } from "~community/common/types/FilterButtonType";
+import { pascalCaseFormatter } from "~community/common/utils/commonUtil";
 
 const FilterButton = ({
   id,
@@ -67,7 +68,7 @@ const FilterButton = ({
         {visibleFilters.map((filter) => (
           <Chip
             key={filter.label}
-            label={filter.label}
+            label={pascalCaseFormatter(filter.label)}
             sx={classes.filterItem}
             onDelete={() => filter.handleFilterDelete(filter.label)}
             deleteIcon={

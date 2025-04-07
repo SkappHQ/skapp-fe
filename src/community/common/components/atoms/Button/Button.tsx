@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { JSX, MouseEvent as ReactMouseEvent, useMemo } from "react";
 
+import { BrandingBlueColor } from "~community/common/constants/stringConstants";
 import {
   ButtonSizes,
   ButtonStyle,
@@ -38,6 +39,7 @@ export interface StyledButtonProps {
   onMouseLeave?: ButtonProps["onMouseLeave"];
   isDefaultIconColor?: boolean;
   isStrokeAvailable?: boolean;
+  shouldBlink?: boolean;
 }
 
 const Button = ({
@@ -59,7 +61,8 @@ const Button = ({
   onMouseEnter,
   onMouseLeave,
   isDefaultIconColor = false,
-  isStrokeAvailable = false
+  isStrokeAvailable = false,
+  shouldBlink = false
 }: StyledButtonProps): JSX.Element => {
   const theme = useTheme();
 
@@ -95,6 +98,8 @@ const Button = ({
         return theme.palette.common.black;
       case ButtonStyle.SECONDARY:
         return theme.palette.primary.dark;
+      case ButtonStyle.BLUE_OUTLINED:
+        return BrandingBlueColor.primary.dark;
       case ButtonStyle.ERROR:
         return theme.palette.text.error;
       default:
@@ -131,6 +136,7 @@ const Button = ({
       isdefaulticoncolor={isDefaultIconColor.toString()}
       isstrokeavailable={isStrokeAvailable.toString()}
       width={isFullWidth ? "100%" : "max-content"}
+      shouldblink={shouldBlink}
       startIcon={
         startIcon && typeof startIcon === "object" && "type" in startIcon ? (
           startIcon

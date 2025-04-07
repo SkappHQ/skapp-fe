@@ -77,6 +77,10 @@ const styles = (theme: Theme) => ({
       transition: "100ms",
       height: "79px",
       gap: "0.5rem",
+      "&:hover": {
+        cursor: "pointer",
+        background: theme.palette.grey.A200
+      },
       ...tableRowStyles
     }) as const,
   tableHeaderCheckboxCellStyles: (tableHeaderCellStyles?: SxProps) =>
@@ -109,6 +113,9 @@ const styles = (theme: Theme) => ({
   tableCheckboxStyles: (tableCheckboxStyles?: SxProps) =>
     ({
       color: theme.palette.primary.main,
+      "&.Mui-checked": {
+        color: "primary.main"
+      },
       ...tableCheckboxStyles
     }) as const,
   tableHeaderCellStyles: (tableHeaderCellStyles?: SxProps) =>

@@ -65,10 +65,10 @@ const LeaveEntitlementTableRow: FC<Props> = ({
           : "-";
 
         return (
-          <Box key={index} sx={styles.cell}>
-            <Typography sx={styles.holidayText}>
-              {totalDaysAllocated}
-            </Typography>
+          <Box key={index} sx={styles.rowContainer}>
+            <Box sx={styles.headerCell}>
+              <Typography sx={styles.label}>{totalDaysAllocated}</Typography>
+            </Box>
           </Box>
         );
       })}

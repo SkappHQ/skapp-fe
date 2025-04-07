@@ -5,13 +5,14 @@ import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import MenuItem from "~community/common/components/atoms/MenuItem/MenuItem";
 import Popper from "~community/common/components/molecules/Popper/Popper";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import {
+  ButtonSizes,
+  ButtonStyle
+} from "~community/common/enums/ComponentEnums";
 import { StyleProps } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
-
-import styles from "./styles";
 
 type Props<T> = {
   title: string;
@@ -21,9 +22,9 @@ type Props<T> = {
   selectedItem: T;
   displayKey?: keyof T;
   dropdownBtnStyles?: StyleProps;
-  textStyles?: StyleProps;
   wrapperStyles?: StyleProps;
   position?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
+  buttonSize?: ButtonSizes;
 };
 
 const Dropdown = <T extends string | { [key: string]: any }>({
@@ -34,12 +35,10 @@ const Dropdown = <T extends string | { [key: string]: any }>({
   selectedItem,
   displayKey,
   dropdownBtnStyles,
-  textStyles,
   wrapperStyles,
-  position = "bottom-start"
+  position = "bottom-start",
+  buttonSize = ButtonSizes.MEDIUM
 }: Props<T>) => {
-  const classes = styles();
-
   const [popperOpen, setPopperOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -64,14 +63,12 @@ const Dropdown = <T extends string | { [key: string]: any }>({
   };
 
   return (
-    <Box sx={mergeSx([classes.wrapper, wrapperStyles])}>
+    <Box sx={mergeSx([{ width: "100%" }, wrapperStyles])}>
       <Button
         label={title}
-        buttonStyle={ButtonStyle.TERTIARY}
-        styles={{
-          ...classes.dropdownBtn,
-          ...dropdownBtnStyles
-        }}
+        buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+        size={buttonSize}
+        styles={dropdownBtnStyles}
         endIcon={
           !disabled ? <Icon name={IconName.DROPDOWN_ARROW_ICON} /> : null
         }

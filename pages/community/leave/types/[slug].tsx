@@ -13,6 +13,7 @@ import {
   LeaveTypeModalEnums
 } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const LeaveType: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveTypes");
@@ -26,7 +27,17 @@ const LeaveType: NextPage = () => {
     setLeaveTypeModalType,
     resetEditingLeaveType,
     setPendingNavigation
-  } = useLeaveStore((state) => state);
+  } = useLeaveStore((state) => ({
+    isLeaveTypeFormDirty: state.isLeaveTypeFormDirty,
+    isLeaveTypeModalOpen: state.isLeaveTypeModalOpen,
+    setLeaveTypeModalType: state.setLeaveTypeModalType,
+    resetEditingLeaveType: state.resetEditingLeaveType,
+    setPendingNavigation: state.setPendingNavigation
+  }));
+
+  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   useEffect(() => {
     const handleRouteChangeStart = (url: string) => {
@@ -54,6 +65,11 @@ const LeaveType: NextPage = () => {
     };
   }, [isLeaveTypeFormDirty, isLeaveTypeModalOpen]);
 
+  const handleBackBtnClick = () => {
+    stopAllOngoingQuickSetup();
+    router.push(ROUTES.LEAVE.LEAVE_TYPES);
+  };
+
   return (
     <>
       <ContentLayout
@@ -65,7 +81,7 @@ const LeaveType: NextPage = () => {
         pageHead={translateText(["pageHead"])}
         isDividerVisible
         isBackButtonVisible
-        onBackClick={() => router.push(ROUTES.LEAVE.LEAVE_TYPES)}
+        onBackClick={handleBackBtnClick}
         customRightContent={
           slug === LeaveTypeFormTypes.EDIT ? (
             <LeaveTypeActivationToggleButton />

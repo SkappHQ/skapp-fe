@@ -11,19 +11,22 @@ const ROUTES = {
     VERIFY: "/verify/email",
     VERIFY_SUCCESS: "/verify/success",
     VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/reset-password",
-    FORGET_PASSWORD: "/forget-password"
+    FORGET_PASSWORD: "/forget-password",
+    SYSTEM_UPDATE: "/system-update"
   },
   ORGANIZATION: {
     SETUP: "/setup-organization",
     MODULE_SELECTION: "/module-selection"
   },
   NOTIFICATIONS: "/notifications",
+  INTEGRATIONS: "/integrations",
   SETTINGS: {
     BASE: "/settings",
     BILLING: "/settings/billing",
     ACCOUNT: "/settings/account",
     MODULES: "/settings/modules",
-    INTEGRATIONS: "/settings/integrations"
+    INTEGRATIONS: "/settings/integrations",
+    PAYMENT: "/payment"
   },
   TIMESHEET: {
     BASE: "/timesheet",
@@ -58,7 +61,10 @@ const ROUTES = {
     ADD_NEW_RESOURCE: "/people/directory/add-new-resource",
     EDIT_ALL_INFORMATION: (id: any) =>
       `/people/directory/edit-all-information/${id}`,
-    PENDING: "/people/directory/pending"
+    PENDING: "/people/directory/pending",
+    USER_ACCOUNT: "/user-account",
+    EDIT: (id: any) => `/people/directory/edit/${id}`,
+    ADD: "/people/directory/add"
   },
   CONFIGURATIONS: {
     BASE: "/configurations",
@@ -85,8 +91,14 @@ const ROUTES = {
     SENT: "/sign/sent",
     FOLDERS: "/sign/folders",
     CONTACTS: "/sign/contacts",
-    CREATE_DOCUMENT: "/sign/create"
-  }
+    CREATE_DOCUMENT: "/sign/create",
+    SIGN: "/sign/sign",
+    REDIRECT: "/sign/redirect",
+    COMPLETE: "/sign/complete"
+  },
+  REMOVE_PEOPLE: "/remove-people",
+  CHANGE_SUPERVISORS: "/change-supervisors",
+  SUBSCRIPTION: "/subscription"
 };
 
 export default ROUTES;

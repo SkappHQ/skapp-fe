@@ -36,7 +36,6 @@ interface Props {
   maxFileSize?: number;
   minFileSize?: number;
   fileName?: string;
-  onDelete?: () => void;
   isZeroFilesErrorRequired?: boolean;
   isDisableColor?: boolean;
   customError?: string;
@@ -80,7 +79,7 @@ const DragAndDropField: FC<Props> = ({
 
   const [, setChipLabel] = useState<string | undefined>("");
 
-  const [validationError, setValidationError] = useState(false);
+  const [validationError, setValidationError] = useState<boolean>(false);
   const [fileUploadErrorsList, setFileUploadErrorsList] = useState<
     Partial<FileRejection>[]
   >([]);
@@ -191,6 +190,7 @@ const DragAndDropField: FC<Props> = ({
       (error: string): string => {
         switch (error) {
           case FileUploadErrorTypes.INVALID_TEXT_OR_CSV_FILE_TYPE_ERROR:
+          case FileUploadErrorTypes.INVALID_IMAGE_TYPE_ERROR:
             return errors.fileTypeError;
           case FileUploadErrorTypes.TOO_MANY_FILES_ERROR:
             return errors.maxFileLengthError;
@@ -230,7 +230,7 @@ const DragAndDropField: FC<Props> = ({
                   <Icon name={IconName.FILE_UPLOAD_ICON} />
                 </Box>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={mergeSx([classes.desTextStyle, descriptionStyles])}
                 >
                   {translateText(["dropFileDescription"])} &nbsp;
@@ -238,17 +238,18 @@ const DragAndDropField: FC<Props> = ({
               </Stack>
               <Stack>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={mergeSx([classes.orText, browseTextStyles])}
                 >
-                  or
+                  or &nbsp;
                   <Typography
                     component="span"
+                    variant="body2"
                     sx={{
                       ...(classes.browseText as CSSProperties),
                       ...browseTextStyles
                     }}
-                  >{` Browse`}</Typography>
+                  >{`Browse`}</Typography>
                 </Typography>
               </Stack>
             </>

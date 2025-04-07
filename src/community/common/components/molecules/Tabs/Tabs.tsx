@@ -19,23 +19,25 @@ const TabsContainer: React.FC<TabsComponentProps> = ({ tabs }) => {
 
   return (
     <Box sx={classes.tabsContainer}>
-      <Box sx={classes.tabsBox}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          TabIndicatorProps={{ sx: classes.indicator }}
-        >
-          {tabs.map((tab, index) => (
-            <Tab
-              sx={classes.tab}
-              key={index}
-              label={tab.label}
-              id={`tab-${index}`}
-              aria-controls={`tabpanel-${index}`}
-            />
-          ))}
-        </Tabs>
-      </Box>
+      {tabs.length > 1 && (
+        <Box sx={classes.tabsBox}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            TabIndicatorProps={{ sx: classes.indicator }}
+          >
+            {tabs.map((tab, index) => (
+              <Tab
+                sx={classes.tab}
+                key={index}
+                label={tab.label}
+                id={`tab-${index}`}
+                aria-controls={`tabpanel-${index}`}
+              />
+            ))}
+          </Tabs>
+        </Box>
+      )}
       {tabs.map((tab, index) => (
         <TabPanel key={index} value={value} index={index}>
           {tab.content}

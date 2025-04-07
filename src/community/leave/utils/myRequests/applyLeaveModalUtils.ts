@@ -13,32 +13,53 @@ import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import {
   HolidayType,
   LeaveAllocationDataTypes,
-  MyLeaveRequestPayloadType,
-  ResourceAvailabilityPayload
+  MyLeaveRequestPayloadType
 } from "~community/leave/types/MyRequests";
-import { HolidayDurationType } from "~community/people/types/HolidayTypes";
+import {
+  Holiday,
+  HolidayDurationType
+} from "~community/people/types/HolidayTypes";
 
-export const getDurationInitialValue = (
-  duration: LeaveDurationTypes
-): LeaveStates => {
-  if (duration === LeaveDurationTypes.HALF_DAY) {
-    return LeaveStates.MORNING;
+export const getDurationInitialValue = ({
+  allowedDurations,
+  disabledOptions
+}: {
+  allowedDurations: LeaveDurationTypes;
+  disabledOptions: DurationSelectorDisabledOptions;
+}): LeaveStates => {
+  if (allowedDurations === LeaveDurationTypes.FULL_DAY) {
+    return disabledOptions.fullDay ? LeaveStates.NONE : LeaveStates.FULL_DAY;
   }
-  return LeaveStates.FULL_DAY;
+
+  if (allowedDurations === LeaveDurationTypes.HALF_DAY) {
+    return disabledOptions.halfDayMorning
+      ? LeaveStates.EVENING
+      : LeaveStates.MORNING;
+  }
+
+  if (allowedDurations === LeaveDurationTypes.HALF_AND_FULL_DAY) {
+    if (!disabledOptions.fullDay) return LeaveStates.FULL_DAY;
+
+    return disabledOptions.halfDayMorning
+      ? LeaveStates.EVENING
+      : LeaveStates.MORNING;
+  }
+
+  return LeaveStates.NONE;
 };
 
 interface GetDurationSelectorDisabledOptionsProps {
   selectedDates: DateTime[];
   duration: LeaveDurationTypes;
   myLeaveRequests: MyLeaveRequestPayloadType[] | undefined;
-  resourceAvailability: ResourceAvailabilityPayload[] | undefined;
+  allHolidays: Holiday[] | undefined;
 }
 
 export const getDurationSelectorDisabledOptions = ({
   selectedDates,
   duration,
   myLeaveRequests,
-  resourceAvailability
+  allHolidays
 }: GetDurationSelectorDisabledOptionsProps): DurationSelectorDisabledOptions => {
   const disabledOptions: DurationSelectorDisabledOptions = {
     fullDay: false,
@@ -63,7 +84,7 @@ export const getDurationSelectorDisabledOptions = ({
 
   const holidays = getHolidaysWithinDateRange({
     selectedDates,
-    resourceAvailability
+    allHolidays
   });
 
   const handleHolidayDuration = (holiday: HolidayType) => {
@@ -108,7 +129,7 @@ export const getDurationSelectorDisabledOptions = ({
 
   if (leaveRequests.length > 0) {
     const leaveOptions =
-      selectedDates.length === 1
+      selectedDates.length === 1 && leaveRequests.length === 1
         ? handleLeaveRequestState(leaveRequests[0])
         : { fullDay: true, halfDayMorning: true, halfDayEvening: true };
 

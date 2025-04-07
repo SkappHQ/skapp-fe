@@ -249,14 +249,69 @@ const nextConfig = {
         destination: "/enterprise/sign/create"
       },
       {
+        source: "/sign/sign",
+        destination: "/enterprise/sign/sign"
+      },
+      {
+        source: "/sign/redirect",
+        destination: "/enterprise/sign/redirect"
+      },
+      {
+        source: "/sign/complete",
+        destination: "/enterprise/sign/complete"
+      },
+      {
         source: "/settings/modules",
         destination: "/enterprise/settings/modules"
       },
       {
+        source: "/integrations",
+        destination: "/enterprise/settings/account"
+      },
+      {
         source: "/settings/integrations",
         destination: "/enterprise/settings/integrations"
+      },
+      {
+        source: "/remove-people",
+        destination: "/enterprise/remove-people"
+      },
+      {
+        source: "/change-supervisors",
+        destination: "/enterprise/change-supervisors"
+      },
+      {
+        source: "/payment",
+        destination: "/enterprise/payment"
+      },
+      {
+        source: "/system-update",
+        destination: "/enterprise/system-update"
+      },
+      {
+        source: "/subscription",
+        destination: "/enterprise/subscription"
+      },
+      {
+        source: "/people/directory/edit/:id",
+        destination: "/community/people/directory/edit/:id"
+      },
+      {
+        source: "/people/directory/add",
+        destination: "/community/people/directory/add"
+      },
+      {
+        source: "/people/:id",
+        destination: "/community/people/:id"
+      },
+      {
+        source: "/user-account",
+        destination: "/community/user-account"
       }
     ];
+  },
+  images: {
+    domains: ["dev-app-storage-bucket.s3.ap-southeast-1.amazonaws.com"]
   },
   eslint: {
     ignoreDuringBuilds: true

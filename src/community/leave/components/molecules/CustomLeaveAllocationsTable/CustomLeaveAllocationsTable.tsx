@@ -11,7 +11,11 @@ import FilterButton from "~community/common/components/molecules/FilterButton/Fi
 import Table from "~community/common/components/molecules/Table/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-import { getAdjacentYearsWithCurrent } from "~community/common/utils/dateTimeUtils";
+import {
+  currentYear,
+  getAdjacentYearsWithCurrent,
+  nextYear
+} from "~community/common/utils/dateTimeUtils";
 import { useGetCustomLeaves } from "~community/leave/api/LeaveApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -295,6 +299,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
     setIsLeaveAllocationModalOpen(true);
   };
 
+  const showEmptyTableButton =
+    selectedYear === currentYear.toString() ||
+    selectedYear === nextYear.toString();
+
   return (
     <Box>
       <Table
@@ -305,6 +313,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
         tableContainerStyles={tableContainerStyles(theme)}
         tableRowStyles={tableRowStyles(theme)}
         currentPage={currentPage}
+        isPaginationEnabled={(customLeaveData?.items?.length ?? 0) > 0}
         onPaginationChange={(_, value) => setCurrentPage(value - 1)}
         totalPages={customLeaveData?.totalPages || 1}
         isLoading={isLoading}
@@ -319,9 +328,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           "emptyCustomLeaveScreen",
           "description"
         ])}
-        emptyScreenButtonText={translateText([
-          "CustomLeaveAllocationsSectionBtn"
-        ])}
+        emptyScreenButtonText={
+          showEmptyTableButton &&
+          translateText(["CustomLeaveAllocationsSectionBtn"])
+        }
         isDataAvailable={
           !!customLeaveData?.items?.length ||
           !!searchTerm ||

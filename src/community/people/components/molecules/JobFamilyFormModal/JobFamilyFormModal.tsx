@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { useFormik } from "formik";
-import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
@@ -11,8 +10,8 @@ import {
   ButtonStyle,
   ButtonTypes
 } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { AdminTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import JobTitleField from "~community/people/components/molecules/JobTitleField/JobTitleField";
 import { JobFamilyActionModalEnums } from "~community/people/enums/JobFamilyEnums";
@@ -22,6 +21,7 @@ import { sortJobTitlesArrayInAscendingOrder } from "~community/people/utils/jobF
 import { handleJobFamilyNameInputChange } from "~community/people/utils/jobFamilyUtils/jobFamilyUtils";
 import { handleJobFamilyCloseModal } from "~community/people/utils/jobFamilyUtils/modalControllerUtils";
 import { addEditJobFamilyValidationSchema } from "~community/people/utils/validation";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   hasDataChanged: boolean;
@@ -31,9 +31,7 @@ interface Props {
 const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
   const translateText = useTranslator("peopleModule", "jobFamily");
 
-  const { data: session } = useSession();
-
-  const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
+  const { isPeopleAdmin } = useSessionData();
 
   const {
     allJobFamilies,
@@ -41,7 +39,19 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
     currentEditingJobFamily,
     setJobFamilyModalType,
     setCurrentEditingJobFamily
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    allJobFamilies: state.allJobFamilies,
+    jobFamilyModalType: state.jobFamilyModalType,
+    currentEditingJobFamily: state.currentEditingJobFamily,
+    setJobFamilyModalType: state.setJobFamilyModalType,
+    setCurrentEditingJobFamily: state.setCurrentEditingJobFamily
+  }));
+
+  const { ongoingQuickSetup, stopAllOngoingQuickSetup } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+    }));
 
   const initialValues: AddJobFamilyFormType = {
     jobFamilyId: currentEditingJobFamily?.jobFamilyId ?? 0,
@@ -108,21 +118,22 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
           }
           required
           maxLength={characterLengths.JOB_FAMILY_LENGTH}
-          isDisabled={!isAdmin}
+          isDisabled={!isPeopleAdmin}
         />
-        <JobTitleField formik={formik} isAdmin={isAdmin} />
-        {!isAdmin ? (
+        <JobTitleField formik={formik} />
+        {!isPeopleAdmin ? (
           <Button
             label={translateText(["goBackBtnText"])}
             styles={{ mt: "1rem" }}
             buttonStyle={ButtonStyle.TERTIARY}
             startIcon={IconName.LEFT_ARROW_ICON}
             onClick={() =>
-              handleJobFamilyCloseModal(
+              handleJobFamilyCloseModal({
                 hasDataChanged,
                 jobFamilyModalType,
-                setJobFamilyModalType
-              )
+                setJobFamilyModalType,
+                stopAllOngoingQuickSetup
+              })
             }
           />
         ) : (
@@ -134,6 +145,11 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
               disabled={isSaveBtnDisabled}
               buttonStyle={ButtonStyle.PRIMARY}
               endIcon={IconName.RIGHT_ARROW_ICON}
+              shouldBlink={
+                values.name && values.jobTitles?.length > 0
+                  ? ongoingQuickSetup.DEFINE_JOB_FAMILIES
+                  : false
+              }
             />
             <Button
               label={translateText(["cancelBtnText"])}
@@ -141,11 +157,12 @@ const JobFamilyFormModal = ({ hasDataChanged, onSubmit }: Props) => {
               buttonStyle={ButtonStyle.TERTIARY}
               endIcon={IconName.CLOSE_ICON}
               onClick={() =>
-                handleJobFamilyCloseModal(
+                handleJobFamilyCloseModal({
                   hasDataChanged,
                   jobFamilyModalType,
-                  setJobFamilyModalType
-                )
+                  setJobFamilyModalType,
+                  stopAllOngoingQuickSetup
+                })
               }
             />
           </>

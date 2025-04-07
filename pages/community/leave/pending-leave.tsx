@@ -13,6 +13,7 @@ const PendingLeave: NextPage = () => {
   const translateText = useTranslator("leaveModule", "pendingRequests");
 
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
+
   const router = useRouter();
 
   return (
@@ -29,7 +30,7 @@ const PendingLeave: NextPage = () => {
             value={searchTerm}
             setSearchTerm={setSearchTerm}
             placeHolder={translateText(["searchBoxPlaceholder"])}
-          />{" "}
+          />
         </Box>
         <PendingLeaveRequestTable searchTerm={searchTerm} />
       </>

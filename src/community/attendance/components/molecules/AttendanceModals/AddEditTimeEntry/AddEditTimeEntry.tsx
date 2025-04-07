@@ -8,7 +8,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useGetPeriodAvailability } from "~community/attendance/api/AttendanceEmployeeApi";
 import {
   TIME_LENGTH,
-  durationSelector
+  durationSelector,
+  holidayDurationSelector
 } from "~community/attendance/constants/constants";
 import { EmployeeTimesheetModalTypes } from "~community/attendance/enums/timesheetEnums";
 import useAddEntry from "~community/attendance/hooks/useAddEntry";
@@ -42,10 +43,16 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { datePatternReverse } from "~community/common/regex/regexPatterns";
 import { IconName } from "~community/common/types/IconTypes";
 import {
+  currentYear,
   formatDateWithOrdinalIndicator,
-  getLocalDate
+  getLocalDate,
+  getMinDateOfYear
 } from "~community/common/utils/dateTimeUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
+import { useGetEmployeeLeaveRequests } from "~community/leave/api/MyRequestApi";
+import { LeaveStatusEnums } from "~community/leave/enums/MyRequestEnums";
+import { useLeaveStore } from "~community/leave/store/store";
+import { useGetAllHolidaysInfinite } from "~community/people/api/HolidayApi";
 
 import styles from "./styles";
 
@@ -66,6 +73,21 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
     useState<TimeAvailabilityType>();
   const classes = styles(theme);
   const { data: timeConfigData } = useDefaultCapacity();
+
+  const { data: allHolidays } = useGetAllHolidaysInfinite(
+    currentYear.toString()
+  );
+
+  const { data: leaveRequests } = useGetEmployeeLeaveRequests();
+
+  const { setLeaveRequestParams } = useLeaveStore((state) => state);
+
+  useEffect(() => {
+    setLeaveRequestParams("status", [
+      LeaveStatusEnums.APPROVED,
+      LeaveStatusEnums.PENDING
+    ]);
+  }, []);
 
   const {
     selectedDailyRecord,
@@ -362,6 +384,9 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
           disableMaskedInput
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          holidays={allHolidays}
+          myLeaveRequests={leaveRequests?.items ?? []}
+          minDate={getMinDateOfYear()}
         />
       )}
       {(employeeTimesheetModalType ===
@@ -375,9 +400,13 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
             </Typography>
             <BasicChip
               label={
-                durationSelector[
-                  selectedDailyRecord?.leaveRequest?.leaveState as string
-                ]
+                selectedDailyRecord?.holiday
+                  ? holidayDurationSelector[
+                      selectedDailyRecord?.holiday?.holidayDuration
+                    ]
+                  : durationSelector[
+                      selectedDailyRecord?.leaveRequest?.leaveState as string
+                    ]
               }
               chipStyles={classes.leaveStateChip}
             />
@@ -393,8 +422,16 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
               {translateText(["leaveTypeLabel"])}
             </Typography>
             <IconChip
-              label={selectedDailyRecord?.leaveRequest?.leaveType?.name}
-              icon={selectedDailyRecord?.leaveRequest?.leaveType?.emojiCode}
+              label={
+                selectedDailyRecord?.holiday
+                  ? selectedDailyRecord?.holiday?.name
+                  : selectedDailyRecord?.leaveRequest?.leaveType?.name
+              }
+              icon={
+                selectedDailyRecord?.holiday
+                  ? "1f3d6-fe0f"
+                  : selectedDailyRecord?.leaveRequest?.leaveType?.emojiCode
+              }
               chipStyles={classes.leaveStateChip}
               isTruncated={false}
             />

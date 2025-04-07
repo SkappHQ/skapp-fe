@@ -76,7 +76,6 @@ export interface MyLeaveRequestPayloadType {
   };
   leaveState: LeaveStates;
   status: LeaveStatusEnums;
-  durationHours: number | null;
   isViewed: boolean | null;
   durationDays: number;
   requestDesc: string;

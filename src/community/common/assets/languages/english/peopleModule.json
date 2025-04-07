@@ -77,6 +77,7 @@
     "holidays": "Holidays",
     "addHoliday": "Add holiday",
     "addHolidays": "Add holidays",
+    "addHolidayBtn": "Add Holiday",
     "addHolidaysBtn": "Add Holidays",
     "tableDateColumnTitle": "DATE",
     "tableHolidayNameColumnTitle": "HOLIDAY NAME",
@@ -94,22 +95,22 @@
     "evening": "Evening",
     "halfDayMorning": "Half Day - Morning",
     "halfDayEvening": "Half Day - Evening",
-    "noHolidayDes": "No holidays have been added yet. Once you add holidays, they will be displayed here.",
+    "noHolidayDesForAdmin": "No holidays have been added yet. Once you add holidays, they will be displayed here.",
+    "noHolidayDesForNonAdmin": "No holidays have been added yet. Once admin add holidays, they will be displayed here.",
     "noHolidaysTitle": "No holidays available for  {{selectedYear}}",
     "downloadCsvDes": "Download the CSV template, fill in the holidays you wish to add to the organization, and upload the completed file.",
     "uploadCsvText": "Upload csv",
     "uploadCsvDesc": "Upload the CSV template with updated employee leave information.",
     "csvTemplateError": "Invalid File. Please use the provided template. ",
-    "noRecordCSVTitle": "No Records Found",
-    "noRecordCSVDes": "No records have been found.Please try again.",
+    "emptyFileError": "No records have been found.Please try again.",
     "deleteSelectedTitle": "Delete Selected",
     "deleteAllTitle": "Delete All",
     "deleteHoliday": "Delete holiday",
     "deleteHolidays": "Delete holidays",
     "holidayDeleteModalTitle": "Confirm Delete",
     "confirmDeletion": "Confirm deletion",
-    "singleHolidayDeleteModalDes": "Are you sure you want to delete the selected holiday? This action will affect any leave requests that overlap with the holiday.",
-    "selectedHolidayDeleteModalDes": "Are you sure you want to delete all the selected holidays? This action will affect any leave requests that overlap with the holidays.",
+    "singleHolidayDeleteModalDes": "Are you sure you want to delete this holiday? This action will affect any leave requests that overlap with this holiday.",
+    "selectedHolidayDeleteModalDes": "Are you sure you want to delete selected holidays? This action will affect any leave requests that overlap with the selected holidays.",
     "allHolidayDeleteModalDes": "Are you sure you want to delete all holidays? This action will affect any leave requests that overlap with the holidays.",
     "singleHolidayDeleteSuccessTitle": "Holiday Deleted",
     "singleHolidayDeleteSuccessDes": "Holiday has been deleted successfully.",
@@ -152,7 +153,6 @@
     "noLeaveFound": "No Active Leave Types",
     "proceed": "Okay",
     "invalidTemplateError": "Invalid template. Please use the provided template to add leave entitlements",
-    "emptyFileError": "Upload the correct template with the data.",
     "leaveRequestCollisionText": "Holiday cannot be deleted, due to involvement of existing leave requests",
     "oneEntryOneFailSummary": "The entry was not successfully uploaded. It encountered an error.",
     "manyEntriesAllFailSummary": "All {{totalEntries}} entries encountered errors.",
@@ -210,6 +210,7 @@
   "termination": {
     "status": "Status",
     "terminateButtonText": "Terminate",
+    "deleteButtonText": "Delete",
     "terminateConfirmationModalTitle": "Confirm termination",
     "terminateConfirmationModalDescription": "Are you sure you want to terminate this user? After termination, the user will no longer be able to log in to the application.",
     "cancelButtonText": "Cancel",
@@ -223,6 +224,21 @@
     "terminateSuccessDescription": "Resource has been terminated successfully.",
     "terminateErrorTitle": "Termination Failed",
     "terminateErrorDescription": "Resource termination has failed."
+  },
+
+  "deletion": {
+    "deleteConfirmationModalTitle": "Are you sure ?",
+    "deleteButtonLabel": "Delete",
+    "cancelButtonLabel": "Cancel",
+    "okayButtonLabel": "Okay",
+    "deleteConfirmationModalDescription": "Are you sure you want to delete this employee? This action will permanently delete all records associated with employee from the system. Do you want to proceed?",
+    "deleteSuccessTitle": "User Deleted",
+    "deleteSuccessDescription": "User profile has been deleted successfully.",
+    "deleteErrorTitle": "Oops! Something went wrong",
+    "deleteErrorDescription": "Failed to delete user profile. Please try again.",
+    "deleteWarningTitle": "Alert",
+    "deleteWarningPrimarySupervisorDescription": "This user is currently assigned as the primary supervisor for an employee. Please assign a new primary supervisor to that employee before proceeding with the deletion.",
+    "deleteWarningTeamSupervisorDescription": "This user is assigned as a supervisor for team/s. Please update their assignments before changing the user role."
   },
 
   "discardChangesModal": {
@@ -404,7 +420,14 @@
     "reInvitenConfirmationModalDescription": "This action will send a new invitation to all selected users, allowing them to complete their first-time login. Are you sure you want to proceed?",
     "confirmAndInviteButtonTitle": "Confirm and Invite",
     "confirmAndInviteCancelButtonTitle": "Cancel",
-    "reinviteButtonTitle": "Reinvite"
+    "reinviteButtonTitle": "Reinvite",
+    "unsavedModalTitle": "Unsaved changes",
+    "unsavedModalDescription": "You have unsaved changes. To proceed, would you like to save or discard them?",
+    "unsavedModalSaveButton": "Save Changes",
+    "unsavedModalDiscardButton": "Discard",
+    "cancelChangesModalDescription": "Are you sure you want to cancel? All unsaved changes will be discarded.",
+    "cancelChangesModalConfirmButton": "Confirm",
+    "cancelChangesModalCancelButton": "Cancel"
   },
 
   "addResource": {
@@ -457,10 +480,18 @@
       "editToastDescription": "Resource updated successfully.",
       "editProfileToastDescription": "Profile updated successfully.",
       "incompleteSuperAdminToastTitle": "Please fill the mandatory fields",
+      "editErrorToastTitle": "Oops! Something went wrong",
+      "editErrorToastDescription": "Failed to update the resource. Please try again.",
       "incompleteSuperAdminToastDescriptionPersonal": "Please fill the mandatory personal details",
       "incompleteSuperAdminToastDescriptionEmergency": "Please fill the mandatory emergency details",
       "incompleteSuperAdminToastDescriptionEmployment": "Please fill the mandatory employment details",
-      "head": "Directory | Skapp"
+      "head": "Directory | Skapp",
+      "defaultErrorMsg": "Something went wrong",
+      "employeeAddSuccessToastTitle": "Resource added",
+      "employeeAddSuccessToastDescription": "Resource has been added successfully.",
+      "employeeAddErrorToastTitle": "Oops! Something went wrong",
+      "employeeAddErrorToastDescription": "Failed to add the resource. Please try again.",
+      "areYouSureModalTitle": "Are you sure?"
     },
     "commonValidations": {
       "lettersAllowed": "Only letters are allowed",
@@ -506,8 +537,8 @@
       "requireEmailError": "Please enter the work email",
       "validEmailError": "Please enter a valid email",
       "head": "Directory | Skapp",
-      "quickAddSuccessTitle": "User Added",
-      "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully.",
+      "quickAddSuccessTitle": "Resource added",
+      "quickAddSuccessDescription": "Resource has been added successfully",
       "workEmailGoogle": "Work email must be a Google account.",
       "country": "Country",
       "selectCountry": "Select country"
@@ -805,7 +836,8 @@
       "demoteUserSupervisingEmployee": "This user is assigned as a supervisor for other employees. Please update their assignments before changing the user role.",
       "maxSupervisorCountReached": "Super Admin Count Reached.",
       "maxSupervisorCountReachedDescription": "The maximum limit of 3 Super Admins has been reached.",
-      "head": "Directory | Skapp"
+      "head": "Directory | Skapp",
+      "alert": "Alert"
     },
     "credentials": {
       "sectionOne": "Skapp Account Credentials",
@@ -987,6 +1019,8 @@
     "eSignSenderLimitationTitle": "Sender Limit Reached",
     "eSignSenderLimitationDescription": "Only one Sender account is allowed under the current plan.",
     "eSignAdminLimitationTitle": "E-sign Admin Limit Reached",
-    "eSignAdminLimitationDescription": "Only one E-sign admin account is allowed."
+    "eSignAdminLimitationDescription": "Only one E-sign admin account is allowed.",
+    "userRoleLimitationTitle": "User Role Limit Reached",
+    "userRoleLimitationDescription": "Failed to change user role. Please try again."
   }
 }

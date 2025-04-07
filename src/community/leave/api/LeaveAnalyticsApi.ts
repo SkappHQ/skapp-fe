@@ -12,8 +12,12 @@ import { LeaveType } from "../types/CustomLeaveAllocationTypes";
 import { leaveAnalyticsEndpoints } from "./utils/ApiEndpoints";
 import { leaveAnalyticsQueryKeys } from "./utils/QueryKeys";
 
-export const useGetEmployeeEntitlements = (employeeId: number) => {
+export const useGetEmployeeEntitlements = (
+  employeeId: number,
+  isEnabled: boolean = true
+) => {
   return useQuery({
+    enabled: isEnabled,
     queryKey:
       leaveAnalyticsQueryKeys.EMPLOYEE_LEAVE_ENTITLEMENTS_FOR_ANALYTICS(
         employeeId
@@ -35,12 +39,14 @@ export const useGetEmployeeLeaveHistory = (
   type: string[],
   page: number,
   size: number,
-  isExport: boolean
+  isExport: boolean,
+  isEnabled: boolean
 ) => {
   const { startDateOfYear: startDate, endDateOfYear: endDate } =
     getStartAndEndOfYear(DATE_FORMAT);
 
   return useQuery({
+    enabled: isEnabled,
     queryKey: leaveAnalyticsQueryKeys.EMPLOYEE_LEAVE_HISTORY(
       employeeId,
       selectedDates,
@@ -80,13 +86,15 @@ export const useGetEmployeeLeaveHistory = (
 
 export const GetLeaveUtilizationChartDetails = (
   employeeId: number,
-  leaveTypes: LeaveType[]
+  leaveTypes: LeaveType[],
+  isEnabled: boolean = true
 ) => {
   const typeIdArray = leaveTypes.map((item) => item.typeId);
   const { startDateOfYear: startDate, endDateOfYear: endDate } =
     getStartAndEndOfYear(DATE_FORMAT);
 
   return useQuery({
+    enabled: isEnabled,
     queryKey: leaveAnalyticsQueryKeys.LEAVE_TYPE_UTILIZATION(
       employeeId,
       startDate,

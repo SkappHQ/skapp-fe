@@ -2,7 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -34,28 +34,18 @@ import {
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { quickAddEmployeeValidations } from "~community/people/utils/peopleValidations";
 import { useGetEmployeeRoleLimit } from "~enterprise/common/api/peopleApi";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useGetGlobalLoginMethod } from "~enterprise/people/api/GlobalLoginMethodApi";
 import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 
 const AddNewResourceModal = () => {
   const { setToastMessage } = useToast();
+
+  const router = useRouter();
+
   const { data: session } = useSession();
-
-  const isEsignatureModuleAvailable =
-    process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
-  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
-    leaveAdminLimitExceeded: false,
-    attendanceAdminLimitExceeded: false,
-    peopleAdminLimitExceeded: false,
-    leaveManagerLimitExceeded: false,
-    attendanceManagerLimitExceeded: false,
-    peopleManagerLimitExceeded: false,
-    superAdminLimitExceeded: false,
-    esignAdminLimitExceeded: false,
-    esignSenderLimitExceeded: false
-  });
 
   const translateText = useTranslator(
     "peopleModule",
@@ -83,11 +73,41 @@ const AddNewResourceModal = () => {
 
   const roleLimitationTexts = useTranslator("peopleModule", "roleLimitation");
 
-  const router = useRouter();
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
+
+  const { setDirectoryModalType, setIsDirectoryModalOpen } = usePeopleStore(
+    (state) => ({
+      setDirectoryModalType: state.setDirectoryModalType,
+      setIsDirectoryModalOpen: state.setIsDirectoryModalOpen
+    })
+  );
+
+  const { resetPeopleSlice } = usePeopleStore((state) => state);
+
+  const [roleLimits, setRoleLimits] = useState<EmployeeRoleLimit>({
+    leaveAdminLimitExceeded: false,
+    attendanceAdminLimitExceeded: false,
+    peopleAdminLimitExceeded: false,
+    leaveManagerLimitExceeded: false,
+    attendanceManagerLimitExceeded: false,
+    peopleManagerLimitExceeded: false,
+    superAdminLimitExceeded: false,
+    esignAdminLimitExceeded: false,
+    esignSenderLimitExceeded: false
+  });
+
   const initialValues = {
     firstName: "",
     lastName: "",
-    workEmail: "",
+    email: "",
     isSuperAdmin: false,
     peopleRole: Role.PEOPLE_EMPLOYEE,
     leaveRole: Role.LEAVE_EMPLOYEE,
@@ -95,12 +115,20 @@ const AddNewResourceModal = () => {
     esignRole: Role.ESIGN_EMPLOYEE
   };
 
-  const { mutate } = useQuickAddEmployeeMutation();
+  const handleSuccess = () => {
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      stopAllOngoingQuickSetup();
+    }
+  };
+
+  const { mutate } = useQuickAddEmployeeMutation(handleSuccess);
+
   const onSubmit = async (values: any) => {
     const payload: QuickAddEmployeePayload = {
       firstName: values.firstName,
       lastName: values.lastName,
-      workEmail: values.workEmail,
+      email: values.email,
       userRoles: {
         isSuperAdmin: values.isSuperAdmin,
         attendanceRole: values.attendanceRole,
@@ -121,20 +149,21 @@ const AddNewResourceModal = () => {
     validateOnBlur: true
   });
 
-  const { values, errors, handleChange, setFieldValue, handleSubmit } = formik;
-  const { setDirectoryModalType, setIsDirectoryModalOpen } = usePeopleStore(
-    (state) => state
-  );
+  const { values, errors, setFieldValue, setFieldError, handleSubmit } = formik;
 
   const {
     data: checkEmailAndIdentificationNo,
     refetch,
     isSuccess
-  } = useCheckEmailAndIdentificationNoForQuickAdd(values.workEmail, "");
+  } = useCheckEmailAndIdentificationNoForQuickAdd(values.email, "");
 
   const closeModal = () => {
     setDirectoryModalType(DirectoryModalTypes.NONE);
     setIsDirectoryModalOpen(false);
+    if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+      setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      stopAllOngoingQuickSetup();
+    }
   };
 
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
@@ -151,13 +180,13 @@ const AddNewResourceModal = () => {
   const validateWorkEmail = () => {
     const updatedData = checkEmailAndIdentificationNo;
     if (updatedData?.isWorkEmailExists) {
-      formik.setFieldError("workEmail", translateText(["uniqueEmailError"]));
+      setFieldError("email", translateText(["uniqueEmailError"]));
       return false;
     }
 
     if (isEnterpriseMode) {
       if (globalLogin == "GOOGLE" && !updatedData?.isGoogleDomain) {
-        formik.setFieldError("workEmail", translateText(["workEmailGoogle"]));
+        setFieldError("email", translateText(["workEmailGoogle"]));
         return false;
       }
     }
@@ -189,6 +218,11 @@ const AddNewResourceModal = () => {
     }
   }, [env]);
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(e.target.name, e.target.value);
+    setFieldError(e.target.name, "");
+  };
+
   const handleSuperAdminChangeEnterprise = (isChecked: boolean) => {
     if (isChecked && roleLimits.superAdminLimitExceeded) {
       setToastMessage({
@@ -214,12 +248,12 @@ const AddNewResourceModal = () => {
     const updatedAttendanceRole = isChecked
       ? Role.ATTENDANCE_ADMIN
       : Role.ATTENDANCE_EMPLOYEE;
-    const updateESignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
+    const updateesignRole = isChecked ? Role.ESIGN_ADMIN : Role.ESIGN_EMPLOYEE;
 
     setFieldValue("peopleRole", updatedRole);
     setFieldValue("leaveRole", updatedLeaveRole);
     setFieldValue("attendanceRole", updatedAttendanceRole);
-    setFieldValue("esignRole", updateESignRole);
+    setFieldValue("esignRole", updateesignRole);
   };
 
   const handleRoleChangeEnterprise = (name: string, value: any) => {
@@ -392,9 +426,9 @@ const AddNewResourceModal = () => {
         />
       </Stack>
       <InputField
-        inputName="workEmail"
-        value={values.workEmail}
-        error={errors.workEmail}
+        inputName="email"
+        value={values.email}
+        error={errors.email}
         label="Work email"
         placeHolder={employmentDetailsTexts(["enterWorkEmail"])}
         required
@@ -421,8 +455,9 @@ const AddNewResourceModal = () => {
         }
         onClick={() => {
           setDirectoryModalType(DirectoryModalTypes.NONE);
+          resetPeopleSlice();
           setIsDirectoryModalOpen(false);
-          router.push(ROUTES.PEOPLE.ADD_NEW_RESOURCE);
+          router.push(ROUTES.PEOPLE.ADD);
         }}
         data-testid={peopleDirectoryTestId.buttons.addFullProfileBtn}
       />
@@ -558,7 +593,7 @@ const AddNewResourceModal = () => {
               </Stack>
             )}
 
-            {isEsignatureModuleAvailable && (
+            {session?.user?.roles?.includes(EmployeeTypes.ESIGN_EMPLOYEE) && (
               <Stack
                 direction={"row"}
                 justifyContent={"space-between"}
@@ -600,11 +635,17 @@ const AddNewResourceModal = () => {
         }}
         onClick={() => refetch()}
         disabled={
-          values.workEmail === "" ||
+          values.email === "" ||
           values.firstName === "" ||
           values.lastName === ""
         }
         data-testid={peopleDirectoryTestId.buttons.quickAddSaveBtn}
+        shouldBlink={
+          ongoingQuickSetup.INVITE_EMPLOYEES &&
+          values.email !== "" &&
+          values.firstName !== "" &&
+          values.lastName !== ""
+        }
       />
       <Button
         buttonStyle={ButtonStyle.TERTIARY}

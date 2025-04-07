@@ -4,30 +4,33 @@ import { FC } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 
-import { tableHeaderStyles } from "./styles";
+import styles from "./styles";
 
 interface Props {
   headerLabels: string[];
 }
 
 const LeaveEntitlementTableHeader: FC<Props> = ({ headerLabels }) => {
-  const theme: Theme = useTheme();
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
-  const styles = tableHeaderStyles(theme);
+
+  const theme: Theme = useTheme();
+  const classes = styles(theme);
 
   return (
     <Stack
       direction="row"
       justifyContent="space-between"
       alignItems="flex-start"
-      sx={styles.headerContainer}
+      sx={classes.headerContainer}
     >
-      <Box sx={styles.stickyColumn}>
+      <Box sx={classes.stickyColumn}>
         <Typography variant="body2">{translateText(["name"])}</Typography>
       </Box>
-      {headerLabels?.map((header, index) => (
-        <Box key={index} sx={styles.headerCell}>
-          <Typography variant="body2">{header?.toUpperCase()}</Typography>
+      {headerLabels?.map((header) => (
+        <Box key={header} sx={classes.headerCell}>
+          <Typography variant="body2" sx={classes.label}>
+            {header?.toUpperCase()}
+          </Typography>
         </Box>
       ))}
     </Stack>

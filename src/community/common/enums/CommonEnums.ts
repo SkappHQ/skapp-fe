@@ -13,10 +13,17 @@ export enum ZIndexEnums {
   MODAL = 1300
 }
 
+export enum GlobalLoginMethod {
+  CREDENTIALS = "CREDENTIALS",
+  GOOGLE = "GOOGLE",
+  NONE = ""
+}
+
 export enum Modules {
   LEAVE = "LEAVE",
   ATTENDANCE = "ATTENDANCE",
   PEOPLE = "PEOPLE",
+  ESIGNATURE = "ESIGNATURE",
   NONE = ""
 }
 

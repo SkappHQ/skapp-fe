@@ -2,15 +2,14 @@ import {
   Box,
   Divider,
   IconButton,
-  Modal as MuiModal,
   Stack,
   SxProps,
   Typography
 } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
 import { FC, JSX, MouseEvent, ReactElement } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import BasicModal from "~community/common/components/organisms/BasicModal/BasicModal";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -27,9 +26,11 @@ interface Props {
   icon?: JSX.Element;
   modalContentStyles?: SxProps;
   modalWrapperStyles?: SxProps;
+  customCloseComponent?: JSX.Element;
   customCloseIcon?: JSX.Element;
   modalHeaderStyles?: SxProps;
   modalChildrenStyles?: SxProps;
+  dividerStyles?: SxProps;
 }
 
 const Modal: FC<Props> = ({
@@ -43,22 +44,18 @@ const Modal: FC<Props> = ({
   icon,
   modalContentStyles,
   modalWrapperStyles,
+  customCloseComponent,
   customCloseIcon,
   modalHeaderStyles,
-  modalChildrenStyles
+  modalChildrenStyles,
+  dividerStyles
 }) => {
   const classes = styles();
 
   return (
-    <MuiModal
+    <BasicModal
       open={isModalOpen}
-      onClose={(event, reason) => {
-        if (reason === "backdropClick") return;
-        onCloseModal(event as MouseEvent<HTMLButtonElement>, reason);
-      }}
-      disableEscapeKeyDown
-      slots={{ backdrop: Backdrop }}
-      slotProps={{ backdrop: { timeout: 100 } }}
+      onClose={onCloseModal}
       sx={mergeSx([classes.modalWrapper, modalWrapperStyles])}
     >
       <Stack sx={mergeSx([classes.modelContentWrapper, modalContentStyles])}>
@@ -67,7 +64,9 @@ const Modal: FC<Props> = ({
             {isIconVisible && <Box sx={classes.titleIcon}>{icon}</Box>}
             <Typography sx={classes.modalHeaderTitle}>{title}</Typography>
           </Stack>
-          {isClosable && (
+          {isClosable && customCloseComponent ? (
+            customCloseComponent
+          ) : isClosable ? (
             <IconButton
               sx={classes.closeIconBtn}
               onClick={(event) => onCloseModal(event, "backdropClick")}
@@ -78,22 +77,24 @@ const Modal: FC<Props> = ({
                 <Icon name={IconName.CLOSE_STATUS_POPUP_ICON} />
               )}
             </IconButton>
-          )}
+          ) : null}
         </Stack>
-        {isDividerVisible && <Divider />}
+        {isDividerVisible && <Divider sx={dividerStyles} />}
         <Stack
-          sx={{
-            ...classes.childrenWrapper,
-            "::-webkit-scrollbar": {
-              display: "none"
+          sx={mergeSx([
+            classes.childrenWrapper,
+            {
+              "::-webkit-scrollbar": {
+                display: "none"
+              }
             },
-            ...modalChildrenStyles
-          }}
+            modalChildrenStyles
+          ])}
         >
           {children}
         </Stack>
       </Stack>
-    </MuiModal>
+    </BasicModal>
   );
 };
 

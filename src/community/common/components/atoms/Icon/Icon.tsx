@@ -1,6 +1,7 @@
 import { JSX } from "react";
 
 import AddIcon from "~community/common/assets/Icons/AddIcon";
+import ApprovedIcon from "~community/common/assets/Icons/ApprovedIcon";
 import ApprovedStatusIcon from "~community/common/assets/Icons/ApprovedStatusIcon";
 import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
@@ -27,6 +28,7 @@ import CurvedTickIcon from "~community/common/assets/Icons/CurvedTickIcon";
 import DancingWomenIcon from "~community/common/assets/Icons/DancingWomenIcon";
 import DashIcon from "~community/common/assets/Icons/DashIcon";
 import DashboardIcon from "~community/common/assets/Icons/DashboardIcon";
+import DeclinedIcon from "~community/common/assets/Icons/DeclinedIcon";
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
@@ -36,6 +38,7 @@ import DragIcon from "~community/common/assets/Icons/DragIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
 import EditIcon from "~community/common/assets/Icons/EditIcon";
+import EmailIcon from "~community/common/assets/Icons/EmailIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
 import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
@@ -47,12 +50,15 @@ import GoogleCalendarIcon from "~community/common/assets/Icons/GoogleCalendarIco
 import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
+import InitialsIcon from "~community/common/assets/Icons/InitialsIcon";
+import InviteIcon from "~community/common/assets/Icons/InviteIcon";
 import LeaveIcon from "~community/common/assets/Icons/LeaveIcon";
 import LeaveModuleIcon from "~community/common/assets/Icons/LeaveModuleIcon";
 import LeftArrowIcon from "~community/common/assets/Icons/LeftArrowIcon";
 import LockIcon from "~community/common/assets/Icons/LockIcon";
 import MagnifyingGlassIcon from "~community/common/assets/Icons/MagnifyingGlassIcon";
 import MenuIcon from "~community/common/assets/Icons/MenuIcon";
+import MinusIcon from "~community/common/assets/Icons/MinusIcon";
 import MoreIcon from "~community/common/assets/Icons/MoreIcon";
 import NewWindowIcon from "~community/common/assets/Icons/NewWindowIcon";
 import NoDataIcon from "~community/common/assets/Icons/NoDataIcon";
@@ -64,6 +70,7 @@ import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
 import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
+import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
@@ -81,9 +88,11 @@ import SearchIcon from "~community/common/assets/Icons/SearchIcon";
 import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
+import SignatureIcon from "~community/common/assets/Icons/SignIcon";
 import SignerIcon from "~community/common/assets/Icons/SignerIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
 import SkappIcon from "~community/common/assets/Icons/SkappIcon";
+import StampIcon from "~community/common/assets/Icons/StampIcon";
 import SuccessIcon from "~community/common/assets/Icons/SuccessIcon";
 import SuperAdminIcon from "~community/common/assets/Icons/SuperAdminIcon";
 import SyncIcon from "~community/common/assets/Icons/SyncIcon";
@@ -95,12 +104,18 @@ import UnCheckedIcon from "~community/common/assets/Icons/UnCheckedIcon";
 import UndoIcon from "~community/common/assets/Icons/UndoIcon";
 import UpArrowIcon from "~community/common/assets/Icons/UpArrowIcon";
 import UpgradeInfoIcon from "~community/common/assets/Icons/UpgradeInfoIcon";
+import UserIcon from "~community/common/assets/Icons/UserIcon";
 import UserUploadIcon from "~community/common/assets/Icons/UserUploadIcon";
 import ViewIcon from "~community/common/assets/Icons/ViewIcon";
+import WaitingStatusIcon from "~community/common/assets/Icons/WaitingStatusIcon";
 import WarningIcon from "~community/common/assets/Icons/WarningIcon";
 import WarningSignIcon from "~community/common/assets/Icons/WarningSignIcon";
 import WrenchIcon from "~community/common/assets/Icons/WrenchIcon";
 import { IconName, IconProps } from "~community/common/types/IconTypes";
+import GreyPlusIcon from "~enterprise/settings/assets/Icons/GreyPlusIcon";
+import GreyRoundedTickIcon from "~enterprise/settings/assets/Icons/GreyRoundedTickIcon";
+import MasterCardIcon from "~enterprise/settings/assets/Icons/MasterCardIcon";
+import VisaCardIcon from "~enterprise/settings/assets/Icons/VisaCardIcon";
 
 interface Props extends IconProps {
   name: IconName;
@@ -209,7 +224,22 @@ export const IconMapping: Partial<
   [IconName.SIGN_ICON]: SignerIcon,
   [IconName.VIEW_ICON]: ViewIcon,
   [IconName.GOOGLE_CALENDAR_ICON]: GoogleCalendarIcon,
-  [IconName.SKAPP_ICON]: SkappIcon
+  [IconName.SKAPP_ICON]: SkappIcon,
+  [IconName.MASTER_CARD_ICON]: MasterCardIcon,
+  [IconName.VISA_CARD_ICON]: VisaCardIcon,
+  [IconName.GREY_ROUNDED_TICK_ICON]: GreyRoundedTickIcon,
+  [IconName.GREY_PLUS_ICON]: GreyPlusIcon,
+  [IconName.INITIALS_ICON]: InitialsIcon,
+  [IconName.STAMP_ICON]: StampIcon,
+  [IconName.APPROVED_ICON]: ApprovedIcon,
+  [IconName.DECLINED_ICON]: DeclinedIcon,
+  [IconName.SIGNATURE_ICON]: SignatureIcon,
+  [IconName.INVITE_ICON]: InviteIcon,
+  [IconName.REMOVE_PEOPLE_ICON]: PeopleRemoveIcon,
+  [IconName.MINUS_ICON]: MinusIcon,
+  [IconName.USER_ICON]: UserIcon,
+  [IconName.EMAIL_ICON]: EmailIcon,
+  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon
   // Add more icons here as needed
 };
 

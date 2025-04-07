@@ -7,7 +7,7 @@ import {
   useTheme
 } from "@mui/material";
 import { type SxProps } from "@mui/system";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, memo, useEffect, useMemo } from "react";
@@ -16,7 +16,9 @@ import { useGetOrganization } from "~community/common/api/OrganizationCreateApi"
 import { useStorageAvailability } from "~community/common/api/StorageAvailabilityApi";
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import VersionUpgradeBanner from "~community/common/components/molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import { appModes } from "~community/common/constants/configs";
+import ROUTES from "~community/common/constants/routes";
 import { contentLayoutTestId } from "~community/common/constants/testIds";
 import {
   ButtonSizes,
@@ -33,11 +35,17 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EIGHTY_PERCENT } from "~community/common/utils/getConstants";
+import QuickSetupContainer from "~enterprise/common/components/molecules/QuickSetupContainer/QuickSetupContainer";
+import SubscriptionEndedModalController from "~enterprise/common/components/molecules/SubscriptionEndedModalController/SubscriptionEndedModalController";
+import {
+  SubscriptionModalTypeEnums,
+  TenantStatusEnums
+} from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
-import { UserLimitBanner } from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
+import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
 
-import VersionUpgradeBanner from "../../molecules/VersionUpgradeBanner/VersionUpgradeBanner";
 import styles from "./styles";
 
 interface Props {
@@ -61,6 +69,16 @@ interface Props {
   isTitleHidden?: boolean;
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
+  isPrimaryBtnDisabled?: boolean;
+  id?: {
+    btnWrapper?: string;
+    primaryBtn?: string;
+    secondaryBtn?: string;
+  };
+  shouldBlink?: {
+    primaryBtn?: boolean;
+    secondaryBtn?: boolean;
+  };
 }
 
 const ContentLayout = ({
@@ -83,7 +101,10 @@ const ContentLayout = ({
   customRightContent,
   isTitleHidden = false,
   isPrimaryBtnLoading = false,
-  backIcon = IconName.LEFT_ARROW_ICON
+  backIcon = IconName.LEFT_ARROW_ICON,
+  isPrimaryBtnDisabled = false,
+  id,
+  shouldBlink
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -95,9 +116,62 @@ const ContentLayout = ({
 
   const { data } = useSession();
 
+  const { asPath } = useRouter();
+
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
     (state) => state
   );
+
+  const isSuperAdmin = data?.user?.roles?.includes(AdminTypes.SUPER_ADMIN);
+  const tenantStatus = data?.user?.tenantStatus;
+
+  const modalTypeMap = {
+    [TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED]:
+      SubscriptionModalTypeEnums.POST_SUBSCRIPTION_CANCELLATION_MODAL,
+    [TenantStatusEnums.FREE_TRAIL_ENDED]:
+      SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL,
+    [TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED]:
+      SubscriptionModalTypeEnums.POST_TRIAL_EXPIRATION_MODAL_USER_LIMIT_SURPASS_MODAL,
+    [TenantStatusEnums.ACTIVE]: null
+  };
+
+  const { setIsSubscriptionEndedModalOpen, setSubscriptionEndedModalType } =
+    useCommonEnterpriseStore((state) => state);
+
+  useEffect(() => {
+    if (
+      asPath === ROUTES.REMOVE_PEOPLE ||
+      asPath === ROUTES.CHANGE_SUPERVISORS
+    ) {
+      setIsSubscriptionEndedModalOpen(false);
+      return;
+    }
+
+    if (!tenantStatus) return;
+
+    if (
+      !isSuperAdmin &&
+      [
+        TenantStatusEnums.SUBSCRIPTION_CANCELED_USER_LIMIT_EXCEEDED,
+        TenantStatusEnums.FREE_TRAIL_ENDED,
+        TenantStatusEnums.TRIAL_ENDED_USER_LIMIT_EXCEEDED
+      ].includes(tenantStatus)
+    ) {
+      signOut({
+        redirect: true,
+        callbackUrl: ROUTES.AUTH.SYSTEM_UPDATE
+      });
+      return;
+    }
+
+    const modalType = modalTypeMap[tenantStatus];
+    if (modalType) {
+      setSubscriptionEndedModalType(modalType);
+      setIsSubscriptionEndedModalOpen(true);
+    } else if (tenantStatus === TenantStatusEnums.ACTIVE) {
+      setIsSubscriptionEndedModalOpen(false);
+    }
+  }, [data?.user?.tenantStatus]);
 
   const { data: organizationDetails } = useGetOrganization();
 
@@ -111,7 +185,11 @@ const ContentLayout = ({
     setShowUserLimitBanner,
     showUserLimitBanner,
     setIsUserLimitExceeded
-  } = useUserLimitStore((state) => state);
+  } = useUserLimitStore((state) => ({
+    setShowUserLimitBanner: state.setShowUserLimitBanner,
+    showUserLimitBanner: state.showUserLimitBanner,
+    setIsUserLimitExceeded: state.setIsUserLimitExceeded
+  }));
 
   const { data: storageAvailabilityData } = useStorageAvailability();
 
@@ -124,7 +202,7 @@ const ContentLayout = ({
 
   useEffect(() => {
     if (isEnterpriseMode) {
-      if (isCheckUserLimitSuccess && checkUserLimit === true) {
+      if (isCheckUserLimitSuccess && checkUserLimit) {
         setIsUserLimitExceeded(true);
         setShowUserLimitBanner(true);
       }
@@ -195,7 +273,7 @@ const ContentLayout = ({
               </Typography>
             )}
           </Stack>
-          <Stack sx={classes.rightContent}>
+          <Stack sx={classes.rightContent} id={id?.btnWrapper}>
             {secondaryBtnText && (
               <Button
                 isFullWidth={isBelow600}
@@ -205,6 +283,8 @@ const ContentLayout = ({
                 endIcon={secondaryBtnIconName}
                 onClick={onSecondaryButtonClick}
                 dataTestId={contentLayoutTestId.buttons.secondaryButton}
+                shouldBlink={shouldBlink?.secondaryBtn}
+                id={id?.secondaryBtn}
               />
             )}
             {primaryButtonText && (
@@ -217,6 +297,9 @@ const ContentLayout = ({
                 isLoading={isPrimaryBtnLoading}
                 onClick={onPrimaryButtonClick}
                 data-testid={contentLayoutTestId.buttons.primaryButton}
+                shouldBlink={shouldBlink?.primaryBtn}
+                id={id?.primaryBtn}
+                disabled={isPrimaryBtnDisabled}
               />
             )}
             {customRightContent}
@@ -229,6 +312,8 @@ const ContentLayout = ({
           </Stack>
         )}
         {children}
+        <QuickSetupContainer />
+        <SubscriptionEndedModalController />
       </Stack>
     </>
   );

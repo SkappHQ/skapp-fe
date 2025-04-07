@@ -230,25 +230,26 @@ export const getStartAndEndOfCurrentMonth = () => {
   return { startOfMonth, endOfMonth };
 };
 
-export const isDateGraterThanToday = (data: string) => {
+export const isDateGraterThanToday = (date: string) => {
   const today = DateTime.local().startOf("day");
-  const dateToCompare = DateTime.fromISO(data);
+  const dateToCompare = DateTime.fromISO(date);
   return dateToCompare > today;
 };
 
 export const getMinDateOfYear = (year?: number) => {
-  const currentDate = DateTime.local();
-
-  // having currentDate.year + 1 since entitlments can be added to the current year and the next year
-  if (year === currentDate.year || year === currentDate.year + 1) {
-    return DateTime.fromObject({ year, month: 1, day: 1 });
-  }
-  return currentDate.startOf("year");
+  return DateTime.fromObject({
+    year: year ?? DateTime.local().year,
+    month: 1,
+    day: 1
+  });
 };
 
-export const getMaxDateOfYear = () => {
-  const now = DateTime.local();
-  return now.endOf("year");
+export const getMaxDateOfYear = (year?: number) => {
+  return DateTime.fromObject({
+    year: year ?? DateTime.local().year,
+    month: 12,
+    day: 31
+  });
 };
 
 export const getTimeElapsedSinceDate = (startDate: string) => {
@@ -557,4 +558,50 @@ export const fromDateToRelativeTime = (
 
 export const getCurrentWeekNumber = () => {
   return DateTime.now().weekNumber;
+};
+
+// Example: "2024-03-05" → "5th March 2024"
+export const formatISODateWithSuffix = (isoString: string): string => {
+  const date = DateTime.fromISO(isoString, { zone: "utc" });
+  const day = date.day;
+  const suffix = getDaySuffix(day);
+
+  return `${day}${suffix} ${date.toFormat("MMMM yyyy")}`;
+};
+
+// Example: "2024-03-05" → "March 2024"
+export const formatISODateToMonthYear = (isoString: string): string => {
+  if (isoString !== "") {
+    const date = DateTime.fromISO(isoString, { zone: "utc" });
+
+    return `${date.toFormat("MMMM")} ${date.year}`;
+  }
+
+  return "";
+};
+
+const getDaySuffix = (day: number): string => {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+};
+
+export const getAllMonthsAsString = (
+  format: "short" | "long" = "short",
+  language: string = "en"
+): string[] => {
+  const months = [];
+  for (let i = 1; i <= 12; i++) {
+    const dateTime = DateTime.fromObject({ month: i }).setLocale(language);
+    months.push(dateTime.toFormat(format === "short" ? "LLL" : "MMMM"));
+  }
+  return months;
 };

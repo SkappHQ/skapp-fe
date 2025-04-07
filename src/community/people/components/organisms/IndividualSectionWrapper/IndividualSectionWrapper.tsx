@@ -1,0 +1,50 @@
+import { useEffect } from "react";
+
+import { useGetEmployee } from "~community/people/api/PeopleApi";
+import { usePeopleStore } from "~community/people/store/store";
+
+import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
+import UserDetailsCentered from "../../molecules/UserDetailsCentered/UserDetailsCentered";
+import PeopleIndividualSection from "../PeopleIndividualSection/PeopleIndividualSection";
+
+interface Props {
+  employeeId: number;
+}
+
+const IndividualSectionWrapper = ({ employeeId }: Props) => {
+  const { data: employeeData } = useGetEmployee(employeeId);
+
+  const { currentStep, nextStep, employee, setCurrentStep, setEmployee } =
+    usePeopleStore((state) => state);
+
+  useEffect(() => {
+    if (employeeData) {
+      setEmployee(employeeData?.data?.results[0]);
+    }
+  }, [employeeData, setEmployee]);
+
+  useEffect(() => {
+    if (currentStep !== nextStep) {
+      setCurrentStep(nextStep);
+    }
+  }, [currentStep, nextStep, setCurrentStep]);
+
+  return (
+    <>
+      {employee && (
+        <UserDetailsCentered
+          selectedUser={employee}
+          styles={{
+            marginBottom: "1rem",
+            marginTop: "1.5rem"
+          }}
+          enableEdit={false}
+        />
+      )}
+      <DirectorySteppers employeeId={Number(employeeId)} isIndividualView />
+      <PeopleIndividualSection employeeId={Number(employeeId)} />
+    </>
+  );
+};
+
+export default IndividualSectionWrapper;

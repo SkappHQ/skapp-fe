@@ -5,6 +5,7 @@ import ROUTES from "~community/common/constants/routes";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import { LeaveTypeToastEnums } from "~community/leave/enums/LeaveTypeEnums";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 
 export const handleLeaveTypeApiResponse =
   ({
@@ -12,15 +13,21 @@ export const handleLeaveTypeApiResponse =
     setToastMessage,
     translateText,
     setFormDirty,
-    redirect
+    redirect,
+    stopAllOngoingQuickSetup,
+    setQuickSetupModalType,
+    isOngoingSetupLeave
   }: {
     type: LeaveTypeToastEnums;
     setToastMessage: (value: React.SetStateAction<ToastProps>) => void;
     translateText: (key: string[]) => string;
     setFormDirty?: (value: boolean) => void;
     redirect?: NextRouter["replace"];
+    stopAllOngoingQuickSetup?: () => void;
+    setQuickSetupModalType?: (value: QuickSetupModalTypeEnums) => void;
+    isOngoingSetupLeave?: boolean;
   }) =>
-  () => {
+  async () => {
     switch (type) {
       case LeaveTypeToastEnums.ADD_LEAVE_TYPE_SUCCESS:
         setToastMessage({
@@ -30,7 +37,13 @@ export const handleLeaveTypeApiResponse =
           description: translateText(["addLeaveTypeSuccessToastDescription"])
         });
         setFormDirty?.(false);
-        redirect?.(ROUTES.LEAVE.LEAVE_TYPES);
+        await redirect?.(ROUTES.LEAVE.LEAVE_TYPES);
+        if (isOngoingSetupLeave) {
+          setQuickSetupModalType?.(
+            QuickSetupModalTypeEnums.IN_PROGRESS_START_UP
+          );
+          stopAllOngoingQuickSetup?.();
+        }
         break;
       case LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR:
         setToastMessage({

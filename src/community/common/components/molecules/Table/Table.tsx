@@ -16,12 +16,18 @@ import TablePagination from "./TablePagination";
 import styles from "./styles";
 
 interface Props {
+  id?: {
+    emptyScreen?: {
+      button?: string;
+    };
+  };
   tableHeaders: any[];
   tableRows: any[];
   actionRowOneLeftButton?: JSX.Element;
   actionRowTwoLeftButton?: JSX.Element;
   actionRowOneRightButton?: JSX.Element | null;
   actionRowTwoRightButton?: JSX.Element;
+  actionRowBottomRightButton?: JSX.Element;
   isCheckboxSelectionEnabled?: boolean;
   isSelectAllCheckboxEnabled?: boolean;
   selectedRows?: number[];
@@ -47,6 +53,7 @@ interface Props {
   paginationContainerStyles?: SxProps;
   exportButtonStyles?: SxProps;
   tableWrapperStyles?: SxProps;
+  paginationWithNumOfRowsStyles?: SxProps;
   isLoading?: boolean;
   skeletonRows?: number;
   emptySearchTitle?: string;
@@ -71,15 +78,18 @@ interface Props {
     OnClick: (data: any) => void;
   } | null;
   emptyScreenButtonType?: ButtonStyle;
+  shouldEmptyTableScreenBtnBlink?: boolean;
 }
 
 const Table: FC<Props> = ({
+  id,
   tableHeaders,
   tableRows,
   actionRowOneLeftButton,
   actionRowOneRightButton,
   actionRowTwoLeftButton,
   actionRowTwoRightButton,
+  actionRowBottomRightButton,
   isCheckboxSelectionEnabled = false,
   isSelectAllCheckboxEnabled = false,
   selectedRows,
@@ -105,6 +115,7 @@ const Table: FC<Props> = ({
   paginationContainerStyles,
   exportButtonStyles,
   tableWrapperStyles,
+  paginationWithNumOfRowsStyles,
   isLoading,
   skeletonRows = 6,
   emptySearchTitle,
@@ -116,7 +127,8 @@ const Table: FC<Props> = ({
   onEmptyScreenBtnClick,
   actionColumnIconBtnLeft = null,
   actionColumnIconBtnRight = null,
-  emptyScreenButtonType
+  emptyScreenButtonType,
+  shouldEmptyTableScreenBtnBlink
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -197,22 +209,27 @@ const Table: FC<Props> = ({
             actionColumnIconBtnLeft={actionColumnIconBtnLeft}
             actionColumnIconBtnRight={actionColumnIconBtnRight}
             emptyScreenButtonType={emptyScreenButtonType}
+            id={id}
+            shouldEmptyTableScreenBtnBlink={shouldEmptyTableScreenBtnBlink}
           />
         </MuiTable>
       </TableContainer>
 
       {isPaginationEnabled && (
-        <TablePagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPaginationChange={onPaginationChange}
-          paginationContainerStyles={paginationContainerStyles}
-          exportButtonText={exportButtonText}
-          onExportButtonClick={onExportButtonClick}
-          exportTooltipText={exportTooltipText}
-          exportButtonStyles={exportButtonStyles}
-          isDataAvailable={isDataAvailable}
-        />
+        <Stack direction={"row"} sx={paginationWithNumOfRowsStyles}>
+          <TablePagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPaginationChange={onPaginationChange}
+            paginationContainerStyles={paginationContainerStyles}
+            exportButtonText={exportButtonText}
+            onExportButtonClick={onExportButtonClick}
+            exportTooltipText={exportTooltipText}
+            exportButtonStyles={exportButtonStyles}
+            isDataAvailable={isDataAvailable}
+          />
+          <Box>{actionRowBottomRightButton}</Box>
+        </Stack>
       )}
     </Stack>
   );

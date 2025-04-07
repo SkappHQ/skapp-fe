@@ -1,8 +1,7 @@
-import { ZIndexEnums } from "~community/common/enums/CommonEnums";
+import { StyleProps } from "~community/common/types/CommonTypes";
 
-const styles = () => ({
+const styles = (): StyleProps => ({
   modalWrapper: {
-    zIndex: ZIndexEnums.MODAL,
     width: { xs: "100%", sm: "60%" },
     marginInline: "auto"
   },

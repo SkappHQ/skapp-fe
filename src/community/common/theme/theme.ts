@@ -2,7 +2,19 @@ import { createTheme } from "@mui/material/styles";
 import * as React from "react";
 
 declare module "@mui/material/styles" {
+  interface OpacityPalette {
+    10: string;
+    20: string;
+    30: string;
+    40: string;
+    50: string;
+    60: string;
+    70: string;
+    80: string;
+    90: string;
+  }
   interface Palette {
+    opacity: OpacityPalette;
     notifyBadge: {
       main: string;
       contrastText: string;
@@ -29,6 +41,12 @@ declare module "@mui/material/styles" {
       chipText: string;
       chipDark: string;
       text: string;
+      100: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
     };
     trendChart: {
       available: string;
@@ -63,6 +81,9 @@ declare module "@mui/material/styles" {
     };
     customGrey: {
       customGreyWithAlpha: string;
+      lightShadowGrey: string;
+      midDarkGrey: string;
+      darkGrey: string;
     };
     graphColors: {
       green: string;
@@ -80,8 +101,13 @@ declare module "@mui/material/styles" {
         light: string;
       };
     };
+    recipientsColors: {
+      background: string;
+      border: string;
+    }[];
   }
   interface PaletteOptions {
+    opacity: OpacityPalette;
     notifyBadge: {
       main: string;
       contrastText: string;
@@ -108,6 +134,12 @@ declare module "@mui/material/styles" {
       chipText: string;
       chipDark: string;
       text: string;
+      100: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
     };
     trendChart: {
       available: string;
@@ -142,6 +174,9 @@ declare module "@mui/material/styles" {
     };
     customGrey: {
       customGreyWithAlpha: string;
+      lightShadowGrey: string;
+      midDarkGrey: string;
+      darkGrey: string;
     };
     graphColors: {
       green: string;
@@ -159,6 +194,10 @@ declare module "@mui/material/styles" {
         light: string;
       };
     };
+    recipientsColors: {
+      background: string;
+      border: string;
+    }[];
   }
   interface TypographyVariants {
     onboardingHeader: React.CSSProperties;
@@ -167,6 +206,7 @@ declare module "@mui/material/styles" {
     placeholder: React.CSSProperties;
     smallTitle: React.CSSProperties;
     allVariants: React.CSSProperties;
+    kpiValue: React.CSSProperties;
   }
   interface TypographyVariantsOptions {
     onboardingHeader?: React.CSSProperties;
@@ -175,6 +215,7 @@ declare module "@mui/material/styles" {
     placeholder?: React.CSSProperties;
     smallTitle?: React.CSSProperties;
     allVariants: React.CSSProperties;
+    kpiValue?: React.CSSProperties;
   }
 }
 declare module "@mui/material/Badge" {
@@ -213,6 +254,7 @@ declare module "@mui/material/Typography" {
     h6: false;
     subtitle1: false;
     subtitle2: false;
+    kpiValue: true;
     body1: true;
     body2: true;
     button: false;
@@ -223,6 +265,17 @@ declare module "@mui/material/Typography" {
 
 export const theme = createTheme({
   palette: {
+    opacity: {
+      10: "1A",
+      20: "33",
+      30: "4D",
+      40: "66",
+      50: "80",
+      60: "99",
+      70: "B3",
+      80: "CC",
+      90: "E6"
+    },
     primary: {
       main: "#93C5FD", //* primary-color
       dark: "#2A61A0" //* primary-color-text
@@ -291,7 +344,13 @@ export const theme = createTheme({
       main: "#EEA92E",
       chipText: "#78350F",
       chipDark: "#FCD34D",
-      text: "#92400E"
+      text: "#92400E",
+      100: "#FEF9C3",
+      200: "#FBBF24",
+      300: "#FFC107",
+      400: "#EAB308",
+      500: "#CA8A04",
+      600: "#854D0E"
     },
     trendChart: {
       available: "#15803D",
@@ -325,7 +384,10 @@ export const theme = createTheme({
       area: "#f9787b75"
     },
     customGrey: {
-      customGreyWithAlpha: "rgba(0,0,0,0.01)"
+      customGreyWithAlpha: "rgba(0,0,0,0.01)",
+      lightShadowGrey: "#0900410D",
+      midDarkGrey: "#3D3D3D",
+      darkGrey: "#18212C"
     },
     graphColors: {
       green: "#4CC0C0",
@@ -342,7 +404,33 @@ export const theme = createTheme({
         dark: "#6B21A8",
         light: "#F3E8FF"
       }
-    }
+    },
+    recipientsColors: [
+      {
+        background: "#E7DBFFB2",
+        border: "#9A66FF"
+      },
+      {
+        background: "#FFDFE6B2",
+        border: "#FF6384"
+      },
+      {
+        background: "#FFE3C7B2",
+        border: "#FF9F40"
+      },
+      {
+        background: "#FFF5DEB2",
+        border: "#FFCD56"
+      },
+      {
+        background: "#9FD6D6B2",
+        border: "#4CC0C0"
+      },
+      {
+        background: "#7AA3BF",
+        border: "#37A2EB"
+      }
+    ]
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
@@ -372,7 +460,6 @@ export const theme = createTheme({
       fontWeight: 600,
       fontSize: "0.875rem" // 14px
     },
-    h6: undefined,
     subtitle1: undefined,
     subtitle2: undefined,
     // Nav heading, Table filter chip, Modal content, Button large, Paragraph, Toggle label
@@ -420,6 +507,11 @@ export const theme = createTheme({
     smallTitle: {
       fontWeight: 600,
       fontSize: "0.75rem" // 12px
+    },
+    //KPI value
+    kpiValue: {
+      fontWeight: 700,
+      fontSize: "2rem" //32px
     }
   },
   breakpoints: {

@@ -23,6 +23,8 @@ import { AllJobFamilyType } from "~community/people/types/JobFamilyTypes";
 import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { BulkUploadUser } from "~community/people/types/UserBulkUploadTypes";
 import { convertUserBulkCsvHeaders } from "~community/people/utils/userBulkUploadUtils";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 interface Props {
   jobRoleList: AllJobFamilyType[] | undefined;
@@ -40,6 +42,16 @@ const UserBulkCsvUpload: FC<Props> = ({
   const { bulkUploadUsers, setBulkUploadUsers } = usePeopleStore(
     (state) => state
   );
+
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
 
   const [, setAttachmentError] = useState(false);
   const [bulkUserAttachment, setBulkUserAttachment] = useState<
@@ -87,6 +99,10 @@ const UserBulkCsvUpload: FC<Props> = ({
         setPopupType(DirectoryModalTypes.UPLOAD_SUMMARY);
       else {
         setPopupType(DirectoryModalTypes.NONE);
+        if (ongoingQuickSetup.INVITE_EMPLOYEES) {
+          setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+          stopAllOngoingQuickSetup();
+        }
         setToastMessage({
           toastType: ToastType.SUCCESS,
           open: true,
@@ -111,7 +127,11 @@ const UserBulkCsvUpload: FC<Props> = ({
     setPopupType(DirectoryModalTypes.NONE);
   };
 
-  const { mutate } = useAddBulkUsers(bulkUploadUsers, onSuccess, onError);
+  const { mutate, isPending } = useAddBulkUsers(
+    bulkUploadUsers,
+    onSuccess,
+    onError
+  );
 
   const handleUploadBtn = () => {
     mutate();
@@ -165,8 +185,9 @@ const UserBulkCsvUpload: FC<Props> = ({
         buttonStyle={ButtonStyle.PRIMARY}
         styles={{ mb: "1rem" }}
         onClick={() => handleUploadBtn()}
-        isLoading={false}
+        isLoading={isPending}
         disabled={bulkUserAttachment?.length === 0}
+        shouldBlink={bulkUserAttachment?.length > 0}
       />
 
       <Button

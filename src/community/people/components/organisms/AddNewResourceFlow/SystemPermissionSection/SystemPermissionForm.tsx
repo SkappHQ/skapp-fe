@@ -21,7 +21,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
-import useModuleChecker from "~community/common/hooks/useModuleChecker";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -86,9 +86,6 @@ const SystemPermissionForm = ({
   isInputsDisabled = false,
   isSuccess
 }: Props): JSX.Element => {
-  const isEsignatureModuleAvailable =
-    process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
   const classes = styles();
 
   const router = useRouter();
@@ -98,8 +95,11 @@ const SystemPermissionForm = ({
   const { data: superAdminCount } = useGetSuperAdminCount();
   const { data: grantablePermission } = useGetAllowedGrantablePermissions();
 
-  const { isAttendanceModuleEnabled, isLeaveModuleEnabled } =
-    useModuleChecker();
+  const {
+    isAttendanceModuleEnabled,
+    isLeaveModuleEnabled,
+    isEsignatureModuleEnabled
+  } = useSessionData();
 
   const { setToastMessage } = useToast();
 
@@ -334,9 +334,9 @@ const SystemPermissionForm = ({
             />
           )}
 
-          {isEsignatureModuleAvailable && (
+          {isEsignatureModuleEnabled && (
             <DropdownList
-              inputName={"eSignRole"}
+              inputName={"esignRole"}
               label="e-signature"
               itemList={grantablePermission?.esign || []}
               value={values.esignRole}

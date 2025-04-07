@@ -52,7 +52,7 @@ const Holidays: NextPage = () => {
 
   const primaryButtonText =
     Boolean(holidays?.pages[0]?.items?.length ?? 0) &&
-    translateText(["addHolidaysBtn"]);
+    translateText(["addHolidayBtn"]);
 
   useEffect(() => {
     if (holidays?.pages) {

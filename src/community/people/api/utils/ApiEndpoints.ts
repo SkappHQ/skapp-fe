@@ -16,7 +16,7 @@ export const peoplesEndpoints = {
     `${moduleAPIPath.PEOPLE}/employee/me/${employeeId}`,
   ME: `${moduleAPIPath.PEOPLE}/me`,
   EMPLOYEE_TIMELINE: (memberId: number) =>
-    `${moduleAPIPath.PEOPLE}/employees/timeline/${memberId}`,
+    `${moduleAPIPath.PEOPLE}/ep/employees/timeline/${memberId}`,
   USER_BULK_UPLOAD: `${moduleAPIPath.PEOPLE}/bulk/employees`,
   TERMINATE_EMPLOYEE: (employeeId: string | number) =>
     `${moduleAPIPath.PEOPLE}/user/terminate/${employeeId}`,
@@ -25,7 +25,11 @@ export const peoplesEndpoints = {
   MY_MANAGERS: `${moduleAPIPath.PEOPLE}/me/managers`,
   SUPERVISED_BY_ME: (employeeId: number) =>
     `${moduleAPIPath.PEOPLE}/${employeeId}/is-supervised-by-me`,
-  REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`
+  REVITE_EMPLOYEES: `${moduleAPIPath.AUTH}/re-invitation`,
+  DELETE_USER: (employeeId: string | number) =>
+    `${moduleAPIPath.PEOPLE}/user/delete/${employeeId}`,
+  HAS_SUPERVISOR_ROLES: (employeeId: number) =>
+    `${moduleAPIPath.PEOPLE}/${employeeId}/has-supervisory-roles`
 };
 
 export const authEndpoints = {

@@ -7,9 +7,10 @@ import {
   EmployeeTypes,
   ManagerTypes,
   ROLE_SUPER_ADMIN,
-  SenderRoleTypes,
+  SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -18,8 +19,12 @@ const commonRoutes = [
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.UNAUTHORIZED,
   ROUTES.PEOPLE.ACCOUNT,
+  ROUTES.PEOPLE.USER_ACCOUNT,
   ROUTES.NOTIFICATIONS,
-  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
+  ROUTES.INTEGRATIONS,
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
+  s3Endpoints.GET_SIGNED_URL,
+  s3Endpoints.DELETE_FILE
 ];
 
 // Specific role-based routes
@@ -36,8 +41,10 @@ const superAdminRoutes = {
     ROUTES.SIGN.SENT,
     ROUTES.AUTH.VERIFY,
     ROUTES.AUTH.VERIFY_SUCCESS,
-    ROUTES.SIGN.SENT,
-    ROUTES.SETTINGS.MODULES
+    ROUTES.SETTINGS.MODULES,
+    ROUTES.SETTINGS.PAYMENT,
+    ROUTES.REMOVE_PEOPLE,
+    ROUTES.SUBSCRIPTION
   ]
 };
 
@@ -53,7 +60,10 @@ const adminRoutes = {
     ROUTES.SIGN.CREATE_DOCUMENT,
     ROUTES.SIGN.FOLDERS,
     ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT
+    ROUTES.SIGN.SENT,
+    ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.COMPLETE
   ]
 };
 
@@ -70,12 +80,15 @@ const managerRoutes = {
     ROUTES.TIMESHEET.TIMESHEET_ANALYTICS,
     ROUTES.PEOPLE.INDIVIDUAL
   ],
-  [SenderRoleTypes.ESIGN_SENDER]: [
+  [SenderTypes.ESIGN_SENDER]: [
     ROUTES.SIGN.CONTACTS,
     ROUTES.SIGN.CREATE_DOCUMENT,
     ROUTES.SIGN.FOLDERS,
     ROUTES.SIGN.INBOX,
-    ROUTES.SIGN.SENT
+    ROUTES.SIGN.SENT,
+    ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.COMPLETE
   ]
 };
 
@@ -83,6 +96,7 @@ const employeeRoutes = {
   [EmployeeTypes.PEOPLE_EMPLOYEE]: [
     ROUTES.PEOPLE.DIRECTORY,
     ROUTES.PEOPLE.INDIVIDUAL,
+    ROUTES.PEOPLE.BASE,
     ...commonRoutes
   ],
   [EmployeeTypes.LEAVE_EMPLOYEE]: [ROUTES.LEAVE.MY_REQUESTS, ...commonRoutes],
@@ -90,7 +104,13 @@ const employeeRoutes = {
     ROUTES.TIMESHEET.MY_TIMESHEET,
     ...commonRoutes
   ],
-  [EmployeeTypes.ESIGN_EMPLOYEE]: [ROUTES.SIGN.INBOX, ...commonRoutes]
+  [EmployeeTypes.ESIGN_EMPLOYEE]: [
+    ROUTES.SIGN.INBOX,
+    ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.COMPLETE,
+    ...commonRoutes
+  ]
 };
 
 // Merging all routes into one allowedRoutes object
@@ -172,12 +192,9 @@ export default withAuth(
     );
 
     if (isAllowed) {
-      const isEsignatureModuleAvailable =
-        process.env.NEXT_PUBLIC_ESIGN_FEATURE_TOGGLE === "true";
-
       if (
         request.nextUrl.pathname.includes(ROUTES.SIGN.BASE) &&
-        !isEsignatureModuleAvailable
+        !roles.includes(EmployeeTypes.ESIGN_EMPLOYEE)
       ) {
         return NextResponse.redirect(
           new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
@@ -195,7 +212,7 @@ export default withAuth(
 
       return NextResponse.next();
     }
-
+    // Redirect to /unauthorized if no access
     return NextResponse.redirect(
       new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
     );
@@ -207,11 +224,16 @@ export default withAuth(
   }
 );
 
+// Define the matcher patterns for this middleware
 export const config = {
   matcher: [
+    // All community routes
     "/community/:path*",
+    // Super admin routes
     "/setup-organization/:path*",
     "/module-selection",
+    "/payment",
+    // Common routes
     "/dashboard/:path*",
     "/configurations/:path*",
     "/settings/:path*",
@@ -222,9 +244,15 @@ export const config = {
     "/verify/email",
     "/verify/success",
     "/verify/account-reset-password",
+    // "/api/:path*", // API routes
+    // Module routes
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/sign/:path*"
+    "/sign/:path*",
+    "/remove-people",
+    "/integrations",
+    "/subscription",
+    "/user-account"
   ]
 };

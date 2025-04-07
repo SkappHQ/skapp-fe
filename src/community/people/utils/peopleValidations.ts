@@ -14,11 +14,13 @@ import {
   convertDateToDateTime,
   getDateFromTimeStamp
 } from "~community/common/utils/dateTimeUtils";
+import { isValidEmailPattern } from "~community/common/utils/validation";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { LeaveEntitlementDropdownListType } from "~community/leave/types/LeaveTypes";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
 
 import { ADDRESS_MAX_CHARACTER_LENGTH } from "../constants/configs";
+import { EMAIL_MAX_LENGTH } from "../constants/stringConstants";
 
 type TranslatorFunctionType = (
   suffixes: string[],
@@ -53,7 +55,7 @@ export const employeeSecondaryEmergencyContactDetailsValidation = (
       allowsLettersAndSpecialCharactersForNames(),
       translator(["validNameError"])
     ),
-    relationship: Yup.string(),
+    relationship: Yup.string().nullable(),
     phone: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
@@ -81,7 +83,8 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
-      ),
+      )
+      .nullable(),
     lastName: Yup.string()
       .required(translator(["requireLastNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
@@ -89,9 +92,9 @@ export const employeeGeneralDetailsValidation = (
         allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
-    gender: Yup.string(),
+    gender: Yup.string().nullable(),
     birthDate: Yup.date().nullable(),
-    nationality: Yup.string(),
+    nationality: Yup.string().nullable(),
     nin: Yup.string()
       .max(
         characterLengths.NIN_LENGTH,
@@ -100,7 +103,8 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
-      ),
+      )
+      .nullable(),
     passportNumber: Yup.string()
       .max(
         characterLengths.NAME_LENGTH,
@@ -109,8 +113,9 @@ export const employeeGeneralDetailsValidation = (
       .matches(
         isValidAlphaNumericString(),
         translator(["validNinAndPassportError"])
-      ),
-    maritalStatus: Yup.string()
+      )
+      .nullable(),
+    maritalStatus: Yup.string().nullable()
   });
 
 export const employeeFamilyDetailsValidation = (
@@ -162,26 +167,25 @@ export const employeeSocialMediaDetailsValidation = (
   translator: TranslatorFunctionType
 ) =>
   Yup.object({
-    linkedIn: Yup.string().matches(
-      isValidUrlPattern(),
-      translator(["validUrlError"])
-    ),
-    x: Yup.string().matches(isValidUrlPattern(), translator(["validUrlError"])),
-    facebook: Yup.string().matches(
-      isValidUrlPattern(),
-      translator(["validUrlError"])
-    ),
-    instagram: Yup.string().matches(
-      isValidUrlPattern(),
-      translator(["validUrlError"])
-    )
+    linkedIn: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable(),
+    x: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable(),
+    facebook: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable(),
+    instagram: Yup.string()
+      .matches(isValidUrlPattern(), translator(["validUrlError"]))
+      .nullable()
   });
 
 export const employeeHealthAndOtherDetailsValidation = Yup.object({
-  bloodGroup: Yup.string(),
-  allergies: Yup.string(),
-  dietaryRestrictions: Yup.string(),
-  tshirtSize: Yup.string()
+  bloodGroup: Yup.string().nullable(),
+  allergies: Yup.string().nullable(),
+  dietaryRestrictions: Yup.string().nullable(),
+  tshirtSize: Yup.string().nullable()
 });
 
 export const employeeEmploymentDetailsValidation = (
@@ -205,17 +209,25 @@ export const employeeEmploymentDetailsValidation = (
         function () {
           return context?.isUniqueEmployeeNo;
         }
-      ),
-    workEmail: Yup.string()
+      )
+      .nullable(),
+    email: Yup.string()
       .trim()
-      .email(translator(["validEmailError"]))
+      .max(EMAIL_MAX_LENGTH, translator(["maxLengthError"]))
       .required(translator(["requireEmailError"]))
+      .test(
+        "valid-email-format",
+        translator(["validEmailError"]),
+        function (value) {
+          return isValidEmailPattern(value);
+        }
+      )
       .test("is-unique-email", translator(["uniqueEmailError"]), function () {
         return context?.isUniqueEmail || context?.isUpdate;
       }),
-    employmentAllocation: Yup.string(),
-    teams: Yup.array(),
-    joinedDate: Yup.date(),
+    employmentAllocation: Yup.string().nullable(),
+    teamIds: Yup.array().nullable(),
+    joinedDate: Yup.date().nullable(),
     probationStartDate: Yup.date()
       .test(
         "is-valid",
@@ -238,7 +250,8 @@ export const employeeEmploymentDetailsValidation = (
           }
           return true;
         }
-      ),
+      )
+      .nullable(),
     probationEndDate: Yup.date()
       .test(
         "is-valid",
@@ -273,8 +286,9 @@ export const employeeEmploymentDetailsValidation = (
           }
           return true;
         }
-      ),
-    workTimeZone: Yup.string()
+      )
+      .nullable(),
+    workTimeZone: Yup.string().nullable()
   });
 };
 
@@ -356,7 +370,7 @@ export const employeeVisaDetailsValidation = (
     visaType: Yup.string().required(translator(["requireVisaTypeError"])),
     issuingCountry: Yup.string().required(translator(["requireCountryError"])),
     issuedDate: Yup.date().required(translator(["requireIssuedDateError"])),
-    expirationDate: Yup.date()
+    expiryDate: Yup.date()
       .required(translator(["requireExpirationDateError"]))
       .test(
         "is-valid",
@@ -452,7 +466,8 @@ export const employeeContactDetailsValidation = (
   Yup.object({
     personalEmail: Yup.string()
       .trim()
-      .email(translator(["validEmailError"])),
+      .email(translator(["validEmailError"]))
+      .nullable(),
     phone: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
@@ -462,21 +477,27 @@ export const employeeContactDetailsValidation = (
         characterLengths.PHONE_NUMBER_LENGTH_MIN,
         translator(["validContactNumberError"])
       ),
-    addressLine1: Yup.string(),
-    addressLine2: Yup.string(),
-    city: Yup.string().max(
-      ADDRESS_MAX_CHARACTER_LENGTH,
-      translator(["maxCharacterCityLimitError"])
-    ),
-    country: Yup.string(),
-    state: Yup.string().max(
-      ADDRESS_MAX_CHARACTER_LENGTH,
-      translator(["maxCharacterLimitStateError"])
-    ),
-    postalCode: Yup.string().matches(
-      isValidAlphaNumericString(),
-      translator(["validPostalCodeError"])
-    )
+    addressLine1: Yup.string().nullable(),
+    addressLine2: Yup.string().nullable(),
+    city: Yup.string()
+      .max(
+        ADDRESS_MAX_CHARACTER_LENGTH,
+        translator(["maxCharacterCityLimitError"])
+      )
+      .nullable(),
+    country: Yup.string().nullable(),
+    state: Yup.string()
+      .nullable()
+      .max(
+        ADDRESS_MAX_CHARACTER_LENGTH,
+        translator(["maxCharacterLimitStateError"])
+      ),
+    postalCode: Yup.string()
+      .matches(
+        isValidAlphaNumericString(),
+        translator(["validPostalCodeError"])
+      )
+      .nullable()
   });
 
 export const quickAddEmployeeValidations = (
@@ -497,8 +518,15 @@ export const quickAddEmployeeValidations = (
         isValidNameWithAccentsAndApostrophes(),
         translator(["validNameError"])
       ),
-    workEmail: Yup.string()
+    email: Yup.string()
       .trim()
-      .email(translator(["validEmailError"]))
+      .test(
+        "valid-email-format",
+        translator(["validEmailError"]),
+        function (value) {
+          return isValidEmailPattern(value as string);
+        }
+      )
+
       .required(translator(["requireEmailError"]))
   });

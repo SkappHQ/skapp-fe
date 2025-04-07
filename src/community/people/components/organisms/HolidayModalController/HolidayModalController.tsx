@@ -7,34 +7,62 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { useGetAllHolidaysInfinite } from "~community/people/api/HolidayApi";
 import AddCalendar from "~community/people/components/molecules/HolidayModals/AddCalendar/AddCalendar";
 import AddEditHolidayModal from "~community/people/components/molecules/HolidayModals/AddEditHolidayModal/AddEditHolidayModal";
+import BulkUploadSummary from "~community/people/components/molecules/HolidayModals/BulkUploadSummary/BulkUploadSummary";
 import HolidayBulkDelete from "~community/people/components/molecules/HolidayModals/HolidayBulkDelete/HolidayBulkDelete";
+import HolidayExitConfirmationModal from "~community/people/components/molecules/HolidayModals/HolidayExitConfirmationModal/HolidayConfirmationModal";
+import UploadHolidayBulk from "~community/people/components/molecules/HolidayModals/UploadHolidayBulk/UploadHolidayBulk";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   HolidayDeleteType,
   holidayBulkUploadResponse,
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
+import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
-import BulkUploadSummary from "../../molecules/HolidayModals/BulkUploadSummary/BulkUploadSummary";
-import HolidayExitConfirmationModal from "../../molecules/HolidayModals/HolidayExitConfirmationModal/HolidayConfirmationModal";
-import UploadHolidayBulk from "../../molecules/HolidayModals/UploadHolidayBulk/UploadHolidayBulk";
+import styles from "./styles";
 
 const HolidayModalController: FC = () => {
+  const classes = styles();
+
   const { toastMessage } = useToast();
-  const [bulkUploadData, setBulkUploadData] = useState<
-    holidayBulkUploadResponse | undefined
-  >();
+
   const translateText = useTranslator("peopleModule", "holidays");
+
   const {
     newCalenderDetails,
     newHolidayDetails,
     isHolidayModalOpen,
     holidayModalType,
+    selectedYear,
     setIsHolidayModalOpen,
     setHolidayModalType,
-    selectedYear,
     setIsBulkUpload
-  } = usePeopleStore((state) => state);
+  } = usePeopleStore((state) => ({
+    newCalenderDetails: state.newCalenderDetails,
+    newHolidayDetails: state.newHolidayDetails,
+    isHolidayModalOpen: state.isHolidayModalOpen,
+    holidayModalType: state.holidayModalType,
+    selectedYear: state.selectedYear,
+    setIsHolidayModalOpen: state.setIsHolidayModalOpen,
+    setHolidayModalType: state.setHolidayModalType,
+    setIsBulkUpload: state.setIsBulkUpload
+  }));
+
+  const {
+    ongoingQuickSetup,
+    setQuickSetupModalType,
+    stopAllOngoingQuickSetup
+  } = useCommonEnterpriseStore((state) => ({
+    ongoingQuickSetup: state.ongoingQuickSetup,
+    setQuickSetupModalType: state.setQuickSetupModalType,
+    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+  }));
+
+  const [bulkUploadData, setBulkUploadData] = useState<
+    holidayBulkUploadResponse | undefined
+  >();
+
   const { data: holidays, refetch } = useGetAllHolidaysInfinite(selectedYear);
 
   const getModalTitle = (): string => {
@@ -59,6 +87,7 @@ const HolidayModalController: FC = () => {
         return "";
     }
   };
+
   const handleCloseModal = (): void => {
     const isEditingHoliday =
       newCalenderDetails?.acceptedFile?.length !== 0 ||
@@ -69,12 +98,25 @@ const HolidayModalController: FC = () => {
     const isExitConfirmationNeeded =
       holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK ||
       holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY;
-    if (isEditingHoliday) setIsBulkUpload(false);
+
+    setIsBulkUpload(holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK);
+
     if (isEditingHoliday && isExitConfirmationNeeded) {
       setHolidayModalType(holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION);
     } else {
       setIsHolidayModalOpen(false);
       setHolidayModalType(holidayModalTypes.NONE);
+    }
+
+    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
+      stopAllOngoingQuickSetup();
+      if (
+        holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
+        bulkUploadData &&
+        bulkUploadData?.bulkStatusSummary?.successCount > 0
+      ) {
+        setQuickSetupModalType(QuickSetupModalTypeEnums.IN_PROGRESS_START_UP);
+      }
     }
   };
 
@@ -93,46 +135,61 @@ const HolidayModalController: FC = () => {
             : true
         }
         setModalType={setHolidayModalType}
+        modalContentStyles={
+          holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY
+            ? classes.modalContent
+            : {}
+        }
       >
         <Fragment>
           {holidayModalType === holidayModalTypes.ADD_EDIT_HOLIDAY && (
-            <AddEditHolidayModal holidays={holidays} holidayRefetch={refetch} />
+            <AddEditHolidayModal
+              holidays={holidays?.items}
+              holidayRefetch={refetch}
+            />
           )}
+
           {holidayModalType === holidayModalTypes.ADD_CALENDAR && (
-            <AddCalendar setBulkUploadData={setBulkUploadData} />
+            <AddCalendar />
           )}
-          {holidayModalType === holidayModalTypes.HOLIDAY_SELECTED_DELETE && (
-            <HolidayBulkDelete
-              setIsPopupOpen={setIsHolidayModalOpen}
-              type={HolidayDeleteType.SELECTED}
-            />
+
+          {holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK && (
+            <UploadHolidayBulk setBulkUploadData={setBulkUploadData} />
           )}
-          {holidayModalType === holidayModalTypes.HOLIDAY_BULK_DELETE && (
-            <HolidayBulkDelete
-              setIsPopupOpen={setIsHolidayModalOpen}
-              type={HolidayDeleteType.ALL}
-            />
-          )}
+
+          {bulkUploadData &&
+            holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
+            bulkUploadData?.bulkStatusSummary?.failedCount > 0 && (
+              <BulkUploadSummary data={bulkUploadData} />
+            )}
+
           {holidayModalType === holidayModalTypes.HOLIDAY_INDIVIDUAL_DELETE && (
             <HolidayBulkDelete
               setIsPopupOpen={setIsHolidayModalOpen}
               type={HolidayDeleteType.INDIVIDUAL}
             />
           )}
-          {bulkUploadData &&
-            holidayModalType === holidayModalTypes.UPLOAD_SUMMARY &&
-            bulkUploadData?.bulkStatusSummary?.failedCount > 0 && (
-              <BulkUploadSummary data={bulkUploadData} />
-            )}
+
+          {holidayModalType === holidayModalTypes.HOLIDAY_SELECTED_DELETE && (
+            <HolidayBulkDelete
+              setIsPopupOpen={setIsHolidayModalOpen}
+              type={HolidayDeleteType.SELECTED}
+            />
+          )}
+
+          {holidayModalType === holidayModalTypes.HOLIDAY_BULK_DELETE && (
+            <HolidayBulkDelete
+              setIsPopupOpen={setIsHolidayModalOpen}
+              type={HolidayDeleteType.ALL}
+            />
+          )}
+
           {holidayModalType === holidayModalTypes.HOLIDAY_EXIT_CONFIRMATION && (
             <HolidayExitConfirmationModal />
           )}
-
-          {holidayModalType === holidayModalTypes.UPLOAD_HOLIDAY_BULK && (
-            <UploadHolidayBulk setBulkUploadData={setBulkUploadData} />
-          )}
         </Fragment>
       </ModalController>
+
       <ToastMessage
         open={toastMessage.open}
         onClose={toastMessage.onClose}
