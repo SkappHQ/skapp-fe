@@ -42,7 +42,7 @@
     "i18next-http-backend": "^2.6.1",
     "luxon": "^3.5.0",
     "luxon-business-days": "^3.0.1",
-    "next": "~14.2.25",
+    "next": "~14.2.26",
     "next-auth": "^4.24.7",
     "papaparse": "^5.4.1",
     "pdfjs-dist": "^4.10.38",
