@@ -540,7 +540,9 @@ const PeopleTable: FC<Props> = ({
           isCheckboxSelectionEnabled={
             isPendingInvitationListOpen || isRemovePeople
           }
-          isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
+          isSelectAllCheckboxEnabled={
+            isPendingInvitationListOpen && employeeData?.length > 0
+          }
           handleAllRowsCheck={handleAllCheckBoxClick}
           handleRowCheck={handleCheckBoxClick}
           actionRowOneRightButton={
