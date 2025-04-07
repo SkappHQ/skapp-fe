@@ -90,8 +90,12 @@ const styles = (theme: Theme): StylesType => ({
     },
     checkbox: {
       color: theme.palette.primary.main,
+      cursor: "pointer",
       "&.Mui-checked": {
         color: "primary.main"
+      },
+      "&.Mui-disabled": {
+        cursor: "not-allowed"
       }
     }
   },

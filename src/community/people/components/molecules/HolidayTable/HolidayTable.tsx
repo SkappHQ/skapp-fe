@@ -251,15 +251,23 @@ const HolidayTable: FC<Props> = ({
   }, [holidayData]);
 
   const isSelectAllCheckboxEnabled = useMemo(() => {
-    if (holidayData && holidayData?.length > 0) {
-      return isPeopleAdmin && futureHolidays?.length !== holidayData?.length;
+    if (!isPeopleAdmin || !holidayData) {
+      return false;
     }
 
-    return isPeopleAdmin;
-  }, [futureHolidays?.length, holidayData, isPeopleAdmin]);
+    if (futureHolidays && futureHolidays?.length > 0) {
+      return futureHolidays?.length !== holidayData?.length;
+    }
+
+    return false;
+  }, [futureHolidays, holidayData, isPeopleAdmin]);
 
   const isSelectAllCheckboxChecked = useMemo(() => {
-    return selectedHolidays?.length === futureHolidays?.length;
+    if (selectedHolidays.length > 0) {
+      return selectedHolidays?.length === futureHolidays?.length;
+    }
+
+    return false;
   }, [selectedHolidays, futureHolidays]);
 
   const isRowDisabled = useCallback(

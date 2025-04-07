@@ -76,18 +76,16 @@ const TableHead: FC<
               customStyles?.cell
             ])}
           >
-            {checkboxSelection?.isSelectAllEnabled && (
-              <Checkbox
-                color="primary"
-                disabled={!checkboxSelection?.isSelectAllEnabled}
-                checked={checkboxSelection?.isSelectAllChecked}
-                onChange={() => checkboxSelection?.handleSelectAllClick?.()}
-                sx={mergeSx([
-                  classes.checkboxSelection.checkbox,
-                  checkboxSelection?.customStyles?.checkbox
-                ])}
-              />
-            )}
+            <Checkbox
+              color="primary"
+              disabled={!checkboxSelection?.isSelectAllEnabled}
+              checked={checkboxSelection?.isSelectAllChecked}
+              onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+              sx={mergeSx([
+                classes.checkboxSelection.checkbox,
+                checkboxSelection?.customStyles?.checkbox
+              ])}
+            />
           </TableCell>
         )}
 
