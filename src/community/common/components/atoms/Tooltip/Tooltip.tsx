@@ -1,6 +1,6 @@
 import { Theme, Typography, useTheme } from "@mui/material";
 import Fade from "@mui/material/Fade";
-import { FC, JSX } from "react";
+import React, { FC, JSX, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
@@ -28,7 +28,7 @@ const Tooltip: FC<Props> = ({
   children,
   PopperProps,
   placement = TooltipPlacement.TOP,
-  open,
+  open: controlledOpen,
   dataTestId,
   id,
   isDisabled = false,
@@ -36,13 +36,35 @@ const Tooltip: FC<Props> = ({
   iconColor
 }) => {
   const theme: Theme = useTheme();
+  const [open, setOpen] = useState(false);
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (isDisabled) return;
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setOpen(!open);
+    }
+  };
+
+  const handleFocus = () => {
+    if (!isDisabled) {
+      setOpen(true);
+    }
+  };
+
+  const handleBlur = () => {
+    setOpen(false);
+  };
+
+  const isOpen = controlledOpen !== undefined ? controlledOpen : open;
 
   return (
     <StyledTooltip
       arrow
       id={id}
       data-testid={dataTestId}
-      open={open}
+      open={isOpen}
       placement={placement}
       title={title}
       TransitionComponent={Fade}
@@ -55,6 +77,14 @@ const Tooltip: FC<Props> = ({
       }}
     >
       <span
+        tabIndex={isDisabled ? -1 : 0}
+        role="button"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        aria-disabled={isDisabled}
+        onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         style={{
           pointerEvents: isDisabled ? "none" : "auto", // Prevent interaction when disabled
           cursor: isDisabled ? "not-allowed" : "pointer" // Change cursor when disabled
