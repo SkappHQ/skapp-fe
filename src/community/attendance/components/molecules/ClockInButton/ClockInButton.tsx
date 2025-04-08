@@ -70,6 +70,9 @@ const ClockInButton = ({ disabled }: Props): JSX.Element => {
       isLoading={isPending}
       disabled={disabled}
       dataTestId={isClockedIn ? "clock-in-button" : "clock-out-button"}
+      aria-label={
+        isClockedIn ? translateText(["clockIn"]) : translateText(["clockOut"])
+      }
     />
   );
 };
