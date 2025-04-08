@@ -34,6 +34,7 @@ const NotificationContent = ({
         <Avatar
           firstName={""}
           lastName={""}
+          alt={item.title}
           src={
             item.authPic === null ||
             item.isCausedByCurrentUser ||

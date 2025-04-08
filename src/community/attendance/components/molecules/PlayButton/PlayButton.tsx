@@ -76,6 +76,13 @@ const PlayButton = (): JSX.Element => {
           status === AttendanceSlotType.NON_WORKING_DAY ||
           status === AttendanceSlotType.LEAVE_DAY
         }
+        aria-label={
+          status === AttendanceSlotType.RESUME ||
+          status === AttendanceSlotType.START ||
+          status === AttendanceSlotType.END
+            ? "Pause attendance timer"
+            : "Start attendance timer"
+        }
       >
         {isPending ? (
           <CircularProgress size={"1rem"} />

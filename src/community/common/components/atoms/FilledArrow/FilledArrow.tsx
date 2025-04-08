@@ -32,6 +32,7 @@ export const FilledArrow: FC<Props> = ({
 
   return (
     <Avatar
+      alt={ariaLabel || (isRightArrow ? "Right arrow" : "Left arrow")}
       onClick={(event: React.MouseEvent<HTMLDivElement>) => {
         if (!disabled) {
           onClick(event);

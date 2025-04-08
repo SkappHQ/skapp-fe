@@ -178,6 +178,10 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
           <Avatar
             firstName={leaveRequestData?.empName ?? ""}
             lastName={leaveRequestData?.lastName ?? ""}
+            alt={
+              `${leaveRequestData?.empName} ${leaveRequestData?.lastName}` ||
+              "Employee avatar"
+            }
             src={leaveRequestData.avatarUrl ?? ""}
           />
           <Typography variant="body2" sx={{ fontSize: "1rem" }}>

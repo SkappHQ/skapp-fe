@@ -114,6 +114,10 @@ const TransferMembersModal: FC<Props> = ({
                     <Avatar
                       firstName={employee?.firstName ?? ""}
                       lastName={employee?.lastName ?? ""}
+                      alt={
+                        `${employee?.firstName} ${employee?.lastName}` ||
+                        "Employee avatar"
+                      }
                       src={employee?.authPic ?? ""}
                     />
                     <Typography

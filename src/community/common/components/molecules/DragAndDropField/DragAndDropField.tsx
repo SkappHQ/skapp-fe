@@ -217,7 +217,7 @@ const DragAndDropField: FC<Props> = ({
         {...getRootProps()}
         style={classes.dragDropContainer as CSSProperties}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} aria-label={label || "File upload"} />
         <>
           {isDragActive ? (
             <Typography variant="body1">
