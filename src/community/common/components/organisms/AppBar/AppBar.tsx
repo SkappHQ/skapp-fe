@@ -138,7 +138,11 @@ const AppBar = () => {
             />
           )}
         </Stack>
-        <IconButton onClick={handleDrawer} sx={classes.menuIconBtn}>
+        <IconButton
+          onClick={handleDrawer}
+          sx={classes.menuIconBtn}
+          aria-label="Open menu"
+        >
           <Icon name={IconName.MENU_ICON} />
         </IconButton>
       </Stack>
