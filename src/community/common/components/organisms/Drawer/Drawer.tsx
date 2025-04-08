@@ -164,6 +164,7 @@ const Drawer = (): JSX.Element => {
         sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
         onClick={handleDrawer}
         data-testid={appDrawerTestId.buttons.drawerToggleBtn}
+        aria-label={isDrawerExpanded ? "Collapse drawer" : "Expand drawer"}
       >
         <Icon
           name={IconName.CHEVRON_RIGHT_ICON}

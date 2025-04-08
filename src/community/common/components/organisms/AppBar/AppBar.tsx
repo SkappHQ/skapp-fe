@@ -114,8 +114,11 @@ const AppBar = () => {
                 <Avatar
                   firstName={employee?.firstName || ""}
                   lastName={employee?.lastName || ""}
-                  alt={`${employee?.firstName} ${employee?.lastName}`}
-                  src={employee?.authPic || ""}
+                  src={
+                    typeof employee?.authPic === "string"
+                      ? employee.authPic
+                      : ""
+                  }
                 />
               </Box>
               <Stack sx={classes.userInfo}>

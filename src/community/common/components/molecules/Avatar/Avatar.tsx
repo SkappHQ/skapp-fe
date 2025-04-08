@@ -95,6 +95,7 @@ const Avatar: FC<AvatarProps> = ({
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          alt={`${firstName} ${lastName}` || "Employee avatar"}
         >
           {children}
         </MuiAvatar>
@@ -112,6 +113,7 @@ const Avatar: FC<AvatarProps> = ({
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        alt={`${firstName} ${lastName}` || "Employee avatar"}
       />
     );
   };
