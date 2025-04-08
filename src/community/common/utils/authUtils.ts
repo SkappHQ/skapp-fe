@@ -12,7 +12,6 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.REMOVE_PEOPLE,
   ROUTES.CHANGE_SUPERVISORS,
   ROUTES.SUBSCRIPTION,
-  ROUTES.SIGN.CREATE_DOCUMENT,
   ROUTES.SIGN.SIGN
 ];
 
@@ -25,6 +24,7 @@ export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
     (path) =>
       !asPath.includes(ROUTES.AUTH.SIGNIN) &&
       !asPath.includes(ROUTES.AUTH.SIGNUP) &&
+      !asPath.includes(ROUTES.SIGN.CREATE_DOCUMENT) &&
       asPath.includes(path)
   );
 };
