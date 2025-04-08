@@ -100,8 +100,8 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             checkboxSelection={checkboxSelection}
             actionColumn={{
               isEnabled:
-                tableBody?.actionColumn?.actionBtns?.left !== null ||
-                tableBody?.actionColumn?.actionBtns?.right !== null
+                tableBody?.actionColumn?.actionBtns?.left !== undefined ||
+                tableBody?.actionColumn?.actionBtns?.right !== undefined
             }}
             customStyles={tableHead?.customStyles}
           />

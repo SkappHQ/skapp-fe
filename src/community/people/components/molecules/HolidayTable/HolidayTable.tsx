@@ -1,11 +1,10 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import Button from "~community/common/components/atoms/Button/Button";
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Table from "~community/common/components/molecules/Table/Table";
 import {
   ButtonSizes,
@@ -17,13 +16,21 @@ import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { isDateGraterThanToday } from "~community/common/utils/dateTimeUtils";
 import SortByDropDown from "~community/people/components/molecules/SortByDropDown/SortByDropDown";
 import { usePeopleStore } from "~community/people/store/store";
+import { Holiday } from "~community/people/types/HolidayTypes";
 import {
-  Holiday,
-  HolidayDataType,
-  HolidayDurationType,
-  holidayModalTypes
-} from "~community/people/types/HolidayTypes";
-import { getFormattedDate } from "~community/people/utils/holidayUtils/commonUtils";
+  getTableHeaders,
+  transformToTableRows
+} from "~community/people/utils/holidayUtils/holidayTableComponentUtils";
+import {
+  getSelectAllCheckboxCheckedStatus,
+  getSelectAllCheckboxEnableStatus,
+  handleAddHolidayButtonClick,
+  handleBulkDeleteClick,
+  handleIndividualDelete,
+  handleIndividualSelectClick,
+  handleSelectAllCheckboxClick,
+  isDeleteButtonDisabled
+} from "~community/people/utils/holidayUtils/holidayTableUtils";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -84,64 +91,18 @@ const HolidayTable: FC<Props> = ({
 
   const [selectedHolidays, setSelectedHolidays] = useState<number[]>([]);
 
-  const tableHeaders = [
-    { id: "date", label: translateText(["tableDateColumnTitle"]) },
-    {
-      id: "holidayName",
-      label: translateText(["tableHolidayNameColumnTitle"])
-    }
-  ];
-
-  const transformToTableRows = useCallback(() => {
-    const returnDurationLabel = (duration: HolidayDurationType): string => {
-      switch (duration) {
-        case HolidayDurationType.FULLDAY:
-          return translateText(["fullDay"]);
-        case HolidayDurationType.HALFDAY_MORNING:
-          return translateText(["halfDayMorning"]);
-        case HolidayDurationType.HALFDAY_EVENING:
-          return translateText(["halfDayEvening"]);
-        default:
-          return duration;
-      }
-    };
-
-    return (
-      (Array.isArray(holidayData) &&
-        holidayData.map((holiday) => ({
-          id: holiday.id,
-          date: (
-            <Box sx={classes.dateWrapper}>
-              <Typography variant="body1">
-                {getFormattedDate(holiday?.date || "", true)}
-              </Typography>
-              <BasicChip
-                label={returnDurationLabel(
-                  holiday?.holidayDuration || HolidayDurationType.NONE
-                )}
-                chipStyles={{ mx: "0.3125rem" }}
-              />
-            </Box>
-          ),
-          holidayName: holiday?.name,
-          actionData: holiday?.id
-        }))) ||
-      []
-    );
-  }, [classes.dateWrapper, holidayData, translateText]);
-
-  const onScroll = () => {
-    if (listInnerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-      const isNearBottom = scrollTop + clientHeight >= scrollHeight;
-      if (isNearBottom && !isFetchingNextPage && hasNextPage) {
-        fetchNextPage();
-      }
-    }
-  };
-
   useEffect(() => {
     const listInnerElement = listInnerRef.current;
+
+    const onScroll = () => {
+      if (listInnerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+        const isNearBottom = scrollTop + clientHeight >= scrollHeight;
+        if (isNearBottom && !isFetchingNextPage && hasNextPage) {
+          fetchNextPage();
+        }
+      }
+    };
 
     if (!isFetchingNextPage && listInnerElement) {
       listInnerElement.addEventListener(
@@ -161,114 +122,11 @@ const HolidayTable: FC<Props> = ({
         listInnerElement?.removeEventListener("wheel", onScroll);
       };
     }
-  }, [isFetchingNextPage, hasNextPage]);
-
-  const renderDeleteAllButton = () => {
-    return holidayData && holidayData?.length > 0 && isPeopleAdmin ? (
-      <Box>
-        <Button
-          label={
-            selectedHolidays.length
-              ? translateText(["deleteSelectedTitle"])
-              : translateText(["deleteAllTitle"])
-          }
-          buttonStyle={ButtonStyle.SECONDARY}
-          size={ButtonSizes.MEDIUM}
-          startIcon={<DeleteButtonIcon />}
-          onClick={handleBulkDelete}
-          disabled={isDeleteButtonDisabled()}
-        />
-      </Box>
-    ) : undefined;
-  };
-
-  const handleBulkDelete = () => {
-    if (selectedHolidays.length) {
-      setSelectedDeleteIds(selectedHolidays);
-      if (setPopupTitle && setIsHolidayModalOpen && setHolidayModalType) {
-        setPopupTitle(translateText(["holidayDeleteModalTitle"]));
-        setHolidayModalType(holidayModalTypes.HOLIDAY_SELECTED_DELETE);
-        setIsHolidayModalOpen(true);
-      }
-    } else {
-      if (setPopupTitle && setIsHolidayModalOpen && setHolidayModalType) {
-        setSelectedDeleteIds(selectedHolidays);
-        setPopupTitle(translateText(["holidayDeleteModalTitle"]));
-        setHolidayModalType(holidayModalTypes.HOLIDAY_BULK_DELETE);
-        setIsHolidayModalOpen(true);
-      }
-    }
-  };
-
-  const handleIndividualSelectClick = (id: number) => () => {
-    setSelectedHolidays((prevSelectedHolidays) => {
-      if (!prevSelectedHolidays.includes(id)) {
-        return [...prevSelectedHolidays, id];
-      } else {
-        return prevSelectedHolidays.filter((selectedId) => selectedId !== id);
-      }
-    });
-  };
+  }, [isFetchingNextPage, hasNextPage, supportsPassive, fetchNextPage]);
 
   useEffect(() => {
     setSelectedHolidays(selectedDeleteIds);
   }, [selectedDeleteIds]);
-
-  const isDeleteButtonDisabled = useCallback(() => {
-    if (holidayData && holidayData?.length > 0) {
-      const currentDate = new Date().toISOString().slice(0, 10);
-      const filteredHolidays = holidayData?.filter(
-        (holiday: HolidayDataType) => (holiday?.date || "") < currentDate
-      );
-
-      return filteredHolidays?.length === holidayData?.length;
-    }
-
-    return holidayData?.length === 0;
-  }, [holidayData]);
-
-  const AddHolidayButtonClick = () => {
-    setHolidayModalType(holidayModalTypes.ADD_CALENDAR);
-    setIsHolidayModalOpen(true);
-
-    if (ongoingQuickSetup.SETUP_HOLIDAYS) {
-      destroyDriverObj();
-    }
-  };
-
-  const futureHolidays = useMemo(() => {
-    if (holidayData && holidayData?.length > 0) {
-      const filteredHolidays = holidayData?.filter(
-        (holiday: HolidayDataType) => {
-          return isDateGraterThanToday(holiday?.date || "");
-        }
-      );
-
-      return filteredHolidays;
-    }
-
-    return [];
-  }, [holidayData]);
-
-  const isSelectAllCheckboxEnabled = useMemo(() => {
-    if (!isPeopleAdmin || !holidayData) {
-      return false;
-    }
-
-    if (futureHolidays && futureHolidays?.length > 0) {
-      return futureHolidays?.length !== holidayData?.length;
-    }
-
-    return false;
-  }, [futureHolidays, holidayData, isPeopleAdmin]);
-
-  const isSelectAllCheckboxChecked = useMemo(() => {
-    if (selectedHolidays.length > 0) {
-      return selectedHolidays?.length === futureHolidays?.length;
-    }
-
-    return false;
-  }, [selectedHolidays, futureHolidays]);
 
   const isRowDisabled = useCallback(
     (id: number) => {
@@ -279,24 +137,36 @@ const HolidayTable: FC<Props> = ({
     [holidayData]
   );
 
-  const handleSelectAllCheckboxClick = () => {
-    if (selectedHolidays.length === futureHolidays?.length) {
-      setSelectedHolidays([]);
-    } else {
-      setSelectedHolidays(
-        futureHolidays?.map((holiday) => holiday.id || 0) || []
-      );
-    }
-  };
+  const tableHeaders = useMemo(
+    () => getTableHeaders(translateText),
+    [translateText]
+  );
 
-  const handleIndividualDelete = (holidayId: number) => {
-    setIndividualDeleteId(holidayId);
-    if (setPopupTitle && setIsHolidayModalOpen && setHolidayModalType) {
-      setPopupTitle(translateText(["holidayDeleteModalTitle"]));
-      setHolidayModalType(holidayModalTypes.HOLIDAY_INDIVIDUAL_DELETE);
-      setIsHolidayModalOpen(true);
-    }
-  };
+  const tableRows = useMemo(
+    () =>
+      transformToTableRows(
+        holidayData,
+        translateText,
+        isRowDisabled,
+        classes.dateWrapper
+      ),
+    [holidayData, translateText, isRowDisabled, classes.dateWrapper]
+  );
+
+  const deleteButtonDisabled = useMemo(
+    () => isDeleteButtonDisabled(holidayData),
+    [holidayData]
+  );
+
+  const isSelectAllCheckboxEnabled = useMemo(
+    () => getSelectAllCheckboxEnableStatus(isPeopleAdmin, holidayData),
+    [holidayData, isPeopleAdmin]
+  );
+
+  const isSelectAllCheckboxChecked = useMemo(
+    () => getSelectAllCheckboxCheckedStatus(holidayData, selectedHolidays),
+    [holidayData, selectedHolidays]
+  );
 
   return (
     <Stack sx={classes.wrapper}>
@@ -305,15 +175,21 @@ const HolidayTable: FC<Props> = ({
           tableName="holidays"
           headers={tableHeaders}
           isLoading={isFetching && !isFetchingNextPage}
-          rows={transformToTableRows()}
+          rows={tableRows}
           isRowDisabled={isRowDisabled}
           selectedRows={selectedHolidays}
           checkboxSelection={{
             isEnabled: true,
             isSelectAllEnabled: isSelectAllCheckboxEnabled,
             isSelectAllChecked: isSelectAllCheckboxChecked,
-            handleIndividualSelectClick: handleIndividualSelectClick,
-            handleSelectAllClick: handleSelectAllCheckboxClick
+            handleIndividualSelectClick: (id: number) =>
+              handleIndividualSelectClick(id, setSelectedHolidays),
+            handleSelectAllClick: () =>
+              handleSelectAllCheckboxClick(
+                holidayData,
+                selectedHolidays,
+                setSelectedHolidays
+              )
           }}
           actionToolbar={{
             firstRow: {
@@ -323,7 +199,32 @@ const HolidayTable: FC<Props> = ({
                   holidayData={holidayData}
                 />
               ),
-              rightButton: renderDeleteAllButton()
+              rightButton:
+                holidayData && holidayData?.length > 0 && isPeopleAdmin ? (
+                  <Box>
+                    <Button
+                      label={
+                        selectedHolidays.length
+                          ? translateText(["deleteSelectedTitle"])
+                          : translateText(["deleteAllTitle"])
+                      }
+                      buttonStyle={ButtonStyle.SECONDARY}
+                      size={ButtonSizes.MEDIUM}
+                      startIcon={<DeleteButtonIcon />}
+                      onClick={() =>
+                        handleBulkDeleteClick(
+                          selectedHolidays,
+                          setSelectedDeleteIds,
+                          setPopupTitle,
+                          setIsHolidayModalOpen,
+                          setHolidayModalType,
+                          translateText
+                        )
+                      }
+                      disabled={deleteButtonDisabled}
+                    />
+                  </Box>
+                ) : undefined
             }
           }}
           tableBody={{
@@ -333,7 +234,15 @@ const HolidayTable: FC<Props> = ({
                 right: isPeopleAdmin
                   ? {
                       styles: { mr: "1rem" },
-                      onClick: (data) => handleIndividualDelete(data)
+                      onClick: (holidayId) =>
+                        handleIndividualDelete(
+                          holidayId,
+                          setIndividualDeleteId,
+                          setPopupTitle,
+                          setIsHolidayModalOpen,
+                          setHolidayModalType,
+                          translateText
+                        )
                     }
                   : undefined
               }
@@ -350,7 +259,13 @@ const HolidayTable: FC<Props> = ({
                   ? {
                       id: "add-holidays-empty-table-screen-button",
                       label: translateText(["addHolidaysBtn"]),
-                      onClick: AddHolidayButtonClick,
+                      onClick: () =>
+                        handleAddHolidayButtonClick(
+                          setHolidayModalType,
+                          setIsHolidayModalOpen,
+                          ongoingQuickSetup,
+                          destroyDriverObj
+                        ),
                       shouldBlink:
                         ongoingQuickSetup.SETUP_HOLIDAYS &&
                         quickSetupCurrentFlowSteps !== null
