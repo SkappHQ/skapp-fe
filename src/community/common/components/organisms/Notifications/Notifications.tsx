@@ -5,6 +5,7 @@ import { JSX } from "react";
 
 import { useMarkNotificationAsRead } from "~community/common/api/notificationsApi";
 import ROUTES from "~community/common/constants/routes";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import {
@@ -32,6 +33,8 @@ const Notifications = ({ data, isLoading }: Props): JSX.Element => {
 
   const { mutate } = useMarkNotificationAsRead();
 
+  const { isLeaveEmployee, isAttendanceEmployee } = useSessionData();
+
   const handelNotifyRow = (
     id: number,
     notificationType: NotificationItemsTypes | null,
@@ -39,17 +42,25 @@ const Notifications = ({ data, isLoading }: Props): JSX.Element => {
   ): void => {
     if (
       isCausedByCurrentUser &&
-      notificationType === NotificationItemsTypes.LEAVE_REQUEST
+      notificationType === NotificationItemsTypes.LEAVE_REQUEST &&
+      isLeaveEmployee
     ) {
       router.push(ROUTES.LEAVE.MY_REQUESTS);
-    } else if (notificationType === NotificationItemsTypes.LEAVE_REQUEST) {
+    } else if (
+      notificationType === NotificationItemsTypes.LEAVE_REQUEST &&
+      isLeaveEmployee
+    ) {
       router.push(ROUTES.LEAVE.LEAVE_REQUESTS);
     } else if (
       isCausedByCurrentUser &&
-      notificationType === NotificationItemsTypes.TIME_ENTRY
+      notificationType === NotificationItemsTypes.TIME_ENTRY &&
+      isAttendanceEmployee
     ) {
       router.push(ROUTES.TIMESHEET.MY_TIMESHEET);
-    } else if (notificationType === NotificationItemsTypes.TIME_ENTRY) {
+    } else if (
+      notificationType === NotificationItemsTypes.TIME_ENTRY &&
+      isAttendanceEmployee
+    ) {
       router.push(ROUTES.TIMESHEET.ALL_TIMESHEETS);
     }
     mutate(id);
@@ -114,7 +125,17 @@ const Notifications = ({ data, isLoading }: Props): JSX.Element => {
                   )
                 }
               >
-                <NotificationContent item={item} />
+                <NotificationContent
+                  isLeaveModuleDisabled={
+                    item?.notificationType ===
+                      NotificationItemsTypes.LEAVE_REQUEST && !isLeaveEmployee
+                  }
+                  isAttendanceModuleDisabled={
+                    item?.notificationType ===
+                      NotificationItemsTypes.TIME_ENTRY && !isAttendanceEmployee
+                  }
+                  item={item}
+                />
               </Box>
               <Divider />
             </Box>

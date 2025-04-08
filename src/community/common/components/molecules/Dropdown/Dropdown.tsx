@@ -24,6 +24,7 @@ type Props<T> = {
   dropdownBtnStyles?: StyleProps;
   wrapperStyles?: StyleProps;
   position?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
+  buttonSize?: ButtonSizes;
 };
 
 const Dropdown = <T extends string | { [key: string]: any }>({
@@ -35,7 +36,8 @@ const Dropdown = <T extends string | { [key: string]: any }>({
   displayKey,
   dropdownBtnStyles,
   wrapperStyles,
-  position = "bottom-start"
+  position = "bottom-start",
+  buttonSize = ButtonSizes.MEDIUM
 }: Props<T>) => {
   const [popperOpen, setPopperOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -65,7 +67,7 @@ const Dropdown = <T extends string | { [key: string]: any }>({
       <Button
         label={title}
         buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
-        size={ButtonSizes.MEDIUM}
+        size={buttonSize}
         styles={dropdownBtnStyles}
         endIcon={
           !disabled ? <Icon name={IconName.DROPDOWN_ARROW_ICON} /> : null

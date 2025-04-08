@@ -11,11 +11,22 @@ import Avatar from "../Avatar/Avatar";
 
 interface Props {
   item: NotificationDataTypes;
+  isLeaveModuleDisabled?: boolean;
+  isAttendanceModuleDisabled?: boolean;
 }
 
-const NotificationContent = ({ item }: Props): JSX.Element => {
+const NotificationContent = ({
+  item,
+  isLeaveModuleDisabled,
+  isAttendanceModuleDisabled
+}: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const translateText = useTranslator("notifications");
+
+  const isViewed =
+    item.isViewed ||
+    isLeaveModuleDisabled === true ||
+    isAttendanceModuleDisabled === true;
 
   return (
     <Stack direction="row" spacing={2} sx={{ width: "100%" }}>
@@ -41,13 +52,13 @@ const NotificationContent = ({ item }: Props): JSX.Element => {
             fontWeight: 700,
             lineHeight: "160%"
           }}
-          color={!item.isViewed ? "primary.dark" : theme.palette.grey.A100}
+          color={!isViewed ? "primary.dark" : theme.palette.grey.A100}
         >
           {item?.body}
         </Typography>
         <Typography
           variant="inherit"
-          color={!item.isViewed ? "primary.dark" : theme.palette.grey.A100}
+          color={!isViewed ? "primary.dark" : theme.palette.grey.A100}
           sx={{ fontSize: "0.75rem", fontWeight: 700, mt: "1rem" }}
           aria-hidden={true}
         >
@@ -58,7 +69,7 @@ const NotificationContent = ({ item }: Props): JSX.Element => {
           )}
         </Typography>
       </Box>
-      {!item.isViewed && (
+      {!isViewed && (
         <Box
           sx={{
             display: "flex",

@@ -282,3 +282,14 @@ export enum NationalityEnum {
   ZAMBIAN = "Zambian",
   ZIMBABWEAN = "Zimbabwean"
 }
+
+export enum RoleModuleEnum {
+  PEOPLE = "people",
+  LEAVE = "leave",
+  ATTENDANCE = "attendance"
+}
+
+export enum RoleNameEnum {
+  ADMIN = "Admin",
+  MANAGER = "Manager"
+}
