@@ -95,6 +95,14 @@ const AppBar = () => {
               <Box
                 sx={{ cursor: "pointer", mr: "0.25rem" }}
                 onClick={() => handleOpenMenu(AppBarItemTypes.NOTIFICATION)}
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleOpenMenu(AppBarItemTypes.NOTIFICATION);
+                  }
+                }}
+                aria-label="Notifications"
               >
                 <Badge
                   color="notifyBadge"
@@ -110,6 +118,14 @@ const AppBar = () => {
                 sx={{ cursor: "pointer" }}
                 onClick={() => handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS)}
                 data-testid={appBarTestId.appBar.profileAvatar}
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS);
+                  }
+                }}
+                aria-label="Account details"
               >
                 <Avatar
                   firstName={employee?.firstName || ""}
