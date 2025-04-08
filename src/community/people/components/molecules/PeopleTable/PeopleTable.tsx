@@ -297,6 +297,10 @@ const PeopleTable: FC<Props> = ({
                         .firstTeamName
                     }
                     isResponsive={true}
+                    chipStyles={{
+                      maxWidth:
+                        (employee?.teams ?? []).length > 1 ? "10rem" : "full"
+                    }}
                   />
                 </Box>
               )}
