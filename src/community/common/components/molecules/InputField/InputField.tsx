@@ -71,6 +71,7 @@ interface Props {
   "data-testid"?: string;
   "validation-testid"?: string;
   keepHelperTextColor?: boolean;
+  ariaLabel?: string;
 }
 
 const InputField = ({
@@ -117,7 +118,8 @@ const InputField = ({
   showAsterisk = true,
   keepHelperTextColor = false,
   "data-testid": testId,
-  "validation-testid": validationTestId
+  "validation-testid": validationTestId,
+  ariaLabel
 }: Props): JSX.Element => {
   const theme = useTheme();
   const classes = styles(theme);
@@ -168,7 +170,7 @@ const InputField = ({
       startAdornment={startAdornment}
       endAdornment={endAdornment}
       inputProps={{
-        "aria-label": label,
+        "aria-label": ariaLabel ? ariaLabel : label,
         "aria-invalid": !!error,
         "data-testid": testId,
         ...(inputType === "number" && { min, max }),

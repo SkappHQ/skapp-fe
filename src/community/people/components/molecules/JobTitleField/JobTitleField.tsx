@@ -44,7 +44,7 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
   const translateText = useTranslator("peopleModule", "jobFamily");
 
   const theme: Theme = useTheme();
-  const classes = styles();
+  const classes = styles(theme);
 
   const { isPeopleAdmin } = useSessionData();
 
@@ -115,6 +115,7 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                 );
               }
             }}
+            ariaLabel="add-job-title-btn"
           />
         </Stack>
       )}
@@ -149,6 +150,7 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                   maxLength={characterLengths.JOB_TITLE_LENGTH}
                   onMouseEnter={() => setHoveredInputField(index)}
                   onMouseLeave={() => setHoveredInputField(null)}
+                  ariaLabel={`job-title.${index}.name`}
                   endAdornment={
                     isPeopleAdmin ? (
                       <InputAdornment
