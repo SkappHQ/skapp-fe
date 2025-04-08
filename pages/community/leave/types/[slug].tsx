@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import ROUTES from "~community/common/constants/routes";
+import { useRouteChangeHandler } from "~community/common/hooks/useRouteChangeHandler";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import LeaveTypeActivationToggleButton from "~community/leave/components/molecules/LeaveTypeActivationToggleButton/LeaveTypeActivationToggleButton";
 import UnsavedChangesModal from "~community/leave/components/molecules/UserPromptModals/UnsavedChangesModal/UnsavedChangesModal";
@@ -17,7 +17,6 @@ import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const LeaveType: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveTypes");
-
   const router = useRouter();
   const { slug } = router.query;
 
@@ -39,31 +38,16 @@ const LeaveType: NextPage = () => {
     stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
-  useEffect(() => {
-    const handleRouteChangeStart = (url: string) => {
-      if (isLeaveTypeFormDirty && !isLeaveTypeModalOpen) {
-        setPendingNavigation(url);
-        setLeaveTypeModalType(LeaveTypeModalEnums.UNSAVED_CHANGES_MODAL);
-        router.events.emit("routeChangeError");
-        throw "routeChange aborted";
-      } else {
-        resetEditingLeaveType();
-      }
-    };
-
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      return "";
-    };
-
-    router.events.on("routeChangeStart", handleRouteChangeStart);
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChangeStart);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isLeaveTypeFormDirty, isLeaveTypeModalOpen]);
+  useRouteChangeHandler({
+    preventNavigation: () => isLeaveTypeFormDirty && !isLeaveTypeModalOpen,
+    onBeforeRouteAbort: (url) => {
+      setPendingNavigation(url);
+      setLeaveTypeModalType(LeaveTypeModalEnums.UNSAVED_CHANGES_MODAL);
+    },
+    onRouteChange: () => {
+      resetEditingLeaveType();
+    }
+  });
 
   const handleBackBtnClick = () => {
     stopAllOngoingQuickSetup();
@@ -71,31 +55,27 @@ const LeaveType: NextPage = () => {
   };
 
   return (
-    <>
-      <ContentLayout
-        title={
-          slug === LeaveTypeFormTypes.EDIT
-            ? translateText(["editLeaveType"])
-            : translateText(["addLeaveType"])
-        }
-        pageHead={translateText(["pageHead"])}
-        isDividerVisible
-        isBackButtonVisible
-        onBackClick={handleBackBtnClick}
-        customRightContent={
-          slug === LeaveTypeFormTypes.EDIT ? (
-            <LeaveTypeActivationToggleButton />
-          ) : (
-            <></>
-          )
-        }
-      >
-        <>
-          <LeaveTypeForm />
-          <UnsavedChangesModal />
-        </>
-      </ContentLayout>
-    </>
+    <ContentLayout
+      title={
+        slug === LeaveTypeFormTypes.EDIT
+          ? translateText(["editLeaveType"])
+          : translateText(["addLeaveType"])
+      }
+      pageHead={translateText(["pageHead"])}
+      isDividerVisible
+      isBackButtonVisible
+      onBackClick={handleBackBtnClick}
+      customRightContent={
+        slug === LeaveTypeFormTypes.EDIT ? (
+          <LeaveTypeActivationToggleButton />
+        ) : undefined
+      }
+    >
+      <>
+        <LeaveTypeForm />
+        <UnsavedChangesModal />
+      </>
+    </ContentLayout>
   );
 };
 
