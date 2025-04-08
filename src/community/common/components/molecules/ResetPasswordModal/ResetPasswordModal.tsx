@@ -191,6 +191,11 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   onMouseLeave={() =>
                     togglePasswordVisibility("currentPassword", false)
                   }
+                  aria-label={
+                    passwordVisibility.currentPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
                 >
                   {passwordVisibility.currentPassword ? (
                     <Visibility />
@@ -226,6 +231,11 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   onMouseUp={() => togglePasswordVisibility("password", false)}
                   onMouseLeave={() =>
                     togglePasswordVisibility("password", false)
+                  }
+                  aria-label={
+                    passwordVisibility.password
+                      ? "Hide password"
+                      : "Show password"
                   }
                 >
                   {passwordVisibility.password ? (
@@ -271,6 +281,11 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   }
                   onMouseLeave={() =>
                     togglePasswordVisibility("confirmPassword", false)
+                  }
+                  aria-label={
+                    passwordVisibility.confirmPassword
+                      ? "Hide password"
+                      : "Show password"
                   }
                 >
                   {passwordVisibility.confirmPassword ? (
