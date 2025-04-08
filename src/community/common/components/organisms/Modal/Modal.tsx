@@ -70,6 +70,7 @@ const Modal: FC<Props> = ({
             <IconButton
               sx={classes.closeIconBtn}
               onClick={(event) => onCloseModal(event, "backdropClick")}
+              aria-label="Close modal"
             >
               {customCloseIcon ? (
                 customCloseIcon
