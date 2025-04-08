@@ -66,6 +66,9 @@ const TableHead: FC<Props> = ({
                 onChange={handleAllRowsCheck}
                 color="primary"
                 sx={classes.tableCheckboxStyles(tableCheckboxStyles)}
+                slotProps={{
+                  input: { "aria-label": `table-row-checkbox-header` }
+                }}
               />
             )}
           </TableCell>

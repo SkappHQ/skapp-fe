@@ -134,6 +134,9 @@ const TableBody: FC<Props> = ({
                   color="primary"
                   sx={classes.tableCheckboxStyles(tableCheckboxStyles)}
                   disabled={isRowDisabled ? isRowDisabled(row) : false}
+                  slotProps={{
+                    input: { "aria-label": `table-row-checkbox-${row.id}` }
+                  }}
                 />
               </TableCell>
             )}
