@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Grid2 as Grid,
   type SelectChangeEvent,
@@ -24,6 +23,7 @@ import { useStorageAvailability } from "~community/common/api/StorageAvailabilit
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
@@ -330,6 +330,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                     height: "6.125rem",
                     backgroundColor: theme.palette.grey[200]
                   }}
+                  firstName={values.firstName || ""}
+                  lastName={values.lastName || ""}
                 >
                   <Icon name={IconName.USER_UPLOAD_ICON} />
                 </Avatar>

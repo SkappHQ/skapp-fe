@@ -14,6 +14,8 @@ import ClockWidget from "~community/attendance/components/molecules/ClockWidget/
 import { useGetUnreadNotificationsCount } from "~community/common/api/notificationsApi";
 import { notificationsQueryKeys } from "~community/common/api/utils/QueryKeys";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import AppBarMenu from "~community/common/components/molecules/AppBarMenu/AppBarMenu";
+import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import { appBarTestId } from "~community/common/constants/testIds";
 import useDrawer from "~community/common/hooks/useDrawer";
 import { useCommonStore } from "~community/common/stores/commonStore";
@@ -22,8 +24,6 @@ import { AppBarItemTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 
-import AppBarMenu from "../../molecules/AppBarMenu/AppBarMenu";
-import Avatar from "../../molecules/Avatar/Avatar";
 import styles from "./styles";
 
 const AppBar = () => {

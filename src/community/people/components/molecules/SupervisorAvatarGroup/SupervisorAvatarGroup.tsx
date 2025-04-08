@@ -81,7 +81,6 @@ const SupervisorAvatarGroup: FC<Props> = ({
                 key={index}
                 firstName={firstName ?? ""}
                 lastName={lastName ?? ""}
-                alt={`${firstName} ${lastName}` || "Employee avatar"}
                 src={image ?? ""}
                 sx={{
                   ...styles,
