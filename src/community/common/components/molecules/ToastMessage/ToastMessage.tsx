@@ -70,6 +70,22 @@ const ToastMessage = ({
     }
   }, [toastType]);
 
+  // Determine the appropriate ARIA role based on toast type
+  const getAriaRole = () => {
+    switch (toastType) {
+      case ToastType.ERROR:
+        return "alert";
+      case ToastType.WARN:
+        return "alert";
+      case ToastType.SUCCESS:
+        return "status";
+      case ToastType.INFO:
+        return "status";
+      default:
+        return "status";
+    }
+  };
+
   return (
     <Snackbar
       key={key}
@@ -88,7 +104,13 @@ const ToastMessage = ({
           : classes.stackStyle
       }
     >
-      <Box onClick={handleToastClick} sx={classes.toastContainer(bgColor)}>
+      <Box
+        onClick={handleToastClick}
+        sx={classes.toastContainer(bgColor)}
+        role={getAriaRole()}
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {/* Vertical Divider */}
         <Divider
           orientation="vertical"
