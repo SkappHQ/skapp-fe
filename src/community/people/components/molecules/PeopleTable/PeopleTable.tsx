@@ -55,6 +55,7 @@ import {
   refactorTeamListData,
   sortSupervisorAvatars
 } from "~community/people/utils/PeopleDirectoryUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
 import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";
@@ -464,7 +465,7 @@ const PeopleTable: FC<Props> = ({
     >
       <Box ref={listInnerRef}>
         <Table
-          tableName="people-table"
+          tableName={TableNames.PEOPLE}
           headers={tableHeaders}
           rows={transformToTableRows()}
           isLoading={isFetching && !isFetchingNextPage}

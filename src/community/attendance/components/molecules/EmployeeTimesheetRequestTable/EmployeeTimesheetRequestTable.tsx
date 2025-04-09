@@ -23,6 +23,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { formatDateWithOrdinalIndicator } from "~community/common/utils/dateTimeUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -210,7 +211,7 @@ const EmployeeTimesheetRequestTable: FC<Props> = ({
       </Typography>
       <TimesheetRequestsFilters />
       <Table
-        tableName="employee-timesheet-request"
+        tableName={TableNames.EMPLOYEE_TIMESHEET_REQUEST}
         headers={tableHeaders}
         rows={transformToTableRows() || []}
         isLoading={isRequestLoading}
