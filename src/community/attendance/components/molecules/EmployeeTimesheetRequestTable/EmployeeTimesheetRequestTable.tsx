@@ -210,19 +210,40 @@ const EmployeeTimesheetRequestTable: FC<Props> = ({
       </Typography>
       <TimesheetRequestsFilters />
       <Table
-        tableHeaders={tableHeaders}
-        tableContainerStyles={classes.tableContainerStyles}
-        tableHeaderCellStyles={classes.tableHeaderStyles}
-        tableRows={transformToTableRows() || []}
-        isPaginationEnabled={true}
+        tableName="employee-timesheet-request"
+        headers={tableHeaders}
+        rows={transformToTableRows() || []}
         isLoading={isRequestLoading}
-        skeletonRows={3}
-        emptyDataTitle={translateText(["emptyRequestTitle"])}
-        emptyDataDescription={translateText(["emptyRequestDesEmployee"])}
-        totalPages={requestData?.totalPages}
-        currentPage={employeeTimesheetRequestParams?.page}
-        onPaginationChange={(_event: ChangeEvent<unknown>, value: number) => {
-          setEmployeeTimesheetRequestPagination(value - 1);
+        tableHead={{
+          customStyles: {
+            cell: classes.tableHeaderStyles
+          }
+        }}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText(["emptyRequestTitle"]),
+              description: translateText(["emptyRequestDesEmployee"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 3
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: requestData?.totalPages,
+            currentPage: employeeTimesheetRequestParams?.page,
+            onChange: (_event: ChangeEvent<unknown>, value: number) => {
+              setEmployeeTimesheetRequestPagination(value - 1);
+            }
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainerStyles
         }}
       />
     </>

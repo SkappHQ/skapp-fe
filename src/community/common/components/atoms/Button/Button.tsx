@@ -2,11 +2,13 @@ import {
   ButtonProps,
   CircularProgress,
   SxProps,
+  Theme,
   Typography,
   useTheme
 } from "@mui/material";
 import { JSX, MouseEvent as ReactMouseEvent, useMemo } from "react";
 
+import Icon from "~community/common/components/atoms/Icon/Icon";
 import { BrandingBlueColor } from "~community/common/constants/stringConstants";
 import {
   ButtonSizes,
@@ -16,7 +18,6 @@ import {
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
-import Icon from "../Icon/Icon";
 import StyledButton from "./StyledButton";
 
 export interface StyledButtonProps {
@@ -32,7 +33,7 @@ export interface StyledButtonProps {
   isFullWidth?: boolean;
   startIcon?: IconName | JSX.Element | null;
   endIcon?: IconName | JSX.Element | null;
-  styles?: SxProps;
+  styles?: SxProps<Theme>;
   disabled?: boolean;
   onClick?: ButtonProps["onClick"];
   onMouseEnter?: ButtonProps["onMouseEnter"];

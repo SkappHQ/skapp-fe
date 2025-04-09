@@ -178,13 +178,24 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
   return (
     <Box>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={tableRows}
-        tableHeaderRowStyles={tableHeaderRowStyles(theme)}
-        tableHeaderCellStyles={tableHeaderCellStyles(theme)}
-        tableContainerStyles={tableContainerStyles(theme)}
-        isPaginationEnabled={false}
-        tableWrapperStyles={tableWrapperStyles}
+        tableName="pending-leave-requests-table"
+        headers={tableHeaders}
+        rows={tableRows}
+        tableHead={{
+          customStyles: {
+            row: tableHeaderRowStyles(theme),
+            cell: tableHeaderCellStyles(theme)
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        customStyles={{
+          container: tableContainerStyles(theme),
+          wrapper: tableWrapperStyles
+        }}
       />
       <Stack direction="row" justifyContent="flex-end" sx={stackStyles(theme)}>
         <Button

@@ -1,4 +1,6 @@
-const styles = () => ({
+import { StyleProps } from "~community/common/types/CommonTypes";
+
+const styles = (): StyleProps => ({
   container: {
     pt: "0.75rem",
     maxHeight: "50vh",
