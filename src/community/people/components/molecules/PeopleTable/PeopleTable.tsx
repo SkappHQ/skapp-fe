@@ -348,6 +348,7 @@ const PeopleTable: FC<Props> = ({
                   : []
               }
               max={3}
+              isHoverModal={true}
             />
           )
       }));

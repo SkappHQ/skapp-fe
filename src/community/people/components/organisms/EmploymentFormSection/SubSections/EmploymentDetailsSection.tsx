@@ -443,7 +443,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   noSearchResultTexts={translateText(["noSearchResults"])}
                   onKeyDown={handleBackspacePressSecondary}
                 />
-              ) : !isReadOnly && !isProfileView ? (
+              ) : (
                 <SupervisorSelector
                   employee={employee}
                   otherSupervisorsCount={otherSupervisorsCount}
@@ -456,41 +456,14 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   isInputsDisabled={
                     isInputsDisabled ||
                     !employee?.employment?.employmentDetails?.primarySupervisor
-                      ?.employeeId
+                      ?.employeeId ||
+                    isReadOnly ||
+                    isProfileView
                   }
                   label={translateText(["otherSupervisors"])}
                   filterEl={secondarySupervisorFilterEl}
                   setFilterEl={setSecondarySupervisorFilterEl}
                   isSearchResultsLoading={isSecondaryManagersLoading}
-                />
-              ) : (
-                <MultiSelectChipInput
-                  chipList={
-                    employee?.employment?.employmentDetails?.otherSupervisors?.map(
-                      (supervisor) =>
-                        `${supervisor.firstName} ${supervisor.lastName}`
-                    ) || []
-                  }
-                  chipWrapperStyles={{
-                    borderWidth: 0
-                  }}
-                  chipStyles={{
-                    backgroundColor: "common.white",
-                    color: theme.palette.grey[700],
-                    borderWidth: 0,
-                    borderColor: "common.white",
-                    fontWeight: 400,
-                    fontSize: "1rem",
-                    height: "max-content"
-                  }}
-                  hiddenChipStyles={{
-                    borderWidth: 0,
-                    backgroundColor: theme.palette.grey[100],
-                    fontWeight: 400,
-                    fontSize: "1rem",
-                    height: "max-content"
-                  }}
-                  label={"Other Supervisors"}
                 />
               )}
             </Grid>

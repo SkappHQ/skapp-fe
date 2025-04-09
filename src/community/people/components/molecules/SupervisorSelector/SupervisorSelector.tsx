@@ -213,12 +213,15 @@ const SupervisorSelector = ({
                   )
                 : []
             }
-            max={6}
+            max={3}
+            isHoverModal={isInputsDisabled}
           />
         )}
-        <Box sx={{ ml: "auto", mr: "1rem", mt: "0.5rem" }}>
-          <Icon name={IconName.SEARCH_ICON} />
-        </Box>
+        {!isInputsDisabled && (
+          <Box sx={{ ml: "auto", mr: "1rem", mt: "0.5rem" }}>
+            <Icon name={IconName.SEARCH_ICON} />
+          </Box>
+        )}
       </Box>
       <Popper
         anchorEl={filterEl}
