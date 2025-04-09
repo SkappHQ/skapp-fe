@@ -10,6 +10,7 @@ import React, {
   useState
 } from "react";
 
+import useSessionData from "~community/common/hooks/useSessionData";
 import { allowsAlphaNumericWithHyphenAndUnderscore } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { filterByValue } from "~community/common/utils/commonUtil";
@@ -90,6 +91,8 @@ const useEmployeeDetailsFormHandler = ({
     secondaryManagerSearchTerm || "",
     SystemPermissionTypes.MANAGERS
   );
+
+  const { isProTier } = useSessionData();
 
   const workTimeZoneDictionary: Record<string, string> = timeZonesList.reduce<
     Record<string, string>
@@ -219,19 +222,22 @@ const useEmployeeDetailsFormHandler = ({
       searchTerm: e.target.value.trimStart(),
       setManagerSearchTerm: setPrimaryManagerSearchTerm,
       formik,
-      setSupervisor: setEmploymentDetails
+      setSupervisor: setEmploymentDetails,
+      isProTier
     });
   };
 
   const onSecondaryManagerSearchChange = async (
-    searchTerm: string
+    e?: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    searchTerm?: string
   ): Promise<void> => {
     await onManagerSearchChange({
-      managerType: "secondarySupervisor",
-      searchTerm,
+      managerType: "otherSupervisors",
+      searchTerm: (searchTerm || e?.target.value.trimStart()) as string,
       setManagerSearchTerm: setSecondaryManagerSearchTerm,
       formik,
-      setSupervisor: setEmploymentDetails
+      setSupervisor: setEmploymentDetails,
+      isProTier
     });
   };
 
@@ -266,19 +272,19 @@ const useEmployeeDetailsFormHandler = ({
         "employeeId"
       );
     }
-    if (
-      employee?.employment?.employmentDetails?.otherSupervisors?.length
-    ) {
+    if (employee?.employment?.employmentDetails?.otherSupervisors?.length) {
       // Filter out all manager IDs from the otherSupervisors array
-      employee?.employment?.employmentDetails?.otherSupervisors.forEach(supervisor => {
-        if (supervisor.employeeId) {
-          newManagerList = filterByValue(
-            newManagerList,
-            supervisor.employeeId,
-            "employeeId"
-          );
+      employee?.employment?.employmentDetails?.otherSupervisors.forEach(
+        (supervisor) => {
+          if (supervisor.employeeId) {
+            newManagerList = filterByValue(
+              newManagerList,
+              supervisor.employeeId,
+              "employeeId"
+            );
+          }
         }
-      });
+      );
     }
 
     return newManagerList;
@@ -314,7 +320,7 @@ const useEmployeeDetailsFormHandler = ({
     });
     formik?.values?.otherSupervisors &&
       (await onManagerRemove({
-        fieldName: "secondarySupervisor",
+        fieldName: "otherSupervisors",
         formik,
         searchTermSetter: setSecondaryManagerSearchTerm,
         setSupervisor: setEmploymentDetails
@@ -326,7 +332,7 @@ const useEmployeeDetailsFormHandler = ({
   ): Promise<void> => {
     await handleManagerSelect({
       user,
-      fieldName: "secondarySupervisor",
+      fieldName: "otherSupervisors",
       formik,
       searchTermSetter: setSecondaryManagerSearchTerm,
       setSupervisor: setEmploymentDetails,
@@ -336,7 +342,7 @@ const useEmployeeDetailsFormHandler = ({
 
   const handleSecondaryManagerRemove = async (): Promise<void> => {
     await onManagerRemove({
-      fieldName: "secondarySupervisor",
+      fieldName: "otherSupervisors",
       formik,
       searchTermSetter: setSecondaryManagerSearchTerm,
       setSupervisor: setEmploymentDetails
@@ -432,7 +438,7 @@ const useEmployeeDetailsFormHandler = ({
 
     if (!primarySupervisor?.employeeId && hasSecondarySupervisor) {
       onManagerRemove({
-        fieldName: "secondarySupervisor",
+        fieldName: "otherSupervisors",
         formik,
         searchTermSetter: setSecondaryManagerSearchTerm,
         setSupervisor: setEmploymentDetails

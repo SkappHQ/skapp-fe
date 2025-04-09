@@ -1,20 +1,16 @@
-import { Box, Grid2 as Grid, Stack, Typography } from "@mui/material";
+import { Grid2 as Grid } from "@mui/material";
 import { Theme, useTheme } from "@mui/system";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
 import { useRouter } from "next/router";
 import {
-  MouseEvent,
   forwardRef,
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
   useState
 } from "react";
 
-import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
-import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import AvatarSearch from "~community/common/components/molecules/AvatarSearch/AvatarSearch";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
@@ -23,20 +19,15 @@ import InputField from "~community/common/components/molecules/InputField/InputF
 import InteractiveInputTrigger from "~community/common/components/molecules/InteractiveInputTrigger/InteractiveInputTrigger";
 import MultiSelectChipInput from "~community/common/components/molecules/MultiSelectChipInput";
 import MultivalueDropdownList from "~community/common/components/molecules/MultiValueDropdownList/MultivalueDropdownList";
-import Popper from "~community/common/components/molecules/Popper/Popper";
 import {
   LONG_DATE_TIME_FORMAT,
   REVERSE_DATE_FORMAT
 } from "~community/common/constants/timeConstants";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import {
-  AvatarPropTypes,
-  MenuTypes
-} from "~community/common/types/MoleculeTypes";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import MultiSelectManagerSearch from "~community/people/components/molecules/MultiSelectManagerSearch/MultiSelectManagerSearch";
+import SupervisorSelector from "~community/people/components/molecules/SupervisorSelector/SupervisorSelector";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useEmployeeDetailsFormHandler from "~community/people/hooks/useEmployeeDetailsFormHandler";
 import { usePeopleStore } from "~community/people/store/store";
@@ -80,40 +71,20 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       "employmentDetails"
     );
 
-    const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
-    const [filterOpen, setFilterOpen] = useState<boolean>(false);
-    const filterBeOpen: boolean = filterOpen && Boolean(filterEl);
-    const boxRef = useRef<HTMLDivElement>(null);
-    const [boxWidth, setBoxWidth] = useState(0);
-    const filterId: string | undefined = filterBeOpen
-      ? "filter-popper"
-      : undefined;
+    const [secondarySupervisorFilterEl, setSecondarySupervisorFilterEl] =
+      useState<null | HTMLElement>(null);
 
-    const [selectedManagers, setSelectedManagers] = useState<L4ManagerType[]>(
-      []
-    );
-
-    useEffect(() => {
-      if (boxRef.current) {
-        setBoxWidth(boxRef.current.clientWidth);
-      }
-    }, [filterOpen]);
-
+    const [selectedOtherSupervisors, setSelectedOtherSupervisors] = useState<
+      L4ManagerType[]
+    >([]);
     const router = useRouter();
     const { id } = router.query;
 
-    const { isPeopleManager } = useSessionData();
+    const { isPeopleManager, isProTier } = useSessionData();
 
-    const {
-      employee,
-      setTeamModalType,
-      setIsTeamModalOpen,
-      setEmploymentDetails
-    } = usePeopleStore((state) => state);
-
-    const handleFilterClose = (): void => {
-      setFilterOpen(false);
-    };
+    const { employee, setTeamModalType, setIsTeamModalOpen } = usePeopleStore(
+      (state) => state
+    );
 
     const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
     const [isUniqueEmployeeNo, setIsUniqueEmployeeNo] =
@@ -209,14 +180,19 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       }
     }));
 
+    const otherSupervisorsCount =
+      employee?.employment?.employmentDetails?.otherSupervisors?.length ?? 0;
+
     useEffect(() => {
-      setEmploymentDetails({
-        employmentDetails: {
-          ...employee,
-          otherSupervisors: selectedManagers
-        }
-      });
-    }, [selectedManagers]);
+      if (employee?.employment?.employmentDetails?.otherSupervisors) {
+        setSelectedOtherSupervisors(
+          employee?.employment?.employmentDetails?.otherSupervisors
+        );
+      }
+    }, [
+      employee?.employment?.employmentDetails?.otherSupervisors,
+      setSelectedOtherSupervisors
+    ]);
 
     return (
       <PeopleFormSectionWrapper
@@ -424,140 +400,90 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               size={{ xs: 12, md: 6, xl: 4 }}
               sx={{ display: isEmployee ? "none" : "block" }}
             >
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{
-                  mt: "0.3rem"
-                }}
-              >
-                <Typography
-                  variant="placeholder"
-                  gutterBottom
-                  sx={{
-                    color: isInputsDisabled
-                      ? theme.palette.text.disabled
-                      : "common.black"
-                  }}
-                >
-                  Other Supervisors
-                </Typography>
-              </Stack>
-              <Box
-                ref={boxRef}
-                alignItems={"center"}
-                sx={{
-                  backgroundColor: theme.palette.grey[100],
-                  height: "3rem",
-                  borderRadius: "0.5rem",
-                  flexDirection: "row",
-                  display: "flex",
-                  width: "100%"
-                }}
-                onClick={(event: MouseEvent<HTMLElement>): void => {
-                  setFilterEl(event.currentTarget);
-                  setFilterOpen((previousOpen) => !previousOpen);
-                }}
-              >
-                {(
-                  employee?.employment?.employmentDetails?.otherSupervisors ||
-                  []
-                ).length < 3 ? (
-                  employee?.employment?.employmentDetails?.otherSupervisors?.map(
-                    (manager: L4ManagerType) => (
-                      <Box
-                        sx={{ height: "3.125rem", pt: "0.3125rem" }}
-                        key={manager?.employeeId}
-                      >
-                        <AvatarChip
-                          firstName={manager?.firstName ?? ""}
-                          lastName={
-                            employee?.employment?.employmentDetails
-                              ?.otherSupervisors?.length === 1
-                              ? (manager?.lastName ?? "")
-                              : ""
-                          }
-                          avatarUrl={manager?.authPic}
-                          isResponsiveLayout={false}
-                          isDeleteAvailable={true}
-                          chipStyles={{
-                            backgroundColor: "common.white",
-                            color: "common.black",
-                            height: "2.5rem",
-                            "& .MuiChip-deleteIcon": {
-                              mr: "0.9375rem"
-                            },
-                            "& .MuiChip-label": {
-                              pl: "0.5rem",
-                              ml: "0.25rem",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden !important",
-                              textOverflow: "ellipsis",
-                              maxWidth: "11.25rem"
-                            },
-                            mt: "0rem",
-                            ml: "0.75rem"
-                          }}
-                          isDisabled={isInputsDisabled}
-                        />
-                      </Box>
-                    )
-                  )
-                ) : (
-                    employee?.employment?.employmentDetails?.otherSupervisors ||
-                    []
-                  ).length === 0 ? (
-                  <Typography
-                    variant="placeholder"
-                    gutterBottom
-                    sx={{
-                      color: theme.palette.grey[400],
-                      ml: "0.5rem",
-                      fontSize: "1rem"
-                    }}
-                  >
-                    Select supervisors
-                  </Typography>
-                ) : (
-                  <AvatarGroup
-                    avatars={
-                      employee?.employment?.employmentDetails?.otherSupervisors
-                        ? employee?.employment?.employmentDetails?.otherSupervisors?.map(
-                            (manager: L4ManagerType) =>
-                              ({
-                                firstName: manager?.firstName,
-                                lastName: manager?.lastName,
-                                image: manager?.authPic
-                              }) as AvatarPropTypes
-                          )
-                        : []
-                    }
-                    max={6}
-                  />
-                )}
-              </Box>
-              <Popper
-                anchorEl={filterEl}
-                open={filterOpen}
-                position={"bottom-end"}
-                menuType={MenuTypes.FILTER}
-                id={filterId}
-                handleClose={handleFilterClose}
-                timeout={300}
-                containerStyles={{
-                  maxHeight: "20.25rem",
-                  width: `${boxWidth}px`,
-                  backgroundColor: theme.palette.notifyBadge.contrastText
-                }}
-              >
-                <MultiSelectManagerSearch
-                  selectedManagers={selectedManagers}
-                  setSelectedManagers={setSelectedManagers}
+                {!isProTier ? (
+                <AvatarSearch
+                  id="secondary-manager-search"
+                  title={translateText(["secondarySupervisor"])}
+                  newResourceManager={
+                  employee?.employment?.employmentDetails
+                    ?.otherSupervisors?.[0]
+                  }
+                  isManagerPopperOpen={isSecondaryManagerPopperOpen}
                   managerSuggestions={secondaryManagerSuggestions}
-                  onManagerSearchChange={onSecondaryManagerSearchChange}
                   managerSearchTerm={secondaryManagerSearchTerm}
+                  handleManagerRemove={handleSecondaryManagerRemove}
+                  handleManagerSelect={handleSecondaryManagerSelect}
+                  setIsManagerPopperOpen={setIsSecondaryManagerPopperOpen}
+                  onManagerSearchChange={onSecondaryManagerSearchChange}
+                  errors={errors?.otherSupervisors ?? ""}
+                  inputName={"secondarySupervisor"}
+                  isDisabled={
+                  isReadOnly ||
+                  isProfileView ||
+                  Number(
+                    employee?.employment?.employmentDetails?.primarySupervisor
+                    ?.employeeId ?? 0
+                  ) <= 0 ||
+                  isInputsDisabled
+                  }
+                  isDisabledLabel={
+                  Number(
+                    employee?.employment?.employmentDetails?.primarySupervisor
+                    ?.employeeId ?? 0
+                  ) <= 0 || isInputsDisabled
+                  }
+                  placeholder={
+                  !isReadOnly && !isProfileView
+                    ? translateText(["selectSecondarySupervisor"])
+                    : ""
+                  }
+                  needSearchIcon={!isReadOnly && !isProfileView}
+                  noSearchResultTexts={translateText(["noSearchResults"])}
+                  onKeyDown={handleBackspacePressSecondary}
                 />
-              </Popper>
+                ) : !isReadOnly && !isProfileView ? (
+                <SupervisorSelector
+                  employee={employee}
+                  otherSupervisorsCount={otherSupervisorsCount}
+                  managerSuggestions={secondaryManagerSuggestions}
+                  managerSearchTerm={secondaryManagerSearchTerm}
+                  onmanagerSearchChange={onSecondaryManagerSearchChange}
+                  selectedManagers={selectedOtherSupervisors}
+                  setSelectedManagers={setSelectedOtherSupervisors}
+                  isInputsDisabled={isInputsDisabled}
+                  label="Other Supervisors"
+                  filterEl={secondarySupervisorFilterEl}
+                  setFilterEl={setSecondarySupervisorFilterEl}
+                />
+                ) : (
+                <MultiSelectChipInput
+                  chipList={
+                  employee?.employment?.employmentDetails?.otherSupervisors?.map(
+                    supervisor => `${supervisor.firstName} ${supervisor.lastName}`
+                  ) || []
+                  }
+                  chipWrapperStyles={{
+                  borderWidth: 0
+                  }}
+                  chipStyles={{
+                  backgroundColor: "common.white",
+                  color: theme.palette.grey[700],
+                  borderWidth: 0,
+                  borderColor: "common.white",
+                  fontWeight: 400,
+                  fontSize: "1rem",
+                  height: "max-content"
+                  }}
+                  hiddenChipStyles={{
+                  borderWidth: 0,
+                  backgroundColor: theme.palette.grey[100],
+                  fontWeight: 400,
+                  fontSize: "1rem",
+                  height: "max-content"
+                  }}
+                  label={"Other Supervisors"}
+                />
+                )}
             </Grid>
             {isPeopleManager && (
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>

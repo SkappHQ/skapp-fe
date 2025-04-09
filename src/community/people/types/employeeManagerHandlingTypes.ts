@@ -1,5 +1,4 @@
 import { FormikProps } from "formik";
-import { ChangeEvent } from "react";
 
 import { EmployeeDataType } from "./EmployeeTypes";
 import {
@@ -22,6 +21,7 @@ export interface ManagerSearchType {
   setManagerSearchTerm: (searchTerm: string) => void;
   formik: FormikProps<L3EmploymentDetailsType>;
   setSupervisor: (value: L2EmploymentFormDetailsType) => void;
+  isProTier: boolean;
 }
 
 export interface ManagerRemoveType {
