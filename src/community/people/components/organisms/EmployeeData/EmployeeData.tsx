@@ -73,10 +73,6 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   };
 
   useEffect(() => {
-    //NOTE: For debugging purposes, do not remove
-    console.log("file: EmployeeData");
-    console.log("employeeData: ", employeeData);
-
     if (employeeData?.pages) {
       const employeeDataItems = employeeData?.pages
         ?.map((page: any) => page?.items)
