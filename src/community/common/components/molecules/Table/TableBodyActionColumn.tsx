@@ -67,6 +67,7 @@ const TableBodyActionColumn: FC<
             ])}
             disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.left?.onClick(row.actionData)}
+            ariaLabel={`table-action-column-edit-button-${row.id}`}
           />
         )}
         {actionBtns?.right && (
@@ -88,6 +89,7 @@ const TableBodyActionColumn: FC<
             ])}
             disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.right?.onClick(row.actionData)}
+            ariaLabel={`table-action-column-delete-button-${row.id}`}
           />
         )}
       </TableCell>

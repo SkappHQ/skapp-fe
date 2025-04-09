@@ -149,6 +149,7 @@ const TeamsTable: FC<Props> = ({
               hoverEffect={false}
               buttonStyles={classes.editIconBtn}
               onClick={() => handleEditTeam(teamDetails)}
+              ariaLabel={`table-action-column-edit-button-${teamDetails.teamId}`}
             />
             <IconButton
               icon={
@@ -162,6 +163,7 @@ const TeamsTable: FC<Props> = ({
               hoverEffect={false}
               buttonStyles={classes.deleteIconBtn}
               onClick={() => handleDeleteTeam(teamDetails)}
+              ariaLabel={`table-action-column-delete-button-${teamDetails.teamId}`}
             />
           </>
         ) : (
