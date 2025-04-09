@@ -22,7 +22,9 @@ export const handleManagerSelect = async ({
       employmentDetails: {
         ...currentEmploymentDetails,
         otherSupervisors: [
-          ...Array.isArray(currentEmploymentDetails?.otherSupervisors) ? currentEmploymentDetails.otherSupervisors : [],
+          ...(Array.isArray(currentEmploymentDetails?.otherSupervisors)
+            ? currentEmploymentDetails.otherSupervisors
+            : []),
           {
             employeeId: user?.employeeId,
             firstName: user?.firstName,
@@ -84,7 +86,7 @@ export const onManagerRemove = async ({
   setSupervisor({
     employmentDetails: {
       ...currentEmploymentDetails,
-      [fieldName]: {}
+      [fieldName]: fieldName === "otherSupervisors" ? [] : {}
     }
   });
 };

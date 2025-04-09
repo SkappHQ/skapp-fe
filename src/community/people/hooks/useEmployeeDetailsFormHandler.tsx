@@ -231,9 +231,12 @@ const useEmployeeDetailsFormHandler = ({
     e?: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
     searchTerm?: string
   ): Promise<void> => {
+    const term =
+      searchTerm !== undefined ? searchTerm : e?.target?.value?.trimStart();
+
     await onManagerSearchChange({
       managerType: "otherSupervisors",
-      searchTerm: (searchTerm || e?.target.value.trimStart()) as string,
+      searchTerm: term as string,
       setManagerSearchTerm: setSecondaryManagerSearchTerm,
       formik,
       setSupervisor: setEmploymentDetails,
@@ -505,7 +508,8 @@ const useEmployeeDetailsFormHandler = ({
     handleSecondaryManagerRemove,
     refetch,
     handleBackspacePressPrimary,
-    handleBackspacePressSecondary
+    handleBackspacePressSecondary,
+    setSecondaryManagerSearchTerm
   };
 };
 

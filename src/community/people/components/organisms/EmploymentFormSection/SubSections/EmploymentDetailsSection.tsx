@@ -155,7 +155,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       handleSecondaryManagerRemove,
       refetch,
       handleBackspacePressPrimary,
-      handleBackspacePressSecondary
+      handleBackspacePressSecondary,
+      setSecondaryManagerSearchTerm
     } = useEmployeeDetailsFormHandler({
       formik,
       id,
@@ -400,13 +401,13 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               size={{ xs: 12, md: 6, xl: 4 }}
               sx={{ display: isEmployee ? "none" : "block" }}
             >
-                {!isProTier ? (
+              {!isProTier ? (
                 <AvatarSearch
                   id="secondary-manager-search"
                   title={translateText(["secondarySupervisor"])}
                   newResourceManager={
-                  employee?.employment?.employmentDetails
-                    ?.otherSupervisors?.[0]
+                    employee?.employment?.employmentDetails
+                      ?.otherSupervisors?.[0]
                   }
                   isManagerPopperOpen={isSecondaryManagerPopperOpen}
                   managerSuggestions={secondaryManagerSuggestions}
@@ -418,72 +419,74 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   errors={errors?.otherSupervisors ?? ""}
                   inputName={"secondarySupervisor"}
                   isDisabled={
-                  isReadOnly ||
-                  isProfileView ||
-                  Number(
-                    employee?.employment?.employmentDetails?.primarySupervisor
-                    ?.employeeId ?? 0
-                  ) <= 0 ||
-                  isInputsDisabled
+                    isReadOnly ||
+                    isProfileView ||
+                    Number(
+                      employee?.employment?.employmentDetails?.primarySupervisor
+                        ?.employeeId ?? 0
+                    ) <= 0 ||
+                    isInputsDisabled
                   }
                   isDisabledLabel={
-                  Number(
-                    employee?.employment?.employmentDetails?.primarySupervisor
-                    ?.employeeId ?? 0
-                  ) <= 0 || isInputsDisabled
+                    Number(
+                      employee?.employment?.employmentDetails?.primarySupervisor
+                        ?.employeeId ?? 0
+                    ) <= 0 || isInputsDisabled
                   }
                   placeholder={
-                  !isReadOnly && !isProfileView
-                    ? translateText(["selectSecondarySupervisor"])
-                    : ""
+                    !isReadOnly && !isProfileView
+                      ? translateText(["selectSecondarySupervisor"])
+                      : ""
                   }
                   needSearchIcon={!isReadOnly && !isProfileView}
                   noSearchResultTexts={translateText(["noSearchResults"])}
                   onKeyDown={handleBackspacePressSecondary}
                 />
-                ) : !isReadOnly && !isProfileView ? (
+              ) : !isReadOnly && !isProfileView ? (
                 <SupervisorSelector
                   employee={employee}
                   otherSupervisorsCount={otherSupervisorsCount}
                   managerSuggestions={secondaryManagerSuggestions}
                   managerSearchTerm={secondaryManagerSearchTerm}
+                  setManagerSearchTerm={setSecondaryManagerSearchTerm}
                   onmanagerSearchChange={onSecondaryManagerSearchChange}
                   selectedManagers={selectedOtherSupervisors}
                   setSelectedManagers={setSelectedOtherSupervisors}
-                  isInputsDisabled={isInputsDisabled}
+                  isInputsDisabled={isInputsDisabled || !employee?.employment?.employmentDetails?.primarySupervisor?.employeeId}
                   label="Other Supervisors"
                   filterEl={secondarySupervisorFilterEl}
                   setFilterEl={setSecondarySupervisorFilterEl}
                 />
-                ) : (
+              ) : (
                 <MultiSelectChipInput
                   chipList={
-                  employee?.employment?.employmentDetails?.otherSupervisors?.map(
-                    supervisor => `${supervisor.firstName} ${supervisor.lastName}`
-                  ) || []
+                    employee?.employment?.employmentDetails?.otherSupervisors?.map(
+                      (supervisor) =>
+                        `${supervisor.firstName} ${supervisor.lastName}`
+                    ) || []
                   }
                   chipWrapperStyles={{
-                  borderWidth: 0
+                    borderWidth: 0
                   }}
                   chipStyles={{
-                  backgroundColor: "common.white",
-                  color: theme.palette.grey[700],
-                  borderWidth: 0,
-                  borderColor: "common.white",
-                  fontWeight: 400,
-                  fontSize: "1rem",
-                  height: "max-content"
+                    backgroundColor: "common.white",
+                    color: theme.palette.grey[700],
+                    borderWidth: 0,
+                    borderColor: "common.white",
+                    fontWeight: 400,
+                    fontSize: "1rem",
+                    height: "max-content"
                   }}
                   hiddenChipStyles={{
-                  borderWidth: 0,
-                  backgroundColor: theme.palette.grey[100],
-                  fontWeight: 400,
-                  fontSize: "1rem",
-                  height: "max-content"
+                    borderWidth: 0,
+                    backgroundColor: theme.palette.grey[100],
+                    fontWeight: 400,
+                    fontSize: "1rem",
+                    height: "max-content"
                   }}
                   label={"Other Supervisors"}
                 />
-                )}
+              )}
             </Grid>
             {isPeopleManager && (
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>

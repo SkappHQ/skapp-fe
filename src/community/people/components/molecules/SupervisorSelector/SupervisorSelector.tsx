@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import {
+  ChangeEvent,
   Dispatch,
   MouseEvent,
   SetStateAction,
@@ -31,13 +32,17 @@ interface Props {
   otherSupervisorsCount: number;
   managerSuggestions: EmployeeDataType[];
   managerSearchTerm: string;
-  onmanagerSearchChange: (searchTerm: string) => Promise<void>;
+  onmanagerSearchChange: (
+    e?: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    searchTerm?: string
+  ) => Promise<void>;
   selectedManagers: L4ManagerType[];
   setSelectedManagers: Dispatch<SetStateAction<L4ManagerType[]>>;
   isInputsDisabled: boolean;
   label: string;
   filterEl: HTMLElement | null;
   setFilterEl: Dispatch<SetStateAction<HTMLElement | null>>;
+  setManagerSearchTerm: Dispatch<SetStateAction<string>>;
 }
 
 const SupervisorSelector = ({
@@ -51,7 +56,8 @@ const SupervisorSelector = ({
   isInputsDisabled,
   label,
   filterEl,
-  setFilterEl
+  setFilterEl,
+  setManagerSearchTerm
 }: Props) => {
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const filterBeOpen: boolean = filterOpen && Boolean(filterEl);
@@ -106,11 +112,12 @@ const SupervisorSelector = ({
           cursor: "pointer"
         }}
         onClick={(event: MouseEvent<HTMLElement>): void => {
+          setManagerSearchTerm("");
           setFilterEl(event.currentTarget);
-          setFilterOpen((previousOpen) => !previousOpen);
+          !isInputsDisabled && setFilterOpen((previousOpen) => !previousOpen);
         }}
       >
-        { otherSupervisorsCount < 3 ? (
+        {otherSupervisorsCount < 3 ? (
           employee?.employment?.employmentDetails?.otherSupervisors?.map(
             (manager: L4ManagerType) => (
               <Box
@@ -174,6 +181,17 @@ const SupervisorSelector = ({
           </Box>
         ) : (
           <AvatarGroup
+            componentStyles={{
+              ".MuiAvatarGroup-avatar": {
+                bgcolor: theme.palette.grey[100],
+                color: theme.palette.primary.dark,
+                fontSize: "0.875rem",
+                height: "2.5rem",
+                width: "2.5rem",
+                fontWeight: 400,
+                flexDirection: "row-reverse"
+              }
+            }}
             avatars={
               employee?.employment?.employmentDetails?.otherSupervisors
                 ? employee?.employment?.employmentDetails?.otherSupervisors?.map(

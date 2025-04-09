@@ -3,9 +3,11 @@ import { DateTime } from "luxon";
 import { useMemo } from "react";
 
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import { daysTypes } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveStates } from "~community/common/types/CommonTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { ResourceAvailabilityPayload } from "~community/leave/types/MyRequests";
 import {
@@ -49,6 +51,16 @@ const LeaveSummary = ({
   const classes = styles(theme);
 
   const { data: myManagers } = useGetMyManagers();
+
+  const primaryManager = useMemo(() => {
+    if (!myManagers || myManagers.length === 0) return null;
+    return myManagers.find((manager) => manager.isPrimaryManager === true);
+  }, [myManagers]);
+
+  const otherManagers = useMemo(() => {
+    if (!myManagers || myManagers.length === 0) return [];
+    return myManagers.filter((manager) => manager.isPrimaryManager === false);
+  }, [myManagers]);
 
   const duration = useMemo(() => {
     return getDuration({
@@ -101,15 +113,29 @@ const LeaveSummary = ({
             {translateText(["recipient"])}
           </Typography>
           <Stack sx={classes.chipWrapper}>
-            {myManagers?.map((manager: MyManagersType) => (
-              <AvatarChip
-                key={manager.employeeId}
-                firstName={manager.firstName}
-                lastName={manager.lastName}
-                avatarUrl={manager.authPic}
-                chipStyles={classes.chipStyles}
-              />
-            ))}
+            <AvatarChip
+              key={primaryManager?.employeeId ?? ""}
+              firstName={primaryManager?.firstName ?? ""}
+              lastName={primaryManager?.lastName ?? ""}
+              avatarUrl={primaryManager?.authPic ?? ""}
+              chipStyles={classes.chipStyles}
+            />
+            <AvatarGroup
+              componentStyles={classes.avatarGroup}
+              avatars={
+                otherManagers
+                  ? otherManagers?.map(
+                      (manager: MyManagersType) =>
+                        ({
+                          firstName: manager?.firstName,
+                          lastName: manager?.lastName,
+                          image: manager?.authPic
+                        }) as AvatarPropTypes
+                    )
+                  : []
+              }
+              max={3}
+            />
           </Stack>
         </Stack>
       </Stack>

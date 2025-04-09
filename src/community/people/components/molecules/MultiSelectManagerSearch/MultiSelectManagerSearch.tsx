@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import { Box, type Theme, useTheme } from "@mui/system";
-import { Dispatch, JSX, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, JSX, SetStateAction } from "react";
 
 import Checkbox from "~community/common/components/atoms/Checkbox/Checkbox";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
@@ -14,7 +14,10 @@ interface Props {
   setSelectedManagers: Dispatch<SetStateAction<L4ManagerType[]>>;
   managerSuggestions: EmployeeDataType[];
   hasAllSelector?: boolean;
-  onManagerSearchChange: (searchTerm: string) => Promise<void>;
+  onManagerSearchChange: (
+    e?: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    searchTerm?: string
+  ) => Promise<void>;
   managerSearchTerm: string;
 }
 
@@ -31,11 +34,13 @@ const MultiSelectManagerSearch = ({
     (state) => state
   );
 
-  const toggleManagerSelection = (employee: EmployeeDataType | L4ManagerType) => {
+  const toggleManagerSelection = (
+    employee: EmployeeDataType | L4ManagerType
+  ) => {
     const isSelected = selectedManagers.some(
       (manager) => manager.employeeId === Number(employee.employeeId)
     );
-  
+
     const newSelectedManagers = isSelected
       ? selectedManagers.filter(
           (manager) => manager.employeeId !== Number(employee.employeeId)
@@ -49,7 +54,7 @@ const MultiSelectManagerSearch = ({
             authPic: employee.authPic
           }
         ];
-    
+
     setSelectedManagers(newSelectedManagers);
     setEmploymentDetails({
       employmentDetails: {
@@ -67,7 +72,7 @@ const MultiSelectManagerSearch = ({
           value={managerSearchTerm}
           setSearchTerm={(value: string) => {
             const searchTerm = value.trimStart();
-            onManagerSearchChange(searchTerm);
+            onManagerSearchChange(undefined, searchTerm);
           }}
           paperStyles={{
             height: "2.375rem",
@@ -135,9 +140,12 @@ const MultiSelectManagerSearch = ({
                     ? `.0625rem solid ${theme.palette.secondary.dark}`
                     : null,
                   my: ".75rem",
-                  py: "0.75rem"
+                  py: "0.75rem",
+                  "&:hover": {
+                    backgroundColor: "common.white"
+                  }
                 }}
-                onClickChip={() => {}}
+                onClickChip={() => toggleManagerSelection(employee)}
               />
             </Stack>
           );
