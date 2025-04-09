@@ -29,6 +29,7 @@ import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportReportUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 const LeaveRequestsReportTable: FC = () => {
   const translateText = useTranslator("leaveModule", "leaveReports");
@@ -427,7 +428,7 @@ const LeaveRequestsReportTable: FC = () => {
   return (
     <Box>
       <Table
-        tableName="leave-requests-report-table"
+        tableName={TableNames.LEAVE_REQUESTS_REPORT}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableBody={{

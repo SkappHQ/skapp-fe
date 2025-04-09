@@ -18,6 +18,7 @@ import {
   handleJobFamilyDeleteBtnClick,
   handleJobFamilyEditBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobFamilyTableUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -140,7 +141,7 @@ const JobFamilyTable: FC<Props> = ({
   return (
     <Box sx={classes.wrapper}>
       <Table
-        tableName="job-family"
+        tableName={TableNames.JOB_FAMILY}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableHead={{

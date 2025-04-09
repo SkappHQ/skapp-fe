@@ -185,6 +185,10 @@ const nextConfig = {
         destination: "/community/configurations/time"
       },
       {
+        source:"/configurations/esign",
+        destination:"/enterprise/configurations/esign"
+      },
+      {
         source: "/configurations/user-roles",
         destination: "/community/configurations/user-roles"
       },

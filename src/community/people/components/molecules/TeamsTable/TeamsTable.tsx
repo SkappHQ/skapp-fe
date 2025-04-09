@@ -16,6 +16,7 @@ import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
 import { TeamModelTypes, TeamType } from "~community/people/types/TeamTypes";
+import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -208,7 +209,7 @@ const TeamsTable: FC<Props> = ({
   return (
     <Box sx={classes.tableWrapper}>
       <Table
-        tableName="teams"
+        tableName={TableNames.TEAMS}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableHead={{

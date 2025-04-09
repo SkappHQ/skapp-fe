@@ -20,6 +20,7 @@ import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportReportUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import {
   tableContainerStyles,
@@ -296,7 +297,7 @@ const CustomAllocationsReportTable: FC = () => {
   return (
     <Box>
       <Table
-        tableName="custom-allocations-report-table"
+        tableName={TableNames.CUSTOM_ALLOCATIONS_REPORT}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableHead={{

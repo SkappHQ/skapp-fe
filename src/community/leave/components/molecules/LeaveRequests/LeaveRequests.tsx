@@ -30,6 +30,7 @@ import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveRequestDataType } from "~community/leave/types/EmployeeLeaveRequestTypes";
 import { LeaveStatusTypes } from "~community/leave/types/LeaveTypes";
 import { leaveStatusIconSelector } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import LeaveRequestDates from "../LeaveRequestDates/LeaveRequestDates";
 import styles from "./styles";
@@ -350,7 +351,7 @@ const LeaveRequests: FC = () => {
       </Typography>
       <Divider sx={{ mb: "1rem" }} />
       <Table
-        tableName="leave-requests-table"
+        tableName={TableNames.LEAVE_REQUESTS}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableHead={{
