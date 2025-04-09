@@ -22,7 +22,7 @@ const styles = (theme: Theme): StyleProps => ({
   description: {
     color: theme.palette.grey[700]
   },
-  buttonStyles: {
+  button: {
     marginBottom: "1rem"
   }
 });

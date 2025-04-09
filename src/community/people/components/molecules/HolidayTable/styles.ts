@@ -12,7 +12,6 @@ export const styles = (theme: Theme): StyleProps => ({
     gap: "0.125rem"
   },
   container: { zIndex: ZIndexEnums.MIN },
-  tableHeaderCellStyles: { paddingLeft: "0rem" },
   dateWrapper: {
     color: "common.black",
     display: "flex",

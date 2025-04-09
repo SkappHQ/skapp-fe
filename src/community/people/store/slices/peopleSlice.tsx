@@ -73,7 +73,7 @@ const defaultEmployee: L1EmployeeType = {
       employmentAllocation: undefined,
       teamIds: undefined,
       primarySupervisor: undefined,
-      secondarySupervisor: undefined,
+      otherSupervisors: [],
       joinedDate: undefined,
       probationStartDate: undefined,
       probationEndDate: undefined,

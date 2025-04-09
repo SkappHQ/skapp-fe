@@ -1,7 +1,5 @@
-import { Stack, Typography } from "@mui/material";
-import { type Theme, useTheme } from "@mui/material/styles";
-import { type SxProps } from "@mui/system";
-import { FC, JSX, ReactNode } from "react";
+import { Stack, SxProps, Theme, Typography, useTheme } from "@mui/material";
+import { FC } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -11,70 +9,78 @@ import { mergeSx } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
 
-interface Props {
-  id?: {
-    emptyScreen?: {
-      button?: string;
-    };
-  };
+export interface TableEmptyScreenProps {
   title?: string;
   description?: string;
-  addNewEmployeeAction?: boolean;
-  children?: ReactNode;
-  titleStyles?: SxProps;
-  descriptionStyles?: SxProps;
-  buttonText?: string | boolean;
-  buttonEndIcon?: JSX.Element;
-  buttonStartIcon?: JSX.Element;
-  onButtonClick?: () => void;
-  buttonStyle?: ButtonStyle;
-  wrapperStyles?: SxProps;
-  shouldEmptyTableScreenBtnBlink?: boolean;
+  button?: {
+    id?: string;
+    shouldBlink?: boolean;
+    buttonStyle?: ButtonStyle;
+    label?: string;
+    startIcon?: IconName;
+    endIcon?: IconName;
+    onClick?: () => void;
+    styles?: SxProps<Theme>;
+  };
+  customStyles?: {
+    wrapper?: SxProps<Theme>;
+    container?: SxProps<Theme>;
+    title?: SxProps<Theme>;
+    description?: SxProps<Theme>;
+  };
 }
-const TableEmptyScreen: FC<Props> = ({
-  id,
+
+const TableEmptyScreen: FC<TableEmptyScreenProps> = ({
   title,
   description,
-  titleStyles,
-  descriptionStyles,
-  buttonText = "",
-  buttonStartIcon,
-  onButtonClick,
-  buttonStyle = ButtonStyle.PRIMARY,
-  wrapperStyles,
-  shouldEmptyTableScreenBtnBlink
+  button = {
+    buttonStyle: ButtonStyle.PRIMARY
+  },
+  customStyles
 }) => {
   const theme: Theme = useTheme();
 
   const classes = styles(theme);
 
   return (
-    <Stack sx={mergeSx([classes.wrapper, wrapperStyles])}>
-      <Stack component="div" role="output" sx={classes.container}>
+    <Stack sx={mergeSx([classes.wrapper, customStyles?.wrapper])}>
+      <Stack
+        component="div"
+        role="output"
+        sx={mergeSx([classes.container, customStyles?.container])}
+      >
         <Icon name={IconName.MAGNIFYING_GLASS_ICON} />
+
         {title && (
-          <Typography variant="h3" sx={mergeSx([classes.title, titleStyles])}>
+          <Typography
+            variant="h3"
+            sx={mergeSx([classes.title, customStyles?.title])}
+          >
             {title}
           </Typography>
         )}
+
         <Typography
           component="div"
           variant="body2"
-          sx={mergeSx([classes.description, descriptionStyles])}
+          sx={mergeSx([classes.description, customStyles?.description])}
         >
           {description}
         </Typography>
-        {buttonText && (
+
+        {button?.label && (
           <Button
-            id={id?.emptyScreen?.button}
-            shouldBlink={shouldEmptyTableScreenBtnBlink}
-            label={buttonText as string}
-            endIcon={<Icon name={IconName.ADD_ICON} />}
-            startIcon={buttonStartIcon}
-            buttonStyle={buttonStyle}
+            id={button?.id}
+            shouldBlink={button?.shouldBlink}
+            label={button?.label}
+            startIcon={
+              button?.startIcon ? <Icon name={button?.startIcon} /> : <></>
+            }
+            endIcon={<Icon name={button?.endIcon ?? IconName.ADD_ICON} />}
+            buttonStyle={button?.buttonStyle}
             isFullWidth={false}
-            onClick={onButtonClick}
-            styles={classes.buttonStyles}
+            onClick={button?.onClick}
+            styles={mergeSx([classes.button, button?.styles])}
           />
         )}
       </Stack>

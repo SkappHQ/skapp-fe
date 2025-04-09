@@ -14,6 +14,7 @@ interface Props {
   label: string | JSX.Element;
   size?: "small" | "medium" | "large"; // TODO: create an enum for this
   labelStyles?: SxProps;
+  customStyles?: SxProps;
 }
 
 const Checkbox = ({
@@ -23,7 +24,8 @@ const Checkbox = ({
   disabled = false,
   label,
   size = "medium",
-  labelStyles
+  labelStyles,
+  customStyles
 }: Props) => {
   const theme = useTheme();
 
@@ -36,7 +38,8 @@ const Checkbox = ({
           onChange={onChange}
           disabled={disabled}
           sx={{
-            color: theme.palette.primary.main
+            color: theme.palette.primary.main,
+            ...customStyles
           }}
           size={size}
         />

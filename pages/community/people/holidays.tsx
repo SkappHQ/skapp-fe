@@ -9,13 +9,16 @@ import { useGetAllHolidaysInfinite } from "~community/people/api/HolidayApi";
 import HolidayDataTable from "~community/people/components/molecules/HolidayTable/HolidayTable";
 import HolidayModalController from "~community/people/components/organisms/HolidayModalController/HolidayModalController";
 import { usePeopleStore } from "~community/people/store/store";
-import { holidayModalTypes } from "~community/people/types/HolidayTypes";
+import {
+  Holiday,
+  holidayModalTypes
+} from "~community/people/types/HolidayTypes";
 
 const Holidays: NextPage = () => {
   const translateText = useTranslator("peopleModule", "holidays");
 
   const [setPopupTitle] = useState<string | undefined>();
-  const [holidayDataItems, setHolidayDataItems] = useState([]);
+  const [holidayDataItems, setHolidayDataItems] = useState<Holiday[]>([]);
   const [isConcatenationDone, setIsConcatenationDone] =
     useState<boolean>(false);
 
@@ -59,6 +62,7 @@ const Holidays: NextPage = () => {
       const holidayDataItems = holidays?.pages
         ?.map((page: any) => page?.items)
         ?.flat();
+
       setHolidayDataItems(holidayDataItems);
       setIsConcatenationDone(true);
     } else if (isFetching && !isHolidayDataLoading) {

@@ -33,11 +33,12 @@ const styles = (theme: Theme) => ({
   },
   hoverAvatarModalWrapper: {
     backgroundColor: "common.white",
-    width: "26.75rem",
+    width: "15.75rem",
     borderRadius: "0.75rem",
     overflow: "hidden",
     boxShadow: `0rem 0.25rem 1.25rem ${theme.palette.grey.A200}`,
-    padding: "1.25rem"
+    px: "1.25rem",
+    py: "1rem"
   },
   morningHalfDay: {
     overflow: "initial",

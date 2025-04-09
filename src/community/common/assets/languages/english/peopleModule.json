@@ -680,6 +680,8 @@
       "addNewTeam": "Add New Team",
       "selectPrimarySupervisor": "Select primary supervisor",
       "selectSecondarySupervisor": "Select secondary supervisor",
+      "otherSupervisors": "Other supervisors",
+      "selectOtherSupervisors": "Select other supervisors",
       "selectJoinedDate": "Select joined date",
       "selectProbationStartDate": "Select probation start date",
       "selectProbationEndDate": "Select probation end date",
