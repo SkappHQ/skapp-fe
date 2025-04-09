@@ -84,10 +84,15 @@ const ModuleRolesTable = ({ module }: Props): JSX.Element => {
   return (
     <Box sx={classes.container}>
       <Table
+        tableName="module-roles-table"
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
         isLoading={false}
-        isPaginationEnabled={false}
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
       />
     </Box>
   );

@@ -283,52 +283,74 @@ const ClockInTable: FC<Props> = ({
     >
       <Box ref={listInnerRef}>
         <Table
-          tableHeaders={tableHeaders}
-          tableRows={transformToTableRows()}
-          tableHeaderRowStyles={tableHeadStyles}
-          tableWrapperStyles={{
-            overflow: "hidden"
-          }}
-          tableContainerStyles={tableContainerStyles}
-          isPaginationEnabled={false}
-          tableHeaderCellStyles={tableHeaderCellStyles}
-          tableRowStyles={{
-            ":hover": {
-              backgroundColor: theme.palette.secondary.main
+          tableName="clock-in-table"
+          headers={tableHeaders}
+          isLoading={isFetching}
+          rows={transformToTableRows()}
+          tableHead={{
+            customStyles: {
+              row: tableHeadStyles,
+              cell: tableHeaderCellStyles
             }
           }}
-          actionRowOneLeftButton={
-            <Box display={"flex"} justifyContent="space-between" gap="1rem">
-              <Typography>
-                {translateTexts(["timesheet.dateInputLabel"])}
-              </Typography>
-              <DateRangePicker
-                isRangePicker={false}
-                setSelectedDates={setSelectedDate}
-                selectedDates={selectedDate}
-                chipStyles={
-                  { border: `1px solid ${theme.palette.grey[500]}` } as SxProps
-                }
-              />
-            </Box>
-          }
-          actionRowOneRightButton={
-            <FilterButton
-              filterTypes={filterData}
-              onApplyFilters={handleApplyFilters}
-              onResetFilters={handleResetFilters}
-              setSelectedFilters={setSelectedFilters}
-              selectedFilters={selectedFilters}
-            />
-          }
-          isLoading={isFetching}
-          skeletonRows={5}
-          emptyDataTitle={translateTexts([
-            "dashboards.attendanceDashboard.clockInTableSummary.noDataTitle"
-          ])}
-          emptyDataDescription={translateTexts([
-            "dashboards.attendanceDashboard.clockInTableSummary.noDataDescription"
-          ])}
+          tableBody={{
+            emptyState: {
+              noData: {
+                title: translateTexts([
+                  "dashboards.attendanceDashboard.clockInTableSummary.noDataTitle"
+                ]),
+                description: translateTexts([
+                  "dashboards.attendanceDashboard.clockInTableSummary.noDataDescription"
+                ])
+              }
+            },
+            loadingState: {
+              skeleton: {
+                rows: 5
+              }
+            }
+          }}
+          actionToolbar={{
+            firstRow: {
+              leftButton: (
+                <Box display={"flex"} justifyContent="space-between" gap="1rem">
+                  <Typography>
+                    {translateTexts(["timesheet.dateInputLabel"])}
+                  </Typography>
+                  <DateRangePicker
+                    isRangePicker={false}
+                    setSelectedDates={setSelectedDate}
+                    selectedDates={selectedDate}
+                    chipStyles={
+                      {
+                        border: `1px solid ${theme.palette.grey[500]}`
+                      } as SxProps
+                    }
+                  />
+                </Box>
+              ),
+              rightButton: (
+                <FilterButton
+                  filterTypes={filterData}
+                  onApplyFilters={handleApplyFilters}
+                  onResetFilters={handleResetFilters}
+                  setSelectedFilters={setSelectedFilters}
+                  selectedFilters={selectedFilters}
+                />
+              )
+            }
+          }}
+          tableFoot={{
+            pagination: {
+              isEnabled: false
+            }
+          }}
+          customStyles={{
+            wrapper: {
+              overflow: "hidden"
+            },
+            container: tableContainerStyles
+          }}
         />
       </Box>
     </Box>

@@ -30,7 +30,6 @@ import {
   tableContainerStyles,
   tableHeaderCellStyles,
   tableHeaderRowStyles,
-  tableRowStyles,
   typographyStyles
 } from "./styles";
 
@@ -198,15 +197,24 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
             <IconButton
               icon={<Icon name={IconName.EDIT_ICON} />}
               id={`${leaveAllocation.entitlementId}-edit-btn`}
-              hoverEffect={false}
               buttonStyles={iconButtonStyles(theme)}
-              onClick={() => handleEdit(leaveAllocation)}
+              onClick={() =>
+                handleEdit({
+                  ...leaveAllocation,
+                  employee: {
+                    ...leaveAllocation.employee,
+                    employeeId: Number(leaveAllocation.employee.employeeId)
+                  },
+                  validTo: leaveAllocation.validTo || "",
+                  validFrom: leaveAllocation.validFrom || ""
+                })
+              }
             />
           )
         };
       }) || []
     );
-  }, [customLeaveData?.items, handleEdit, translateText, theme]);
+  }, [customLeaveData?.items, theme, translateText, handleEdit]);
 
   const handleApplyFilters = () => {
     setSelectedLeaveTypes(tempSelectedLeaveTypes);
@@ -306,40 +314,62 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
   return (
     <Box>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={tableHeaderRowStyles(theme)}
-        tableHeaderCellStyles={tableHeaderCellStyles(theme)}
-        tableContainerStyles={tableContainerStyles(theme)}
-        tableRowStyles={tableRowStyles(theme)}
-        currentPage={currentPage}
-        isPaginationEnabled={(customLeaveData?.items?.length ?? 0) > 0}
-        onPaginationChange={(_, value) => setCurrentPage(value - 1)}
-        totalPages={customLeaveData?.totalPages || 1}
+        tableName="custom-leave-allocations-table"
+        headers={tableHeaders}
         isLoading={isLoading}
-        skeletonRows={5}
-        emptySearchTitle={translateText(["emptySearchResult", "title"])}
-        emptySearchDescription={translateText([
-          "emptySearchResult",
-          "description"
-        ])}
-        emptyDataTitle={translateText(["emptyCustomLeaveScreen", "title"])}
-        emptyDataDescription={translateText([
-          "emptyCustomLeaveScreen",
-          "description"
-        ])}
-        emptyScreenButtonText={
-          showEmptyTableButton &&
-          translateText(["CustomLeaveAllocationsSectionBtn"])
-        }
-        isDataAvailable={
-          !!customLeaveData?.items?.length ||
-          !!searchTerm ||
-          !!selectedLeaveTypes.length
-        }
-        actionRowOneLeftButton={yearFilter}
-        actionRowOneRightButton={filterButton}
-        onEmptyScreenBtnClick={handleAddLeaveAllocation}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            row: tableHeaderRowStyles(theme),
+            cell: tableHeaderCellStyles(theme)
+          }
+        }}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title:
+                !!customLeaveData?.items?.length ||
+                !!searchTerm ||
+                !!selectedLeaveTypes.length
+                  ? translateText(["emptySearchResult", "title"])
+                  : translateText(["emptyCustomLeaveScreen", "title"]),
+              description:
+                !!customLeaveData?.items?.length ||
+                !!searchTerm ||
+                !!selectedLeaveTypes.length
+                  ? translateText(["emptySearchResult", "description"])
+                  : translateText(["emptyCustomLeaveScreen", "description"]),
+              button: showEmptyTableButton
+                ? {
+                    label: translateText(["CustomLeaveAllocationsSectionBtn"]),
+                    onClick: handleAddLeaveAllocation
+                  }
+                : undefined
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 5
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: (customLeaveData?.items?.length ?? 0) > 0,
+            totalPages: customLeaveData?.totalPages || 1,
+            currentPage: currentPage,
+            onChange: (_, value) => setCurrentPage(value - 1)
+          }
+        }}
+        customStyles={{
+          container: tableContainerStyles(theme)
+        }}
+        actionToolbar={{
+          firstRow: {
+            leftButton: yearFilter,
+            rightButton: filterButton
+          }
+        }}
       />
     </Box>
   );
