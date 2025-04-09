@@ -1,7 +1,6 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { JSX } from "react";
 
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 
@@ -25,17 +24,6 @@ const HoverAvatarModal = ({
       </Typography>
     );
 
-  const renderChip = () => (
-    <Box component="div" sx={classes.basicChipWrapper}>
-      <BasicChip
-        label={
-          avatars.length < 10 ? `0${avatars.length}` : avatars.length.toString()
-        }
-        chipStyles={classes.basicChip}
-      />
-    </Box>
-  );
-
   const renderAvatars = () =>
     avatars.map(({ firstName, image, lastName }, index: number) => (
       <Box key={index} sx={classes.avatarChipWrapper}>
@@ -53,7 +41,6 @@ const HoverAvatarModal = ({
     <Box sx={classes.wrapper}>
       <Box component="div" sx={classes.columnOne}>
         {renderTitle()}
-        {renderChip()}
       </Box>
       <Box sx={classes.columnTwo}>
         <Divider />
