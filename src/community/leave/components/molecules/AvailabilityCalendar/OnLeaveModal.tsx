@@ -12,6 +12,7 @@ import { LeaveRequestStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { LeaveRequest } from "~community/leave/types/ResourceAvailabilityTypes";
 import { getLeaveRequestState } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 interface OnLeaveModalProps {
   isOpen: boolean;
@@ -124,7 +125,7 @@ const OnLeaveModal: React.FC<OnLeaveModalProps> = ({
     >
       <Box sx={{ pt: 1 }}>
         <Table
-          tableName="on-leave-modal-table"
+          tableName={TableNames.ON_LEAVE_MODAL}
           headers={tableHeaders}
           rows={transformToTableRows()}
           tableBody={{

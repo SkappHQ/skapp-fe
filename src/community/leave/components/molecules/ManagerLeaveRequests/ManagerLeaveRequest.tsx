@@ -29,6 +29,7 @@ import {
   requestTypeSelector,
   requestedLeaveTypesPreProcessor
 } from "~community/leave/utils/LeaveRequestFilterActions";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 interface Props {
   employeeLeaveRequests: LeaveRequestItemsType[];
@@ -250,7 +251,7 @@ const ManagerLeaveRequest: FC<Props> = ({
 
   return (
     <Table
-      tableName="manager-leave-requests-table"
+      tableName={TableNames.MANAGER_LEAVE_REQUESTS}
       headers={tableHeaders}
       rows={transformToTableRows()}
       tableBody={{

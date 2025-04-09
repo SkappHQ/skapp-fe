@@ -41,6 +41,7 @@ import {
   requestedLeaveTypesPreProcessor
 } from "~community/leave/utils/LeaveRequestFilterActions";
 import ShowSelectedFilters from "~community/people/components/molecules/ShowSelectedFilters/ShowSelectedFilters";
+import { TableNames } from "~enterprise/common/enums/Table";
 import leaveHistoryMockData from "~enterprise/leave/data/leaveHistoryMockData.json";
 
 interface Props {
@@ -472,7 +473,7 @@ const UserLeaveHistory: FC<Props> = ({
       </Typography>
 
       <Table
-        tableName="user-leave-history-table"
+        tableName={TableNames.USER_LEAVE_HISTORY}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableBody={{

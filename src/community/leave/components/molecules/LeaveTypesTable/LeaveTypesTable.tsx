@@ -13,6 +13,7 @@ import { LeaveTypeFormTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import { getLeaveTypeDurationTableContent } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -88,7 +89,7 @@ const LeaveTypesTable = () => {
   return (
     <Box sx={classes.tableWrapper}>
       <Table
-        tableName="leave-types-table"
+        tableName={TableNames.LEAVE_TYPES}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableHead={{

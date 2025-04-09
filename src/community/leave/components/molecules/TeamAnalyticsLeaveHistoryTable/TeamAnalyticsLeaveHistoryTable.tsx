@@ -31,6 +31,7 @@ import {
 } from "~community/leave/types/TeamLeaveAnalyticsTypes";
 import { downloadDataAsCSVTeam } from "~community/leave/utils/TeamLeaveAnalyticsUtils";
 import { leaveStatusIconSelector } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import RequestDates from "../LeaveRequestRow/RequestDates";
 import MultiselectEmployeeFilter from "../MultiselectEmployeeFilter/MultiselectEmployeeFilter";
@@ -348,7 +349,7 @@ const TeamAnalyticsLeaveHistoryTable: FC<Props> = ({
         {translateText(["tableTitle"])}
       </Typography>
       <Table
-        tableName="team-analytics-leave-history-table"
+        tableName={TableNames.TEAM_ANALYTICS_LEAVE_HISTORY}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableBody={{

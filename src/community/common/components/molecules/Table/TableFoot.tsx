@@ -1,5 +1,5 @@
 import { Stack, SxProps, useTheme } from "@mui/material";
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC, JSX } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Pagination from "~community/common/components/atoms/Pagination/Pagination";
@@ -32,6 +32,10 @@ export interface TableFootProps {
     };
     isVisible?: boolean;
   };
+  customElements?: {
+    left?: JSX.Element;
+    right?: JSX.Element;
+  };
   customStyles?: {
     wrapper?: SxProps;
   };
@@ -56,6 +60,7 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
     },
     isVisible: false
   },
+  customElements,
   customStyles
 }) => {
   const theme = useTheme();
@@ -81,6 +86,7 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
         role="region"
         aria-label={`${tableName}-table-foot-export-button-wrapper`}
       >
+        {customElements?.right && customElements.right}
         {exportBtn.isVisible && exportBtn.label && (
           <Button
             buttonStyle={ButtonStyle.TERTIARY_OUTLINED}

@@ -15,6 +15,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import EmojiChip from "../../atoms/EmojiChip/EmojiChip";
 
@@ -283,7 +284,7 @@ const ClockInTable: FC<Props> = ({
     >
       <Box ref={listInnerRef}>
         <Table
-          tableName="clock-in-table"
+          tableName={TableNames.CLOCK_IN}
           headers={tableHeaders}
           isLoading={isFetching}
           rows={transformToTableRows()}
