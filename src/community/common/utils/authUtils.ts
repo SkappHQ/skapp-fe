@@ -1,6 +1,5 @@
+import ROUTES from "~community/common/constants/routes";
 import { config } from "~middleware";
-
-import ROUTES from "../constants/routes";
 
 export const drawerHiddenProtectedRoutes = [
   ROUTES.ORGANIZATION.SETUP,
@@ -11,20 +10,22 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.SETTINGS.PAYMENT,
   ROUTES.REMOVE_PEOPLE,
   ROUTES.CHANGE_SUPERVISORS,
-  ROUTES.SUBSCRIPTION,
-  ROUTES.SIGN.CREATE_DOCUMENT,
-  ROUTES.SIGN.SIGN
+  ROUTES.SUBSCRIPTION
 ];
 
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const protectedPaths = config.matcher
-    .map((path) => path.replace(/\/:path\*$/, ""))
-    .filter((path) => !drawerHiddenProtectedRoutes.includes(path));
+  const formattedProtectedPaths = config.matcher.map((path) =>
+    path.replace(/\/:path\*$/, "")
+  );
+
+  const protectedPaths = formattedProtectedPaths.filter((path) => {
+    return !drawerHiddenProtectedRoutes.includes(path);
+  });
 
   return protectedPaths.some(
     (path) =>
-      !asPath.includes(ROUTES.AUTH.SIGNIN) &&
-      !asPath.includes(ROUTES.AUTH.SIGNUP) &&
+      !asPath.includes(ROUTES.SIGN.SIGN) &&
+      !asPath.includes(ROUTES.SIGN.CREATE_DOCUMENT) &&
       asPath.includes(path)
   );
 };

@@ -15,12 +15,6 @@ export const tableContainerStyles = (theme: Theme) => ({
   borderRadius: "0.625rem"
 });
 
-export const tableRowStyles = (theme: Theme) => ({
-  "&:hover": {
-    bgcolor: theme.palette.action.hover
-  }
-});
-
 export const typographyStyles = (theme: Theme) => ({
   color: theme.palette.common.black,
   fontSize: "0.875rem",

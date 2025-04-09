@@ -24,8 +24,7 @@ import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportRepo
 import {
   tableContainerStyles,
   tableHeaderCellStyles,
-  tableHeaderRowStyles,
-  tableRowStyles
+  tableHeaderRowStyles
 } from "../CustomLeaveAllocationsTable/styles";
 
 const CustomAllocationsReportTable: FC = () => {
@@ -297,24 +296,51 @@ const CustomAllocationsReportTable: FC = () => {
   return (
     <Box>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={tableHeaderRowStyles(theme)}
-        tableHeaderCellStyles={tableHeaderCellStyles(theme)}
-        tableContainerStyles={tableContainerStyles(theme)}
-        tableRowStyles={tableRowStyles(theme)}
-        currentPage={reportsParams.page}
-        onPaginationChange={(_, value) => setReportsPagination(value - 1)}
-        totalPages={customAllocations?.data?.results[0]?.totalPages || 1}
+        tableName="custom-allocations-report-table"
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            row: tableHeaderRowStyles(theme),
+            cell: tableHeaderCellStyles(theme)
+          }
+        }}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText(["emptyScreenTitle"]),
+              description: translateText(["emptyScreenDescription"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 5
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: customAllocations?.data?.results[0]?.totalPages || 1,
+            currentPage: reportsParams.page,
+            onChange: (_, value) => setReportsPagination(value - 1)
+          },
+          exportBtn: {
+            label: translateText(["exportBtnTxt"]),
+            onClick: () => downloadCSV(SheetType.CustomAllocation),
+            isVisible: true
+          }
+        }}
+        customStyles={{
+          container: tableContainerStyles(theme)
+        }}
+        actionToolbar={{
+          firstRow: {
+            leftButton: yearFilter,
+            rightButton: filterButton
+          }
+        }}
         isLoading={isLoading}
-        skeletonRows={5}
-        emptySearchTitle={translateText(["emptyScreenTitle"])}
-        emptySearchDescription={translateText(["emptyScreenDescription"])}
-        isDataAvailable={true}
-        actionRowOneLeftButton={yearFilter}
-        actionRowOneRightButton={filterButton}
-        exportButtonText={translateText(["exportBtnTxt"])}
-        onExportButtonClick={() => downloadCSV(SheetType.CustomAllocation)}
       />
     </Box>
   );
