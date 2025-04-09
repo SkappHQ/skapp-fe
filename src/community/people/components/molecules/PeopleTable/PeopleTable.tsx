@@ -221,10 +221,6 @@ const PeopleTable: FC<Props> = ({
   }));
 
   const transformToTableRows = useCallback(() => {
-    //NOTE: For debugging purposes, do not remove
-    console.log("file: PeopleTable");
-    console.log("employeeData: ", employeeData);
-
     const tableRowData = employeeData
       ?.filter(
         (employee: EmployeeDataType) =>
@@ -333,8 +329,6 @@ const PeopleTable: FC<Props> = ({
             />
           )
       }));
-
-    console.log("tableRowData: ", tableRowData);
 
     return tableRowData;
   }, [
