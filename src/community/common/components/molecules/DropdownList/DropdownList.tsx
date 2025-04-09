@@ -47,6 +47,7 @@ interface Props {
   readOnly?: boolean;
   errorFocusOutlineNeeded?: boolean;
   labelStyles?: SxProps;
+  ariaLabel?: string;
   checkSelected?: boolean;
 }
 
@@ -77,7 +78,8 @@ const DropdownList: FC<Props> = ({
   readOnly,
   errorFocusOutlineNeeded = true,
   labelStyles,
-  checkSelected
+  checkSelected,
+  ariaLabel
 }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -100,6 +102,7 @@ const DropdownList: FC<Props> = ({
         <Typography
           component="label"
           lineHeight={1.5}
+          id={ariaLabel ? `${ariaLabel} Label` : "Label"}
           sx={{ ...classes.labelStyle(isDisabled, !!error), ...labelStyles }}
         >
           {label} {required && <span style={{ color: "red" }}>*</span>}
@@ -141,7 +144,18 @@ const DropdownList: FC<Props> = ({
               ...selectStyles
             }}
             fullWidth
+            inputProps={{
+              "aria-label": ariaLabel
+                ? `${ariaLabel} Dropdown List`
+                : "Dropdown List",
+              "aria-labelledby": ariaLabel ? `${ariaLabel} Label` : "Label"
+            }}
             displayEmpty={!!placeholder?.length}
+            title={ariaLabel ? `${ariaLabel} Dropdown List` : "Dropdown List"}
+            aria-label={
+              ariaLabel ? `${ariaLabel} Dropdown List` : "Dropdown List"
+            }
+            aria-labelledby={ariaLabel ? `${ariaLabel} Label` : "Label"}
             renderValue={
               value !== ""
                 ? () => (
@@ -239,6 +253,17 @@ const DropdownList: FC<Props> = ({
               }
             }}
             fullWidth
+            inputProps={{
+              "aria-label": ariaLabel
+                ? `${ariaLabel} Dropdown List`
+                : "Dropdown List",
+              "aria-labelledby": ariaLabel ? `${ariaLabel} Label` : "Label"
+            }}
+            title={ariaLabel ? `${ariaLabel} Dropdown List` : "Dropdown List"}
+            aria-label={
+              ariaLabel ? `${ariaLabel} Dropdown List` : "Dropdown List"
+            }
+            aria-labelledby={ariaLabel ? `${ariaLabel} Label` : "Label"}
           >
             <Box display={"flex"} justifyContent={"center"}>
               <CircularProgress size={20} style={{ color: "black" }} />
