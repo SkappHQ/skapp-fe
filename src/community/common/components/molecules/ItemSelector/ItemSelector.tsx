@@ -81,8 +81,9 @@ const ItemSelector = ({
         position="bottom-end" // TODO: Use enums
         handleClose={closeMenu}
         id="popper"
-        ariaLabel="Team Selector"
+        ariaLabel="Year Selector"
         containerStyles={popperStyles}
+        ariaRole="menu"
       >
         <Box
           sx={{
