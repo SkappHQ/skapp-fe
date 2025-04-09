@@ -452,8 +452,12 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   onmanagerSearchChange={onSecondaryManagerSearchChange}
                   selectedManagers={selectedOtherSupervisors}
                   setSelectedManagers={setSelectedOtherSupervisors}
-                  isInputsDisabled={isInputsDisabled || !employee?.employment?.employmentDetails?.primarySupervisor?.employeeId}
-                  label="Other Supervisors"
+                  isInputsDisabled={
+                    isInputsDisabled ||
+                    !employee?.employment?.employmentDetails?.primarySupervisor
+                      ?.employeeId
+                  }
+                  label={translateText(["otherSupervisors"])}
                   filterEl={secondarySupervisorFilterEl}
                   setFilterEl={setSecondarySupervisorFilterEl}
                 />

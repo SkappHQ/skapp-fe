@@ -13,6 +13,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import Popper from "~community/common/components/molecules/Popper/Popper";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 import { IconName } from "~community/common/types/IconTypes";
 import {
@@ -78,6 +79,12 @@ const SupervisorSelector = ({
     setFilterEl(null);
   };
 
+  const translateText = useTranslator(
+    "peopleModule",
+    "addResource",
+    "employmentDetails"
+  );
+
   return (
     <>
       <Stack
@@ -117,7 +124,27 @@ const SupervisorSelector = ({
           !isInputsDisabled && setFilterOpen((previousOpen) => !previousOpen);
         }}
       >
-        {otherSupervisorsCount < 3 ? (
+        {otherSupervisorsCount === 0 ? (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              px: "0.75rem"
+            }}
+          >
+            <Typography
+              variant="placeholder"
+              sx={{
+                color: theme.palette.grey[500],
+                ml: "0.5rem"
+              }}
+            >
+              {translateText(["selectOtherSupervisors"])}
+            </Typography>
+          </Box>
+        ) : otherSupervisorsCount < 3 ? (
           employee?.employment?.employmentDetails?.otherSupervisors?.map(
             (manager: L4ManagerType) => (
               <Box
@@ -158,27 +185,6 @@ const SupervisorSelector = ({
               </Box>
             )
           )
-        ) : otherSupervisorsCount === 0 ? (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "100%",
-              px: "0.75rem"
-            }}
-          >
-            <Typography
-              variant="placeholder"
-              sx={{
-                color: theme.palette.grey[200],
-                ml: "0.5rem"
-              }}
-            >
-              Select supervisors
-            </Typography>
-            <Icon name={IconName.SEARCH_ICON} />
-          </Box>
         ) : (
           <AvatarGroup
             componentStyles={{
@@ -207,6 +213,9 @@ const SupervisorSelector = ({
             max={6}
           />
         )}
+        <Box sx={{ ml: "auto", mr: "0.5rem" }}>
+          <Icon name={IconName.SEARCH_ICON} />
+        </Box>
       </Box>
       <Popper
         anchorEl={filterEl}

@@ -85,13 +85,13 @@ export const getEmploymentChanges = (
   }
 
   const previousOtherSupervisorIds =
-    previousEmployement?.otherSupervisors?.map(
-      (supervisor) => supervisor.employeeId
-    ).filter((id): id is number => id !== undefined) ?? [];
+    previousEmployement?.otherSupervisors
+      ?.map((supervisor) => supervisor.employeeId)
+      .filter((id): id is number => id !== undefined) ?? [];
   const newOtherSupervisorIds =
-    newEmployment?.otherSupervisors?.map(
-      (supervisor) => supervisor.employeeId
-    ).filter((id): id is number => id !== undefined) ?? [];
+    newEmployment?.otherSupervisors
+      ?.map((supervisor) => supervisor.employeeId)
+      .filter((id): id is number => id !== undefined) ?? [];
 
   if (
     isArrayFieldDifferentAndValid(

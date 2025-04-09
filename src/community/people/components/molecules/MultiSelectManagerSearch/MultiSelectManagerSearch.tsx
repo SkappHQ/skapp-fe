@@ -126,6 +126,12 @@ const MultiSelectManagerSearch = ({
                 name={""}
                 checked={isSelected}
                 onChange={() => toggleManagerSelection(employee)}
+                customStyles={{
+                  color: theme.palette.primary.dark,
+                  "&.Mui-checked": {
+                    color: theme.palette.primary.dark
+                  }
+                }}
               />
               <AvatarChip
                 key={employee.employeeId}
