@@ -44,6 +44,7 @@ interface Props {
   filterEl: HTMLElement | null;
   setFilterEl: Dispatch<SetStateAction<HTMLElement | null>>;
   setManagerSearchTerm: Dispatch<SetStateAction<string>>;
+  isSearchResultsLoading?: boolean;
 }
 
 const SupervisorSelector = ({
@@ -58,7 +59,8 @@ const SupervisorSelector = ({
   label,
   filterEl,
   setFilterEl,
-  setManagerSearchTerm
+  setManagerSearchTerm,
+  isSearchResultsLoading
 }: Props) => {
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const filterBeOpen: boolean = filterOpen && Boolean(filterEl);
@@ -114,6 +116,7 @@ const SupervisorSelector = ({
           height: "3rem",
           borderRadius: "0.5rem",
           flexDirection: "row",
+          pl: otherSupervisorsCount > 2 ? "0.75rem" : "0rem",
           display: "flex",
           width: "100%",
           cursor: "pointer"
@@ -213,7 +216,7 @@ const SupervisorSelector = ({
             max={6}
           />
         )}
-        <Box sx={{ ml: "auto", mr: "0.5rem" }}>
+        <Box sx={{ ml: "auto", mr: "1rem", mt: "0.5rem" }}>
           <Icon name={IconName.SEARCH_ICON} />
         </Box>
       </Box>
@@ -228,7 +231,8 @@ const SupervisorSelector = ({
         containerStyles={{
           maxHeight: "20.25rem",
           width: `${boxWidth}px`,
-          backgroundColor: theme.palette.notifyBadge.contrastText
+          backgroundColor: theme.palette.notifyBadge.contrastText,
+          boxShadow: theme.shadows[1]
         }}
       >
         <MultiSelectManagerSearch
@@ -237,6 +241,7 @@ const SupervisorSelector = ({
           managerSuggestions={managerSuggestions}
           onManagerSearchChange={onmanagerSearchChange}
           managerSearchTerm={managerSearchTerm}
+          isSearchResultsLoading={isSearchResultsLoading}
         />
       </Popper>
     </>

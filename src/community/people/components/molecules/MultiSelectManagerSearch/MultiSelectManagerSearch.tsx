@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import { Box, type Theme, useTheme } from "@mui/system";
 import { ChangeEvent, Dispatch, JSX, SetStateAction } from "react";
 
@@ -19,6 +19,7 @@ interface Props {
     searchTerm?: string
   ) => Promise<void>;
   managerSearchTerm: string;
+  isSearchResultsLoading?: boolean;
 }
 
 const MultiSelectManagerSearch = ({
@@ -26,7 +27,8 @@ const MultiSelectManagerSearch = ({
   setSelectedManagers,
   managerSuggestions,
   onManagerSearchChange,
-  managerSearchTerm
+  managerSearchTerm,
+  isSearchResultsLoading
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
 
@@ -78,8 +80,24 @@ const MultiSelectManagerSearch = ({
             height: "2.375rem",
             backgroundColor: "white"
           }}
+          isSearchIconVisible={false}
+          autoFocus={true}
         />
       </Box>
+      {isSearchResultsLoading && (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            my: "0.5rem"
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <Box
         sx={{
           overflowY: "auto",
@@ -144,7 +162,7 @@ const MultiSelectManagerSearch = ({
                   height: "3rem",
                   border: isSelected
                     ? `.0625rem solid ${theme.palette.secondary.dark}`
-                    : null,
+                    : "common.white",
                   my: ".75rem",
                   py: "0.75rem",
                   "&:hover": {

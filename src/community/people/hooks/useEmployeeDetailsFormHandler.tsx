@@ -489,6 +489,7 @@ const useEmployeeDetailsFormHandler = ({
     secondaryManagerSearchTerm,
     primaryManagerSuggestions,
     secondaryManagerSuggestions,
+    isSecondaryManagersLoading,
     setIsSecondaryManagerPopperOpen,
     setIsPrimaryManagerPopperOpen,
     setSelectedProbationStartDate,

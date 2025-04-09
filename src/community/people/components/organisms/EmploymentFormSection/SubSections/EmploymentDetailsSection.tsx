@@ -136,6 +136,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       secondaryManagerSearchTerm,
       primaryManagerSuggestions,
       secondaryManagerSuggestions,
+      isSecondaryManagersLoading,
       setIsSecondaryManagerPopperOpen,
       setIsPrimaryManagerPopperOpen,
       setSelectedProbationStartDate,
@@ -460,6 +461,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   label={translateText(["otherSupervisors"])}
                   filterEl={secondarySupervisorFilterEl}
                   setFilterEl={setSecondarySupervisorFilterEl}
+                  isSearchResultsLoading={isSecondaryManagersLoading}
                 />
               ) : (
                 <MultiSelectChipInput
