@@ -183,7 +183,7 @@ const TableBody: FC<Props> = ({
                     onClick={() =>
                       actionColumnIconBtnLeft?.onClick(row.actionData)
                     }
-                    ariaLabel="table-edit-button"
+                    ariaLabel={`table-action-column-edit-button-${row.id}`}
                   />
                 )}
                 {actionColumnIconBtnRight && (
@@ -212,7 +212,7 @@ const TableBody: FC<Props> = ({
                     onClick={() =>
                       actionColumnIconBtnRight?.OnClick(row.actionData)
                     }
-                    ariaLabel="table-delete-button"
+                    ariaLabel={`table-action-column-delete-button-${row.id}`}
                   />
                 )}
               </TableCell>
