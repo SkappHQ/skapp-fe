@@ -17,37 +17,59 @@ export const handleManagerSelect = async ({
   await formik.setFieldValue(fieldName, user?.employeeId);
   const currentEmploymentDetails = formik.values || {};
 
-  setSupervisor({
-    employmentDetails: {
-      ...currentEmploymentDetails,
-      [fieldName]: {
-        employeeId: user?.employeeId,
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        authPic: user?.avatarUrl ?? ""
+  if (fieldName === "otherSupervisors") {
+    setSupervisor({
+      employmentDetails: {
+        ...currentEmploymentDetails,
+        otherSupervisors: [
+          ...(Array.isArray(currentEmploymentDetails?.otherSupervisors)
+            ? currentEmploymentDetails.otherSupervisors
+            : []),
+          {
+            employeeId: user?.employeeId,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            authPic: user?.avatarUrl ?? ""
+          }
+        ]
       }
-    }
-  });
+    });
+  } else {
+    setSupervisor({
+      employmentDetails: {
+        ...currentEmploymentDetails,
+        [fieldName]: {
+          employeeId: user?.employeeId,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          authPic: user?.avatarUrl ?? ""
+        }
+      }
+    });
+  }
 
   setIsPopperOpen(false);
 };
 export const onManagerSearchChange = async ({
   managerType,
-  e,
+  searchTerm,
   setManagerSearchTerm,
   formik,
-  setSupervisor
+  setSupervisor,
+  isProTier
 }: ManagerSearchType): Promise<void> => {
-  setManagerSearchTerm(e.target.value.trimStart());
+  setManagerSearchTerm(searchTerm);
   await formik.setFieldValue(managerType, {});
   const currentEmploymentDetails = formik.values || {};
 
-  setSupervisor({
-    employmentDetails: {
-      ...currentEmploymentDetails,
-      [managerType]: {}
-    }
-  });
+  if (!(isProTier && managerType === "otherSupervisors")) {
+    setSupervisor({
+      employmentDetails: {
+        ...currentEmploymentDetails,
+        [managerType]: managerType === "otherSupervisors" ? [] : {}
+      }
+    });
+  }
 };
 
 export const onManagerRemove = async ({
@@ -64,7 +86,7 @@ export const onManagerRemove = async ({
   setSupervisor({
     employmentDetails: {
       ...currentEmploymentDetails,
-      [fieldName]: {}
+      [fieldName]: fieldName === "otherSupervisors" ? [] : {}
     }
   });
 };

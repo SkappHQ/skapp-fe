@@ -54,6 +54,17 @@ const styles = (theme: Theme): StyleProps => ({
   },
   chipStyles: {
     backgroundColor: theme.palette.grey[100]
+  },
+  avatarGroup: {
+    ".MuiAvatarGroup-avatar": {
+      bgcolor: theme.palette.grey[100],
+      color: theme.palette.primary.dark,
+      fontSize: "0.875rem",
+      height: "2.5rem",
+      width: "2.5rem",
+      fontWeight: 400,
+      flexDirection: "row-reverse"
+    }
   }
 });
 

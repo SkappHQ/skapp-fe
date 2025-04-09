@@ -8,6 +8,7 @@ import {
   MouseEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
@@ -17,6 +18,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
 import {
@@ -32,6 +34,7 @@ import {
   SortOrderTypes
 } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
 import {
@@ -50,14 +53,12 @@ import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
   GetTeamPreProcessor,
-  refactorSupervisorAvatars,
-  refactorTeamListData,
-  sortSupervisorAvatars
+  refactorTeamListData
 } from "~community/people/utils/PeopleDirectoryUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
 import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";
-import SupervisorAvatarGroup from "../SupervisorAvatarGroup/SupervisorAvatarGroup";
 
 interface Props {
   employeeData: EmployeeDataType[];
@@ -220,10 +221,6 @@ const PeopleTable: FC<Props> = ({
   }));
 
   const transformToTableRows = useCallback(() => {
-    //NOTE: For debugging purposes, do not remove
-    console.log("file: PeopleTable");
-    console.log("employeeData: ", employeeData);
-
     const tableRowData = employeeData
       ?.filter(
         (employee: EmployeeDataType) =>
@@ -324,16 +321,35 @@ const PeopleTable: FC<Props> = ({
           employee?.managers?.length === 0 ? (
             <>{translateText(["noSupervisor"])}</>
           ) : (
-            <SupervisorAvatarGroup
-              avatars={sortSupervisorAvatars(
-                refactorSupervisorAvatars(employee?.managers ?? [])
-              )}
+            <AvatarGroup
+              componentStyles={{
+                ".MuiAvatarGroup-avatar": {
+                  bgcolor: theme.palette.grey[100],
+                  color: theme.palette.primary.dark,
+                  fontSize: "0.875rem",
+                  height: "2.5rem",
+                  width: "2.5rem",
+                  fontWeight: 400,
+                  flexDirection: "row-reverse"
+                }
+              }}
+              avatars={
+                employee?.managers
+                  ? employee?.managers?.map(
+                      (supervisor) =>
+                        ({
+                          firstName: supervisor?.manager.firstName,
+                          lastName: supervisor?.manager.lastName,
+                          image: supervisor?.manager.authPic
+                        }) as AvatarPropTypes
+                    )
+                  : []
+              }
+              max={3}
               isHoverModal={true}
             />
           )
       }));
-
-    console.log("tableRowData: ", tableRowData);
 
     return tableRowData;
   }, [
@@ -452,47 +468,9 @@ const PeopleTable: FC<Props> = ({
     }
   };
 
-  const getEmptyDataTitle = () => {
-    if (
-      !employeeData?.length ||
-      (employeeData?.length === 1 && isRemovePeople && onSearch)
-    ) {
-      return translateText(["emptySearchResult", "title"]);
-    }
-    if (!employeeData?.length && filter) {
-      return isPendingInvitationListOpen
-        ? translateText(["emptyPendingList", "title"])
-        : translateText(["emptyFilterResult", "title"]);
-    }
-    if (
-      !employeeData?.length ||
-      (employeeData?.length === 1 && isRemovePeople)
-    ) {
-      return translateText(["emptyEmployeeData", "title"]);
-    }
-    return "";
-  };
-
-  const getEmptyDataDescription = () => {
-    if (
-      !employeeData?.length ||
-      (employeeData?.length === 1 && isRemovePeople && onSearch)
-    ) {
-      return translateText(["emptySearchResult", "description"]);
-    }
-
-    if (!employeeData?.length && filter) {
-      return isPendingInvitationListOpen
-        ? translateText(["emptyPendingList", "description"])
-        : translateText(["emptyFilterResult", "description"]);
-    }
-
-    if (!employeeData?.length) {
-      return translateText(["emptyEmployeeData", "description"]);
-    }
-
-    return "";
-  };
+  const isSelectAllCheckboxChecked = useMemo(() => {
+    return selectedPeople?.length === employeeData?.length;
+  }, [selectedPeople, employeeData]);
 
   return (
     <Box
@@ -507,77 +485,124 @@ const PeopleTable: FC<Props> = ({
     >
       <Box ref={listInnerRef}>
         <Table
-          tableHeaders={tableHeaders}
-          tableRows={transformToTableRows()}
-          tableHeaderRowStyles={tableHeadStyles}
-          tableWrapperStyles={{
-            overflow: "hidden"
+          tableName={TableNames.PEOPLE}
+          headers={tableHeaders}
+          rows={transformToTableRows()}
+          isLoading={isFetching && !isFetchingNextPage}
+          selectedRows={selectedPeople}
+          checkboxSelection={{
+            isEnabled: isPendingInvitationListOpen || isRemovePeople,
+            isSelectAllEnabled: isPendingInvitationListOpen || isRemovePeople,
+            isSelectAllChecked: isSelectAllCheckboxChecked,
+            handleIndividualSelectClick: handleCheckBoxClick,
+            handleSelectAllClick: handleAllCheckBoxClick
           }}
-          tableContainerStyles={tableContainerStyles}
-          isPaginationEnabled={false}
-          tableHeaderCellStyles={tableHeaderCellStyles}
-          onRowClick={isRemovePeople ? undefined : handleRowClick}
-          tableRowStyles={{
-            "&:hover": {
-              cursor: isRemovePeople ? "default" : "pointer"
+          customStyles={{
+            wrapper: {
+              overflow: "hidden"
+            },
+            container: tableContainerStyles
+          }}
+          actionToolbar={{
+            firstRow: {
+              leftButton:
+                isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
+                  <PeopleTableSortBy
+                    sortEl={sortEl}
+                    handleSortClose={handleSortClose}
+                    scrollToTop={scrollToTop}
+                    sortOpen={sortOpen}
+                    sortId={sortId}
+                    sortType={sortType}
+                    handleSortClick={handleSortClick}
+                    disabled={employeeData?.length === 0}
+                  />
+                ) : undefined,
+              rightButton: isPendingInvitationListOpen ? (
+                <Button
+                  label={translateText(["reinviteButtonTitle"])}
+                  buttonStyle={ButtonStyle.SECONDARY}
+                  size={ButtonSizes.MEDIUM}
+                  endIcon={<InviteIcon />}
+                  onClick={() => {
+                    setIsReinviteConfirmationModalOpen(true);
+                  }}
+                  isStrokeAvailable={true}
+                  disabled={selectedPeople.length === 0}
+                />
+              ) : isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
+                <PeopleTableFilterBy
+                  filterEl={filterEl}
+                  handleFilterClose={handleFilterClose}
+                  handleFilterClick={handleFilterClick}
+                  disabled={isPendingInvitationListOpen}
+                  filterId={filterId}
+                  filterOpen={filterOpen}
+                  scrollToTop={scrollToTop}
+                  teams={
+                    teamData && !isLoading && GetTeamPreProcessor(teamData)
+                  }
+                  jobFamilies={
+                    jobFamilyData &&
+                    !jobFamilyLoading &&
+                    GetFamilyFilterPreProcessor(jobFamilyData)
+                  }
+                />
+              ) : undefined
             }
           }}
-          selectedRows={selectedPeople}
-          actionRowOneLeftButton={
-            isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
-              <PeopleTableSortBy
-                sortEl={sortEl}
-                handleSortClose={handleSortClose}
-                scrollToTop={scrollToTop}
-                sortOpen={sortOpen}
-                sortId={sortId}
-                sortType={sortType}
-                handleSortClick={handleSortClick}
-                disabled={employeeData?.length === 0}
-              />
-            ) : undefined
-          }
-          isCheckboxSelectionEnabled={
-            isPendingInvitationListOpen || isRemovePeople
-          }
-          isSelectAllCheckboxEnabled={isPendingInvitationListOpen}
-          handleAllRowsCheck={handleAllCheckBoxClick}
-          handleRowCheck={handleCheckBoxClick}
-          actionRowOneRightButton={
-            isPendingInvitationListOpen ? (
-              <Button
-                label={translateText(["reinviteButtonTitle"])}
-                buttonStyle={ButtonStyle.SECONDARY}
-                size={ButtonSizes.MEDIUM}
-                endIcon={<InviteIcon />}
-                onClick={() => {
-                  setIsReinviteConfirmationModalOpen(true);
-                }}
-                isStrokeAvailable={true}
-                disabled={selectedPeople.length === 0}
-              />
-            ) : isPeopleManagerOrSuperAdmin && !isRemovePeople ? (
-              <PeopleTableFilterBy
-                filterEl={filterEl}
-                handleFilterClose={handleFilterClose}
-                handleFilterClick={handleFilterClick}
-                disabled={isPendingInvitationListOpen}
-                filterId={filterId}
-                filterOpen={filterOpen}
-                scrollToTop={scrollToTop}
-                teams={teamData && !isLoading && GetTeamPreProcessor(teamData)}
-                jobFamilies={
-                  jobFamilyData &&
-                  !jobFamilyLoading &&
-                  GetFamilyFilterPreProcessor(jobFamilyData)
+          tableHead={{
+            customStyles: {
+              row: tableHeadStyles,
+              cell: tableHeaderCellStyles
+            }
+          }}
+          tableBody={{
+            loadingState: {
+              skeleton: {
+                rows: 5
+              }
+            },
+            emptyState: {
+              noData: {
+                title:
+                  !employeeData?.length && onSearch
+                    ? translateText(["emptySearchResult", "title"])
+                    : !employeeData?.length && filter
+                      ? isPendingInvitationListOpen
+                        ? translateText(["emptyPendingList", "title"])
+                        : translateText(["emptyFilterResult", "title"])
+                      : !employeeData?.length
+                        ? translateText(["emptyEmployeeData", "title"])
+                        : undefined,
+                description:
+                  !employeeData?.length && onSearch
+                    ? translateText(["emptySearchResult", "description"])
+                    : !employeeData?.length && filter
+                      ? isPendingInvitationListOpen
+                        ? translateText(["emptyPendingList", "description"])
+                        : translateText(["emptyFilterResult", "description"])
+                      : !employeeData?.length
+                        ? translateText(["emptyEmployeeData", "description"])
+                        : undefined
+              }
+            },
+            onRowClick: !isRemovePeople ? handleRowClick : undefined,
+            customStyles: {
+              row: {
+                active: {
+                  "&:hover": {
+                    cursor: isRemovePeople ? "default" : "pointer"
+                  }
                 }
-              />
-            ) : null
-          }
-          isLoading={isFetching && !isFetchingNextPage}
-          skeletonRows={5}
-          emptyDataTitle={getEmptyDataTitle()}
-          emptyDataDescription={getEmptyDataDescription()}
+              }
+            }
+          }}
+          tableFoot={{
+            pagination: {
+              isEnabled: false
+            }
+          }}
         />
       </Box>
       <ReinviteConfirmationModal

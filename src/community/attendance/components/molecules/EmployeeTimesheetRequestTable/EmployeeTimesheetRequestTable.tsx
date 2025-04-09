@@ -23,6 +23,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { formatDateWithOrdinalIndicator } from "~community/common/utils/dateTimeUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -210,19 +211,40 @@ const EmployeeTimesheetRequestTable: FC<Props> = ({
       </Typography>
       <TimesheetRequestsFilters />
       <Table
-        tableHeaders={tableHeaders}
-        tableContainerStyles={classes.tableContainerStyles}
-        tableHeaderCellStyles={classes.tableHeaderStyles}
-        tableRows={transformToTableRows() || []}
-        isPaginationEnabled={true}
+        tableName={TableNames.EMPLOYEE_TIMESHEET_REQUEST}
+        headers={tableHeaders}
+        rows={transformToTableRows() || []}
         isLoading={isRequestLoading}
-        skeletonRows={3}
-        emptyDataTitle={translateText(["emptyRequestTitle"])}
-        emptyDataDescription={translateText(["emptyRequestDesEmployee"])}
-        totalPages={requestData?.totalPages}
-        currentPage={employeeTimesheetRequestParams?.page}
-        onPaginationChange={(_event: ChangeEvent<unknown>, value: number) => {
-          setEmployeeTimesheetRequestPagination(value - 1);
+        tableHead={{
+          customStyles: {
+            cell: classes.tableHeaderStyles
+          }
+        }}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText(["emptyRequestTitle"]),
+              description: translateText(["emptyRequestDesEmployee"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 3
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: requestData?.totalPages,
+            currentPage: employeeTimesheetRequestParams?.page,
+            onChange: (_event: ChangeEvent<unknown>, value: number) => {
+              setEmployeeTimesheetRequestPagination(value - 1);
+            }
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainerStyles
         }}
       />
     </>

@@ -13,7 +13,7 @@ interface Props {
   children: ReactNode;
 }
 
-const UnProtectedContent = ({ children }: Props) => {
+const ContentWithoutDrawer = ({ children }: Props) => {
   const classes = styles();
 
   const { toastMessage, setToastMessage } = useToast();
@@ -38,4 +38,4 @@ const UnProtectedContent = ({ children }: Props) => {
   );
 };
 
-export default UnProtectedContent;
+export default ContentWithoutDrawer;
