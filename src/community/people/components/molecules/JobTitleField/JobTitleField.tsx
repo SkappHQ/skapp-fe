@@ -42,6 +42,7 @@ interface Props {
 
 const JobTitleField = ({ formik }: Props): JSX.Element => {
   const translateText = useTranslator("peopleModule", "jobFamily");
+  const ariaTranslateText = useTranslator("peopleAria", "jobFamily");
 
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -115,7 +116,7 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                 );
               }
             }}
-            ariaLabel="add-job-title-btn"
+            ariaLabel={ariaTranslateText(["addJobTitleButton"])}
           />
         </Stack>
       )}
@@ -150,7 +151,9 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                   maxLength={characterLengths.JOB_TITLE_LENGTH}
                   onMouseEnter={() => setHoveredInputField(index)}
                   onMouseLeave={() => setHoveredInputField(null)}
-                  ariaLabel={`job-title.${index}.name`}
+                  ariaLabel={ariaTranslateText(["jobTitleField"], {
+                    jobTitleName: jobTitle?.name?.toLowerCase() ?? ""
+                  })}
                   endAdornment={
                     isPeopleAdmin ? (
                       <InputAdornment

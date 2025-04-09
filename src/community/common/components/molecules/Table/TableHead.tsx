@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   TableHeaderTypes,
   TableTypes
@@ -54,6 +55,12 @@ const TableHead: FC<
     }
   }
 }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "table",
+    "tableHead"
+  );
   const theme = useTheme();
   const classes = styles(theme);
 
@@ -61,12 +68,16 @@ const TableHead: FC<
     <MuiTableHead
       sx={mergeSx([classes.tableHead.head, customStyles?.head])}
       role="rowgroup"
-      aria-label={`${tableName}-table-head`}
+      aria-label={translateText(["tableHeadLabel"], {
+        tableName: tableName
+      })}
     >
       <TableRow
         sx={mergeSx([classes.tableHead.row, customStyles?.row])}
         role="row"
-        aria-label={`${tableName}-table-head-row`}
+        aria-label={translateText(["tableHeadRowLabel"], {
+          tableName: tableName
+        })}
       >
         {rows?.length > 0 && checkboxSelection?.isEnabled && (
           <TableCell
@@ -86,7 +97,11 @@ const TableHead: FC<
                 checkboxSelection?.customStyles?.checkbox
               ])}
               slotProps={{
-                input: { "aria-label": `table-row-checkbox-header` }
+                input: {
+                  "aria-label": translateText(["checkbox"], {
+                    tableName: tableName
+                  })
+                }
               }}
             />
           </TableCell>
@@ -97,7 +112,10 @@ const TableHead: FC<
             key={header?.id}
             sx={mergeSx([classes.tableHead.cell, customStyles?.cell])}
             role="columnheader"
-            aria-label={`${tableName}-table-head-${header?.label}-cell`}
+            aria-label={translateText(["tableHeadCell"], {
+              tableName: tableName,
+              headerLabel: header?.label?.toLowerCase() ?? ""
+            })}
           >
             {header?.label && (
               <Typography
@@ -120,7 +138,9 @@ const TableHead: FC<
               customStyles?.cell
             ])}
             role="columnheader"
-            aria-label={`${tableName}-table-head-actions-column-cell`}
+            aria-label={translateText(["tableHeadActionCell"], {
+              tableName: tableName
+            })}
           >
             <Typography
               sx={mergeSx([

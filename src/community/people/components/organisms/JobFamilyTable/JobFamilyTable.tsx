@@ -69,6 +69,7 @@ const JobFamilyTable: FC<Props> = ({
         )
         .map((jobFamilyData: AllJobFamilyType) => ({
           id: jobFamilyData.jobFamilyId,
+          ariaLabel: jobFamilyData.name,
           jobFamily: jobFamilyData.name,
           employees:
             ((jobFamilyData?.employees as JobFamilyEmployeeDataType[])?.length <

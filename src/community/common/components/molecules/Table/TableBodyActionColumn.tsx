@@ -3,6 +3,7 @@ import { FC } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { TableTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
@@ -40,6 +41,13 @@ const DELETE_BUTTON_ICON_HEIGHT = "12";
 const TableBodyActionColumn: FC<
   TableTypes & TableBodyActionColumnProps & TableRowDataProps
 > = ({ row, isEnabled = false, actionBtns, tableName, isRowDisabled }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "table",
+    "tableBody",
+    "actionColumn"
+  );
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -67,7 +75,10 @@ const TableBodyActionColumn: FC<
             ])}
             disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.left?.onClick(row.actionData)}
-            ariaLabel={`table-action-column-edit-button-${row.id}`}
+            ariaLabel={translateText(["editButton"], {
+              tableName: tableName,
+              ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+            })}
           />
         )}
         {actionBtns?.right && (
@@ -89,7 +100,10 @@ const TableBodyActionColumn: FC<
             ])}
             disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.right?.onClick(row.actionData)}
-            ariaLabel={`table-action-column-delete-button-${row.id}`}
+            ariaLabel={translateText(["deleteButton"], {
+              tableName: tableName,
+              ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+            })}
           />
         )}
       </TableCell>

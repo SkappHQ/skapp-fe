@@ -10,6 +10,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { usePeopleStore } from "~community/people/store/store";
 
 interface OptionType {
@@ -32,6 +33,11 @@ const ItemSelector = ({
   setOptionName,
   popperStyles
 }: Props): JSX.Element => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "itemSelector"
+  );
   const theme: Theme = useTheme();
 
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
@@ -81,7 +87,7 @@ const ItemSelector = ({
         position="bottom-end" // TODO: Use enums
         handleClose={closeMenu}
         id="popper"
-        ariaLabel="Year Selector"
+        ariaLabel={translateText(["popperLabel"])}
         containerStyles={popperStyles}
         ariaRole="menu"
       >

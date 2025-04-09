@@ -11,6 +11,7 @@ import {
 import { FC } from "react";
 
 import { TableEmptyScreenProps } from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -63,6 +64,12 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   onRowClick,
   tableName
 }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "table",
+    "tableBody"
+  );
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -83,7 +90,9 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
     <MuiTableBody
       sx={mergeSx([classes.tableBody.body, customStyles?.body])}
       role="rowgroup"
-      aria-label={`${tableName}-table-body`}
+      aria-label={translateText(["tableBodyLabel"], {
+        tableName: tableName
+      })}
     >
       {isLoading ? (
         <TableBodyLoadingState
@@ -107,7 +116,10 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               ]
             ])}
             role="row"
-            aria-label={`${tableName}-table-body-row-${row.id}`}
+            aria-label={translateText(["row"], {
+              tableName: tableName,
+              ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+            })}
           >
             {checkboxSelection?.isEnabled && (
               <TableCell
@@ -130,7 +142,12 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
                     checkboxSelection?.customStyles?.checkbox
                   ])}
                   slotProps={{
-                    input: { "aria-label": `table-row-checkbox-${row.id}` }
+                    input: {
+                      "aria-label": translateText(["checkbox"], {
+                        tableName: tableName,
+                        ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+                      })
+                    }
                   }}
                 />
               </TableCell>
@@ -143,7 +160,11 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
                   customStyles?.cell?.wrapper
                 ])}
                 role="cell"
-                aria-label={`${tableName}-table-body-${header?.label}-cell-${row.id}`}
+                aria-label={translateText(["tableBodyCell"], {
+                  tableName: tableName,
+                  headerLabel: header?.label?.toLowerCase() ?? "",
+                  rowId: row?.id ?? ""
+                })}
               >
                 {typeof row[header?.id] === "function" ? (
                   row[header?.id]()
