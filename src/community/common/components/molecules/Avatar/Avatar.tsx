@@ -14,6 +14,7 @@ import DefaultAvatar from "~community/common/components/atoms/DefaultAvatar/Defa
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
@@ -56,6 +57,8 @@ const Avatar: FC<AvatarProps> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const translateAria = useTranslator("commonAria", "components", "avatar");
+
   const { s3FileUrls, downloadS3File } = useS3Download();
 
   const [image, setImage] = useState<string | null>(null);
@@ -93,6 +96,7 @@ const Avatar: FC<AvatarProps> = ({
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          alt={`${firstName} ${lastName}` || translateAria(["avatar"])}
         >
           {children}
         </MuiAvatar>
@@ -110,6 +114,7 @@ const Avatar: FC<AvatarProps> = ({
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        alt={`${firstName} ${lastName}` || translateAria(["avatar"])}
       />
     );
   };

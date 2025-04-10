@@ -1,5 +1,29 @@
 {
   "components": {
+    "appBar": {
+      "menuIcon": "Expand menu"
+    },
+    "avatar": {
+      "alt": "Employee avatar"
+    },
+    "dragAndDrop": {
+      "ariaLabel": "Drag and Drop your file here"
+    },
+    "drawer": {
+      "expand": "Expand navigation menu",
+      "collapse": "Collapse navigation menu"
+    },
+    "dropDown": { "label": "label", "dropDown": "Dropdown" },
+    "filledArrowIcon": {
+      "right": "Right arrow",
+      "left": "Left arrow"
+    },
+    "modal": {
+      "closeIconBtn": "Close modal"
+    },
+    "switch": {
+      "ariaLabel": "Switch on"
+    },
     "table": {
       "tableHead": {
         "tableHeadLabel": "{{tableName}} table head",
@@ -21,6 +45,12 @@
     },
     "itemSelector": {
       "popperLabel": "Item Selector"
+    }
+  },
+  "modals": {
+    "resetPassword": {
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     }
   }
 }

@@ -15,6 +15,7 @@ import {
   AllUserRolesType,
   UserRoleTableType
 } from "~community/configurations/types/UserRolesTypes";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -87,27 +88,27 @@ const UserRolesTable = (): JSX.Element => {
     );
   };
 
-  const columns = [
-    { field: "module", headerName: translateText(["moduleHeader"]) },
-    { field: "roles", headerName: translateText(["roleHeader"]) }
+  const headers = [
+    { id: "module", label: translateText(["moduleHeader"]) },
+    { id: "roles", label: translateText(["roleHeader"]) }
   ];
-
-  const tableHeaders = columns.map((col) => ({
-    id: col.field,
-    label: col.headerName
-  }));
 
   return (
     <Box sx={classes.container}>
       <Table
+        tableName={TableNames.MODULE_ROLES}
+        headers={headers}
+        rows={transformToTableRows()}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        tableBody={{
+          onRowClick: (row) =>
+            router.push(ROUTES.CONFIGURATIONS.USER_ROLES_MODULE(row.id))
+        }}
         isLoading={isUserRolesPending}
-        isPaginationEnabled={false}
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableRowStyles={classes.tableRowStyles}
-        onRowClick={(row) =>
-          router.push(ROUTES.CONFIGURATIONS.USER_ROLES_MODULE(row.id))
-        }
       />
     </Box>
   );

@@ -143,7 +143,6 @@ const UserDetailsCentered: FC<Props> = ({
           id="avatar"
           firstName={cardData?.firstName}
           lastName={cardData?.lastName}
-          alt={cardData?.fullName}
           src={getAvatarThumbnailUrl()}
           avatarStyles={{
             width: "6.125rem",

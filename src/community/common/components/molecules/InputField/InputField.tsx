@@ -196,7 +196,6 @@ const InputField = ({
             },
             labelStyles
           ])}
-          aria-hidden={true}
         >
           {label}{" "}
           {required && showAsterisk && !isDisabled && (

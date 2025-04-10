@@ -226,6 +226,7 @@ const SystemPermissionFormSection = ({
     >
       <>
         <SwitchRow
+          labelId="super-admin"
           label={translateText(["superAdmin"])}
           disabled={isProfileView || isInputsDisabled || isReadOnly}
           checked={permissions.isSuperAdmin as boolean}

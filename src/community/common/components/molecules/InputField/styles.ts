@@ -22,10 +22,10 @@ const styles = (theme: Theme): StyleProps => ({
     borderRadius: "0.5rem",
     overflow: "hidden",
     display: "flex",
-    color: theme.palette.text.secondary,
+    color: theme.palette.common.black,
     "&& input:-webkit-autofill": {
       WebkitBackgroundClip: "text",
-      WebkitTextFillColor: theme.palette.grey[700]
+      WebkitTextFillColor: theme.palette.common.black
     }
   },
   multiValueOuterBox: {
@@ -44,7 +44,7 @@ const styles = (theme: Theme): StyleProps => ({
   },
   defaultInputBaseStyles: {
     flex: 1,
-    color: theme.palette.grey[700],
+    color: theme.palette.common.black,
     fontSize: "1rem",
     fontWeight: 400,
     "&& .MuiInputBase-input": {

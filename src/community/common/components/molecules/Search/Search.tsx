@@ -26,6 +26,10 @@ import React, {
 import AnalyticsTeamIcon from "~community/common/assets/Icons/AnalyticsTeamIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import SearchIcon from "~community/common/assets/Icons/SearchIcon";
+import Button from "~community/common/components/atoms/Button/Button";
+import Avatar from "~community/common/components/molecules/Avatar/Avatar";
+import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import {
   EmployeeSearchResultType,
@@ -39,11 +43,6 @@ import {
   EmployeeDetails,
   EmployeeSuggestions
 } from "~community/people/types/EmployeeTypes";
-
-import Button from "../../atoms/Button/Button";
-import Avatar from "../Avatar/Avatar";
-import AvatarChip from "../AvatarChip/AvatarChip";
-import Popper from "../Popper/Popper";
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -457,7 +456,6 @@ const Search: FC<Props> = ({
                           <Avatar
                             firstName={user?.firstName}
                             lastName={user?.lastName}
-                            alt={`${user?.firstName} ${user?.lastName}`}
                             sx={{ marginRight: "1.25rem" }}
                             src={user?.authPic}
                           />

@@ -187,7 +187,7 @@ const ChangeBrandingSettingsModal: React.FC<Props> = ({
           <Typography
             variant="body1"
             sx={{
-              my: "1.25rem"
+              mb: "1.25rem"
             }}
           >
             {logo

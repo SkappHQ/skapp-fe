@@ -70,23 +70,18 @@ const ModuleRolesTable = ({ module }: Props): JSX.Element => {
     );
   };
 
-  const columns = [
-    { field: "permission", headerName: "" },
-    { field: "admin", headerName: translateText(["adminHeader"]) },
-    { field: "manager", headerName: translateText(["managerHeader"]) },
-    { field: "employee", headerName: translateText(["employeeHeader"]) }
+  const headers = [
+    { id: "permission", label: "" },
+    { id: "admin", label: translateText(["adminHeader"]) },
+    { id: "manager", label: translateText(["managerHeader"]) },
+    { id: "employee", label: translateText(["employeeHeader"]) }
   ];
-
-  const tableHeaders = columns.map((col) => ({
-    id: col.field,
-    label: col.headerName
-  }));
 
   return (
     <Box sx={classes.container}>
       <Table
         tableName={TableNames.MODULE_ROLES}
-        headers={tableHeaders}
+        headers={headers}
         rows={transformToTableRows()}
         tableFoot={{
           pagination: {

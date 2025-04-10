@@ -4,6 +4,7 @@ import * as React from "react";
 
 import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 
 interface Props {
   onClick: (
@@ -30,8 +31,18 @@ export const FilledArrow: FC<Props> = ({
 }: Props) => {
   const theme: Theme = useTheme();
 
+  const translateAria = useTranslator(
+    "commonAria",
+    "components",
+    "filledArrowIcon"
+  );
+
   return (
     <Avatar
+      alt={
+        ariaLabel ||
+        (isRightArrow ? translateAria(["right"]) : translateAria(["left"]))
+      }
       onClick={(event: React.MouseEvent<HTMLDivElement>) => {
         if (!disabled) {
           onClick(event);
