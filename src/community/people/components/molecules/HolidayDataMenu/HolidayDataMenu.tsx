@@ -31,6 +31,7 @@ const HolidayDataMenu = ({
       menuType={menuType}
       id={id}
       handleClose={handleClose}
+      ariaRole="menu"
     >
       <HolidayDataSortMenuItems
         handleClose={handleClose}

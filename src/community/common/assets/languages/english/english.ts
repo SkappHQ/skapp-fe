@@ -1,3 +1,5 @@
+import commonAria from "~community/common/assets/languages/english/aria/common.json";
+import peopleAria from "~community/common/assets/languages/english/aria/people.json";
 import attendanceModule from "~community/common/assets/languages/english/attendanceModule.json";
 import common from "~community/common/assets/languages/english/common.json";
 import configurations from "~community/common/assets/languages/english/configurations.json";
@@ -11,7 +13,8 @@ export const english = {
   configurations,
   peopleModule,
   leaveModule,
-  attendanceModule
-
+  attendanceModule,
+  commonAria,
+  peopleAria
   // add other modules here
 };

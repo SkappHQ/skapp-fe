@@ -42,6 +42,7 @@ export const transformToTableRows = (
     (Array.isArray(holidayData) &&
       holidayData.map((holiday) => ({
         id: holiday.id,
+        ariaLabel: holiday?.name,
         date: (
           <Box sx={dateWrapperStyles}>
             <Typography variant="body1">

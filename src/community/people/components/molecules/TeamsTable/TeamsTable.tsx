@@ -36,6 +36,7 @@ const TeamsTable: FC<Props> = ({
   isAdmin = false
 }) => {
   const translateText = useTranslator("peopleModule", "teams");
+  const ariaTranslateText = useTranslator("peopleAria", "teams");
 
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -150,6 +151,12 @@ const TeamsTable: FC<Props> = ({
               hoverEffect={false}
               buttonStyles={classes.editIconBtn}
               onClick={() => handleEditTeam(teamDetails)}
+              ariaLabel={ariaTranslateText(
+                ["table", "actionColumn", "editButton"],
+                {
+                  teamName: teamDetails?.teamName?.toLowerCase() ?? ""
+                }
+              )}
             />
             <IconButton
               icon={
@@ -163,6 +170,12 @@ const TeamsTable: FC<Props> = ({
               hoverEffect={false}
               buttonStyles={classes.deleteIconBtn}
               onClick={() => handleDeleteTeam(teamDetails)}
+              ariaLabel={ariaTranslateText(
+                ["table", "actionColumn", "deleteButton"],
+                {
+                  teamName: teamDetails?.teamName?.toLowerCase() ?? ""
+                }
+              )}
             />
           </>
         ) : (

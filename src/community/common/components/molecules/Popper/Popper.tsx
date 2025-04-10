@@ -31,6 +31,7 @@ type Props = {
   isFlip?: boolean;
   timeout?: number;
   ariaLabel?: string;
+  ariaRole?: string;
 };
 
 const Popper = ({
@@ -48,7 +49,8 @@ const Popper = ({
   containerStyles,
   isFlip = false,
   timeout = 0,
-  ariaLabel
+  ariaLabel,
+  ariaRole = "dialog"
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles();
@@ -118,8 +120,8 @@ const Popper = ({
         ...classes.wrapper,
         ...wrapperStyles
       }}
-      role="dialog"
-      aria-modal={true}
+      role={ariaRole}
+      {...(ariaRole === "dialog" ? { "aria-modal": true } : {})}
       tabIndex={0}
       aria-label={ariaLabel}
     >
