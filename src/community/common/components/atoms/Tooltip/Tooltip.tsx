@@ -41,7 +41,7 @@ const Tooltip: FC<Props> = ({
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (isDisabled) return;
 
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Enter") {
       event.preventDefault();
       setOpen(!open);
     }
