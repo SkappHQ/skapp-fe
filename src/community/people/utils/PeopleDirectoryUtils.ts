@@ -32,7 +32,7 @@ export const refactorSupervisorAvatars = (
     image: supervisor?.manager?.authPic ?? "",
     firstName: supervisor?.manager?.firstName ?? "",
     lastName: supervisor?.manager?.lastName ?? "",
-    primaryManager: supervisor?.primaryManager,
+    primaryManager: supervisor?.isPrimaryManager,
     managerType: supervisor?.managerType
   }));
 

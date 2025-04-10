@@ -23,6 +23,28 @@
     },
     "switch": {
       "ariaLabel": "Switch on"
+    },
+    "table": {
+      "tableHead": {
+        "tableHeadLabel": "{{tableName}} table head",
+        "tableHeadRowLabel": "{{tableName}} table head row",
+        "checkbox": "Check {{tableName}} table all checkboxes",
+        "tableHeadCell": "{{tableName}} table head {{headerLabel}} cell",
+        "tableHeadActionCell": "{{tableName}} table head actions column cell"
+      },
+      "tableBody": {
+        "tableBodyLabel": "{{tableName}} table body",
+        "row": "{{tableName}} table {{ariaLabel}} record",
+        "checkbox": "Check {{tableName}} table {{ariaLabel}} checkbox",
+        "tableBodyCell": "{{tableName}} table body {{headerLabel}} cell {{rowId}}",
+        "actionColumn": {
+          "editButton": "Select {{tableName}} table {{ariaLabel}} record edit button",
+          "deleteButton": "Select {{tableName}} table {{ariaLabel}} record delete button"
+        }
+      }
+    },
+    "itemSelector": {
+      "popperLabel": "Item Selector"
     }
   },
   "modals": {

@@ -75,7 +75,6 @@ const SortRow = ({
       selected={selected}
       onClick={onClick}
       tabIndex={0}
-      aria-selected={selected}
       aria-label={ariaLabel}
       disabled={isDisabled}
       data-value={text}

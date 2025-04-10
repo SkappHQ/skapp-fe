@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 
 import { useUploadImages } from "~community/common/api/FileHandleApi";
 import { useUpdateOrganizationDetails } from "~community/common/api/settingsApi";
+import Button from "~community/common/components/atoms/Button/Button";
+import Icon from "~community/common/components/atoms/Icon/Icon";
 import ColorInputField from "~community/common/components/molecules/ColorInputField/ColorInputField";
 import DragAndDropField from "~community/common/components/molecules/DragAndDropField/DragAndDropField";
 import Form from "~community/common/components/molecules/Form/Form";
+import Modal from "~community/common/components/organisms/Modal/Modal";
 import { appModes } from "~community/common/constants/configs";
 import { FileTypes } from "~community/common/enums/CommonEnums";
 import {
@@ -20,10 +23,6 @@ import { IconName } from "~community/common/types/IconTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
-
-import Button from "../../atoms/Button/Button";
-import Icon from "../../atoms/Icon/Icon";
-import Modal from "../../organisms/Modal/Modal";
 
 interface Props {
   isOpen: boolean;

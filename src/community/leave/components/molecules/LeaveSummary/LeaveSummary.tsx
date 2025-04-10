@@ -128,7 +128,7 @@ const LeaveSummary = ({
                 chipStyles={classes.chipStyles}
               />
             )}
-            {otherManagers.length > 2 && (
+            {otherManagers.length > 1 && (
               <BasicChip
                 chipStyles={{
                   backgroundColor: theme.palette.grey[100],
