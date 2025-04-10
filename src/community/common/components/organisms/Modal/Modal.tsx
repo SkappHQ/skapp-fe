@@ -10,6 +10,7 @@ import { FC, JSX, MouseEvent, ReactElement } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import BasicModal from "~community/common/components/organisms/BasicModal/BasicModal";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -50,6 +51,8 @@ const Modal: FC<Props> = ({
   modalChildrenStyles,
   dividerStyles
 }) => {
+  const translateAria = useTranslator("commonAria", "components", "modal");
+
   const classes = styles();
 
   return (
@@ -70,7 +73,7 @@ const Modal: FC<Props> = ({
             <IconButton
               sx={classes.closeIconBtn}
               onClick={(event) => onCloseModal(event, "backdropClick")}
-              aria-label="Close modal"
+              aria-label={translateAria(["closeIconBtn"])}
             >
               {customCloseIcon ? (
                 customCloseIcon

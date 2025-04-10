@@ -51,6 +51,7 @@ const Drawer = (): JSX.Element => {
   const classes = styles({ theme });
 
   const translateText = useTranslator("commonComponents", "drawer");
+  const translateAria = useTranslator("commonAria", "components", "drawer");
 
   const router = useRouter();
 
@@ -164,7 +165,11 @@ const Drawer = (): JSX.Element => {
         sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
         onClick={handleDrawer}
         data-testid={appDrawerTestId.buttons.drawerToggleBtn}
-        aria-label={isDrawerExpanded ? "Collapse drawer" : "Expand drawer"}
+        aria-label={
+          isDrawerExpanded
+            ? translateAria(["collapse"])
+            : translateAria(["expand"])
+        }
       >
         <Icon
           name={IconName.CHEVRON_RIGHT_ICON}

@@ -74,13 +74,10 @@ const ToastMessage = ({
   const getAriaRole = () => {
     switch (toastType) {
       case ToastType.ERROR:
-        return "alert";
       case ToastType.WARN:
         return "alert";
       case ToastType.SUCCESS:
-        return "status";
       case ToastType.INFO:
-        return "status";
       default:
         return "status";
     }

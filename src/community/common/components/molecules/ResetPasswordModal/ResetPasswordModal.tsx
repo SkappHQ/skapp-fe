@@ -39,6 +39,8 @@ interface FormValues {
 
 const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const translateText = useTranslator("settings");
+  const translateAria = useTranslator("commonAria", "modals", "resetPassword");
+
   const passwordValidationTranslateText = useTranslator(
     "onboarding",
     "resetPassword"
@@ -193,8 +195,8 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   }
                   aria-label={
                     passwordVisibility.currentPassword
-                      ? "Hide password"
-                      : "Show password"
+                      ? translateAria(["hidePassword"])
+                      : translateAria(["showPassword"])
                   }
                 >
                   {passwordVisibility.currentPassword ? (
@@ -234,8 +236,8 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   }
                   aria-label={
                     passwordVisibility.password
-                      ? "Hide password"
-                      : "Show password"
+                      ? translateAria(["hidePassword"])
+                      : translateAria(["showPassword"])
                   }
                 >
                   {passwordVisibility.password ? (
@@ -284,8 +286,8 @@ const ResetPasswordModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   }
                   aria-label={
                     passwordVisibility.confirmPassword
-                      ? "Hide password"
-                      : "Show password"
+                      ? translateAria(["hidePassword"])
+                      : translateAria(["showPassword"])
                   }
                 >
                   {passwordVisibility.confirmPassword ? (

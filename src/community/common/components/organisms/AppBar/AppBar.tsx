@@ -18,6 +18,7 @@ import AppBarMenu from "~community/common/components/molecules/AppBarMenu/AppBar
 import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import { appBarTestId } from "~community/common/constants/testIds";
 import useDrawer from "~community/common/hooks/useDrawer";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { AppBarItemTypes } from "~community/common/types/CommonTypes";
@@ -27,6 +28,8 @@ import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 import styles from "./styles";
 
 const AppBar = () => {
+  const translateAria = useTranslator("commonAria", "components", "appBar");
+
   const classes = styles();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -98,7 +101,7 @@ const AppBar = () => {
                 tabIndex={0}
                 role="button"
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
+                  if (e.key === "Enter") {
                     handleOpenMenu(AppBarItemTypes.NOTIFICATION);
                   }
                 }}
@@ -121,7 +124,7 @@ const AppBar = () => {
                 tabIndex={0}
                 role="button"
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
+                  if (e.key === "Enter") {
                     handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS);
                   }
                 }}
@@ -160,7 +163,7 @@ const AppBar = () => {
         <IconButton
           onClick={handleDrawer}
           sx={classes.menuIconBtn}
-          aria-label="Open menu"
+          aria-label={translateAria(["menuIcon"])}
         >
           <Icon name={IconName.MENU_ICON} />
         </IconButton>

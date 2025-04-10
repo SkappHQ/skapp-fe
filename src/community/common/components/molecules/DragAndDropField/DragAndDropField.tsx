@@ -65,6 +65,11 @@ const DragAndDropField: FC<Props> = ({
   maxSizeOfFile = MAX_FILE_SIZE_OF_FILE
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
+  const translateAria = useTranslator(
+    "commonAria",
+    "components",
+    "dragAndDrop"
+  );
 
   const errors = {
     zeroFilesError: translateText(["emptyAttachmentError"]),
@@ -217,7 +222,10 @@ const DragAndDropField: FC<Props> = ({
         {...getRootProps()}
         style={classes.dragDropContainer as CSSProperties}
       >
-        <input {...getInputProps()} aria-label={label || "File upload"} />
+        <input
+          {...getInputProps()}
+          aria-label={label || translateAria(["ariaLabel"])}
+        />
         <>
           {isDragActive ? (
             <Typography variant="body1">
