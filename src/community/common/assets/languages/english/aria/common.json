@@ -13,6 +13,7 @@
       "expand": "Expand navigation menu",
       "collapse": "Collapse navigation menu"
     },
+    "dropDown": { "label": "label", "dropDown": "Dropdown" },
     "filledArrowIcon": {
       "right": "Right arrow",
       "left": "Left arrow"
