@@ -31,6 +31,7 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { formatDateWithOrdinalIndicator } from "~community/common/utils/dateTimeUtils";
 import { concatStrings } from "~community/people/utils/jobFamilyUtils/commonUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import TimesheetRequestsFilters from "../TimesheetRequestsFilters/TimesheetRequestsFilters";
 import styles from "./styles";
@@ -320,7 +321,7 @@ const ManagerTimesheetRequestTable: FC<Props> = ({
       )}
       {hasFullList && <TimesheetRequestsFilters isManager={true} />}
       <Table
-        tableName="manager-timesheet-request-table"
+        tableName={TableNames.MANAGER_TIMESHEET_REQUEST}
         headers={tableHeaders}
         rows={transformToTableRows() || []}
         tableHead={{

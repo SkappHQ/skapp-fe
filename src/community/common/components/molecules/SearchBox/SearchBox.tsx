@@ -25,6 +25,7 @@ interface Props {
   autoFocus?: boolean;
   name?: string;
   "data-testid"?: string;
+  isSearchIconVisible?: boolean;
 }
 
 const SearchBox: FC<Props> = ({
@@ -38,7 +39,8 @@ const SearchBox: FC<Props> = ({
   paperStyles,
   autoFocus = false,
   name = "search",
-  "data-testid": testId
+  "data-testid": testId,
+  isSearchIconVisible = true
 }) => {
   const theme: Theme = useTheme();
 
@@ -82,8 +84,9 @@ const SearchBox: FC<Props> = ({
           value={searchValue}
           autoFocus={autoFocus}
           name={name}
+          autoComplete="off"
         />
-        <Icon name={IconName.SEARCH_ICON} />
+        {isSearchIconVisible && <Icon name={IconName.SEARCH_ICON} />}
       </Paper>
     </>
   );
