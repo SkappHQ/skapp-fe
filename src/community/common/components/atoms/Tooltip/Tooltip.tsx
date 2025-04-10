@@ -1,4 +1,4 @@
-import { Theme, Typography, useTheme } from "@mui/material";
+import { Theme, useTheme } from "@mui/material";
 import Fade from "@mui/material/Fade";
 import { FC, JSX } from "react";
 
@@ -59,22 +59,21 @@ const Tooltip: FC<Props> = ({
           pointerEvents: isDisabled ? "none" : "auto", // Prevent interaction when disabled
           cursor: isDisabled ? "not-allowed" : "pointer" // Change cursor when disabled
         }}
+        role="group"
       >
-        <Typography component="span">
-          {children ?? (
-            <Icon
-              dataTestId="tooltip-icon"
-              name={IconName.INFORMATION_ICON}
-              fill={
-                isDisabled
-                  ? theme.palette.grey.A100
-                  : error
-                    ? theme.palette.error.contrastText
-                    : iconColor
-              }
-            />
-          )}
-        </Typography>
+        {children ?? (
+          <Icon
+            dataTestId="tooltip-icon"
+            name={IconName.INFORMATION_ICON}
+            fill={
+              isDisabled
+                ? theme.palette.grey.A100
+                : error
+                  ? theme.palette.error.contrastText
+                  : iconColor
+            }
+          />
+        )}
       </span>
     </StyledTooltip>
   );
