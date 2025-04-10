@@ -164,6 +164,7 @@ const SetupEmailServerModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <Form onSubmit={formik.handleSubmit}>
         <Stack sx={{ gap: "1rem", mt: "0.5rem" }}>
           <SwitchRow
+            labelId="enable-email-server"
             label={translateText(["enableEmailServerLabel"])}
             checked={formik.values.isEnabled}
             onChange={handleSwitchChange}

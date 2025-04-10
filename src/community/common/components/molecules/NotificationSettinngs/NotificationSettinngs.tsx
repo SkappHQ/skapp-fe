@@ -89,6 +89,7 @@ const NotificationSettings = (): JSX.Element => {
               }
               return (
                 <SwitchRow
+                  labelId={translateText([key])}
                   key={key}
                   label={translateText([key])}
                   checked={settings[key]}

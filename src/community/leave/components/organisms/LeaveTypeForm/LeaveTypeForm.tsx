@@ -402,6 +402,7 @@ const LeaveTypeForm = () => {
             </Stack>
 
             <SwitchRow
+              labelId="enable-attachment"
               label={translateText(["enableAttachment"])}
               checked={values?.isAttachment}
               onChange={async (e) => {
@@ -414,6 +415,7 @@ const LeaveTypeForm = () => {
             />
 
             <SwitchRow
+              labelId="attachment-mandatory"
               label={translateText(["attachmentMandatory"])}
               checked={values?.isAttachmentMandatory}
               onChange={async (e) => {
@@ -423,6 +425,7 @@ const LeaveTypeForm = () => {
             />
 
             <SwitchRow
+              labelId="requires-comment"
               label={translateText(["requiresComment"])}
               checked={values?.isCommentMandatory}
               onChange={async (e) => {
@@ -439,6 +442,7 @@ const LeaveTypeForm = () => {
             </Typography>
 
             <SwitchRow
+              labelId="allow-auto-approval"
               label={translateText(["allowAutoApproval"])}
               checked={values?.isAutoApproval}
               onChange={async (e) => {
@@ -455,6 +459,7 @@ const LeaveTypeForm = () => {
             </Typography>
 
             <SwitchRow
+              labelId="enable-carry-forward"
               label={translateText(["enableCarryForward"])}
               checked={values?.isCarryForwardEnabled}
               onChange={async (e) => {

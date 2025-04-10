@@ -20,6 +20,9 @@
     },
     "modal": {
       "closeIconBtn": "Close modal"
+    },
+    "switch": {
+      "ariaLabel": "Switch on"
     }
   },
   "modals": {
