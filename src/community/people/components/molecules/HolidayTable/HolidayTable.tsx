@@ -31,6 +31,7 @@ import {
   handleSelectAllCheckboxClick,
   isDeleteButtonDisabled
 } from "~community/people/utils/holidayUtils/holidayTableUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -172,7 +173,7 @@ const HolidayTable: FC<Props> = ({
     <Stack sx={classes.wrapper}>
       <Box sx={classes.container} ref={listInnerRef}>
         <Table
-          tableName="holidays"
+          tableName={TableNames.HOLIDAYS}
           headers={tableHeaders}
           isLoading={isFetching && !isFetchingNextPage}
           rows={tableRows}

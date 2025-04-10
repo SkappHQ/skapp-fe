@@ -27,6 +27,7 @@ import {
   LeaveRequest,
   PendingLeaveEnum
 } from "~community/leave/types/PendingLeaves";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import {
   stackStyles,
@@ -178,7 +179,7 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
   return (
     <Box>
       <Table
-        tableName="pending-leave-requests-table"
+        tableName={TableNames.PENDING_LEAVE_REQUESTS}
         headers={tableHeaders}
         rows={tableRows}
         tableHead={{

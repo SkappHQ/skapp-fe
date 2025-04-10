@@ -130,7 +130,7 @@ export interface L3EmploymentDetailsType {
   employmentAllocation?: EmploymentAllocationTypes;
   teamIds?: number[];
   primarySupervisor?: L4ManagerType;
-  secondarySupervisor?: L4ManagerType;
+  otherSupervisors?: L4ManagerType[];
   joinedDate?: string;
   probationStartDate?: string;
   probationEndDate?: string;

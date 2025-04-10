@@ -9,6 +9,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import attendanceModuleRolesTableData from "~community/configurations/data/attendanceModuleRolesTableData.json";
 import leaveModuleRolesTableData from "~community/configurations/data/leaveModuleRolesTableData.json";
 import peopleModuleRolesTableData from "~community/configurations/data/peopleModuleRolesTableData.json";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -84,7 +85,7 @@ const ModuleRolesTable = ({ module }: Props): JSX.Element => {
   return (
     <Box sx={classes.container}>
       <Table
-        tableName="module-roles-table"
+        tableName={TableNames.MODULE_ROLES}
         headers={tableHeaders}
         rows={transformToTableRows()}
         tableFoot={{

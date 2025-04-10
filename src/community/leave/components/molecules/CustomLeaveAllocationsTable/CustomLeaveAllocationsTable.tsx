@@ -24,6 +24,7 @@ import {
   CustomLeaveAllocationType,
   LeaveAllocation
 } from "~community/leave/types/CustomLeaveAllocationTypes";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import {
   iconButtonStyles,
@@ -314,7 +315,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
   return (
     <Box>
       <Table
-        tableName="custom-leave-allocations-table"
+        tableName={TableNames.CUSTOM_LEAVE_ALLOCATIONS}
         headers={tableHeaders}
         isLoading={isLoading}
         rows={transformToTableRows()}

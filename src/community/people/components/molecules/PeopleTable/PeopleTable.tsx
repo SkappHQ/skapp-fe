@@ -18,6 +18,7 @@ import Button from "~community/common/components/atoms/Button/Button";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
 import {
@@ -33,6 +34,7 @@ import {
   SortOrderTypes
 } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllJobFamilies } from "~community/people/api/JobFamilyApi";
 import {
@@ -51,14 +53,12 @@ import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
   GetTeamPreProcessor,
-  refactorSupervisorAvatars,
-  refactorTeamListData,
-  sortSupervisorAvatars
+  refactorTeamListData
 } from "~community/people/utils/PeopleDirectoryUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
 import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";
-import SupervisorAvatarGroup from "../SupervisorAvatarGroup/SupervisorAvatarGroup";
 
 interface Props {
   employeeData: EmployeeDataType[];
@@ -321,10 +321,31 @@ const PeopleTable: FC<Props> = ({
           employee?.managers?.length === 0 ? (
             <>{translateText(["noSupervisor"])}</>
           ) : (
-            <SupervisorAvatarGroup
-              avatars={sortSupervisorAvatars(
-                refactorSupervisorAvatars(employee?.managers ?? [])
-              )}
+            <AvatarGroup
+              componentStyles={{
+                ".MuiAvatarGroup-avatar": {
+                  bgcolor: theme.palette.grey[100],
+                  color: theme.palette.primary.dark,
+                  fontSize: "0.875rem",
+                  height: "2.5rem",
+                  width: "2.5rem",
+                  fontWeight: 400,
+                  flexDirection: "row-reverse"
+                }
+              }}
+              avatars={
+                employee?.managers
+                  ? employee?.managers?.map(
+                      (supervisor) =>
+                        ({
+                          firstName: supervisor?.manager.firstName,
+                          lastName: supervisor?.manager.lastName,
+                          image: supervisor?.manager.authPic
+                        }) as AvatarPropTypes
+                    )
+                  : []
+              }
+              max={3}
               isHoverModal={true}
             />
           )
@@ -464,7 +485,7 @@ const PeopleTable: FC<Props> = ({
     >
       <Box ref={listInnerRef}>
         <Table
-          tableName="people-table"
+          tableName={TableNames.PEOPLE}
           headers={tableHeaders}
           rows={transformToTableRows()}
           isLoading={isFetching && !isFetchingNextPage}

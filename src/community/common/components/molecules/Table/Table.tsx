@@ -126,6 +126,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
         customStyles={tableFoot?.customStyles}
         pagination={tableFoot?.pagination}
         exportBtn={tableFoot?.exportBtn}
+        customElements={tableFoot?.customElements}
         tableName={tableName}
       />
     </Stack>
