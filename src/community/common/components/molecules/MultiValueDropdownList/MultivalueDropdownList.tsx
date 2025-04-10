@@ -49,6 +49,7 @@ interface Props {
   isErrorFocusOutlineNeeded?: boolean;
   labelStyles?: SxProps;
   isCheckSelected?: boolean;
+  ariaLabel?: string;
 }
 
 // TODO: fix name
@@ -78,7 +79,8 @@ const MultivalueDropdownList: FC<Props> = ({
   isReadOnly: readOnly = false,
   isErrorFocusOutlineNeeded: errorFocusOutlineNeeded = true,
   labelStyles,
-  isCheckSelected: checkSelected
+  isCheckSelected: checkSelected,
+  ariaLabel
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -179,6 +181,9 @@ const MultivalueDropdownList: FC<Props> = ({
             fullWidth
             displayEmpty={!!placeholder}
             renderValue={renderSelectedValues}
+            inputProps={{
+              "aria-label": ariaLabel || label
+            }}
           >
             {itemList.map(({ label, value: menuItemValue, emoji }, index) => (
               <MenuItem

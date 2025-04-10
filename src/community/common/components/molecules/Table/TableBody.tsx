@@ -120,6 +120,12 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               tableName: tableName,
               ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
             })}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleTableRowClick(row);
+              }
+            }}
           >
             {checkboxSelection?.isEnabled && (
               <TableCell

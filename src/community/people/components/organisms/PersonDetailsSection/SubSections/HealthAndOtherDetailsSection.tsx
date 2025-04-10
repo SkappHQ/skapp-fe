@@ -28,6 +28,11 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
       "addResource",
       "health&OtherDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "healthAndOtherDetails"
+    );
 
     const { employee, setPersonalDetails } = usePeopleStore((state) => state);
 
@@ -120,6 +125,7 @@ const HealthAndOtherDetailsSection = forwardRef<FormMethods, props>(
                 itemList={BloodGroupList}
                 isDisabled={isInputsDisabled}
                 readOnly={isReadOnly}
+                ariaLabel={translateAria(["selectBloodGroup"])}
               />
             </Grid>
 

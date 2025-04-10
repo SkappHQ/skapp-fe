@@ -10,5 +10,24 @@
         "deleteButton": "Select teams table {{teamName}} team delete button"
       }
     }
+  },
+  "addResource": {
+    "generalDetails": {
+      "selectGender": "Select gender",
+      "selectMaritalStatus": "Select marital status"
+    },
+    "familyDetails": {
+      "selectGender": "Select gender",
+      "selectRelationship": "Select relationship"
+    },
+    "healthAndOtherDetails": {
+      "selectBloodGroup": " Select blood group"
+    },
+    "emergencyDetails": {
+      "selectRelationship": "Select relationship"
+    },
+    "employmentDetails": {
+      "selectMultipleTeams": "Select multiple teams dropdown"
+    }
   }
 }

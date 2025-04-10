@@ -45,6 +45,11 @@ const FamilyDetailsSection = ({
     "addResource",
     "entitlementDetails"
   );
+  const translateAria = useTranslator(
+    "peopleAria",
+    "addResource",
+    "familyDetails"
+  );
 
   const {
     rowEdited,
@@ -204,6 +209,7 @@ const FamilyDetailsSection = ({
             itemList={GenderList}
             checkSelected
             readOnly={isReadOnly}
+            ariaLabel={translateAria(["selectGender"])}
           />
         </Grid>
 
@@ -223,6 +229,7 @@ const FamilyDetailsSection = ({
             itemList={relationshipList}
             checkSelected
             readOnly={isReadOnly}
+            ariaLabel={translateAria(["selectRelationship"])}
           />
         </Grid>
 

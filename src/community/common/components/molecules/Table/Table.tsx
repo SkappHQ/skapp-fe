@@ -86,6 +86,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
         sx={mergeSx([classes.container, customStyles?.container])}
         role="region"
         aria-label={`${tableName}-table-container`}
+        tabIndex={0}
       >
         <MuiTable
           stickyHeader

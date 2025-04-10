@@ -64,6 +64,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       "addResource",
       "generalDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "generalDetails"
+    );
 
     const translateStorageText = useTranslator("StorageToastMessage");
 
@@ -359,6 +364,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 checkSelected
                 readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectGender"])}
               />
             </Grid>
 
@@ -483,6 +489,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={MaritalStatusList}
                 checkSelected
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectMaritalStatus"])}
               />
             </Grid>
             <Grid
