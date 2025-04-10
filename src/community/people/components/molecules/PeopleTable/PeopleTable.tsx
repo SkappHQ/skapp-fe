@@ -294,6 +294,10 @@ const PeopleTable: FC<Props> = ({
                         .firstTeamName
                     }
                     isResponsive={true}
+                    chipStyles={{
+                      maxWidth:
+                        (employee?.teams ?? []).length > 1 ? "10rem" : "full"
+                    }}
                   />
                 </Box>
               )}
@@ -335,14 +339,24 @@ const PeopleTable: FC<Props> = ({
               }}
               avatars={
                 employee?.managers
-                  ? employee?.managers?.map(
-                      (supervisor) =>
-                        ({
-                          firstName: supervisor?.manager.firstName,
-                          lastName: supervisor?.manager.lastName,
-                          image: supervisor?.manager.authPic
-                        }) as AvatarPropTypes
-                    )
+                  ? [...employee.managers]
+                      .sort((a, b) => {
+                        if (a?.isPrimaryManager && !b?.isPrimaryManager)
+                          return -1;
+                        if (!a?.isPrimaryManager && b?.isPrimaryManager)
+                          return 1;
+                        return (a?.manager?.firstName ?? "").localeCompare(
+                          b?.manager?.firstName ?? ""
+                        );
+                      })
+                      .map(
+                        (supervisor) =>
+                          ({
+                            firstName: supervisor?.manager.firstName,
+                            lastName: supervisor?.manager.lastName,
+                            image: supervisor?.manager.authPic
+                          }) as AvatarPropTypes
+                      )
                   : []
               }
               max={3}
