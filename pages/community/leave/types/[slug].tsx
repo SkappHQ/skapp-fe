@@ -35,12 +35,17 @@ const LeaveType: NextPage = () => {
     setPendingNavigation: state.setPendingNavigation
   }));
 
-  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
-  }));
+  const { ongoingQuickSetup, stopAllOngoingQuickSetup } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+    }));
 
   useEffect(() => {
     const handleRouteChangeStart = (url: string) => {
+      if (ongoingQuickSetup.SETUP_LEAVE_TYPES) {
+        stopAllOngoingQuickSetup();
+      }
       if (isLeaveTypeFormDirty && !isLeaveTypeModalOpen) {
         setPendingNavigation(url);
         setLeaveTypeModalType(LeaveTypeModalEnums.UNSAVED_CHANGES_MODAL);
@@ -63,10 +68,12 @@ const LeaveType: NextPage = () => {
       router.events.off("routeChangeStart", handleRouteChangeStart);
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [isLeaveTypeFormDirty, isLeaveTypeModalOpen]);
+  }, [ongoingQuickSetup, isLeaveTypeFormDirty, isLeaveTypeModalOpen]);
 
   const handleBackBtnClick = () => {
-    stopAllOngoingQuickSetup();
+    if (ongoingQuickSetup.SETUP_LEAVE_TYPES) {
+      stopAllOngoingQuickSetup();
+    }
     router.push(ROUTES.LEAVE.LEAVE_TYPES);
   };
 
