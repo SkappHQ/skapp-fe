@@ -61,7 +61,6 @@ const NotificationContent = ({
           variant="inherit"
           color={!isViewed ? "primary.dark" : theme.palette.grey.A100}
           sx={{ fontSize: "0.75rem", fontWeight: 700, mt: "1rem" }}
-          aria-hidden={true}
         >
           {fromDateToRelativeTime(
             item.createdDate,
