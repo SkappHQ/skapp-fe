@@ -10,7 +10,6 @@ import {
   SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import { s3Endpoints } from "~enterprise/common/api/utils/ApiEndpoints";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -22,9 +21,7 @@ const commonRoutes = [
   ROUTES.PEOPLE.USER_ACCOUNT,
   ROUTES.NOTIFICATIONS,
   ROUTES.INTEGRATIONS,
-  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
-  s3Endpoints.GET_SIGNED_URL,
-  s3Endpoints.DELETE_FILE
+  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD
 ];
 
 // Specific role-based routes
@@ -244,7 +241,6 @@ export const config = {
     "/verify/email",
     "/verify/success",
     "/verify/account-reset-password",
-    // "/api/:path*", // API routes
     // Module routes
     "/leave/:path*",
     "/people/:path*",

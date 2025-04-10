@@ -42,7 +42,7 @@ const SignUp: NextPage = () => {
       }
     ).length;
     const errors = await signUpForm.validateForm();
-    if (!errors) {
+    if (Object.keys(errors).length === 0) {
       if (trueValueCount === MAX_PASSWORD_STRENGTH) {
         handleSubmit();
       } else {
