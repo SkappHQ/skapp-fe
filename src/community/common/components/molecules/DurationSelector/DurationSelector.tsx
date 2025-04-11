@@ -126,8 +126,15 @@ const DurationSelector = <T,>({
         <Stack sx={classes.btnWrapper}>
           <Stack
             className={muiFullDayClasses}
+            role="button"
+            tabIndex={0}
             sx={mergeSx([classes.btn, commonButtonStyles])}
             onClick={() => onOptionClick(options.fullDay)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                onOptionClick(options.fullDay);
+              }
+            }}
           >
             <Typography
               className={muiFullDayClasses}
@@ -144,12 +151,19 @@ const DurationSelector = <T,>({
             <Stack sx={classes.btnGroup}>
               <Stack
                 className={muiHalfDayMorningClasses}
+                role="button"
+                tabIndex={0}
                 sx={mergeSx([
                   classes.halfBtn,
                   classes.firstHalfBtn,
                   commonButtonStyles
                 ])}
                 onClick={() => onOptionClick(options.halfDayMorning)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    onOptionClick(options.fullDay);
+                  }
+                }}
               >
                 <Typography
                   className={muiHalfDayMorningClasses}
@@ -165,12 +179,19 @@ const DurationSelector = <T,>({
               </Stack>
               <Stack
                 className={muiHalfDayEveningClasses}
+                role="button"
+                tabIndex={0}
                 sx={mergeSx([
                   classes.halfBtn,
                   classes.lastHalfBtn,
                   commonButtonStyles
                 ])}
                 onClick={() => onOptionClick(options.halfDayEvening)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    onOptionClick(options.fullDay);
+                  }
+                }}
               >
                 <Typography
                   className={muiHalfDayEveningClasses}
