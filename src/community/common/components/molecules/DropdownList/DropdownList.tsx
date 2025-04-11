@@ -82,7 +82,7 @@ const DropdownList: FC<Props> = ({
   checkSelected,
   ariaLabel
 }: Props) => {
-  const translateAria = useTranslator("commonAria", "components", "dropdown");
+  const translateAria = useTranslator("commonAria", "components", "dropDown");
 
   const theme: Theme = useTheme();
   const classes = styles(theme);

@@ -10,5 +10,27 @@
         "deleteButton": "Select teams table {{teamName}} team delete button"
       }
     }
+  },
+  "addResource": {
+    "generalDetails": {
+      "selectGender": "Select gender",
+      "selectMaritalStatus": "Select marital status"
+    },
+    "familyDetails": {
+      "selectGender": "Select gender",
+      "selectRelationship": "Select relationship"
+    },
+    "healthAndOtherDetails": {
+      "selectBloodGroup": " Select blood group"
+    },
+    "emergencyDetails": {
+      "selectRelationship": "Select relationship"
+    },
+    "employmentDetails": {
+      "selectMultipleTeams": "Select multiple teams dropdown"
+    }
+  },
+  "individualLeaveAnalytics": {
+    "leaveHistoryFilterButton": "Pressing enter on this button opens a menu where you can choose to filter by leave status and leave type"
   }
 }

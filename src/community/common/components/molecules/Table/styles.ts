@@ -168,7 +168,11 @@ const styles = (theme: Theme): StylesType => ({
       default: {
         background: theme.palette.grey[50],
         height: "79px",
-        gap: "0.5rem"
+        gap: "0.5rem",
+        "&:focus": {
+          outline: `2px solid ${theme.palette.primary.main}`,
+          outlineOffset: 0
+        }
       },
       active: {
         transition: "100ms",

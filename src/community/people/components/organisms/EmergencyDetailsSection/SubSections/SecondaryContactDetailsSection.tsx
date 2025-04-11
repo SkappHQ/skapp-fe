@@ -22,6 +22,11 @@ const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
       "addResource",
       "emergencyDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "emergencyDetails"
+    );
     const {
       values,
       errors,
@@ -104,6 +109,7 @@ const SecondaryContactDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={EmergencyContactRelationshipList}
                 readOnly={isReadOnly || isInputsDisabled}
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectRelationship"])}
               />
             </Grid>
 
