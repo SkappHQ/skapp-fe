@@ -2,7 +2,6 @@ import { Chip, Stack, Theme, Typography, useTheme } from "@mui/material";
 import { DateTime } from "luxon";
 import { useMemo } from "react";
 
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import { daysTypes } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -16,6 +15,9 @@ import {
 import { useGetMyManagers } from "~community/people/api/PeopleApi";
 
 import styles from "./styles";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
+import { L4ManagerType } from "~community/people/types/PeopleTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 
 interface Props {
   workingDays: daysTypes[];
@@ -129,14 +131,32 @@ const LeaveSummary = ({
               />
             )}
             {otherManagers.length > 1 && (
-              <BasicChip
-                chipStyles={{
-                  backgroundColor: theme.palette.grey[100],
-                  height: "3rem",
-                  width: "4rem",
-                  borderRadius: "10rem"
+              <AvatarGroup
+                componentStyles={{
+                  ".MuiAvatarGroup-avatar": {
+                    bgcolor: theme.palette.grey[100],
+                    color: theme.palette.primary.dark,
+                    fontSize: "0.875rem",
+                    height: "2.5rem",
+                    width: "2.5rem",
+                    fontWeight: 400,
+                    flexDirection: "row-reverse"
+                  }
                 }}
-                label={`+${otherManagers.length - 1}`}
+                avatars={
+                  otherManagers
+                    ? otherManagers.slice(1).map(
+                        (manager: L4ManagerType) =>
+                          ({
+                            firstName: manager?.firstName,
+                            lastName: manager?.lastName,
+                            image: manager?.authPic
+                          }) as AvatarPropTypes
+                      )
+                    : []
+                }
+                max={1}
+                isHoverModal={true}
               />
             )}
           </Stack>
