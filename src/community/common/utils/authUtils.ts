@@ -11,7 +11,9 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.SETTINGS.PAYMENT,
   ROUTES.REMOVE_PEOPLE,
   ROUTES.CHANGE_SUPERVISORS,
-  ROUTES.SUBSCRIPTION
+  ROUTES.SUBSCRIPTION,
+  ROUTES.SIGN.SIGN,
+  ROUTES.SIGN.CREATE_DOCUMENT
 ];
 
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
@@ -24,11 +26,7 @@ export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
     );
 
     return formattedProtectedPaths.some((path) => {
-      return (
-        !asPath.includes(ROUTES.SIGN.SIGN) &&
-        !asPath.includes(ROUTES.SIGN.CREATE_DOCUMENT) &&
-        asPath.substring(1).split("/")[0] === path.split("/")[1]
-      );
+      return asPath.substring(1).split("/")[0] === path.split("/")[1];
     });
   }
 
