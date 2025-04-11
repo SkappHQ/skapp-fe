@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { EmployeeRoleLimit } from "~fallback/people/types/EmployeeTypes";
 
 export const useGetEmployeeRoleLimit = (
@@ -7,4 +9,11 @@ export const useGetEmployeeRoleLimit = (
   return {
     mutate: async () => {}
   };
+};
+
+export const useGetRoleLimits = (isEnterprise: boolean) => {
+  return useQuery({
+    queryKey: [],
+    queryFn: () => {}
+  });
 };
