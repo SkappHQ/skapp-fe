@@ -24,6 +24,10 @@ export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
 
   return protectedPaths.some(
     (path) =>
+      // NOTE: Even though /signup paths is an unprotected route, but since we are sending a temporary
+      // jwt token for the rest of the /signup flow, we have to consider it has a protected route here
+      // or the signup flow will break
+      !asPath.includes(ROUTES.AUTH.SIGNUP) &&
       !asPath.includes(ROUTES.SIGN.SIGN) &&
       !asPath.includes(ROUTES.SIGN.CREATE_DOCUMENT) &&
       asPath.includes(path)
