@@ -72,7 +72,7 @@ const ROUTES = {
     ATTENDANCE: "/configurations/attendance",
     TIME: "/configurations/time",
     USER_ROLES: "/configurations/user-roles",
-    SIGN: "/configurations/esign",
+    SIGN: "/configurations/sign",
     USER_ROLES_MODULE: (module: string) =>
       `/configurations/user-roles/${module}`
   },
@@ -88,15 +88,15 @@ const ROUTES = {
   },
   MAINTENANCE: "/maintenance",
   SIGN: {
-    BASE: "/esign",
-    INBOX: "/esign/inbox",
-    SENT: "/esign/sent",
-    FOLDERS: "/esign/folders",
-    CONTACTS: "/esign/contacts",
-    CREATE_DOCUMENT: "/esign/create",
-    SIGN: "/esign/sign",
-    REDIRECT: "/esign/redirect",
-    COMPLETE: "/esign/complete"
+    BASE: "/sign",
+    INBOX: "/sign/inbox",
+    SENT: "/sign/sent",
+    FOLDERS: "/sign/folders",
+    CONTACTS: "/sign/contacts",
+    CREATE_DOCUMENT: "/sign/create",
+    SIGN: "/sign/sign",
+    REDIRECT: "/sign/redirect",
+    COMPLETE: "/sign/complete"
   },
   REMOVE_PEOPLE: "/remove-people",
   CHANGE_SUPERVISORS: "/change-supervisors",
