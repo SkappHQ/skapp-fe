@@ -65,6 +65,7 @@ const UserLeaveHistory: FC<Props> = ({
     "peopleModule",
     "individualLeaveAnalytics"
   );
+  const translateAria = useTranslator("peopleAria", "individualLeaveAnalytics");
 
   const {
     resetLeaveRequestParams,
@@ -412,10 +413,7 @@ const UserLeaveHistory: FC<Props> = ({
               }
             }}
             aria-describedby={filterId}
-            dataProps={{
-              "aria-label":
-                "Filter: Pressing enter on this button opens a menu where you can choose to filter by leave status, leave type and date."
-            }}
+            ariaLabel={translateAria(["leaveHistoryFilterButton"])}
           />
         </Stack>
         <LeaveRequestMenu

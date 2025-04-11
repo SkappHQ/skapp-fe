@@ -29,5 +29,8 @@
     "employmentDetails": {
       "selectMultipleTeams": "Select multiple teams dropdown"
     }
+  },
+  "individualLeaveAnalytics": {
+    "leaveHistoryFilterButton": "Pressing enter on this button opens a menu where you can choose to filter by leave status and leave type"
   }
 }
