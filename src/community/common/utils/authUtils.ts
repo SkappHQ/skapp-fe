@@ -18,11 +18,11 @@ export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
     path.replace(/\/:path\*$/, "")
   );
 
-  const protectedPaths = formattedProtectedPaths.filter((path) => {
+  const protectedPathsWithDrawer = formattedProtectedPaths.filter((path) => {
     return !drawerHiddenProtectedRoutes.includes(path);
   });
 
-  return protectedPaths.some(
+  return protectedPathsWithDrawer.some(
     (path) =>
       !asPath.includes(ROUTES.SIGN.SIGN) &&
       !asPath.includes(ROUTES.SIGN.CREATE_DOCUMENT) &&

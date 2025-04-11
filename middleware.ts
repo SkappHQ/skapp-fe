@@ -245,7 +245,7 @@ export const config = {
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/sign/:path*",
+    "/esign/:path*",
     "/remove-people",
     "/integrations",
     "/subscription",

@@ -185,8 +185,8 @@ const nextConfig = {
         destination: "/community/configurations/time"
       },
       {
-        source:"/configurations/esign",
-        destination:"/enterprise/configurations/esign"
+        source: "/configurations/esign",
+        destination: "/enterprise/configurations/esign"
       },
       {
         source: "/configurations/user-roles",
@@ -233,36 +233,36 @@ const nextConfig = {
         destination: "/enterprise/maintenance"
       },
       {
-        source: "/sign/inbox",
-        destination: "/enterprise/sign/inbox"
+        source: "/esign/inbox",
+        destination: "/enterprise/esign/inbox"
       },
       {
-        source: "/sign/sent",
-        destination: "/enterprise/sign/sent"
+        source: "/esign/sent",
+        destination: "/enterprise/esign/sent"
       },
       {
-        source: "/sign/contacts",
-        destination: "/enterprise/sign/contacts"
+        source: "/esign/contacts",
+        destination: "/enterprise/esign/contacts"
       },
       {
-        source: "/sign/folders",
-        destination: "/enterprise/sign/folders"
+        source: "/esign/folders",
+        destination: "/enterprise/esign/folders"
       },
       {
-        source: "/sign/create",
-        destination: "/enterprise/sign/create"
+        source: "/esign/create",
+        destination: "/enterprise/esign/create"
       },
       {
-        source: "/sign/sign",
-        destination: "/enterprise/sign/sign"
+        source: "/esign/sign",
+        destination: "/enterprise/esign/sign"
       },
       {
-        source: "/sign/redirect",
-        destination: "/enterprise/sign/redirect"
+        source: "/esign/redirect",
+        destination: "/enterprise/esign/redirect"
       },
       {
-        source: "/sign/complete",
-        destination: "/enterprise/sign/complete"
+        source: "/esign/complete",
+        destination: "/enterprise/esign/complete"
       },
       {
         source: "/settings/modules",
