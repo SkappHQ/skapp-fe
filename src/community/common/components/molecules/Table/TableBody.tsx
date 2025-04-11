@@ -99,6 +99,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
           headers={headers}
           loadingState={loadingState}
           isActionColumnEnabled={actionColumn?.isEnabled}
+          isCheckboxSelectionEnabled={checkboxSelection?.isEnabled}
           tableName={tableName}
         />
       ) : rows?.length ? (
