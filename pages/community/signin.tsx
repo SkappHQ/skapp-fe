@@ -27,7 +27,6 @@ import { signInValidation } from "~community/common/utils/validation";
 import i18n from "~i18n";
 
 import { version } from "../../package.json";
-import { HTTP_OK } from "~community/common/constants/httpStatusCodes";
 
 interface SignInValues {
   email: string;
