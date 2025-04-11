@@ -326,6 +326,7 @@ const TimeConfigurations = (): JSX.Element => {
                       ? theme.palette.primary.main
                       : theme.palette.grey[100],
                     padding: "0.75rem 1rem",
+                    color: "common.black",
                     "&:hover": {
                       backgroundColor: isSelected
                         ? theme.palette.primary.main

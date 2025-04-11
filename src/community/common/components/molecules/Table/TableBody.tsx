@@ -96,10 +96,11 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
     >
       {isLoading ? (
         <TableBodyLoadingState
+          tableName={tableName}
           headers={headers}
           loadingState={loadingState}
           isActionColumnEnabled={actionColumn?.isEnabled}
-          tableName={tableName}
+          isCheckboxSelectionEnabled={checkboxSelection?.isEnabled}
         />
       ) : rows?.length ? (
         rows.map((row) => (

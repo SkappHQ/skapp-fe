@@ -20,13 +20,15 @@ export interface TableBodyLoadingStateProps {
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
   isActionColumnEnabled?: boolean;
+  isCheckboxSelectionEnabled?: boolean;
 }
 
 const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
+  tableName,
   headers,
   loadingState,
   isActionColumnEnabled = false,
-  tableName
+  isCheckboxSelectionEnabled = false
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -41,7 +43,11 @@ const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
       aria-label={`${tableName}-table-body-loading-state-row`}
     >
       <TableCell
-        colSpan={headers?.length + (isActionColumnEnabled ? 1 : 0)}
+        colSpan={
+          headers?.length +
+          (isCheckboxSelectionEnabled ? 1 : 0) +
+          (isActionColumnEnabled ? 1 : 0)
+        }
         sx={mergeSx([
           classes.tableBody.loadingState.cell,
           loadingState?.customStyles?.cell
