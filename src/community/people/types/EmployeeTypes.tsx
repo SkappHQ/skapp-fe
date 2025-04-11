@@ -150,7 +150,6 @@ export interface BulkEmployeeDetails {
   phone: string | null;
   teams: (string | number)[] | null;
   primaryManager: string | null;
-  secondaryManager: string | null;
   timeZone: string | null;
   employmentAllocation: string | null;
   accountStatus: AccountStatus;
