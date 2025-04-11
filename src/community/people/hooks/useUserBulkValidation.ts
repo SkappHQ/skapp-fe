@@ -76,8 +76,7 @@ const useUserBulkValidation = () => {
   };
 
   const isCsvValid = (userArray: BulkUploadUser[]) => {
-    const headerList = Object.keys(userArray?.[0]);
-    console.log("headerList", headerList);
+    const headerList = Object.keys(userArray?.[0]).filter(Boolean);
     return (
       headerList?.length === USER_BULK_HEADERS?.length &&
       USER_BULK_HEADERS?.every((header) => headerList?.includes(header))
