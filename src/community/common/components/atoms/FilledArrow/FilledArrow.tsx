@@ -39,10 +39,7 @@ export const FilledArrow: FC<Props> = ({
 
   return (
     <Avatar
-      alt={
-        ariaLabel ||
-        (isRightArrow ? translateAria(["right"]) : translateAria(["left"]))
-      }
+      alt={isRightArrow ? translateAria(["right"]) : translateAria(["left"])}
       onClick={(event: React.MouseEvent<HTMLDivElement>) => {
         if (!disabled) {
           onClick(event);
@@ -63,7 +60,11 @@ export const FilledArrow: FC<Props> = ({
       }}
       role="button"
       tabIndex={disabled ? -1 : tabIndex}
-      aria-label={ariaLabel}
+      aria-label={
+        ariaLabel || isRightArrow
+          ? translateAria(["right"])
+          : translateAria(["left"])
+      }
     >
       {isRightArrow ? (
         <ArrowFilledRight
