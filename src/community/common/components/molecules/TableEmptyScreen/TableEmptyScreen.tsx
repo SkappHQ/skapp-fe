@@ -46,7 +46,6 @@ const TableEmptyScreen: FC<TableEmptyScreenProps> = ({
     <Stack sx={mergeSx([classes.wrapper, customStyles?.wrapper])}>
       <Stack
         component="div"
-        role="output"
         sx={mergeSx([classes.container, customStyles?.container])}
       >
         <Icon name={IconName.MAGNIFYING_GLASS_ICON} />
