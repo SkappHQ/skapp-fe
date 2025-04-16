@@ -170,7 +170,7 @@ const styles = (theme: Theme): StylesType => ({
         height: "79px",
         gap: "0.5rem",
         "&:focus": {
-          outline: `2px solid ${theme.palette.primary.main}`,
+          outline: `2px solid ${theme.palette.common.black}`,
           outlineOffset: 0
         }
       },
