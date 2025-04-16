@@ -28,6 +28,7 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { AdminTypes } from "~community/common/types/AuthTypes";
@@ -106,6 +107,7 @@ const ContentLayout = ({
   id,
   shouldBlink
 }: Props): JSX.Element => {
+  const translateText = useTranslator("commonAria", "contentLayout");
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
   const isBelow600 = useMediaQuery()(MediaQueries.BELOW_600);
@@ -255,6 +257,7 @@ const ContentLayout = ({
                   })
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
+                aria-label={translateText(["backButton"])}
               >
                 <Icon name={backIcon} />
               </IconButton>

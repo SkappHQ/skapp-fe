@@ -52,5 +52,8 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password"
     }
+  },
+  "contentLayout": {
+    "backButton": "Back Button"
   }
 }
