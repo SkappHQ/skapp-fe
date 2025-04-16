@@ -144,6 +144,10 @@ const LeaveDashboard = (): JSX.Element => {
                 setViewedPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
                 router.replace(ROUTES.LEAVE.LEAVE_PENDING);
             }}
+            accessibility={{
+              tabIndex: 0,
+              role: "button"
+            }}
           >
             {pendingLeaves?.[0]?.items?.length > 0 ? (
               <div style={{ display: "flex", alignItems: "center", gap: 5 }}>

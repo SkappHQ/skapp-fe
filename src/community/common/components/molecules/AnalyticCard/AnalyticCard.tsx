@@ -11,20 +11,34 @@ interface Props {
   isExpandable?: boolean;
   onExpand?: () => void;
   children?: ReactNode;
+  accessibility?: {
+    tabIndex?: number;
+    role?: string;
+  };
 }
 
 const AnalyticCard: FC<Props> = ({
   title,
   children,
   isExpandable = false,
-  onExpand
+  onExpand,
+  accessibility
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
 
   return (
     <>
-      <Box sx={classes.card}>
+      <Box
+        sx={classes.card}
+        tabIndex={accessibility?.tabIndex ?? -1}
+        role={accessibility?.role ?? "group"}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onExpand?.();
+          }
+        }}
+      >
         <>
           <Box display={"flex"} justifyContent="space-between">
             <Typography
