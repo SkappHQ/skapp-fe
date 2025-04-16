@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import ReactECharts from "echarts-for-react";
-import { JSX, useEffect, useRef, useState } from "react";
+import React, { JSX, useEffect, useRef, useState } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
@@ -37,6 +37,7 @@ const LeaveTypeBreakdownChart = ({
   const [toggle, setToggle] = useState<Record<string, boolean> | undefined>(
     datasets?.toggle
   );
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
 
   const chartData = useLeaveUtilizationChartOptions({
     datasets,
@@ -61,6 +62,33 @@ const LeaveTypeBreakdownChart = ({
         initialList: toggle
       })
     );
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    const chartInstance = chartRef.current?.getEchartsInstance();
+    const totalBars = datasets?.months?.length || 0;
+
+    if (!chartInstance) return;
+
+    if (event.key === "ArrowRight") {
+      const newIndex = (highlightedIndex + 1) % totalBars;
+      setHighlightedIndex(newIndex);
+      chartInstance.dispatchAction({
+        type: "showTip",
+        seriesIndex: 0,
+        dataIndex: newIndex
+      });
+    }
+
+    if (event.key === "ArrowLeft") {
+      const newIndex = (highlightedIndex - 1 + totalBars) % totalBars;
+      setHighlightedIndex(newIndex);
+      chartInstance.dispatchAction({
+        type: "showTip",
+        seriesIndex: 0,
+        dataIndex: newIndex
+      });
+    }
   };
 
   return (
@@ -99,6 +127,8 @@ const LeaveTypeBreakdownChart = ({
                       ? "block"
                       : "none"
                 }}
+                tabIndex={0}
+                onKeyDown={handleKeyPress}
               >
                 <ReactECharts option={chartData} ref={chartRef} />
               </Box>
