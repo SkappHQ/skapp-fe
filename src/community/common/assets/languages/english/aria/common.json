@@ -45,6 +45,10 @@
     },
     "itemSelector": {
       "popperLabel": "Item Selector"
+    },
+    "inputPhoneNumber": {
+      "countryCode": "country code",
+      "phoneNumber": "phone number"
     }
   },
   "modals": {

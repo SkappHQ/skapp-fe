@@ -32,5 +32,11 @@
   },
   "individualLeaveAnalytics": {
     "leaveHistoryFilterButton": "Pressing enter on this button opens a menu where you can choose to filter by leave status and leave type"
+  },
+  "peopleFormTable": {
+    "actionColumn": {
+      "editButton": "Select edit button",
+      "deleteButton": "Select delete button"
+    }
   }
 }

@@ -1,11 +1,12 @@
 import { Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { type ChangeEvent, FC } from "react";
+import { type ChangeEvent, FC, KeyboardEvent, useRef } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { numberPattern } from "~community/common/regex/regexPatterns";
 
 import InputField from "../InputField/InputField";
@@ -44,7 +45,30 @@ const InputPhoneNumber: FC<Props> = ({
   inputStyle,
   readOnly
 }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "inputPhoneNumber"
+  );
   const theme: Theme = useTheme();
+  const phoneInputRef = useRef<any>(null);
+
+  const handleCountryKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (phoneInputRef.current) {
+        phoneInputRef.current.setOpen(true);
+      }
+    }
+    if (e.key === "Escape" && phoneInputRef.current?.state.open) {
+      e.preventDefault();
+      phoneInputRef.current.setOpen(false);
+    }
+    if (e.key === "Tab" && phoneInputRef.current?.state.open) {
+      e.preventDefault();
+      phoneInputRef.current.setOpen(false);
+    }
+  };
 
   return (
     // TODO: move styles to styles.ts
@@ -78,7 +102,10 @@ const InputPhoneNumber: FC<Props> = ({
         <PhoneInput
           value={countryCodeValue}
           onChange={onChangeCountry}
-          inputProps={{ readOnly: true }}
+          inputProps={{
+            readOnly: true,
+            "aria-label": `${label} ${translateText(["countryCode"])}`
+          }}
           disableDropdown={isDisabled}
           inputStyle={{
             backgroundColor: isDisabled
@@ -135,6 +162,7 @@ const InputPhoneNumber: FC<Props> = ({
             zIndex: ZIndexEnums.DEFAULT,
             position: "absolute"
           }}
+          onKeyDown={handleCountryKeyDown}
         />
         <InputField
           inputName={inputName}
@@ -159,7 +187,9 @@ const InputPhoneNumber: FC<Props> = ({
             // TODO: move this to a separate file and write unit test cases
             if (
               !numberPattern().test(e.key) &&
-              e.key !== "Backspace" &&
+              !["Backspace", "Tab", "ArrowLeft", "ArrowRight"].includes(
+                e.key
+              ) &&
               !(e.ctrlKey && ["a", "c", "v", "x"].includes(e.key))
             ) {
               e.preventDefault();
