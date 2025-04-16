@@ -68,9 +68,16 @@ const FilterButton = ({
         {visibleFilters.map((filter) => (
           <Chip
             key={filter.label}
+            tabIndex={0}
+            role="button"
             label={pascalCaseFormatter(filter.label)}
             sx={classes.filterItem}
             onDelete={() => filter.handleFilterDelete(filter.label)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                filter.handleFilterDelete(filter.label);
+              }
+            }}
             deleteIcon={
               <Box>
                 <CloseIcon fill="black" />

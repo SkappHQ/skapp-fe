@@ -5,7 +5,14 @@ import {
   Popper as MuiPopper
 } from "@mui/material";
 import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { CSSProperties, JSX, ReactNode, useMemo } from "react";
+import {
+  CSSProperties,
+  JSX,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef
+} from "react";
 
 import {
   MenuTypes,
@@ -54,6 +61,28 @@ const Popper = ({
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles();
+  const popperRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<Element | null>(null);
+
+  useEffect(() => {
+    if (open) {
+      previousActiveElement.current = document.activeElement;
+
+      setTimeout(() => {
+        if (popperRef.current) {
+          const focusableElements = popperRef.current.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+
+          if (focusableElements.length > 0) {
+            (focusableElements[0] as HTMLElement).focus();
+          }
+        }
+      }, 0);
+    } else if (previousActiveElement.current) {
+      (previousActiveElement.current as HTMLElement).focus();
+    }
+  }, [open]);
 
   const wrapperWidth = useMemo(() => {
     if (menuType === MenuTypes.SEARCH) {
@@ -122,13 +151,14 @@ const Popper = ({
       }}
       role={ariaRole}
       {...(ariaRole === "dialog" ? { "aria-modal": true } : {})}
-      tabIndex={0}
+      tabIndex={-1}
       aria-label={ariaLabel}
     >
       {({ TransitionProps }) => (
         <ClickAwayListener onClickAway={handleClose}>
           <Fade {...TransitionProps} timeout={timeout}>
             <Box
+              ref={popperRef}
               sx={{
                 ...classes.container,
                 marginY: marginY,

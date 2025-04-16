@@ -70,6 +70,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
     "table",
     "tableBody"
   );
+
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -106,7 +107,15 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
         rows.map((row) => (
           <TableRow
             key={row.id}
+            role="row"
+            tabIndex={0}
             onClick={() => handleTableRowClick(row)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleTableRowClick(row);
+              }
+            }}
             sx={mergeSx([
               classes.tableBody.row.default,
               classes.tableBody.row?.[
@@ -116,7 +125,6 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
                 isRowDisabled?.(row.id) ? "disabled" : "active"
               ]
             ])}
-            role="row"
             aria-label={translateText(["row"], {
               tableName: tableName,
               ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""

@@ -66,6 +66,10 @@ export const styles = (theme: Theme) => ({
     },
     "& .MuiSelect-icon": {
       display: readOnly ? "none" : "block"
+    },
+    "&:focus-within": {
+      outline: `0.125rem solid ${theme.palette.common.black}`,
+      outlineOffset: "-0.125rem"
     }
   }),
 

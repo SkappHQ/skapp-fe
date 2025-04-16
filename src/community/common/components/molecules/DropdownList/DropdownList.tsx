@@ -134,6 +134,7 @@ const DropdownList: FC<Props> = ({
       >
         {itemList?.length > 0 ? (
           <Select
+            tabIndex={0}
             id={id}
             value={value?.toString() ?? ""}
             readOnly={readOnly}
