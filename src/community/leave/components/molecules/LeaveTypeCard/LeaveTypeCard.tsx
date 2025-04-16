@@ -97,6 +97,9 @@ const LeaveTypeCard: FC<Props> = ({ entitlement, managers }: Props) => {
 
   return (
     <Stack
+      role="button"
+      tabIndex={0}
+      aria-disabled={!balanceInDays || !managers || isExpired}
       sx={
         !balanceInDays || !managers || isExpired
           ? mergeSx([classes.activeCard, classes.disabledCard])
@@ -105,6 +108,12 @@ const LeaveTypeCard: FC<Props> = ({ entitlement, managers }: Props) => {
       onMouseEnter={() => setMouseOn(true)}
       onMouseLeave={() => setMouseOn(false)}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
     >
       <Stack sx={classes.leftContent}>
         <Typography variant="body1">
