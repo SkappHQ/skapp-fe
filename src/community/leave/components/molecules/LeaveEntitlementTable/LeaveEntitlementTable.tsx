@@ -123,16 +123,17 @@ const LeaveEntitlementTable = ({
                 selectedYear: leaveEntitlementTableSelectedYear
               })}
               description={translateText(["emptyScreen", "description"])}
-              buttonText={
-                showEmptyTableButton &&
-                translateText(["emptyScreen", "buttonText"])
-              }
-              onButtonClick={() => {
-                setLeaveEntitlementModalType(
-                  tableData?.items?.length === 0
-                    ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
-                    : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
-                );
+              button={{
+                label: showEmptyTableButton
+                  ? translateText(["emptyScreen", "buttonText"])
+                  : undefined,
+                onClick: () => {
+                  setLeaveEntitlementModalType(
+                    tableData?.items?.length === 0
+                      ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
+                      : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
+                  );
+                }
               }}
             />
           </Box>
