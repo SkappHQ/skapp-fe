@@ -47,7 +47,7 @@ export const FilledArrow: FC<Props> = ({
       }}
       aria-disabled={disabled}
       onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-        if (!disabled && event.key === "Enter" && enableKeyboardNavigation) {
+        if (!disabled && event.key === "Enter") {
           onClick(event);
         }
       }}

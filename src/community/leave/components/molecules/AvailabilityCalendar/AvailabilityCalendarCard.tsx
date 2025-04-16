@@ -116,6 +116,13 @@ const AvailabilityCalendarCard = ({
           flexDirection: "column",
           cursor: "pointer"
         }}
+        tabIndex={0}
+        role="button"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setIsModalOpen(true);
+          }
+        }}
         onClick={() => setIsModalOpen(true)}
       >
         <Box
