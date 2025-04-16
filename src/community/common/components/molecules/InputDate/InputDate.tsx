@@ -206,7 +206,9 @@ const InputDate: FC<Props> = ({
           {...other}
           outsideCurrentMonth={outsideCurrentMonth}
           day={day}
-          sx={{ ...backgroundStyle }}
+          sx={{
+            ...backgroundStyle
+          }}
         />
       </Box>
     );
@@ -279,7 +281,12 @@ const InputDate: FC<Props> = ({
           )}
         </Typography>
         {tooltip && (
-          <Tooltip id="emoji-field" title={tooltip} isDisabled={disabled} />
+          <Tooltip
+            id="emoji-field"
+            title={tooltip}
+            isDisabled={disabled}
+            aria-label={`${label.toLowerCase()} tooltip`}
+          />
         )}
       </Stack>
 
@@ -317,7 +324,15 @@ const InputDate: FC<Props> = ({
               )
             : placeholder}
         </Typography>
-        <Box onClick={(e) => !(disabled || readOnly) && handleClick(e)}>
+        <Box
+          role="button"
+          tabIndex={0}
+          onClick={(e) => !(disabled || readOnly) && handleClick(e)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !(disabled || readOnly))
+              handleClick(e as unknown as MouseEvent<HTMLElement>);
+          }}
+        >
           <Icon
             name={IconName.CALENDAR_ICON}
             width="6.25rem"
@@ -355,6 +370,20 @@ const InputDate: FC<Props> = ({
                     : PickersCalendarHeader
                 }}
                 slotProps={{
+                  yearButton: {
+                    sx: {
+                      "&.Mui-selected": {
+                        color: "common.white"
+                      }
+                    }
+                  },
+                  monthButton: {
+                    sx: {
+                      "&.Mui-selected": {
+                        color: "common.white"
+                      }
+                    }
+                  },
                   leftArrowIcon: {
                     sx: {
                       "&.Mui-disabled": {
