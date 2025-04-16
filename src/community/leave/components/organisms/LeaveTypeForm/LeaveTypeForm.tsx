@@ -340,6 +340,14 @@ const LeaveTypeForm = () => {
                   setFieldError
                 )
               }
+              onKeyDown={() =>
+                handleLeaveDurationClick(
+                  values,
+                  LeaveDurationTypes.HALF_DAY,
+                  setFieldValue,
+                  setFieldError
+                )
+              }
               isError={Boolean(errors.leaveDuration)}
               typographyStyles={{
                 variant: {
@@ -361,6 +369,14 @@ const LeaveTypeForm = () => {
                 values?.leaveDuration === LeaveDurationTypes.FULL_DAY
               }
               onClick={() =>
+                handleLeaveDurationClick(
+                  values,
+                  LeaveDurationTypes.FULL_DAY,
+                  setFieldValue,
+                  setFieldError
+                )
+              }
+              onKeyDown={() =>
                 handleLeaveDurationClick(
                   values,
                   LeaveDurationTypes.FULL_DAY,
@@ -412,15 +428,28 @@ const LeaveTypeForm = () => {
                   e.target.checked ? values?.isAttachmentMandatory : false
                 );
               }}
+              onKeyDown={async () => {
+                await setFieldValue("isAttachment", !values?.isAttachment);
+                await setFieldValue(
+                  "isAttachmentMandatory",
+                  !values?.isAttachment ? values?.isAttachmentMandatory : false
+                );
+              }}
             />
 
             <SwitchRow
               labelId="attachment-mandatory"
               label={translateText(["attachmentMandatory"])}
               checked={values?.isAttachmentMandatory}
-              onChange={async (e) => {
-                await setFieldValue("isAttachmentMandatory", e.target.checked);
-              }}
+              onChange={async (e) =>
+                await setFieldValue("isAttachmentMandatory", e.target.checked)
+              }
+              onKeyDown={async () =>
+                await setFieldValue(
+                  "isAttachmentMandatory",
+                  !values?.isAttachmentMandatory
+                )
+              }
               disabled={!values?.isAttachment}
             />
 
@@ -431,6 +460,12 @@ const LeaveTypeForm = () => {
               onChange={async (e) => {
                 await setFieldValue("isCommentMandatory", e.target.checked);
               }}
+              onKeyDown={async () =>
+                await setFieldValue(
+                  "isCommentMandatory",
+                  !values?.isCommentMandatory
+                )
+              }
             />
           </Stack>
 
@@ -445,9 +480,12 @@ const LeaveTypeForm = () => {
               labelId="allow-auto-approval"
               label={translateText(["allowAutoApproval"])}
               checked={values?.isAutoApproval}
-              onChange={async (e) => {
-                await setFieldValue("isAutoApproval", e.target.checked);
-              }}
+              onChange={async (e) =>
+                await setFieldValue("isAutoApproval", e.target.checked)
+              }
+              onKeyDown={async () =>
+                await setFieldValue("isAutoApproval", !values?.isAutoApproval)
+              }
             />
           </Stack>
 
@@ -462,13 +500,15 @@ const LeaveTypeForm = () => {
               labelId="enable-carry-forward"
               label={translateText(["enableCarryForward"])}
               checked={values?.isCarryForwardEnabled}
-              onChange={async (e) => {
-                if (!e.target.checked) {
-                  setFieldError("maxCarryForwardDays", "");
-                  setFieldError("carryForwardExpirationDate", "");
-                }
-                await setFieldValue("isCarryForwardEnabled", e.target.checked);
-              }}
+              onChange={async (e) =>
+                await setFieldValue("isCarryForwardEnabled", e.target.checked)
+              }
+              onKeyDown={async () =>
+                await setFieldValue(
+                  "isCarryForwardEnabled",
+                  !values?.isCarryForwardEnabled
+                )
+              }
             />
 
             <InputField

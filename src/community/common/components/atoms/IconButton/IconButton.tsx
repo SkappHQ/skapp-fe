@@ -18,6 +18,7 @@ interface Props {
   isTextPermenent?: boolean;
   id?: string;
   ariaLabel?: string;
+  tabIndex?: number;
 }
 
 const IconButton = ({
@@ -31,7 +32,8 @@ const IconButton = ({
   dataProps,
   isTextPermenent = false,
   id,
-  ariaLabel
+  ariaLabel,
+  tabIndex = 0
 }: Props): JSX.Element => {
   const queryMatches = useMediaQuery();
   const isBelow1420 = queryMatches(1420);
@@ -45,6 +47,7 @@ const IconButton = ({
       sx={{
         ...buttonStyles
       }}
+      tabIndex={tabIndex}
       onClick={onClick}
       disabled={disabled}
       disableRipple={disableRipple}

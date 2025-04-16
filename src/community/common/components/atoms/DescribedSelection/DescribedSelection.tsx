@@ -5,7 +5,7 @@ import {
   TypographyProps
 } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { JSX, type MouseEventHandler, useMemo } from "react";
+import { JSX, KeyboardEvent, type MouseEventHandler, useMemo } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
@@ -22,6 +22,7 @@ interface Props {
   selected: boolean;
   isError?: boolean;
   onClick: MouseEventHandler<HTMLDivElement>;
+  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>) => void;
   typographyStyles: {
     variant: {
       title: TypographyProps["variant"];
@@ -44,6 +45,7 @@ const DescribedSelection = ({
   selected,
   isError,
   onClick,
+  onKeyDown,
   typographyStyles,
   isChevronIconVisible = false,
   isAnimationOn = false
@@ -69,6 +71,14 @@ const DescribedSelection = ({
 
   return (
     <Stack
+      tabIndex={0}
+      role="button"
+      onClick={onClick}
+      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === "Enter") {
+          onKeyDown(event);
+        }
+      }}
       sx={mergeSx([
         classes.wrapper,
         cardWrapperStyles,
@@ -91,7 +101,6 @@ const DescribedSelection = ({
             }
           : {}
       ])}
-      onClick={onClick}
     >
       <Stack sx={mergeSx([classes.container, cardStyles])}>
         <Stack sx={classes.iconWrapper}>{icon}</Stack>

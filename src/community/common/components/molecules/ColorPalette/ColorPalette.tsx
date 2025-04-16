@@ -89,13 +89,19 @@ const ColorPalette: FC<Props> = ({
               {reorderedColors.map((color: string, index: number) => {
                 return (
                   <Stack
-                    onClick={() => handleColorClick(color)}
                     key={index}
+                    data-testid={`input-color-${index}`}
+                    tabIndex={0}
+                    onClick={() => handleColorClick(color)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleColorClick(color);
+                      }
+                    }}
                     sx={{
                       ...classes.colorWidget,
                       backgroundColor: color
                     }}
-                    data-testid={`input-color-${index}`}
                   >
                     {selectedColor === color && (
                       <Icon
@@ -109,6 +115,7 @@ const ColorPalette: FC<Props> = ({
             </Stack>
             <IconButton
               id="drop-down-icon-btn"
+              tabIndex={-1}
               icon={<Icon name={IconName.DROPDOWN_ARROW_ICON} />}
               buttonStyles={classes.dropDownButton}
               onClick={() => setIsPopperOpen(!isPopperOpen)}

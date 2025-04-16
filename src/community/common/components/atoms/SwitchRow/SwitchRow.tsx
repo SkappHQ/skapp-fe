@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC, KeyboardEvent } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -14,6 +14,7 @@ interface SwitchComponentProps {
   label?: string;
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>, type?: string) => void;
+  onKeyDown?: (event: KeyboardEvent<HTMLButtonElement>, type?: string) => void;
   type?: string;
   disabled?: boolean;
   error?: string;
@@ -28,6 +29,7 @@ const SwitchRow: FC<SwitchComponentProps> = ({
   checked,
   type,
   onChange = null,
+  onKeyDown = null,
   disabled = false,
   error,
   wrapperStyles,
@@ -63,6 +65,11 @@ const SwitchRow: FC<SwitchComponentProps> = ({
         onChange={(e) => onChange?.(e, type)}
         disabled={disabled}
         name={name}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onKeyDown?.(e, type);
+          }
+        }}
         slotProps={{
           input: {
             "aria-labelledby": labelId,
