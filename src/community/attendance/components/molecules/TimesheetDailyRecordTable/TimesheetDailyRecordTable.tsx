@@ -105,7 +105,7 @@ const TimesheetDailyRecordTable = ({
         <TimesheetDailyRecordSkeleton />
       ) : (
         <>
-          <Stack ref={stackRef} sx={classes.stackContainer}>
+          <Stack ref={stackRef} sx={classes.stackContainer} tabIndex={0}>
             {!isDrawerToggled ? (
               <TimesheetDailyRecordTableHeader headerLabels={tableHeaders} />
             ) : (

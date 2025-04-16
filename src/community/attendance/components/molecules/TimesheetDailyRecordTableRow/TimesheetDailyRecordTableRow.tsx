@@ -182,6 +182,12 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       alignItems="center"
       sx={classes.stackContainerStyle}
       onClick={() => mutate()}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          mutate();
+        }
+      }}
     >
       <Box sx={classes.boxContainerStyle(isDrawerToggled)}>
         <Typography variant="body2" sx={classes.dateFontStyle}>
