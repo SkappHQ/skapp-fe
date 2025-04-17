@@ -6,7 +6,12 @@
   "timesheet": {
     "dailyLogTable": {
       "holiday": "holiday",
-      "leave": "leave"
+      "leave": "leave",
+      "previousButton": "Click to go to previous",
+      "nextButton": "Click to go to next"
+    },
+    "timeEntryRequestTable": {
+      "filterButton": "Filter Button"
     }
   }
 }

@@ -31,7 +31,11 @@ import { useCommonStore } from "~community/common/stores/commonStore";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
-import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
+import {
+  shouldActivateButton,
+  shouldMoveDownward,
+  shouldMoveUpward
+} from "~community/common/utils/keyboardUtils";
 
 import TimesheetTimelineBar from "../TimesheetTimelineBar/TimesheetTimelineBar";
 import styles from "./styles";
@@ -199,6 +203,19 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       onKeyDown={(e) => {
         if (shouldActivateButton(e.key)) {
           mutate();
+        }
+        if (shouldMoveUpward(e.key)) {
+          const previousRow = e.currentTarget
+            .previousElementSibling as HTMLElement;
+          if (previousRow) {
+            previousRow.focus();
+          }
+        }
+        if (shouldMoveDownward(e.key)) {
+          const nextRow = e.currentTarget.nextElementSibling as HTMLElement;
+          if (nextRow) {
+            nextRow.focus();
+          }
         }
       }}
     >
