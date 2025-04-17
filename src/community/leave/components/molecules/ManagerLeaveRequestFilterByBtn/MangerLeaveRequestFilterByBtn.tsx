@@ -3,6 +3,7 @@ import { MouseEvent, useState } from "react";
 
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { FilterButtonTypes } from "~community/common/types/CommonTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
 import LeaveRequestMenu from "~community/leave/components/molecules/LeaveRequestMenu/LeaveRequestMenu";
@@ -21,6 +22,8 @@ const ManagerLeaveRequestFilterByBtn = ({
   removeFilters
 }: Props) => {
   const theme: Theme = useTheme();
+
+  const translateAria = useTranslator("commonAria", "components");
 
   const { leaveRequestFilterOrder } = useLeaveStore((state) => ({
     leaveRequestFilterOrder: state.leaveRequestFilterOrder
@@ -55,6 +58,8 @@ const ManagerLeaveRequestFilterByBtn = ({
         <IconButton
           icon={<FilterIcon />}
           onClick={handleFilterClick}
+          ariaLabel={translateAria(["filterBtn"])}
+          title={translateAria(["filterBtn"])}
           buttonStyles={{
             border: "0.0625rem solid",
             borderColor: "grey.500",
