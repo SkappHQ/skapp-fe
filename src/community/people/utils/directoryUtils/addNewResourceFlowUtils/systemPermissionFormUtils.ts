@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { ToastProps } from "~community/common/types/ToastTypes";
@@ -196,7 +196,7 @@ export const handleCustomChangeDefault = ({
 };
 
 interface HandleSuperAdminChangeEnterpriseProps {
-  event: ChangeEvent<HTMLInputElement>;
+  checked: boolean;
   setFieldValue: (
     field: string,
     value: any,
@@ -210,7 +210,7 @@ interface HandleSuperAdminChangeEnterpriseProps {
 }
 
 export const handleSuperAdminChangeEnterprise = async ({
-  event,
+  checked,
   setFieldValue,
   setUserRoles,
   setToastMessage,
@@ -218,9 +218,7 @@ export const handleSuperAdminChangeEnterprise = async ({
   roleLimits,
   superAdminCount
 }: HandleSuperAdminChangeEnterpriseProps) => {
-  const isChecked = event.target.checked;
-
-  if (!isChecked && superAdminCount === 1) {
+  if (!checked && superAdminCount === 1) {
     setToastMessage({
       open: true,
       toastType: "error",
@@ -231,7 +229,7 @@ export const handleSuperAdminChangeEnterprise = async ({
     return;
   }
 
-  if (isChecked && roleLimits.superAdminLimitExceeded) {
+  if (checked && roleLimits.superAdminLimitExceeded) {
     setToastMessage({
       open: true,
       toastType: "error",
@@ -242,8 +240,8 @@ export const handleSuperAdminChangeEnterprise = async ({
     return;
   }
 
-  void setFieldValue("isSuperAdmin", isChecked);
-  setUserRoles("isSuperAdmin", isChecked);
+  void setFieldValue("isSuperAdmin", checked);
+  setUserRoles("isSuperAdmin", checked);
 
   const peopleRole = Role.PEOPLE_ADMIN;
   const leaveRole = Role.LEAVE_ADMIN;
@@ -262,7 +260,7 @@ export const handleSuperAdminChangeEnterprise = async ({
 };
 
 interface HandleSuperAdminChangeDefaultProps {
-  event: ChangeEvent<HTMLInputElement>;
+  checked: boolean;
   setFieldValue: (
     field: string,
     value: any,
@@ -275,16 +273,14 @@ interface HandleSuperAdminChangeDefaultProps {
 }
 
 export const handleSuperAdminChangeDefault = async ({
-  event,
+  checked,
   setFieldValue,
   setUserRoles,
   setToastMessage,
   roleLimitationText,
   superAdminCount
 }: HandleSuperAdminChangeDefaultProps) => {
-  const isChecked = event.target.checked;
-
-  if (!isChecked && superAdminCount === 1) {
+  if (!checked && superAdminCount === 1) {
     setToastMessage({
       open: true,
       toastType: "error",
@@ -295,8 +291,8 @@ export const handleSuperAdminChangeDefault = async ({
     return;
   }
 
-  void setFieldValue("isSuperAdmin", isChecked);
-  setUserRoles("isSuperAdmin", isChecked);
+  void setFieldValue("isSuperAdmin", checked);
+  setUserRoles("isSuperAdmin", checked);
 
   const peopleRole = Role.PEOPLE_ADMIN;
   const leaveRole = Role.LEAVE_ADMIN;

@@ -114,8 +114,7 @@ const SetupEmailServerModal: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   }, [formik, formik.values.emailServiceProvider, formik.values.isEnabled]);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = event.target;
+  const handleSwitchChange = (checked: boolean) => {
     formik.setFieldValue("isEnabled", checked);
     formik.setStatus({ initialized: false });
 
@@ -167,7 +166,7 @@ const SetupEmailServerModal: React.FC<Props> = ({ isOpen, onClose }) => {
             labelId="enable-email-server"
             label={translateText(["enableEmailServerLabel"])}
             checked={formik.values.isEnabled}
-            onChange={handleSwitchChange}
+            onChange={(checked: boolean) => handleSwitchChange(checked)}
             name="isEnabled"
           />
           <DropdownList

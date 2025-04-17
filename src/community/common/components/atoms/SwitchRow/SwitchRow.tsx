@@ -6,6 +6,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import StyledSwitch from "./StyledSwitch";
 import styles from "./styles";
@@ -13,8 +14,7 @@ import styles from "./styles";
 interface SwitchComponentProps {
   label?: string;
   checked: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>, type?: string) => void;
-  onKeyDown?: (event: KeyboardEvent<HTMLButtonElement>, type?: string) => void;
+  onChange: (checked: boolean, type?: string) => void;
   type?: string;
   disabled?: boolean;
   error?: string;
@@ -28,8 +28,7 @@ const SwitchRow: FC<SwitchComponentProps> = ({
   label,
   checked,
   type,
-  onChange = null,
-  onKeyDown = null,
+  onChange,
   disabled = false,
   error,
   wrapperStyles,
@@ -62,12 +61,14 @@ const SwitchRow: FC<SwitchComponentProps> = ({
       <StyledSwitch
         disableRipple
         checked={checked}
-        onChange={(e) => onChange?.(e, type)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          onChange(e.target.checked, type)
+        }
         disabled={disabled}
         name={name}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            onKeyDown?.(e, type);
+        onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
+          if (shouldActivateButton(e.key)) {
+            onChange?.(e.target.checked, type);
           }
         }}
         slotProps={{

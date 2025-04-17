@@ -5,12 +5,13 @@ import {
   TypographyProps
 } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { JSX, KeyboardEvent, type MouseEventHandler, useMemo } from "react";
+import { JSX, KeyboardEvent, MouseEvent, useMemo } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { getRgbForBlink } from "~community/common/utils/describedSelectionUtils";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -21,8 +22,9 @@ interface Props {
   cardWrapperStyles?: SxProps;
   selected: boolean;
   isError?: boolean;
-  onClick: MouseEventHandler<HTMLDivElement>;
-  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>) => void;
+  onClick: (
+    event: KeyboardEvent<HTMLDivElement> | MouseEvent<HTMLDivElement>
+  ) => void;
   typographyStyles: {
     variant: {
       title: TypographyProps["variant"];
@@ -45,7 +47,6 @@ const DescribedSelection = ({
   selected,
   isError,
   onClick,
-  onKeyDown,
   typographyStyles,
   isChevronIconVisible = false,
   isAnimationOn = false
@@ -73,10 +74,10 @@ const DescribedSelection = ({
     <Stack
       tabIndex={0}
       role="button"
-      onClick={onClick}
-      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === "Enter") {
-          onKeyDown(event);
+      onClick={(e: MouseEvent<HTMLDivElement>) => onClick(e)}
+      onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+        if (shouldActivateButton(e.key)) {
+          onClick?.(e);
         }
       }}
       sx={mergeSx([

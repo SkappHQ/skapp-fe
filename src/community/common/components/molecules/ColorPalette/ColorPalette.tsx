@@ -6,6 +6,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -94,7 +95,7 @@ const ColorPalette: FC<Props> = ({
                     tabIndex={0}
                     onClick={() => handleColorClick(color)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (shouldActivateButton(e.key)) {
                         handleColorClick(color);
                       }
                     }}
