@@ -6,6 +6,7 @@ import React, { FC, MouseEvent, ReactNode, useState } from "react";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
 import { MenuItemTypes } from "~community/common/types/MoleculeTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -52,7 +53,7 @@ const KebabMenu: FC<KebabMenuProps> = ({
   };
 
   const handleMenuBtnKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Enter") {
+    if (shouldActivateButton(event.key)) {
       event.preventDefault();
       setAnchorEl(event.currentTarget as HTMLElement);
     }

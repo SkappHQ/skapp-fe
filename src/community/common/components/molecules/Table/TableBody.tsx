@@ -14,6 +14,11 @@ import { TableEmptyScreenProps } from "~community/common/components/molecules/Ta
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import {
+  shouldActivateButton,
+  shouldMoveDownward,
+  shouldMoveUpward
+} from "~community/common/utils/keyboardUtils";
 
 import { CommonTableProps } from "./Table";
 import TableBodyActionColumn, {
@@ -123,8 +128,22 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
             })}
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (shouldActivateButton(e.key)) {
                 handleTableRowClick(row);
+              }
+              if (shouldMoveUpward(e.key)) {
+                const previousRow = e.currentTarget
+                  .previousElementSibling as HTMLElement;
+                if (previousRow) {
+                  previousRow.focus();
+                }
+              }
+              if (shouldMoveDownward(e.key)) {
+                const nextRow = e.currentTarget
+                  .nextElementSibling as HTMLElement;
+                if (nextRow) {
+                  nextRow.focus();
+                }
               }
             }}
           >

@@ -27,7 +27,19 @@
       "selectRelationship": "Select relationship"
     },
     "employmentDetails": {
+      "selectEmploymentAllocation": "Select employment allocation",
       "selectMultipleTeams": "Select multiple teams dropdown"
+    },
+    "careerProgression": {
+      "selectEmploymentType": "Select employment type",
+      "selectJobFamily": "Select job family",
+      "selectJobTitle": "Select job title",
+      "selectCurrentEmploymentChecked": "Select current employment checkbox is checked",
+      "selectCurrentEmploymentUnChecked": "Select current employment checkbox is unchecked"
+    },
+    "diversityDetails": {
+      "selectEthnicity": "Select ethnicity",
+      "selectEEOJobCategory": "Select EEO job category"
     }
   },
   "individualLeaveAnalytics": {

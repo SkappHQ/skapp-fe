@@ -8,6 +8,11 @@ import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { numberPattern } from "~community/common/regex/regexPatterns";
+import {
+  shouldActivateButton,
+  shouldCloseDialog,
+  shouldNavigateForward
+} from "~community/common/utils/keyboardUtils";
 
 import InputField from "../InputField/InputField";
 
@@ -54,17 +59,17 @@ const InputPhoneNumber: FC<Props> = ({
   const phoneInputRef = useRef<any>(null);
 
   const handleCountryKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (shouldActivateButton(e.key)) {
       e.preventDefault();
       if (phoneInputRef.current) {
         phoneInputRef.current.setOpen(true);
       }
     }
-    if (e.key === "Escape" && phoneInputRef.current?.state.open) {
+    if (shouldCloseDialog(e.key) && phoneInputRef.current?.state.open) {
       e.preventDefault();
       phoneInputRef.current.setOpen(false);
     }
-    if (e.key === "Tab" && phoneInputRef.current?.state.open) {
+    if (shouldNavigateForward(e.key) && phoneInputRef.current?.state.open) {
       e.preventDefault();
       phoneInputRef.current.setOpen(false);
     }

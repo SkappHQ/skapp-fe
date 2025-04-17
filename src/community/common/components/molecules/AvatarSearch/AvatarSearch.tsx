@@ -244,6 +244,7 @@ const AvatarSearch = ({
                 width: "100%"
               }}
               onKeyDown={onKeyDown}
+              ariaLabel={placeholder}
             />
           </ClickAwayListener>
         </Stack>

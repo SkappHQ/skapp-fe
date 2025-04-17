@@ -288,6 +288,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 readOnly={isReadOnly || isProfileView}
                 isDisabled={isInputsDisabled}
                 checkSelected
+                ariaLabel={translateAria(["selectEmploymentAllocation"])}
               />
             </Grid>
 

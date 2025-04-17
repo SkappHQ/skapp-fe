@@ -31,6 +31,7 @@ import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   EmployeeSearchResultType,
   EmployeeTeamSearchResultType,
@@ -95,6 +96,7 @@ interface Props {
   required?: boolean;
   needSearchIcon?: boolean;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  ariaLabel?: string;
 }
 
 const Search: FC<Props> = ({
@@ -136,8 +138,10 @@ const Search: FC<Props> = ({
   onSelectTabValue,
   required = false,
   needSearchIcon = true,
-  onKeyDown
+  onKeyDown,
+  ariaLabel
 }) => {
+  const translateAria = useTranslator("commonAria", "components", "search");
   const theme: Theme = useTheme();
   const ref = useRef<HTMLHeadingElement | null>(null);
   const [tabValue, setTabValue] = useState(0);
@@ -289,6 +293,9 @@ const Search: FC<Props> = ({
               onFocus={onFocus}
               name={inputName}
               onKeyDown={onKeyDown}
+              inputProps={{
+                "aria-label": ariaLabel ?? translateAria(["label"])
+              }}
             />
             {needSearchIcon && <SearchIcon />}
           </Paper>

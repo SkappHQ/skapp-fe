@@ -29,6 +29,7 @@ import { useCommonStore } from "~community/common/stores/commonStore";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import TimesheetTimelineBar from "../TimesheetTimelineBar/TimesheetTimelineBar";
 import styles from "./styles";
@@ -184,7 +185,7 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       onClick={() => mutate()}
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === "Enter") {
+        if (shouldActivateButton(e.key)) {
           mutate();
         }
       }}

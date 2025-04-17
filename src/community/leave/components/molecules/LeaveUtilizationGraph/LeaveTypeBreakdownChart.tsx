@@ -9,6 +9,11 @@ import {
   formatChartButtonList,
   updateToggleState
 } from "~community/common/utils/commonUtil";
+import {
+  shouldCloseDialog,
+  shouldMoveLeft,
+  shouldMoveRight
+} from "~community/common/utils/keyboardUtils";
 import { LeaveTypeBreakDownReturnTypes } from "~community/leave/types/LeaveUtilizationTypes";
 import { useLeaveUtilizationChartOptions } from "~community/leave/utils/eChartOptions/leaveUtilizationChartOptions";
 
@@ -70,7 +75,7 @@ const LeaveTypeBreakdownChart = ({
 
     if (!chartInstance) return;
 
-    if (event.key === "ArrowRight") {
+    if (shouldMoveRight(event.key)) {
       const newIndex = (highlightedIndex + 1) % totalBars;
       setHighlightedIndex(newIndex);
       chartInstance.dispatchAction({
@@ -80,13 +85,19 @@ const LeaveTypeBreakdownChart = ({
       });
     }
 
-    if (event.key === "ArrowLeft") {
+    if (shouldMoveLeft(event.key)) {
       const newIndex = (highlightedIndex - 1 + totalBars) % totalBars;
       setHighlightedIndex(newIndex);
       chartInstance.dispatchAction({
         type: "showTip",
         seriesIndex: 0,
         dataIndex: newIndex
+      });
+    }
+
+    if (shouldCloseDialog(event.key)) {
+      chartInstance.dispatchAction({
+        type: "hideTip"
       });
     }
   };

@@ -53,6 +53,12 @@
     "inputPhoneNumber": {
       "countryCode": "country code",
       "phoneNumber": "phone number"
+    },
+    "search": {
+      "label": "Enter Search Keyword"
+    },
+    "iconChip": {
+      "label": "icon chip"
     }
   },
   "modals": {

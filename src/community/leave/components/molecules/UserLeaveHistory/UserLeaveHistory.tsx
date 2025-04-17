@@ -263,6 +263,7 @@ const UserLeaveHistory: FC<Props> = ({
                     px: "1.25rem"
                   }
                 }}
+                tabIndex={-1}
               />
             </Typography>
           </Box>
@@ -307,6 +308,7 @@ const UserLeaveHistory: FC<Props> = ({
               }
             }}
             isTruncated={!theme.breakpoints.up("xl")}
+            tabIndex={-1}
           />
         ),
         reason: (
