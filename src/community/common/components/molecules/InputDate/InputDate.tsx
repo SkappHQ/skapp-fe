@@ -32,6 +32,7 @@ import {
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
@@ -108,6 +109,8 @@ const InputDate: FC<Props> = ({
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
+
+  const translateAria = useTranslator("commonAria", "components", "inputDate");
 
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     HolidayType[]
@@ -293,7 +296,7 @@ const InputDate: FC<Props> = ({
             id="emoji-field"
             title={tooltip}
             isDisabled={disabled}
-            aria-label={`${label.toLowerCase()} tooltip`}
+            aria-label={`${label.toLowerCase()} ${translateAria(["ariaLabel"])}`}
           />
         )}
       </Stack>
