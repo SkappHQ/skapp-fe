@@ -169,13 +169,6 @@ const ManagerLeaveRequest: FC<Props> = ({
         <IconChip
           label={employeeLeaveRequest?.leaveType?.name}
           icon={employeeLeaveRequest?.leaveType?.emojiCode}
-          isResponsive={true}
-          chipStyles={{
-            alignSelf: "center",
-            [`@media (max-width: 81.25rem)`]: {
-              marginLeft: "2rem"
-            }
-          }}
           isTruncated={!theme.breakpoints.up("xl")}
         />
       ),
@@ -183,7 +176,6 @@ const ManagerLeaveRequest: FC<Props> = ({
         <IconChip
           label={employeeLeaveRequest?.status.toLowerCase()}
           icon={requestTypeSelector(employeeLeaveRequest?.status)}
-          isResponsive={true}
           chipStyles={{
             alignSelf: "flex-end",
             [`@media (max-width: 81.25rem)`]: {
