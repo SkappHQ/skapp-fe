@@ -28,6 +28,7 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { AdminTypes } from "~community/common/types/AuthTypes";
@@ -112,10 +113,11 @@ const ContentLayout = ({
 
   const classes = styles(theme);
 
+  const translateAria = useTranslator("commonAria", "components");
+
   const router = useRouter();
 
   const { data } = useSession();
-
   const { asPath } = useRouter();
 
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
@@ -255,6 +257,9 @@ const ContentLayout = ({
                   })
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
+                aria-label={translateAria(["backButton"])}
+                title={translateAria(["backButton"])}
+                tabIndex={0}
               >
                 <Icon name={backIcon} />
               </IconButton>
