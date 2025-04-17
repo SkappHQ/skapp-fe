@@ -9,18 +9,12 @@ export const handleMainContentFocus = (
   const mainContent = document.getElementById("main-content");
 
   if (mainContent) {
-    const previousScrollPosition = window.scrollY;
-
     mainContent.setAttribute("tabindex", "-1");
-    mainContent.focus();
-
-    window.scrollTo(0, previousScrollPosition);
+    mainContent.focus({ preventScroll: true });
 
     mainContent.addEventListener(
       "blur",
-      () => {
-        mainContent.removeAttribute("tabindex");
-      },
+      () => mainContent.removeAttribute("tabindex"),
       { once: true }
     );
   }
