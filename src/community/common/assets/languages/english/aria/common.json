@@ -2,6 +2,9 @@
   "components": {
     "backButton": "Click me to go to previous page",
     "filterBtn": "Click me to open filter menu",
+    "inputDate": {
+      "tooltip": "tooltip"
+    },
     "appBar": {
       "menuIcon": "Expand menu"
     },

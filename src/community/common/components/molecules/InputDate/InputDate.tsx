@@ -21,6 +21,7 @@ import { DateTime } from "luxon";
 import {
   Dispatch,
   FC,
+  KeyboardEvent,
   MouseEvent,
   SetStateAction,
   useCallback,
@@ -31,15 +32,20 @@ import {
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { REVERSE_DATE_FORMAT } from "~community/common/constants/timeConstants";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import {
+  shouldCollapseDropdown,
+  shouldExpandDropdown
+} from "~community/common/utils/keyboardUtils";
 import { LeaveState } from "~community/leave/types/EmployeeLeaveRequestTypes";
 import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
 import {
-  addedHolidays,
-  holiday,
-  holidayType
+  HolidayDataResponse,
+  HolidayType,
+  addedHolidays
 } from "~community/people/types/HolidayTypes";
 
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
@@ -49,7 +55,6 @@ interface Props {
   addedHolidays?: addedHolidays[];
   minDate?: DateTime;
   maxDate?: DateTime;
-  value?: DateTime;
   onchange: (newValue: string) => void;
   error?: string;
   inputStyle?: SxProps;
@@ -69,7 +74,7 @@ interface Props {
   disabled?: boolean;
   isEditable?: boolean;
   isPreviousHolidayDisabled?: boolean;
-  holidays?: holiday[] | undefined;
+  holidays?: HolidayDataResponse | undefined;
   placeHolder?: string;
   name?: string;
   popperStyles?: SxProps;
@@ -83,7 +88,6 @@ interface Props {
 const InputDate: FC<Props> = ({
   minDate,
   maxDate,
-  value,
   onchange,
   tooltipStyles,
   tooltip,
@@ -106,8 +110,10 @@ const InputDate: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const translateAria = useTranslator("commonAria", "components", "inputDate");
+
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
-    holidayType[]
+    HolidayType[]
   >([]);
   const [leaveRequests, setLeaveRequests] = useState<
     { date: string; leaveStates: string }[]
@@ -120,7 +126,7 @@ const InputDate: FC<Props> = ({
     if (holidays) {
       const appliedHolidays = holidays?.pages[0]?.items?.map(
         // TODO: fix type issue
-        (item: holidayType) => ({
+        (item: HolidayType) => ({
           date: item.date,
           name: item.name,
           holidayType: item.holidayDuration || undefined
@@ -169,15 +175,15 @@ const InputDate: FC<Props> = ({
     const appliedLeave = leaveRequests && isLeave(day);
 
     if (appliedHoliday) {
-      if (appliedHoliday?.holidayType === "FULL_DAY") {
+      if (appliedHoliday?.holidayDuration === "FULL_DAY") {
         backgroundStyle = {
           backgroundColor: theme.palette.grey[200]
         };
-      } else if (appliedHoliday.holidayType === "HALF_DAY_MORNING") {
+      } else if (appliedHoliday.holidayDuration === "HALF_DAY_MORNING") {
         backgroundStyle = {
           background: `linear-gradient(90deg, ${theme.palette.grey[200]} 50%, transparent 50%)`
         };
-      } else if (appliedHoliday.holidayType === "HALF_DAY_EVENING") {
+      } else if (appliedHoliday.holidayDuration === "HALF_DAY_EVENING") {
         backgroundStyle = {
           background: `linear-gradient(90deg, transparent 50%, ${theme.palette.grey[200]} 50%)`
         };
@@ -206,27 +212,34 @@ const InputDate: FC<Props> = ({
           {...other}
           outsideCurrentMonth={outsideCurrentMonth}
           day={day}
-          sx={{ ...backgroundStyle }}
+          sx={{
+            ...backgroundStyle
+          }}
         />
       </Box>
     );
   };
 
-  const calculatePlacement = useCallback((event: MouseEvent<HTMLElement>) => {
-    if (!event.currentTarget) return;
+  const calculatePlacement = useCallback(
+    (currentTarget: HTMLElement | null) => {
+      if (!currentTarget) return;
 
-    const targetRect = event.currentTarget.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const bottomSpace = viewportHeight - targetRect.bottom;
-    const topSpace = targetRect.top;
+      const targetRect = currentTarget.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const bottomSpace = viewportHeight - targetRect.bottom;
+      const topSpace = targetRect.top;
 
-    setPlacement(
-      bottomSpace < 300 && bottomSpace < topSpace ? "top" : "bottom" // TODO: Use enums
-    );
-  }, []);
+      setPlacement(
+        bottomSpace < 300 && bottomSpace < topSpace ? "top" : "bottom" // TODO: Use enums
+      );
+    },
+    []
+  );
 
-  const handleClick = (event: MouseEvent<HTMLElement>): void => {
-    calculatePlacement(event);
+  const handleClick = (
+    event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLDivElement>
+  ): void => {
+    calculatePlacement(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -279,7 +292,12 @@ const InputDate: FC<Props> = ({
           )}
         </Typography>
         {tooltip && (
-          <Tooltip id="emoji-field" title={tooltip} isDisabled={disabled} />
+          <Tooltip
+            id="emoji-field"
+            title={tooltip}
+            isDisabled={disabled}
+            aria-label={`${label.toLowerCase()} ${translateAria(["ariaLabel"])}`}
+          />
         )}
       </Stack>
 
@@ -317,7 +335,17 @@ const InputDate: FC<Props> = ({
               )
             : placeholder}
         </Typography>
-        <Box onClick={(e) => !(disabled || readOnly) && handleClick(e)}>
+        <Box
+          role="button"
+          tabIndex={0}
+          onClick={(e: MouseEvent<HTMLElement>) =>
+            !(disabled || readOnly) && handleClick(e)
+          }
+          onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+            if (shouldExpandDropdown(e.key) && !(disabled || readOnly))
+              handleClick(e);
+          }}
+        >
           <Icon
             name={IconName.CALENDAR_ICON}
             width="6.25rem"
@@ -341,6 +369,9 @@ const InputDate: FC<Props> = ({
         disablePortal
         sx={mergeSx([classes.popper, popperStyles])}
         tabIndex={0}
+        onKeyDown={(e) => {
+          if (shouldCollapseDropdown(e.key)) handleClose();
+        }}
       >
         <ClickAwayListener onClickAway={handleClose}>
           <Paper>
@@ -355,6 +386,20 @@ const InputDate: FC<Props> = ({
                     : PickersCalendarHeader
                 }}
                 slotProps={{
+                  yearButton: {
+                    sx: {
+                      "&.Mui-selected": {
+                        color: "common.white"
+                      }
+                    }
+                  },
+                  monthButton: {
+                    sx: {
+                      "&.Mui-selected": {
+                        color: "common.white"
+                      }
+                    }
+                  },
                   leftArrowIcon: {
                     sx: {
                       "&.Mui-disabled": {
