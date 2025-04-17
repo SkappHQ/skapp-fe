@@ -6,6 +6,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -89,13 +90,19 @@ const ColorPalette: FC<Props> = ({
               {reorderedColors.map((color: string, index: number) => {
                 return (
                   <Stack
-                    onClick={() => handleColorClick(color)}
                     key={index}
+                    data-testid={`input-color-${index}`}
+                    tabIndex={0}
+                    onClick={() => handleColorClick(color)}
+                    onKeyDown={(e) => {
+                      if (shouldActivateButton(e.key)) {
+                        handleColorClick(color);
+                      }
+                    }}
                     sx={{
                       ...classes.colorWidget,
                       backgroundColor: color
                     }}
-                    data-testid={`input-color-${index}`}
                   >
                     {selectedColor === color && (
                       <Icon
@@ -109,6 +116,7 @@ const ColorPalette: FC<Props> = ({
             </Stack>
             <IconButton
               id="drop-down-icon-btn"
+              tabIndex={-1}
               icon={<Icon name={IconName.DROPDOWN_ARROW_ICON} />}
               buttonStyles={classes.dropDownButton}
               onClick={() => setIsPopperOpen(!isPopperOpen)}

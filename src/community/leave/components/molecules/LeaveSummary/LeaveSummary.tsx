@@ -3,9 +3,11 @@ import { DateTime } from "luxon";
 import { useMemo } from "react";
 
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import { daysTypes } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveStates } from "~community/common/types/CommonTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { ResourceAvailabilityPayload } from "~community/leave/types/MyRequests";
 import {
@@ -13,11 +15,9 @@ import {
   getLeavePeriod
 } from "~community/leave/utils/myRequests/leaveSummaryUtils";
 import { useGetMyManagers } from "~community/people/api/PeopleApi";
+import { L4ManagerType } from "~community/people/types/PeopleTypes";
 
 import styles from "./styles";
-import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
-import { L4ManagerType } from "~community/people/types/PeopleTypes";
-import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 
 interface Props {
   workingDays: daysTypes[];
