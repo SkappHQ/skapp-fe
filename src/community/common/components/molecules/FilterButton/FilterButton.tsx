@@ -1,5 +1,12 @@
-import { Box, Chip, Divider, Stack, type Theme, useTheme } from "@mui/material";
-import { useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Divider,
+  Stack,
+  type Theme,
+  useMediaQuery,
+  useTheme
+} from "@mui/material";
 import { JSX, MouseEvent, useState } from "react";
 
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
@@ -15,6 +22,7 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { FilterButtonTypes } from "~community/common/types/FilterButtonType";
 import { pascalCaseFormatter } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 const FilterButton = ({
   id,
@@ -73,8 +81,8 @@ const FilterButton = ({
             label={pascalCaseFormatter(filter.label)}
             sx={classes.filterItem}
             onDelete={() => filter.handleFilterDelete(filter.label)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
+            onKeyDown={(e) => {
+              if (shouldActivateButton(e.key)) {
                 filter.handleFilterDelete(filter.label);
               }
             }}
