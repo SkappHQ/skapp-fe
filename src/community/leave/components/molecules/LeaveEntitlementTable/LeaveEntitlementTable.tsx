@@ -126,7 +126,7 @@ const LeaveEntitlementTable = ({
               button={{
                 label: showEmptyTableButton
                   ? translateText(["emptyScreen", "buttonText"])
-                  : undefined,
+                  : "",
                 onClick: () => {
                   setLeaveEntitlementModalType(
                     tableData?.items?.length === 0

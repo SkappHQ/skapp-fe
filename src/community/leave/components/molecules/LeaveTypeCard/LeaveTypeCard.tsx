@@ -12,6 +12,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji, mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveAllocationDataTypes } from "~community/leave/types/MyRequests";
@@ -97,6 +98,9 @@ const LeaveTypeCard: FC<Props> = ({ entitlement, managers }: Props) => {
 
   return (
     <Stack
+      role="button"
+      tabIndex={0}
+      aria-disabled={!balanceInDays || !managers || isExpired}
       sx={
         !balanceInDays || !managers || isExpired
           ? mergeSx([classes.activeCard, classes.disabledCard])
@@ -105,6 +109,12 @@ const LeaveTypeCard: FC<Props> = ({ entitlement, managers }: Props) => {
       onMouseEnter={() => setMouseOn(true)}
       onMouseLeave={() => setMouseOn(false)}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (shouldActivateButton(e.key)) {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
     >
       <Stack sx={classes.leftContent}>
         <Typography variant="body1">

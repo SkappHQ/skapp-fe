@@ -394,6 +394,7 @@ const AddNewResourceModal = () => {
     env === "enterprise"
       ? handleSuperAdminChangeEnterprise
       : handleSuperAdminChangeDefault;
+
   const handleRoleChange =
     env === "enterprise" ? handleRoleChangeEnterprise : handleRoleChangeDefault;
 
@@ -498,7 +499,7 @@ const AddNewResourceModal = () => {
               <SwitchRow
                 labelId="is-super-admin"
                 checked={values.isSuperAdmin}
-                onChange={(e) => handleSuperAdminChange(e.target.checked)}
+                onChange={(checked: boolean) => handleSuperAdminChange(checked)}
               />
             </Stack>
           </Stack>
