@@ -19,6 +19,7 @@ interface Props {
   id?: string;
   ariaLabel?: string;
   tabIndex?: number;
+  title?: string;
 }
 
 const IconButton = ({
@@ -33,7 +34,8 @@ const IconButton = ({
   isTextPermenent = false,
   id,
   ariaLabel,
-  tabIndex = 0
+  tabIndex = 0,
+  title
 }: Props): JSX.Element => {
   const queryMatches = useMediaQuery();
   const isBelow1420 = queryMatches(1420);
@@ -56,6 +58,7 @@ const IconButton = ({
       {...dataProps}
       data-testid={id || ""}
       aria-label={ariaLabel}
+      title={title || ""}
     >
       {hoverEffect && !isBelow1420 && (
         <Collapse orientation="horizontal" in={showText}>

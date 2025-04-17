@@ -2,11 +2,12 @@ import { Chip, Stack, Theme, Typography, useTheme } from "@mui/material";
 import { DateTime } from "luxon";
 import { useMemo } from "react";
 
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import { daysTypes } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveStates } from "~community/common/types/CommonTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { ResourceAvailabilityPayload } from "~community/leave/types/MyRequests";
 import {
@@ -14,6 +15,7 @@ import {
   getLeavePeriod
 } from "~community/leave/utils/myRequests/leaveSummaryUtils";
 import { useGetMyManagers } from "~community/people/api/PeopleApi";
+import { L4ManagerType } from "~community/people/types/PeopleTypes";
 
 import styles from "./styles";
 
@@ -129,14 +131,32 @@ const LeaveSummary = ({
               />
             )}
             {otherManagers.length > 1 && (
-              <BasicChip
-                chipStyles={{
-                  backgroundColor: theme.palette.grey[100],
-                  height: "3rem",
-                  width: "4rem",
-                  borderRadius: "10rem"
+              <AvatarGroup
+                componentStyles={{
+                  ".MuiAvatarGroup-avatar": {
+                    bgcolor: theme.palette.grey[100],
+                    color: theme.palette.primary.dark,
+                    fontSize: "0.875rem",
+                    height: "2.5rem",
+                    width: "2.5rem",
+                    fontWeight: 400,
+                    flexDirection: "row-reverse"
+                  }
                 }}
-                label={`+${otherManagers.length - 1}`}
+                avatars={
+                  otherManagers
+                    ? otherManagers.slice(1).map(
+                        (manager: L4ManagerType) =>
+                          ({
+                            firstName: manager?.firstName,
+                            lastName: manager?.lastName,
+                            image: manager?.authPic
+                          }) as AvatarPropTypes
+                      )
+                    : []
+                }
+                max={1}
+                isHoverModal={true}
               />
             )}
           </Stack>
