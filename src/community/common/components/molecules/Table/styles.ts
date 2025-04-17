@@ -167,7 +167,7 @@ const styles = (theme: Theme): StylesType => ({
     row: {
       default: {
         background: theme.palette.grey[50],
-        height: "79px",
+        height: "4.9375rem",
         gap: "0.5rem"
       },
       active: {
