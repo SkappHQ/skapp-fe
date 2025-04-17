@@ -12,6 +12,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji, mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveAllocationDataTypes } from "~community/leave/types/MyRequests";
@@ -109,7 +110,7 @@ const LeaveTypeCard: FC<Props> = ({ entitlement, managers }: Props) => {
       onMouseLeave={() => setMouseOn(false)}
       onClick={handleClick}
       onKeyDown={(e) => {
-        if (e.key === "Enter") {
+        if (shouldActivateButton(e.key)) {
           e.preventDefault();
           handleClick();
         }
