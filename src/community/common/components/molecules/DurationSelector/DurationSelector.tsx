@@ -6,6 +6,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { DurationSelectorDisabledOptions } from "~community/common/types/MoleculeTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -131,7 +132,7 @@ const DurationSelector = <T,>({
             sx={mergeSx([classes.btn, commonButtonStyles])}
             onClick={() => onOptionClick(options.fullDay)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") {
+              if (shouldActivateButton(event.key)) {
                 onOptionClick(options.fullDay);
               }
             }}
@@ -160,7 +161,7 @@ const DurationSelector = <T,>({
                 ])}
                 onClick={() => onOptionClick(options.halfDayMorning)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter") {
+                  if (shouldActivateButton(event.key)) {
                     onOptionClick(options.fullDay);
                   }
                 }}
@@ -188,7 +189,7 @@ const DurationSelector = <T,>({
                 ])}
                 onClick={() => onOptionClick(options.halfDayEvening)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter") {
+                  if (shouldActivateButton(event.key)) {
                     onOptionClick(options.fullDay);
                   }
                 }}
