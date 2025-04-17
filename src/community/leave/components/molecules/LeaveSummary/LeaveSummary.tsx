@@ -3,9 +3,11 @@ import { DateTime } from "luxon";
 import { useMemo } from "react";
 
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import { daysTypes } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveStates } from "~community/common/types/CommonTypes";
+import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { ResourceAvailabilityPayload } from "~community/leave/types/MyRequests";
 import {
@@ -13,7 +15,7 @@ import {
   getLeavePeriod
 } from "~community/leave/utils/myRequests/leaveSummaryUtils";
 import { useGetMyManagers } from "~community/people/api/PeopleApi";
-import { MyManagersType } from "~community/people/types/EmployeeTypes";
+import { L4ManagerType } from "~community/people/types/PeopleTypes";
 
 import styles from "./styles";
 
@@ -49,6 +51,16 @@ const LeaveSummary = ({
   const classes = styles(theme);
 
   const { data: myManagers } = useGetMyManagers();
+
+  const primaryManager = useMemo(() => {
+    if (!myManagers || myManagers.length === 0) return null;
+    return myManagers.find((manager) => manager.isPrimaryManager === true);
+  }, [myManagers]);
+
+  const otherManagers = useMemo(() => {
+    if (!myManagers || myManagers.length === 0) return [];
+    return myManagers.filter((manager) => manager.isPrimaryManager === false);
+  }, [myManagers]);
 
   const duration = useMemo(() => {
     return getDuration({
@@ -101,15 +113,52 @@ const LeaveSummary = ({
             {translateText(["recipient"])}
           </Typography>
           <Stack sx={classes.chipWrapper}>
-            {myManagers?.map((manager: MyManagersType) => (
+            <AvatarChip
+              key={primaryManager?.employeeId ?? ""}
+              firstName={primaryManager?.firstName ?? ""}
+              lastName={primaryManager?.lastName ?? ""}
+              avatarUrl={primaryManager?.authPic ?? ""}
+              chipStyles={classes.chipStyles}
+            />
+
+            {otherManagers.length > 0 && (
               <AvatarChip
-                key={manager.employeeId}
-                firstName={manager.firstName}
-                lastName={manager.lastName}
-                avatarUrl={manager.authPic}
+                key={otherManagers[0]?.employeeId ?? ""}
+                firstName={otherManagers[0]?.firstName ?? ""}
+                lastName={otherManagers[0]?.lastName ?? ""}
+                avatarUrl={otherManagers[0]?.authPic ?? ""}
                 chipStyles={classes.chipStyles}
               />
-            ))}
+            )}
+            {otherManagers.length > 1 && (
+              <AvatarGroup
+                componentStyles={{
+                  ".MuiAvatarGroup-avatar": {
+                    bgcolor: theme.palette.grey[100],
+                    color: theme.palette.primary.dark,
+                    fontSize: "0.875rem",
+                    height: "2.5rem",
+                    width: "2.5rem",
+                    fontWeight: 400,
+                    flexDirection: "row-reverse"
+                  }
+                }}
+                avatars={
+                  otherManagers
+                    ? otherManagers.slice(1).map(
+                        (manager: L4ManagerType) =>
+                          ({
+                            firstName: manager?.firstName,
+                            lastName: manager?.lastName,
+                            image: manager?.authPic
+                          }) as AvatarPropTypes
+                      )
+                    : []
+                }
+                max={1}
+                isHoverModal={true}
+              />
+            )}
           </Stack>
         </Stack>
       </Stack>

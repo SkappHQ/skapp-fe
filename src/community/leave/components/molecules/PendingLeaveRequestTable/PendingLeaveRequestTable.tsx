@@ -27,6 +27,7 @@ import {
   LeaveRequest,
   PendingLeaveEnum
 } from "~community/leave/types/PendingLeaves";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import {
   stackStyles,
@@ -178,13 +179,24 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
   return (
     <Box>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={tableRows}
-        tableHeaderRowStyles={tableHeaderRowStyles(theme)}
-        tableHeaderCellStyles={tableHeaderCellStyles(theme)}
-        tableContainerStyles={tableContainerStyles(theme)}
-        isPaginationEnabled={false}
-        tableWrapperStyles={tableWrapperStyles}
+        tableName={TableNames.PENDING_LEAVE_REQUESTS}
+        headers={tableHeaders}
+        rows={tableRows}
+        tableHead={{
+          customStyles: {
+            row: tableHeaderRowStyles(theme),
+            cell: tableHeaderCellStyles(theme)
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        customStyles={{
+          container: tableContainerStyles(theme),
+          wrapper: tableWrapperStyles
+        }}
       />
       <Stack direction="row" justifyContent="flex-end" sx={stackStyles(theme)}>
         <Button

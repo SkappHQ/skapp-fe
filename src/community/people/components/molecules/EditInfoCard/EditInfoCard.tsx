@@ -374,7 +374,6 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
       >
         <Avatar
           id="avatar"
-          alt={cardData?.fullName}
           src={getAvatarThumbnailUrl()}
           avatarStyles={{
             width: "6.125rem",

@@ -14,19 +14,22 @@ import ClockWidget from "~community/attendance/components/molecules/ClockWidget/
 import { useGetUnreadNotificationsCount } from "~community/common/api/notificationsApi";
 import { notificationsQueryKeys } from "~community/common/api/utils/QueryKeys";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import AppBarMenu from "~community/common/components/molecules/AppBarMenu/AppBarMenu";
+import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import { appBarTestId } from "~community/common/constants/testIds";
 import useDrawer from "~community/common/hooks/useDrawer";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { AppBarItemTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 
-import AppBarMenu from "../../molecules/AppBarMenu/AppBarMenu";
-import Avatar from "../../molecules/Avatar/Avatar";
 import styles from "./styles";
 
 const AppBar = () => {
+  const translateAria = useTranslator("commonAria", "components", "appBar");
+
   const classes = styles();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -95,6 +98,14 @@ const AppBar = () => {
               <Box
                 sx={{ cursor: "pointer", mr: "0.25rem" }}
                 onClick={() => handleOpenMenu(AppBarItemTypes.NOTIFICATION)}
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleOpenMenu(AppBarItemTypes.NOTIFICATION);
+                  }
+                }}
+                aria-label="Notifications"
               >
                 <Badge
                   color="notifyBadge"
@@ -110,12 +121,23 @@ const AppBar = () => {
                 sx={{ cursor: "pointer" }}
                 onClick={() => handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS)}
                 data-testid={appBarTestId.appBar.profileAvatar}
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleOpenMenu(AppBarItemTypes.ACCOUNT_DETAILS);
+                  }
+                }}
+                aria-label="Account details"
               >
                 <Avatar
                   firstName={employee?.firstName || ""}
                   lastName={employee?.lastName || ""}
-                  alt={`${employee?.firstName} ${employee?.lastName}`}
-                  src={employee?.authPic || ""}
+                  src={
+                    typeof employee?.authPic === "string"
+                      ? employee.authPic
+                      : ""
+                  }
                 />
               </Box>
               <Stack sx={classes.userInfo}>
@@ -138,7 +160,11 @@ const AppBar = () => {
             />
           )}
         </Stack>
-        <IconButton onClick={handleDrawer} sx={classes.menuIconBtn}>
+        <IconButton
+          onClick={handleDrawer}
+          sx={classes.menuIconBtn}
+          aria-label={translateAria(["menuIcon"])}
+        >
           <Icon name={IconName.MENU_ICON} />
         </IconButton>
       </Stack>

@@ -35,13 +35,21 @@ interface SignInValues {
 }
 
 const SignIn: NextPage = () => {
-  const translateText = useTranslator("onboarding", "signIn");
   const router = useRouter();
+
   const { data: session } = useSession();
-  const theme: Theme = useTheme();
+
   const { setToastMessage } = useToast();
-  const getLanguage = () => i18n.language;
+
+  const { error } = useWebSocket();
+
   useRedirectHandler({ isSignInPage: true });
+
+  const getLanguage = () => i18n.language;
+
+  const translateText = useTranslator("onboarding", "signIn");
+
+  const theme: Theme = useTheme();
 
   const {
     setIsDailyNotifyDisplayed,
@@ -52,6 +60,7 @@ const SignIn: NextPage = () => {
     setCurrentWeek,
     currentWeek
   } = useVersionUpgradeStore((state) => state);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = (
@@ -146,8 +155,6 @@ const SignIn: NextPage = () => {
     },
     [signInFormik]
   );
-
-  const { error } = useWebSocket();
 
   useEffect(() => {
     if (error) {

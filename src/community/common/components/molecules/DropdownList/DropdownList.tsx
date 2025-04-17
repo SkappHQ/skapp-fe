@@ -14,6 +14,7 @@ import { FC, JSX, SyntheticEvent } from "react";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
@@ -47,6 +48,7 @@ interface Props {
   readOnly?: boolean;
   errorFocusOutlineNeeded?: boolean;
   labelStyles?: SxProps;
+  ariaLabel?: string;
   checkSelected?: boolean;
 }
 
@@ -77,8 +79,11 @@ const DropdownList: FC<Props> = ({
   readOnly,
   errorFocusOutlineNeeded = true,
   labelStyles,
-  checkSelected
+  checkSelected,
+  ariaLabel
 }: Props) => {
+  const translateAria = useTranslator("commonAria", "components", "dropdown");
+
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -100,6 +105,11 @@ const DropdownList: FC<Props> = ({
         <Typography
           component="label"
           lineHeight={1.5}
+          id={
+            ariaLabel
+              ? `${ariaLabel} ${translateAria(["label"])}`
+              : translateAria(["label"])
+          }
           sx={{ ...classes.labelStyle(isDisabled, !!error), ...labelStyles }}
         >
           {label} {required && <span style={{ color: "red" }}>*</span>}
@@ -141,7 +151,30 @@ const DropdownList: FC<Props> = ({
               ...selectStyles
             }}
             fullWidth
+            inputProps={{
+              "aria-label": ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"]),
+              "aria-labelledby": ariaLabel
+                ? `${ariaLabel} ${translateAria(["label"])}`
+                : translateAria(["label"])
+            }}
             displayEmpty={!!placeholder?.length}
+            title={
+              ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
+            }
+            aria-label={
+              ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
+            }
+            aria-labelledby={
+              ariaLabel
+                ? `${ariaLabel} ${translateAria(["label"])}`
+                : translateAria(["label"])
+            }
             renderValue={
               value !== ""
                 ? () => (
@@ -239,6 +272,29 @@ const DropdownList: FC<Props> = ({
               }
             }}
             fullWidth
+            inputProps={{
+              "aria-label": ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"]),
+              "aria-labelledby": ariaLabel
+                ? `${ariaLabel} ${translateAria(["label"])}`
+                : translateAria(["label"])
+            }}
+            title={
+              ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
+            }
+            aria-label={
+              ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
+            }
+            aria-labelledby={
+              ariaLabel
+                ? `${ariaLabel} ${translateAria(["label"])}`
+                : translateAria(["label"])
+            }
           >
             <Box display={"flex"} justifyContent={"center"}>
               <CircularProgress size={20} style={{ color: "black" }} />

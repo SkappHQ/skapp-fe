@@ -31,6 +31,7 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { formatDateWithOrdinalIndicator } from "~community/common/utils/dateTimeUtils";
 import { concatStrings } from "~community/people/utils/jobFamilyUtils/commonUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import TimesheetRequestsFilters from "../TimesheetRequestsFilters/TimesheetRequestsFilters";
 import styles from "./styles";
@@ -320,20 +321,41 @@ const ManagerTimesheetRequestTable: FC<Props> = ({
       )}
       {hasFullList && <TimesheetRequestsFilters isManager={true} />}
       <Table
-        tableHeaders={tableHeaders}
-        tableContainerStyles={classes.tableContainerStyles}
-        tableHeaderCellStyles={classes.tableHeaderStyles}
-        tableRows={transformToTableRows() || []}
-        isPaginationEnabled={hasFullList}
-        isLoading={isRequestLoading}
-        skeletonRows={3}
-        emptyDataTitle={translateText(["emptyRequestTitle"])}
-        emptyDataDescription={translateText(["emptyRequestDesEmployee"])}
-        totalPages={requestData?.totalPages}
-        currentPage={employeeTimesheetRequestParams?.page}
-        onPaginationChange={(_event: ChangeEvent<unknown>, value: number) => {
-          setTimesheetRequestPagination(value);
+        tableName={TableNames.MANAGER_TIMESHEET_REQUEST}
+        headers={tableHeaders}
+        rows={transformToTableRows() || []}
+        tableHead={{
+          customStyles: {
+            cell: classes.tableHeaderStyles
+          }
         }}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText(["emptyRequestTitle"]),
+              description: translateText(["emptyRequestDesEmployee"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 3
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: hasFullList,
+            totalPages: requestData?.totalPages,
+            currentPage: employeeTimesheetRequestParams?.page,
+            onChange: (_event: ChangeEvent<unknown>, value: number) => {
+              setTimesheetRequestPagination(value);
+            }
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainerStyles
+        }}
+        isLoading={isRequestLoading}
       />
       {!hasFullList && (
         <Button

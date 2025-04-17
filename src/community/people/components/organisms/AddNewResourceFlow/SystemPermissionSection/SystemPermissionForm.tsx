@@ -1,14 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import {
-  ChangeEvent,
-  Dispatch,
-  JSX,
-  SetStateAction,
-  useEffect,
-  useState
-} from "react";
+import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
@@ -235,10 +228,10 @@ const SystemPermissionForm = ({
         });
   };
 
-  const handleSuperAdminChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSuperAdminChange = (checked: boolean) => {
     if (environment === appModes.ENTERPRISE) {
       handleSuperAdminChangeEnterprise({
-        event,
+        checked,
         setFieldValue,
         setUserRoles,
         setToastMessage,
@@ -248,7 +241,7 @@ const SystemPermissionForm = ({
       });
     } else {
       handleSuperAdminChangeDefault({
-        event,
+        checked,
         setFieldValue,
         setUserRoles,
         setToastMessage,
@@ -267,10 +260,11 @@ const SystemPermissionForm = ({
     >
       <>
         <SwitchRow
+          labelId="super-admin"
           label={systemPermissionsText(["superAdmin"])}
           disabled={isProfileView || isInputsDisabled}
           checked={values.isSuperAdmin}
-          onChange={handleSuperAdminChange}
+          onChange={(checked: boolean) => handleSuperAdminChange(checked)}
           wrapperStyles={classes.switchRowWrapper}
           icon={!isInputsDisabled ? IconName.SUPER_ADMIN_ICON : undefined}
         />

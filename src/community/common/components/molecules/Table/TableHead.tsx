@@ -1,99 +1,152 @@
 import {
   Checkbox,
   TableHead as MuiTableHead,
-  type SxProps,
+  SxProps,
   TableCell,
   TableRow,
+  Theme,
   Typography,
   useTheme
 } from "@mui/material";
-import { ChangeEvent, FC } from "react";
+import { FC } from "react";
 
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import {
+  TableHeaderTypes,
+  TableTypes
+} from "~community/common/types/CommonTypes";
+import { mergeSx } from "~community/common/utils/commonUtil";
+
+import { CommonTableProps } from "./Table";
 import styles from "./styles";
 
-interface Props {
-  tableHeaders: any[];
-  tableRows: any[];
-  isCheckboxSelectionEnabled?: boolean;
-  isSelectAllCheckboxEnabled?: boolean;
-  selectedRows?: number[];
-  handleAllRowsCheck?: (event: ChangeEvent<HTMLInputElement>) => void;
-  isRowDisabled?: (row: any) => boolean;
-  tableHeaderRowStyles?: SxProps;
-  tableHeaderCellStyles?: SxProps;
-  tableCheckboxStyles?: SxProps;
-  tableHeaderTypographyStyles?: SxProps;
-  isActionColumnEnabled?: boolean;
+export interface TableHeadersProps {
+  headers: TableHeaderTypes[];
 }
 
-const TableHead: FC<Props> = ({
-  tableHeaders,
-  tableRows,
-  isCheckboxSelectionEnabled = false,
-  isSelectAllCheckboxEnabled = false,
-  selectedRows,
-  handleAllRowsCheck,
-  isRowDisabled = () => false,
-  tableHeaderRowStyles,
-  tableHeaderCellStyles,
-  tableCheckboxStyles,
-  tableHeaderTypographyStyles,
-  isActionColumnEnabled = false
+export interface TableHeadProps {
+  customStyles?: {
+    head?: SxProps<Theme>;
+    row?: SxProps<Theme>;
+    cell?: SxProps<Theme>;
+    typography?: SxProps<Theme>;
+  };
+}
+
+export interface TableHeadActionColumnProps {
+  actionColumn?: {
+    isEnabled?: boolean;
+  };
+}
+
+const TableHead: FC<
+  TableTypes & TableHeadProps & CommonTableProps & TableHeadActionColumnProps
+> = ({
+  tableName,
+  rows,
+  headers,
+  customStyles,
+  checkboxSelection,
+  actionColumn = {
+    isEnabled: false,
+    styles: {
+      cell: {},
+      typography: {}
+    }
+  }
 }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "table",
+    "tableHead"
+  );
   const theme = useTheme();
   const classes = styles(theme);
 
   return (
-    <MuiTableHead sx={classes.tableHeaderStyles}>
-      <TableRow sx={classes.tableHeaderRowStyles(tableHeaderRowStyles)}>
-        {isCheckboxSelectionEnabled && (
+    <MuiTableHead
+      sx={mergeSx([classes.tableHead.head, customStyles?.head])}
+      role="rowgroup"
+      aria-label={translateText(["tableHeadLabel"], {
+        tableName: tableName
+      })}
+    >
+      <TableRow
+        sx={mergeSx([classes.tableHead.row, customStyles?.row])}
+        role="row"
+        aria-label={translateText(["tableHeadRowLabel"], {
+          tableName: tableName
+        })}
+      >
+        {rows?.length > 0 && checkboxSelection?.isEnabled && (
           <TableCell
-            sx={
-              classes.tableHeaderCheckboxCellStyles(
-                tableHeaderCellStyles
-              ) as SxProps
-            }
+            sx={mergeSx([
+              classes.checkboxSelection.cell,
+              classes.tableHead.checkboxSelection.cell,
+              customStyles?.cell
+            ])}
           >
-            {isSelectAllCheckboxEnabled && (
-              <Checkbox
-                checked={
-                  (tableRows?.length > 0 &&
-                    tableRows
-                      ?.filter((row) => !isRowDisabled(row))
-                      ?.every((row) => selectedRows?.includes(row.id))) ||
-                  false
+            <Checkbox
+              color="primary"
+              disabled={!checkboxSelection?.isSelectAllEnabled}
+              checked={checkboxSelection?.isSelectAllChecked}
+              onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+              sx={mergeSx([
+                classes.checkboxSelection.checkbox,
+                checkboxSelection?.customStyles?.checkbox
+              ])}
+              slotProps={{
+                input: {
+                  "aria-label": translateText(["checkbox"], {
+                    tableName: tableName
+                  })
                 }
-                onChange={handleAllRowsCheck}
-                color="primary"
-                sx={classes.tableCheckboxStyles(tableCheckboxStyles)}
-              />
-            )}
+              }}
+            />
           </TableCell>
         )}
 
-        {tableHeaders?.map((header) => (
+        {headers?.map((header) => (
           <TableCell
             key={header?.id}
-            sx={classes.tableHeaderCellStyles(tableHeaderCellStyles)}
+            sx={mergeSx([classes.tableHead.cell, customStyles?.cell])}
+            role="columnheader"
+            aria-label={translateText(["tableHeadCell"], {
+              tableName: tableName,
+              headerLabel: header?.label?.toLowerCase() ?? ""
+            })}
           >
-            <Typography
-              sx={classes.tableHeaderTypographyStyles(
-                tableHeaderTypographyStyles
-              )}
-            >
-              {header?.label}
-            </Typography>
+            {header?.label && (
+              <Typography
+                sx={mergeSx([
+                  classes.tableHead.typography,
+                  customStyles?.typography
+                ])}
+              >
+                {header?.label}
+              </Typography>
+            )}
+            {header?.element && header?.element}
           </TableCell>
         ))}
 
-        {isActionColumnEnabled && (
+        {actionColumn.isEnabled && (
           <TableCell
-            sx={classes.tableHeaderActionCellStyles(tableHeaderCellStyles)}
+            sx={mergeSx([
+              classes.tableHead.actionColumn?.cell,
+              customStyles?.cell
+            ])}
+            role="columnheader"
+            aria-label={translateText(["tableHeadActionCell"], {
+              tableName: tableName
+            })}
           >
             <Typography
-              sx={classes.tableHeaderTypographyStyles(
-                tableHeaderTypographyStyles
-              )}
+              sx={mergeSx([
+                classes.tableHead.typography,
+                customStyles?.typography
+              ])}
             >
               Actions
             </Typography>

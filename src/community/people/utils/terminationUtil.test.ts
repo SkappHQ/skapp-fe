@@ -11,7 +11,7 @@ describe("getStatusStyle", () => {
 
     expect(result).toEqual({
       backgroundColor: theme.palette.greens.lighter,
-      color: theme.palette.greens.deep_shadows
+      color: theme.palette.greens.deepShadows
     });
   });
 

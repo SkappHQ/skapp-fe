@@ -33,6 +33,7 @@ import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
 import DocumentsIcon from "~community/common/assets/Icons/DocumentsIcon";
+import DottedClockIcon from "~community/common/assets/Icons/DottedClockIcon";
 import DownloadIcon from "~community/common/assets/Icons/DownloadIcon";
 import DragIcon from "~community/common/assets/Icons/DragIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
@@ -66,6 +67,7 @@ import NudgeBellIcon from "~community/common/assets/Icons/NudgeBellIcon";
 import ObjectivesIcon from "~community/common/assets/Icons/ObjectivesIcon";
 import PaintTrayIcon from "~community/common/assets/Icons/PaintTrayIcon";
 import PauseIcon from "~community/common/assets/Icons/PauseIcon";
+import PdfIcon from "~community/common/assets/Icons/PdfIcon";
 import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
@@ -73,6 +75,7 @@ import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
 import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
+import PopOutIcon from "~community/common/assets/Icons/PopOutIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
 import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
 import RestoreIcon from "~community/common/assets/Icons/RestoreIcon";
@@ -81,6 +84,7 @@ import RevokedStatusIcon from "~community/common/assets/Icons/RevokedStatusIcon"
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
 import RightColoredIcon from "~community/common/assets/Icons/RightColoredIcon";
 import RightMark from "~community/common/assets/Icons/RightMark";
+import RingBellIcon from "~community/common/assets/Icons/RingBellIcon";
 import RotateLeftIcon from "~community/common/assets/Icons/RotateLeftIcon";
 import RoundedCloseIcon from "~community/common/assets/Icons/RoundedCloseIcon";
 import SaveIcon from "~community/common/assets/Icons/SaveIcon";
@@ -239,7 +243,11 @@ export const IconMapping: Partial<
   [IconName.MINUS_ICON]: MinusIcon,
   [IconName.USER_ICON]: UserIcon,
   [IconName.EMAIL_ICON]: EmailIcon,
-  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon
+  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon,
+  [IconName.PDF_ICON]: PdfIcon,
+  [IconName.POP_OUT_ICON]: PopOutIcon,
+  [IconName.RING_BELL_ICON]: RingBellIcon,
+  [IconName.DOTTED_CLOCK_ICON]: DottedClockIcon
   // Add more icons here as needed
 };
 

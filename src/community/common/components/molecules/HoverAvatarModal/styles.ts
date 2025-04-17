@@ -26,8 +26,8 @@ const styles = () => ({
   title: { fontWeight: "700" },
   basicChipWrapper: { height: "auto", m: 2, cursor: "pointer" },
   basicChip: { backgroundColor: "grey.100", padding: "0.75rem 1rem" },
-  avatarChipWrapper: { py: "0.625rem" },
-  avatarChip: { backgroundColor: "grey.100" }
+  avatarChipWrapper: { py: "0.625rem", maxWidth: "13rem" },
+  avatarChip: { backgroundColor: "grey.100", justifyContent: "left" }
 });
 
 export default styles;

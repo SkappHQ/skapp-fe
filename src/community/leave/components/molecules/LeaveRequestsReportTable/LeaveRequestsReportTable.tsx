@@ -29,6 +29,7 @@ import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportReportUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 const LeaveRequestsReportTable: FC = () => {
   const translateText = useTranslator("leaveModule", "leaveReports");
@@ -427,23 +428,47 @@ const LeaveRequestsReportTable: FC = () => {
   return (
     <Box>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        currentPage={reportsParams.page}
-        tableContainerStyles={{
-          maxHeight: "40rem"
+        tableName={TableNames.LEAVE_REQUESTS_REPORT}
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText(["emptyScreenTitle"]),
+              description: translateText(["emptyScreenDescription"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 5
+            }
+          }
         }}
-        onPaginationChange={(_, value) => setReportsPagination(value - 1)}
-        totalPages={leaveRequests?.data?.results[0]?.totalPages || 1}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: leaveRequests?.data?.results[0]?.totalPages || 1,
+            currentPage: reportsParams.page,
+            onChange: (_, value) => setReportsPagination(value - 1)
+          },
+          exportBtn: {
+            label: translateText(["exportBtnTxt"]),
+            onClick: () => downloadCSV(SheetType.LeaveRequests),
+            isVisible: true
+          }
+        }}
+        customStyles={{
+          container: {
+            maxHeight: "40rem"
+          }
+        }}
+        actionToolbar={{
+          firstRow: {
+            leftButton: yearFilter,
+            rightButton: filterButton
+          }
+        }}
         isLoading={isLoading}
-        skeletonRows={5}
-        emptySearchTitle={translateText(["emptyScreenTitle"])}
-        emptySearchDescription={translateText(["emptyScreenDescription"])}
-        isDataAvailable={true}
-        actionRowOneLeftButton={yearFilter}
-        actionRowOneRightButton={filterButton}
-        exportButtonText={translateText(["exportBtnTxt"])}
-        onExportButtonClick={() => downloadCSV(SheetType.LeaveRequests)}
       />
     </Box>
   );

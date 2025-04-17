@@ -1,0 +1,10 @@
+{
+  "analytics": {
+    "workHourGraph": {
+      "monthNavigator": {
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month"
+      }
+    }
+  }
+}
