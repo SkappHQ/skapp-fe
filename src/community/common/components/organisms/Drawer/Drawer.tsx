@@ -37,6 +37,7 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { CommonStoreTypes } from "~community/common/types/zustand/StoreTypes";
 import getDrawerRoutes from "~community/common/utils/getDrawerRoutes";
+import { shouldActivateLink } from "~community/common/utils/keyboardUtils";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
@@ -223,7 +224,7 @@ const Drawer = (): JSX.Element => {
                     }
                     onMouseLeave={() => setHoveredDrawerItemUrl("")}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (shouldActivateLink(e.key)) {
                         e.preventDefault();
                         handleListItemButtonClick(
                           routeId,
