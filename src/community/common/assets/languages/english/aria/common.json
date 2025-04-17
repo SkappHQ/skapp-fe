@@ -4,7 +4,9 @@
       "menuIcon": "Expand menu"
     },
     "avatar": {
-      "alt": "Employee avatar"
+      "alt": "Employee avatar",
+      "removeProfilePicture": "Remove profile picture",
+      "uploadProfilePicture": "Upload profile picture"
     },
     "dragAndDrop": {
       "ariaLabel": "Drag and Drop your file here"
