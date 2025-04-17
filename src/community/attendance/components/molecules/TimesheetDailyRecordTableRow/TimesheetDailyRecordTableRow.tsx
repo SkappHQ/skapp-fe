@@ -12,7 +12,9 @@ import { useGetPeriodAvailabilityMutation } from "~community/attendance/api/Atte
 import {
   DAY_END_TIME,
   DAY_START_TIME,
-  WEEKDAY_DAY_MONTH_YEAR_FORMAT
+  WEEKDAY_DAY_MONTH_YEAR_FORMAT,
+  durationSelector,
+  holidayDurationSelector
 } from "~community/attendance/constants/constants";
 import { EmployeeTimesheetModalTypes } from "~community/attendance/enums/timesheetEnums";
 import { useAttendanceStore } from "~community/attendance/store/attendanceStore";
@@ -42,6 +44,11 @@ interface Props {
 const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
   const theme: Theme = useTheme();
   const translateText = useTranslator("attendanceModule", "timesheet");
+  const translateAria = useTranslator(
+    "attendanceAria",
+    "timesheet",
+    "dailyLogTable"
+  );
   const classes = styles(theme);
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
@@ -133,6 +140,11 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
               leaveType === LeaveStates.EVENING
                 ? 50
                 : 100
+            }
+            aria-label={
+              isHoliday
+                ? `${holidayDurationSelector[leaveType]} ${translateAria(["holiday"])}`
+                : `${durationSelector[leaveType]} ${translateAria(["leave"])}`
             }
           />
           <Typography fontSize={10}>{getEmoji(emoji)}</Typography>

@@ -2,5 +2,11 @@
   "timeWidget": {
     "startTimer": "Start attendance timer",
     "pauseTimer": "Pause attendance timer"
+  },
+  "timesheet": {
+    "dailyLogTable": {
+      "holiday": "holiday",
+      "leave": "leave"
+    }
   }
 }
