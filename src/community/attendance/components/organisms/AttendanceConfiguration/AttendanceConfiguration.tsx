@@ -1,6 +1,6 @@
 import { Close } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
-import { ChangeEvent, JSX, useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import {
   useGetAttendanceConfiguration,
@@ -61,10 +61,10 @@ const AttendanceConfiguration = (): JSX.Element => {
 
   const handleSwitchChange = (
     key: keyof AttendanceConfigurationType,
-    event: ChangeEvent<HTMLInputElement>
+    checked: boolean
   ) => {
     setConfig((prevConfig) =>
-      prevConfig ? { ...prevConfig, [key]: event.target.checked } : prevConfig
+      prevConfig ? { ...prevConfig, [key]: checked } : prevConfig
     );
   };
 

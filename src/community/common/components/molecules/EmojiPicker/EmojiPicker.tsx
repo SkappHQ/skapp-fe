@@ -112,11 +112,12 @@ const EmojiPicker = ({
           value={value}
           placeholder={placeholder}
           onChange={onChange}
-          inputProps={{ readOnly: true }}
+          inputProps={{ readOnly: true, tabIndex: -1 }}
           endAdornment={
             <IconButton
               sx={classes.button}
               onClick={() => setIsPickerOpen((previousOpen) => !previousOpen)}
+              tabIndex={0}
             >
               <Icon name={IconName.EMOJI_ICON} />
             </IconButton>

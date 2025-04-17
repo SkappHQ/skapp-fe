@@ -27,7 +27,7 @@ declare module "@mui/material/styles" {
       dark: string;
       midDark: string;
       darker: string;
-      deep_shadows: string;
+      deepShadows: string;
       darkBoarder: string;
       lightBackground: string;
       lightTertiary: string;
@@ -120,7 +120,7 @@ declare module "@mui/material/styles" {
       dark: string;
       midDark: string;
       darker: string;
-      deep_shadows: string;
+      deepShadows: string;
       darkBoarder: string;
       lightBackground: string;
       lightTertiary: string;
@@ -331,7 +331,7 @@ export const theme = createTheme({
       midDark: "#16A34A",
       dark: "#65A30D",
       darker: "#166534",
-      deep_shadows: "#3F6212",
+      deepShadows: "#3F6212",
       darkBoarder: "#4D7C0F",
       lightBackground: "#DCFCE7",
       lightTertiary: "#F7FEE7"

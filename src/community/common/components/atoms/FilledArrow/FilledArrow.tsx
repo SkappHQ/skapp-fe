@@ -1,19 +1,16 @@
 import { Avatar, Theme, useTheme } from "@mui/material";
-import { FC, KeyboardEvent } from "react";
-import * as React from "react";
+import { FC, KeyboardEvent, MouseEvent } from "react";
 
 import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { shouldExpandDropdown } from "~community/common/utils/keyboardUtils";
 
 interface Props {
   onClick: (
-    event:
-      | React.MouseEvent<HTMLDivElement>
-      | React.KeyboardEvent<HTMLDivElement>
+    event: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>
   ) => void;
   disabled?: boolean;
-  enableKeyboardNavigation?: boolean;
   isRightArrow?: boolean;
   ariaLabel?: string;
   tabIndex?: number;
@@ -23,7 +20,6 @@ interface Props {
 export const FilledArrow: FC<Props> = ({
   onClick,
   disabled = false,
-  enableKeyboardNavigation = true,
   isRightArrow = true,
   ariaLabel,
   backgroundColor = "common.white",
@@ -39,19 +35,16 @@ export const FilledArrow: FC<Props> = ({
 
   return (
     <Avatar
-      alt={
-        ariaLabel ||
-        (isRightArrow ? translateAria(["right"]) : translateAria(["left"]))
-      }
-      onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+      alt={isRightArrow ? translateAria(["right"]) : translateAria(["left"])}
+      onClick={(e: MouseEvent<HTMLDivElement>) => {
         if (!disabled) {
-          onClick(event);
+          onClick(e);
         }
       }}
       aria-disabled={disabled}
-      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-        if (!disabled && event.key === "Enter" && enableKeyboardNavigation) {
-          onClick(event);
+      onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+        if (!disabled && shouldExpandDropdown(e.key)) {
+          onClick(e);
         }
       }}
       sx={{
@@ -63,7 +56,11 @@ export const FilledArrow: FC<Props> = ({
       }}
       role="button"
       tabIndex={disabled ? -1 : tabIndex}
-      aria-label={ariaLabel}
+      aria-label={
+        ariaLabel || isRightArrow
+          ? translateAria(["right"])
+          : translateAria(["left"])
+      }
     >
       {isRightArrow ? (
         <ArrowFilledRight

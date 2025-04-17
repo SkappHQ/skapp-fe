@@ -3,6 +3,7 @@ import { FC, ReactNode } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -11,20 +12,34 @@ interface Props {
   isExpandable?: boolean;
   onExpand?: () => void;
   children?: ReactNode;
+  accessibility?: {
+    tabIndex?: number;
+    role?: string;
+  };
 }
 
 const AnalyticCard: FC<Props> = ({
   title,
   children,
   isExpandable = false,
-  onExpand
+  onExpand,
+  accessibility
 }) => {
   const theme: Theme = useTheme();
   const classes = styles();
 
   return (
     <>
-      <Box sx={classes.card}>
+      <Box
+        sx={classes.card}
+        tabIndex={accessibility?.tabIndex ?? -1}
+        role={accessibility?.role ?? "group"}
+        onKeyDown={(e) => {
+          if (shouldActivateButton(e.key)) {
+            onExpand?.();
+          }
+        }}
+      >
         <>
           <Box display={"flex"} justifyContent="space-between">
             <Typography

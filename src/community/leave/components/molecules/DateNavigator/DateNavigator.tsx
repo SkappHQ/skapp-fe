@@ -54,13 +54,11 @@ const DateNavigator = ({
   return (
     <Stack direction="row" gap={"0.25rem"} mt={1} justifyContent={"end"}>
       <FilledArrow
-        enableKeyboardNavigation={false}
         onClick={() => handleNavigate("backward")}
         isRightArrow={false}
         backgroundColor={"grey.100"}
       />
       <FilledArrow
-        enableKeyboardNavigation={false}
         onClick={() => handleNavigate("forward")}
         isRightArrow={true}
         backgroundColor={"grey.100"}
