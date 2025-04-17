@@ -1,5 +1,7 @@
 {
   "components": {
+    "backButton": "Click me to go to previous page",
+    "filterBtn": "Click me to open filter menu",
     "appBar": {
       "menuIcon": "Expand menu"
     },

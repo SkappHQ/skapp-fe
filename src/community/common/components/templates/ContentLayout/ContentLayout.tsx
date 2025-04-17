@@ -107,17 +107,17 @@ const ContentLayout = ({
   id,
   shouldBlink
 }: Props): JSX.Element => {
-  const translateText = useTranslator("commonAria", "contentLayout");
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
   const isBelow600 = useMediaQuery()(MediaQueries.BELOW_600);
 
   const classes = styles(theme);
 
+  const translateAria = useTranslator("commonAria", "components");
+
   const router = useRouter();
 
   const { data } = useSession();
-
   const { asPath } = useRouter();
 
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
@@ -257,7 +257,9 @@ const ContentLayout = ({
                   })
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
-                aria-label={translateText(["backButton"])}
+                aria-label={translateAria(["backButton"])}
+                title={translateAria(["backButton"])}
+                tabIndex={0}
               >
                 <Icon name={backIcon} />
               </IconButton>
