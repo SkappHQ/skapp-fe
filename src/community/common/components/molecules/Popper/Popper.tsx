@@ -5,7 +5,14 @@ import {
   Popper as MuiPopper
 } from "@mui/material";
 import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { CSSProperties, JSX, ReactNode, useMemo, useRef } from "react";
+import {
+  CSSProperties,
+  JSX,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef
+} from "react";
 
 import {
   MenuTypes,
@@ -56,6 +63,31 @@ const Popper = ({
   const classes = styles();
 
   const popperRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<Element | null>(null);
+
+  /**
+   * This useEffect hook in your React component manages focus when the Popper component opens and closes.
+   * When open is true, it stores the currently focused element, then attempts to focus the first focusable
+   * element within the Popper. When open is false (Popper is closed), it restores focus to the element that
+   * was focused before the Popper opened. requestAnimationFrame ensures the focus logic runs after the component
+   * has been updated in the DOM. The logic previousActiveElement.current as HTMLElement | null)?.focus() uses the
+   * optional chaining operator ?. to avoid errors if previousActiveElement.current is null.
+   */
+  useEffect(() => {
+    if (open) {
+      previousActiveElement.current = document.activeElement;
+
+      requestAnimationFrame(() => {
+        const focusableElement = popperRef.current?.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+
+        focusableElement?.focus();
+      });
+    } else {
+      (previousActiveElement.current as HTMLElement | null)?.focus();
+    }
+  }, [open]);
 
   const wrapperWidth = useMemo(() => {
     if (menuType === MenuTypes.SEARCH) {
@@ -99,7 +131,6 @@ const Popper = ({
 
   return (
     <MuiPopper
-      ref={popperRef}
       id={id}
       open={open}
       anchorEl={anchorEl}
@@ -136,6 +167,7 @@ const Popper = ({
         <ClickAwayListener onClickAway={handleClose}>
           <Fade {...TransitionProps} timeout={timeout}>
             <Box
+              ref={popperRef}
               sx={{
                 ...classes.container,
                 marginY: marginY,
