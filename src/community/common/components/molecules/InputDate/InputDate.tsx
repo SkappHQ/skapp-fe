@@ -342,8 +342,9 @@ const InputDate: FC<Props> = ({
             !(disabled || readOnly) && handleClick(e)
           }
           onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
-            if (shouldExpandDropdown(e.key) && !(disabled || readOnly))
-              handleClick(e);
+            if (shouldExpandDropdown(e.key)) {
+              !(disabled || readOnly) && handleClick(e);
+            }
           }}
         >
           <Icon
