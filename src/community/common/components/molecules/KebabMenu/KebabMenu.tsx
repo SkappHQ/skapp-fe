@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { FC, MouseEvent, ReactNode, useState } from "react";
+import React, { FC, MouseEvent, ReactNode, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
@@ -51,6 +51,13 @@ const KebabMenu: FC<KebabMenuProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
+  const handleMenuBtnKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setAnchorEl(event.currentTarget as HTMLElement);
+    }
+  };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -67,9 +74,11 @@ const KebabMenu: FC<KebabMenuProps> = ({
     <Box sx={{ ...classes.wrapper, ...customStyles.wrapper }}>
       <Box
         onClick={handleMenuBtnClick}
+        onKeyDown={handleMenuBtnKeyDown}
         sx={{ ...classes.menuIcon, ...customStyles.menuIcon }}
         aria-label={ariaLabel}
         role="button"
+        tabIndex={0}
       >
         {icon}
       </Box>
