@@ -37,7 +37,7 @@
         "title": "Leave summary",
         "type": "Type:",
         "duration": "Duration:",
-        "recipient": "Recipient:"
+        "recipient": "Recipients:"
       },
       "submitBtn": "Confirm and apply",
       "cancelBtn": "Cancel",

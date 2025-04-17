@@ -1,32 +1,38 @@
+import ROUTES from "~community/common/constants/routes";
 import { config } from "~middleware";
-
-import ROUTES from "../constants/routes";
 
 export const drawerHiddenProtectedRoutes = [
   ROUTES.ORGANIZATION.SETUP,
   ROUTES.AUTH.RESET_PASSWORD,
   ROUTES.AUTH.VERIFY,
   ROUTES.AUTH.VERIFY_SUCCESS,
+  ROUTES.AUTH.VERIFY_RESET_PASSWORD,
   ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
   ROUTES.SETTINGS.PAYMENT,
   ROUTES.REMOVE_PEOPLE,
   ROUTES.CHANGE_SUPERVISORS,
   ROUTES.SUBSCRIPTION,
-  ROUTES.SIGN.CREATE_DOCUMENT,
-  ROUTES.SIGN.SIGN
+  ROUTES.SIGN.SIGN,
+  ROUTES.SIGN.CREATE_DOCUMENT
 ];
 
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const protectedPaths = config.matcher
-    .map((path) => path.replace(/\/:path\*$/, ""))
-    .filter((path) => !drawerHiddenProtectedRoutes.includes(path));
+  const isADrawerHiddenProtectedRoute =
+    drawerHiddenProtectedRoutes.includes(asPath);
 
-  return protectedPaths.some(
-    (path) =>
-      !asPath.includes(ROUTES.AUTH.SIGNIN) &&
-      !asPath.includes(ROUTES.AUTH.SIGNUP) &&
-      asPath.includes(path)
-  );
+  if (!isADrawerHiddenProtectedRoute) {
+    const formattedProtectedPaths = config.matcher.map((path) =>
+      path.replace(/\/:path\*$/, "")
+    );
+
+    return formattedProtectedPaths.some((path) => {
+      return (
+        asPath.substring(1).split("/")[0].split("?")[0] === path.split("/")[1]
+      );
+    });
+  }
+
+  return false;
 };
 
 export const decodeJWTToken = (token: string) => {

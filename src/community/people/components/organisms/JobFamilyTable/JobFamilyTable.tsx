@@ -18,6 +18,7 @@ import {
   handleJobFamilyDeleteBtnClick,
   handleJobFamilyEditBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobFamilyTableUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -69,6 +70,7 @@ const JobFamilyTable: FC<Props> = ({
         )
         .map((jobFamilyData: AllJobFamilyType) => ({
           id: jobFamilyData.jobFamilyId,
+          ariaLabel: jobFamilyData.name,
           jobFamily: jobFamilyData.name,
           employees:
             ((jobFamilyData?.employees as JobFamilyEmployeeDataType[])?.length <
@@ -139,52 +141,60 @@ const JobFamilyTable: FC<Props> = ({
   return (
     <Box sx={classes.wrapper}>
       <Table
-        id={{
-          emptyScreen: {
-            button: "add-job-family-empty-table-screen-button"
+        tableName={TableNames.JOB_FAMILY}
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            row: classes.tableHeadStyles,
+            cell: classes.tableHeaderCellStyles
           }
         }}
-        shouldEmptyTableScreenBtnBlink={
-          ongoingQuickSetup.DEFINE_JOB_FAMILIES &&
-          quickSetupCurrentFlowSteps !== null
-        }
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={classes.tableHeadStyles}
-        tableContainerStyles={classes.tableContainerStyles}
-        tableHeaderCellStyles={classes.tableHeaderCellStyles}
-        isPaginationEnabled={false}
-        emptySearchTitle={translateText(["emptySearchResult", "title"])}
-        emptySearchDescription={translateText([
-          "emptySearchResult",
-          "description"
-        ])}
-        emptyDataTitle={translateText(["emptyScreen", "title"])}
-        emptyDataDescription={translateText(["emptyScreen", "description"])}
-        emptyScreenButtonText={translateText(["addJobFamily"])}
-        onEmptyScreenBtnClick={() => {
-          setJobFamilyModalType(JobFamilyActionModalEnums.ADD_JOB_FAMILY);
-          destroyDriverObj();
-        }}
-        isDataAvailable={allJobFamilies && allJobFamilies?.length > 0}
-        isLoading={isJobFamilyPending}
-        skeletonRows={6}
-        actionColumnIconBtnLeft={
-          isPeopleAdmin
-            ? {
-                onClick: (jobFamilyData) =>
+        tableBody={{
+          emptyState: {
+            noData: {
+              title:
+                allJobFamilies && allJobFamilies?.length > 0
+                  ? translateText(["emptyScreen", "title"])
+                  : translateText(["emptySearchResult", "title"]),
+              description:
+                allJobFamilies && allJobFamilies?.length > 0
+                  ? translateText(["emptyScreen", "description"])
+                  : translateText(["emptySearchResult", "description"]),
+              button: {
+                id: "add-job-family-empty-table-screen-button",
+                label: translateText(["addJobFamily"]),
+                shouldBlink:
+                  ongoingQuickSetup.DEFINE_JOB_FAMILIES &&
+                  quickSetupCurrentFlowSteps !== null,
+                onClick: () => {
+                  setJobFamilyModalType(
+                    JobFamilyActionModalEnums.ADD_JOB_FAMILY
+                  );
+                  destroyDriverObj();
+                }
+              }
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 6
+            }
+          },
+          actionColumn: {
+            isEnabled: isPeopleAdmin,
+            actionBtns: {
+              left: {
+                onClick: (jobFamilyData: AllJobFamilyType) => {
                   handleJobFamilyEditBtnClick(
                     jobFamilyData,
                     setCurrentEditingJobFamily,
                     setJobFamilyModalType
-                  )
-              }
-            : null
-        }
-        actionColumnIconBtnRight={
-          isPeopleAdmin
-            ? {
-                OnClick: (jobFamilyData) =>
+                  );
+                }
+              },
+              right: {
+                onClick: (jobFamilyData: AllJobFamilyType) =>
                   handleJobFamilyDeleteBtnClick(
                     allJobFamilies,
                     jobFamilyData,
@@ -192,8 +202,18 @@ const JobFamilyTable: FC<Props> = ({
                     setJobFamilyModalType
                   )
               }
-            : null
-        }
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainerStyles
+        }}
+        isLoading={isJobFamilyPending}
       />
     </Box>
   );

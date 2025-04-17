@@ -10,7 +10,8 @@ const ROUTES = {
     FORGOT_PASSWORD: "/forgot-password",
     VERIFY: "/verify/email",
     VERIFY_SUCCESS: "/verify/success",
-    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/reset-password",
+    VERIFY_RESET_PASSWORD: "/verify/reset-password",
+    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/account-reset-password",
     FORGET_PASSWORD: "/forget-password",
     SYSTEM_UPDATE: "/system-update"
   },
@@ -71,6 +72,7 @@ const ROUTES = {
     ATTENDANCE: "/configurations/attendance",
     TIME: "/configurations/time",
     USER_ROLES: "/configurations/user-roles",
+    SIGN: "/configurations/esign",
     USER_ROLES_MODULE: (module: string) =>
       `/configurations/user-roles/${module}`
   },

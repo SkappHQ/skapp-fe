@@ -31,6 +31,7 @@ import {
 } from "~community/leave/types/TeamLeaveAnalyticsTypes";
 import { downloadDataAsCSVTeam } from "~community/leave/utils/TeamLeaveAnalyticsUtils";
 import { leaveStatusIconSelector } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import RequestDates from "../LeaveRequestRow/RequestDates";
 import MultiselectEmployeeFilter from "../MultiselectEmployeeFilter/MultiselectEmployeeFilter";
@@ -348,22 +349,42 @@ const TeamAnalyticsLeaveHistoryTable: FC<Props> = ({
         {translateText(["tableTitle"])}
       </Typography>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        actionRowOneLeftButton={dateRangePicker}
-        actionRowOneRightButton={filterButton}
-        isPaginationEnabled={true}
-        totalPages={leaveHistory?.totalPages}
-        currentPage={currentPage as number}
-        onPaginationChange={(_event: ChangeEvent<unknown>, value: number) =>
-          setTeamLeaveAnalyticsPagination(value - 1)
-        }
-        emptyDataTitle={translateText(["emptyHistoryTitle"])}
-        emptyDataDescription={translateText(["emptyHistoryDescription"])}
+        tableName={TableNames.TEAM_ANALYTICS_LEAVE_HISTORY}
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableBody={{
+          emptyState: {
+            noData: {
+              title: translateText(["emptyHistoryTitle"]),
+              description: translateText(["emptyHistoryDescription"])
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 5
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: true,
+            totalPages: leaveHistory?.totalPages,
+            currentPage: currentPage as number,
+            onChange: (_event: ChangeEvent<unknown>, value: number) =>
+              setTeamLeaveAnalyticsPagination(value - 1)
+          },
+          exportBtn: {
+            label: translateText(["exportBtnTxt"]),
+            onClick: handleExport
+          }
+        }}
+        actionToolbar={{
+          firstRow: {
+            leftButton: dateRangePicker,
+            rightButton: filterButton
+          }
+        }}
         isLoading={isLoading}
-        skeletonRows={5}
-        exportButtonText={translateText(["exportBtnTxt"])}
-        onExportButtonClick={handleExport}
       />
     </Box>
   );

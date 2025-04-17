@@ -265,3 +265,13 @@ export enum AnalyticsTypes {
   LEAVE = "leaveAnalytics",
   TIME = "timeSheetAnalytics"
 }
+
+export type TableHeaderTypes = {
+  id: string | number;
+  label?: string;
+  element?: JSX.Element;
+};
+
+export type TableTypes = {
+  tableName: string;
+};

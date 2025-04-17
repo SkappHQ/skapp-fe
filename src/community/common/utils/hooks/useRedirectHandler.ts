@@ -30,7 +30,7 @@ export const useRedirectHandler = (options: SessionPropsOptions) => {
 
             if (orgSetupStatus?.results[0]) {
               if (!orgSetupStatus?.results[0]?.isSignUpCompleted) {
-                router.replace(ROUTES.AUTH.SIGNUP);
+                window.location.href = ROUTES.AUTH.SIGNUP;
                 return;
               } else if (
                 !orgSetupStatus?.results[0]?.isOrganizationSetupCompleted &&

@@ -18,7 +18,7 @@ interface Props {
   children: ReactNode;
 }
 
-const ProtectedContent = ({ children }: Props) => {
+const ContentWithDrawer = ({ children }: Props) => {
   const classes = styles();
 
   const { toastMessage, setToastMessage } = useToast();
@@ -50,4 +50,4 @@ const ProtectedContent = ({ children }: Props) => {
   );
 };
 
-export default ProtectedContent;
+export default ContentWithDrawer;

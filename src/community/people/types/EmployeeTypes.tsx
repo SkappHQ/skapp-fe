@@ -476,5 +476,5 @@ export interface MyManagersType {
   lastName: string;
   managerType: ManagerTypes;
   middleName: string | null;
-  primaryManager: boolean;
+  isPrimaryManager: boolean;
 }
