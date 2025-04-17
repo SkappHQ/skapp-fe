@@ -39,8 +39,11 @@ export const shouldNavigateDropdownOptions = (key: string) =>
 
 export const shouldExpandDropdown = (key: string) => key === KeyboardKeys.SPACE;
 
-export const shouldCollapseOrSelectDropdown = (key: string) =>
-  key === KeyboardKeys.ENTER || key === KeyboardKeys.ESCAPE;
+export const shouldCollapseDropdown = (key: string) =>
+  key === KeyboardKeys.ESCAPE;
+
+export const shouldSelectDropdownOption = (key: string) =>
+  key === KeyboardKeys.ENTER;
 
 // Autocomplete
 export const shouldNavigateAutocompleteOptions = (key: string) =>
