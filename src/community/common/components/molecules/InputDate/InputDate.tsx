@@ -37,8 +37,8 @@ import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import {
-  isEnterKeyPress,
-  isEscapeKeyPress
+  shouldCollapseDropdown,
+  shouldExpandDropdown
 } from "~community/common/utils/keyboardUtils";
 import { LeaveState } from "~community/leave/types/EmployeeLeaveRequestTypes";
 import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
@@ -342,7 +342,7 @@ const InputDate: FC<Props> = ({
             !(disabled || readOnly) && handleClick(e)
           }
           onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
-            if (isEnterKeyPress(e.key) && !(disabled || readOnly))
+            if (shouldExpandDropdown(e.key) && !(disabled || readOnly))
               handleClick(e);
           }}
         >
@@ -370,7 +370,7 @@ const InputDate: FC<Props> = ({
         sx={mergeSx([classes.popper, popperStyles])}
         tabIndex={0}
         onKeyDown={(e) => {
-          if (isEscapeKeyPress(e.key)) handleClose();
+          if (shouldCollapseDropdown(e.key)) handleClose();
         }}
       >
         <ClickAwayListener onClickAway={handleClose}>
