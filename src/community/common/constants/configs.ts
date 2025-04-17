@@ -1,11 +1,16 @@
+export enum ApiVersions {
+  V1 = "/v1",
+  V2 = "/v2"
+}
+
 export enum moduleAPIPath {
-  AUTH = "/auth",
-  PEOPLE = "/people",
-  LEAVE = "/leave",
-  JOB = "/job",
-  TIME = "/time",
-  ORGANIZATION = "/organization",
-  ROLES = "/roles"
+  AUTH = `/auth`,
+  PEOPLE = `/people`,
+  LEAVE = `/leave`,
+  JOB = `/job`,
+  TIME = `/time`,
+  ORGANIZATION = `/organization`,
+  ROLES = `/roles`
 }
 
 export enum nextAuthOptions {
