@@ -1,4 +1,30 @@
+import { MouseEvent } from "react";
+
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
+
+export const handleMainContentFocus = (
+  e: MouseEvent<HTMLAnchorElement>
+): void => {
+  e.preventDefault();
+  const mainContent = document.getElementById("main-content");
+
+  if (mainContent) {
+    const previousScrollPosition = window.scrollY;
+
+    mainContent.setAttribute("tabindex", "-1");
+    mainContent.focus();
+
+    window.scrollTo(0, previousScrollPosition);
+
+    mainContent.addEventListener(
+      "blur",
+      () => {
+        mainContent.removeAttribute("tabindex");
+      },
+      { once: true }
+    );
+  }
+};
 
 // Navigation
 export const shouldNavigateForward = (key: string) => key === KeyboardKeys.TAB;
