@@ -194,7 +194,7 @@ const LeaveDashboard = (): JSX.Element => {
                       style={{
                         color:
                           absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                            ? theme.palette.greens.deep_shadows
+                            ? theme.palette.greens.deepShadows
                             : theme.palette.error.contrastText
                       }}
                     />
@@ -205,11 +205,11 @@ const LeaveDashboard = (): JSX.Element => {
                   sx={{
                     color:
                       absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                        ? theme.palette.greens.deep_shadows
+                        ? theme.palette.greens.deepShadows
                         : theme.palette.error.contrastText,
                     backgroundColor:
                       absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                        ? "#ECFCCB"
+                        ? theme.palette.greens.lighter
                         : theme.palette.error.light,
                     [theme.breakpoints.down("md")]: {
                       fontSize: "0.625rem",

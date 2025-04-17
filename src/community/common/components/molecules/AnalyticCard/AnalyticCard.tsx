@@ -3,6 +3,7 @@ import { FC, ReactNode } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -34,7 +35,7 @@ const AnalyticCard: FC<Props> = ({
         tabIndex={accessibility?.tabIndex ?? -1}
         role={accessibility?.role ?? "group"}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (shouldActivateButton(e.key)) {
             onExpand?.();
           }
         }}

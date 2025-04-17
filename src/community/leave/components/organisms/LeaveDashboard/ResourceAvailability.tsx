@@ -56,7 +56,6 @@ const ResourceAvailabilityCalendar = (): JSX.Element => {
               justifyContent={"start"}
             >
               <FilledArrow
-                enableKeyboardNavigation={false}
                 onClick={() => {
                   setMonth(month - 1);
                 }}
@@ -72,7 +71,6 @@ const ResourceAvailabilityCalendar = (): JSX.Element => {
                 onClick={() => {
                   setMonth(month + 1);
                 }}
-                enableKeyboardNavigation={false}
                 isRightArrow={true}
                 backgroundColor={"grey.100"}
                 disabled={month === 12}
