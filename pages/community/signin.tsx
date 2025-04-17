@@ -12,6 +12,7 @@ import { organizationCreateEndpoints } from "~community/common/api/utils/ApiEndp
 import RequestPasswordChangeModal from "~community/common/components/molecules/RequestPasswordChangeModal/RequestPasswordChangeModal";
 import SignInForm from "~community/common/components/organisms/Forms/SignInForm/SignInForm";
 import OnboardingLayout from "~community/common/components/templates/OnboardingLayout/OnboardingLayout";
+import { HTTP_OK } from "~community/common/constants/httpStatusCodes";
 import ROUTES from "~community/common/constants/routes";
 import { AppVersionNotificationType } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -27,7 +28,6 @@ import { signInValidation } from "~community/common/utils/validation";
 import i18n from "~i18n";
 
 import { version } from "../../package.json";
-import { HTTP_OK } from "~community/common/constants/httpStatusCodes";
 
 interface SignInValues {
   email: string;
