@@ -211,6 +211,12 @@ const getDrawerRoutes = ({
             ) {
               return false;
             }
+            if (
+              subRoute.name === "Sign" &&
+              !userRoles?.includes(EmployeeTypes.ESIGN_EMPLOYEE)
+            ) {
+              return false;
+            }
             return subRoute.requiredAuthLevel?.some((requiredRole) =>
               userRoles?.includes(requiredRole as Role)
             );
