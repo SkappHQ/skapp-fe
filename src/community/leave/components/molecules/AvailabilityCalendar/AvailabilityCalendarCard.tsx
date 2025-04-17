@@ -170,7 +170,7 @@ const AvailabilityCalendarCard = ({
           fontSize={12}
           lineHeight={"1.125rem"}
           sx={{ mb: ".125rem" }}
-          color="secondary.dark"
+          color="primary.dark"
         >
           {day}
         </Typography>
