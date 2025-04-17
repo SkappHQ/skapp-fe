@@ -349,7 +349,7 @@ export const theme = createTheme({
       200: "#FBBF24",
       300: "#FFC107",
       400: "#EAB308",
-      500: "#CA8A04",
+      500: "#8F6B10",
       600: "#854D0E"
     },
     trendChart: {
