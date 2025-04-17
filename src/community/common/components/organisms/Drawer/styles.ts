@@ -94,17 +94,20 @@ export const styles = ({ theme }: stylesProps) => ({
       color: color
     }
   }),
-  subList: {
+  collapse: {
     display: "flex",
     flexDirection: "column",
     width: "max-content"
   },
-  subListItem: {
+  subList: {
     display: "flex",
     flexDirection: "column",
     height: "auto",
     gap: "1.75rem",
     padding: "1.75rem 0rem 0rem 0rem"
+  },
+  subListItem: {
+    padding: "0rem"
   },
   subListItemButton: {
     display: "flex",
