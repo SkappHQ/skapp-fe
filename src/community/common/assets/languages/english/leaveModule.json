@@ -300,7 +300,7 @@
     "downloadCsvButton": "Download CSV template",
     "nextButton": "Next",
     "uploadCsvModalDes": "Upload the CSV template with updated employee leave information.",
-    "uploadButton": "Update entitlements",
+    "uploadButton": "Upload entitlements",
     "goBackButton": "Go back",
     "emptyFileError": "No records found. Please try again.",
     "invalidFileFormatError": "Invalid file format.",
