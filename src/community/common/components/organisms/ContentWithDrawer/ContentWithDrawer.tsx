@@ -27,12 +27,17 @@ const ContentWithDrawer = ({ children }: Props) => {
 
   return (
     <>
-      <Link href="#main-content" onClick={handleMainContentFocus} />
+      <Link
+        href="#content-with-drawer-main-content"
+        onClick={(e) =>
+          handleMainContentFocus(e, "content-with-drawer-main-content")
+        }
+      />
       <Stack sx={classes.protectedWrapper}>
         <Drawer />
         <Stack sx={classes.contentWrapper}>
           <AppBar />
-          <main id="main-content">{children}</main>
+          <main id="content-with-drawer-main-content">{children}</main>
         </Stack>
       </Stack>
       <ToastMessage

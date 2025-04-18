@@ -22,9 +22,14 @@ const ContentWithoutDrawer = ({ children }: Props) => {
 
   return (
     <>
-      <Link href="#main-content" onClick={handleMainContentFocus} />
+      <Link
+        href="#content-without-drawer-main-content"
+        onClick={(e) =>
+          handleMainContentFocus(e, "content-without-drawer-main-content")
+        }
+      />
       <Stack sx={classes.unProtectedWrapper}>
-        <main id="main-content">{children}</main>
+        <main id="content-without-drawer-main-content">{children}</main>
         <ToastMessage
           key={toastMessage.key}
           open={toastMessage.open}

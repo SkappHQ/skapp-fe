@@ -3,10 +3,11 @@ import { MouseEvent } from "react";
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 
 export const handleMainContentFocus = (
-  e: MouseEvent<HTMLAnchorElement>
+  e: MouseEvent<HTMLAnchorElement>,
+  id: string
 ): void => {
   e.preventDefault();
-  const mainContent = document.getElementById("main-content");
+  const mainContent = document.getElementById(id);
 
   if (mainContent) {
     mainContent.setAttribute("tabindex", "-1");
