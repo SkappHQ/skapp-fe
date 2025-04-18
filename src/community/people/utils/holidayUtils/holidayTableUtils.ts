@@ -46,11 +46,7 @@ export const getSelectAllCheckboxEnableStatus = (
 
   const futureHolidays = getFutureHolidays(holidayData);
 
-  if (futureHolidays) {
-    return futureHolidays?.length > 0;
-  }
-
-  return false;
+  return futureHolidays?.length !== 0;
 };
 
 export const getSelectAllCheckboxCheckedStatus = (
