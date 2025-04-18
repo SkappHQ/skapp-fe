@@ -113,11 +113,7 @@ export function leaveRequestDataPreProcessor(
     durationDays: data?.durationDays,
     dates: getStartEndDate(data.startDate, data.endDate),
 
-    days: getLeaveRequestsLeaveState(
-      data.startDate,
-      data.endDate,
-      data.leaveState
-    ),
+    days: `${data.durationDays} Days`,
     reason: data?.requestDesc ?? "",
     reviewerComment: data?.reviewerComment ?? "",
     reviewedDate: getStandardDate(data?.reviewedDate),
