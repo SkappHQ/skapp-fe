@@ -49,6 +49,7 @@ const TimeConfigurations = (): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles();
   const translateText = useTranslator("configurations", "times");
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toastMessage, setToastMessage } = useToast();
@@ -350,6 +351,7 @@ const TimeConfigurations = (): JSX.Element => {
               {translateText(["startOfTheWeekDescription"]) ?? ""}
             </Typography>
             <DropdownList
+              ariaLabel={translateText(["startOfTheWeekTitle"]) ?? ""}
               isDisabled={!workingDays?.length}
               id="startDayOfTheWeekDropDownList"
               inputName="startDayOfTheWeek"
@@ -380,6 +382,7 @@ const TimeConfigurations = (): JSX.Element => {
               value={startTime}
               onChange={(e: SelectChangeEvent) => setStartTime(e.target.value)}
               componentStyle={{ mt: "0rem" }}
+              ariaLabel={translateText(["startOfAWorkDayTitle"]) ?? ""}
             />
           </Stack>
         </Stack>
@@ -403,6 +406,7 @@ const TimeConfigurations = (): JSX.Element => {
               setTotalHours(parseInt(e.target.value))
             }
             componentStyle={classes.inputField}
+            ariaLabel={translateText(["numberOfWorkHoursInADayTitle"]) ?? ""}
           />
 
           <Stack sx={classes.inputField}>

@@ -9,6 +9,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import attendanceModuleRolesTableData from "~community/configurations/data/attendanceModuleRolesTableData.json";
 import leaveModuleRolesTableData from "~community/configurations/data/leaveModuleRolesTableData.json";
 import peopleModuleRolesTableData from "~community/configurations/data/peopleModuleRolesTableData.json";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -69,25 +70,25 @@ const ModuleRolesTable = ({ module }: Props): JSX.Element => {
     );
   };
 
-  const columns = [
-    { field: "permission", headerName: "" },
-    { field: "admin", headerName: translateText(["adminHeader"]) },
-    { field: "manager", headerName: translateText(["managerHeader"]) },
-    { field: "employee", headerName: translateText(["employeeHeader"]) }
+  const headers = [
+    { id: "permission", label: "" },
+    { id: "admin", label: translateText(["adminHeader"]) },
+    { id: "manager", label: translateText(["managerHeader"]) },
+    { id: "employee", label: translateText(["employeeHeader"]) }
   ];
-
-  const tableHeaders = columns.map((col) => ({
-    id: col.field,
-    label: col.headerName
-  }));
 
   return (
     <Box sx={classes.container}>
       <Table
+        tableName={TableNames.MODULE_ROLES}
+        headers={headers}
+        rows={transformToTableRows()}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
         isLoading={false}
-        isPaginationEnabled={false}
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
       />
     </Box>
   );

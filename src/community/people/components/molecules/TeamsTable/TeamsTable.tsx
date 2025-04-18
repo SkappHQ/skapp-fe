@@ -16,6 +16,7 @@ import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
 import { TeamModelTypes, TeamType } from "~community/people/types/TeamTypes";
+import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -35,6 +36,7 @@ const TeamsTable: FC<Props> = ({
   isAdmin = false
 }) => {
   const translateText = useTranslator("peopleModule", "teams");
+  const ariaTranslateText = useTranslator("peopleAria", "teams");
 
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -149,6 +151,12 @@ const TeamsTable: FC<Props> = ({
               hoverEffect={false}
               buttonStyles={classes.editIconBtn}
               onClick={() => handleEditTeam(teamDetails)}
+              ariaLabel={ariaTranslateText(
+                ["table", "actionColumn", "editButton"],
+                {
+                  teamName: teamDetails?.teamName?.toLowerCase() ?? ""
+                }
+              )}
             />
             <IconButton
               icon={
@@ -162,6 +170,12 @@ const TeamsTable: FC<Props> = ({
               hoverEffect={false}
               buttonStyles={classes.deleteIconBtn}
               onClick={() => handleDeleteTeam(teamDetails)}
+              ariaLabel={ariaTranslateText(
+                ["table", "actionColumn", "deleteButton"],
+                {
+                  teamName: teamDetails?.teamName?.toLowerCase() ?? ""
+                }
+              )}
             />
           </>
         ) : (
@@ -195,33 +209,52 @@ const TeamsTable: FC<Props> = ({
   return (
     <Box sx={classes.tableWrapper}>
       <Table
-        id={{
-          emptyScreen: {
-            button: "add-teams-empty-table-screen-button"
+        tableName={TableNames.TEAMS}
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            row: classes.tableHead,
+            cell: classes.tableHeaderCellStyles
           }
         }}
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={classes.tableHead}
-        tableContainerStyles={classes.tableContainer}
-        isPaginationEnabled={false}
-        tableHeaderCellStyles={classes.tableHeaderCellStyles}
-        emptySearchTitle={translateText(["emptySearchResult", "title"])}
-        emptySearchDescription={translateText([
-          "emptySearchResult",
-          "description"
-        ])}
-        emptyDataTitle={translateText(["emptyScreen", "title"])}
-        emptyDataDescription={translateText(["emptyScreen", "description"])}
-        isDataAvailable={allTeams && allTeams?.length > 0}
-        isLoading={isTeamsLoading}
-        onEmptyScreenBtnClick={() => {
-          teamAddButtonButtonClick?.();
-          destroyDriverObj();
+        tableBody={{
+          emptyState: {
+            noData: {
+              title:
+                allTeams && allTeams?.length > 0
+                  ? translateText(["emptyScreen", "title"])
+                  : translateText(["emptySearchResult", "title"]),
+              description:
+                allTeams && allTeams?.length > 0
+                  ? translateText(["emptyScreen", "description"])
+                  : translateText(["emptySearchResult", "description"]),
+              button: {
+                id: "add-teams-empty-table-screen-button",
+                label: teamAddButtonText,
+                onClick: () => {
+                  teamAddButtonButtonClick?.();
+                  destroyDriverObj();
+                },
+                shouldBlink: ongoingQuickSetup.DEFINE_TEAMS
+              }
+            }
+          },
+          loadingState: {
+            skeleton: {
+              rows: 3
+            }
+          }
         }}
-        emptyScreenButtonText={teamAddButtonText}
-        skeletonRows={3}
-        shouldEmptyTableScreenBtnBlink={ongoingQuickSetup.DEFINE_TEAMS}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainer
+        }}
+        isLoading={isTeamsLoading}
       />
     </Box>
   );

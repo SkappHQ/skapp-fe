@@ -62,7 +62,6 @@ const InteractiveInputTrigger = ({
                 : "common.black",
             ...labelStyles
           }}
-          aria-hidden={true}
         >
           {label} {required && <span style={{ color: "red" }}>*</span>}
         </Typography>

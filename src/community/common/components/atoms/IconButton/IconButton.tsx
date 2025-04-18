@@ -1,4 +1,4 @@
-import { Collapse, type SxProps, Typography } from "@mui/material";
+import { Collapse, type SxProps, Theme, Typography } from "@mui/material";
 import { JSX, MouseEvent, useState } from "react";
 
 import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
@@ -9,7 +9,7 @@ import styles from "./styles";
 interface Props {
   icon: JSX.Element;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  buttonStyles?: SxProps;
+  buttonStyles?: SxProps<Theme>;
   disabled?: boolean;
   hoverEffect?: boolean;
   text?: string;
@@ -17,6 +17,7 @@ interface Props {
   dataProps?: Record<string, string | boolean | number>;
   isTextPermenent?: boolean;
   id?: string;
+  ariaLabel?: string;
 }
 
 const IconButton = ({
@@ -29,7 +30,8 @@ const IconButton = ({
   disableRipple = true,
   dataProps,
   isTextPermenent = false,
-  id
+  id,
+  ariaLabel
 }: Props): JSX.Element => {
   const queryMatches = useMediaQuery();
   const isBelow1420 = queryMatches(1420);
@@ -50,6 +52,7 @@ const IconButton = ({
       onMouseLeave={() => setShowText(false)}
       {...dataProps}
       data-testid={id || ""}
+      aria-label={ariaLabel}
     >
       {hoverEffect && !isBelow1420 && (
         <Collapse orientation="horizontal" in={showText}>

@@ -1,0 +1,14 @@
+{
+  "jobFamily": {
+    "addJobTitleButton": "Add job title button",
+    "jobTitleField": "{{jobTitleName}} job title field"
+  },
+  "teams": {
+    "table": {
+      "actionColumn": {
+        "editButton": "Select teams table {{teamName}} team edit button",
+        "deleteButton": "Select teams table {{teamName}} team delete button"
+      }
+    }
+  }
+}

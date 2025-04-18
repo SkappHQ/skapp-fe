@@ -496,6 +496,7 @@ const AddNewResourceModal = () => {
 
             <Stack>
               <SwitchRow
+                labelId="is-super-admin"
                 checked={values.isSuperAdmin}
                 onChange={(e) => handleSuperAdminChange(e.target.checked)}
               />

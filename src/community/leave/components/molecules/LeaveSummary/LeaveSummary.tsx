@@ -2,6 +2,7 @@ import { Chip, Stack, Theme, Typography, useTheme } from "@mui/material";
 import { DateTime } from "luxon";
 import { useMemo } from "react";
 
+import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import { daysTypes } from "~community/common/constants/stringConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -13,7 +14,6 @@ import {
   getLeavePeriod
 } from "~community/leave/utils/myRequests/leaveSummaryUtils";
 import { useGetMyManagers } from "~community/people/api/PeopleApi";
-import { MyManagersType } from "~community/people/types/EmployeeTypes";
 
 import styles from "./styles";
 
@@ -49,6 +49,16 @@ const LeaveSummary = ({
   const classes = styles(theme);
 
   const { data: myManagers } = useGetMyManagers();
+
+  const primaryManager = useMemo(() => {
+    if (!myManagers || myManagers.length === 0) return null;
+    return myManagers.find((manager) => manager.isPrimaryManager === true);
+  }, [myManagers]);
+
+  const otherManagers = useMemo(() => {
+    if (!myManagers || myManagers.length === 0) return [];
+    return myManagers.filter((manager) => manager.isPrimaryManager === false);
+  }, [myManagers]);
 
   const duration = useMemo(() => {
     return getDuration({
@@ -101,15 +111,34 @@ const LeaveSummary = ({
             {translateText(["recipient"])}
           </Typography>
           <Stack sx={classes.chipWrapper}>
-            {myManagers?.map((manager: MyManagersType) => (
+            <AvatarChip
+              key={primaryManager?.employeeId ?? ""}
+              firstName={primaryManager?.firstName ?? ""}
+              lastName={primaryManager?.lastName ?? ""}
+              avatarUrl={primaryManager?.authPic ?? ""}
+              chipStyles={classes.chipStyles}
+            />
+
+            {otherManagers.length > 0 && (
               <AvatarChip
-                key={manager.employeeId}
-                firstName={manager.firstName}
-                lastName={manager.lastName}
-                avatarUrl={manager.authPic}
+                key={otherManagers[0]?.employeeId ?? ""}
+                firstName={otherManagers[0]?.firstName ?? ""}
+                lastName={otherManagers[0]?.lastName ?? ""}
+                avatarUrl={otherManagers[0]?.authPic ?? ""}
                 chipStyles={classes.chipStyles}
               />
-            ))}
+            )}
+            {otherManagers.length > 1 && (
+              <BasicChip
+                chipStyles={{
+                  backgroundColor: theme.palette.grey[100],
+                  height: "3rem",
+                  width: "4rem",
+                  borderRadius: "10rem"
+                }}
+                label={`+${otherManagers.length - 1}`}
+              />
+            )}
           </Stack>
         </Stack>
       </Stack>

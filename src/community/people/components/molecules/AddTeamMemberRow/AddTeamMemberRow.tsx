@@ -164,7 +164,7 @@ const AddTeamMemberRow: FC<Props> = ({
         isFlip={true}
         timeout={300}
       >
-        <Box sx={{ backgroundColor: theme.palette.common.white }}>
+        <Box sx={{ backgroundColor: theme.palette.common.white }} role="menu">
           {itemList?.map((item, index: number) => (
             <MenuItem
               id={"dropdown-button-id-"

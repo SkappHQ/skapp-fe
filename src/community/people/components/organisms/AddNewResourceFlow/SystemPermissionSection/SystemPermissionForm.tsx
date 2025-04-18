@@ -267,6 +267,7 @@ const SystemPermissionForm = ({
     >
       <>
         <SwitchRow
+          labelId="super-admin"
           label={systemPermissionsText(["superAdmin"])}
           disabled={isProfileView || isInputsDisabled}
           checked={values.isSuperAdmin}

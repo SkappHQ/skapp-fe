@@ -3,6 +3,7 @@ import { SxProps, type Theme, useTheme } from "@mui/material/styles";
 import { ChangeEvent, FC } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -19,6 +20,7 @@ interface SwitchComponentProps {
   wrapperStyles?: SxProps<Theme>;
   name?: string;
   icon?: IconName;
+  labelId: string;
 }
 
 const SwitchRow: FC<SwitchComponentProps> = ({
@@ -30,8 +32,11 @@ const SwitchRow: FC<SwitchComponentProps> = ({
   error,
   wrapperStyles,
   name,
-  icon
+  icon,
+  labelId
 }) => {
+  const translateAria = useTranslator("commonAria", "components", "switch");
+
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -45,6 +50,8 @@ const SwitchRow: FC<SwitchComponentProps> = ({
               ? theme.palette.grey.A100
               : theme.palette.common.black
           }}
+          id={labelId}
+          component="label"
         >
           {label}
           {!!icon && <Icon name={icon} />}
@@ -56,6 +63,17 @@ const SwitchRow: FC<SwitchComponentProps> = ({
         onChange={(e) => onChange?.(e, type)}
         disabled={disabled}
         name={name}
+        slotProps={{
+          input: {
+            "aria-labelledby": labelId,
+            "aria-label": label
+              ? `${translateAria(["ariaLabel"])} ${label.toLowerCase()}`
+              : translateAria(["ariaLabel"]),
+            title: label
+              ? `${translateAria(["ariaLabel"])} ${label.toLowerCase()}`
+              : translateAria(["ariaLabel"])
+          }
+        }}
       />
       {!!error && (
         <Typography variant="body2" sx={classes.error}>

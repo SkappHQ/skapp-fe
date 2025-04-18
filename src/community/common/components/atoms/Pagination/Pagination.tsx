@@ -2,6 +2,7 @@ import {
   Pagination as MuiPagination,
   PaginationItem,
   type PaginationRenderItemParams,
+  Theme,
   useTheme
 } from "@mui/material";
 import { type SxProps } from "@mui/system";
@@ -16,7 +17,7 @@ interface Props {
   totalPages?: number;
   onChange: (event: ChangeEvent<unknown>, value: number) => void;
   currentPage: number;
-  paginationStyles?: SxProps;
+  paginationStyles?: SxProps<Theme>;
   isDisabled?: boolean;
   isNumbersVisible?: boolean;
 }

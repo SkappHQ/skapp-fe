@@ -12,6 +12,7 @@ import { LeaveRequestStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { LeaveRequest } from "~community/leave/types/ResourceAvailabilityTypes";
 import { getLeaveRequestState } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 interface OnLeaveModalProps {
   isOpen: boolean;
@@ -124,11 +125,27 @@ const OnLeaveModal: React.FC<OnLeaveModalProps> = ({
     >
       <Box sx={{ pt: 1 }}>
         <Table
-          tableHeaders={tableHeaders}
-          tableRows={transformToTableRows()}
-          emptyDataTitle={translateText(["allAvailable"])}
-          skeletonRows={5}
-          isPaginationEnabled={false}
+          tableName={TableNames.ON_LEAVE_MODAL}
+          headers={tableHeaders}
+          rows={transformToTableRows()}
+          tableBody={{
+            emptyState: {
+              noData: {
+                title: translateText(["allAvailable"]),
+                description: ""
+              }
+            },
+            loadingState: {
+              skeleton: {
+                rows: 5
+              }
+            }
+          }}
+          tableFoot={{
+            pagination: {
+              isEnabled: false
+            }
+          }}
         />
       </Box>
     </Modal>

@@ -13,6 +13,7 @@ import { LeaveTypeFormTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import { getLeaveTypeDurationTableContent } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
+import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
@@ -88,18 +89,39 @@ const LeaveTypesTable = () => {
   return (
     <Box sx={classes.tableWrapper}>
       <Table
-        tableHeaders={tableHeaders}
-        tableRows={transformToTableRows()}
-        tableHeaderRowStyles={classes.tableHead}
-        tableContainerStyles={classes.tableContainer}
-        isPaginationEnabled={false}
-        tableHeaderCellStyles={classes.tableHeaderCell}
-        isDataAvailable={allLeaveTypes?.length > 0}
-        isLoading={isLeaveTypesFetching}
-        skeletonRows={6}
-        actionColumnIconBtnLeft={{
-          onClick: (leaveType) => handleEditTeam(leaveType)
+        tableName={TableNames.LEAVE_TYPES}
+        headers={tableHeaders}
+        rows={transformToTableRows()}
+        tableHead={{
+          customStyles: {
+            row: classes.tableHead,
+            cell: classes.tableHeaderCell
+          }
         }}
+        tableBody={{
+          loadingState: {
+            skeleton: {
+              rows: 6
+            }
+          },
+          actionColumn: {
+            isEnabled: true,
+            actionBtns: {
+              left: {
+                onClick: (leaveType) => handleEditTeam(leaveType)
+              }
+            }
+          }
+        }}
+        tableFoot={{
+          pagination: {
+            isEnabled: false
+          }
+        }}
+        customStyles={{
+          container: classes.tableContainer
+        }}
+        isLoading={isLeaveTypesFetching}
       />
     </Box>
   );
