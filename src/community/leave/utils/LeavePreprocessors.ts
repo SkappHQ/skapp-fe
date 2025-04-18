@@ -112,7 +112,6 @@ export function leaveRequestDataPreProcessor(
     avatarUrl: data?.employee?.authPic ?? "",
     durationDays: data?.durationDays,
     dates: getStartEndDate(data.startDate, data.endDate),
-
     days: `${data.durationDays} Days`,
     reason: data?.requestDesc ?? "",
     reviewerComment: data?.reviewerComment ?? "",
