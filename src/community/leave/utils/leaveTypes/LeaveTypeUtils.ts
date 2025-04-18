@@ -20,7 +20,7 @@ export const carryForwardKeyDownRestriction = (
 ) => {
   if (
     !hasNumber().test(e.key) &&
-    e.key !== "Backspace" &&
+    !["Backspace", "Tab", "ArrowLeft", "ArrowRight"].includes(e.key) &&
     !(e.ctrlKey && ["a", "c", "v", "x"].includes(e.key))
   ) {
     e.preventDefault();

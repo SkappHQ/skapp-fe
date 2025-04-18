@@ -72,8 +72,9 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   return (
     <Stack
       sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
-      role="region"
+      role="group"
       aria-label={`${tableName}-table-wrapper`}
+      tabIndex={0}
     >
       <TableHeadActionToolbar
         firstRow={actionToolbar?.firstRow}

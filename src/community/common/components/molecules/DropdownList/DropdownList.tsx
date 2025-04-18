@@ -134,6 +134,7 @@ const DropdownList: FC<Props> = ({
       >
         {itemList?.length > 0 ? (
           <Select
+            tabIndex={0}
             id={id}
             value={value?.toString() ?? ""}
             readOnly={readOnly}
@@ -157,24 +158,12 @@ const DropdownList: FC<Props> = ({
                 : translateAria(["dropDown"]),
               "aria-labelledby": ariaLabel
                 ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
+                : translateAria(["label"]),
+              title: ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
             }}
             displayEmpty={!!placeholder?.length}
-            title={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-label={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-labelledby={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
-            }
             renderValue={
               value !== ""
                 ? () => (
@@ -278,23 +267,11 @@ const DropdownList: FC<Props> = ({
                 : translateAria(["dropDown"]),
               "aria-labelledby": ariaLabel
                 ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
+                : translateAria(["label"]),
+              title: ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
             }}
-            title={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-label={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-labelledby={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
-            }
           >
             <Box display={"flex"} justifyContent={"center"}>
               <CircularProgress size={20} style={{ color: "black" }} />
