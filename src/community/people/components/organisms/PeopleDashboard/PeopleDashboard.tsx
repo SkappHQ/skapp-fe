@@ -153,12 +153,12 @@ const PeopleDashboard = (): JSX.Element => {
                       color:
                         analyticsData?.employeeTurnoverRateResponseDto
                           ?.turnOverRateChange >= 0
-                          ? theme.palette.greens.midDark
+                          ? theme.palette.greens.deepShadows
                           : theme.palette.error.contrastText,
                       backgroundColor:
                         analyticsData?.employeeTurnoverRateResponseDto
                           ?.turnOverRateChange >= 0
-                          ? theme.palette.greens.lightBackground
+                          ? theme.palette.greens.lighter
                           : theme.palette.error.light,
                       [theme.breakpoints.down("md")]: {
                         fontSize: "0.625rem",

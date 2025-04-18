@@ -70,6 +70,11 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       "addResource",
       "employmentDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "employmentDetails"
+    );
 
     const [secondarySupervisorFilterEl, setSecondarySupervisorFilterEl] =
       useState<null | HTMLElement>(null);
@@ -283,6 +288,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 readOnly={isReadOnly || isProfileView}
                 isDisabled={isInputsDisabled}
                 checkSelected
+                ariaLabel={translateAria(["selectEmploymentAllocation"])}
               />
             </Grid>
 
@@ -359,6 +365,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   itemList={projectTeamList}
                   isDisabled={isReadOnly || isProfileView || isInputsDisabled}
                   addNewClickBtnText={translateText(["addNewTeam"])}
+                  ariaLabel={translateAria(["selectMultipleTeams"])}
                 />
               )}
             </Grid>

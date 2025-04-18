@@ -52,6 +52,11 @@ const CareerProgressDetailsSection = ({
     "addResource",
     "entitlementDetails"
   );
+  const translateAria = useTranslator(
+    "peopleAria",
+    "addResource",
+    "careerProgression"
+  );
 
   const {
     setIsJobFamilyModalOpen,
@@ -240,6 +245,7 @@ const CareerProgressDetailsSection = ({
                   itemList={EmployeeTypesList}
                   checkSelected={true}
                   isDisabled={isInputsDisabled}
+                  ariaLabel={translateAria(["selectEmploymentType"])}
                 />
               </Grid>
 
@@ -281,6 +287,7 @@ const CareerProgressDetailsSection = ({
                         JobFamilyActionModalEnums.ADD_JOB_FAMILY
                       );
                     }}
+                    ariaLabel={translateAria(["selectJobFamily"])}
                   />
                 )}
               </Grid>
@@ -301,6 +308,7 @@ const CareerProgressDetailsSection = ({
                   itemList={jobTitleList}
                   isDisabled={!values?.jobFamilyId || isInputsDisabled}
                   checkSelected={true}
+                  ariaLabel={translateAria(["selectJobTitle"])}
                 />
               </Grid>
 
@@ -408,6 +416,13 @@ const CareerProgressDetailsSection = ({
                     color: theme.palette.primary.main
                   }}
                   disabled={isInputsDisabled}
+                  slotProps={{
+                    input: {
+                      "aria-label": values.isCurrentEmployment
+                        ? translateAria(["selectCurrentEmploymentChecked"])
+                        : translateAria(["selectCurrentEmploymentUnChecked"])
+                    }
+                  }}
                 />
                 <Typography
                   variant="caption"

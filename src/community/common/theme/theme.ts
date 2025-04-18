@@ -82,6 +82,7 @@ declare module "@mui/material/styles" {
     customGrey: {
       customGreyWithAlpha: string;
       lightShadowGrey: string;
+      midGrey: string;
       midDarkGrey: string;
       darkGrey: string;
     };
@@ -175,6 +176,7 @@ declare module "@mui/material/styles" {
     customGrey: {
       customGreyWithAlpha: string;
       lightShadowGrey: string;
+      midGrey: string;
       midDarkGrey: string;
       darkGrey: string;
     };
@@ -386,6 +388,7 @@ export const theme = createTheme({
     customGrey: {
       customGreyWithAlpha: "rgba(0,0,0,0.01)",
       lightShadowGrey: "#0900410D",
+      midGrey: "#c3c3c4",
       midDarkGrey: "#3D3D3D",
       darkGrey: "#18212C"
     },

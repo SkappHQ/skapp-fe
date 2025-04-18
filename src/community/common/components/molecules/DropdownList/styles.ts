@@ -69,7 +69,8 @@ export const styles = (theme: Theme) => ({
     },
     "&:focus-within": {
       outline: `0.125rem solid ${theme.palette.common.black}`,
-      outlineOffset: "-0.125rem"
+      outlineOffset: "-0.125rem",
+      borderRadius: "0.5rem"
     }
   }),
 

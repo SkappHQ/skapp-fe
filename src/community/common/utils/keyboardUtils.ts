@@ -4,6 +4,12 @@ import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 export const shouldNavigateForward = (key: string) => key === KeyboardKeys.TAB;
 export const shouldNavigateBackward = (key: string, shiftKey: boolean) =>
   key === KeyboardKeys.TAB && shiftKey;
+export const shouldMoveUpward = (key: string) => key === KeyboardKeys.ARROW_UP;
+export const shouldMoveDownward = (key: string) =>
+  key === KeyboardKeys.ARROW_DOWN;
+export const shouldMoveLeft = (key: string) => key === KeyboardKeys.ARROW_LEFT;
+export const shouldMoveRight = (key: string) =>
+  key === KeyboardKeys.ARROW_RIGHT;
 
 // Link
 export const shouldActivateLink = (key: string) => key === KeyboardKeys.ENTER;

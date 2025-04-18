@@ -60,11 +60,11 @@ const TimeUtilizationCard: FC<Props> = ({
             sx={{
               color:
                 trend === TimeUtilizationTrendTypes.TREND_UP
-                  ? theme.palette.greens.midDark
+                  ? theme.palette.greens.deepShadows
                   : theme.palette.error.contrastText,
               backgroundColor:
                 trend === TimeUtilizationTrendTypes.TREND_UP
-                  ? theme.palette.greens.lightBackground
+                  ? theme.palette.greens.lighter
                   : theme.palette.error.light,
               [theme.breakpoints.down("md")]: {
                 fontSize: "0.625rem",
