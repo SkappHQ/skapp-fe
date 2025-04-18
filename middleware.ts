@@ -59,7 +59,7 @@ const adminRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.DOCUMENT,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -84,7 +84,7 @@ const managerRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.DOCUMENT,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -104,7 +104,7 @@ const employeeRoutes = {
   [EmployeeTypes.ESIGN_EMPLOYEE]: [
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
+    ROUTES.SIGN.DOCUMENT,
     ROUTES.SIGN.COMPLETE,
     ...commonRoutes
   ]

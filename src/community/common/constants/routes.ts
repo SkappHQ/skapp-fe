@@ -95,7 +95,7 @@ const ROUTES = {
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create",
     SIGN: "/sign/sign",
-    REDIRECT: "/sign/redirect",
+    DOCUMENT: "/sign/document",
     COMPLETE: "/sign/complete"
   },
   REMOVE_PEOPLE: "/remove-people",
