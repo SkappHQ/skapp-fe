@@ -505,8 +505,8 @@ const PeopleTable: FC<Props> = ({
           isLoading={isFetching && !isFetchingNextPage}
           selectedRows={selectedPeople}
           checkboxSelection={{
-            isEnabled: isPendingInvitationListOpen || !isRemovePeople,
-            isSelectAllEnabled: isPendingInvitationListOpen || isRemovePeople,
+            isEnabled: isPendingInvitationListOpen || isRemovePeople,
+            isSelectAllEnabled: isPendingInvitationListOpen || !isRemovePeople,
             isSelectAllVisible: true,
             isSelectAllChecked: isSelectAllCheckboxChecked,
             handleIndividualSelectClick: handleCheckBoxClick,
