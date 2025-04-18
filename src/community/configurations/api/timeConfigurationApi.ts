@@ -35,7 +35,7 @@ export const useGetConfigIsRemovable = (params: daysTypes[]) => {
   return useQuery({
     queryKey: [timeConfigurationQueryKeys.CONFIG_IS_REMOVEVABLE, params],
     queryFn: () => getConfigIsRemovable(params),
-    enabled: !!params
+    enabled: params.length > 0
   });
 };
 
