@@ -16,7 +16,11 @@ const styles = (theme: Theme) => ({
     p: "0.5rem 0.9375rem",
     display: "flex",
     alignItems: "center",
-    borderRadius: "0.5rem"
+    borderRadius: "0.5rem",
+    "&:focus-within": {
+      outline: `0.125rem solid ${theme.palette.common.black}`,
+      outlineOffset: "-0.125rem"
+    }
   },
   inputBase: {
     flex: 1,

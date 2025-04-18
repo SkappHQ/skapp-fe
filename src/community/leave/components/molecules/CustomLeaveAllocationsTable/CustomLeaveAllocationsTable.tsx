@@ -249,6 +249,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
         {leaveTypeOptions.map((leaveType) => (
           <Chip
             key={leaveType.id}
+            tabIndex={0}
+            role="button"
             label={leaveType.name}
             onClick={() =>
               handleLeaveTypeFilter({

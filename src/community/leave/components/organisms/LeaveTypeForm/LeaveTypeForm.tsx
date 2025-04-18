@@ -490,7 +490,6 @@ const LeaveTypeForm = () => {
               isYearHidden
               name="carryForwardExpirationDate"
               label={translateText(["carryForwardExpirationDate"])}
-              value={DateTime.fromISO(values.carryForwardExpirationDate ?? "")}
               onchange={(value: string) => {
                 setFieldValue(
                   "carryForwardExpirationDate",

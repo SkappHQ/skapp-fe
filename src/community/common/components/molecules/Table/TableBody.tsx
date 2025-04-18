@@ -14,6 +14,7 @@ import { TableEmptyScreenProps } from "~community/common/components/molecules/Ta
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { CommonTableProps } from "./Table";
 import TableBodyActionColumn, {
@@ -70,6 +71,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
     "table",
     "tableBody"
   );
+
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -106,7 +108,15 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
         rows.map((row) => (
           <TableRow
             key={row.id}
+            role="row"
+            tabIndex={0}
             onClick={() => handleTableRowClick(row)}
+            onKeyDown={(e) => {
+              if (shouldActivateButton(e.key)) {
+                e.preventDefault();
+                handleTableRowClick(row);
+              }
+            }}
             sx={mergeSx([
               classes.tableBody.row.default,
               classes.tableBody.row?.[
@@ -116,7 +126,6 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
                 isRowDisabled?.(row.id) ? "disabled" : "active"
               ]
             ])}
-            role="row"
             aria-label={translateText(["row"], {
               tableName: tableName,
               ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
