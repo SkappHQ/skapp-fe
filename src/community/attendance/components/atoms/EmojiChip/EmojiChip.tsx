@@ -1,6 +1,7 @@
 import { Box, CircularProgress, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 
+import { durationSelector } from "~community/attendance/constants/constants";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 
@@ -64,6 +65,13 @@ const EmojiChip = ({
             leaveType === LeaveStates.EVENING
               ? 50
               : 100
+          }
+          aria-label={
+            leaveType === LeaveStates.MORNING ||
+            leaveType === LeaveStates.EVENING ||
+            leaveType === LeaveStates.FULL_DAY
+              ? `${durationSelector[leaveType ?? ""]} ${name}`
+              : `${name}`
           }
         />
         <Typography fontSize={10}>{getEmoji(emoji)}</Typography>
