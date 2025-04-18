@@ -181,6 +181,7 @@ const HolidayTable: FC<Props> = ({
           selectedRows={selectedHolidays}
           checkboxSelection={{
             isEnabled: true,
+            isSelectAllEnabled: true,
             isSelectAllVisible: isSelectAllCheckboxVisible,
             isSelectAllChecked: isSelectAllCheckboxChecked,
             handleIndividualSelectClick: (id: number) =>
