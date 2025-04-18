@@ -1,7 +1,14 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
 import { DateTime } from "luxon";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import {
   GRAPH_LEFT,
@@ -15,6 +22,10 @@ import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/Toggle
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import {
+  shouldMoveLeft,
+  shouldMoveRight
+} from "~community/common/utils/keyboardUtils";
 
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
@@ -43,6 +54,8 @@ const LateArrivalsGraph = ({
   const theme: Theme = useTheme();
   const currentMonth = DateTime.local().toFormat("MMM");
 
+  const chartRef = useRef<ReactECharts>(null);
+
   const findTimeIndex = (labels: string[], standardTime: string) => {
     return (
       labels?.findIndex((time: string) => time?.includes(standardTime)) - 3
@@ -53,6 +66,10 @@ const LateArrivalsGraph = ({
     startIndex: 0,
     endIndex: 0
   });
+
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(
+    xIndexDay.startIndex
+  );
 
   const MaxNumberOfWeeks = 51;
   const MaxNumberOfMonths = 12;
@@ -104,6 +121,39 @@ const LateArrivalsGraph = ({
     }
 
     return "hidden";
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    let newIndex = highlightedIndex;
+
+    if (shouldMoveRight(event.key)) {
+      newIndex = Math.min(highlightedIndex + 1, chartData.labels.length - 1);
+      setHighlightedIndex(newIndex);
+      showTooltipAtIndex(newIndex);
+      if (newIndex >= xIndexDay.endIndex) {
+        handleClick(GRAPH_RIGHT);
+      }
+      event.preventDefault();
+    } else if (shouldMoveLeft(event.key)) {
+      newIndex = Math.max(highlightedIndex - 1, 0);
+      setHighlightedIndex(newIndex);
+      showTooltipAtIndex(newIndex);
+      if (newIndex < xIndexDay.startIndex) {
+        handleClick(GRAPH_LEFT);
+      }
+      event.preventDefault();
+    }
+  };
+
+  const showTooltipAtIndex = (index: number): void => {
+    const chartInstance = chartRef.current?.getEchartsInstance?.();
+    if (chartInstance) {
+      chartInstance.dispatchAction({
+        type: "showTip",
+        seriesIndex: 0,
+        dataIndex: index
+      });
+    }
   };
 
   return (
@@ -175,10 +225,11 @@ const LateArrivalsGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box>
+                <Box tabIndex={0} onKeyDown={handleKeyPress}>
                   <ReactECharts
                     option={lateArrivalsGraphOptions}
                     style={{ height: "16.25rem" }}
+                    ref={chartRef}
                   />
                 </Box>
               )}

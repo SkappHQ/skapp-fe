@@ -55,6 +55,7 @@ const TimesheetTableRow: FC<Props> = ({
       justifyContent="space-between"
       alignItems="center"
       sx={styles.rowContainer}
+      tabIndex={0}
     >
       <Box sx={styles.stickyColumn}>
         {employee?.firstName && employee?.lastName ? (

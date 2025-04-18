@@ -117,8 +117,7 @@ export const handleColorClick = ({
   setFieldValue: (field: string, value: any) => void;
   setFieldError: (field: string, value: string) => void;
 }): void => {
-  const updatedColors = [color, ...colors.filter((c) => c !== color)];
-  setColors(updatedColors);
+  setColors(colors);
   setFieldValue("colorCode", color);
   setFieldError("colorCode", "");
 };
