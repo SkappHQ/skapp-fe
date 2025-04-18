@@ -60,7 +60,7 @@ const TimeUtilizationCard: FC<Props> = ({
             sx={{
               color:
                 trend === TimeUtilizationTrendTypes.TREND_UP
-                  ? theme.palette.greens.deep_shadows
+                  ? theme.palette.greens.deepShadows
                   : theme.palette.error.contrastText,
               backgroundColor:
                 trend === TimeUtilizationTrendTypes.TREND_UP

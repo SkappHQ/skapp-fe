@@ -153,7 +153,7 @@ const PeopleDashboard = (): JSX.Element => {
                       color:
                         analyticsData?.employeeTurnoverRateResponseDto
                           ?.turnOverRateChange >= 0
-                          ? theme.palette.greens.deep_shadows
+                          ? theme.palette.greens.deepShadows
                           : theme.palette.error.contrastText,
                       backgroundColor:
                         analyticsData?.employeeTurnoverRateResponseDto
