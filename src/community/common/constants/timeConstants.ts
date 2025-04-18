@@ -34,3 +34,5 @@ export const monthAbbreviations = [
   "Nov",
   "Dec"
 ];
+
+export type DateFormatType = "YYYY/MM/DD" | "MM/DD/YYYY" | "DD/MM/YYYY";
