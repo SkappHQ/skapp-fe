@@ -48,6 +48,8 @@ const ColorPalette: FC<Props> = ({
       ]
     : colors || [];
 
+  const displayColors = colors || [];
+
   return (
     <Stack sx={mergeSx([classes.wrapper, componentStyle])}>
       <Typography
@@ -87,7 +89,7 @@ const ColorPalette: FC<Props> = ({
                 ...classes.colorWidgetWrapper
               }}
             >
-              {reorderedColors.map((color: string, index: number) => {
+              {displayColors.map((color: string, index: number) => {
                 return (
                   <Stack
                     key={index}
