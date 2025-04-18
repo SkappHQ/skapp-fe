@@ -14,7 +14,11 @@ import { TableEmptyScreenProps } from "~community/common/components/molecules/Ta
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
-import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
+import {
+  shouldActivateButton,
+  shouldMoveDownward,
+  shouldMoveUpward
+} from "~community/common/utils/keyboardUtils";
 
 import { CommonTableProps } from "./Table";
 import TableBodyActionColumn, {
@@ -111,12 +115,6 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
             role="row"
             tabIndex={0}
             onClick={() => handleTableRowClick(row)}
-            onKeyDown={(e) => {
-              if (shouldActivateButton(e.key)) {
-                e.preventDefault();
-                handleTableRowClick(row);
-              }
-            }}
             sx={mergeSx([
               classes.tableBody.row.default,
               classes.tableBody.row?.[
@@ -130,6 +128,26 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               tableName: tableName,
               ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
             })}
+            onKeyDown={(e) => {
+              if (shouldActivateButton(e.key)) {
+                e.preventDefault();
+                handleTableRowClick(row);
+              }
+              if (shouldMoveUpward(e.key)) {
+                const previousRow = e.currentTarget
+                  .previousElementSibling as HTMLElement;
+                if (previousRow) {
+                  previousRow.focus();
+                }
+              }
+              if (shouldMoveDownward(e.key)) {
+                const nextRow = e.currentTarget
+                  .nextElementSibling as HTMLElement;
+                if (nextRow) {
+                  nextRow.focus();
+                }
+              }
+            }}
           >
             {checkboxSelection?.isEnabled && (
               <TableCell

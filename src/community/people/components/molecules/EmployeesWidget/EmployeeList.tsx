@@ -96,7 +96,7 @@ const EmployeeList: FC<Props> = ({
   };
 
   return (
-    <Box sx={classes.widgetBody}>
+    <Box sx={classes.widgetBody} tabIndex={0}>
       <Box ref={listInnerRef}>
         {employeeData.length === 0 && <NoDataScreen />}
         {employeeData?.map((employee) => {
@@ -105,6 +105,7 @@ const EmployeeList: FC<Props> = ({
               sx={classes.listItemRow}
               key={employee.identificationNo}
               onClick={() => handleRowClick(employee.employeeId)}
+              tabIndex={0}
             >
               <Box sx={classes.listItem}>
                 <Box sx={{ margin: "auto" }}>
