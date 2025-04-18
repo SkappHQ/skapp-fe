@@ -131,8 +131,8 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
             })}
           >
-            {checkboxSelection?.isSelectAllEnabled &&
-              checkboxSelection?.isEnabled && (
+            {checkboxSelection?.isEnabled &&
+              checkboxSelection?.isSelectAllVisible && (
                 <TableCell
                   onClick={(e) => e.stopPropagation()}
                   sx={mergeSx([
