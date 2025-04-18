@@ -149,37 +149,39 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               }
             }}
           >
-            {checkboxSelection?.isEnabled && (
-              <TableCell
-                onClick={(e) => e.stopPropagation()}
-                sx={mergeSx([
-                  classes.checkboxSelection.cell,
-                  classes.tableBody.checkboxSelection.cell,
-                  checkboxSelection?.customStyles?.cell
-                ])}
-              >
-                <Checkbox
-                  color="primary"
-                  disabled={isRowDisabled ? isRowDisabled(row.id) : false}
-                  checked={selectedRows?.includes(row.id) || false}
-                  onChange={checkboxSelection?.handleIndividualSelectClick?.(
-                    row.id
-                  )}
+            {checkboxSelection?.isEnabled &&
+              checkboxSelection?.isSelectAllVisible && (
+                <TableCell
+                  onClick={(e) => e.stopPropagation()}
                   sx={mergeSx([
-                    classes.checkboxSelection.checkbox,
-                    checkboxSelection?.customStyles?.checkbox
+                    classes.checkboxSelection.cell,
+                    classes.tableBody.checkboxSelection.cell,
+                    checkboxSelection?.customStyles?.cell
                   ])}
-                  slotProps={{
-                    input: {
-                      "aria-label": translateText(["checkbox"], {
-                        tableName: tableName,
-                        ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
-                      })
-                    }
-                  }}
-                />
-              </TableCell>
-            )}
+                >
+                  {!isRowDisabled(row.id) && (
+                    <Checkbox
+                      color="primary"
+                      checked={selectedRows?.includes(row.id) || false}
+                      onChange={checkboxSelection?.handleIndividualSelectClick?.(
+                        row.id
+                      )}
+                      sx={mergeSx([
+                        classes.checkboxSelection.checkbox,
+                        checkboxSelection?.customStyles?.checkbox
+                      ])}
+                      slotProps={{
+                        input: {
+                          "aria-label": translateText(["checkbox"], {
+                            tableName: tableName,
+                            ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+                          })
+                        }
+                      }}
+                    />
+                  )}
+                </TableCell>
+              )}
             {headers?.map((header) => (
               <TableCell
                 key={header.id}

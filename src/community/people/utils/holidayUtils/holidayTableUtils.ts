@@ -36,7 +36,7 @@ export const getFutureHolidays = (
   return [];
 };
 
-export const getSelectAllCheckboxEnableStatus = (
+export const getSelectAllCheckboxVisibility = (
   isPeopleAdmin: boolean | undefined,
   holidayData: Holiday[] | undefined
 ): boolean => {
@@ -46,11 +46,7 @@ export const getSelectAllCheckboxEnableStatus = (
 
   const futureHolidays = getFutureHolidays(holidayData);
 
-  if (futureHolidays) {
-    return futureHolidays?.length > 0;
-  }
-
-  return false;
+  return futureHolidays?.length !== 0;
 };
 
 export const getSelectAllCheckboxCheckedStatus = (
