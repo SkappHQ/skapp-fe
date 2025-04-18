@@ -80,7 +80,6 @@ const TableHead: FC<
         })}
       >
         {rows?.length > 0 &&
-          checkboxSelection?.isSelectAllEnabled &&
           checkboxSelection?.isSelectAllVisible &&
           checkboxSelection?.isEnabled && (
             <TableCell
@@ -90,22 +89,24 @@ const TableHead: FC<
                 customStyles?.cell
               ])}
             >
-              <Checkbox
-                color="primary"
-                checked={checkboxSelection?.isSelectAllChecked}
-                onChange={() => checkboxSelection?.handleSelectAllClick?.()}
-                sx={mergeSx([
-                  classes.checkboxSelection.checkbox,
-                  checkboxSelection?.customStyles?.checkbox
-                ])}
-                slotProps={{
-                  input: {
-                    "aria-label": translateText(["checkbox"], {
-                      tableName: tableName
-                    })
-                  }
-                }}
-              />
+              {checkboxSelection?.isSelectAllEnabled && (
+                <Checkbox
+                  color="primary"
+                  checked={checkboxSelection?.isSelectAllChecked}
+                  onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+                  sx={mergeSx([
+                    classes.checkboxSelection.checkbox,
+                    checkboxSelection?.customStyles?.checkbox
+                  ])}
+                  slotProps={{
+                    input: {
+                      "aria-label": translateText(["checkbox"], {
+                        tableName: tableName
+                      })
+                    }
+                  }}
+                />
+              )}
             </TableCell>
           )}
 
