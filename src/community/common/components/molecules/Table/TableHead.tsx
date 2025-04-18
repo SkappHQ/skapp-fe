@@ -81,6 +81,7 @@ const TableHead: FC<
       >
         {rows?.length > 0 &&
           checkboxSelection?.isSelectAllEnabled &&
+          checkboxSelection?.isSelectAllVisible &&
           checkboxSelection?.isEnabled && (
             <TableCell
               sx={mergeSx([
