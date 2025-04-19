@@ -257,8 +257,8 @@ const nextConfig = {
         destination: "/enterprise/sign/sign"
       },
       {
-        source: "/sign/document",
-        destination: "/enterprise/sign/document"
+        source: "/sign/document/access",
+        destination: "/enterprise/sign/document/access"
       },
       {
         source: "/sign/complete",
