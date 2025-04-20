@@ -221,6 +221,13 @@ const routes = [
       },
       {
         id: "4C",
+        name: "Sign",
+        url: ROUTES.CONFIGURATIONS.SIGN,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ESIGN_ADMIN]
+      },
+      {
+        id: "4D",
         name: "User Roles",
         url: ROUTES.CONFIGURATIONS.USER_ROLES,
         hasSubTree: false,

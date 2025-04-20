@@ -18,6 +18,7 @@ const PlayButton = (): JSX.Element => {
   const classes = styles();
   const status = attendanceParams.slotType;
   const translateText = useTranslator("attendanceModule", "timeWidget");
+  const translateAria = useTranslator("attendanceAria", "timeWidget");
 
   const { isPending, mutate } = useUpdateEmployeeStatus();
 
@@ -75,6 +76,13 @@ const PlayButton = (): JSX.Element => {
           status === AttendanceSlotType.HOLIDAY ||
           status === AttendanceSlotType.NON_WORKING_DAY ||
           status === AttendanceSlotType.LEAVE_DAY
+        }
+        aria-label={
+          status === AttendanceSlotType.RESUME ||
+          status === AttendanceSlotType.START ||
+          status === AttendanceSlotType.END
+            ? translateAria(["pauseTimer"])
+            : translateAria(["startTimer"])
         }
       >
         {isPending ? (

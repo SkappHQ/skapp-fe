@@ -1,155 +1,207 @@
 import {
+  Box,
   Checkbox,
   TableBody as MuiTableBody,
-  type SxProps,
+  SxProps,
   TableCell,
   TableRow,
-  Theme
+  Theme,
+  useTheme
 } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
 import { FC } from "react";
 
-import Icon from "~community/common/components/atoms/Icon/Icon";
-import IconButton from "~community/common/components/atoms/IconButton/IconButton";
-import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
-import { ButtonStyle } from "~community/common/enums/ComponentEnums";
-import { IconName } from "~community/common/types/IconTypes";
+import { TableEmptyScreenProps } from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { TableTypes } from "~community/common/types/CommonTypes";
+import { mergeSx } from "~community/common/utils/commonUtil";
+import {
+  shouldActivateButton,
+  shouldMoveDownward,
+  shouldMoveUpward
+} from "~community/common/utils/keyboardUtils";
 
-import TableSkeleton from "./TableSkeleton";
+import { CommonTableProps } from "./Table";
+import TableBodyActionColumn, {
+  TableBodyActionColumnProps
+} from "./TableBodyActionColumn";
+import TableBodyEmptyState from "./TableBodyEmptyState";
+import TableBodyLoadingState from "./TableBodyLoading";
 import styles from "./styles";
 
-const DELETE_BUTTON_ICON_WIDTH = "10";
-const DELETE_BUTTON_ICON_HEIGHT = "12";
-
-interface Props {
-  id?: {
-    emptyScreen?: {
-      button?: string;
-    };
+export interface TableBodyProps {
+  emptyState?: {
+    noData?: TableEmptyScreenProps;
+    customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
-  tableHeaders: any[];
-  tableRows: any[];
-  isCheckboxSelectionEnabled?: boolean;
-  selectedRows?: number[];
-  handleRowCheck?: (id: number) => () => void;
+  loadingState?: {
+    skeleton?: {
+      rows?: number;
+    };
+    customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
+  };
+  customStyles?: {
+    body?: SxProps<Theme>;
+    row?: {
+      active?: SxProps<Theme>;
+      disabled?: SxProps<Theme>;
+    };
+    cell?: {
+      wrapper?: SxProps<Theme>;
+      container?: SxProps<Theme>;
+    };
+    typography?: SxProps<Theme>;
+  };
+  actionColumn?: TableBodyActionColumnProps;
   onRowClick?: (row: any) => void;
-  isRowDisabled?: (row: any) => boolean;
-  tableRowStyles?: SxProps;
-  tableRowCellStyles?: SxProps;
-  tableCheckboxStyles?: SxProps;
-  isLoading?: boolean;
-  skeletonRows?: number;
-  emptySearchTitle?: string;
-  emptySearchDescription?: string;
-  emptyDataTitle?: string;
-  emptyDataDescription?: string;
-  isDataAvailable?: boolean;
-  emptyScreenButtonText?: string | boolean;
-  onEmptyScreenBtnClick?: () => void;
-  isActionColumnEnabled?: boolean;
-  actionColumnIconBtnLeft?: {
-    icon?: IconName;
-    width?: string;
-    height?: string;
-    styles?: SxProps;
-    onClick: (data: any) => void;
-  } | null;
-  actionColumnIconBtnRight?: {
-    icon?: IconName;
-    width?: string;
-    height?: string;
-    styles?: SxProps;
-    OnClick: (data: any) => void;
-  } | null;
-  emptyScreenButtonType?: ButtonStyle;
-  shouldEmptyTableScreenBtnBlink?: boolean;
 }
 
-const TableBody: FC<Props> = ({
-  id,
-  tableHeaders,
-  tableRows,
+const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   isLoading,
-  skeletonRows = 4,
-  emptySearchTitle,
-  emptySearchDescription,
-  emptyDataTitle,
-  emptyDataDescription,
-  isDataAvailable,
-  emptyScreenButtonText,
-  onEmptyScreenBtnClick,
-  isCheckboxSelectionEnabled,
+  headers,
+  rows,
   selectedRows,
-  handleRowCheck,
+  emptyState,
+  loadingState,
+  actionColumn,
+  checkboxSelection,
+  customStyles,
   isRowDisabled = () => false,
   onRowClick,
-  tableRowStyles,
-  tableRowCellStyles,
-  tableCheckboxStyles,
-  isActionColumnEnabled = false,
-  actionColumnIconBtnLeft,
-  actionColumnIconBtnRight,
-  emptyScreenButtonType,
-  shouldEmptyTableScreenBtnBlink
+  tableName
 }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "table",
+    "tableBody"
+  );
+
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const handleTableRowClick = (row: any) => {
+    if (isRowDisabled?.(row.id)) {
+      return;
+    }
+
+    if (onRowClick) {
+      onRowClick(row);
+      return;
+    }
+
+    return;
+  };
+
   return (
-    <MuiTableBody sx={classes.tableBodyStyles}>
+    <MuiTableBody
+      sx={mergeSx([classes.tableBody.body, customStyles?.body])}
+      role="rowgroup"
+      aria-label={translateText(["tableBodyLabel"], {
+        tableName: tableName
+      })}
+    >
       {isLoading ? (
-        <TableRow sx={classes.loadingAndEmptyScreen}>
-          <TableCell
-            colSpan={
-              tableHeaders?.length +
-              (isActionColumnEnabled ? 1 : 0) +
-              (isCheckboxSelectionEnabled ? 1 : 0)
-            }
-            sx={classes.loadingAndEmptyScreenCell}
-          >
-            <TableSkeleton rows={skeletonRows} />
-          </TableCell>
-        </TableRow>
-      ) : tableRows?.length ? (
-        tableRows.map((row) => (
+        <TableBodyLoadingState
+          tableName={tableName}
+          headers={headers}
+          loadingState={loadingState}
+          isActionColumnEnabled={actionColumn?.isEnabled}
+          isCheckboxSelectionEnabled={checkboxSelection?.isEnabled}
+        />
+      ) : rows?.length ? (
+        rows.map((row) => (
           <TableRow
             key={row.id}
-            onClick={
-              isRowDisabled?.(row)
-                ? undefined
-                : onRowClick
-                  ? () => onRowClick(row)
-                  : undefined
-            }
-            sx={classes.tableRowStyles(isRowDisabled?.(row), tableRowStyles)}
+            role="row"
+            tabIndex={0}
+            onClick={() => handleTableRowClick(row)}
+            sx={mergeSx([
+              classes.tableBody.row.default,
+              classes.tableBody.row?.[
+                isRowDisabled?.(row.id) ? "disabled" : "active"
+              ],
+              customStyles?.row?.[
+                isRowDisabled?.(row.id) ? "disabled" : "active"
+              ]
+            ])}
+            aria-label={translateText(["row"], {
+              tableName: tableName,
+              ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+            })}
+            onKeyDown={(e) => {
+              if (shouldActivateButton(e.key)) {
+                e.preventDefault();
+                handleTableRowClick(row);
+              }
+              if (shouldMoveUpward(e.key)) {
+                const previousRow = e.currentTarget
+                  .previousElementSibling as HTMLElement;
+                if (previousRow) {
+                  previousRow.focus();
+                }
+              }
+              if (shouldMoveDownward(e.key)) {
+                const nextRow = e.currentTarget
+                  .nextElementSibling as HTMLElement;
+                if (nextRow) {
+                  nextRow.focus();
+                }
+              }
+            }}
           >
-            {isCheckboxSelectionEnabled && (
+            {checkboxSelection?.isEnabled && (
               <TableCell
                 onClick={(e) => e.stopPropagation()}
-                sx={classes.tableRowCheckboxSelectionStyles(tableRowCellStyles)}
+                sx={mergeSx([
+                  classes.checkboxSelection.cell,
+                  classes.tableBody.checkboxSelection.cell,
+                  checkboxSelection?.customStyles?.cell
+                ])}
               >
                 <Checkbox
-                  checked={selectedRows?.includes(row.id) || false}
-                  onChange={handleRowCheck && handleRowCheck(row.id)}
                   color="primary"
-                  sx={classes.tableCheckboxStyles(tableCheckboxStyles)}
-                  disabled={isRowDisabled ? isRowDisabled(row) : false}
+                  disabled={isRowDisabled ? isRowDisabled(row.id) : false}
+                  checked={selectedRows?.includes(row.id) || false}
+                  onChange={checkboxSelection?.handleIndividualSelectClick?.(
+                    row.id
+                  )}
+                  sx={mergeSx([
+                    classes.checkboxSelection.checkbox,
+                    checkboxSelection?.customStyles?.checkbox
+                  ])}
+                  slotProps={{
+                    input: {
+                      "aria-label": translateText(["checkbox"], {
+                        tableName: tableName,
+                        ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+                      })
+                    }
+                  }}
                 />
               </TableCell>
             )}
-
-            {tableHeaders?.map((header) => (
+            {headers?.map((header) => (
               <TableCell
                 key={header.id}
-                sx={classes.tableRowCellStyles(tableRowCellStyles)}
+                sx={mergeSx([
+                  classes.tableBody.cell.wrapper,
+                  customStyles?.cell?.wrapper
+                ])}
+                role="cell"
+                aria-label={translateText(["tableBodyCell"], {
+                  tableName: tableName,
+                  headerLabel: header?.label?.toLowerCase() ?? "",
+                  rowId: row?.id ?? ""
+                })}
               >
                 {typeof row[header?.id] === "function" ? (
                   row[header?.id]()
                 ) : (
                   <Box
-                    display="flex"
-                    alignItems="flex-start"
-                    justifyContent="flex-start"
+                    sx={mergeSx([
+                      classes.tableBody.cell.container,
+                      customStyles?.cell?.container
+                    ])}
                   >
                     {row[header?.id]}
                   </Box>
@@ -157,89 +209,21 @@ const TableBody: FC<Props> = ({
               </TableCell>
             ))}
 
-            {isActionColumnEnabled && (
-              <TableCell
-                sx={classes.tableRowActionCellStyles(tableRowCellStyles)}
-              >
-                {actionColumnIconBtnLeft && (
-                  <IconButton
-                    icon={
-                      <Icon
-                        name={
-                          actionColumnIconBtnLeft?.icon ?? IconName.EDIT_ICON
-                        }
-                        width={actionColumnIconBtnLeft?.width}
-                        height={actionColumnIconBtnLeft?.height}
-                      />
-                    }
-                    id={`${row.id}-action-column-icon-btn-left`}
-                    hoverEffect={false}
-                    buttonStyles={classes.iconBtnOneStyles(
-                      actionColumnIconBtnLeft?.styles
-                    )}
-                    onClick={() =>
-                      actionColumnIconBtnLeft?.onClick(row.actionData)
-                    }
-                  />
-                )}
-                {actionColumnIconBtnRight && (
-                  <IconButton
-                    icon={
-                      <Icon
-                        name={
-                          actionColumnIconBtnRight?.icon ??
-                          IconName.DELETE_BUTTON_ICON
-                        }
-                        width={
-                          actionColumnIconBtnRight?.width ??
-                          DELETE_BUTTON_ICON_WIDTH
-                        }
-                        height={
-                          actionColumnIconBtnRight?.height ??
-                          DELETE_BUTTON_ICON_HEIGHT
-                        }
-                      />
-                    }
-                    id={`${row.id}-action-column-icon-btn-right`}
-                    hoverEffect={false}
-                    buttonStyles={classes.iconBtnTwoStyles(
-                      actionColumnIconBtnRight?.styles
-                    )}
-                    onClick={() =>
-                      actionColumnIconBtnRight?.OnClick(row.actionData)
-                    }
-                  />
-                )}
-              </TableCell>
-            )}
+            <TableBodyActionColumn
+              row={row}
+              isEnabled={actionColumn?.isEnabled}
+              actionBtns={actionColumn?.actionBtns}
+              tableName={tableName}
+              isRowDisabled={isRowDisabled}
+            />
           </TableRow>
         ))
       ) : (
-        <TableRow sx={classes.loadingAndEmptyScreen}>
-          <TableCell
-            colSpan={tableHeaders?.length + 2}
-            padding="none"
-            sx={{ border: "none" }}
-          >
-            {isDataAvailable ? (
-              <TableEmptyScreen
-                id={id}
-                title={emptySearchTitle}
-                description={emptySearchDescription}
-              />
-            ) : (
-              <TableEmptyScreen
-                id={id}
-                title={emptyDataTitle}
-                description={emptyDataDescription}
-                buttonText={emptyScreenButtonText}
-                onButtonClick={onEmptyScreenBtnClick}
-                buttonStyle={emptyScreenButtonType}
-                shouldEmptyTableScreenBtnBlink={shouldEmptyTableScreenBtnBlink}
-              />
-            )}
-          </TableCell>
-        </TableRow>
+        <TableBodyEmptyState
+          headers={headers}
+          emptyState={emptyState}
+          tableName={tableName}
+        />
       )}
     </MuiTableBody>
   );

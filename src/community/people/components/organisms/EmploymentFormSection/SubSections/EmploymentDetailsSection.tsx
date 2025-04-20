@@ -3,7 +3,13 @@ import { Theme, useTheme } from "@mui/system";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
 import { useRouter } from "next/router";
-import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from "react";
 
 import AvatarSearch from "~community/common/components/molecules/AvatarSearch/AvatarSearch";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
@@ -21,12 +27,16 @@ import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { timeZonesList } from "~community/common/utils/data/timeZones";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import SupervisorSelector from "~community/people/components/molecules/SupervisorSelector/SupervisorSelector";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useEmployeeDetailsFormHandler from "~community/people/hooks/useEmployeeDetailsFormHandler";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
-import { L3EmploymentDetailsType } from "~community/people/types/PeopleTypes";
+import {
+  L3EmploymentDetailsType,
+  L4ManagerType
+} from "~community/people/types/PeopleTypes";
 import { TeamModelTypes } from "~community/people/types/TeamTypes";
 import { EmployementAllocationList } from "~community/people/utils/data/employeeSetupStaticData";
 import { employeeEmploymentDetailsValidation } from "~community/people/utils/peopleValidations";
@@ -60,11 +70,22 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       "addResource",
       "employmentDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "employmentDetails"
+    );
 
+    const [secondarySupervisorFilterEl, setSecondarySupervisorFilterEl] =
+      useState<null | HTMLElement>(null);
+
+    const [selectedOtherSupervisors, setSelectedOtherSupervisors] = useState<
+      L4ManagerType[]
+    >([]);
     const router = useRouter();
     const { id } = router.query;
 
-    const { isPeopleManager } = useSessionData();
+    const { isPeopleManager, isProTier } = useSessionData();
 
     const { employee, setTeamModalType, setIsTeamModalOpen } = usePeopleStore(
       (state) => state
@@ -120,6 +141,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       secondaryManagerSearchTerm,
       primaryManagerSuggestions,
       secondaryManagerSuggestions,
+      isSecondaryManagersLoading,
       setIsSecondaryManagerPopperOpen,
       setIsPrimaryManagerPopperOpen,
       setSelectedProbationStartDate,
@@ -139,7 +161,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       handleSecondaryManagerRemove,
       refetch,
       handleBackspacePressPrimary,
-      handleBackspacePressSecondary
+      handleBackspacePressSecondary,
+      setSecondaryManagerSearchTerm
     } = useEmployeeDetailsFormHandler({
       formik,
       id,
@@ -163,6 +186,20 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
         formik.resetForm();
       }
     }));
+
+    const otherSupervisorsCount =
+      employee?.employment?.employmentDetails?.otherSupervisors?.length ?? 0;
+
+    useEffect(() => {
+      if (employee?.employment?.employmentDetails?.otherSupervisors) {
+        setSelectedOtherSupervisors(
+          employee?.employment?.employmentDetails?.otherSupervisors
+        );
+      }
+    }, [
+      employee?.employment?.employmentDetails?.otherSupervisors,
+      setSelectedOtherSupervisors
+    ]);
 
     return (
       <PeopleFormSectionWrapper
@@ -251,6 +288,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 readOnly={isReadOnly || isProfileView}
                 isDisabled={isInputsDisabled}
                 checkSelected
+                ariaLabel={translateAria(["selectEmploymentAllocation"])}
               />
             </Grid>
 
@@ -327,6 +365,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                   itemList={projectTeamList}
                   isDisabled={isReadOnly || isProfileView || isInputsDisabled}
                   addNewClickBtnText={translateText(["addNewTeam"])}
+                  ariaLabel={translateAria(["selectMultipleTeams"])}
                 />
               )}
             </Grid>
@@ -370,45 +409,70 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
               size={{ xs: 12, md: 6, xl: 4 }}
               sx={{ display: isEmployee ? "none" : "block" }}
             >
-              <AvatarSearch
-                id="secondary-manager-search"
-                title={translateText(["secondarySupervisor"])}
-                newResourceManager={
-                  employee?.employment?.employmentDetails?.secondarySupervisor
-                }
-                isManagerPopperOpen={isSecondaryManagerPopperOpen}
-                managerSuggestions={secondaryManagerSuggestions}
-                managerSearchTerm={secondaryManagerSearchTerm}
-                handleManagerRemove={handleSecondaryManagerRemove}
-                handleManagerSelect={handleSecondaryManagerSelect}
-                setIsManagerPopperOpen={setIsSecondaryManagerPopperOpen}
-                onManagerSearchChange={onSecondaryManagerSearchChange}
-                errors={errors?.secondarySupervisor ?? ""}
-                inputName={"secondarySupervisor"}
-                isDisabled={
-                  isReadOnly ||
-                  isProfileView ||
-                  Number(
-                    employee?.employment?.employmentDetails?.primarySupervisor
-                      ?.employeeId ?? 0
-                  ) <= 0 ||
-                  isInputsDisabled
-                }
-                isDisabledLabel={
-                  Number(
-                    employee?.employment?.employmentDetails?.primarySupervisor
-                      ?.employeeId ?? 0
-                  ) <= 0 || isInputsDisabled
-                }
-                placeholder={
-                  !isReadOnly && !isProfileView
-                    ? translateText(["selectSecondarySupervisor"])
-                    : ""
-                }
-                needSearchIcon={!isReadOnly && !isProfileView}
-                noSearchResultTexts={translateText(["noSearchResults"])}
-                onKeyDown={handleBackspacePressSecondary}
-              />
+              {!isProTier ? (
+                <AvatarSearch
+                  id="secondary-manager-search"
+                  title={translateText(["secondarySupervisor"])}
+                  newResourceManager={
+                    employee?.employment?.employmentDetails
+                      ?.otherSupervisors?.[0]
+                  }
+                  isManagerPopperOpen={isSecondaryManagerPopperOpen}
+                  managerSuggestions={secondaryManagerSuggestions}
+                  managerSearchTerm={secondaryManagerSearchTerm}
+                  handleManagerRemove={handleSecondaryManagerRemove}
+                  handleManagerSelect={handleSecondaryManagerSelect}
+                  setIsManagerPopperOpen={setIsSecondaryManagerPopperOpen}
+                  onManagerSearchChange={onSecondaryManagerSearchChange}
+                  errors={errors?.otherSupervisors ?? ""}
+                  inputName={"secondarySupervisor"}
+                  isDisabled={
+                    isReadOnly ||
+                    isProfileView ||
+                    Number(
+                      employee?.employment?.employmentDetails?.primarySupervisor
+                        ?.employeeId ?? 0
+                    ) <= 0 ||
+                    isInputsDisabled
+                  }
+                  isDisabledLabel={
+                    Number(
+                      employee?.employment?.employmentDetails?.primarySupervisor
+                        ?.employeeId ?? 0
+                    ) <= 0 || isInputsDisabled
+                  }
+                  placeholder={
+                    !isReadOnly && !isProfileView
+                      ? translateText(["selectSecondarySupervisor"])
+                      : ""
+                  }
+                  needSearchIcon={!isReadOnly && !isProfileView}
+                  noSearchResultTexts={translateText(["noSearchResults"])}
+                  onKeyDown={handleBackspacePressSecondary}
+                />
+              ) : (
+                <SupervisorSelector
+                  employee={employee}
+                  otherSupervisorsCount={otherSupervisorsCount}
+                  managerSuggestions={secondaryManagerSuggestions}
+                  managerSearchTerm={secondaryManagerSearchTerm}
+                  setManagerSearchTerm={setSecondaryManagerSearchTerm}
+                  onmanagerSearchChange={onSecondaryManagerSearchChange}
+                  selectedManagers={selectedOtherSupervisors}
+                  setSelectedManagers={setSelectedOtherSupervisors}
+                  isInputsDisabled={
+                    isInputsDisabled ||
+                    !employee?.employment?.employmentDetails?.primarySupervisor
+                      ?.employeeId ||
+                    isReadOnly ||
+                    isProfileView
+                  }
+                  label={translateText(["otherSupervisors"])}
+                  filterEl={secondarySupervisorFilterEl}
+                  setFilterEl={setSecondarySupervisorFilterEl}
+                  isSearchResultsLoading={isSecondaryManagersLoading}
+                />
+              )}
             </Grid>
             {isPeopleManager && (
               <Grid size={{ xs: 12, md: 6, xl: 4 }}>

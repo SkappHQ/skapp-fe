@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
-import ProtectedContent from "~community/common/components/organisms/ProtectedContent/ProtectedContent";
-import UnProtectedContent from "~community/common/components/organisms/UnProtectedContent/UnProtectedContent";
+import ContentWithDrawer from "~community/common/components/organisms/ContentWithDrawer/ContentWithDrawer";
+import ContentWithoutDrawer from "~community/common/components/organisms/ContentWithoutDrawer/ContentWithoutDrawer";
 import { appModes } from "~community/common/constants/configs";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { IsAProtectedUrlWithDrawer } from "~community/common/utils/authUtils";
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const BaseLayout = ({ children }: Props) => {
-  const { asPath, query } = useRouter();
+  const { asPath } = useRouter();
 
   const { sessionStatus } = useSessionData();
 
@@ -72,16 +72,17 @@ const BaseLayout = ({ children }: Props) => {
         }
 
         if (isProtectedRouteWithDrawer) {
-          return <ProtectedContent>{children}</ProtectedContent>;
+          return <ContentWithDrawer>{children}</ContentWithDrawer>;
         }
 
-        return <UnProtectedContent>{children}</UnProtectedContent>;
+        return <ContentWithoutDrawer>{children}</ContentWithoutDrawer>;
       }
       case "unauthenticated":
-        return <UnProtectedContent>{children}</UnProtectedContent>;
+        return <ContentWithoutDrawer>{children}</ContentWithoutDrawer>;
       default:
         return <></>;
     }
+    // NOTE: Do not change these dependencies, or this will break
   }, [
     sessionStatus,
     children,

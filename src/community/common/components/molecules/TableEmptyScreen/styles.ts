@@ -20,9 +20,9 @@ const styles = (theme: Theme): StyleProps => ({
     fontWeight: 700
   },
   description: {
-    color: theme.palette.grey[700]
+    color: theme.palette.common.black
   },
-  buttonStyles: {
+  button: {
     marginBottom: "1rem"
   }
 });

@@ -26,7 +26,12 @@ import React, {
 import AnalyticsTeamIcon from "~community/common/assets/Icons/AnalyticsTeamIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import SearchIcon from "~community/common/assets/Icons/SearchIcon";
+import Button from "~community/common/components/atoms/Button/Button";
+import Avatar from "~community/common/components/molecules/Avatar/Avatar";
+import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
+import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   EmployeeSearchResultType,
   EmployeeTeamSearchResultType,
@@ -39,11 +44,6 @@ import {
   EmployeeDetails,
   EmployeeSuggestions
 } from "~community/people/types/EmployeeTypes";
-
-import Button from "../../atoms/Button/Button";
-import Avatar from "../Avatar/Avatar";
-import AvatarChip from "../AvatarChip/AvatarChip";
-import Popper from "../Popper/Popper";
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -96,6 +96,7 @@ interface Props {
   required?: boolean;
   needSearchIcon?: boolean;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  ariaLabel?: string;
 }
 
 const Search: FC<Props> = ({
@@ -137,8 +138,10 @@ const Search: FC<Props> = ({
   onSelectTabValue,
   required = false,
   needSearchIcon = true,
-  onKeyDown
+  onKeyDown,
+  ariaLabel
 }) => {
+  const translateAria = useTranslator("commonAria", "components", "search");
   const theme: Theme = useTheme();
   const ref = useRef<HTMLHeadingElement | null>(null);
   const [tabValue, setTabValue] = useState(0);
@@ -290,6 +293,9 @@ const Search: FC<Props> = ({
               onFocus={onFocus}
               name={inputName}
               onKeyDown={onKeyDown}
+              inputProps={{
+                "aria-label": ariaLabel ?? translateAria(["label"])
+              }}
             />
             {needSearchIcon && <SearchIcon />}
           </Paper>
@@ -457,7 +463,6 @@ const Search: FC<Props> = ({
                           <Avatar
                             firstName={user?.firstName}
                             lastName={user?.lastName}
-                            alt={`${user?.firstName} ${user?.lastName}`}
                             sx={{ marginRight: "1.25rem" }}
                             src={user?.authPic}
                           />

@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 import TimeWidgetPopupController from "~community/attendance/components/organisms/TimeWidgetPopupController/TimeWidgetPopupController";
@@ -9,6 +10,7 @@ import {
   initialState,
   useToast
 } from "~community/common/providers/ToastProvider";
+import { handleMainContentFocus } from "~community/common/utils/keyboardUtils";
 import MyRequestModalController from "~community/leave/components/organisms/MyRequestModalController/MyRequestModalController";
 import QuickSetupModalController from "~enterprise/common/components/organisms/QuickSetupModalController/QuickSetupModalController";
 
@@ -18,18 +20,24 @@ interface Props {
   children: ReactNode;
 }
 
-const ProtectedContent = ({ children }: Props) => {
+const ContentWithDrawer = ({ children }: Props) => {
   const classes = styles();
 
   const { toastMessage, setToastMessage } = useToast();
 
   return (
     <>
+      <Link
+        href="#content-with-drawer-main-content"
+        onClick={(e) =>
+          handleMainContentFocus(e, "content-with-drawer-main-content")
+        }
+      />
       <Stack sx={classes.protectedWrapper}>
         <Drawer />
         <Stack sx={classes.contentWrapper}>
           <AppBar />
-          {children}
+          <main id="content-with-drawer-main-content">{children}</main>
         </Stack>
       </Stack>
       <ToastMessage
@@ -50,4 +58,4 @@ const ProtectedContent = ({ children }: Props) => {
   );
 };
 
-export default ProtectedContent;
+export default ContentWithDrawer;

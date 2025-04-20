@@ -226,10 +226,11 @@ const SystemPermissionFormSection = ({
     >
       <>
         <SwitchRow
+          labelId="super-admin"
           label={translateText(["superAdmin"])}
           disabled={isProfileView || isInputsDisabled || isReadOnly}
           checked={permissions.isSuperAdmin as boolean}
-          onChange={handleSuperAdminToggle}
+          onChange={(checked: boolean) => handleSuperAdminToggle(checked)}
           wrapperStyles={classes.switchRowWrapper}
           icon={!isInputsDisabled ? IconName.SUPER_ADMIN_ICON : undefined}
         />

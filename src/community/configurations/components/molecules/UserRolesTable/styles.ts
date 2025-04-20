@@ -15,10 +15,7 @@ const styles = (theme: Theme) => ({
     marginRight: index !== lastItemIndex ? "0.625rem" : 0,
     border: `1px solid ${theme.palette.grey[500]}`,
     backgroundColor: theme.palette.grey[50]
-  }),
-  tableRowStyles: {
-    cursor: "pointer"
-  }
+  })
 });
 
 export default styles;

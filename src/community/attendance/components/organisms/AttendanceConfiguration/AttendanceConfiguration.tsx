@@ -1,6 +1,6 @@
 import { Close } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
-import { ChangeEvent, JSX, useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import {
   useGetAttendanceConfiguration,
@@ -61,10 +61,10 @@ const AttendanceConfiguration = (): JSX.Element => {
 
   const handleSwitchChange = (
     key: keyof AttendanceConfigurationType,
-    event: ChangeEvent<HTMLInputElement>
+    checked: boolean
   ) => {
     setConfig((prevConfig) =>
-      prevConfig ? { ...prevConfig, [key]: event.target.checked } : prevConfig
+      prevConfig ? { ...prevConfig, [key]: checked } : prevConfig
     );
   };
 
@@ -99,6 +99,7 @@ const AttendanceConfiguration = (): JSX.Element => {
                 label={
                   attendanceConfigurations(["isClockInOnNonWorkingDays"]) ?? ""
                 }
+                labelId="clock-in-on-non-working-days"
                 wrapperStyles={classes.switchWrapper}
                 checked={config.isClockInOnNonWorkingDays}
                 onChange={(checked) =>
@@ -106,6 +107,7 @@ const AttendanceConfiguration = (): JSX.Element => {
                 }
               />
               <SwitchRow
+                labelId="clock-in-on-holidays"
                 label={attendanceConfigurations(["clockInOnHolidays"]) ?? ""}
                 checked={config.isClockInOnCompanyHolidays}
                 wrapperStyles={classes.switchWrapper}
@@ -114,6 +116,7 @@ const AttendanceConfiguration = (): JSX.Element => {
                 }
               />
               <SwitchRow
+                labelId="clock-in-on-leave-days"
                 label={attendanceConfigurations(["clockInOnLeaveDays"]) ?? ""}
                 checked={config.isClockInOnLeaveDays}
                 wrapperStyles={classes.switchWrapper}
@@ -135,6 +138,7 @@ const AttendanceConfiguration = (): JSX.Element => {
         <Box sx={classes.container}>
           {config && (
             <SwitchRow
+              labelId="auto-approval-for-changes"
               label={
                 attendanceConfigurations(["isAutoApprovalForChanges"]) ?? ""
               }

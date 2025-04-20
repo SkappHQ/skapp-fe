@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Grid2 as Grid,
-  Stack,
-  type Theme,
-  useTheme
-} from "@mui/material";
+import { Box, Grid2 as Grid, Stack, type Theme, useTheme } from "@mui/material";
 import { useFormik } from "formik";
 import { DateTime } from "luxon";
 import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react";
@@ -15,6 +8,7 @@ import { useStorageAvailability } from "~community/common/api/StorageAvailabilit
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
 import Icon from "~community/common/components/atoms/Icon/Icon";
+import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import DropdownAutocomplete from "~community/common/components/molecules/DropdownAutocomplete/DropdownAutocomplete";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
@@ -67,6 +61,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
     const theme: Theme = useTheme();
     const translateText = useTranslator(
       "peopleModule",
+      "addResource",
+      "generalDetails"
+    );
+    const translateAria = useTranslator(
+      "peopleAria",
       "addResource",
       "generalDetails"
     );
@@ -234,6 +233,8 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                     height: "6.125rem",
                     backgroundColor: theme.palette.grey[200]
                   }}
+                  firstName={values.firstName || ""}
+                  lastName={values.lastName || ""}
                 >
                   <Icon name={IconName.USER_UPLOAD_ICON} />
                 </Avatar>
@@ -363,6 +364,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 checkSelected
                 readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectGender"])}
               />
             </Grid>
 
@@ -487,6 +489,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={MaritalStatusList}
                 checkSelected
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectMaritalStatus"])}
               />
             </Grid>
             <Grid

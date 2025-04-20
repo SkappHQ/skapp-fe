@@ -34,9 +34,11 @@ const LeaveType: NextPage = () => {
     setPendingNavigation: state.setPendingNavigation
   }));
 
-  const { stopAllOngoingQuickSetup } = useCommonEnterpriseStore((state) => ({
-    stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
-  }));
+  const { ongoingQuickSetup, stopAllOngoingQuickSetup } =
+    useCommonEnterpriseStore((state) => ({
+      ongoingQuickSetup: state.ongoingQuickSetup,
+      stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
+    }));
 
   useRouteChangeHandler({
     preventNavigation: () => isLeaveTypeFormDirty && !isLeaveTypeModalOpen,
@@ -50,7 +52,9 @@ const LeaveType: NextPage = () => {
   });
 
   const handleBackBtnClick = () => {
-    stopAllOngoingQuickSetup();
+    if (ongoingQuickSetup.SETUP_LEAVE_TYPES) {
+      stopAllOngoingQuickSetup();
+    }
     router.push(ROUTES.LEAVE.LEAVE_TYPES);
   };
 
@@ -68,7 +72,9 @@ const LeaveType: NextPage = () => {
       customRightContent={
         slug === LeaveTypeFormTypes.EDIT ? (
           <LeaveTypeActivationToggleButton />
-        ) : undefined
+        ) : (
+          <></>
+        )
       }
     >
       <>

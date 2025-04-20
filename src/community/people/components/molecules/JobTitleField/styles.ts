@@ -1,6 +1,8 @@
+import { Theme } from "@mui/material";
+
 import { StyleProps } from "~community/common/types/CommonTypes";
 
-const styles = (): StyleProps => ({
+const styles = (theme: Theme): StyleProps => ({
   fieldWrapper: {
     flexDirection: "row",
     gap: "0.75rem",
@@ -8,7 +10,12 @@ const styles = (): StyleProps => ({
   },
   jobTitleInputField: { mt: "1rem", width: "100%" },
   inputFieldComponent: {
-    mt: "0rem"
+    mt: "0rem",
+    "&& .MuiInputBase-input": {
+      "&.Mui-disabled": {
+        WebkitTextFillColor: theme.palette.text.secondary
+      }
+    }
   },
   addIconBtn: {
     width: "3rem",

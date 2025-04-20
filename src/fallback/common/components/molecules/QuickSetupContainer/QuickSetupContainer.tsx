@@ -1,3 +1,5 @@
-export const QuickSetupContainer = () => {
+const QuickSetupContainer = () => {
   return <></>;
 };
+
+export default QuickSetupContainer;

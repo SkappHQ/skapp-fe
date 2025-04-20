@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useSession } from "next-auth/react";
-import { ChangeEvent, JSX } from "react";
+import { JSX } from "react";
 
 import {
   useGetNotificationSettings,
@@ -35,13 +35,10 @@ const NotificationSettings = (): JSX.Element => {
     });
   });
 
-  const handleSwitchChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    type: string
-  ) => {
+  const handleSwitchChange = (checked: boolean, type: string) => {
     if (!settings) return;
 
-    const updatedSettings = { ...settings, [type]: event.target.checked };
+    const updatedSettings = { ...settings, [type]: checked };
     updateMutation.mutate(updatedSettings);
   };
 
@@ -89,10 +86,13 @@ const NotificationSettings = (): JSX.Element => {
               }
               return (
                 <SwitchRow
+                  labelId={translateText([key])}
                   key={key}
                   label={translateText([key])}
                   checked={settings[key]}
-                  onChange={(event) => handleSwitchChange(event, key)}
+                  onChange={(checked: boolean) =>
+                    handleSwitchChange(checked, key)
+                  }
                 />
               );
             })}

@@ -3,6 +3,8 @@ import { useTheme } from "@mui/material/styles";
 import { type SxProps } from "@mui/system";
 import { FC } from "react";
 
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
+
 interface Props {
   activeStep: number | string;
   steps: string[];
@@ -65,6 +67,12 @@ const BoxStepper: FC<Props> = ({
                   : theme.palette.grey[200]
             },
             ...boxStyles
+          }}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (shouldActivateButton(e.key)) {
+              onStepClick(useStringIdentifier ? step : index);
+            }
           }}
         >
           <Typography

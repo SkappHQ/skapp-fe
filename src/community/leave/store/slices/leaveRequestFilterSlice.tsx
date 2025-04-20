@@ -12,7 +12,7 @@ const leaveRequestFilterSlice = (
   },
   leaveRequestFilterOrder: [LeaveStatusTypes.PENDING],
   leaveRequestParams: {
-    status: "",
+    status: LeaveStatusTypes.PENDING,
     leaveType: "",
     startDate: "",
     endDate: "",

@@ -42,9 +42,10 @@ interface Props {
 
 const JobTitleField = ({ formik }: Props): JSX.Element => {
   const translateText = useTranslator("peopleModule", "jobFamily");
+  const ariaTranslateText = useTranslator("peopleAria", "jobFamily");
 
   const theme: Theme = useTheme();
-  const classes = styles();
+  const classes = styles(theme);
 
   const { isPeopleAdmin } = useSessionData();
 
@@ -115,11 +116,12 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                 );
               }
             }}
+            ariaLabel={ariaTranslateText(["addJobTitleButton"])}
           />
         </Stack>
       )}
       {values.jobTitles && (
-        <Box sx={classes.scrollContainer}>
+        <Box sx={classes.scrollContainer} tabIndex={0}>
           <Box sx={classes.valueContainer}>
             {values.jobTitles?.map((jobTitle: JobTitleType, index: number) => {
               const isOldValue = jobTitle.jobTitleId !== null;
@@ -129,107 +131,112 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
               const error = getJobTitleNameError(errors, index);
 
               return (
-                <InputField
-                  focusOnText
-                  isDisabled={!isEditing}
-                  key={index}
-                  id={`job-title.[${index}].name`}
-                  inputName={`jobTitles.${index}.name`}
-                  value={jobTitle.name}
-                  error={error}
-                  onChange={(event) =>
-                    handleJobTitleNameChange(
-                      event,
-                      index,
-                      setFieldValue,
-                      setFieldError
-                    )
-                  }
-                  inputStyle={classes.inputFieldComponent}
-                  maxLength={characterLengths.JOB_TITLE_LENGTH}
-                  onMouseEnter={() => setHoveredInputField(index)}
-                  onMouseLeave={() => setHoveredInputField(null)}
-                  endAdornment={
-                    isPeopleAdmin ? (
-                      <InputAdornment
-                        position="end"
-                        sx={classes.inputAdornment}
-                      >
-                        {isOldValue && isHovered && !isEditing && (
-                          <Icon
-                            name={IconName.EDIT_ICON}
-                            id={`${index}-edit-btn`}
-                            fill={theme.palette.grey[700]}
-                            onClick={() =>
-                              handleEditIconBtnClick(
-                                jobTitle,
-                                setEditingInputField,
-                                hoveredInputField,
-                                setPreviousJobTitleData
-                              )
-                            }
-                          />
-                        )}
-                        {isHovered && !isEditing && (
-                          <Icon
-                            name={IconName.BIN_ICON}
-                            id={`${index}-bin-btn`}
-                            fill={theme.palette.grey[700]}
-                            onClick={() =>
-                              handleBinIconBtnClick(
-                                jobTitle,
-                                setPreviousJobTitleData,
-                                setFieldValue,
-                                values,
-                                allJobFamilies,
-                                setJobFamilyModalType
-                              )
-                            }
-                          />
-                        )}
-                        {isOldValue && isEditing && (
-                          <>
+                <Box key={index} tabIndex={0}>
+                  <InputField
+                    focusOnText
+                    isDisabled={!isEditing}
+                    key={index}
+                    id={`job-title.[${index}].name`}
+                    inputName={`jobTitles.${index}.name`}
+                    value={jobTitle.name}
+                    error={error}
+                    onChange={(event) =>
+                      handleJobTitleNameChange(
+                        event,
+                        index,
+                        setFieldValue,
+                        setFieldError
+                      )
+                    }
+                    inputStyle={classes.inputFieldComponent}
+                    maxLength={characterLengths.JOB_TITLE_LENGTH}
+                    onMouseEnter={() => setHoveredInputField(index)}
+                    onMouseLeave={() => setHoveredInputField(null)}
+                    ariaLabel={ariaTranslateText(["jobTitleField"], {
+                      jobTitleName: jobTitle?.name?.toLowerCase() ?? ""
+                    })}
+                    endAdornment={
+                      isPeopleAdmin ? (
+                        <InputAdornment
+                          position="end"
+                          sx={classes.inputAdornment}
+                        >
+                          {isOldValue && isHovered && !isEditing && (
                             <Icon
-                              name={IconName.TICK_ICON}
-                              id={`${index}-check-btn`}
-                              height="1.25rem"
-                              width="1.25rem"
+                              name={IconName.EDIT_ICON}
+                              id={`${index}-edit-btn`}
                               fill={theme.palette.grey[700]}
                               onClick={() =>
-                                !error &&
-                                handleTickIconBtnClick(
-                                  index,
-                                  values,
-                                  previousJobTitleData,
-                                  allJobFamilies,
-                                  setFieldValue,
-                                  setJobFamilyModalType,
-                                  setEditingInputField
+                                handleEditIconBtnClick(
+                                  jobTitle,
+                                  setEditingInputField,
+                                  hoveredInputField,
+                                  setPreviousJobTitleData
                                 )
                               }
                             />
+                          )}
+                          {isHovered && !isEditing && (
                             <Icon
-                              name={IconName.ROUNDED_CLOSE_ICON}
-                              id={`${index}-close-btn`}
-                              height="1.25rem"
-                              width="1.25rem"
+                              name={IconName.BIN_ICON}
+                              id={`${index}-bin-btn`}
                               fill={theme.palette.grey[700]}
                               onClick={() =>
-                                handleCloseIconBtnClick(
-                                  index,
-                                  previousJobTitleData,
-                                  setFieldValue,
+                                handleBinIconBtnClick(
+                                  jobTitle,
                                   setPreviousJobTitleData,
-                                  setEditingInputField
+                                  setFieldValue,
+                                  values,
+                                  allJobFamilies,
+                                  setJobFamilyModalType
                                 )
                               }
                             />
-                          </>
-                        )}
-                      </InputAdornment>
-                    ) : null
-                  }
-                />
+                          )}
+                          {isOldValue && isEditing && (
+                            <>
+                              <Icon
+                                name={IconName.TICK_ICON}
+                                id={`${index}-check-btn`}
+                                height="1.25rem"
+                                width="1.25rem"
+                                fill={theme.palette.grey[700]}
+                                onClick={() =>
+                                  !error &&
+                                  handleTickIconBtnClick(
+                                    index,
+                                    values,
+                                    previousJobTitleData,
+                                    allJobFamilies,
+                                    setFieldValue,
+                                    setJobFamilyModalType,
+                                    setEditingInputField
+                                  )
+                                }
+                              />
+                              <Icon
+                                name={IconName.ROUNDED_CLOSE_ICON}
+                                id={`${index}-close-btn`}
+                                height="1.25rem"
+                                width="1.25rem"
+                                fill={theme.palette.grey[700]}
+                                onClick={() =>
+                                  handleCloseIconBtnClick(
+                                    index,
+                                    previousJobTitleData,
+                                    setFieldValue,
+                                    setPreviousJobTitleData,
+                                    setEditingInputField
+                                  )
+                                }
+                              />
+                            </>
+                          )}
+                        </InputAdornment>
+                      ) : null
+                    }
+                  />
+                </Box>
               );
             })}
           </Box>

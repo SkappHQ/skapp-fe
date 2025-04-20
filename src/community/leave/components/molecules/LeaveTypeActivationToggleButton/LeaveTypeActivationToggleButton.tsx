@@ -19,6 +19,7 @@ const LeaveTypeActivationToggleButton = () => {
   return (
     <Stack sx={classes.wrapper}>
       <SwitchRow
+        labelId="activate"
         label={translateText(["activate"])}
         checked={editingLeaveType?.isActive ?? true}
         onChange={() => {

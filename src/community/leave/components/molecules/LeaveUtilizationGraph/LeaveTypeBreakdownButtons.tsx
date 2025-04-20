@@ -126,7 +126,10 @@ const LeaveTypeBreakdownButtons = ({
                     border:
                       count > maxLeaveTypeToShow
                         ? `1px solid ${theme.palette.secondary.dark}`
-                        : null
+                        : null,
+                    "&:focus": {
+                      border: `2px solid ${theme.palette.secondary.dark}`
+                    }
                   }}
                   isTextPermenent={count > maxLeaveTypeToShow}
                   onClick={(e: MouseEvent<HTMLElement>) => handleClick(e)}

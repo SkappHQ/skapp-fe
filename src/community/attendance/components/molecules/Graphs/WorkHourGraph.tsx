@@ -40,6 +40,8 @@ const WorkHourGraph = ({
   setMonth
 }: Props): JSX.Element => {
   const translations = useTranslator("attendanceModule", "dashboards");
+  const translateAria = useTranslator("leaveAria", "analytics");
+
   const { preProcessedData: datasets = [], labels = [] } = !isLoading
     ? data
     : {};
@@ -139,11 +141,15 @@ const WorkHourGraph = ({
         <Stack direction="row" gap="0.25rem">
           {month > FIRST_MONTH && (
             <FilledArrow
-              enableKeyboardNavigation={false}
               onClick={() => handleArrowClick(GRAPH_LEFT)}
               isRightArrow={false}
               backgroundColor="grey.100"
               disabled={month === FIRST_MONTH}
+              ariaLabel={translateAria([
+                "workHourGraph",
+                "monthNavigator",
+                "previousMonth"
+              ])}
             />
           )}
           <BasicChip
@@ -154,10 +160,14 @@ const WorkHourGraph = ({
           {month < LAST_MONTH && (
             <FilledArrow
               onClick={() => handleArrowClick(GRAPH_RIGHT)}
-              enableKeyboardNavigation={false}
               isRightArrow
               backgroundColor="grey.100"
               disabled={month === LAST_MONTH}
+              ariaLabel={translateAria([
+                "workHourGraph",
+                "monthNavigator",
+                "nextMonth"
+              ])}
             />
           )}
         </Stack>
