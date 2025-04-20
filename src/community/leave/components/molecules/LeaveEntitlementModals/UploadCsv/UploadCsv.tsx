@@ -99,8 +99,10 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
     setErrorLog(null);
   };
 
-  const { mutate: leaveEntitlementBulkUploadMutate } =
-    useLeaveEntitlementBulkUpload(onSuccess, onError);
+  const {
+    mutate: leaveEntitlementBulkUploadMutate,
+    isPending: leaveEntitlementBulkUploadPending
+  } = useLeaveEntitlementBulkUpload(onSuccess, onError);
 
   const handleUploadBtnClick = () => {
     leaveEntitlementBulkUploadMutate({
@@ -148,6 +150,7 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
         styles={classes.uploadButton}
         onClick={handleUploadBtnClick}
         disabled={!isValid}
+        isLoading={leaveEntitlementBulkUploadPending}
       />
       <Button
         label={translateText(["goBackButton"])}
