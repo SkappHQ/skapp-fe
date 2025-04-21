@@ -79,33 +79,36 @@ const TableHead: FC<
           tableName: tableName
         })}
       >
-        {rows?.length > 0 && checkboxSelection?.isEnabled && (
-          <TableCell
-            sx={mergeSx([
-              classes.checkboxSelection.cell,
-              classes.tableHead.checkboxSelection.cell,
-              customStyles?.cell
-            ])}
-          >
-            <Checkbox
-              color="primary"
-              disabled={!checkboxSelection?.isSelectAllEnabled}
-              checked={checkboxSelection?.isSelectAllChecked}
-              onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+        {rows?.length > 0 &&
+          checkboxSelection?.isSelectAllVisible &&
+          checkboxSelection?.isEnabled && (
+            <TableCell
               sx={mergeSx([
-                classes.checkboxSelection.checkbox,
-                checkboxSelection?.customStyles?.checkbox
+                classes.checkboxSelection.cell,
+                classes.tableHead.checkboxSelection.cell,
+                customStyles?.cell
               ])}
-              slotProps={{
-                input: {
-                  "aria-label": translateText(["checkbox"], {
-                    tableName: tableName
-                  })
-                }
-              }}
-            />
-          </TableCell>
-        )}
+            >
+              {checkboxSelection?.isSelectAllEnabled && (
+                <Checkbox
+                  color="primary"
+                  checked={checkboxSelection?.isSelectAllChecked}
+                  onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+                  sx={mergeSx([
+                    classes.checkboxSelection.checkbox,
+                    checkboxSelection?.customStyles?.checkbox
+                  ])}
+                  slotProps={{
+                    input: {
+                      "aria-label": translateText(["checkbox"], {
+                        tableName: tableName
+                      })
+                    }
+                  }}
+                />
+              )}
+            </TableCell>
+          )}
 
         {headers?.map((header) => (
           <TableCell
