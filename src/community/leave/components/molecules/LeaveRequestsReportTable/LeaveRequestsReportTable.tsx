@@ -17,6 +17,7 @@ import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
 import FilterButton from "~community/common/components/molecules/FilterButton/FilterButton";
 import Table from "~community/common/components/molecules/Table/Table";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveRequestStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -29,7 +30,6 @@ import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { SheetType } from "~community/leave/enums/LeaveReportEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { downloadDataAsCSV } from "~community/leave/utils/leaveReport/exportReportUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 const LeaveRequestsReportTable: FC = () => {
   const translateText = useTranslator("leaveModule", "leaveReports");

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
@@ -13,7 +14,6 @@ import { LeaveTypeFormTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import { getLeaveTypeDurationTableContent } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 

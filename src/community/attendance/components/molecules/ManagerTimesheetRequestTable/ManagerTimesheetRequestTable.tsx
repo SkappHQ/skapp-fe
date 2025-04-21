@@ -26,12 +26,12 @@ import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMen
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
 import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
 import { formatDateWithOrdinalIndicator } from "~community/common/utils/dateTimeUtils";
 import { concatStrings } from "~community/people/utils/jobFamilyUtils/commonUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import TimesheetRequestsFilters from "../TimesheetRequestsFilters/TimesheetRequestsFilters";
 import styles from "./styles";

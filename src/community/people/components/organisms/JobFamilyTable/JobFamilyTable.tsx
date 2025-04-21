@@ -6,6 +6,7 @@ import AvatarChip from "~community/common/components/molecules/AvatarChip/Avatar
 import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import Table from "~community/common/components/molecules/Table/Table";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { JobFamilyActionModalEnums } from "~community/people/enums/JobFamilyEnums";
@@ -18,7 +19,6 @@ import {
   handleJobFamilyDeleteBtnClick,
   handleJobFamilyEditBtnClick
 } from "~community/people/utils/jobFamilyUtils/jobFamilyTableUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
