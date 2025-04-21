@@ -47,3 +47,9 @@ export enum AppVersionNotificationType {
   CRITICAL = "critical",
   INFO = "info"
 }
+
+export enum AuthRedirectionEnums {
+  GOOGLE_SIGNIN = "google-signin",
+  GOOGLE_SIGNUP = "google-signup",
+  SIGNIN_AFTER_ORG_SETUP = "signin-after-org-setup"
+}
