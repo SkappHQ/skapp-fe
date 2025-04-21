@@ -36,22 +36,26 @@ const generateThumbnail = (
 
       ctx?.drawImage(img, 0, 0, width, height);
 
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const thumbnailFile = new File([blob], file.name, {
-            type: file.type
-          });
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const thumbnailFile = new File([blob], file.name, {
+              type: file.type
+            });
 
-          const thumbnailWithPreview = Object.assign(thumbnailFile, {
-            preview: URL.createObjectURL(thumbnailFile),
-            path: file.path
-          });
+            const thumbnailWithPreview = Object.assign(thumbnailFile, {
+              preview: URL.createObjectURL(thumbnailFile),
+              path: file.path
+            });
 
-          resolve([thumbnailWithPreview]);
-        } else {
-          reject(new Error("Failed to create thumbnail blob."));
-        }
-      }, file.type);
+            resolve([thumbnailWithPreview]);
+          } else {
+            reject(new Error("Failed to create thumbnail blob."));
+          }
+        },
+        file.type,
+        0.5
+      );
     };
     img.onerror = reject;
   });
