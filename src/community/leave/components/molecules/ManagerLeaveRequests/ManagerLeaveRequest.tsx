@@ -5,6 +5,7 @@ import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/Icon
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
 import Table from "~community/common/components/molecules/Table/Table";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { FilterButtonTypes } from "~community/common/types/CommonTypes";
 import {
@@ -29,7 +30,6 @@ import {
   requestTypeSelector,
   requestedLeaveTypesPreProcessor
 } from "~community/leave/utils/LeaveRequestFilterActions";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 interface Props {
   employeeLeaveRequests: LeaveRequestItemsType[];

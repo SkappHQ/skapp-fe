@@ -9,6 +9,7 @@ import AvatarChip from "~community/common/components/molecules/AvatarChip/Avatar
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
 import FilterButton from "~community/common/components/molecules/FilterButton/FilterButton";
 import Table from "~community/common/components/molecules/Table/Table";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import {
@@ -24,7 +25,6 @@ import {
   CustomLeaveAllocationType,
   LeaveAllocation
 } from "~community/leave/types/CustomLeaveAllocationTypes";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import {
   iconButtonStyles,

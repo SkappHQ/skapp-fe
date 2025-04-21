@@ -10,6 +10,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
@@ -31,7 +32,6 @@ import {
   handleSelectAllCheckboxClick,
   isDeleteButtonDisabled
 } from "~community/people/utils/holidayUtils/holidayTableUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
