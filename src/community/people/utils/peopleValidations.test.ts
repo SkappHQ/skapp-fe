@@ -19,7 +19,7 @@ describe("Emergency Contact Validation", () => {
       const validData = {
         name: "John Doe",
         relationship: "Father",
-        phone: "1234567890"
+        contactNo: "1234567890"
       };
       await expect(schema.validate(validData)).resolves.toBeTruthy();
     });
@@ -28,7 +28,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "123",
         relationship: "Father",
-        phone: "1234567890"
+        contactNo: "1234567890"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
@@ -37,7 +37,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "John Doe",
         relationship: "Father",
-        phone: "123"
+        contactNo: "123"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
@@ -51,18 +51,18 @@ describe("Emergency Contact Validation", () => {
       const validData = {
         name: "John Doe",
         relationship: "Father",
-        phone: "1234567890"
+        contactNo: "1234567890"
       };
       await expect(schema.validate(validData)).resolves.toBeTruthy();
     });
 
     it("should require all fields if name is provided", async () => {
-      const partialData = { name: "John Doe", relationship: "", phone: "" };
+      const partialData = { name: "John Doe", relationship: "", contactNo: "" };
       await expect(schema.validate(partialData)).rejects.toThrow();
     });
 
     it("should require all fields if relationship is provided", async () => {
-      const partialData = { name: "", relationship: "Father", phone: "" };
+      const partialData = { name: "", relationship: "Father", contactNo: "" };
       await expect(schema.validate(partialData)).rejects.toThrow();
     });
 
@@ -70,7 +70,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "John Doe",
         relationship: "Father",
-        phone: "123"
+        contactNo: "123"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
@@ -79,7 +79,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "@1gf02",
         relationship: "Father",
-        phone: "123"
+        contactNo: "123"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });

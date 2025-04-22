@@ -124,7 +124,7 @@ const PrimaryContactDetailsSection = forwardRef<FormMethods, Props>(
                 onChangeCountry={onChangeCountry}
                 onChange={handlePhoneNumber}
                 error={errors.contactNo ?? ""}
-                inputName="phone"
+                inputName="contactNo"
                 fullComponentStyle={{
                   mt: "0rem"
                 }}

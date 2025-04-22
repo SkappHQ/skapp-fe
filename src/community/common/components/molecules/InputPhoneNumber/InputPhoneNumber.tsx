@@ -7,7 +7,7 @@ import "react-phone-input-2/lib/material.css";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { numberPattern } from "~community/common/regex/regexPatterns";
+import { phoneNumberPattern } from "~community/common/regex/regexPatterns";
 import {
   shouldActivateButton,
   shouldCloseDialog,
@@ -191,7 +191,7 @@ const InputPhoneNumber: FC<Props> = ({
           onKeyDown={(e) => {
             // TODO: move this to a separate file and write unit test cases
             if (
-              !numberPattern().test(e.key) &&
+              !phoneNumberPattern().test(e.key) &&
               !["Backspace", "Tab", "ArrowLeft", "ArrowRight"].includes(
                 e.key
               ) &&
@@ -202,7 +202,7 @@ const InputPhoneNumber: FC<Props> = ({
           }}
           onPaste={(e) => {
             // TODO: move this to a separate file and write unit test cases
-            if (!numberPattern().test(e.clipboardData.getData("Text"))) {
+            if (!phoneNumberPattern().test(e.clipboardData.getData("Text"))) {
               e.preventDefault();
             }
           }}
