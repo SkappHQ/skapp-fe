@@ -241,6 +241,10 @@ const nextConfig = {
         destination: "/enterprise/sign/sent"
       },
       {
+        source:"/sign/sent/:id",
+        destination: "/enterprise/sign/sent/:id"
+      },
+      {
         source: "/sign/contacts",
         destination: "/enterprise/sign/contacts"
       },

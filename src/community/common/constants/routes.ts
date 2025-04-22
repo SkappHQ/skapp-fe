@@ -91,6 +91,7 @@ const ROUTES = {
     BASE: "/sign",
     INBOX: "/sign/inbox",
     SENT: "/sign/sent",
+    SENT_DETAIL: (id: number) => `/sign/sent/${id}`,
     FOLDERS: "/sign/folders",
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create",
