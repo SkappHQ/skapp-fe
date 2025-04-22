@@ -24,6 +24,11 @@ const customJestConfig = {
     '!**/coverage/**',      // Exclude coverage directory
     '!**/jest.config.js',   // Exclude configuration files
     '!./pages/**',
+    '!**/types/**',
+    '!**/enums/**',
+    '!**/constants/**',
+    '!**/organisms/**',
+    '!**/assets/**',
   ],
 };
 
