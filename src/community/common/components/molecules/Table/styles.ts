@@ -167,8 +167,30 @@ const styles = (theme: Theme): StylesType => ({
     row: {
       default: {
         background: theme.palette.grey[50],
-        height: "79px",
-        gap: "0.5rem"
+        height: "4.9375rem",
+        gap: "0.5rem",
+        position: "relative",
+        "&:focus-visible": {
+          outline: `0.125rem solid ${theme.palette.common.black}`,
+          outlineOffset: "-0.125rem",
+          zIndex: 1,
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: theme.palette.action.hover,
+            opacity: 0.04,
+            zIndex: -1
+          }
+        },
+        "&:focus": {
+          outline: `0.125rem solid ${theme.palette.common.black}`,
+          outlineOffset: "-0.125rem",
+          zIndex: 1
+        }
       },
       active: {
         transition: "100ms",

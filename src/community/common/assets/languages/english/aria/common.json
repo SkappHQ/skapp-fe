@@ -2,11 +2,16 @@
   "components": {
     "backButton": "Click me to go to previous page",
     "filterBtn": "Click me to open filter menu",
+    "inputDate": {
+      "tooltip": "tooltip"
+    },
     "appBar": {
       "menuIcon": "Expand menu"
     },
     "avatar": {
-      "alt": "Employee avatar"
+      "alt": "Employee avatar",
+      "removeProfilePicture": "Remove profile picture",
+      "uploadProfilePicture": "Upload profile picture"
     },
     "dragAndDrop": {
       "ariaLabel": "Drag and Drop your file here"
@@ -47,6 +52,16 @@
     },
     "itemSelector": {
       "popperLabel": "Item Selector"
+    },
+    "inputPhoneNumber": {
+      "countryCode": "country code",
+      "phoneNumber": "phone number"
+    },
+    "search": {
+      "label": "Enter Search Keyword"
+    },
+    "iconChip": {
+      "label": "icon chip"
     }
   },
   "modals": {
@@ -54,5 +69,8 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password"
     }
+  },
+  "contentLayout": {
+    "backButton": "Back Button"
   }
 }

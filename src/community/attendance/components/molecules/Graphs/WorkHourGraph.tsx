@@ -141,7 +141,6 @@ const WorkHourGraph = ({
         <Stack direction="row" gap="0.25rem">
           {month > FIRST_MONTH && (
             <FilledArrow
-              enableKeyboardNavigation={false}
               onClick={() => handleArrowClick(GRAPH_LEFT)}
               isRightArrow={false}
               backgroundColor="grey.100"
@@ -161,7 +160,6 @@ const WorkHourGraph = ({
           {month < LAST_MONTH && (
             <FilledArrow
               onClick={() => handleArrowClick(GRAPH_RIGHT)}
-              enableKeyboardNavigation={false}
               isRightArrow
               backgroundColor="grey.100"
               disabled={month === LAST_MONTH}
