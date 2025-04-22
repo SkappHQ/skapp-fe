@@ -83,8 +83,8 @@ const EmployeesWidget = ({ team }: Props): JSX.Element => {
               </Typography>
               <ToggleSwitch
                 options={[
-                  employeeStatusTypes.ACTIVE.label,
-                  employeeStatusTypes.PENDING.label
+                  { value: employeeStatusTypes.ACTIVE.label },
+                  { value: employeeStatusTypes.PENDING.label }
                 ]}
                 setCategoryOption={(option: string) => {
                   setDataCategory(
