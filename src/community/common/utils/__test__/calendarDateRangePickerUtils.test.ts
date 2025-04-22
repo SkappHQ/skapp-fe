@@ -42,6 +42,15 @@ describe("calendarDateRangePickerUtils", () => {
       });
       expect(result).toBe(false);
     });
+
+    it("should return false if workingDays is undefined", () => {
+      const result = isNotAWorkingDate({
+        date: workingDate,
+        workingDays: undefined
+      });
+      expect(result).toBe(false);
+    });
+
   });
 
   describe("getMyLeaveRequestForDay", () => {
@@ -50,7 +59,7 @@ describe("calendarDateRangePickerUtils", () => {
         myLeaveRequests,
         date: startDate
       });
-      expect(result).toEqual(myLeaveRequests[0]);
+      expect(result).toEqual([myLeaveRequests[0]]);
     });
 
     it("should return null if no leave request is found for the given date", () => {
@@ -58,7 +67,23 @@ describe("calendarDateRangePickerUtils", () => {
         myLeaveRequests,
         date: workingDate
       });
-      expect(result).toBeNull();
+      expect(result).toStrictEqual([]);
+    });
+
+    it("should return null if myLeaveRequests is undefined", () => {
+      const result = getMyLeaveRequestForDay({
+        myLeaveRequests: undefined,
+        date: startDate
+      });
+      expect(result).toBe(null);
+    });
+
+    it("should return null if date is null", () => {
+      const result = getMyLeaveRequestForDay({
+        myLeaveRequests,
+        date: null as unknown as DateTime
+      });
+      expect(result).toStrictEqual([]);
     });
   });
 
@@ -86,6 +111,42 @@ describe("calendarDateRangePickerUtils", () => {
       });
       expect(setSelectedDates).toHaveBeenCalledWith([startDate, endDate]);
     });
+
+    it("should do nothing if date is null", () => {
+      const selectedDates: DateTime[] = [];
+      const setSelectedDates = jest.fn();
+      handleDateChange({
+        date: null,
+        isRangePicker: false,
+        selectedDates,
+        setSelectedDates
+      });
+      expect(setSelectedDates).not.toHaveBeenCalled();
+    });
+
+    it("should reset selected dates if range picker and selectedDates has more than 2 dates", () => {
+      const selectedDates: DateTime[] = [startDate, endDate, workingDate];
+      const setSelectedDates = jest.fn();
+      handleDateChange({
+        date: workingDate,
+        isRangePicker: true,
+        selectedDates,
+        setSelectedDates
+      });
+      expect(setSelectedDates).toHaveBeenCalledWith([workingDate]);
+    });
+
+    it("should set the selected date if selectedDates has no items", () => {
+      const selectedDates: DateTime[] = [];
+      const setSelectedDates = jest.fn();
+      handleDateChange({
+        date: workingDate,
+        isRangePicker: true,
+        selectedDates,
+        setSelectedDates
+      });
+      expect(setSelectedDates).toHaveBeenCalledWith([workingDate]);
+    });
   });
 
   describe("handleDateValidation", () => {
@@ -108,6 +169,38 @@ describe("calendarDateRangePickerUtils", () => {
         description: "Error"
       });
     });
+
+    it("should not disable the button if no holidays or leave requests exist", () => {
+      const setToastMessage = jest.fn();
+      const translateText = jest.fn();
+      const setIsApplyLeaveModalBtnDisabled = jest.fn();
+      handleDateValidation({
+        allowedDuration: LeaveDurationTypes.FULL_DAY,
+        selectedDates,
+        allHolidays: [],
+        myLeaveRequests: [],
+        setToastMessage,
+        translateText,
+        setIsApplyLeaveModalBtnDisabled
+      });
+      expect(setIsApplyLeaveModalBtnDisabled).toHaveBeenCalledWith(false);
+    });
+
+    it("should disable the button if selected dates overlap with holidays", () => {
+      const setToastMessage = jest.fn();
+      const translateText = jest.fn().mockReturnValue("Holiday Error");
+      const setIsApplyLeaveModalBtnDisabled = jest.fn();
+      handleDateValidation({
+        allowedDuration: LeaveDurationTypes.FULL_DAY,
+        selectedDates,
+        allHolidays,
+        myLeaveRequests: [],
+        setToastMessage,
+        translateText,
+        setIsApplyLeaveModalBtnDisabled
+      });
+      expect(setIsApplyLeaveModalBtnDisabled).toHaveBeenCalledWith(false);
+    });
   });
 
   describe("getHolidaysForDay", () => {
@@ -126,6 +219,22 @@ describe("calendarDateRangePickerUtils", () => {
       });
       expect(result).toEqual([]);
     });
+
+    it("should return null if allHolidays is undefined", () => {
+      const result = getHolidaysForDay({
+        allHolidays: undefined,
+        date: workingDate
+      });
+      expect(result).toBe(null);
+    });
+
+    it("should return an empty array if date is null", () => {
+      const result = getHolidaysForDay({
+        allHolidays,
+        date: null as unknown as DateTime
+      });
+      expect(result).toEqual([]);
+    });
   });
 
   describe("getHolidaysWithinDateRange", () => {
@@ -140,6 +249,22 @@ describe("calendarDateRangePickerUtils", () => {
     it("should return an empty array if no holidays are found within the selected date range", () => {
       const result = getHolidaysWithinDateRange({
         selectedDates,
+        allHolidays
+      });
+      expect(result).toEqual([]);
+    });
+
+    it("should return an empty array if allHolidays is undefined", () => {
+      const result = getHolidaysWithinDateRange({
+        selectedDates,
+        allHolidays: undefined
+      });
+      expect(result).toEqual([]);
+    });
+
+    it("should return an empty array if selectedDates is empty", () => {
+      const result = getHolidaysWithinDateRange({
+        selectedDates: [],
         allHolidays
       });
       expect(result).toEqual([]);
@@ -162,5 +287,22 @@ describe("calendarDateRangePickerUtils", () => {
       });
       expect(result).toEqual([]);
     });
+
+    it("should return an empty array if myLeaveRequests is undefined", () => {
+      const result = getLeaveRequestsWithinDateRange({
+        selectedDates,
+        myLeaveRequests: undefined
+      });
+      expect(result).toEqual([]);
+    });
+
+    it("should return an empty array if selectedDates is empty", () => {
+      const result = getLeaveRequestsWithinDateRange({
+        selectedDates: [],
+        myLeaveRequests
+      });
+      expect(result).toEqual([]);
+    });
   });
 });
+

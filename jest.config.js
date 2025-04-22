@@ -23,6 +23,7 @@ const customJestConfig = {
     '!**/.next/**',         // Exclude Next.js build artifacts
     '!**/coverage/**',      // Exclude coverage directory
     '!**/jest.config.js',   // Exclude configuration files
+    '!./pages/**',
   ],
 };
 

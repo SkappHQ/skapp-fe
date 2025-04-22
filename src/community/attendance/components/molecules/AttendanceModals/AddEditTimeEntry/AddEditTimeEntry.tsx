@@ -203,6 +203,7 @@ const AddEditTimeEntry = ({ setFromDateTime, setToDateTime }: Props) => {
       if (!duration?.includes("-")) {
         setDuration(getDuration(values.fromTime, values.toTime));
       }
+      // check - don't we need else condition
     }
   }, [values.fromTime, values.toTime]);
 
