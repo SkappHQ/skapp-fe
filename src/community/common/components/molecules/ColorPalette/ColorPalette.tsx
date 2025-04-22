@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
@@ -36,19 +36,35 @@ const ColorPalette: FC<Props> = ({
 
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
 
+  const splitColors = useMemo(() => {
+    const mid = Math.ceil(colors.length / 2);
+    return [colors.slice(0, mid), colors.slice(mid)];
+  }, [colors]);
+
+  const [colorRows, setColorRows] = useState<string[][]>(splitColors);
+
+  useEffect(() => {
+    if (!selectedColor) return;
+    const [topRow, bottomRow] = colorRows;
+
+    if (bottomRow.includes(selectedColor)) {
+      setColorRows([bottomRow, topRow]);
+    }
+  }, [selectedColor, colorRows]);
+
   const handleColorClick = (color: string): void => {
     setIsPopperOpen(false);
+
+    const [topRow, bottomRow] = colorRows;
+
+    if (bottomRow.includes(color)) {
+      setColorRows([bottomRow, topRow]);
+    }
+
     onClick(color);
   };
 
-  const reorderedColors = selectedColor
-    ? [
-        selectedColor,
-        ...(colors ? colors.filter((color) => color !== selectedColor) : [])
-      ]
-    : colors || [];
-
-  const displayColors = colors || [];
+  const displayColors = colorRows.flat();
 
   return (
     <Stack sx={mergeSx([classes.wrapper, componentStyle])}>
