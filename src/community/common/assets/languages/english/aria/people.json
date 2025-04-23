@@ -50,5 +50,13 @@
       "editButton": "Select edit button",
       "deleteButton": "Select delete button"
     }
+  },
+  "holiday": {
+    "sortByDropdown": {
+      "sort": "Sort : ",
+      "chronologically": "Chronologically : ",
+      "janToDec": "January to December",
+      "decToJan": "December to January"
+    }
   }
 }
