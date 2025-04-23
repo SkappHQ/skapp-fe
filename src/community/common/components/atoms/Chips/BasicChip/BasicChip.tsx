@@ -7,6 +7,7 @@ import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
 import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -22,6 +23,7 @@ interface Props {
   coloredCloseIcon?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  tabIndex?: number;
 }
 
 const BasicChip: FC<Props> = ({
@@ -35,7 +37,8 @@ const BasicChip: FC<Props> = ({
   dataTestId,
   coloredCloseIcon = false,
   onMouseEnter,
-  onMouseLeave
+  onMouseLeave,
+  tabIndex
 }) => {
   const theme = useTheme();
   const classes = styles(theme);
@@ -80,7 +83,14 @@ const BasicChip: FC<Props> = ({
         onClick={onClick}
         onDelete={onDeleteIcon ? () => onDeleteIcon(label) : undefined}
         deleteIcon={
-          <Box>
+          <Box
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (shouldActivateButton(e.key) && onDeleteIcon) {
+                onDeleteIcon();
+              }
+            }}
+          >
             <Icon
               name={IconName.CLOSE_ICON}
               fill={coloredCloseIcon ? theme.palette.primary.dark : "black"} // TODO: use the theme color
@@ -89,6 +99,7 @@ const BasicChip: FC<Props> = ({
         }
         onMouseEnter={onMouseEnter ?? handleTooltipOpen}
         onMouseLeave={onMouseLeave ?? closeTooltip}
+        tabIndex={tabIndex}
       />
     </Tooltip>
   );

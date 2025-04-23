@@ -8,6 +8,7 @@ import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
 import {
   CSSProperties,
   JSX,
+  KeyboardEvent,
   ReactNode,
   useEffect,
   useMemo,
@@ -18,13 +19,14 @@ import {
   MenuTypes,
   PopperAndTooltipPositionTypes
 } from "~community/common/types/MoleculeTypes";
+import { shouldCollapseDropdown } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
 type Props = {
   anchorEl: null | HTMLElement;
   anchorElWidth?: number;
-  handleClose?: (e: MouseEvent | TouchEvent) => void;
+  handleClose?: (e: MouseEvent | TouchEvent | KeyboardEvent) => void;
   position: PopperAndTooltipPositionTypes;
   menuType?: MenuTypes;
   isManager?: boolean;
@@ -160,6 +162,11 @@ const Popper = ({
           "aria-modal": ariaRole === "dialog" ? true : undefined,
           role: ariaRole,
           tabIndex: 0
+        }
+      }}
+      onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+        if (shouldCollapseDropdown(e.key)) {
+          handleClose(e);
         }
       }}
     >
