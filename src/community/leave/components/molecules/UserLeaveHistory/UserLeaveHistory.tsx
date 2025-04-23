@@ -162,6 +162,12 @@ const UserLeaveHistory: FC<Props> = ({
     return employeeLeaveHistoryData?.items?.map(
       (leaveData: LeaveHistoryRawType) => ({
         id: leaveData.leaveRequestId,
+        ariaLabel: `${translateText(["tableHeaders", "leavePeriod"])} ${formatDateRange(
+          new Date(leaveData.startDate),
+          new Date(leaveData.endDate),
+          false,
+          leaveData.durationDays
+        )} ${translateText(["tableHeaders", "dateRequested"])} ${formatDateWithOrdinalIndicator(new Date(leaveData.createdDate))}`,
         leavePeriod: (
           <Box
             sx={{
