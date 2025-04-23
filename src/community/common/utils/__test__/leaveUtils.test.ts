@@ -1,6 +1,7 @@
-import { processEntitlementPayload } from "../leaveUtils";
 import { EntitlementYears } from "~community/leave/types/LeaveTypes";
 import { EntitlementDetailType } from "~community/people/types/PeopleTypes";
+
+import { processEntitlementPayload } from "../leaveUtils";
 
 describe("processEntitlementPayload", () => {
   it("should process entitlement payload for the current year", () => {
@@ -33,7 +34,9 @@ describe("processEntitlementPayload", () => {
     expect(result.year).toBe(new Date().getFullYear().toString());
     expect(result.entitlementDetailsList).toHaveLength(1);
     expect(result.entitlementDetailsList[0].entitlements).toHaveLength(1);
-    expect(result.entitlementDetailsList[0].entitlements[0].name).toBe("Annual Leave");
+    expect(result.entitlementDetailsList[0].entitlements[0].name).toBe(
+      "Annual Leave"
+    );
   });
 
   it("should process entitlement payload for the next year", () => {
@@ -66,7 +69,9 @@ describe("processEntitlementPayload", () => {
     expect(result.year).toBe((new Date().getFullYear() + 1).toString());
     expect(result.entitlementDetailsList).toHaveLength(1);
     expect(result.entitlementDetailsList[0].entitlements).toHaveLength(1);
-    expect(result.entitlementDetailsList[0].entitlements[0].name).toBe("Sick Leave");
+    expect(result.entitlementDetailsList[0].entitlements[0].name).toBe(
+      "Sick Leave"
+    );
   });
 
   it("should return an empty entitlements list if no matching year is found", () => {

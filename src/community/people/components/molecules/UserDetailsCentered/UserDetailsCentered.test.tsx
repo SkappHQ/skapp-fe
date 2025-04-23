@@ -1,9 +1,11 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import UserDetailsCentered from "./UserDetailsCentered";
+
+import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
 import MockTheme from "~community/common/mocks/MockTheme";
 import { usePeopleStore } from "~community/people/store/store";
-import { useGetUploadedImage } from "~community/common/api/FileHandleApi";
+
+import UserDetailsCentered from "./UserDetailsCentered";
 
 // Mock hooks and functions
 jest.mock("~community/people/store/store", () => ({
@@ -23,7 +25,9 @@ jest.mock("~community/common/api/FileHandleApi", () => ({
   }))
 }));
 
-jest.mock("~community/people/utils/image/thumbnailGenerator", () => jest.fn(() => Promise.resolve("mockThumbnail")));
+jest.mock("~community/people/utils/image/thumbnailGenerator", () =>
+  jest.fn(() => Promise.resolve("mockThumbnail"))
+);
 
 describe("UserDetailsCentered", () => {
   const mockSetCommonDetails = jest.fn();
@@ -61,6 +65,4 @@ describe("UserDetailsCentered", () => {
     expect(screen.getByText("John Doe")).toBeInTheDocument();
     expect(screen.getByText("Software Engineer")).toBeInTheDocument();
   });
-
-
 });

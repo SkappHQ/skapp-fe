@@ -1,5 +1,6 @@
-import JobFamilyOverviewGraphTooltip from "./JobFamilyOverviewGraphTooltip";
 import { theme } from "~community/common/theme/theme";
+
+import JobFamilyOverviewGraphTooltip from "./JobFamilyOverviewGraphTooltip";
 
 describe("JobFamilyOverviewGraphTooltip", () => {
   it("should generate correct tooltip HTML for given inputs", () => {
@@ -7,14 +8,17 @@ describe("JobFamilyOverviewGraphTooltip", () => {
     const label = "Job Family";
     const jobTitles = [
       { name: "Engineer", value: 50 },
-      { name: "Manager", value: 30 },
+      { name: "Manager", value: 30 }
     ];
 
     const result = JobFamilyOverviewGraphTooltip(value, label, jobTitles);
 
-    expect(result).toContain(`<div style="font-family: Poppins; font-style: normal; font-size: 1.5rem; font-weight: 400; color: #000; margin-right: 0.5rem;">100</div>`);
-    expect(result).toContain(`<div style="font-family: Poppins; font-style: normal; font-size: 0.875rem; font-weight: 400; color: ${theme.palette.trendChart.tooltip.color};">Job Family</div>`);
-
+    expect(result).toContain(
+      `<div style="font-family: Poppins; font-style: normal; font-size: 1.5rem; font-weight: 400; color: #000; margin-right: 0.5rem;">100</div>`
+    );
+    expect(result).toContain(
+      `<div style="font-family: Poppins; font-style: normal; font-size: 0.875rem; font-weight: 400; color: ${theme.palette.trendChart.tooltip.color};">Job Family</div>`
+    );
   });
 
   it("should handle empty jobTitles array gracefully", () => {
@@ -24,9 +28,15 @@ describe("JobFamilyOverviewGraphTooltip", () => {
 
     const result = JobFamilyOverviewGraphTooltip(value, label, jobTitles);
 
-    expect(result).toContain(`<div style="font-family: Poppins; font-style: normal; font-size: 1.5rem; font-weight: 400; color: #000; margin-right: 0.5rem;">200</div>`);
-    expect(result).toContain(`<div style="font-family: Poppins; font-style: normal; font-size: 0.875rem; font-weight: 400; color: ${theme.palette.trendChart.tooltip.color};">Empty Job Family</div>`);
-    expect(result).not.toContain(`<div style="font-family: Poppins; font-size: 1rem; font-weight: 400; color: #000; margin-right: 0.5rem;">`);
+    expect(result).toContain(
+      `<div style="font-family: Poppins; font-style: normal; font-size: 1.5rem; font-weight: 400; color: #000; margin-right: 0.5rem;">200</div>`
+    );
+    expect(result).toContain(
+      `<div style="font-family: Poppins; font-style: normal; font-size: 0.875rem; font-weight: 400; color: ${theme.palette.trendChart.tooltip.color};">Empty Job Family</div>`
+    );
+    expect(result).not.toContain(
+      `<div style="font-family: Poppins; font-size: 1rem; font-weight: 400; color: #000; margin-right: 0.5rem;">`
+    );
   });
 
   it("should handle null or undefined jobTitles gracefully", () => {
@@ -34,10 +44,20 @@ describe("JobFamilyOverviewGraphTooltip", () => {
     const label = "No Job Titles";
     const jobTitles = null;
 
-    const result = JobFamilyOverviewGraphTooltip(value, label, jobTitles as any);
+    const result = JobFamilyOverviewGraphTooltip(
+      value,
+      label,
+      jobTitles as any
+    );
 
-    expect(result).toContain(`<div style="font-family: Poppins; font-style: normal; font-size: 1.5rem; font-weight: 400; color: #000; margin-right: 0.5rem;">300</div>`);
-    expect(result).toContain(`<div style="font-family: Poppins; font-style: normal; font-size: 0.875rem; font-weight: 400; color: ${theme.palette.trendChart.tooltip.color};">No Job Titles</div>`);
-    expect(result).not.toContain(`<div style="font-family: Poppins; font-size: 1rem; font-weight: 400; color: #000; margin-right: 0.5rem;">`);
+    expect(result).toContain(
+      `<div style="font-family: Poppins; font-style: normal; font-size: 1.5rem; font-weight: 400; color: #000; margin-right: 0.5rem;">300</div>`
+    );
+    expect(result).toContain(
+      `<div style="font-family: Poppins; font-style: normal; font-size: 0.875rem; font-weight: 400; color: ${theme.palette.trendChart.tooltip.color};">No Job Titles</div>`
+    );
+    expect(result).not.toContain(
+      `<div style="font-family: Poppins; font-size: 1rem; font-weight: 400; color: #000; margin-right: 0.5rem;">`
+    );
   });
 });

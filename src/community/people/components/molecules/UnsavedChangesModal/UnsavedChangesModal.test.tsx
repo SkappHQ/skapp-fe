@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import UnsavedChangesModal from "./UnsavedChangesModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import UnsavedChangesModal from "./UnsavedChangesModal";
 
 // Mock hooks and functions
 jest.mock("~community/common/hooks/useTranslator", () => ({
@@ -19,7 +21,11 @@ describe("UnsavedChangesModal", () => {
   test("renders the modal with correct title and description when open", () => {
     render(
       <MockTheme>
-        <UnsavedChangesModal isOpen={true} onDiscard={mockOnDiscard} onSave={mockOnSave} />
+        <UnsavedChangesModal
+          isOpen={true}
+          onDiscard={mockOnDiscard}
+          onSave={mockOnSave}
+        />
       </MockTheme>
     );
 
@@ -32,7 +38,11 @@ describe("UnsavedChangesModal", () => {
   test("calls onSave when the save button is clicked", () => {
     render(
       <MockTheme>
-        <UnsavedChangesModal isOpen={true} onDiscard={mockOnDiscard} onSave={mockOnSave} />
+        <UnsavedChangesModal
+          isOpen={true}
+          onDiscard={mockOnDiscard}
+          onSave={mockOnSave}
+        />
       </MockTheme>
     );
 
@@ -45,7 +55,11 @@ describe("UnsavedChangesModal", () => {
   test("calls onDiscard when the discard button is clicked", () => {
     render(
       <MockTheme>
-        <UnsavedChangesModal isOpen={true} onDiscard={mockOnDiscard} onSave={mockOnSave} />
+        <UnsavedChangesModal
+          isOpen={true}
+          onDiscard={mockOnDiscard}
+          onSave={mockOnSave}
+        />
       </MockTheme>
     );
 
@@ -58,11 +72,17 @@ describe("UnsavedChangesModal", () => {
   test("does not render the modal when isOpen is false", () => {
     render(
       <MockTheme>
-        <UnsavedChangesModal isOpen={false} onDiscard={mockOnDiscard} onSave={mockOnSave} />
+        <UnsavedChangesModal
+          isOpen={false}
+          onDiscard={mockOnDiscard}
+          onSave={mockOnSave}
+        />
       </MockTheme>
     );
 
     expect(screen.queryByText("unsavedModalTitle")).not.toBeInTheDocument();
-    expect(screen.queryByText("unsavedModalDescription")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("unsavedModalDescription")
+    ).not.toBeInTheDocument();
   });
 });

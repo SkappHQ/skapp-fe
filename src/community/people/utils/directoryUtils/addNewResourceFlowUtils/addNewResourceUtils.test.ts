@@ -1,7 +1,12 @@
-import { handleGoBack, handleError, handleAddNewResourceSuccess } from "./addNewResourceUtils";
+import ROUTES from "~community/common/constants/routes";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { DiscardTypeEnums } from "~community/people/enums/DirectoryEnums";
-import ROUTES from "~community/common/constants/routes";
+
+import {
+  handleAddNewResourceSuccess,
+  handleError,
+  handleGoBack
+} from "./addNewResourceUtils";
 
 describe("handleGoBack", () => {
   const mockRouter = { push: jest.fn() } as any;
@@ -15,7 +20,11 @@ describe("handleGoBack", () => {
   it("should navigate to directory if discard changes modal is open", async () => {
     await handleGoBack({
       activeStep: 1,
-      isDiscardChangesModal: { isModalOpen: true, modalType: DiscardTypeEnums.DISCARD_FORM, modalOpenedFrom: "" },
+      isDiscardChangesModal: {
+        isModalOpen: true,
+        modalType: DiscardTypeEnums.DISCARD_FORM,
+        modalOpenedFrom: ""
+      },
       setIsDiscardChangesModal: mockSetIsDiscardChangesModal,
       router: mockRouter,
       getEmployeeObject: mockGetEmployeeObject
@@ -27,7 +36,11 @@ describe("handleGoBack", () => {
   it("should show discard modal if activeStep > 0 and modal is not open", () => {
     handleGoBack({
       activeStep: 1,
-      isDiscardChangesModal: { isModalOpen: false, modalType: null, modalOpenedFrom: "" },
+      isDiscardChangesModal: {
+        isModalOpen: false,
+        modalType: null,
+        modalOpenedFrom: ""
+      },
       setIsDiscardChangesModal: mockSetIsDiscardChangesModal,
       router: mockRouter,
       getEmployeeObject: mockGetEmployeeObject
@@ -44,7 +57,11 @@ describe("handleGoBack", () => {
     mockGetEmployeeObject.mockReturnValue({});
     await handleGoBack({
       activeStep: 0,
-      isDiscardChangesModal: { isModalOpen: false, modalType: null, modalOpenedFrom: "" },
+      isDiscardChangesModal: {
+        isModalOpen: false,
+        modalType: null,
+        modalOpenedFrom: ""
+      },
       setIsDiscardChangesModal: mockSetIsDiscardChangesModal,
       router: mockRouter,
       getEmployeeObject: mockGetEmployeeObject
@@ -57,7 +74,11 @@ describe("handleGoBack", () => {
     mockGetEmployeeObject.mockReturnValue({ name: "John Doe" });
     handleGoBack({
       activeStep: 0,
-      isDiscardChangesModal: { isModalOpen: false, modalType: null, modalOpenedFrom: "" },
+      isDiscardChangesModal: {
+        isModalOpen: false,
+        modalType: null,
+        modalOpenedFrom: ""
+      },
       setIsDiscardChangesModal: mockSetIsDiscardChangesModal,
       router: mockRouter,
       getEmployeeObject: mockGetEmployeeObject

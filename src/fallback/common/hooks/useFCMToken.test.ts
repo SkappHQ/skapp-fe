@@ -1,9 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 
-
-
 import useFcmToken from "./useFCMToken";
-
 
 describe("useFcmToken", () => {
   it("returns the initial token as null", () => {

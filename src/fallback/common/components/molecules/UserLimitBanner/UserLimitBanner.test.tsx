@@ -1,5 +1,5 @@
-
 import { render } from "@testing-library/react";
+
 import UserLimitBanner from "./UserLimitBanner";
 
 describe("UserLimitBanner", () => {

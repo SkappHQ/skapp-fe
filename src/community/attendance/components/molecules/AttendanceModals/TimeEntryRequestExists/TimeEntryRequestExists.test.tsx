@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import TimeEntryRequestExists from "./TimeEntryRequestExists";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import TimeEntryRequestExists from "./TimeEntryRequestExists";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/store/attendanceStore", () => ({
@@ -22,10 +24,15 @@ describe("TimeEntryRequestExists", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/attendance/store/attendanceStore").useAttendanceStore).mockReturnValue({
-      setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
-      setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType
-    });
+    jest
+      .mocked(
+        require("~community/attendance/store/attendanceStore")
+          .useAttendanceStore
+      )
+      .mockReturnValue({
+        setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
+        setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType
+      });
   });
 
   test("renders the component with correct text and button", () => {

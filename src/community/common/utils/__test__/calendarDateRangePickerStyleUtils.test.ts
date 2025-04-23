@@ -1,7 +1,12 @@
 import { DateTime } from "luxon";
-import { getHolidayClasses, getLeaveRequestClasses } from "../calendarDateRangePickerStyleUtils";
-import { HolidayDurationType } from "~community/people/types/HolidayTypes";
+
 import { LeaveStates } from "~community/common/types/CommonTypes";
+import { HolidayDurationType } from "~community/people/types/HolidayTypes";
+
+import {
+  getHolidayClasses,
+  getLeaveRequestClasses
+} from "../calendarDateRangePickerStyleUtils";
 
 describe("getHolidayClasses", () => {
   it("should return 'Mui-full-day-holiday' for full-day holidays", () => {
@@ -44,7 +49,12 @@ describe("getLeaveRequestClasses", () => {
   it("should return 'Mui-full-day-leave' for full-day leave requests", () => {
     const leaveRequests = [{ leaveState: LeaveStates.FULL_DAY }];
     expect(
-      getLeaveRequestClasses({ leaveRequests, workingDays, date, holidays: null })
+      getLeaveRequestClasses({
+        leaveRequests,
+        workingDays,
+        date,
+        holidays: null
+      })
     ).toBe("");
   });
 
@@ -54,7 +64,12 @@ describe("getLeaveRequestClasses", () => {
       { leaveState: LeaveStates.EVENING }
     ];
     expect(
-      getLeaveRequestClasses({ leaveRequests, workingDays, date, holidays: null })
+      getLeaveRequestClasses({
+        leaveRequests,
+        workingDays,
+        date,
+        holidays: null
+      })
     ).toBe("");
   });
 
@@ -69,7 +84,12 @@ describe("getLeaveRequestClasses", () => {
     const nonWorkingDate = DateTime.fromISO("2023-10-03");
     const leaveRequests = [{ leaveState: LeaveStates.FULL_DAY }];
     expect(
-      getLeaveRequestClasses({ leaveRequests, workingDays, date: nonWorkingDate, holidays: null })
+      getLeaveRequestClasses({
+        leaveRequests,
+        workingDays,
+        date: nonWorkingDate,
+        holidays: null
+      })
     ).toBe("");
   });
 
@@ -107,13 +127,23 @@ describe("getLeaveRequestClasses", () => {
   it("should return empty string for leave requests with no state", () => {
     const leaveRequests = [{ leaveState: null }];
     expect(
-      getLeaveRequestClasses({ leaveRequests, workingDays, date, holidays: null })
+      getLeaveRequestClasses({
+        leaveRequests,
+        workingDays,
+        date,
+        holidays: null
+      })
     ).toBe("");
   });
 
   it("should return empty string when both leave requests and holidays are empty", () => {
     expect(
-      getLeaveRequestClasses({ leaveRequests: [], workingDays, date, holidays: [] })
+      getLeaveRequestClasses({
+        leaveRequests: [],
+        workingDays,
+        date,
+        holidays: []
+      })
     ).toBe("");
   });
 
@@ -123,7 +153,12 @@ describe("getLeaveRequestClasses", () => {
       { leaveState: LeaveStates.EVENING }
     ];
     expect(
-      getLeaveRequestClasses({ leaveRequests, workingDays, date, holidays: null })
+      getLeaveRequestClasses({
+        leaveRequests,
+        workingDays,
+        date,
+        holidays: null
+      })
     ).toBe("");
   });
 
@@ -135,4 +170,3 @@ describe("getLeaveRequestClasses", () => {
     ).toBe("");
   });
 });
-

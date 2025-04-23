@@ -1,5 +1,6 @@
-import { transformRolesToDropdownFormat } from "./apiUtils";
 import { AllowedGrantableRolesResponseType } from "~community/configurations/types/UserRolesTypes";
+
+import { transformRolesToDropdownFormat } from "./apiUtils";
 
 describe("transformRolesToDropdownFormat", () => {
   it("should transform roles data into dropdown format correctly", () => {
@@ -53,9 +54,7 @@ describe("transformRolesToDropdownFormat", () => {
     const rolesData: AllowedGrantableRolesResponseType[] = [
       {
         module: "UnknownModule",
-        roles: [
-          { role: "test", name: "Test" }
-        ]
+        roles: [{ role: "test", name: "Test" }]
       }
     ];
 

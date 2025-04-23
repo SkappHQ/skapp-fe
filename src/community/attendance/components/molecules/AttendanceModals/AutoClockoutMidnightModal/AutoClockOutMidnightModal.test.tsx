@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import AutoClockOutMidnightModal from "./AutoClockOutMidnightModal";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import AutoClockOutMidnightModal from "./AutoClockOutMidnightModal";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/store/attendanceStore", () => ({
@@ -60,10 +62,15 @@ describe("AutoClockOutMidnightModal", () => {
 
   test("calls mutate and closeModal when clockInAgain button is clicked", async () => {
     const mockMutate = jest.fn();
-    jest.mocked(require("~community/attendance/api/AttendanceApi").useUpdateEmployeeStatus).mockReturnValue({
-      isPending: false,
-      mutate: mockMutate
-    });
+    jest
+      .mocked(
+        require("~community/attendance/api/AttendanceApi")
+          .useUpdateEmployeeStatus
+      )
+      .mockReturnValue({
+        isPending: false,
+        mutate: mockMutate
+      });
 
     const user = userEvent.setup();
     render(

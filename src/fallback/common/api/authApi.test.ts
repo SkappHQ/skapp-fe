@@ -1,11 +1,9 @@
 // __tests__/useCheckLoginMethod.test.ts
-
-
 import { useCheckLoginMethod } from "~enterprise/common/api/authApi";
 
-describe('useCheckLoginMethod', () => {
-  it('calls onSuccess when mutate succeeds', async () => {
-    const mockResponse = { message: 'success' };
+describe("useCheckLoginMethod", () => {
+  it("calls onSuccess when mutate succeeds", async () => {
+    const mockResponse = { message: "success" };
     const onSuccess = jest.fn();
     const onError = jest.fn();
 
@@ -19,14 +17,14 @@ describe('useCheckLoginMethod', () => {
     };
 
     // Override mutate for test (since your original is empty for now)
-    await mockMutateImpl({ username: 'abc' });
+    await mockMutateImpl({ username: "abc" });
 
     expect(onSuccess).toHaveBeenCalledWith(mockResponse);
     expect(onError).not.toHaveBeenCalled();
   });
 
-  it('calls onError when mutate fails', async () => {
-    const mockError = new Error('failure');
+  it("calls onError when mutate fails", async () => {
+    const mockError = new Error("failure");
     const onSuccess = jest.fn();
     const onError = jest.fn();
 
@@ -38,7 +36,7 @@ describe('useCheckLoginMethod', () => {
       onError(mockError); // Simulate error call
     };
 
-    await mockMutateImpl({ username: 'abc' });
+    await mockMutateImpl({ username: "abc" });
 
     expect(onError).toHaveBeenCalledWith(mockError);
     expect(onSuccess).not.toHaveBeenCalled();

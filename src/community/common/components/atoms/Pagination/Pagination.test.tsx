@@ -1,17 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
+
 import Pagination from "./Pagination";
 
 describe("Pagination", () => {
   test("renders the pagination component", () => {
-    render(
-      <Pagination
-        totalPages={5}
-        currentPage={0}
-        onChange={jest.fn()}
-      />
-    );
+    render(<Pagination totalPages={5} currentPage={0} onChange={jest.fn()} />);
     expect(screen.getByRole("navigation")).toBeInTheDocument();
   });
 
@@ -34,11 +29,7 @@ describe("Pagination", () => {
     const handleChange = jest.fn();
     const user = userEvent.setup();
     render(
-      <Pagination
-        totalPages={5}
-        currentPage={0}
-        onChange={handleChange}
-      />
+      <Pagination totalPages={5} currentPage={0} onChange={handleChange} />
     );
     const page2Button = screen.getByText("2");
     await user.click(page2Button);

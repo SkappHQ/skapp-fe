@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import EmployeeDataMenu from "./EmployeeDataMenu";
+
 import MockTheme from "~community/common/mocks/MockTheme";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
+
+import EmployeeDataMenu from "./EmployeeDataMenu";
 
 // Mock hooks and components
 jest.mock("~community/common/hooks/useMediaQuery", () => ({
@@ -82,5 +84,4 @@ describe("EmployeeDataMenu", () => {
     expect(screen.queryByText("Filter Menu Items")).not.toBeInTheDocument();
     expect(screen.queryByText("Sort Menu Items")).not.toBeInTheDocument();
   });
-
 });

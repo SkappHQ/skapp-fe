@@ -44,11 +44,7 @@ describe("DefaultAvatar", () => {
     const handleClick = jest.fn();
     const user = userEvent.setup();
     render(
-      <DefaultAvatar
-        firstName="John"
-        lastName="Doe"
-        onClick={handleClick}
-      />
+      <DefaultAvatar firstName="John" lastName="Doe" onClick={handleClick} />
     );
     const avatar = screen.getByText("JD");
     await user.click(avatar);
@@ -69,5 +65,4 @@ describe("DefaultAvatar", () => {
     await user.hover(avatar);
     expect(handleMouseEnter).toHaveBeenCalledTimes(1);
   });
-
 });

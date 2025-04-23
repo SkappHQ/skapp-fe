@@ -1,4 +1,4 @@
-import { USER_BULK_HEADERS, DATE_FORMAT } from "./constants";
+import { DATE_FORMAT, USER_BULK_HEADERS } from "./constants";
 
 describe("USER_BULK_HEADERS", () => {
   it("should contain all expected headers", () => {

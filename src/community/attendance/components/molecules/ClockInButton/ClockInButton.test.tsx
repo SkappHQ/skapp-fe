@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ClockInButton from "./ClockInButton";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import ClockInButton from "./ClockInButton";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/api/AttendanceApi", () => ({
@@ -37,16 +39,26 @@ describe("ClockInButton", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/attendance/api/AttendanceApi").useUpdateEmployeeStatus).mockReturnValue({
-      isPending: false,
-      mutate: mockMutate
-    });
-    jest.mocked(require("~community/attendance/store/attendanceStore").useAttendanceStore).mockReturnValue({
-      attendanceParams: { slotType: "READY" },
-      attendanceLeaveStatus: { onLeave: false },
-      setSlotType: mockSetSlotType,
-      setIsAttendanceModalOpen: mockSetIsAttendanceModalOpen
-    });
+    jest
+      .mocked(
+        require("~community/attendance/api/AttendanceApi")
+          .useUpdateEmployeeStatus
+      )
+      .mockReturnValue({
+        isPending: false,
+        mutate: mockMutate
+      });
+    jest
+      .mocked(
+        require("~community/attendance/store/attendanceStore")
+          .useAttendanceStore
+      )
+      .mockReturnValue({
+        attendanceParams: { slotType: "READY" },
+        attendanceLeaveStatus: { onLeave: false },
+        setSlotType: mockSetSlotType,
+        setIsAttendanceModalOpen: mockSetIsAttendanceModalOpen
+      });
   });
 
   test("renders the button with correct label", () => {
@@ -73,5 +85,4 @@ describe("ClockInButton", () => {
     expect(mockMutate).toHaveBeenCalledWith(mockSetSlotType("START"));
     expect(mockSetIsAttendanceModalOpen).not.toHaveBeenCalled();
   });
-
 });

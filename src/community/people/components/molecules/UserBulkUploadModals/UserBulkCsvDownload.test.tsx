@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import UserBulkCsvDownload from "./UserBulkCsvDownload";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import UserBulkCsvDownload from "./UserBulkCsvDownload";
 
 // Mock hooks and functions
 jest.mock("~community/people/store/store", () => ({
@@ -27,10 +29,12 @@ describe("UserBulkCsvDownload", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      setIsDirectoryModalOpen: mockSetIsDirectoryModalOpen,
-      setDirectoryModalType: mockSetDirectoryModalType
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        setIsDirectoryModalOpen: mockSetIsDirectoryModalOpen,
+        setDirectoryModalType: mockSetDirectoryModalType
+      });
   });
 
   test("renders the component with correct text and buttons", () => {

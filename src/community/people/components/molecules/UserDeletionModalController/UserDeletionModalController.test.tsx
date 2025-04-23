@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
 import UserDeletionModalController from "./UserDeletionModalController";
 
 // Mock hooks and components
@@ -19,19 +21,18 @@ jest.mock(
   "../UserDeletionConfirmationModal/UserDeletionConfirmationModal",
   () => ({
     __esModule: true,
-    default: ({ isOpen, onClose }: any) => (
+    default: ({ isOpen, onClose }: any) =>
       isOpen && (
         <div data-testid="confirmation-modal">
           <button onClick={onClose}>Close Confirmation Modal</button>
         </div>
       )
-    )
   })
 );
 
 jest.mock("../UserDeletionWarningModal/UserDeletionWarningModal", () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, message, onClick }: any) => (
+  default: ({ isOpen, onClose, message, onClick }: any) =>
     isOpen && (
       <div data-testid="warning-modal">
         <p>{message}</p>
@@ -39,7 +40,6 @@ jest.mock("../UserDeletionWarningModal/UserDeletionWarningModal", () => ({
         <button onClick={onClose}>Close Warning Modal</button>
       </div>
     )
-  )
 }));
 
 describe("UserDeletionModalController", () => {
@@ -48,13 +48,15 @@ describe("UserDeletionModalController", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      isDeletionConfirmationModalOpen: false,
-      isDeletionAlertOpen: false,
-      setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
-      setDeletionAlertOpen: mockSetDeletionAlertOpen,
-      deletionAlertMessage: "Test alert message"
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        isDeletionConfirmationModalOpen: false,
+        isDeletionAlertOpen: false,
+        setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
+        setDeletionAlertOpen: mockSetDeletionAlertOpen,
+        deletionAlertMessage: "Test alert message"
+      });
   });
 
   test("renders without modals when both modals are closed", () => {
@@ -69,13 +71,15 @@ describe("UserDeletionModalController", () => {
   });
 
   test("renders the confirmation modal when isDeletionConfirmationModalOpen is true", () => {
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      isDeletionConfirmationModalOpen: true,
-      isDeletionAlertOpen: false,
-      setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
-      setDeletionAlertOpen: mockSetDeletionAlertOpen,
-      deletionAlertMessage: "Test alert message"
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        isDeletionConfirmationModalOpen: true,
+        isDeletionAlertOpen: false,
+        setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
+        setDeletionAlertOpen: mockSetDeletionAlertOpen,
+        deletionAlertMessage: "Test alert message"
+      });
 
     render(
       <MockTheme>
@@ -87,13 +91,15 @@ describe("UserDeletionModalController", () => {
   });
 
   test("renders the warning modal when isDeletionAlertOpen is true", () => {
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      isDeletionConfirmationModalOpen: false,
-      isDeletionAlertOpen: true,
-      setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
-      setDeletionAlertOpen: mockSetDeletionAlertOpen,
-      deletionAlertMessage: "Test alert message"
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        isDeletionConfirmationModalOpen: false,
+        isDeletionAlertOpen: true,
+        setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
+        setDeletionAlertOpen: mockSetDeletionAlertOpen,
+        deletionAlertMessage: "Test alert message"
+      });
 
     render(
       <MockTheme>
@@ -106,13 +112,15 @@ describe("UserDeletionModalController", () => {
   });
 
   test("closes the confirmation modal when close button is clicked", async () => {
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      isDeletionConfirmationModalOpen: true,
-      isDeletionAlertOpen: false,
-      setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
-      setDeletionAlertOpen: mockSetDeletionAlertOpen,
-      deletionAlertMessage: "Test alert message"
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        isDeletionConfirmationModalOpen: true,
+        isDeletionAlertOpen: false,
+        setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
+        setDeletionAlertOpen: mockSetDeletionAlertOpen,
+        deletionAlertMessage: "Test alert message"
+      });
 
     const user = userEvent.setup();
     render(
@@ -128,13 +136,15 @@ describe("UserDeletionModalController", () => {
   });
 
   test("closes the warning modal when close button is clicked", async () => {
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      isDeletionConfirmationModalOpen: false,
-      isDeletionAlertOpen: true,
-      setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
-      setDeletionAlertOpen: mockSetDeletionAlertOpen,
-      deletionAlertMessage: "Test alert message"
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        isDeletionConfirmationModalOpen: false,
+        isDeletionAlertOpen: true,
+        setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
+        setDeletionAlertOpen: mockSetDeletionAlertOpen,
+        deletionAlertMessage: "Test alert message"
+      });
 
     const user = userEvent.setup();
     render(
@@ -150,13 +160,15 @@ describe("UserDeletionModalController", () => {
   });
 
   test("acknowledges the warning modal when acknowledge button is clicked", async () => {
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      isDeletionConfirmationModalOpen: false,
-      isDeletionAlertOpen: true,
-      setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
-      setDeletionAlertOpen: mockSetDeletionAlertOpen,
-      deletionAlertMessage: "Test alert message"
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        isDeletionConfirmationModalOpen: false,
+        isDeletionAlertOpen: true,
+        setDeletionConfirmationModalOpen: mockSetDeletionConfirmationModalOpen,
+        setDeletionAlertOpen: mockSetDeletionAlertOpen,
+        deletionAlertMessage: "Test alert message"
+      });
 
     const user = userEvent.setup();
     render(

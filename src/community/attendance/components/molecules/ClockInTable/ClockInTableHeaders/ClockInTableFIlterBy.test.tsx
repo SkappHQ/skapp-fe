@@ -1,20 +1,25 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import ClockInTableFIlterBy from "./ClockInTableFIlterBy";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
 
-jest.mock("~community/common/components/molecules/TableFilterButton/TableFilterButton", () => ({
-  __esModule: true,
-  default: ({ handleFilterClick, filterId, disabled }: any) => (
-    <button
-      data-testid="table-filter-button"
-      onClick={handleFilterClick}
-      disabled={disabled}
-    >
-      Filter Button {filterId}
-    </button>
-  )
-}));
+import ClockInTableFIlterBy from "./ClockInTableFIlterBy";
+
+jest.mock(
+  "~community/common/components/molecules/TableFilterButton/TableFilterButton",
+  () => ({
+    __esModule: true,
+    default: ({ handleFilterClick, filterId, disabled }: any) => (
+      <button
+        data-testid="table-filter-button"
+        onClick={handleFilterClick}
+        disabled={disabled}
+      >
+        Filter Button {filterId}
+      </button>
+    )
+  })
+);
 
 describe("ClockInTableFIlterBy", () => {
   const mockHandleFilterClick = jest.fn();

@@ -1,5 +1,5 @@
-import { useGetEmployeeRoleLimit } from "./peopleApi";
 import { EmployeeRoleLimit } from "../types/EmployeeTypes";
+import { useGetEmployeeRoleLimit } from "./peopleApi";
 
 describe("useGetEmployeeRoleLimit", () => {
   beforeEach(() => {
@@ -17,14 +17,14 @@ describe("useGetEmployeeRoleLimit", () => {
       leaveManagerLimitExceeded: false,
       attendanceManagerLimitExceeded: false,
       peopleManagerLimitExceeded: false,
-      superAdminLimitExceeded: false,
+      superAdminLimitExceeded: false
     };
 
     const { mutate } = useGetEmployeeRoleLimit(mockOnSuccess, mockOnError);
 
     // Mock the global fetch function to simulate success
     global.fetch = jest.fn().mockResolvedValueOnce({
-      json: async () => mockResponse,
+      json: async () => mockResponse
     } as Response);
 
     await mutate();

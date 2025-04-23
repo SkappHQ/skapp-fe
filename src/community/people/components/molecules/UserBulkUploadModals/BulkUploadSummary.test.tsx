@@ -1,12 +1,16 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import BulkUploadSummary from "./BulkUploadSummary";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import BulkUploadSummary from "./BulkUploadSummary";
 
 // Mock hooks and functions
 jest.mock("~community/common/hooks/useTranslator", () => ({
   useTranslator: () => (key: string[], params?: Record<string, any>) =>
-    params ? `${key[key.length - 1]} ${JSON.stringify(params)}` : key[key.length - 1]
+    params
+      ? `${key[key.length - 1]} ${JSON.stringify(params)}`
+      : key[key.length - 1]
 }));
 
 jest.mock("~community/people/utils/holidayUtils/commonUtils", () => ({
@@ -16,8 +20,10 @@ jest.mock("~community/people/utils/holidayUtils/commonUtils", () => ({
 
 describe("BulkUploadSummary", () => {
   const mockSetPopupType = jest.fn();
-  const mockDownloadUserCSV = require("~community/people/utils/holidayUtils/commonUtils").downloadUserBulkUploadErrorLogsCSV;
-  const mockDownloadHolidayCSV = require("~community/people/utils/holidayUtils/commonUtils").downloadHolidayBulkUploadErrorLogsCSV;
+  const mockDownloadUserCSV =
+    require("~community/people/utils/holidayUtils/commonUtils").downloadUserBulkUploadErrorLogsCSV;
+  const mockDownloadHolidayCSV =
+    require("~community/people/utils/holidayUtils/commonUtils").downloadHolidayBulkUploadErrorLogsCSV;
 
   const mockData = {
     bulkStatusSummary: {
@@ -30,7 +36,6 @@ describe("BulkUploadSummary", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
 
   test("calls downloadHolidayBulkUploadErrorLogsCSV when download button is clicked for HOLIDAY_BULK_UPLOAD flow", () => {
     render(

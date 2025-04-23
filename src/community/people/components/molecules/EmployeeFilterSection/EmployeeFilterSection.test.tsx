@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import EmployeeFilterSection from "./EmployeeFilterSection";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import EmployeeFilterSection from "./EmployeeFilterSection";
 
 describe("EmployeeFilterSection", () => {
   const mockHandleFilterChange = jest.fn();

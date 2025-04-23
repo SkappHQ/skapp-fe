@@ -1,9 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
-import MockTheme from "~community/common/mocks/MockTheme";
-import AttendanceCard from "./AttendanceCard";
 import { ClockInOutGraphTypes } from "~community/attendance/enums/dashboardEnums";
+import MockTheme from "~community/common/mocks/MockTheme";
+
+import AttendanceCard from "./AttendanceCard";
 
 // Mock useRouter
 jest.mock("next/router", () => ({
@@ -20,7 +21,6 @@ jest.mock("~community/attendance/store/attendanceStore", () => ({
 }));
 
 describe("AttendanceCard", () => {
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -53,5 +53,4 @@ describe("AttendanceCard", () => {
     expect(screen.getByText("--")).toBeInTheDocument();
     expect(screen.queryByText("/--")).toBeInTheDocument();
   });
-
 });

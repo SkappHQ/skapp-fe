@@ -1,14 +1,16 @@
+import { FileCategories } from "../types/s3Types";
 import {
-  uploadFileToS3ByUrl,
   deleteFileFromS3,
   getS3FoldersByUrl,
+  uploadFileToS3ByUrl
 } from "./awsS3ServiceFunctions";
-import { FileCategories } from "../types/s3Types";
 
 describe("awsS3ServiceFunctions", () => {
   describe("uploadFileToS3ByUrl", () => {
     it("returns a file path after uploading", async () => {
-      const mockFile = new File(["content"], "test.txt", { type: "text/plain" });
+      const mockFile = new File(["content"], "test.txt", {
+        type: "text/plain"
+      });
       const mockCategory = FileCategories.LEAVE_REQUEST;
       const mockSetProgress = jest.fn();
 
@@ -20,7 +22,6 @@ describe("awsS3ServiceFunctions", () => {
 
       expect(result).toBe(""); // Replace with actual expected file path if applicable
     });
-
   });
 
   describe("deleteFileFromS3", () => {

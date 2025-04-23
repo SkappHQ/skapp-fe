@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
+
 import MockTheme from "~community/common/mocks/MockTheme";
 
 import IconButton from "./IconButton";
@@ -28,11 +29,14 @@ describe("IconButton", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-
   test("renders text permanently when isTextPermenent is true", () => {
     render(
       <MockTheme>
-        <IconButton icon={<span>Test Icon</span>} text="Permanent Text" isTextPermenent />
+        <IconButton
+          icon={<span>Test Icon</span>}
+          text="Permanent Text"
+          isTextPermenent
+        />
       </MockTheme>
     );
     expect(screen.getByText("Permanent Text")).toBeInTheDocument();
@@ -42,7 +46,11 @@ describe("IconButton", () => {
     const user = userEvent.setup();
     render(
       <MockTheme>
-        <IconButton icon={<span>Test Icon</span>} text="Hover Text" hoverEffect />
+        <IconButton
+          icon={<span>Test Icon</span>}
+          text="Hover Text"
+          hoverEffect
+        />
       </MockTheme>
     );
     const button = screen.getByRole("button");

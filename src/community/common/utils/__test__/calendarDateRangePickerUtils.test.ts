@@ -50,7 +50,6 @@ describe("calendarDateRangePickerUtils", () => {
       });
       expect(result).toBe(false);
     });
-
   });
 
   describe("getMyLeaveRequestForDay", () => {
@@ -305,4 +304,3 @@ describe("calendarDateRangePickerUtils", () => {
     });
   });
 });
-

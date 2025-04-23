@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import EmployeeDataBanner from "./EmployeeDataBanner";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import EmployeeDataBanner from "./EmployeeDataBanner";
 
 describe("EmployeeDataBanner", () => {
   const mockOnClick = jest.fn();
@@ -62,5 +64,4 @@ describe("EmployeeDataBanner", () => {
 
     expect(mockOnClick).toHaveBeenCalled();
   });
-
 });

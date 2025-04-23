@@ -1,4 +1,5 @@
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
+
 import useS3Download from "./useS3Download";
 
 describe("useS3Download", () => {

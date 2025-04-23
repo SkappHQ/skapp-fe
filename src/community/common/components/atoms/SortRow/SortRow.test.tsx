@@ -3,16 +3,11 @@ import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 
 import SortRow from "./SortRow";
-import { IconName } from "~community/common/types/IconTypes";
 
 describe("SortRow", () => {
   test("renders the sort row with provided text", () => {
     render(
-      <SortRow
-        text="Test Sort Row"
-        selected={false}
-        onClick={jest.fn()}
-      />
+      <SortRow text="Test Sort Row" selected={false} onClick={jest.fn()} />
     );
     expect(screen.getByText("Test Sort Row")).toBeInTheDocument();
   });
@@ -34,11 +29,7 @@ describe("SortRow", () => {
 
   test("applies selected styles when selected is true", () => {
     render(
-      <SortRow
-        text="Selected Sort Row"
-        selected={true}
-        onClick={jest.fn()}
-      />
+      <SortRow text="Selected Sort Row" selected={true} onClick={jest.fn()} />
     );
     const sortRow = screen.getByText("Selected Sort Row");
     expect(sortRow).toHaveClass("MuiTypography-root");
@@ -53,9 +44,10 @@ describe("SortRow", () => {
         isStartIcon={false}
       />
     );
-    expect(screen.queryByTestId("icon-remove-circle-icon")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("icon-remove-circle-icon")
+    ).not.toBeInTheDocument();
   });
-
 
   test("does not render selected icon when showSelectedIcon is false", () => {
     render(
@@ -66,9 +58,10 @@ describe("SortRow", () => {
         showSelectedIcon={false}
       />
     );
-    expect(screen.queryByTestId("icon-check-circle-icon")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("icon-check-circle-icon")
+    ).not.toBeInTheDocument();
   });
-
 
   test("applies custom text styles", () => {
     const textStyles = { color: "blue" };

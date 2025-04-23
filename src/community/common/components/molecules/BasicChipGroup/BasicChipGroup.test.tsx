@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import BasicChipGroup from "./BasicChipGroup";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import BasicChipGroup from "./BasicChipGroup";
 
 describe("BasicChipGroup", () => {
   const values = ["Chip 1", "Chip 2", "Chip 3", "Chip 4", "Chip 5"];
@@ -34,5 +36,4 @@ describe("BasicChipGroup", () => {
     expect(screen.queryByText("Chip 4")).not.toBeInTheDocument();
     expect(screen.queryByText("Chip 5")).not.toBeInTheDocument();
   });
-
 });

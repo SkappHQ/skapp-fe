@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import SupervisorSelector from "./SupervisorSelector";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import SupervisorSelector from "./SupervisorSelector";
 
 jest.mock("~community/common/hooks/useTranslator", () => ({
   useTranslator: () => (key: string[]) => key[key.length - 1]
@@ -52,5 +54,4 @@ describe("SupervisorSelector", () => {
 
     expect(screen.getByText("selectOtherSupervisors")).toBeInTheDocument();
   });
-
 });

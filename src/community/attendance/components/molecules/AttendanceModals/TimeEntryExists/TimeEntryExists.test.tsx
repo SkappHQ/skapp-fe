@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import TimeEntryExists from "./TimeEntryExists";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import TimeEntryExists from "./TimeEntryExists";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/api/AttendanceEmployeeApi", () => ({
@@ -41,16 +43,28 @@ describe("TimeEntryExists", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/attendance/api/AttendanceEmployeeApi").useAddManualTimeEntry).mockReturnValue({
-      mutate: mockMutate
-    });
-    jest.mocked(require("~community/attendance/store/attendanceStore").useAttendanceStore).mockReturnValue({
-      setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
-      setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType
-    });
-    jest.mocked(require("~community/common/providers/ToastProvider").useToast).mockReturnValue({
-      setToastMessage: mockSetToastMessage
-    });
+    jest
+      .mocked(
+        require("~community/attendance/api/AttendanceEmployeeApi")
+          .useAddManualTimeEntry
+      )
+      .mockReturnValue({
+        mutate: mockMutate
+      });
+    jest
+      .mocked(
+        require("~community/attendance/store/attendanceStore")
+          .useAttendanceStore
+      )
+      .mockReturnValue({
+        setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
+        setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType
+      });
+    jest
+      .mocked(require("~community/common/providers/ToastProvider").useToast)
+      .mockReturnValue({
+        setToastMessage: mockSetToastMessage
+      });
   });
 
   const fromDateTime = "2023-10-01T08:00:00";

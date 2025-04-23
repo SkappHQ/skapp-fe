@@ -1,9 +1,11 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import DiscardChangeApprovalModal from "./DiscardChangeApprovalModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
 import { DiscardTypeEnums } from "~community/people/enums/DirectoryEnums";
 import { EditAllInformationFormStatus } from "~community/people/types/EditEmployeeInfoTypes";
+
+import DiscardChangeApprovalModal from "./DiscardChangeApprovalModal";
 
 // Mock hooks and functions
 jest.mock("next/router", () => ({
@@ -65,9 +67,10 @@ describe("DiscardChangeApprovalModal", () => {
     const saveButton = screen.getByText("saveChanges");
     fireEvent.click(saveButton);
 
-    expect(mockSetUpdateEmployeeStatus).toHaveBeenCalledWith(EditAllInformationFormStatus.TRIGGERED);
+    expect(mockSetUpdateEmployeeStatus).toHaveBeenCalledWith(
+      EditAllInformationFormStatus.TRIGGERED
+    );
   });
-
 
   test("navigates back when modalType is LEAVE_FORM and discard button is clicked", () => {
     renderComponent({
@@ -83,6 +86,4 @@ describe("DiscardChangeApprovalModal", () => {
 
     expect(mockRouterBack).toHaveBeenCalled();
   });
-
-
 });

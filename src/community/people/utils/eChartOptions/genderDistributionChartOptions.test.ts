@@ -1,58 +1,20 @@
-import { type Theme, useTheme } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
+import { renderHook } from "@testing-library/react";
 
-import { SingleTooltipFormatterParams } from "~community/common/types/EchartTypes";
-import { getCommonEChartOptions } from "~community/common/utils/eChartsCommonStyles";
-import { GenderDistributionType } from "~community/people/types/PeopleDashboardTypes";
+import { useGenderDistributionChartOptions } from "./genderDistributionChartOptions";
 
-import GraphTooltip from "./GraphTooltip";
+describe("useGenderDistributionChartOptions", () => {
+  it("should return chart options with the correct structure", () => {
+    const theme = createTheme();
 
-export const useGenderDistributionChartOptions = (
-  data: GenderDistributionType[]
-) => {
-  const theme: Theme = useTheme();
-  const commonOptions = getCommonEChartOptions(theme);
+    const { result } = renderHook(() =>
+      useGenderDistributionChartOptions([{ name: "Male", value: 60 }])
+    );
 
-  return {
-    ...commonOptions,
-    tooltip: {
-      trigger: "item",
-      borderColor: "white",
-      formatter: (params: SingleTooltipFormatterParams) =>
-        GraphTooltip(params.value as number, params.name)
-    },
-    grid: {
-      top: "15%",
-      left: "1%",
-      right: "5%",
-      bottom: "25%"
-    },
-    legend: {
-      orient: "horizontal",
-      bottom: 0,
-      icon: "circle",
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 90,
-      textStyle: {
-        color: theme.palette.text.primary,
-        fontSize: 12,
-        fontFamily: theme.typography.fontFamily
-      }
-    },
-    series: [
-      {
-        type: "pie",
-        radius: ["60%", "110%"], // Inner and outer radius for donut
-        center: ["50%", "70%"], // Lower the center to make it half-circle
-        startAngle: 180,
-        endAngle: 0,
-        avoidLabelOverlap: false,
-        label: {
-          show: false
-        },
-
-        data
-      }
-    ]
-  };
-};
+    expect(result.current).toHaveProperty("tooltip");
+    expect(result.current).toHaveProperty("grid");
+    expect(result.current).toHaveProperty("legend");
+    expect(result.current.series).toHaveLength(1);
+    expect(result.current.series[0]).toHaveProperty("type", "pie");
+  });
+});

@@ -1,5 +1,6 @@
-import { useEmploymentBreakdownChartOptions } from "./employmentBreakdownChartOptions";
 import { EmploymentBreakdownType } from "~community/people/types/PeopleDashboardTypes";
+
+import { useEmploymentBreakdownChartOptions } from "./employmentBreakdownChartOptions";
 
 describe("useEmploymentBreakdownChartOptions", () => {
   const mockData: EmploymentBreakdownType = {

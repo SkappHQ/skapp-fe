@@ -1,4 +1,9 @@
-import { getApiUrl, NINETY_PERCENT, EIGHTY_PERCENT, APPLICATION_VERSION_INFO_URL } from "../getConstants";
+import {
+  APPLICATION_VERSION_INFO_URL,
+  EIGHTY_PERCENT,
+  NINETY_PERCENT,
+  getApiUrl
+} from "../getConstants";
 
 describe("getConstants utility functions", () => {
   describe("getApiUrl", () => {

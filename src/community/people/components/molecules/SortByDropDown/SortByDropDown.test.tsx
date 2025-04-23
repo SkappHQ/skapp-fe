@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import SortByDropDown from "./SortByDropDown";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import SortByDropDown from "./SortByDropDown";
 
 jest.mock("~community/people/store/store", () => ({
   usePeopleStore: jest.fn(() => ({
@@ -22,19 +24,22 @@ jest.mock("~community/common/utils/dateTimeUtils", () => ({
 describe("SortByDropDown", () => {
   const mockListInnerRef = { current: { scrollTop: 0 } };
 
-
-
   test("updates the selected year when a new year is selected", () => {
     const mockSetSelectedYear = jest.fn();
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      selectedYear: "2023",
-      setSelectedYear: mockSetSelectedYear,
-      holidayDataParams: { sortOrder: "ASC" }
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        selectedYear: "2023",
+        setSelectedYear: mockSetSelectedYear,
+        holidayDataParams: { sortOrder: "ASC" }
+      });
 
     render(
       <MockTheme>
-        <SortByDropDown holidayData={[{ id: 1, name: "Holiday" }]} listInnerRef={mockListInnerRef} />
+        <SortByDropDown
+          holidayData={[{ id: 1, name: "Holiday" }]}
+          listInnerRef={mockListInnerRef}
+        />
       </MockTheme>
     );
 

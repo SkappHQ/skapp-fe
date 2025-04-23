@@ -1,9 +1,13 @@
-import { useGetEmployeeRoleLimit, useGetRoleLimits } from "~enterprise/common/api/peopleApi";
-import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
 import { useQuery } from "@tanstack/react-query";
 
+import {
+  useGetEmployeeRoleLimit,
+  useGetRoleLimits
+} from "~enterprise/common/api/peopleApi";
+import { EmployeeRoleLimit } from "~enterprise/people/types/EmployeeTypes";
+
 jest.mock("@tanstack/react-query", () => ({
-  useQuery: jest.fn(),
+  useQuery: jest.fn()
 }));
 
 describe("useGetEmployeeRoleLimit", () => {
@@ -58,14 +62,14 @@ describe("useGetRoleLimits", () => {
   it("calls useQuery with correct parameters when isEnterprise is true", () => {
     const mockQueryFn = jest.fn();
     (useQuery as jest.Mock).mockImplementation(() => ({
-      data: { maxRoles: 10 },
+      data: { maxRoles: 10 }
     }));
 
     const result = useGetRoleLimits(true);
 
     expect(useQuery).toHaveBeenCalledWith({
       queryKey: [],
-      queryFn: expect.any(Function),
+      queryFn: expect.any(Function)
     });
     expect(result.data).toEqual({ maxRoles: 10 });
   });
@@ -73,14 +77,14 @@ describe("useGetRoleLimits", () => {
   it("calls useQuery with correct parameters when isEnterprise is false", () => {
     const mockQueryFn = jest.fn();
     (useQuery as jest.Mock).mockImplementation(() => ({
-      data: { maxRoles: 3 },
+      data: { maxRoles: 3 }
     }));
 
     const result = useGetRoleLimits(false);
 
     expect(useQuery).toHaveBeenCalledWith({
       queryKey: [],
-      queryFn: expect.any(Function),
+      queryFn: expect.any(Function)
     });
     expect(result.data).toEqual({ maxRoles: 3 });
   });

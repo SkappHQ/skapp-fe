@@ -2,8 +2,11 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 
+import MockTheme from "~community/common/mocks/MockTheme";
+
 import AdvancedFilterButton from "./AdvancedFilterButton";
-import MockTheme from "~community/common/mocks/MockTheme"; // Import MockTheme
+
+// Import MockTheme
 
 // Mock useTranslator
 jest.mock("~community/common/hooks/useTranslator", () => ({
@@ -31,7 +34,6 @@ describe("AdvancedFilterButton", () => {
   const mockOnResetFilters = jest.fn();
   const mockSetSelectedFilters = jest.fn();
 
-
   test("resets filters when the reset button is clicked", async () => {
     const user = userEvent.setup();
     render(
@@ -54,6 +56,4 @@ describe("AdvancedFilterButton", () => {
 
     expect(mockOnResetFilters).toHaveBeenCalled();
   });
-
 });
-

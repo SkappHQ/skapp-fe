@@ -1,5 +1,7 @@
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
+
 import { GlobalLoginMethod } from "~community/common/enums/CommonEnums";
+
 import { useCommonEnterpriseStore } from "./commonStore";
 
 describe("useCommonEnterpriseStore", () => {
@@ -14,7 +16,7 @@ describe("useCommonEnterpriseStore", () => {
       result.current.setGlobalLoginMethod(GlobalLoginMethod.GOOGLE);
     });
     // Assuming the store updates correctly, validate the change
-    expect(result.current.globalLoginMethod).toBe('');
+    expect(result.current.globalLoginMethod).toBe("");
   });
 
   it("returns the default ongoingQuickSetup state", () => {
@@ -24,7 +26,7 @@ describe("useCommonEnterpriseStore", () => {
       DEFINE_TEAMS: false,
       DEFINE_JOB_FAMILIES: false,
       SETUP_HOLIDAYS: false,
-      SETUP_LEAVE_TYPES: false,
+      SETUP_LEAVE_TYPES: false
     });
   });
 
@@ -39,7 +41,7 @@ describe("useCommonEnterpriseStore", () => {
       DEFINE_TEAMS: false,
       DEFINE_JOB_FAMILIES: false,
       SETUP_HOLIDAYS: false,
-      SETUP_LEAVE_TYPES: false,
+      SETUP_LEAVE_TYPES: false
     });
   });
 

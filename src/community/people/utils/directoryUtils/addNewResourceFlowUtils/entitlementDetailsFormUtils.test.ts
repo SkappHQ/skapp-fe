@@ -1,6 +1,9 @@
-import { handleSaveEntitlements, handleBulkUploadResponse } from "./entitlementDetailsFormUtils";
-import { EntitlementYears } from "~community/leave/types/LeaveTypes";
 import { ToastType } from "~community/common/enums/ComponentEnums";
+
+import {
+  handleBulkUploadResponse,
+  handleSaveEntitlements
+} from "./entitlementDetailsFormUtils";
 
 describe("handleSaveEntitlements", () => {
   const mockSetCurrentYearSuccessFlag = jest.fn();
@@ -18,19 +21,17 @@ describe("handleSaveEntitlements", () => {
     setCurrentYearSuccessFlag: mockSetCurrentYearSuccessFlag,
     nextYearMutation: mockNextYearMutation,
     nextYearSuccessFlag: false,
-    setNextYearSuccessFlag: mockSetNextYearSuccessFlag,
+    setNextYearSuccessFlag: mockSetNextYearSuccessFlag
   };
 
   it("should call currentYearMutation and nextYearMutation with correct payloads", () => {
     handleSaveEntitlements(props);
-
-
   });
 
   it("should set success flags if no entitlements are present", () => {
     handleSaveEntitlements({
       ...props,
-      entitlementDetails: [],
+      entitlementDetails: []
     });
 
     expect(mockSetCurrentYearSuccessFlag).toHaveBeenCalledWith(true);
@@ -46,11 +47,11 @@ describe("handleBulkUploadResponse", () => {
   const props = {
     responseData: {
       bulkStatusSummary: { failedCount: 0 },
-      bulkRecordErrorLogs: [{ message: "Error message" }],
+      bulkRecordErrorLogs: [{ message: "Error message" }]
     },
     setSuccessFlag: mockSetSuccessFlag,
     translateText: mockTranslateText,
-    setToastMessage: mockSetToastMessage,
+    setToastMessage: mockSetToastMessage
   };
 
   it("should set success flag if there are no failed records", () => {
@@ -65,15 +66,15 @@ describe("handleBulkUploadResponse", () => {
       ...props,
       responseData: {
         bulkStatusSummary: { failedCount: 1 },
-        bulkRecordErrorLogs: [{ message: "Error message" }],
-      },
+        bulkRecordErrorLogs: [{ message: "Error message" }]
+      }
     });
 
     expect(mockSetToastMessage).toHaveBeenCalledWith({
       toastType: ToastType.ERROR,
       title: "entitlementErrorMessage",
       description: "Error message",
-      open: true,
+      open: true
     });
   });
 });

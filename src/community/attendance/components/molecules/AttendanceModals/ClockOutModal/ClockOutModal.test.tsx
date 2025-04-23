@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ClockOutModal from "./ClockOutModal";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import ClockOutModal from "./ClockOutModal";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/store/attendanceStore", () => ({
@@ -60,10 +62,15 @@ describe("ClockOutModal", () => {
 
   test("calls mutate and closeModal when confirm button is clicked", async () => {
     const mockMutate = jest.fn();
-    jest.mocked(require("~community/attendance/api/AttendanceApi").useUpdateEmployeeStatus).mockReturnValue({
-      isPending: false,
-      mutate: mockMutate
-    });
+    jest
+      .mocked(
+        require("~community/attendance/api/AttendanceApi")
+          .useUpdateEmployeeStatus
+      )
+      .mockReturnValue({
+        isPending: false,
+        mutate: mockMutate
+      });
 
     const user = userEvent.setup();
     render(

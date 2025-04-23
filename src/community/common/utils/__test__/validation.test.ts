@@ -1,12 +1,11 @@
-
 import {
-  signUpValidation,
-  signInValidation,
+  dateValidation,
   isEmailInputValid,
-  isValidNamePattern,
   isValidAlphaNumericNamePattern,
   isValidEmailPattern,
-  dateValidation,
+  isValidNamePattern,
+  signInValidation,
+  signUpValidation
 } from "../validation";
 
 describe("Validation Tests", () => {
@@ -19,7 +18,7 @@ describe("Validation Tests", () => {
         firstName: "John",
         lastName: "Doe",
         email: "john.doe@example.com",
-        password: "Password123!",
+        password: "Password123!"
       };
       await expect(schema.validate(validData)).resolves.toBeTruthy();
     });
@@ -30,7 +29,7 @@ describe("Validation Tests", () => {
         firstName: "John",
         lastName: "Doe",
         email: "invalid-email",
-        password: "Password123!",
+        password: "Password123!"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
@@ -41,7 +40,7 @@ describe("Validation Tests", () => {
       const schema = signInValidation(mockTranslate);
       const validData = {
         email: "john.doe@example.com",
-        password: "Password123!",
+        password: "Password123!"
       };
       await expect(schema.validate(validData)).resolves.toBeTruthy();
     });
@@ -49,7 +48,7 @@ describe("Validation Tests", () => {
     it("should fail for missing password", async () => {
       const schema = signInValidation(mockTranslate);
       const invalidData = {
-        email: "john.doe@example.com",
+        email: "john.doe@example.com"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });

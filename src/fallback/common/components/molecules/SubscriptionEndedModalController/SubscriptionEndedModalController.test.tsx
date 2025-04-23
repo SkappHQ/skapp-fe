@@ -1,5 +1,5 @@
-
 import { render } from "@testing-library/react";
+
 import SubscriptionEndedModalController from "./SubscriptionEndedModalController";
 
 describe("SubscriptionEndedModalController", () => {

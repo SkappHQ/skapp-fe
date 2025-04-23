@@ -1,17 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
-
 import TimeInput from "./TimeInput";
 
 describe("TimeInput", () => {
   test("renders the TimeInput with label", () => {
     render(
-      <TimeInput
-        time={new Date()}
-        setTime={jest.fn()}
-        label="Select Time"
-      />
+      <TimeInput time={new Date()} setTime={jest.fn()} label="Select Time" />
     );
     expect(screen.getByText("Select Time")).toBeInTheDocument();
   });
@@ -27,5 +22,4 @@ describe("TimeInput", () => {
     );
     expect(screen.getByText("Invalid time")).toBeInTheDocument();
   });
-
 });

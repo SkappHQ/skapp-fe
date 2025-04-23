@@ -1,5 +1,6 @@
-import { getCommonEChartOptions } from "../eChartsCommonStyles";
 import { Theme } from "@mui/material/styles";
+
+import { getCommonEChartOptions } from "../eChartsCommonStyles";
 
 describe("getCommonEChartOptions", () => {
   const mockTheme: Theme = {

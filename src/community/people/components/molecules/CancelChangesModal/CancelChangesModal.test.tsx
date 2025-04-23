@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import CancelChangesModal from "./CancelChangesModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import CancelChangesModal from "./CancelChangesModal";
 
 // Mock hooks and functions
 jest.mock("~community/common/hooks/useTranslator", () => ({
@@ -19,20 +21,34 @@ describe("CancelChangesModal", () => {
   test("renders the modal with correct title and description when open", () => {
     render(
       <MockTheme>
-        <CancelChangesModal isOpen={true} onCancel={mockOnCancel} onConfirm={mockOnConfirm} />
+        <CancelChangesModal
+          isOpen={true}
+          onCancel={mockOnCancel}
+          onConfirm={mockOnConfirm}
+        />
       </MockTheme>
     );
 
     expect(screen.getByText("unsavedModalTitle")).toBeInTheDocument();
-    expect(screen.getByText("cancelChangesModalDescription")).toBeInTheDocument();
-    expect(screen.getByText("cancelChangesModalConfirmButton")).toBeInTheDocument();
-    expect(screen.getByText("cancelChangesModalCancelButton")).toBeInTheDocument();
+    expect(
+      screen.getByText("cancelChangesModalDescription")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("cancelChangesModalConfirmButton")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("cancelChangesModalCancelButton")
+    ).toBeInTheDocument();
   });
 
   test("calls onConfirm when the confirm button is clicked", () => {
     render(
       <MockTheme>
-        <CancelChangesModal isOpen={true} onCancel={mockOnCancel} onConfirm={mockOnConfirm} />
+        <CancelChangesModal
+          isOpen={true}
+          onCancel={mockOnCancel}
+          onConfirm={mockOnConfirm}
+        />
       </MockTheme>
     );
 
@@ -45,7 +61,11 @@ describe("CancelChangesModal", () => {
   test("calls onCancel when the cancel button is clicked", () => {
     render(
       <MockTheme>
-        <CancelChangesModal isOpen={true} onCancel={mockOnCancel} onConfirm={mockOnConfirm} />
+        <CancelChangesModal
+          isOpen={true}
+          onCancel={mockOnCancel}
+          onConfirm={mockOnConfirm}
+        />
       </MockTheme>
     );
 
@@ -58,11 +78,17 @@ describe("CancelChangesModal", () => {
   test("does not render the modal when isOpen is false", () => {
     render(
       <MockTheme>
-        <CancelChangesModal isOpen={false} onCancel={mockOnCancel} onConfirm={mockOnConfirm} />
+        <CancelChangesModal
+          isOpen={false}
+          onCancel={mockOnCancel}
+          onConfirm={mockOnConfirm}
+        />
       </MockTheme>
     );
 
     expect(screen.queryByText("unsavedModalTitle")).not.toBeInTheDocument();
-    expect(screen.queryByText("cancelChangesModalDescription")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("cancelChangesModalDescription")
+    ).not.toBeInTheDocument();
   });
 });

@@ -5,7 +5,7 @@ describe("useCheckUserLimit", () => {
     const result = useCheckUserLimit(true);
     expect(result).toEqual({
       data: false,
-      isSuccess: true,
+      isSuccess: true
     });
   });
 
@@ -13,7 +13,7 @@ describe("useCheckUserLimit", () => {
     const result = useCheckUserLimit(false);
     expect(result).toEqual({
       data: false,
-      isSuccess: true,
+      isSuccess: true
     });
   });
 });

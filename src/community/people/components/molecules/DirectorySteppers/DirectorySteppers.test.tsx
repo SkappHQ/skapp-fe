@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import DirectorySteppers from "./DirectorySteppers";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import DirectorySteppers from "./DirectorySteppers";
 
 // Mock hooks and functions
 jest.mock("next-auth/react", () => ({
@@ -37,8 +39,6 @@ jest.mock("~community/common/hooks/useTranslator", () => ({
 }));
 
 describe("DirectorySteppers", () => {
-
-
   test("renders limited steps for individual view", () => {
     render(
       <MockTheme>
@@ -49,11 +49,11 @@ describe("DirectorySteppers", () => {
     expect(screen.getByText("editAllInfo.personal")).toBeInTheDocument();
     expect(screen.getByText("editAllInfo.employment")).toBeInTheDocument();
     expect(screen.queryByText("editAllInfo.emergency")).not.toBeInTheDocument();
-    expect(screen.queryByText("editAllInfo.systemPermissions")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("editAllInfo.systemPermissions")
+    ).not.toBeInTheDocument();
     expect(screen.queryByText("editAllInfo.timeline")).not.toBeInTheDocument();
   });
-
-
 
   test("does not render leave or timesheet steps if user lacks permissions", () => {
     jest.mocked(require("next-auth/react").useSession).mockReturnValue({

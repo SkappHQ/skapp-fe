@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import PreMidnightClockOutAlertModal from "./PreMidnightClockOutAlertModal";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import PreMidnightClockOutAlertModal from "./PreMidnightClockOutAlertModal";
 
 // Mock useTranslator
 jest.mock("~community/common/hooks/useTranslator", () => ({

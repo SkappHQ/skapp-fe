@@ -1,5 +1,6 @@
-import { pulse } from "../TimerPulseAnimation";
 import { keyframes } from "@emotion/react";
+
+import { pulse } from "../TimerPulseAnimation";
 
 describe("TimerPulseAnimation", () => {
   it("should define the correct transform values for pulse animation", () => {
@@ -15,8 +16,12 @@ describe("TimerPulseAnimation", () => {
       }
     `;
 
-    const pulseTransformValues = pulse.toString().match(/transform: scale\([^)]+\)/g);
-    const expectedTransformValues = pulseKeyframes.toString().match(/transform: scale\([^)]+\)/g);
+    const pulseTransformValues = pulse
+      .toString()
+      .match(/transform: scale\([^)]+\)/g);
+    const expectedTransformValues = pulseKeyframes
+      .toString()
+      .match(/transform: scale\([^)]+\)/g);
 
     expect(pulseTransformValues).toEqual(expectedTransformValues);
   });

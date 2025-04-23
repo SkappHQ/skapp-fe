@@ -21,7 +21,6 @@ describe("ToggleSwitch", () => {
     });
   });
 
-
   test("calls setCategoryOption when an option is clicked", async () => {
     const user = userEvent.setup();
     render(

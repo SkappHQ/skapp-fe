@@ -1,13 +1,14 @@
-import { useGetSubscriptionCancelImpact } from "./subscriptionCancelImpactApi";
 import { renderHook } from "@testing-library/react";
+
+import { useGetSubscriptionCancelImpact } from "./subscriptionCancelImpactApi";
 
 // Mock @tanstack/react-query
 jest.mock("@tanstack/react-query", () => ({
   useQuery: jest.fn(() => ({
     data: null,
     isLoading: false,
-    isError: false,
-  })),
+    isError: false
+  }))
 }));
 
 describe("useGetSubscriptionCancelImpact", () => {

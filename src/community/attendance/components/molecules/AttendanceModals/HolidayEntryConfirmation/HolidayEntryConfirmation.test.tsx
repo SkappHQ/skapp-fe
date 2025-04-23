@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HolidayEntryConfirmation from "./HolidayEntryConfirmation";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import HolidayEntryConfirmation from "./HolidayEntryConfirmation";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/store/attendanceStore", () => ({
@@ -40,18 +42,22 @@ describe("HolidayEntryConfirmation", () => {
     jest.clearAllMocks();
   });
 
-
   test("reopens time entry modal when cancel button is clicked", async () => {
     const mockSetIsEmployeeTimesheetModalOpen = jest.fn();
     const mockSetEmployeeTimesheetModalType = jest.fn();
-    jest.mocked(require("~community/attendance/store/attendanceStore").useAttendanceStore).mockReturnValue({
-      setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
-      setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType,
-      timeAvailabilityForPeriod: {
-        holiday: [{ holidayDuration: "FULL_DAY" }],
-        date: "2023-10-01"
-      }
-    });
+    jest
+      .mocked(
+        require("~community/attendance/store/attendanceStore")
+          .useAttendanceStore
+      )
+      .mockReturnValue({
+        setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
+        setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType,
+        timeAvailabilityForPeriod: {
+          holiday: [{ holidayDuration: "FULL_DAY" }],
+          date: "2023-10-01"
+        }
+      });
 
     const user = userEvent.setup();
     render(

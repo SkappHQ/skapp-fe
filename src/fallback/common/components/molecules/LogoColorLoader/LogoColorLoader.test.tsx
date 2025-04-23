@@ -1,9 +1,8 @@
-
 import { render } from "@testing-library/react";
+
 import LogoColorLoader from "./LogoColorLoader";
 
 describe("LogoColorLoader", () => {
-
   it("matches the snapshot", () => {
     const { asFragment } = render(<LogoColorLoader />);
     expect(asFragment()).toMatchSnapshot();

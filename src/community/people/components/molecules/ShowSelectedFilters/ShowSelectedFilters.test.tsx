@@ -1,7 +1,8 @@
+import { useTheme } from "@mui/material/styles";
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
+
 import ShowSelectedFilters from "./ShowSelectedFilters";
-import { useTheme } from "@mui/material/styles";
 
 // Mock hooks
 jest.mock("@mui/material/styles", () => ({
@@ -34,6 +35,4 @@ describe("ShowSelectedFilters", () => {
     render(<ShowSelectedFilters filterOptions={[]} />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
-
-
 });

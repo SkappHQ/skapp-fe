@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import UserDeletionWarningModal from "./UserDeletionWarningModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import UserDeletionWarningModal from "./UserDeletionWarningModal";
 
 jest.mock("~community/common/hooks/useTranslator", () => ({
   useTranslator: () => (key: string[]) => key[key.length - 1]
@@ -28,7 +30,9 @@ describe("UserDeletionWarningModal", () => {
     );
 
     expect(screen.getByText("deleteWarningTitle")).toBeInTheDocument();
-    expect(screen.getByText("Are you sure you want to delete this user?")).toBeInTheDocument();
+    expect(
+      screen.getByText("Are you sure you want to delete this user?")
+    ).toBeInTheDocument();
     expect(screen.getByText("okayButtonLabel")).toBeInTheDocument();
   });
 

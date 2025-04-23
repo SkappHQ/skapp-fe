@@ -1,8 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+
+import MockTheme from "~community/common/mocks/MockTheme";
+
 import AreYouSureModal from "./AreYouSureModal";
-import MockTheme from "~community/common/mocks/MockTheme"; // Import MockTheme
+
+// Import MockTheme
 
 // Mock useTranslator
 jest.mock("~community/common/hooks/useTranslator", () => ({

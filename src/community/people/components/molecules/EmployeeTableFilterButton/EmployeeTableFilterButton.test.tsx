@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import EmployeeTableFilterButton from "./EmployeeTableFilterButton";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import EmployeeTableFilterButton from "./EmployeeTableFilterButton";
 
 // Mock hooks and functions
 jest.mock("~community/common/hooks/useTranslator", () => ({
@@ -21,17 +23,24 @@ describe("EmployeeTableFilterButton", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      employeeDataFilter: { department: ["Engineering"], location: ["Remote"] },
-      removeEmployeeFilter: mockRemoveEmployeeFilter
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        employeeDataFilter: {
+          department: ["Engineering"],
+          location: ["Remote"]
+        },
+        removeEmployeeFilter: mockRemoveEmployeeFilter
+      });
   });
 
   test("renders the button with correct label when no filters are applied", () => {
-    jest.mocked(require("~community/people/store/store").usePeopleStore).mockReturnValue({
-      employeeDataFilter: {},
-      removeEmployeeFilter: mockRemoveEmployeeFilter
-    });
+    jest
+      .mocked(require("~community/people/store/store").usePeopleStore)
+      .mockReturnValue({
+        employeeDataFilter: {},
+        removeEmployeeFilter: mockRemoveEmployeeFilter
+      });
 
     render(
       <MockTheme>
@@ -45,7 +54,6 @@ describe("EmployeeTableFilterButton", () => {
 
     expect(screen.getByText("filter")).toBeInTheDocument();
   });
-
 
   test("does not render the button when disabled", () => {
     render(

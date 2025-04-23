@@ -6,13 +6,7 @@ import MenuItem from "./MenuItem";
 
 describe("MenuItem", () => {
   test("renders the menu item with provided text", () => {
-    render(
-      <MenuItem
-        text="Test Item"
-        selected={false}
-        onClick={jest.fn()}
-      />
-    );
+    render(<MenuItem text="Test Item" selected={false} onClick={jest.fn()} />);
     expect(screen.getByText("Test Item")).toBeInTheDocument();
   });
 
@@ -20,11 +14,7 @@ describe("MenuItem", () => {
     const handleClick = jest.fn();
     const user = userEvent.setup();
     render(
-      <MenuItem
-        text="Clickable Item"
-        selected={false}
-        onClick={handleClick}
-      />
+      <MenuItem text="Clickable Item" selected={false} onClick={handleClick} />
     );
     const menuItem = screen.getByText("Clickable Item");
     await user.click(menuItem);
@@ -33,14 +23,10 @@ describe("MenuItem", () => {
 
   test("applies selected styles when selected is true", () => {
     render(
-      <MenuItem
-        text="Selected Item"
-        selected={true}
-        onClick={jest.fn()}
-      />
+      <MenuItem text="Selected Item" selected={true} onClick={jest.fn()} />
     );
     const menuItem = screen.getByText("Selected Item");
-    expect(menuItem).toHaveClass('MuiTypography-root');
+    expect(menuItem).toHaveClass("MuiTypography-root");
   });
 
   test("applies custom text styles", () => {

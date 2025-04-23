@@ -110,7 +110,6 @@ describe("Time Entry Validation Schema", () => {
         timeEntryValidation.validateSync(missingData);
       }).toThrow("Please select end time");
     });
-
   });
 
   describe("fromTime and toTime relationship validation", () => {
@@ -163,7 +162,6 @@ describe("Time Entry Validation Schema", () => {
     });
   });
 
-
   describe("complete validation", () => {
     it("should validate all fields together successfully", async () => {
       const validData = {
@@ -200,4 +198,3 @@ describe("Time Entry Validation Schema", () => {
     });
   });
 });
-

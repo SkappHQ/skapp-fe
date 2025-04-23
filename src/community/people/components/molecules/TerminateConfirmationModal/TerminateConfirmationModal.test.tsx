@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import TerminateConfirmationModal from "./TerminateConfirmationModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import TerminateConfirmationModal from "./TerminateConfirmationModal";
 
 // Mock hooks and functions
 jest.mock("~community/common/hooks/useTranslator", () => ({
@@ -27,10 +29,12 @@ describe("TerminateConfirmationModal", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(require("~community/common/providers/ToastProvider").useToast).mockReturnValue({
-      toastMessage: { open: false },
-      setToastMessage: mockSetToastMessage
-    });
+    jest
+      .mocked(require("~community/common/providers/ToastProvider").useToast)
+      .mockReturnValue({
+        toastMessage: { open: false },
+        setToastMessage: mockSetToastMessage
+      });
   });
 
   test("renders the modal with correct title and description when open", () => {
@@ -40,12 +44,15 @@ describe("TerminateConfirmationModal", () => {
       </MockTheme>
     );
 
-    expect(screen.getByText("terminateConfirmationModalTitle")).toBeInTheDocument();
-    expect(screen.getByText("terminateConfirmationModalDescription")).toBeInTheDocument();
+    expect(
+      screen.getByText("terminateConfirmationModalTitle")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("terminateConfirmationModalDescription")
+    ).toBeInTheDocument();
     expect(screen.getByText("terminateButtonText")).toBeInTheDocument();
     expect(screen.getByText("cancelButtonText")).toBeInTheDocument();
   });
-
 
   test("calls onClose when cancel button is clicked", () => {
     render(
@@ -67,7 +74,11 @@ describe("TerminateConfirmationModal", () => {
       </MockTheme>
     );
 
-    expect(screen.queryByText("terminateConfirmationModalTitle")).not.toBeInTheDocument();
-    expect(screen.queryByText("terminateConfirmationModalDescription")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("terminateConfirmationModalTitle")
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("terminateConfirmationModalDescription")
+    ).not.toBeInTheDocument();
   });
 });

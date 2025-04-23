@@ -10,5 +10,4 @@ describe("getEnterpriseDrawerRoutes", () => {
     expect(result).toBeUndefined();
     // Add specific expectations for admin routes
   });
-
 });

@@ -1,7 +1,11 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render } from "@testing-library/react";
+
+import MockTheme from "~community/common/mocks/MockTheme";
+
 import AnalyticCardSkeleton from "./AnalyticCardSkeleton";
-import MockTheme from "~community/common/mocks/MockTheme"; // Import MockTheme
+
+// Import MockTheme
 
 describe("AnalyticCardSkeleton", () => {
   test("renders the AnalyticCardSkeleton without errors", () => {

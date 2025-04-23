@@ -2,11 +2,10 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
 import MockTheme from "~community/common/mocks/MockTheme";
+
 import EmojiChip from "./EmojiChip";
 
 describe("EmojiChip", () => {
-
-
   test("applies title styles passed via the 'titleStyles' prop", () => {
     const titleStyles = { fontWeight: "bold" };
     render(

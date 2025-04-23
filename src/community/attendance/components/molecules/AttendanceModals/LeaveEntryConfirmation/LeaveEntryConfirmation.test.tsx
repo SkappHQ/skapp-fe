@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import LeaveEntryConfirmation from "./LeaveEntryConfirmation";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import LeaveEntryConfirmation from "./LeaveEntryConfirmation";
 
 // Mock hooks and functions
 jest.mock("~community/attendance/store/attendanceStore", () => ({
@@ -45,23 +47,27 @@ describe("LeaveEntryConfirmation", () => {
     jest.clearAllMocks();
   });
 
-
   test("reopens modal with ADD_TIME_ENTRY type when cancel button is clicked", async () => {
     const mockSetIsEmployeeTimesheetModalOpen = jest.fn();
     const mockSetEmployeeTimesheetModalType = jest.fn();
-    jest.mocked(require("~community/attendance/store/attendanceStore").useAttendanceStore).mockReturnValue({
-      setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
-      setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType,
-      timeAvailabilityForPeriod: {
-        leaveRequest: [
-          {
-            leaveState: "APPROVED",
-            leaveType: { name: "Sick Leave", emoji: "🤒" }
-          }
-        ],
-        date: "2023-10-01"
-      }
-    });
+    jest
+      .mocked(
+        require("~community/attendance/store/attendanceStore")
+          .useAttendanceStore
+      )
+      .mockReturnValue({
+        setIsEmployeeTimesheetModalOpen: mockSetIsEmployeeTimesheetModalOpen,
+        setEmployeeTimesheetModalType: mockSetEmployeeTimesheetModalType,
+        timeAvailabilityForPeriod: {
+          leaveRequest: [
+            {
+              leaveState: "APPROVED",
+              leaveType: { name: "Sick Leave", emoji: "🤒" }
+            }
+          ],
+          date: "2023-10-01"
+        }
+      });
 
     const user = userEvent.setup();
     render(

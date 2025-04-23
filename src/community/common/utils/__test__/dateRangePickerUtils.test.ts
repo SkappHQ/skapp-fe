@@ -1,10 +1,15 @@
 import { DateTime } from "luxon";
+
 import {
-  handleDateChange,
+  Holiday,
+  HolidayDurationType
+} from "~community/people/types/HolidayTypes";
+
+import {
   getChipLabel,
-  getSelectionClasses
+  getSelectionClasses,
+  handleDateChange
 } from "../dateRangePickerUtils";
-import { Holiday, HolidayDurationType } from "~community/people/types/HolidayTypes";
 
 describe("handleDateChange", () => {
   it("should set a range when one date is already selected", () => {
@@ -248,7 +253,13 @@ describe("getSelectionClasses - additional cases", () => {
       day.minus({ days: 1 }).toJSDate(),
       day.plus({ days: 1 }).toJSDate()
     ];
-    const workingDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const workingDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
 
     const result = getSelectionClasses({
       day,
@@ -268,7 +279,13 @@ describe("getSelectionClasses - additional cases", () => {
     const holidaysForDay: Holiday[] = [
       { holidayDuration: HolidayDurationType.HALFDAY_MORNING }
     ];
-    const workingDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const workingDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
 
     const result = getSelectionClasses({
       day,
@@ -289,7 +306,13 @@ describe("getSelectionClasses - additional cases", () => {
     const holidaysForDay: Holiday[] = [
       { holidayDuration: HolidayDurationType.HALFDAY_EVENING }
     ];
-    const workingDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const workingDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
 
     const result = getSelectionClasses({
       day,
@@ -311,7 +334,13 @@ describe("getSelectionClasses - additional cases", () => {
       { holidayDuration: HolidayDurationType.FULLDAY },
       { holidayDuration: HolidayDurationType.HALFDAY_MORNING }
     ];
-    const workingDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const workingDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
 
     const result = getSelectionClasses({
       day,
@@ -333,7 +362,13 @@ describe("getSelectionClasses - additional cases", () => {
       { holidayDuration: HolidayDurationType.HALFDAY_MORNING },
       { holidayDuration: HolidayDurationType.HALFDAY_EVENING }
     ];
-    const workingDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const workingDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
 
     const result = getSelectionClasses({
       day,

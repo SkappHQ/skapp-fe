@@ -7,11 +7,7 @@ import SortRow from "./SASortRow";
 describe("SASortRow", () => {
   test("renders the sort row with provided text", () => {
     render(
-      <SortRow
-        text="Test Sort Row"
-        selected={false}
-        onClick={jest.fn()}
-      />
+      <SortRow text="Test Sort Row" selected={false} onClick={jest.fn()} />
     );
     expect(screen.getByText("Test Sort Row")).toBeInTheDocument();
   });
@@ -31,8 +27,6 @@ describe("SASortRow", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-
-
   test("does not render start icon when isStartIcon is false", () => {
     render(
       <SortRow
@@ -42,9 +36,10 @@ describe("SASortRow", () => {
         isStartIcon={false}
       />
     );
-    expect(screen.queryByTestId("icon-add-circle-icon")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("icon-add-circle-icon")
+    ).not.toBeInTheDocument();
   });
-
 
   test("does not render selected icon when showSelectedIcon is false", () => {
     render(
@@ -55,7 +50,9 @@ describe("SASortRow", () => {
         showSelectedIcon={false}
       />
     );
-    expect(screen.queryByTestId("icon-check-circle-icon")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("icon-check-circle-icon")
+    ).not.toBeInTheDocument();
   });
 
   test("applies custom text styles", () => {
@@ -71,5 +68,4 @@ describe("SASortRow", () => {
     const sortRow = screen.getByText("Styled Sort Row");
     expect(sortRow).toHaveStyle("color: blue");
   });
-
 });

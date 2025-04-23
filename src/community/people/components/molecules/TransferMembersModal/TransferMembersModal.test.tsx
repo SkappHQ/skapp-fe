@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import TransferMembersModal from "./TransferMembersModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import TransferMembersModal from "./TransferMembersModal";
 
 jest.mock("~community/common/hooks/useTranslator", () => ({
   useTranslator: () => (key: string[]) => key[key.length - 1]
@@ -61,11 +63,12 @@ describe("TransferMembersModal", () => {
       </MockTheme>
     );
 
-    expect(screen.getByText("Transfer members to a new job family")).toBeInTheDocument();
+    expect(
+      screen.getByText("Transfer members to a new job family")
+    ).toBeInTheDocument();
     expect(screen.getByText("Transfer")).toBeInTheDocument();
     expect(screen.getByText("backBtnText")).toBeInTheDocument();
   });
-
 
   test("calls handleCancel when back button is clicked", () => {
     render(
@@ -88,5 +91,4 @@ describe("TransferMembersModal", () => {
 
     expect(mockHandleCancel).toHaveBeenCalled();
   });
-
 });

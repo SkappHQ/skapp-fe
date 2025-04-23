@@ -1,7 +1,12 @@
 import { DateTime } from "luxon";
 
 import {
+  addHoursToTime,
+  convert24TimeTo12Hour,
+  convertTo12HourByDateObject,
+  convertTo12HourByDateString,
   convertTo24HourByDateString,
+  convertToDateObjectBy12Hour,
   convertToDateTime,
   convertToMilliseconds,
   convertToTimeZoneISO,
@@ -9,21 +14,16 @@ import {
   convertUnixTimestampToISO,
   formatDuration,
   generateTimeSlots,
+  getCurrentTimeZone,
   getDayStartTimeEndTime,
+  getDuration,
   getTimeDifference,
-  isToday,
-  timeStringToDecimalHours,
-  timeStringToSeconds,
-  convertTo12HourByDateString,
-  convert24TimeTo12Hour,
-  addHoursToTime,
   getTotalSlotTypeHours,
   isTimePm,
-  convertToDateObjectBy12Hour,
-  convertTo12HourByDateObject,
+  isToday,
   sortTimeSlots,
-  getDuration,
-  getCurrentTimeZone
+  timeStringToDecimalHours,
+  timeStringToSeconds
 } from "../TimeUtils";
 
 describe("Date and Time Utility Functions", () => {
@@ -33,7 +33,9 @@ describe("Date and Time Utility Functions", () => {
     });
 
     test("handles invalid date strings gracefully", () => {
-      expect(convertTo24HourByDateString("invalid-date")).toBe("Invalid DateTime");
+      expect(convertTo24HourByDateString("invalid-date")).toBe(
+        "Invalid DateTime"
+      );
     });
   });
 
@@ -145,7 +147,9 @@ describe("Date and Time Utility Functions", () => {
 
   describe("convertTo12HourByDateString", () => {
     test("converts ISO date string to 12-hour format", () => {
-      expect(convertTo12HourByDateString("2023-11-03T14:30:00")).toBe("02:30 PM");
+      expect(convertTo12HourByDateString("2023-11-03T14:30:00")).toBe(
+        "02:30 PM"
+      );
     });
   });
 
@@ -164,18 +168,42 @@ describe("Date and Time Utility Functions", () => {
   describe("getTotalSlotTypeHours", () => {
     test("calculates total hours for a given slot type", () => {
       const timeSlots = [
-        { startTime: "2023-11-03T10:00:00", endTime: "2023-11-03T11:00:00", slotType: "WORK", isManualEntry: false },
-        { startTime: "2023-11-03T11:00:00", endTime: "2023-11-03T11:30:00", slotType: "BREAK", isManualEntry: false },
+        {
+          startTime: "2023-11-03T10:00:00",
+          endTime: "2023-11-03T11:00:00",
+          slotType: "WORK",
+          isManualEntry: false
+        },
+        {
+          startTime: "2023-11-03T11:00:00",
+          endTime: "2023-11-03T11:30:00",
+          slotType: "BREAK",
+          isManualEntry: false
+        }
       ];
-      expect(getTotalSlotTypeHours(timeSlots, "10:00 AM", "12:00 PM", "BREAK")).toBe("00h 30m");
+      expect(
+        getTotalSlotTypeHours(timeSlots, "10:00 AM", "12:00 PM", "BREAK")
+      ).toBe("00h 30m");
     });
 
     test("handles overnight durations correctly", () => {
       const timeSlots = [
-        { startTime: "2023-11-03T22:00:00", endTime: "2023-11-04T02:00:00", slotType: "WORK", isManualEntry: false },
-        { startTime: "2023-11-03T23:00:00", endTime: "2023-11-04T00:30:00", slotType: "BREAK", isManualEntry: false },
+        {
+          startTime: "2023-11-03T22:00:00",
+          endTime: "2023-11-04T02:00:00",
+          slotType: "WORK",
+          isManualEntry: false
+        },
+        {
+          startTime: "2023-11-03T23:00:00",
+          endTime: "2023-11-04T00:30:00",
+          slotType: "BREAK",
+          isManualEntry: false
+        }
       ];
-      expect(getTotalSlotTypeHours(timeSlots, "10:00 PM", "02:00 AM", "BREAK")).toBe("01h 30m");
+      expect(
+        getTotalSlotTypeHours(timeSlots, "10:00 PM", "02:00 AM", "BREAK")
+      ).toBe("01h 30m");
     });
   });
 
@@ -212,8 +240,18 @@ describe("Date and Time Utility Functions", () => {
   describe("sortTimeSlots", () => {
     test("sorts time slots by start time", () => {
       const timeSlots = [
-        { startTime: "2023-11-03T12:00:00", endTime: "2023-11-03T13:00:00", slotType: "DEFAULT", isManualEntry: false },
-        { startTime: "2023-11-03T10:00:00", endTime: "2023-11-03T11:00:00", slotType: "DEFAULT", isManualEntry: false },
+        {
+          startTime: "2023-11-03T12:00:00",
+          endTime: "2023-11-03T13:00:00",
+          slotType: "DEFAULT",
+          isManualEntry: false
+        },
+        {
+          startTime: "2023-11-03T10:00:00",
+          endTime: "2023-11-03T11:00:00",
+          slotType: "DEFAULT",
+          isManualEntry: false
+        }
       ];
       const sortedSlots = sortTimeSlots(timeSlots);
       expect(sortedSlots[0].startTime).toBe("2023-11-03T10:00:00");
@@ -238,4 +276,3 @@ describe("Date and Time Utility Functions", () => {
     });
   });
 });
-

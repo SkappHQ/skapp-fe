@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, fireEvent } from "@testing-library/react";
-import TerminationWarningModal from "./TerminationWarningModal";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import MockTheme from "~community/common/mocks/MockTheme";
+
+import TerminationWarningModal from "./TerminationWarningModal";
 
 // Mock hooks and functions
 jest.mock("~community/common/hooks/useTranslator", () => ({
@@ -29,7 +31,9 @@ describe("TerminationWarningModal", () => {
     );
 
     expect(screen.getByText("terminateWarningModalTitle")).toBeInTheDocument();
-    expect(screen.getByText("This is a termination warning message.")).toBeInTheDocument();
+    expect(
+      screen.getByText("This is a termination warning message.")
+    ).toBeInTheDocument();
     expect(screen.getByText("okayButtonText")).toBeInTheDocument();
   });
 
@@ -81,7 +85,11 @@ describe("TerminationWarningModal", () => {
       </MockTheme>
     );
 
-    expect(screen.queryByText("terminateWarningModalTitle")).not.toBeInTheDocument();
-    expect(screen.queryByText("This is a termination warning message.")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("terminateWarningModalTitle")
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("This is a termination warning message.")
+    ).not.toBeInTheDocument();
   });
 });
