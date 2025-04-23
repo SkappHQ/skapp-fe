@@ -112,6 +112,56 @@ describe("Time Entry Validation Schema", () => {
     });
   });
 
+  describe("fromTime and toTime relationship validation", () => {
+    it("should fail when fromTime is later than toTime", async () => {
+      const invalidData = {
+        timeEntryDate: "2024-04-01",
+        fromTime: "06:00 PM",
+        toTime: "05:00 PM"
+      };
+
+      expect(() => {
+        timeEntryValidation.validateSync(invalidData);
+      }).toThrow("Start time cannot be later than the end time.");
+    });
+
+    it("should fail when fromTime is greater than toTime", async () => {
+      const invalidData = {
+        timeEntryDate: "2024-04-01",
+        fromTime: "06:00 PM",
+        toTime: "05:00 PM"
+      };
+
+      expect(() => {
+        timeEntryValidation.validateSync(invalidData);
+      }).toThrow("Start time cannot be later than the end time.");
+    });
+
+    it("should pass when fromTime is earlier than toTime", async () => {
+      const validData = {
+        timeEntryDate: "2024-04-01",
+        fromTime: "08:00 AM",
+        toTime: "05:00 PM"
+      };
+
+      await expect(timeEntryValidation.validateSync(validData)).toEqual(
+        validData
+      );
+    });
+
+    it("should pass when toTime is missing", async () => {
+      const validData = {
+        timeEntryDate: "2024-04-01",
+        fromTime: "08:00 AM",
+        toTime: "05:00 PM"
+      };
+
+      await expect(timeEntryValidation.validateSync(validData)).toEqual(
+        validData
+      );
+    });
+  });
+
   describe("complete validation", () => {
     it("should validate all fields together successfully", async () => {
       const validData = {
@@ -128,8 +178,18 @@ describe("Time Entry Validation Schema", () => {
     it("should fail with multiple validation errors", () => {
       const invalidData = {
         timeEntryDate: "01/04/2024",
-        fromTime: "9AM",
-        toTime: "17:00"
+        fromTime: "9AM"
+      };
+
+      expect(() => {
+        timeEntryValidation.validateSync(invalidData);
+      }).toThrow();
+    });
+    it("should return true when toTime is earlier than fromTime", () => {
+      const invalidData = {
+        timeEntryDate: "2024-04-01",
+        fromTime: "09:00 AM",
+        toTime: "05:00 AM"
       };
 
       expect(() => {
