@@ -387,6 +387,13 @@ const UserLeaveHistory: FC<Props> = ({
         <DateRangePicker
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
+          chipStyles={{
+            "&:focus-visible": {
+              outline: `0.125rem solid ${theme.palette.common.black}`,
+              outlineOffset: "0.125rem",
+              backgroundColor: "transparent"
+            }
+          }}
         />
       </Stack>
     );
