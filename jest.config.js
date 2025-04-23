@@ -28,6 +28,7 @@ const customJestConfig = {
     '!**/enums/**',
     '!**/constants/**',
     '!**/organisms/**',
+    '!**/template/**',
     '!**/assets/**',
     '!**/public/**',
     '!**/data/**',
