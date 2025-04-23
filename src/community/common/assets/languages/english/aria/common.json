@@ -23,8 +23,8 @@
     },
     "dropDown": { "label": "label", "dropDown": "Dropdown" },
     "filledArrowIcon": {
-      "right": "Right arrow",
-      "left": "Left arrow"
+      "right": "Next",
+      "left": "Right"
     },
     "modal": {
       "closeIconBtn": "Close modal"

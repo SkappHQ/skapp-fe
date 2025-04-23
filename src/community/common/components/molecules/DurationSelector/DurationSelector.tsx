@@ -162,7 +162,7 @@ const DurationSelector = <T,>({
                 onClick={() => onOptionClick(options.halfDayMorning)}
                 onKeyDown={(event) => {
                   if (shouldActivateButton(event.key)) {
-                    onOptionClick(options.fullDay);
+                    onOptionClick(options.halfDayMorning);
                   }
                 }}
               >
@@ -190,7 +190,7 @@ const DurationSelector = <T,>({
                 onClick={() => onOptionClick(options.halfDayEvening)}
                 onKeyDown={(event) => {
                   if (shouldActivateButton(event.key)) {
-                    onOptionClick(options.fullDay);
+                    onOptionClick(options.halfDayEvening);
                   }
                 }}
               >
@@ -209,9 +209,16 @@ const DurationSelector = <T,>({
             </Stack>
           ) : (
             <Stack
+              role="button"
+              tabIndex={0}
               className={muiHalfDayClasses}
               sx={mergeSx([classes.btn, commonButtonStyles])}
               onClick={handleHalfDayClick}
+              onKeyDown={(event) => {
+                if (shouldActivateButton(event.key)) {
+                  handleHalfDayClick();
+                }
+              }}
             >
               <Typography
                 className={

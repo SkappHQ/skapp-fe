@@ -57,9 +57,8 @@ export const FilledArrow: FC<Props> = ({
       role="button"
       tabIndex={disabled ? -1 : tabIndex}
       aria-label={
-        ariaLabel || isRightArrow
-          ? translateAria(["right"])
-          : translateAria(["left"])
+        ariaLabel ??
+        (isRightArrow ? translateAria(["right"]) : translateAria(["left"]))
       }
     >
       {isRightArrow ? (
