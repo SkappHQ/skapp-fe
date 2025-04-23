@@ -27,7 +27,6 @@ To get started with Skapp, follow these steps:
 
 - For the installation guide and full documentation, visit the [Skapp Docs](https://docs.skapp.com/).
 - To learn how to contribute, check out the [CONTRIBUTING.md](https://github.com/SkappHQ/skapp-fe/blob/main/CONTRIBUTING.md) file.
-- For API references, see the [API Documentation](https://docs.skapp.com/api).
 
 ### License
 
@@ -37,7 +36,3 @@ To get started with Skapp, follow these steps:
 
 - Please read our [Trademark Policy](https://github.com/SkappHQ/skapp-fe/blob/main/TRADEMARK_POLICY.md).
 
-### Community and Support
-
-- Join the discussion on our [Community Forum](https://community.skapp.com/).
-- For issues or feature requests, open a ticket on [GitHub Issues](https://github.com/SkappHQ/skapp-fe/issues).
