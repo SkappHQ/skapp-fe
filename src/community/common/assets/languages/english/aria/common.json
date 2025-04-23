@@ -35,7 +35,7 @@
       "tableHead": {
         "tableHeadLabel": "{{tableName}} table head",
         "tableHeadRowLabel": "{{tableName}} table head row",
-        "checkbox": "Check {{tableName}} table all checkboxes",
+        "checkbox": "Check all the {{tableName}}",
         "tableHeadCell": "{{tableName}} table head {{headerLabel}} cell",
         "tableHeadActionCell": "{{tableName}} table head actions column cell"
       },
