@@ -43,7 +43,6 @@ export interface BulkUploadUser {
   joinedDate: string | null;
   teams: string | number[];
   primaryManager: string | null;
-  secondaryManager: string | null;
   startDate: string | null;
   endDate: string | null;
   timeZone: string | null;

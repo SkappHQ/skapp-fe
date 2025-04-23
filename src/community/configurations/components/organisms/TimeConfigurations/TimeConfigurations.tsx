@@ -322,6 +322,7 @@ const TimeConfigurations = (): JSX.Element => {
                   id={`${day}`}
                   chipStyles={{
                     width: "min-content",
+                    color: "common.black",
                     backgroundColor: isSelected
                       ? theme.palette.primary.main
                       : theme.palette.grey[100],

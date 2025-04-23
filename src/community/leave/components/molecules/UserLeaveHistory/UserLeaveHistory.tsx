@@ -65,6 +65,7 @@ const UserLeaveHistory: FC<Props> = ({
     "peopleModule",
     "individualLeaveAnalytics"
   );
+  const translateAria = useTranslator("peopleAria", "individualLeaveAnalytics");
 
   const {
     resetLeaveRequestParams,
@@ -262,6 +263,7 @@ const UserLeaveHistory: FC<Props> = ({
                     px: "1.25rem"
                   }
                 }}
+                tabIndex={-1}
               />
             </Typography>
           </Box>
@@ -306,6 +308,7 @@ const UserLeaveHistory: FC<Props> = ({
               }
             }}
             isTruncated={!theme.breakpoints.up("xl")}
+            tabIndex={-1}
           />
         ),
         reason: (
@@ -412,10 +415,7 @@ const UserLeaveHistory: FC<Props> = ({
               }
             }}
             aria-describedby={filterId}
-            dataProps={{
-              "aria-label":
-                "Filter: Pressing enter on this button opens a menu where you can choose to filter by leave status, leave type and date."
-            }}
+            ariaLabel={translateAria(["leaveHistoryFilterButton"])}
           />
         </Stack>
         <LeaveRequestMenu

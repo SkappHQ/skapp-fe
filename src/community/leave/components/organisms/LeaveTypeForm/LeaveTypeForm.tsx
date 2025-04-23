@@ -405,11 +405,11 @@ const LeaveTypeForm = () => {
               labelId="enable-attachment"
               label={translateText(["enableAttachment"])}
               checked={values?.isAttachment}
-              onChange={async (e) => {
-                await setFieldValue("isAttachment", e.target.checked);
+              onChange={async (checked: boolean) => {
+                await setFieldValue("isAttachment", checked);
                 await setFieldValue(
                   "isAttachmentMandatory",
-                  e.target.checked ? values?.isAttachmentMandatory : false
+                  checked ? values?.isAttachmentMandatory : false
                 );
               }}
             />
@@ -418,9 +418,9 @@ const LeaveTypeForm = () => {
               labelId="attachment-mandatory"
               label={translateText(["attachmentMandatory"])}
               checked={values?.isAttachmentMandatory}
-              onChange={async (e) => {
-                await setFieldValue("isAttachmentMandatory", e.target.checked);
-              }}
+              onChange={async (checked: boolean) =>
+                await setFieldValue("isAttachmentMandatory", checked)
+              }
               disabled={!values?.isAttachment}
             />
 
@@ -428,8 +428,8 @@ const LeaveTypeForm = () => {
               labelId="requires-comment"
               label={translateText(["requiresComment"])}
               checked={values?.isCommentMandatory}
-              onChange={async (e) => {
-                await setFieldValue("isCommentMandatory", e.target.checked);
+              onChange={async (checked: boolean) => {
+                await setFieldValue("isCommentMandatory", checked);
               }}
             />
           </Stack>
@@ -445,9 +445,9 @@ const LeaveTypeForm = () => {
               labelId="allow-auto-approval"
               label={translateText(["allowAutoApproval"])}
               checked={values?.isAutoApproval}
-              onChange={async (e) => {
-                await setFieldValue("isAutoApproval", e.target.checked);
-              }}
+              onChange={async (checked: boolean) =>
+                await setFieldValue("isAutoApproval", checked)
+              }
             />
           </Stack>
 
@@ -462,13 +462,9 @@ const LeaveTypeForm = () => {
               labelId="enable-carry-forward"
               label={translateText(["enableCarryForward"])}
               checked={values?.isCarryForwardEnabled}
-              onChange={async (e) => {
-                if (!e.target.checked) {
-                  setFieldError("maxCarryForwardDays", "");
-                  setFieldError("carryForwardExpirationDate", "");
-                }
-                await setFieldValue("isCarryForwardEnabled", e.target.checked);
-              }}
+              onChange={async (checked: boolean) =>
+                await setFieldValue("isCarryForwardEnabled", checked)
+              }
             />
 
             <InputField
@@ -494,7 +490,6 @@ const LeaveTypeForm = () => {
               isYearHidden
               name="carryForwardExpirationDate"
               label={translateText(["carryForwardExpirationDate"])}
-              value={DateTime.fromISO(values.carryForwardExpirationDate ?? "")}
               onchange={(value: string) => {
                 setFieldValue(
                   "carryForwardExpirationDate",

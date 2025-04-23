@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
@@ -6,6 +7,7 @@ import {
   initialState,
   useToast
 } from "~community/common/providers/ToastProvider";
+import { handleMainContentFocus } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -20,8 +22,14 @@ const ContentWithoutDrawer = ({ children }: Props) => {
 
   return (
     <>
+      <Link
+        href="#content-without-drawer-main-content"
+        onClick={(e) =>
+          handleMainContentFocus(e, "content-without-drawer-main-content")
+        }
+      />
       <Stack sx={classes.unProtectedWrapper}>
-        {children}
+        <main id="content-without-drawer-main-content">{children}</main>
         <ToastMessage
           key={toastMessage.key}
           open={toastMessage.open}

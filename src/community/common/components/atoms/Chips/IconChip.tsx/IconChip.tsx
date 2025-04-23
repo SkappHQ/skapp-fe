@@ -2,6 +2,7 @@ import { Chip, type SxProps } from "@mui/material";
 import { FC, JSX, MouseEvent, MouseEventHandler } from "react";
 
 import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   getEmoji,
   hasUnicodeCharacters
@@ -22,6 +23,7 @@ interface Props {
   emojiSize?: string;
   isTruncated?: boolean;
   dataTestId?: string;
+  tabIndex?: number;
 }
 
 const IconChip: FC<Props> = ({
@@ -36,8 +38,10 @@ const IconChip: FC<Props> = ({
   dataTestId,
   mediumScreenWidth = 1300, // couldn't set to 1280, as the row is tightly packed from 1300
   emojiSize,
-  isTruncated = true
+  isTruncated = true,
+  tabIndex
 }) => {
+  const translateAria = useTranslator("commonAria", "components", "iconChip");
   const classes = styles();
 
   const queryMatches = useMediaQuery();
@@ -89,6 +93,8 @@ const IconChip: FC<Props> = ({
         emojiSize,
         chipStyles
       })}
+      aria-label={`${originalLabel} ${translateAria(["label"])}`}
+      tabIndex={tabIndex}
     />
   );
 };

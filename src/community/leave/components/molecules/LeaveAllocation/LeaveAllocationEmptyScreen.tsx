@@ -27,7 +27,9 @@ const LeaveAllocationEmptyScreen = () => {
           year: selectedYear
         })}
         description={translateText(["description"])}
-        descriptionStyles={{ width: "100%" }}
+        customStyles={{
+          description: { width: "100%" }
+        }}
       />
     </Box>
   );

@@ -23,7 +23,7 @@ const AvailableChip: FC<Props> = ({ text }) => {
       }}
     >
       <Typography
-        sx={{ color: theme.palette.greens.deep_shadows }}
+        sx={{ color: theme.palette.greens.deepShadows }}
         variant="caption"
       >
         {" "}

@@ -55,6 +55,11 @@ const TimesheetDailyLogFilter = ({
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const translateText = useTranslator("attendanceModule", "timesheet");
+  const translateAria = useTranslator(
+    "attendanceAria",
+    "timesheet",
+    "dailyLogTable"
+  );
   const classes = styles(theme);
 
   const [showOverlayDropdown, setShowOverlayDropdown] =
@@ -249,6 +254,7 @@ const TimesheetDailyLogFilter = ({
               }
               buttonStyles={classes.iconButtonStyles}
               onClick={() => goBackward()}
+              ariaLabel={`${translateAria(["previousButton"])} ${selectedOptionName?.toLowerCase()}`}
             />
           )}
         {selectedOptionName === DailyLogFilterTabTypes.WEEK && (
@@ -282,6 +288,7 @@ const TimesheetDailyLogFilter = ({
               }
               buttonStyles={classes.iconButtonStyles}
               onClick={() => goForward()}
+              ariaLabel={`${translateAria(["nextButton"])} ${selectedOptionName?.toLowerCase()}`}
             />
           )}
       </Stack>
