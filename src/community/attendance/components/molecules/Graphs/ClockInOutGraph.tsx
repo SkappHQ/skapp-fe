@@ -1,6 +1,6 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
-import React, {
+import {
   Dispatch,
   JSX,
   SetStateAction,
@@ -17,6 +17,7 @@ import {
   GRAPH_RIGHT,
   clockInOutGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
+import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
@@ -28,10 +29,6 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { addHours } from "~community/common/utils/dateTimeUtils";
-import {
-  shouldMoveLeft,
-  shouldMoveRight
-} from "~community/common/utils/keyboardUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
@@ -65,7 +62,7 @@ const ClockInOutGraph = ({
   const theme: Theme = useTheme();
   const { data: timeConfigData } = useDefaultCapacity();
 
-  const chartRef = useRef<ReactECharts>(null);
+  const clockInOutChartRef = useRef<ReactECharts>(null);
 
   const standardClockInTime =
     timeConfigData?.[0]?.startTime?.substring(0, 5) ?? DEFAULT_START_TIME;
@@ -87,9 +84,8 @@ const ClockInOutGraph = ({
       CLOCK_IN_OUT_CHART_SHIFT_DAYS
   });
 
-  const [highlightedIndex, setHighlightedIndex] = useState<number>(
-    xIndexDay.startIndex
-  );
+  const [clockInOutHighlightedIndex, setClockInOutHighlightedIndex] =
+    useState<number>(xIndexDay.startIndex);
 
   // set start and end index around the standard clock in and clock out time
   useEffect(() => {
@@ -143,39 +139,6 @@ const ClockInOutGraph = ({
 
       case GRAPH_RIGHT:
         return xIndexDay.endIndex >= 48 ? "hidden" : "visible";
-    }
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    let newIndex = highlightedIndex;
-
-    if (shouldMoveRight(event.key)) {
-      newIndex = Math.min(highlightedIndex + 1, chartData.labels.length - 1);
-      setHighlightedIndex(newIndex);
-      showTooltipAtIndex(newIndex);
-      if (newIndex >= xIndexDay.endIndex) {
-        handleClick(GRAPH_RIGHT);
-      }
-      event.preventDefault();
-    } else if (shouldMoveLeft(event.key)) {
-      newIndex = Math.max(highlightedIndex - 1, 0);
-      setHighlightedIndex(newIndex);
-      showTooltipAtIndex(newIndex);
-      if (newIndex < xIndexDay.startIndex) {
-        handleClick(GRAPH_LEFT);
-      }
-      event.preventDefault();
-    }
-  };
-
-  const showTooltipAtIndex = (index: number): void => {
-    const chartInstance = chartRef.current?.getEchartsInstance?.();
-    if (chartInstance) {
-      chartInstance.dispatchAction({
-        type: "showTip",
-        seriesIndex: 0,
-        dataIndex: index
-      });
     }
   };
 
@@ -245,11 +208,24 @@ const ClockInOutGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box tabIndex={0} onKeyDown={handleKeyPress}>
+                <Box
+                  tabIndex={0}
+                  onKeyDown={(event) =>
+                    handleGraphKeyboardNavigation({
+                      event,
+                      highlightedIndex: clockInOutHighlightedIndex,
+                      setHighlightedIndex: setClockInOutHighlightedIndex,
+                      chartDataLabels: chartData.labels,
+                      xIndexDay,
+                      handleClick,
+                      chartRef: clockInOutChartRef
+                    })
+                  }
+                >
                   <ReactECharts
                     option={clockInOutGraphOptions}
                     style={{ height: "16.25rem" }}
-                    ref={chartRef}
+                    ref={clockInOutChartRef}
                   />
                 </Box>
               )}
