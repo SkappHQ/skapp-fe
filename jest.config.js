@@ -7,7 +7,7 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   moduleNameMapper: {
     "^~community(.*)$": "<rootDir>/src/community$1",
-    "^~enterprise(.*)$": "<rootDir>/src/enterprise$1",
+    "^~enterprise(.*)$": "<rootDir>/src/fallback$1",
     "^~public(.*)$": "<rootDir>/public$1",
     "^~styles(.*)$": "<rootDir>/styles$1",
     "^~i18n(.*)$": "<rootDir>/i18n$1",
@@ -29,6 +29,10 @@ const customJestConfig = {
     '!**/constants/**',
     '!**/organisms/**',
     '!**/assets/**',
+    '!**/public/**',
+    '!**/data/**',
+    '!**/QueryKeys.ts/**',
+    '!**/configs/**',
   ],
 };
 
