@@ -85,6 +85,7 @@ const OnboardingLayout: React.FC<LayoutProps> = ({
         disabled={disabled}
         isLoading={isLoading}
         data-testid={buttonTestId.onboardingLayoutSubmitBtn}
+        title={submitButtonText}
       />
     </Box>
   );

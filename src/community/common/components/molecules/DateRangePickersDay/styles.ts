@@ -79,7 +79,8 @@ const styles = (theme: Theme): StyleProps => ({
       }
     },
     "&.Mui-user-selection": {
-      backgroundColor: theme.palette.primary.dark
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.common.white
     },
     "&.Mui-full-day-range-selection": {
       backgroundColor: theme.palette.primary.main
@@ -89,9 +90,6 @@ const styles = (theme: Theme): StyleProps => ({
     },
     "&.Mui-half-day-evening-range-selection": {
       background: `linear-gradient(90deg, transparent 50%, ${theme.palette.primary.main} 50%)`
-    },
-    "&.Mui-selected": {
-      color: theme.palette.common.white
     },
     "&:hover": {
       backgroundColor: theme.palette.secondary.main
