@@ -70,7 +70,7 @@ export interface leaveRequestRowDataTypes {
   lastName?: string;
   avatarUrl?: string;
   dates?: string;
-  days?: string;
+  days?: string | number;
   durationDays?: string;
   reason?: string;
   reviewerComment?: string;

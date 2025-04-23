@@ -51,6 +51,8 @@ const ClockInOutGraph = ({
     "attendanceModule",
     "teamTimesheetAnalytics"
   );
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
+
   const theme: Theme = useTheme();
   const { data: timeConfigData } = useDefaultCapacity();
 
@@ -169,8 +171,14 @@ const ClockInOutGraph = ({
               >
                 <ToggleSwitch
                   options={[
-                    clockInOutGraphTypes.CLOCKIN.label,
-                    clockInOutGraphTypes.CLOCKOUT.label
+                    {
+                      value: clockInOutGraphTypes.CLOCKIN.label,
+                      ariaLabel: translateTextAria(["clockInTrend"])
+                    },
+                    {
+                      value: clockInOutGraphTypes.CLOCKOUT.label,
+                      ariaLabel: translateTextAria(["clockOutTrend"])
+                    }
                   ]}
                   setCategoryOption={(option: string) => {
                     setDataCategory(
@@ -205,6 +213,9 @@ const ClockInOutGraph = ({
             </Box>
             {chartData?.preProcessedData?.length !== 0 && (
               <Box
+                tabIndex={0}
+                role="button"
+                aria-label={translateTextAria(["previousTimeSlots"])}
                 onClick={() => handleClick(GRAPH_LEFT)}
                 sx={{
                   position: "absolute",
@@ -219,6 +230,9 @@ const ClockInOutGraph = ({
             )}
             {chartData?.preProcessedData?.length !== 0 && (
               <Box
+                tabIndex={0}
+                role="button"
+                aria-label={translateTextAria(["nextTimeSlots"])}
                 onClick={() => handleClick(GRAPH_RIGHT)}
                 sx={{
                   position: "absolute",

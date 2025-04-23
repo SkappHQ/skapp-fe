@@ -417,6 +417,7 @@ const TimeConfigurations = (): JSX.Element => {
                   {translateText(["morningLabel"]) ?? ""}
                 </Typography>
                 <InputField
+                  ariaLabel={translateText(["morningLabel"]) ?? ""}
                   isDisabled={!workingDays?.length}
                   inputType="text"
                   inputName="noOfMorningWorkingHours"
@@ -432,6 +433,7 @@ const TimeConfigurations = (): JSX.Element => {
                   {translateText(["eveningLabel"]) ?? ""}
                 </Typography>
                 <InputField
+                  ariaLabel={translateText(["eveningLabel"]) ?? ""}
                   isDisabled={!workingDays?.length}
                   inputType="text"
                   inputName="noOfEveningWorkingHours"

@@ -106,7 +106,6 @@ const LeaveRequests: NextPage = () => {
       pageHead={translateText(["pageHead"])}
       title={translateText(["title"])}
       isDividerVisible={true}
-      isBackButtonVisible
     >
       <>
         <Search
