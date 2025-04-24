@@ -10,6 +10,8 @@ import {
 } from "~community/common/constants/errorMessageKeys";
 import authFetch from "~community/common/utils/axiosInterceptor";
 
+import ROUTES from "../constants/routes";
+
 const TanStackProvider = ({ children }: { children: ReactNode }) => {
   const { update, data: session } = useSession();
 
@@ -35,7 +37,7 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
       console.error("Token refresh failed:", error);
       await signOut({
         redirect: true,
-        callbackUrl: "/system-update"
+        callbackUrl: ROUTES.AUTH.SYSTEM_UPDATE
       });
     }
   };
@@ -55,17 +57,9 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
 
         if (
           error?.response?.data?.results?.[0]?.messageKey ===
-          COMMON_ERROR_INVALID_TOKEN
-        ) {
-          await signOut({
-            redirect: true,
-            callbackUrl: "/system-update"
-          });
-        }
-
-        if (
+            COMMON_ERROR_TOKEN_EXPIRED ||
           error?.response?.data?.results?.[0]?.messageKey ===
-          COMMON_ERROR_TOKEN_EXPIRED
+            COMMON_ERROR_INVALID_TOKEN
         ) {
           await signOut();
         }

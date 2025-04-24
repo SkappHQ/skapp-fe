@@ -1,6 +1,5 @@
 import attendanceAria from "~community/common/assets/languages/english/aria/attendance.json";
 import commonAria from "~community/common/assets/languages/english/aria/common.json";
-import leaveAria from "~community/common/assets/languages/english/aria/leave.json";
 import onboardingAria from "~community/common/assets/languages/english/aria/onboarding.json";
 import peopleAria from "~community/common/assets/languages/english/aria/people.json";
 import attendanceModule from "~community/common/assets/languages/english/attendanceModule.json";
@@ -17,7 +16,6 @@ export const english = {
   peopleModule,
   leaveModule,
   attendanceModule,
-  leaveAria,
   onboardingAria,
   attendanceAria,
   commonAria,
