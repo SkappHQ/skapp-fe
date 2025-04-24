@@ -1,4 +1,7 @@
 {
+  "confirmBackNavigation": {
+    "description": "Are you sure you want to leave? You will lose your progress."
+  },
   "words": {
     "days": "Days"
   },

@@ -17,7 +17,6 @@ import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 const LeaveType: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveTypes");
-
   const router = useRouter();
   const { slug } = router.query;
 
@@ -78,31 +77,29 @@ const LeaveType: NextPage = () => {
   };
 
   return (
-    <>
-      <ContentLayout
-        title={
-          slug === LeaveTypeFormTypes.EDIT
-            ? translateText(["editLeaveType"])
-            : translateText(["addLeaveType"])
-        }
-        pageHead={translateText(["pageHead"])}
-        isDividerVisible
-        isBackButtonVisible
-        onBackClick={handleBackBtnClick}
-        customRightContent={
-          slug === LeaveTypeFormTypes.EDIT ? (
-            <LeaveTypeActivationToggleButton />
-          ) : (
-            <></>
-          )
-        }
-      >
-        <>
-          <LeaveTypeForm />
-          <UnsavedChangesModal />
-        </>
-      </ContentLayout>
-    </>
+    <ContentLayout
+      title={
+        slug === LeaveTypeFormTypes.EDIT
+          ? translateText(["editLeaveType"])
+          : translateText(["addLeaveType"])
+      }
+      pageHead={translateText(["pageHead"])}
+      isDividerVisible
+      isBackButtonVisible
+      onBackClick={handleBackBtnClick}
+      customRightContent={
+        slug === LeaveTypeFormTypes.EDIT ? (
+          <LeaveTypeActivationToggleButton />
+        ) : (
+          <></>
+        )
+      }
+    >
+      <>
+        <LeaveTypeForm />
+        <UnsavedChangesModal />
+      </>
+    </ContentLayout>
   );
 };
 

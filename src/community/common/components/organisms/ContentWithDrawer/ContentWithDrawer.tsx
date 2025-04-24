@@ -36,8 +36,12 @@ const ContentWithDrawer = ({ children }: Props) => {
           handleMainContentFocus(e, "content-with-drawer-main-content")
         }
         style={{
-          opacity: "0",
-          cursor: "default"
+          position: "absolute",
+          left: "-62.4375rem",
+          top: "auto",
+          width: "0.0625rem",
+          height: "0.0625rem",
+          overflow: "hidden"
         }}
       >
         {translateAria(["skipToMainContent"])}
@@ -46,7 +50,17 @@ const ContentWithDrawer = ({ children }: Props) => {
         <Drawer />
         <Stack sx={classes.contentWrapper}>
           <AppBar />
-          <main id="content-with-drawer-main-content">{children}</main>
+          <main
+            id="content-with-drawer-main-content"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%"
+            }}
+          >
+            {children}
+          </main>
         </Stack>
       </Stack>
       <ToastMessage

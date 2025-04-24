@@ -1,0 +1,6 @@
+{
+  "dashboard": {
+    "resourceAvailabilityTrendMonthlyNext": "next month",
+    "resourceAvailabilityTrendMonthlyPrevious": "previous month"
+  }
+}

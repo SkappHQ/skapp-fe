@@ -138,7 +138,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
       setSearchTerm(fullName);
     }
   };
-  const handleLeaveTypeChange = (e: SelectChangeEvent<string>) => {
+  const handleLeaveTypeChange = (e: SelectChangeEvent) => {
     const selectedValue = e.target.value;
 
     const selectedLeaveType = Array.isArray(leaveTypesData)
