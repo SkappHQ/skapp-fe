@@ -141,6 +141,7 @@ const DropdownSearch: FC<Props> = ({
       <Stack direction="row" justifyContent="space-between">
         <Typography
           component="label"
+          id={label}
           lineHeight={1.5}
           sx={{
             fontWeight: isDisabled ? 400 : 500,
@@ -148,7 +149,7 @@ const DropdownSearch: FC<Props> = ({
               ? theme.palette.grey[700]
               : error
                 ? theme.palette.error.contrastText
-                : "black",
+                : "common.black",
             mb: "0.5rem"
           }}
         >
@@ -164,6 +165,7 @@ const DropdownSearch: FC<Props> = ({
       </Stack>
 
       <Select
+        aria-labelledby={label}
         value={value ? getValues() : ""}
         placeholder={placeholder}
         options={itemList}
