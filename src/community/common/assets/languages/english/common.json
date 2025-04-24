@@ -1,4 +1,7 @@
 {
+  "words": {
+    "days": "Days"
+  },
   "commonComponents": {
     "dragAndDrop": {
       "description": "Drop the files here ...",
