@@ -1,8 +1,10 @@
 import ROUTES from "~community/common/constants/routes";
 import { config } from "~middleware";
 
-//Dynamic routes like /sign/sent/:id
-export const drawerHiddenDynamicProtectedRoutes = [ROUTES.SIGN.SENT_DETAIL];
+export const drawerHiddenPathPatterns = [
+  // Add the pattern for dynamic routes
+  "/sign/sent/"
+];
 
 export const drawerHiddenProtectedRoutes = [
   ROUTES.ORGANIZATION.SETUP,
@@ -16,46 +18,34 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.CHANGE_SUPERVISORS,
   ROUTES.SUBSCRIPTION,
   ROUTES.SIGN.SIGN,
-  ROUTES.SIGN.CREATE_DOCUMENT,
-  ...drawerHiddenDynamicProtectedRoutes
+  ROUTES.SIGN.CREATE_DOCUMENT
 ];
 
-const getDrawerHiddenStatus = (asPath: string): boolean => {
-  return drawerHiddenProtectedRoutes.some((route) => {
-    if (typeof route === "string") {
-      return route === asPath;
-    } else if (typeof route === "function") {
-      try {
-        const samplePath = route(123);
-        const basePathPattern = samplePath.substring(
-          0,
-          samplePath.lastIndexOf("/") + 1
-        );
-        return asPath.startsWith(basePathPattern);
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  });
-};
-
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const isADrawerHiddenProtectedRoute = getDrawerHiddenStatus(asPath);
+  const isADrawerHiddenProtectedRoute =
+    drawerHiddenProtectedRoutes.includes(asPath);
 
-  if (!isADrawerHiddenProtectedRoute) {
-    const formattedProtectedPaths = config.matcher.map((path) =>
-      path.replace(/\/:path\*$/, "")
-    );
-
-    return formattedProtectedPaths.some((path) => {
-      return (
-        asPath.substring(1).split("/")[0].split("?")[0] === path.split("/")[1]
-      );
-    });
+  if (isADrawerHiddenProtectedRoute) {
+    return false;
   }
 
-  return false;
+  const isPathMatchingPattern = drawerHiddenPathPatterns.some((pattern) =>
+    asPath.startsWith(pattern)
+  );
+
+  if (isPathMatchingPattern) {
+    return false;
+  }
+
+  const formattedProtectedPaths = config.matcher.map((path) =>
+    path.replace(/\/:path\*$/, "")
+  );
+
+  return formattedProtectedPaths.some((path) => {
+    return (
+      asPath.substring(1).split("/")[0].split("?")[0] === path.split("/")[1]
+    );
+  });
 };
 
 export const decodeJWTToken = (token: string) => {
