@@ -89,8 +89,16 @@ const ContactDetailsFormSection = ({
               label={translateText(["relationship"])}
               value={values?.relationship ?? ""}
               placeholder={translateText(["selectRelationship"])}
-              onChange={handleChange}
-              onInput={handleInput}
+              onChange={(e) => {
+                if ("target" in e && "value" in e.target) {
+                  handleChange(e as SelectChangeEvent);
+                }
+              }}
+              onInput={(e) => {
+                if ("target" in e && "value" in e.target) {
+                  handleInput(e as SelectChangeEvent);
+                }
+              }}
               error={errors.relationship ?? ""}
               componentStyle={{
                 mt: "0rem"
