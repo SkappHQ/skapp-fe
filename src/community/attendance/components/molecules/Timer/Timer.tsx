@@ -54,31 +54,25 @@ const Timer = (): JSX.Element => {
       spacing={1}
       component="div"
       sx={status && classes.container(status)}
-      tabIndex={0}
-      aria-label="Timer"
     >
       <Box
         key={timer}
         sx={status && classes.timerComponent(status, isAttendanceModalOpen)}
       />
       {/* timer */}
-      {isBelow600 ? (
-        <PlayButton />
-      ) : (
-        <>
-          <Typography
-            variant="h3"
-            component="p"
-            sx={classes.textStyle}
-            minWidth={68}
-          >
-            {timer
-              ? new Date(timer * 1000).toISOString().substring(11, 19)
-              : "00:00:00"}
-          </Typography>
-          <PlayButton />
-        </>
+      {!isBelow600 && (
+        <Typography
+          variant="h3"
+          component="p"
+          sx={classes.textStyle}
+          minWidth={68}
+        >
+          {timer
+            ? new Date(timer * 1000).toISOString().substring(11, 19)
+            : "00:00:00"}
+        </Typography>
       )}
+      <PlayButton />
     </Stack>
   );
 };
