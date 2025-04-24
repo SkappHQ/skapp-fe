@@ -105,7 +105,6 @@ const SystemPermissionFormSection = ({
     employee?.common?.accountStatus === AccountStatusTypes.TERMINATED;
 
   const onSave = () => {
-    console.log("onSave", supervisedData);
     if (!employee.systemPermissions?.isSuperAdmin) {
       const rolesToAssign = {
         peopleRole: employee?.systemPermissions?.peopleRole,
