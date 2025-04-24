@@ -19,11 +19,14 @@ import CheckIcon from "~community/common/assets/Icons/CheckIcon";
 import CheckWrapperIcon from "~community/common/assets/Icons/CheckWrapperIcon";
 import ChevronLeftIcon from "~community/common/assets/Icons/ChevronLeftIcon";
 import ChevronRightIcon from "~community/common/assets/Icons/ChevronRightIcon";
+import ClockDenyIcon from "~community/common/assets/Icons/ClockDenyIcon";
 import ClockIcon from "~community/common/assets/Icons/ClockIcon";
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
 import CloseStatusPopupIcon from "~community/common/assets/Icons/CloseStatusPopupIcon";
 import ConfigurationsIcon from "~community/common/assets/Icons/ConfigurationsIcon";
 import CopyIcon from "~community/common/assets/Icons/CopyIcon";
+import CreateDocumentIcon from "~community/common/assets/Icons/CreateDocumentIcon";
+import CrossedCircleIcon from "~community/common/assets/Icons/CrossedCircleIcon";
 import CurvedTickIcon from "~community/common/assets/Icons/CurvedTickIcon";
 import DancingWomenIcon from "~community/common/assets/Icons/DancingWomenIcon";
 import DashIcon from "~community/common/assets/Icons/DashIcon";
@@ -43,6 +46,7 @@ import EmailIcon from "~community/common/assets/Icons/EmailIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
 import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
+import EyeIcon from "~community/common/assets/Icons/EyeIcon";
 import FileIcon from "~community/common/assets/Icons/FileIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
@@ -90,6 +94,7 @@ import RoundedCloseIcon from "~community/common/assets/Icons/RoundedCloseIcon";
 import SaveIcon from "~community/common/assets/Icons/SaveIcon";
 import SearchIcon from "~community/common/assets/Icons/SearchIcon";
 import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
+import SendIcon from "~community/common/assets/Icons/SendIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
 import SignatureIcon from "~community/common/assets/Icons/SignIcon";
@@ -247,7 +252,13 @@ export const IconMapping: Partial<
   [IconName.PDF_ICON]: PdfIcon,
   [IconName.POP_OUT_ICON]: PopOutIcon,
   [IconName.RING_BELL_ICON]: RingBellIcon,
-  [IconName.DOTTED_CLOCK_ICON]: DottedClockIcon
+  [IconName.DOTTED_CLOCK_ICON]: DottedClockIcon,
+  [IconName.CREATE_DOCUMENT_ICON]: CreateDocumentIcon,
+  [IconName.CLOCK_DENY_ICON]: ClockDenyIcon,
+  [IconName.EYE_ICON]: EyeIcon,
+  [IconName.SEND_ICON]: SendIcon,
+  [IconName.SUCCESS_TICK_ICON]: SuccessIcon,
+  [IconName.CROSSED_CIRCLE_ICON]: CrossedCircleIcon
   // Add more icons here as needed
 };
 
