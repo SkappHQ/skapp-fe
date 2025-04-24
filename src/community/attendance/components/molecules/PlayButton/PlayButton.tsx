@@ -69,7 +69,7 @@ const PlayButton = (): JSX.Element => {
     >
       <Box
         tabIndex={0}
-        role="0"
+        role="button"
         component="button"
         sx={status && classes.buttonComponent(status)}
         onClick={onClick}
