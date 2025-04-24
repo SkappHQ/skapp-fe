@@ -61,8 +61,6 @@ const BaseLayout = ({ children }: Props) => {
   const renderComponent = useMemo(() => {
     switch (sessionStatus) {
       case "loading":
-        if (asPath === "/enterprise/settings/account?status=success")
-          return <LogoColorLoader />;
         return <FullScreenLoader />;
       case "authenticated": {
         if (isEnterprise && isGlobalLoginMethodLoading) {

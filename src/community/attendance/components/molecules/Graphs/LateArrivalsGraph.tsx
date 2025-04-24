@@ -1,7 +1,14 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
 import { DateTime } from "luxon";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import {
   GRAPH_LEFT,
@@ -10,6 +17,7 @@ import {
   lateArrivalsGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
 import { useLateArrivalsGraphOptions } from "~community/attendance/utils/echartOptions/lateArrivalsGraphOptions";
+import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -45,6 +53,8 @@ const LateArrivalsGraph = ({
   const theme: Theme = useTheme();
   const currentMonth = DateTime.local().toFormat("MMM");
 
+  const lateArrivalChartRef = useRef<ReactECharts>(null);
+
   const findTimeIndex = (labels: string[], standardTime: string) => {
     return (
       labels?.findIndex((time: string) => time?.includes(standardTime)) - 3
@@ -55,6 +65,9 @@ const LateArrivalsGraph = ({
     startIndex: 0,
     endIndex: 0
   });
+
+  const [lateArrivalHighlightedIndex, setLateArrivalHighlightedIndex] =
+    useState<number>(xIndexDay.startIndex);
 
   const MaxNumberOfWeeks = 51;
   const MaxNumberOfMonths = 12;
@@ -182,10 +195,24 @@ const LateArrivalsGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box>
+                <Box
+                  tabIndex={0}
+                  onKeyDown={(event) =>
+                    handleGraphKeyboardNavigation({
+                      event,
+                      highlightedIndex: lateArrivalHighlightedIndex,
+                      setHighlightedIndex: setLateArrivalHighlightedIndex,
+                      chartDataLabels: chartData.labels,
+                      xIndexDay,
+                      handleClick,
+                      chartRef: lateArrivalChartRef
+                    })
+                  }
+                >
                   <ReactECharts
                     option={lateArrivalsGraphOptions}
                     style={{ height: "16.25rem" }}
+                    ref={lateArrivalChartRef}
                   />
                 </Box>
               )}

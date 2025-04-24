@@ -1,6 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { getSession } from "next-auth/react";
 
+import { ApiVersions } from "../constants/configs";
 import { getApiUrl } from "./getConstants";
 
 const getSubDomain = (url: string, multipleValues: boolean = false) => {
@@ -12,7 +13,7 @@ export const tenantID =
   typeof window !== "undefined" ? getSubDomain(window.location.hostname) : "";
 
 const authFetch = axios.create({
-  baseURL: getApiUrl()
+  baseURL: getApiUrl() + ApiVersions.V1
 });
 
 //  request interceptor
