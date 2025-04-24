@@ -48,6 +48,8 @@ const LateArrivalsGraph = ({
   isDataLoading
 }: Props): JSX.Element => {
   const translations = useTranslator("attendanceModule", "dashboards");
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
+
   const theme: Theme = useTheme();
   const currentMonth = DateTime.local().toFormat("MMM");
 
@@ -165,11 +167,16 @@ const LateArrivalsGraph = ({
                 >
                   {translations(["attendanceDashboard.lateArrivals"])}
                 </Typography>
-
                 <ToggleSwitch
                   options={[
-                    lateArrivalsGraphTypes.WEEKLY.label,
-                    lateArrivalsGraphTypes.MONTHLY.label
+                    {
+                      ariaLabel: translateTextAria(["lateArrivalTrendWeekly"]),
+                      value: lateArrivalsGraphTypes.WEEKLY.label
+                    },
+                    {
+                      ariaLabel: translateTextAria(["lateArrivalTrendMonthly"]),
+                      value: lateArrivalsGraphTypes.MONTHLY.label
+                    }
                   ]}
                   setCategoryOption={(option: string) => {
                     setDataCategory(
@@ -212,6 +219,13 @@ const LateArrivalsGraph = ({
             </Box>
             {chartData?.preProcessedData?.length !== 0 && (
               <Box
+                aria-label={
+                  dataCategory === "WEEKLY"
+                    ? translateTextAria(["lateArrivalTrendWeeklyPrevious"])
+                    : translateTextAria(["lateArrivalTrendMonthlyPrevious"])
+                }
+                tabIndex={0}
+                role="button"
                 onClick={() => handleClick(GRAPH_LEFT)}
                 sx={{
                   position: "absolute",
@@ -224,8 +238,16 @@ const LateArrivalsGraph = ({
                 <Icon name={IconName.CHEVRON_LEFT_ICON} />
               </Box>
             )}
+
             {chartData?.preProcessedData?.length !== 0 && (
               <Box
+                aria-label={
+                  dataCategory === "WEEKLY"
+                    ? translateTextAria(["lateArrivalTrendWeeklyNext"])
+                    : translateTextAria(["lateArrivalTrendMonthlyNext"])
+                }
+                tabIndex={0}
+                role="button"
                 onClick={() => handleClick(GRAPH_RIGHT)}
                 sx={{
                   position: "absolute",

@@ -8,7 +8,10 @@ import { shouldToggleSubmenu } from "~community/common/utils/keyboardUtils";
 import styles from "./styles";
 
 type ToggleSwitchProps = {
-  options: string[];
+  options: {
+    ariaLabel?: string;
+    value: string;
+  }[];
   setCategoryOption: (options: string) => void;
   categoryOption: string;
   containerStyles?: SxProps;
@@ -45,14 +48,15 @@ const ToggleSwitch = (props: ToggleSwitchProps): JSX.Element => {
       {/* options */}
       {options.map((option, index) => (
         <Typography
+          aria-label={option.ariaLabel}
           key={index}
           sx={mergeSx([
-            classes.text(categoryOption === option),
-            textStyles ? textStyles(categoryOption === option) : {}
+            classes.text(categoryOption === option.value),
+            textStyles ? textStyles(categoryOption === option.value) : {}
           ])}
-          onClick={() => setCategoryOption(option)}
+          onClick={() => setCategoryOption(option.value)}
         >
-          {option}
+          {option.value}
         </Typography>
       ))}
     </Box>

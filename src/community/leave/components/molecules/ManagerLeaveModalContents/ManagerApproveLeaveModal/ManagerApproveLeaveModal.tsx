@@ -46,6 +46,8 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
     "leaveManagerEmployee"
   );
 
+  const commonTranslateText = useTranslator("words");
+
   const handleApprove = (): void => {
     const requestData = {
       leaveRequestId: leaveRequestData?.leaveId as number,
@@ -217,7 +219,11 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
             </Typography>
             <Stack direction="row" spacing={1}>
               <BasicChip
-                label={leaveRequestData?.days ?? ""}
+                label={
+                  typeof leaveRequestData?.days === "number"
+                    ? `${leaveRequestData.days} ${commonTranslateText(["days"])}`
+                    : leaveRequestData.days
+                }
                 chipStyles={{ backgroundColor: "grey.100", py: "0.75rem" }}
               />
               <BasicChip
