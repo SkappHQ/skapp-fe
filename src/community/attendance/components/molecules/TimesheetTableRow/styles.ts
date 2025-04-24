@@ -15,6 +15,9 @@ export const timesheetTableRowStyles = (theme: Theme, selectedTab: string) => ({
     position: "relative",
     [theme.breakpoints.down("xl")]: {
       width: "max-content"
+    },
+    "&:focus": {
+      zIndex: ZIndexEnums.POPOVER
     }
   },
   stickyColumn: {
