@@ -1,13 +1,13 @@
 import { fireEvent, render } from "@testing-library/react";
 
-import useBlockNavigation from "./useBlockNavigation";
+import useBlockBackNavigation from "./useBlockBackNavigation";
 
 const TestComponent = () => {
-  useBlockNavigation();
+  useBlockBackNavigation();
   return <div>Test Component</div>;
 };
 
-describe("useBlockNavigation", () => {
+describe("useBlockBackNavigation", () => {
   let confirmSpy: jest.SpyInstance;
 
   beforeEach(() => {

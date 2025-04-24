@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 
-const useBlockNavigation = () => {
+import { useTranslator } from "../useTranslator";
+
+const useBlockBackNavigation = () => {
+  const translateText = useTranslator("confirmBackNavigation");
+
   useEffect(() => {
     let blockNavigation = true;
 
@@ -13,9 +17,7 @@ const useBlockNavigation = () => {
      */
     const handlePopState = (event: PopStateEvent) => {
       if (blockNavigation) {
-        const confirmLeave = window.confirm(
-          "Are you sure you want to leave? You will lose your progress."
-        );
+        const confirmLeave = window.confirm(translateText(["description"]));
         if (!confirmLeave) {
           // Prevent the default 'popstate' behavior (navigation).
           event.preventDefault();
@@ -42,4 +44,4 @@ const useBlockNavigation = () => {
   }, []);
 };
 
-export default useBlockNavigation;
+export default useBlockBackNavigation;
