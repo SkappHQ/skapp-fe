@@ -311,12 +311,27 @@ export const formatDate = (dateString: string) => {
   if (!dateString) return null;
   return dateString?.toString().split("T")[0];
 };
-export const toCamelCase = (string: string) =>
-  string
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9]+(.)/g, (match, char) => char.toUpperCase());
 
+export const toCamelCase = (string: string): string => {
+  if (!string) return "";
+
+  const trimmed = string.trim();
+
+  // If there are no separators, just ensure first char is lowercase
+  if (!/[\s\-_]/.test(trimmed)) {
+    return trimmed.charAt(0).toLowerCase() + trimmed.slice(1);
+  }
+
+  // Split by common delimiters and convert
+  const words = trimmed.split(/[\s\-_]+/);
+  return (
+    words[0].toLowerCase() +
+    words
+      .slice(1)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join("")
+  );
+};
 export const flatListValues = (obj: Record<string, any>): any[] => {
   const result: any[] = [];
 

@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { JSX } from "react";
+import React, { JSX } from "react";
 
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldToggleSubmenu } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -27,8 +28,23 @@ const ToggleSwitch = (props: ToggleSwitchProps): JSX.Element => {
     containerStyles,
     textStyles
   } = props;
+
+  const currentIndex = options.findIndex((opt) => opt === categoryOption);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (shouldToggleSubmenu(e.key)) {
+      const nextIndex = currentIndex === 0 ? 1 : 0;
+      setCategoryOption(options[nextIndex]);
+      e.preventDefault();
+    }
+  };
+
   return (
-    <Box sx={mergeSx([classes.container, containerStyles])}>
+    <Box
+      tabIndex={0}
+      sx={mergeSx([classes.container, containerStyles])}
+      onKeyDown={handleKeyDown}
+    >
       {/* options */}
       {options.map((option, index) => (
         <Typography
