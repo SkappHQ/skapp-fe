@@ -380,6 +380,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
             height: "6.125rem",
             border: "none"
           }}
+          isOriginalImage={true}
           firstName={cardData?.firstName ?? ("" as string)}
           lastName={cardData?.lastName ?? ("" as string)}
           getInputProps={getInputProps}
