@@ -36,8 +36,12 @@ const ContentWithDrawer = ({ children }: Props) => {
           handleMainContentFocus(e, "content-with-drawer-main-content")
         }
         style={{
-          opacity: "0",
-          cursor: "default"
+          position: "absolute",
+          left: "-62.4375rem",
+          top: "auto",
+          width: "0.0625rem",
+          height: "0.0625rem",
+          overflow: "hidden"
         }}
       >
         {translateAria(["skipToMainContent"])}
