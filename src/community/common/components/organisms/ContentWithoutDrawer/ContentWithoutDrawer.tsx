@@ -42,7 +42,17 @@ const ContentWithoutDrawer = ({ children }: Props) => {
         {translateAria(["skipToMainContent"])}
       </Link>
       <Stack sx={classes.unProtectedWrapper}>
-        <main id="content-without-drawer-main-content">{children}</main>
+        <main
+          id="content-without-drawer-main-content"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%"
+          }}
+        >
+          {children}
+        </main>
         <ToastMessage
           key={toastMessage.key}
           open={toastMessage.open}

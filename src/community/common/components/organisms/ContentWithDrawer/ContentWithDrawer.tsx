@@ -50,7 +50,17 @@ const ContentWithDrawer = ({ children }: Props) => {
         <Drawer />
         <Stack sx={classes.contentWrapper}>
           <AppBar />
-          <main id="content-with-drawer-main-content">{children}</main>
+          <main
+            id="content-with-drawer-main-content"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%"
+            }}
+          >
+            {children}
+          </main>
         </Stack>
       </Stack>
       <ToastMessage
