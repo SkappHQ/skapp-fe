@@ -322,6 +322,7 @@ const TimeConfigurations = (): JSX.Element => {
                   id={`${day}`}
                   chipStyles={{
                     width: "min-content",
+                    color: "common.black",
                     backgroundColor: isSelected
                       ? theme.palette.primary.main
                       : theme.palette.grey[100],
@@ -416,6 +417,7 @@ const TimeConfigurations = (): JSX.Element => {
                   {translateText(["morningLabel"]) ?? ""}
                 </Typography>
                 <InputField
+                  ariaLabel={translateText(["morningLabel"]) ?? ""}
                   isDisabled={!workingDays?.length}
                   inputType="text"
                   inputName="noOfMorningWorkingHours"
@@ -431,6 +433,7 @@ const TimeConfigurations = (): JSX.Element => {
                   {translateText(["eveningLabel"]) ?? ""}
                 </Typography>
                 <InputField
+                  ariaLabel={translateText(["eveningLabel"]) ?? ""}
                   isDisabled={!workingDays?.length}
                   inputType="text"
                   inputName="noOfEveningWorkingHours"

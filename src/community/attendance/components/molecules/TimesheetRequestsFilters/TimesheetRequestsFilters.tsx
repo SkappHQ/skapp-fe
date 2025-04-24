@@ -27,6 +27,11 @@ interface Props {
 const TimesheetRequestsFilters: FC<Props> = ({ isManager = false }: Props) => {
   const theme: Theme = useTheme();
   const translateText = useTranslator("attendanceModule", "timesheet");
+  const translateAria = useTranslator(
+    "attendanceAria",
+    "timesheet",
+    "timeEntryRequestTable"
+  );
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [filterEl, setFilterEl] = useState<null | HTMLElement>(null);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
@@ -213,6 +218,7 @@ const TimesheetRequestsFilters: FC<Props> = ({ isManager = false }: Props) => {
             icon={<Icon name={IconName.FILTER_ICON} />}
             onClick={handleFilterClick}
             buttonStyles={classes.iconButtonStyles}
+            ariaLabel={translateAria(["filterButton"])}
           />
         </Stack>
         <TimesheetFilterModal

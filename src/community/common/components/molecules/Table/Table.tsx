@@ -45,6 +45,7 @@ export interface CommonTableProps {
     //NOTE: If you want to disable individual checkbox, you have to use isRowDisabled prop and disable the entire row
     isEnabled?: boolean;
     isSelectAllEnabled?: boolean;
+    isSelectAllVisible?: boolean;
     isSelectAllChecked?: boolean;
     handleIndividualSelectClick?: (id: number) => () => void;
     handleSelectAllClick?: () => void;
@@ -72,8 +73,9 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   return (
     <Stack
       sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
-      role="region"
+      role="group"
       aria-label={`${tableName}-table-wrapper`}
+      tabIndex={0}
     >
       <TableHeadActionToolbar
         firstRow={actionToolbar?.firstRow}

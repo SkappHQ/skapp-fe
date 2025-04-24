@@ -79,7 +79,8 @@ const styles = (theme: Theme): StyleProps => ({
       }
     },
     "&.Mui-user-selection": {
-      backgroundColor: theme.palette.primary.dark
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.common.white
     },
     "&.Mui-full-day-range-selection": {
       backgroundColor: theme.palette.primary.main

@@ -6,6 +6,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { DurationSelectorDisabledOptions } from "~community/common/types/MoleculeTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -126,8 +127,15 @@ const DurationSelector = <T,>({
         <Stack sx={classes.btnWrapper}>
           <Stack
             className={muiFullDayClasses}
+            role="button"
+            tabIndex={0}
             sx={mergeSx([classes.btn, commonButtonStyles])}
             onClick={() => onOptionClick(options.fullDay)}
+            onKeyDown={(event) => {
+              if (shouldActivateButton(event.key)) {
+                onOptionClick(options.fullDay);
+              }
+            }}
           >
             <Typography
               className={muiFullDayClasses}
@@ -144,12 +152,19 @@ const DurationSelector = <T,>({
             <Stack sx={classes.btnGroup}>
               <Stack
                 className={muiHalfDayMorningClasses}
+                role="button"
+                tabIndex={0}
                 sx={mergeSx([
                   classes.halfBtn,
                   classes.firstHalfBtn,
                   commonButtonStyles
                 ])}
                 onClick={() => onOptionClick(options.halfDayMorning)}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    onOptionClick(options.halfDayMorning);
+                  }
+                }}
               >
                 <Typography
                   className={muiHalfDayMorningClasses}
@@ -165,12 +180,19 @@ const DurationSelector = <T,>({
               </Stack>
               <Stack
                 className={muiHalfDayEveningClasses}
+                role="button"
+                tabIndex={0}
                 sx={mergeSx([
                   classes.halfBtn,
                   classes.lastHalfBtn,
                   commonButtonStyles
                 ])}
                 onClick={() => onOptionClick(options.halfDayEvening)}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    onOptionClick(options.halfDayEvening);
+                  }
+                }}
               >
                 <Typography
                   className={muiHalfDayEveningClasses}
@@ -187,9 +209,16 @@ const DurationSelector = <T,>({
             </Stack>
           ) : (
             <Stack
+              role="button"
+              tabIndex={0}
               className={muiHalfDayClasses}
               sx={mergeSx([classes.btn, commonButtonStyles])}
               onClick={handleHalfDayClick}
+              onKeyDown={(event) => {
+                if (shouldActivateButton(event.key)) {
+                  handleHalfDayClick();
+                }
+              }}
             >
               <Typography
                 className={

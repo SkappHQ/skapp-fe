@@ -12,6 +12,7 @@ import { FC, ReactNode } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { capitalizeFirstLetter } from "~community/common/utils/commonUtil";
 
@@ -54,6 +55,7 @@ const PeopleFormTable: FC<Props> = ({
   excludedColumns = [],
   isResponsive = true
 }) => {
+  const translateText = useTranslator("peopleAria", "peopleFormTable");
   const theme = useTheme();
 
   const renderCellContent = (content: any) => {
@@ -214,6 +216,7 @@ const PeopleFormTable: FC<Props> = ({
                       />
                     }
                     onClick={() => onEdit && onEdit(rowIndex)}
+                    ariaLabel={translateText(["actionColumn", "editButton"])}
                   />
                   <IconButton
                     icon={
@@ -223,6 +226,7 @@ const PeopleFormTable: FC<Props> = ({
                       />
                     }
                     onClick={() => onDelete && onDelete(rowIndex)}
+                    ariaLabel={translateText(["actionColumn", "deleteButton"])}
                   />
                 </Stack>
               </TableCell>

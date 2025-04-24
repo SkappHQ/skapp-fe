@@ -6,6 +6,7 @@ import { JSX, useState } from "react";
 
 import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import { DATE_FORMAT } from "~community/common/constants/timeConstants";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import { LeaveRequest } from "~community/leave/types/ResourceAvailabilityTypes";
 
 import AvailableChip from "../LeaveDashboardChips/AvailableChip";
@@ -116,6 +117,13 @@ const AvailabilityCalendarCard = ({
           flexDirection: "column",
           cursor: "pointer"
         }}
+        tabIndex={0}
+        role="button"
+        onKeyDown={(e) => {
+          if (shouldActivateButton(e.key)) {
+            setIsModalOpen(true);
+          }
+        }}
         onClick={() => setIsModalOpen(true)}
       >
         <Box
@@ -162,7 +170,7 @@ const AvailabilityCalendarCard = ({
           fontSize={12}
           lineHeight={"1.125rem"}
           sx={{ mb: ".125rem" }}
-          color="secondary.dark"
+          color="primary.dark"
         >
           {day}
         </Typography>

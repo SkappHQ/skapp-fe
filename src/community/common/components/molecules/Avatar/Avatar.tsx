@@ -128,7 +128,15 @@ const Avatar: FC<AvatarProps> = ({
 
     return (
       <Box>
-        <input id="imageInput" {...(getInputProps ? getInputProps() : {})} />
+        <input
+          id="imageInput"
+          {...(getInputProps ? getInputProps() : {})}
+          aria-label={
+            imageUploaded
+              ? translateAria(["removeProfilePicture"])
+              : translateAria(["uploadProfilePicture"])
+          }
+        />
         <Box
           sx={classes.iconWrapper}
           onClick={imageUploaded ? handleUnselect : open}

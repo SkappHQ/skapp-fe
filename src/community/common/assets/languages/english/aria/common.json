@@ -1,12 +1,18 @@
 {
+  "skipToMainContent": "Skip to main content",
   "components": {
     "backButton": "Click me to go to previous page",
     "filterBtn": "Click me to open filter menu",
+    "inputDate": {
+      "tooltip": "tooltip"
+    },
     "appBar": {
       "menuIcon": "Expand menu"
     },
     "avatar": {
-      "alt": "Employee avatar"
+      "alt": "Employee avatar",
+      "removeProfilePicture": "Remove profile picture",
+      "uploadProfilePicture": "Upload profile picture"
     },
     "dragAndDrop": {
       "ariaLabel": "Drag and Drop your file here"
@@ -17,8 +23,8 @@
     },
     "dropDown": { "label": "label", "dropDown": "Dropdown" },
     "filledArrowIcon": {
-      "right": "Right arrow",
-      "left": "Left arrow"
+      "right": "Next",
+      "left": "Right"
     },
     "modal": {
       "closeIconBtn": "Close modal"
@@ -40,13 +46,23 @@
         "checkbox": "Check {{tableName}} table {{ariaLabel}} checkbox",
         "tableBodyCell": "{{tableName}} table body {{headerLabel}} cell {{rowId}}",
         "actionColumn": {
-          "editButton": "Select {{tableName}} table {{ariaLabel}} record edit button",
-          "deleteButton": "Select {{tableName}} table {{ariaLabel}} record delete button"
+          "editButton": "Edit {{tableName}}",
+          "deleteButton": "Delete {{tableName}}"
         }
       }
     },
     "itemSelector": {
       "popperLabel": "Item Selector"
+    },
+    "inputPhoneNumber": {
+      "countryCode": "country code",
+      "phoneNumber": "phone number"
+    },
+    "search": {
+      "label": "Enter Search Keyword"
+    },
+    "iconChip": {
+      "label": "icon chip"
     }
   },
   "modals": {
@@ -54,5 +70,8 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password"
     }
+  },
+  "contentLayout": {
+    "backButton": "Back Button"
   }
 }

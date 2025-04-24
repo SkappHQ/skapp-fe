@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { appModes } from "~community/common/constants/configs";
 import { ToastType } from "~community/common/enums/ComponentEnums";
@@ -147,12 +147,10 @@ const useSystemPermissionFormHandlers = () => {
   };
 
   const handleSuperAdminToggle = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const isChecked = event.target.checked;
-
+    (checked: boolean) => {
       let newSuperAdminCount = superAdminCount;
 
-      if (isChecked) {
+      if (checked) {
         newSuperAdminCount++;
       } else {
         if (newSuperAdminCount > 0) {
@@ -160,7 +158,7 @@ const useSystemPermissionFormHandlers = () => {
         }
       }
 
-      if (!isChecked && newSuperAdminCount === 0) {
+      if (!checked && newSuperAdminCount === 0) {
         setToastMessage({
           open: true,
           toastType: ToastType.ERROR,
@@ -172,7 +170,7 @@ const useSystemPermissionFormHandlers = () => {
       }
 
       if (
-        isChecked &&
+        checked &&
         !initialEmployee?.systemPermissions?.isSuperAdmin &&
         roleLimits.superAdminLimitExceeded
       ) {
@@ -189,14 +187,14 @@ const useSystemPermissionFormHandlers = () => {
       setSuperAdminCount(newSuperAdminCount);
 
       setPermissions({
-        isSuperAdmin: isChecked,
+        isSuperAdmin: checked,
         leaveRole: Role.LEAVE_ADMIN,
         attendanceRole: Role.ATTENDANCE_ADMIN,
         peopleRole: Role.PEOPLE_ADMIN,
         esignRole: Role.ESIGN_ADMIN
       });
       setSystemPermissions({
-        isSuperAdmin: isChecked,
+        isSuperAdmin: checked,
         leaveRole: Role.LEAVE_ADMIN,
         attendanceRole: Role.ATTENDANCE_ADMIN,
         peopleRole: Role.PEOPLE_ADMIN,

@@ -97,7 +97,9 @@ const NotificationsPopup = ({
         <TableEmptyScreen
           title={translateText(["emptyScreenTitle"])}
           description={translateText(["emptyScreenDescription"])}
-          wrapperStyles={{ height: "100%", py: "3rem" }}
+          customStyles={{
+            wrapper: { height: "100%", py: "3rem" }
+          }}
         />
       ) : (
         <>

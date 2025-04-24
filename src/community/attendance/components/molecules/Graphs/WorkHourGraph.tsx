@@ -40,7 +40,7 @@ const WorkHourGraph = ({
   setMonth
 }: Props): JSX.Element => {
   const translations = useTranslator("attendanceModule", "dashboards");
-  const translateAria = useTranslator("leaveAria", "analytics");
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
 
   const { preProcessedData: datasets = [], labels = [] } = !isLoading
     ? data
@@ -141,16 +141,11 @@ const WorkHourGraph = ({
         <Stack direction="row" gap="0.25rem">
           {month > FIRST_MONTH && (
             <FilledArrow
-              enableKeyboardNavigation={false}
               onClick={() => handleArrowClick(GRAPH_LEFT)}
               isRightArrow={false}
               backgroundColor="grey.100"
               disabled={month === FIRST_MONTH}
-              ariaLabel={translateAria([
-                "workHourGraph",
-                "monthNavigator",
-                "previousMonth"
-              ])}
+              ariaLabel={translateTextAria(["lateArrivalTrendMonthlyPrevious"])}
             />
           )}
           <BasicChip
@@ -161,15 +156,10 @@ const WorkHourGraph = ({
           {month < LAST_MONTH && (
             <FilledArrow
               onClick={() => handleArrowClick(GRAPH_RIGHT)}
-              enableKeyboardNavigation={false}
               isRightArrow
               backgroundColor="grey.100"
               disabled={month === LAST_MONTH}
-              ariaLabel={translateAria([
-                "workHourGraph",
-                "monthNavigator",
-                "nextMonth"
-              ])}
+              ariaLabel={translateTextAria(["lateArrivalTrendMonthlyNext"])}
             />
           )}
         </Stack>
@@ -204,7 +194,12 @@ const WorkHourGraph = ({
             </Box>
             {data.preProcessedData.length !== 0 && (
               <Box
+                tabIndex={0}
+                role="button"
                 onClick={() => handleClick(GRAPH_LEFT)}
+                aria-label={translateTextAria([
+                  "averageHoursWorkedPreviousDates"
+                ])}
                 sx={{
                   position: "absolute",
                   bottom: "0.5rem",
@@ -218,6 +213,9 @@ const WorkHourGraph = ({
             )}
             {data.preProcessedData.length !== 0 && (
               <Box
+                tabIndex={0}
+                role="button"
+                aria-label={translateTextAria(["averageHoursWorkedNextDates"])}
                 onClick={() => handleClick(GRAPH_RIGHT)}
                 sx={{
                   position: "absolute",

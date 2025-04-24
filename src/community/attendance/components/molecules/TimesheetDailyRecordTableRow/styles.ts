@@ -38,6 +38,9 @@ const styles = (theme: Theme) => ({
       "& > :first-child": {
         background: theme.palette.grey[100]
       }
+    },
+    "&:focus": {
+      zIndex: ZIndexEnums.DEFAULT
     }
   },
   boxContainerStyle: (isDrawerToggled: boolean) => ({
