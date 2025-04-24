@@ -17,21 +17,20 @@ const generateThumbnail = (
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       const targetSize = 128;
-      const aspectRatio = img.width / img.height;
 
-      let scaledWidth = img.width;
-      let scaledHeight = img.height;
-      let offsetX = 0;
-      let offsetY = 0;
+      let sourceX = 0;
+      let sourceY = 0;
+      let sourceWidth = img.width;
+      let sourceHeight = img.height;
+      let destWidth = targetSize;
+      let destHeight = targetSize;
 
       if (img.width > img.height) {
-        scaledHeight = targetSize;
-        scaledWidth = targetSize * aspectRatio;
-        offsetX = (scaledWidth - targetSize) / 2;
-      } else {
-        scaledWidth = targetSize;
-        scaledHeight = targetSize / aspectRatio;
-        offsetY = (scaledHeight - targetSize) / 2;
+        sourceWidth = img.height;
+        sourceX = (img.width - img.height) / 2;
+      } else if (img.height > img.width) {
+        sourceHeight = img.width;
+        sourceY = (img.height - img.width) / 2;
       }
 
       canvas.width = targetSize;
@@ -39,14 +38,14 @@ const generateThumbnail = (
 
       ctx?.drawImage(
         img,
-        offsetX,
-        offsetY,
-        scaledWidth,
-        scaledHeight,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
         0,
         0,
-        targetSize,
-        targetSize
+        destWidth,
+        destHeight
       );
 
       canvas.toBlob((blob) => {
