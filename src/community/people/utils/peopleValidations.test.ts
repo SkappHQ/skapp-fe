@@ -19,7 +19,7 @@ describe("Emergency Contact Validation", () => {
       const validData = {
         name: "John Doe",
         relationship: "Father",
-        contactNo: "1234567890"
+        contactNo: "0114567890"
       };
       await expect(schema.validate(validData)).resolves.toBeTruthy();
     });
@@ -28,7 +28,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "123",
         relationship: "Father",
-        contactNo: "1234567890"
+        contactNo: "0374567890"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
@@ -37,7 +37,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "John Doe",
         relationship: "Father",
-        contactNo: "123"
+        contactNo: "094"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
@@ -79,7 +79,7 @@ describe("Emergency Contact Validation", () => {
       const invalidData = {
         name: "@1gf02",
         relationship: "Father",
-        contactNo: "123"
+        contactNo: "076"
       };
       await expect(schema.validate(invalidData)).rejects.toThrow();
     });
