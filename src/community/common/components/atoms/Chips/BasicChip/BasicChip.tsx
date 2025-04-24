@@ -70,6 +70,7 @@ const BasicChip: FC<Props> = ({
       <Chip
         id={id}
         data-testid={dataTestId}
+        aria-label={label}
         label={
           isBelow1350 && isResponsive
             ? label

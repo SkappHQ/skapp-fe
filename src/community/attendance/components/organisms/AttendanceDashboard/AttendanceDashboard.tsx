@@ -31,6 +31,8 @@ import WorkHourGraph from "../../molecules/Graphs/WorkHourGraph";
 
 const AttendanceDashboard = (): JSX.Element => {
   const translateText = useTranslator("attendanceModule", "dashboards");
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
+
   const [selectedDate, setSelectedDate] = useState<Date[]>([new Date()]);
   const [month, setMonth] = useState(getCurrentMonth());
   const [clockInOutDataCategory, setClockInOutDataCategory] = useState(
@@ -125,6 +127,9 @@ const AttendanceDashboard = (): JSX.Element => {
                 analytic1={analyticsData?.clockIns?.actualClockIns}
                 analytic2={analyticsData?.clockIns?.expectedClockIns}
                 type={ClockInOutGraphTypes.CLOCK_IN}
+                iconAriaLabel={translateTextAria([
+                  "todaysClockInsExtendedView"
+                ])}
               />
             </Box>
           </Grid>
@@ -134,6 +139,9 @@ const AttendanceDashboard = (): JSX.Element => {
                 title={translateText(["attendanceDashboard.card2Title"])}
                 analytic1={analyticsData?.lateArrivals?.lateArrivalCount}
                 type=""
+                iconAriaLabel={translateTextAria([
+                  "todaysLateArrivalsExtendedView"
+                ])}
               />
             </Box>
           </Grid>

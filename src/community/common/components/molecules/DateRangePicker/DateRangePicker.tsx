@@ -94,11 +94,11 @@ const DateRangePicker: FC<Props> = ({
             },
             chipStyles
           ])}
-          aria-label={`Selected date ${
+          aria-label={
             selectedDates[0]
-              ? DateTime.fromJSDate(selectedDates[0]).toFormat("do MMMM")
-              : "None"
-          }. Press enter to change selected date`}
+              ? `Selected date ${DateTime.fromJSDate(selectedDates[0]).toFormat("dd MMMM yyyy")}. Press enter to change selected date`
+              : "Press enter to select date"
+          }
           tabIndex={0}
           onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
             if (shouldCollapseDropdown(e.key)) setAnchorEl(null);

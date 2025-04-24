@@ -17,9 +17,16 @@ interface Props {
   analytic1?: number;
   analytic2?: number;
   type: string;
+  iconAriaLabel?: string;
 }
 
-const AttendanceCard: FC<Props> = ({ analytic1, analytic2, title, type }) => {
+const AttendanceCard: FC<Props> = ({
+  analytic1,
+  analytic2,
+  title,
+  type,
+  iconAriaLabel
+}) => {
   const router = useRouter();
   const { setClockInType } = useAttendanceStore((state) => state);
   const theme = useTheme();
@@ -52,6 +59,9 @@ const AttendanceCard: FC<Props> = ({ analytic1, analytic2, title, type }) => {
               {title}
             </Typography>
             <Box
+              tabIndex={0}
+              role="button"
+              aria-label={iconAriaLabel}
               sx={{ cursor: "pointer" }}
               onClick={() => {
                 type === ClockInOutGraphTypes.CLOCK_IN

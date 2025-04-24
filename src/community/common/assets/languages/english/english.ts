@@ -17,10 +17,10 @@ export const english = {
   peopleModule,
   leaveModule,
   attendanceModule,
-  leaveAria,
   onboardingAria,
   attendanceAria,
   commonAria,
+  leaveAria,
   peopleAria
   // add other modules here
 };
