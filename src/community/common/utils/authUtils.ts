@@ -1,11 +1,6 @@
 import ROUTES from "~community/common/constants/routes";
 import { config } from "~middleware";
 
-export const drawerHiddenPathPatterns = [
-  // Add the pattern for dynamic routes
-  "/sign/sent/"
-];
-
 export const drawerHiddenProtectedRoutes = [
   ROUTES.ORGANIZATION.SETUP,
   ROUTES.AUTH.RESET_PASSWORD,
@@ -18,34 +13,30 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.CHANGE_SUPERVISORS,
   ROUTES.SUBSCRIPTION,
   ROUTES.SIGN.SIGN,
-  ROUTES.SIGN.CREATE_DOCUMENT
+  ROUTES.SIGN.CREATE_DOCUMENT,
+  ROUTES.SIGN.SENT_INFO.BASE
 ];
 
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const isADrawerHiddenProtectedRoute =
-    drawerHiddenProtectedRoutes.includes(asPath);
-
-  if (isADrawerHiddenProtectedRoute) {
-    return false;
-  }
-
-  const isPathMatchingPattern = drawerHiddenPathPatterns.some((pattern) =>
-    asPath.startsWith(pattern)
+  const isADrawerHiddenProtectedRoute = drawerHiddenProtectedRoutes.some(
+    (prefix) => {
+      return asPath.startsWith(prefix);
+    }
   );
 
-  if (isPathMatchingPattern) {
-    return false;
-  }
-
-  const formattedProtectedPaths = config.matcher.map((path) =>
-    path.replace(/\/:path\*$/, "")
-  );
-
-  return formattedProtectedPaths.some((path) => {
-    return (
-      asPath.substring(1).split("/")[0].split("?")[0] === path.split("/")[1]
+  if (!isADrawerHiddenProtectedRoute) {
+    const formattedProtectedPaths = config.matcher.map((path) =>
+      path.replace(/\/:path\*$/, "")
     );
-  });
+
+    return formattedProtectedPaths.some((path) => {
+      return (
+        asPath.substring(1).split("/")[0].split("?")[0] === path.split("/")[1]
+      );
+    });
+  }
+
+  return false;
 };
 
 export const decodeJWTToken = (token: string) => {

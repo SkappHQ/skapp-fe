@@ -91,13 +91,16 @@ const ROUTES = {
     BASE: "/sign",
     INBOX: "/sign/inbox",
     SENT: "/sign/sent",
-    SENT_DETAIL: (id: number) => `/sign/sent/${id}`,
     FOLDERS: "/sign/folders",
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create",
     SIGN: "/sign/sign",
     REDIRECT: "/sign/redirect",
-    COMPLETE: "/sign/complete"
+    COMPLETE: "/sign/complete",
+    SENT_INFO: {
+      BASE: "/sign/sent/envelope",
+      ID: (id: number) => `/sign/sent/envelope/${id}`
+    }
   },
   REMOVE_PEOPLE: "/remove-people",
   CHANGE_SUPERVISORS: "/change-supervisors",
