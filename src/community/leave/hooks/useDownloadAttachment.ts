@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 
 import { useGetUploadedLeaveAttachments } from "~community/common/api/FileHandleApi";
 import { appModes } from "~community/common/constants/configs";
+import { FileTypes } from "~community/common/enums/CommonEnums";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
-export const useDownloadAttachment = ({ fileType }: { fileType: string }) => {
+export const useDownloadAttachment = ({
+  fileType
+}: {
+  fileType: FileTypes;
+}) => {
   const [attachment, setAttachment] = useState<string | null>(null);
   const [currentAttachmentFormat, setCurrentAttachmentFormat] = useState<
     string | null

@@ -31,7 +31,7 @@ const AttachmentRow = ({ attachments }: Props) => {
         {translateText(["myLeaveRequests", "attachments"])}
       </Typography>
 
-      <Box>
+      <Box sx={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
         {attachments.map((attachment, index) => (
           <IconChip
             key={index}
@@ -39,7 +39,8 @@ const AttachmentRow = ({ attachments }: Props) => {
             chipStyles={{
               backgroundColor: "grey.100",
               py: "0.75rem",
-              px: "0.75rem"
+              px: "0.75rem",
+              maxWidth: "7.828rem"
             }}
             icon={<CopyIcon />}
             onClick={() => handleDownloadAttachment(attachment.url)}
