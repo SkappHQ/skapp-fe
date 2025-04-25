@@ -150,14 +150,17 @@ const SystemPermissionFormSection = ({
     if (
       employee?.systemPermissions?.peopleRole === Role.PEOPLE_EMPLOYEE &&
       (initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_ADMIN ||
-        initialEmployee?.systemPermissions?.peopleRole === Role.PEOPLE_MANAGER)
+        initialEmployee?.systemPermissions?.peopleRole ===
+          Role.PEOPLE_MANAGER) &&
+      (supervisedData?.isPrimaryManager || supervisedData?.isTeamSupervisor)
     ) {
-      if (supervisedData?.isPrimaryManager)
+      if (supervisedData?.isPrimaryManager) {
         setModalDescription(translateText(["demoteUserSupervisingEmployee"]));
-      else if (supervisedData?.isTeamSupervisor)
+        setOpenModal(true);
+      } else if (supervisedData?.isTeamSupervisor) {
         setModalDescription(translateText(["demoteUserSupervisingTeams"]));
-
-      setOpenModal(true);
+        setOpenModal(true);
+      }
     } else if (
       employee.systemPermissions?.isSuperAdmin &&
       initialEmployee.systemPermissions?.isSuperAdmin &&
