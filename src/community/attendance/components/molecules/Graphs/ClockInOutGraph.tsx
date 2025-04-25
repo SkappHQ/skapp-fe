@@ -1,6 +1,13 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import { useClockInOutGraphOptions } from "~community/attendance/utils/echartOptions/clockInOutGraphOptions";
 import {
@@ -10,6 +17,7 @@ import {
   GRAPH_RIGHT,
   clockInOutGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
+import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
@@ -56,6 +64,8 @@ const ClockInOutGraph = ({
   const theme: Theme = useTheme();
   const { data: timeConfigData } = useDefaultCapacity();
 
+  const clockInOutChartRef = useRef<ReactECharts>(null);
+
   const standardClockInTime =
     timeConfigData?.[0]?.startTime?.substring(0, 5) ?? DEFAULT_START_TIME;
   const standardClockOutTime =
@@ -75,6 +85,9 @@ const ClockInOutGraph = ({
       CLOCK_IN_OUT_CHART_INITIAL_X +
       CLOCK_IN_OUT_CHART_SHIFT_DAYS
   });
+
+  const [clockInOutHighlightedIndex, setClockInOutHighlightedIndex] =
+    useState<number>(xIndexDay.startIndex);
 
   // set start and end index around the standard clock in and clock out time
   useEffect(() => {
@@ -203,10 +216,24 @@ const ClockInOutGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box>
+                <Box
+                  tabIndex={0}
+                  onKeyDown={(event) =>
+                    handleGraphKeyboardNavigation({
+                      event,
+                      highlightedIndex: clockInOutHighlightedIndex,
+                      setHighlightedIndex: setClockInOutHighlightedIndex,
+                      chartDataLabels: chartData.labels,
+                      xIndexDay,
+                      handleClick,
+                      chartRef: clockInOutChartRef
+                    })
+                  }
+                >
                   <ReactECharts
                     option={clockInOutGraphOptions}
                     style={{ height: "16.25rem" }}
+                    ref={clockInOutChartRef}
                   />
                 </Box>
               )}

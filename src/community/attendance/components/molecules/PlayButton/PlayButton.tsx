@@ -10,6 +10,7 @@ import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -62,11 +63,21 @@ const PlayButton = (): JSX.Element => {
       id="play-button"
       title={getTooltipText()}
       placement={TooltipPlacement.BOTTOM}
+      spanStyles={{
+        borderRadius: "50%"
+      }}
     >
       <Box
+        tabIndex={0}
+        role="button"
         component="button"
         sx={status && classes.buttonComponent(status)}
         onClick={onClick}
+        onKeyDown={(e) => {
+          if (shouldActivateButton(e.key)) {
+            onClick();
+          }
+        }}
         disabled={
           isPending ||
           status === AttendanceSlotType.READY ||

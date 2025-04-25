@@ -162,6 +162,12 @@ const UserLeaveHistory: FC<Props> = ({
     return employeeLeaveHistoryData?.items?.map(
       (leaveData: LeaveHistoryRawType) => ({
         id: leaveData.leaveRequestId,
+        ariaLabel: `${translateText(["tableHeaders", "leavePeriod"])} ${formatDateRange(
+          new Date(leaveData.startDate),
+          new Date(leaveData.endDate),
+          false,
+          leaveData.durationDays
+        )} ${translateText(["tableHeaders", "dateRequested"])} ${formatDateWithOrdinalIndicator(new Date(leaveData.createdDate))}`,
         leavePeriod: (
           <Box
             sx={{
@@ -387,6 +393,13 @@ const UserLeaveHistory: FC<Props> = ({
         <DateRangePicker
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
+          chipStyles={{
+            "&:focus-visible": {
+              outline: `0.125rem solid ${theme.palette.common.black}`,
+              outlineOffset: "0.125rem",
+              backgroundColor: "transparent"
+            }
+          }}
         />
       </Stack>
     );
