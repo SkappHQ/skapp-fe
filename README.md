@@ -35,4 +35,3 @@ To get started with Skapp, follow these steps:
 ### Logo and Trademark Policy
 
 - Please read our [Trademark Policy](https://github.com/SkappHQ/skapp-fe/blob/main/TRADEMARK_POLICY.md).
-
