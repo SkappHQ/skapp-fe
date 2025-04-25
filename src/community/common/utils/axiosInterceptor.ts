@@ -16,28 +16,41 @@ const authFetch = axios.create({
   baseURL: getApiUrl() + ApiVersions.V1
 });
 
+export const authFetchV2 = axios.create({
+  baseURL: getApiUrl() + ApiVersions.V2
+});
+
+const requestInterceptorConfig = async (config: InternalAxiosRequestConfig) => {
+  const session = await getSession();
+
+  if (
+    session?.user.accessToken &&
+    !config.url?.includes("/refresh-token") &&
+    !config.url?.includes("/app-setup-status")
+  ) {
+    config.headers.Authorization = `Bearer ${session?.user.accessToken}`;
+  }
+
+  const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
+  if (isEnterpriseMode && tenantID) {
+    config.headers["X-Tenant-ID"] = tenantID;
+  }
+  return config;
+};
+
+const requestInterceptorConfigError = async (error: any) => {
+  return await Promise.reject(error);
+};
+
 //  request interceptor
 authFetch.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig) => {
-    const session = await getSession();
+  requestInterceptorConfig,
+  requestInterceptorConfigError
+);
 
-    if (
-      session?.user.accessToken &&
-      !config.url?.includes("/refresh-token") &&
-      !config.url?.includes("/app-setup-status")
-    ) {
-      config.headers.Authorization = `Bearer ${session?.user.accessToken}`;
-    }
-
-    const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
-    if (isEnterpriseMode && tenantID) {
-      config.headers["X-Tenant-ID"] = tenantID;
-    }
-    return config;
-  },
-  async (error) => {
-    return await Promise.reject(error);
-  }
+authFetchV2.interceptors.request.use(
+  requestInterceptorConfig,
+  requestInterceptorConfigError
 );
 
 export default authFetch;

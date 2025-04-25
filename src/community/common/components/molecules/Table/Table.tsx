@@ -87,6 +87,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       <TableContainer
         sx={mergeSx([classes.container, customStyles?.container])}
         role="region"
+        tabIndex={0}
         aria-label={`${tableName}-table-container`}
       >
         <MuiTable

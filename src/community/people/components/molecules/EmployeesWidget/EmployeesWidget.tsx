@@ -7,10 +7,8 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useGetEmployeeData } from "~community/people/api/PeopleApi";
 import { employeeStatusTypes } from "~community/people/constants/peopleDashboardConstants";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  DataFilterEnums,
-  EmployeeDataType
-} from "~community/people/types/EmployeeTypes";
+import { DataFilterEnums } from "~community/people/types/EmployeeTypes";
+import { AllEmployeeDataType } from "~community/people/types/PeopleTypes";
 
 import EmployeeList from "./EmployeeList";
 import styles from "./styles";
@@ -27,7 +25,7 @@ const EmployeesWidget = ({ team }: Props): JSX.Element => {
     employeeStatusTypes.PENDING.value
   );
   const [employeeDataItems, setEmployeeDataItems] = useState<
-    EmployeeDataType[]
+    AllEmployeeDataType[]
   >([]);
   const [isConcatinationDone, setIsConcatinationDone] =
     useState<boolean>(false);

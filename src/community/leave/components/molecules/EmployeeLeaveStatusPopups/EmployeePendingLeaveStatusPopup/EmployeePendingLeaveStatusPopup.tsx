@@ -25,6 +25,8 @@ import {
   leaveStatusIconSelector
 } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
+import AttachmentRow from "../../AttachmentRow/AttachmentRow";
+
 interface Props {
   setPopupType: Dispatch<SetStateAction<string>>;
 }
@@ -130,7 +132,7 @@ const EmployeePendingLeaveStatusPopup: FC<Props> = ({ setPopupType }) => {
         text={employeeLeaveRequestData.requestDesc}
         isDisabled={true}
       />
-
+      <AttachmentRow attachments={employeeLeaveRequestData?.attachments} />
       <Box
         sx={{
           display: "flex",

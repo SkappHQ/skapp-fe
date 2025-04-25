@@ -14,6 +14,8 @@ import {
   leaveStatusIconSelector
 } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
+import AttachmentRow from "../../AttachmentRow/AttachmentRow";
+
 interface Props {
   handleRequestStatusPopup: () => void;
 }
@@ -57,12 +59,12 @@ const EmployeeCancelLeaveStatusPopup = ({
           employeeLeaveRequestData.endDate
         )}
       />
-
       <StatusPopupRow
         label={translateText(["myLeaveRequests", "recipient"])}
         isRecipient={true}
         reviewer={employeeLeaveRequestData?.reviewer ?? undefined}
       />
+      <AttachmentRow attachments={employeeLeaveRequestData?.attachments} />
       <Button
         label={translateText(["myLeaveRequests", "proceedToHome"])}
         endIcon={IconName.RIGHT_ARROW_ICON}
