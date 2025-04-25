@@ -19,8 +19,9 @@ import {
   ErrorResponse,
   ManagerTypes
 } from "~community/common/types/CommonTypes";
-import authFetch from "~community/common/utils/axiosInterceptor";
-import authFetchV2 from "~community/common/utils/axiosInterceptorV2";
+import authFetch, {
+  authFetchV2
+} from "~community/common/utils/axiosInterceptor";
 import { removeSpecialCharacters } from "~community/common/utils/commonUtil";
 import { leaveBulkUploadResponse } from "~community/leave/types/LeaveTypes";
 import {
