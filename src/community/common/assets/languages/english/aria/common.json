@@ -24,7 +24,7 @@
     "dropDown": { "label": "label", "dropDown": "Dropdown" },
     "filledArrowIcon": {
       "right": "Next",
-      "left": "Right"
+      "left": "Previous"
     },
     "modal": {
       "closeIconBtn": "Close modal"
@@ -36,7 +36,7 @@
       "tableHead": {
         "tableHeadLabel": "{{tableName}} table head",
         "tableHeadRowLabel": "{{tableName}} table head row",
-        "checkbox": "Check {{tableName}} table all checkboxes",
+        "checkbox": "Check all the {{tableName}}",
         "tableHeadCell": "{{tableName}} table head {{headerLabel}} cell",
         "tableHeadActionCell": "{{tableName}} table head actions column cell"
       },

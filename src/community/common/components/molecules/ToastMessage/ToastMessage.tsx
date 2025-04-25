@@ -100,13 +100,13 @@ const ToastMessage = ({
           ? { ...classes.stackStyle, cursor: "pointer" }
           : classes.stackStyle
       }
+      aria-live="polite"
+      aria-atomic="true"
     >
       <Box
         onClick={handleToastClick}
         sx={classes.toastContainer(bgColor)}
         role={getAriaRole()}
-        aria-live="polite"
-        aria-atomic="true"
       >
         {/* Vertical Divider */}
         <Divider
