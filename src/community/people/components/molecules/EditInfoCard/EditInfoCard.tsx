@@ -122,6 +122,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
         teams: supervisoryData?.teamSupervisors?.length || 0
       };
       const caseKey = `${condition.managers}-${condition.teams}`;
+
       switch (caseKey) {
         case "1-0":
           setAlertMessage(
@@ -134,6 +135,13 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
           setAlertMessage(
             translateTerminationText([
               "terminateWarningModalDescriptionSingleTeam"
+            ])
+          );
+          break;
+        case "1-1":
+          setAlertMessage(
+            translateTerminationText([
+              "terminateWarningModalDescriptionSingleEmployee"
             ])
           );
           break;
