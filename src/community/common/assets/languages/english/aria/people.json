@@ -6,9 +6,12 @@
   "teams": {
     "table": {
       "actionColumn": {
-        "editButton": "Select teams table {{teamName}} team edit button",
-        "deleteButton": "Select teams table {{teamName}} team delete button"
+        "editButton": "Edit team {{teamName}} button",
+        "deleteButton": "Delete team {{teamName}} button"
       }
+    },
+    "modal": {
+      "teamMemberRoleDropdown": "Select team member role dropdown"
     }
   },
   "addResource": {
@@ -49,6 +52,14 @@
     "actionColumn": {
       "editButton": "Select edit button",
       "deleteButton": "Select delete button"
+    }
+  },
+  "holiday": {
+    "sortByDropdown": {
+      "sort": "Sort : ",
+      "chronologically": "Chronologically : ",
+      "janToDec": "January to December",
+      "decToJan": "December to January"
     }
   }
 }

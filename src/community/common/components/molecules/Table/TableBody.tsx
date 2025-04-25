@@ -17,7 +17,8 @@ import { mergeSx } from "~community/common/utils/commonUtil";
 import {
   shouldActivateButton,
   shouldMoveDownward,
-  shouldMoveUpward
+  shouldMoveUpward,
+  shouldToggleCheckbox
 } from "~community/common/utils/keyboardUtils";
 
 import { CommonTableProps } from "./Table";
@@ -176,6 +177,14 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
                             tableName: tableName,
                             ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
                           })
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (shouldToggleCheckbox(e.key)) {
+                          e.preventDefault();
+                          checkboxSelection?.handleIndividualSelectClick?.(
+                            row.id
+                          )?.();
                         }
                       }}
                     />

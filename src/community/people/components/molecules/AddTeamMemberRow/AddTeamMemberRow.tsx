@@ -37,6 +37,7 @@ const AddTeamMemberRow: FC<Props> = ({
   setTeamMembers
 }) => {
   const translateText = useTranslator("peopleModule", "teams");
+  const translateAria = useTranslator("peopleAria", "teams", "modal");
 
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -160,9 +161,10 @@ const AddTeamMemberRow: FC<Props> = ({
         }}
         menuType={MenuTypes.SORT}
         isManager={true}
-        id={"popper"}
+        id="popper"
         isFlip={true}
         timeout={300}
+        ariaLabel={translateAria(["teamMemberRoleDropdown"])}
       >
         <Box sx={{ backgroundColor: theme.palette.common.white }} role="menu">
           {itemList?.map((item, index: number) => (

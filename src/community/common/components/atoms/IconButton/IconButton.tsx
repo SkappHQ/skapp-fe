@@ -1,14 +1,17 @@
 import { Collapse, type SxProps, Theme, Typography } from "@mui/material";
-import { JSX, MouseEvent, useState } from "react";
+import { JSX, KeyboardEvent, MouseEvent, useState } from "react";
 
 import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { CSIconButton } from "./CSIconButton";
 import styles from "./styles";
 
 interface Props {
   icon: JSX.Element;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (
+    event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>
+  ) => void;
   buttonStyles?: SxProps<Theme>;
   disabled?: boolean;
   hoverEffect?: boolean;
@@ -59,6 +62,11 @@ const IconButton = ({
       data-testid={id || ""}
       aria-label={ariaLabel}
       title={title || ""}
+      onKeyDown={(e) => {
+        if (shouldActivateButton(e.key)) {
+          onClick(e);
+        }
+      }}
     >
       {hoverEffect && !isBelow1420 && (
         <Collapse orientation="horizontal" in={showText}>

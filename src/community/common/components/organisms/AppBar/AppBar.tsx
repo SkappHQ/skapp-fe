@@ -108,7 +108,12 @@ const AppBar = () => {
                 aria-label="Notifications"
               >
                 <Badge
-                  color="notifyBadge"
+                  sx={{
+                    ".MuiBadge-badge": {
+                      backgroundColor: "error.contrastText",
+                      color: "common.white"
+                    }
+                  }}
                   badgeContent={notifyData.unreadCount}
                   invisible={false}
                   max={100}
