@@ -101,7 +101,7 @@ const TableHead: FC<
                   slotProps={{
                     input: {
                       "aria-label": translateText(["checkbox"], {
-                        tableName: tableName
+                        tableName: tableName.toLowerCase()
                       })
                     }
                   }}

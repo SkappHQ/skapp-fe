@@ -228,7 +228,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   id="avatar"
                   alt={`${values.firstName} ${values.lastName}`}
                   src={getAvatarThumbnailUrl()}
-                  sx={{
+                  avatarStyles={{
                     width: "6.125rem",
                     height: "6.125rem",
                     backgroundColor: theme.palette.grey[200]
@@ -378,7 +378,6 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               >
                 <InputDate
                   label={translateText(["birthDate"])}
-                  value={DateTime.fromISO(values?.dateOfBirth ?? "")}
                   onchange={handleDateChange}
                   placeholder={translateText(["selectBirthDate"])}
                   error={errors?.dateOfBirth ?? ""}

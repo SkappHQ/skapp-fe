@@ -41,6 +41,7 @@ interface Props {
   onAddNewClickBtn?: () => void;
   customStyles?: Record<string, string>;
   required?: boolean;
+  labelId?: string;
 }
 
 const DropdownIndicator = (props: DropdownIndicatorProps): ReactNode => {
@@ -54,6 +55,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps): ReactNode => {
 const DropdownSearch: FC<Props> = ({
   componentStyle,
   label,
+  labelId,
   placeholder,
   error = "",
   value,
@@ -141,6 +143,7 @@ const DropdownSearch: FC<Props> = ({
       <Stack direction="row" justifyContent="space-between">
         <Typography
           component="label"
+          id={labelId ?? "drop-down-search-label"}
           lineHeight={1.5}
           sx={{
             fontWeight: isDisabled ? 400 : 500,
@@ -148,7 +151,7 @@ const DropdownSearch: FC<Props> = ({
               ? theme.palette.grey[700]
               : error
                 ? theme.palette.error.contrastText
-                : "black",
+                : "common.black",
             mb: "0.5rem"
           }}
         >
@@ -164,6 +167,7 @@ const DropdownSearch: FC<Props> = ({
       </Stack>
 
       <Select
+        aria-labelledby={labelId ?? "drop-down-search-label"}
         value={value ? getValues() : ""}
         placeholder={placeholder}
         options={itemList}

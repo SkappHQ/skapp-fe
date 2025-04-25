@@ -10,7 +10,7 @@ export enum characterLengths {
   NIN_LENGTH = 15,
   STATE_LENGTH = 50,
   PHONE_NUMBER_LENGTH_MAX = 14,
-  PHONE_NUMBER_LENGTH_MIN = 4
+  PHONE_NUMBER_LENGTH_MIN = 7
 }
 
 export const MAX_PASSWORD_STRENGTH = 5;
