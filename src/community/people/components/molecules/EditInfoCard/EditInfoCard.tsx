@@ -1,6 +1,7 @@
 import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { JSX, useEffect } from "react";
 import { type MouseEventHandler, useCallback, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -63,6 +64,10 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const { data } = useSession();
 
+  const { asPath } = useRouter();
+
+  const employeeId = asPath.split("/").pop();
+
   const {
     employee,
     setProfilePic,
@@ -93,8 +98,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const { setToastMessage } = useToast();
 
-  const { data: supervisoryData } = useGetSubscriptionCancelImpact([
-    Number(employee?.common?.employeeId)
+  const { data: supervisoryData, refetch } = useGetSubscriptionCancelImpact([
+    Number(employeeId)
   ]);
 
   const { data: storageAvailableData } = useStorageAvailability();
@@ -107,6 +112,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   );
 
   const handleTermination = () => {
+    refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
@@ -153,6 +159,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   };
 
   const handleDeletion = () => {
+    refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
