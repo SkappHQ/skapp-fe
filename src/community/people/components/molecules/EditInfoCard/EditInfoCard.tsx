@@ -111,8 +111,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     null
   );
 
-  const handleTermination = () => {
-    refetch();
+  const handleTermination = async () => {
+    await refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
@@ -158,8 +158,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     setTerminationConfirmationModalOpen(true);
   };
 
-  const handleDeletion = () => {
-    refetch();
+  const handleDeletion = async () => {
+    await refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
