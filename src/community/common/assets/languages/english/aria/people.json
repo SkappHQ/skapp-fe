@@ -9,6 +9,9 @@
         "editButton": "Edit team {{teamName}} button",
         "deleteButton": "Delete team {{teamName}} button"
       }
+    },
+    "modal": {
+      "teamMemberRoleDropdown": "Select team member role dropdown"
     }
   },
   "addResource": {
