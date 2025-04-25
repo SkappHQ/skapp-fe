@@ -36,7 +36,7 @@ export const employeePrimaryEmergencyContactDetailsValidation = (
       translator(["validNameError"])
     ),
     relationship: Yup.string(),
-    phone: Yup.string()
+    contactNo: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
         translator(["validPhoneError"])
@@ -56,7 +56,7 @@ export const employeeSecondaryEmergencyContactDetailsValidation = (
       translator(["validNameError"])
     ),
     relationship: Yup.string().nullable(),
-    phone: Yup.string()
+    contactNo: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
         translator(["validPhoneError"])
@@ -468,7 +468,7 @@ export const employeeContactDetailsValidation = (
       .trim()
       .email(translator(["validEmailError"]))
       .nullable(),
-    phone: Yup.string()
+    contactNo: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
         translator(["validContactNumberError"])

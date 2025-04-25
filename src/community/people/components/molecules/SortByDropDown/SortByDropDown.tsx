@@ -8,6 +8,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   OptionType,
   SortOrderTypes
@@ -27,6 +28,11 @@ interface Props {
 }
 
 const SortByDropDown = ({ holidayData, listInnerRef }: Props) => {
+  const translateAria = useTranslator(
+    "peopleAria",
+    "holiday",
+    "sortByDropdown"
+  );
   const classes = styles();
 
   const { selectedYear, setSelectedYear, holidayDataSort } = usePeopleStore(
@@ -83,6 +89,11 @@ const SortByDropDown = ({ holidayData, listInnerRef }: Props) => {
           onClick={handleSortClick}
           disabled={holidayData?.length === 0}
           aria-describedby={sortId}
+          ariaLabel={`${translateAria(["sort"])} ${
+            holidayDataSort === SortOrderTypes.ASC
+              ? translateAria(["janToDec"])
+              : translateAria(["decToJan"])
+          }`}
         />
         <HolidayDataMenu
           anchorEl={sortEl}

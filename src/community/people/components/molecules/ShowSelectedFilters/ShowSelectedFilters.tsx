@@ -33,6 +33,7 @@ const ShowSelectedFilters = ({ filterOptions, onDeleteIcon }: Props) => {
                 gap: "0.5rem",
                 lineHeight: "1.0625rem"
               }}
+              tabIndex={-1}
               onDeleteIcon={() => onDeleteIcon && onDeleteIcon(option)}
             />
           ))}

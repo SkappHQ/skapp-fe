@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { JSX } from "react";
 
 import SortRow from "~community/common/components/atoms/SortRow/SortRow";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { SortOrderTypes } from "~community/common/types/CommonTypes";
 import { usePeopleStore } from "~community/people/store/store";
 
@@ -13,6 +14,11 @@ const HolidayDataSortMenuItems = ({
   handleClose,
   scrollToTop
 }: Props): JSX.Element => {
+  const translateAria = useTranslator(
+    "peopleAria",
+    "holiday",
+    "sortByDropdown"
+  );
   const holidayDataSort = usePeopleStore(
     (state) => state.holidayDataParams.sortOrder
   );
@@ -30,6 +36,7 @@ const HolidayDataSortMenuItems = ({
           handleClose();
           scrollToTop && scrollToTop();
         }}
+        ariaLabel={`${translateAria(["chronologically"])} ${translateAria(["janToDec"])}`}
       />
       <SortRow
         text="Chronologically : Dec to Jan"
@@ -39,6 +46,7 @@ const HolidayDataSortMenuItems = ({
           handleClose();
           scrollToTop && scrollToTop();
         }}
+        ariaLabel={`${translateAria(["chronologically"])} ${translateAria(["decToJan"])}`}
       />
     </Box>
   );
