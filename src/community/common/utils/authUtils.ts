@@ -13,12 +13,16 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.CHANGE_SUPERVISORS,
   ROUTES.SUBSCRIPTION,
   ROUTES.SIGN.SIGN,
-  ROUTES.SIGN.CREATE_DOCUMENT
+  ROUTES.SIGN.CREATE_DOCUMENT,
+  ROUTES.SIGN.SENT_INFO.BASE
 ];
 
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const isADrawerHiddenProtectedRoute =
-    drawerHiddenProtectedRoutes.includes(asPath);
+  const isADrawerHiddenProtectedRoute = drawerHiddenProtectedRoutes.some(
+    (prefix) => {
+      return asPath.startsWith(prefix);
+    }
+  );
 
   if (!isADrawerHiddenProtectedRoute) {
     const formattedProtectedPaths = config.matcher.map((path) =>
