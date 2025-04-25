@@ -74,7 +74,8 @@ const styles = (theme: Theme): StylesType => ({
   container: {
     maxHeight: "27.5rem",
     width: "100%",
-    borderRadius: "0.625rem"
+    borderRadius: "0.625rem",
+    outlineOffset: "2px"
   },
   table: {
     background: theme.palette.grey[100]
