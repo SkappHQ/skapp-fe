@@ -1,0 +1,53 @@
+import { Box, Stack, Typography } from "@mui/material";
+
+import CopyIcon from "~community/common/assets/Icons/CopyIcon";
+import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
+import { FileTypes } from "~community/common/enums/CommonEnums";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useDownloadAttachment } from "~community/leave/hooks/useDownloadAttachment";
+import { AttachmentType } from "~community/leave/types/EmployeeLeaveRequestTypes";
+
+interface Props {
+  attachments?: AttachmentType[];
+}
+
+const AttachmentRow = ({ attachments }: Props) => {
+  const translateText = useTranslator("leaveModule", "myRequests");
+  const { handleDownloadAttachment } = useDownloadAttachment({
+    fileType: FileTypes.LEAVE_ATTACHMENTS
+  });
+
+  if (!attachments || attachments.length === 0) {
+    return null;
+  }
+
+  return (
+    <Stack
+      sx={{
+        gap: 1
+      }}
+    >
+      <Typography variant="body2" sx={{ fontSize: "1rem" }}>
+        {translateText(["myLeaveRequests", "attachments"])}
+      </Typography>
+
+      <Box>
+        {attachments.map((attachment, index) => (
+          <IconChip
+            key={index}
+            label={`${translateText(["myLeaveRequests", "uploadedAttachment"])} ${index + 1}`}
+            chipStyles={{
+              backgroundColor: "grey.100",
+              py: "0.75rem",
+              px: "0.75rem"
+            }}
+            icon={<CopyIcon />}
+            onClick={() => handleDownloadAttachment(attachment.url)}
+          />
+        ))}
+      </Box>
+    </Stack>
+  );
+};
+
+export default AttachmentRow;
