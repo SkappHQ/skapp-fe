@@ -15,6 +15,8 @@ import {
   leaveStatusIconSelector
 } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
 
+import AttachmentRow from "../../AttachmentRow/AttachmentRow";
+
 interface Props {
   handleRequestStatusPopup: () => void;
 }
@@ -74,6 +76,7 @@ const EmployeeNudgeSupervisorPopup: FC<Props> = ({
           textStyles={{ mt: "0.75rem" }}
           reviewer={employeeLeaveRequestData.reviewer ?? undefined}
         />
+        <AttachmentRow attachments={employeeLeaveRequestData?.attachments} />
         <Button
           label={translateText(["myLeaveRequests", "proceedToHome"])}
           endIcon={IconName.RIGHT_ARROW_ICON}

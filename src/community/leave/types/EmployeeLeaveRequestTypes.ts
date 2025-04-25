@@ -29,6 +29,10 @@ export enum LeaveState {
   HALF_DAY_MORNING = "HALFDAY_MORNING"
 }
 
+export interface AttachmentType {
+  url: string;
+}
+
 export interface LeaveRequestDataType {
   leaveRequestId: number;
   startDate: string;
@@ -45,5 +49,5 @@ export interface LeaveRequestDataType {
   reviewedDate?: string | null;
   employee?: EmployeeLeaveRequestType;
   reviewer?: EmployeeLeaveRequestType | null;
-  attachments?: [];
+  attachments?: AttachmentType[];
 }
