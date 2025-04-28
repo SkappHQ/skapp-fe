@@ -9,7 +9,7 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 import { Theme, useTheme } from "@mui/material/styles";
 import { Box, SxProps } from "@mui/system";
-import { FC, JSX, SyntheticEvent } from "react";
+import { FC, JSX, KeyboardEvent, SyntheticEvent } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
@@ -18,6 +18,10 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
+import {
+  shouldCollapseDropdown,
+  shouldExpandDropdown
+} from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -27,8 +31,16 @@ interface Props {
   inputName: string;
   inputStyle?: SxProps;
   value?: string | number;
-  onChange?: (event: SelectChangeEvent) => void;
-  onInput?: (event: SelectChangeEvent) => void;
+  onChange?: (
+    event:
+      | SelectChangeEvent
+      | KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onInput?: (
+    event:
+      | SelectChangeEvent
+      | KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onClose?: (event: SyntheticEvent) => void;
   error?: string;
   componentStyle?: SxProps;
@@ -87,7 +99,11 @@ const DropdownList: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const handleChange = (event: SelectChangeEvent): void => {
+  const handleChange = (
+    event:
+      | KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent
+  ): void => {
     onChange?.(event);
     onInput?.(event);
   };
@@ -140,6 +156,17 @@ const DropdownList: FC<Props> = ({
             readOnly={readOnly}
             label={placeholder}
             onChange={handleChange}
+            onKeyDown={(
+              event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => {
+              if (shouldExpandDropdown(event.key)) {
+                handleChange(event);
+              }
+
+              if (shouldCollapseDropdown(event.key)) {
+                onClose?.(event);
+              }
+            }}
             onClose={onClose}
             name={inputName}
             disabled={isDisabled}
@@ -250,6 +277,17 @@ const DropdownList: FC<Props> = ({
             value={value?.toString()}
             onChange={handleChange}
             onClose={onClose}
+            onKeyDown={(
+              event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => {
+              if (shouldExpandDropdown(event.key)) {
+                handleChange(event);
+              }
+
+              if (shouldCollapseDropdown(event.key)) {
+                onClose?.(event);
+              }
+            }}
             name={inputName}
             disabled={isDisabled}
             multiple={isMultiValue}

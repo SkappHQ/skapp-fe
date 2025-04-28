@@ -20,6 +20,8 @@ import { DefaultDayCapacityType } from "~community/configurations/types/TimeConf
 import styles from "./styles";
 
 const ClockWidget = (): JSX.Element => {
+  const translateAria = useTranslator("attendanceAria", "timeWidget");
+
   const router: NextRouter = useRouter();
   const { attendanceParams } = useAttendanceStore((state) => state);
   const status = attendanceParams.slotType;
@@ -72,7 +74,14 @@ const ClockWidget = (): JSX.Element => {
   }, [router, getEmployeeStatusRefetch, refetchLeaveStatusData]);
 
   return (
-    <Tooltip id="play-button" title={title} placement={TooltipPlacement.BOTTOM}>
+    <Tooltip
+      id="play-button"
+      title={title}
+      placement={TooltipPlacement.BOTTOM}
+      spanStyles={{
+        borderRadius: "3.3125rem"
+      }}
+    >
       <Stack
         direction="row"
         alignItems="center"
@@ -80,8 +89,7 @@ const ClockWidget = (): JSX.Element => {
         spacing={2}
         component="div"
         sx={classes.container}
-        tabIndex={0}
-        aria-label="Clock Widget"
+        aria-label={translateAria(["widget"])}
       >
         <Stack
           direction="row"
@@ -90,7 +98,6 @@ const ClockWidget = (): JSX.Element => {
           spacing={2}
           component="div"
           sx={classes.timerContainer(isDisabled)}
-          tabIndex={0}
         >
           <Timer />
           <ClockInButton disabled={isDisabled} />

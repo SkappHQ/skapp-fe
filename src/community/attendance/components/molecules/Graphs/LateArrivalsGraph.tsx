@@ -1,7 +1,14 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
 import { DateTime } from "luxon";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import {
   GRAPH_LEFT,
@@ -10,6 +17,7 @@ import {
   lateArrivalsGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
 import { useLateArrivalsGraphOptions } from "~community/attendance/utils/echartOptions/lateArrivalsGraphOptions";
+import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -40,8 +48,12 @@ const LateArrivalsGraph = ({
   isDataLoading
 }: Props): JSX.Element => {
   const translations = useTranslator("attendanceModule", "dashboards");
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
+
   const theme: Theme = useTheme();
   const currentMonth = DateTime.local().toFormat("MMM");
+
+  const lateArrivalChartRef = useRef<ReactECharts>(null);
 
   const findTimeIndex = (labels: string[], standardTime: string) => {
     return (
@@ -53,6 +65,9 @@ const LateArrivalsGraph = ({
     startIndex: 0,
     endIndex: 0
   });
+
+  const [lateArrivalHighlightedIndex, setLateArrivalHighlightedIndex] =
+    useState<number>(xIndexDay.startIndex);
 
   const MaxNumberOfWeeks = 51;
   const MaxNumberOfMonths = 12;
@@ -152,11 +167,16 @@ const LateArrivalsGraph = ({
                 >
                   {translations(["attendanceDashboard.lateArrivals"])}
                 </Typography>
-
                 <ToggleSwitch
                   options={[
-                    lateArrivalsGraphTypes.WEEKLY.label,
-                    lateArrivalsGraphTypes.MONTHLY.label
+                    {
+                      ariaLabel: translateTextAria(["lateArrivalTrendWeekly"]),
+                      value: lateArrivalsGraphTypes.WEEKLY.label
+                    },
+                    {
+                      ariaLabel: translateTextAria(["lateArrivalTrendMonthly"]),
+                      value: lateArrivalsGraphTypes.MONTHLY.label
+                    }
                   ]}
                   setCategoryOption={(option: string) => {
                     setDataCategory(
@@ -175,16 +195,37 @@ const LateArrivalsGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box>
+                <Box
+                  tabIndex={0}
+                  onKeyDown={(event) =>
+                    handleGraphKeyboardNavigation({
+                      event,
+                      highlightedIndex: lateArrivalHighlightedIndex,
+                      setHighlightedIndex: setLateArrivalHighlightedIndex,
+                      chartDataLabels: chartData.labels,
+                      xIndexDay,
+                      handleClick,
+                      chartRef: lateArrivalChartRef
+                    })
+                  }
+                >
                   <ReactECharts
                     option={lateArrivalsGraphOptions}
                     style={{ height: "16.25rem" }}
+                    ref={lateArrivalChartRef}
                   />
                 </Box>
               )}
             </Box>
             {chartData?.preProcessedData?.length !== 0 && (
               <Box
+                aria-label={
+                  dataCategory === "WEEKLY"
+                    ? translateTextAria(["lateArrivalTrendWeeklyPrevious"])
+                    : translateTextAria(["lateArrivalTrendMonthlyPrevious"])
+                }
+                tabIndex={0}
+                role="button"
                 onClick={() => handleClick(GRAPH_LEFT)}
                 sx={{
                   position: "absolute",
@@ -197,8 +238,16 @@ const LateArrivalsGraph = ({
                 <Icon name={IconName.CHEVRON_LEFT_ICON} />
               </Box>
             )}
+
             {chartData?.preProcessedData?.length !== 0 && (
               <Box
+                aria-label={
+                  dataCategory === "WEEKLY"
+                    ? translateTextAria(["lateArrivalTrendWeeklyNext"])
+                    : translateTextAria(["lateArrivalTrendMonthlyNext"])
+                }
+                tabIndex={0}
+                role="button"
                 onClick={() => handleClick(GRAPH_RIGHT)}
                 sx={{
                   position: "absolute",

@@ -6,6 +6,7 @@ import TimeWidgetPopupController from "~community/attendance/components/organism
 import ToastMessage from "~community/common/components/molecules/ToastMessage/ToastMessage";
 import AppBar from "~community/common/components/organisms/AppBar/AppBar";
 import Drawer from "~community/common/components/organisms/Drawer/Drawer";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   initialState,
   useToast
@@ -25,6 +26,8 @@ const ContentWithDrawer = ({ children }: Props) => {
 
   const { toastMessage, setToastMessage } = useToast();
 
+  const translateAria = useTranslator("commonAria");
+
   return (
     <>
       <Link
@@ -32,12 +35,32 @@ const ContentWithDrawer = ({ children }: Props) => {
         onClick={(e) =>
           handleMainContentFocus(e, "content-with-drawer-main-content")
         }
-      />
+        style={{
+          position: "absolute",
+          left: "-62.4375rem",
+          top: "auto",
+          width: "0.0625rem",
+          height: "0.0625rem",
+          overflow: "hidden"
+        }}
+      >
+        {translateAria(["skipToMainContent"])}
+      </Link>
       <Stack sx={classes.protectedWrapper}>
         <Drawer />
         <Stack sx={classes.contentWrapper}>
           <AppBar />
-          <main id="content-with-drawer-main-content">{children}</main>
+          <main
+            id="content-with-drawer-main-content"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%"
+            }}
+          >
+            {children}
+          </main>
         </Stack>
       </Stack>
       <ToastMessage

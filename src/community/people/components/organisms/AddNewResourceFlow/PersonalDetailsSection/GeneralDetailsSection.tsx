@@ -322,6 +322,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 }}
               >
                 <Avatar
+                  isOriginalImage={true}
                   id="avatar"
                   alt={`${values.firstName} ${values.lastName}`}
                   src={getAvatarThumbnailUrl()}

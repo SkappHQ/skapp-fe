@@ -1,7 +1,8 @@
 {
   "timeWidget": {
-    "startTimer": "Start attendance timer",
-    "pauseTimer": "Pause attendance timer"
+    "widget": "Clock Widget",
+    "startTimer": "Resume timer",
+    "pauseTimer": "Take a break"
   },
   "timesheet": {
     "dailyLogTable": {
@@ -13,5 +14,24 @@
     "timeEntryRequestTable": {
       "filterButton": "Filter Button"
     }
+  },
+  "dashboards": {
+    "todaysClockInsExtendedView": "Today's clock ins extended view",
+    "todaysLateArrivalsExtendedView": "Today's late arrivals extended view",
+    "clockInTrend": "Clock in trend",
+    "clockOutTrend": "Clock out trend",
+    "date": "Date",
+    "lateArrivalTrendWeekly": "Weekly late arrival trend",
+    "lateArrivalTrendMonthly": "monthly late arrival trend",
+    "previousTimeSlots": "previous time slots",
+    "nextTimeSlots": "next time slots",
+    "lateArrivalTrendWeeklyNext": "next week",
+    "lateArrivalTrendWeeklyPrevious": "previous week",
+    "lateArrivalTrendMonthlyNext": "next month",
+    "lateArrivalTrendMonthlyPrevious": "previous month",
+    "averageHoursWorkedNextMonth": "next month",
+    "averageHoursWorkedPreviousMonth": "previous month",
+    "averageHoursWorkedNextDates": "next dates",
+    "averageHoursWorkedPreviousDates": "previous dates"
   }
 }

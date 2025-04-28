@@ -55,8 +55,8 @@ const EmploymentBreakdownGraph = ({
                 </Typography>
                 <ToggleSwitch
                   options={[
-                    employmentBreakdownGraphTypes.TYPE.label,
-                    employmentBreakdownGraphTypes.ALLOCATION.label
+                    { value: employmentBreakdownGraphTypes.TYPE.label },
+                    { value: employmentBreakdownGraphTypes.ALLOCATION.label }
                   ]}
                   setCategoryOption={(option: string) => {
                     setDataCategory(

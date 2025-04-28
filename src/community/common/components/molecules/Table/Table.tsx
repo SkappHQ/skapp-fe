@@ -45,6 +45,7 @@ export interface CommonTableProps {
     //NOTE: If you want to disable individual checkbox, you have to use isRowDisabled prop and disable the entire row
     isEnabled?: boolean;
     isSelectAllEnabled?: boolean;
+    isSelectAllVisible?: boolean;
     isSelectAllChecked?: boolean;
     handleIndividualSelectClick?: (id: number) => () => void;
     handleSelectAllClick?: () => void;
@@ -86,6 +87,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       <TableContainer
         sx={mergeSx([classes.container, customStyles?.container])}
         role="region"
+        tabIndex={0}
         aria-label={`${tableName}-table-container`}
       >
         <MuiTable

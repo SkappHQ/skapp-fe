@@ -13,7 +13,14 @@ import {
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { DateTime } from "luxon";
-import { Dispatch, FC, type MouseEvent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  KeyboardEvent,
+  type MouseEvent,
+  SetStateAction,
+  useState
+} from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import PickersDay from "~community/common/components/molecules/DateRangePickersDay/DateRangePickersDay";
@@ -23,6 +30,7 @@ import {
   getChipLabel,
   handleDateChange
 } from "~community/common/utils/dateRangePickerUtils";
+import { shouldCollapseDropdown } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -86,12 +94,15 @@ const DateRangePicker: FC<Props> = ({
             },
             chipStyles
           ])}
-          aria-label={`Selected date ${
+          aria-label={
             selectedDates[0]
-              ? DateTime.fromJSDate(selectedDates[0]).toFormat("do MMMM")
-              : "None"
-          }. Press enter to change selected date`}
+              ? `Selected date ${DateTime.fromJSDate(selectedDates[0]).toFormat("dd MMMM yyyy")}. Press enter to change selected date`
+              : "Press enter to select date"
+          }
           tabIndex={0}
+          onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+            if (shouldCollapseDropdown(e.key)) setAnchorEl(null);
+          }}
         />
 
         <Popper
@@ -113,6 +124,9 @@ const DateRangePicker: FC<Props> = ({
             }
           ]}
           tabIndex={0}
+          onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+            if (shouldCollapseDropdown(e.key)) setAnchorEl(null);
+          }}
         >
           <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
             <Paper>

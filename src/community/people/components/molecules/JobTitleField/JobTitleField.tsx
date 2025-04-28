@@ -9,6 +9,7 @@ import { characterLengths } from "~community/common/constants/stringConstants";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import { usePeopleStore } from "~community/people/store/store";
 import {
   AddJobFamilyFormType,
@@ -69,6 +70,9 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
   const [editingInputField, setEditingInputField] = useState<number | null>(
     null
   );
+  const [focusedInputField, setFocusedInputField] = useState<number | null>(
+    null
+  );
 
   return (
     <Stack>
@@ -125,13 +129,18 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
           <Box sx={classes.valueContainer}>
             {values.jobTitles?.map((jobTitle: JobTitleType, index: number) => {
               const isOldValue = jobTitle.jobTitleId !== null;
-              const isHovered = hoveredInputField === index;
               const isEditing = editingInputField === index;
+              const isVisible =
+                hoveredInputField === index || focusedInputField === index;
 
               const error = getJobTitleNameError(errors, index);
 
               return (
-                <Box key={index} tabIndex={0}>
+                <Box
+                  key={index}
+                  tabIndex={0}
+                  onFocus={() => setFocusedInputField(index)}
+                >
                   <InputField
                     focusOnText
                     isDisabled={!isEditing}
@@ -151,7 +160,10 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                     inputStyle={classes.inputFieldComponent}
                     maxLength={characterLengths.JOB_TITLE_LENGTH}
                     onMouseEnter={() => setHoveredInputField(index)}
-                    onMouseLeave={() => setHoveredInputField(null)}
+                    onMouseLeave={() => {
+                      setHoveredInputField(null);
+                      setFocusedInputField(null);
+                    }}
                     ariaLabel={ariaTranslateText(["jobTitleField"], {
                       jobTitleName: jobTitle?.name?.toLowerCase() ?? ""
                     })}
@@ -161,75 +173,142 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
                           position="end"
                           sx={classes.inputAdornment}
                         >
-                          {isOldValue && isHovered && !isEditing && (
-                            <Icon
-                              name={IconName.EDIT_ICON}
-                              id={`${index}-edit-btn`}
-                              fill={theme.palette.grey[700]}
-                              onClick={() =>
-                                handleEditIconBtnClick(
-                                  jobTitle,
-                                  setEditingInputField,
-                                  hoveredInputField,
-                                  setPreviousJobTitleData
-                                )
-                              }
-                            />
+                          {isOldValue && isVisible && !isEditing && (
+                            <Box
+                              tabIndex={0}
+                              role="button"
+                              onKeyDown={(e) => {
+                                if (shouldActivateButton(e.key)) {
+                                  handleEditIconBtnClick(
+                                    jobTitle,
+                                    setEditingInputField,
+                                    focusedInputField,
+                                    setPreviousJobTitleData
+                                  );
+                                }
+                              }}
+                            >
+                              <Icon
+                                name={IconName.EDIT_ICON}
+                                id={`${index}-edit-btn`}
+                                fill={theme.palette.grey[700]}
+                                onClick={() =>
+                                  handleEditIconBtnClick(
+                                    jobTitle,
+                                    setEditingInputField,
+                                    hoveredInputField,
+                                    setPreviousJobTitleData
+                                  )
+                                }
+                              />
+                            </Box>
                           )}
-                          {isHovered && !isEditing && (
-                            <Icon
-                              name={IconName.BIN_ICON}
-                              id={`${index}-bin-btn`}
-                              fill={theme.palette.grey[700]}
-                              onClick={() =>
-                                handleBinIconBtnClick(
-                                  jobTitle,
-                                  setPreviousJobTitleData,
-                                  setFieldValue,
-                                  values,
-                                  allJobFamilies,
-                                  setJobFamilyModalType
-                                )
-                              }
-                            />
+                          {isVisible && !isEditing && (
+                            <Box
+                              tabIndex={0}
+                              role="button"
+                              onKeyDown={(e) => {
+                                if (shouldActivateButton(e.key)) {
+                                  handleBinIconBtnClick(
+                                    jobTitle,
+                                    setPreviousJobTitleData,
+                                    setFieldValue,
+                                    values,
+                                    allJobFamilies,
+                                    setJobFamilyModalType
+                                  );
+                                }
+                              }}
+                            >
+                              <Icon
+                                name={IconName.BIN_ICON}
+                                id={`${index}-bin-btn`}
+                                fill={theme.palette.grey[700]}
+                                onClick={() =>
+                                  handleBinIconBtnClick(
+                                    jobTitle,
+                                    setPreviousJobTitleData,
+                                    setFieldValue,
+                                    values,
+                                    allJobFamilies,
+                                    setJobFamilyModalType
+                                  )
+                                }
+                              />
+                            </Box>
                           )}
                           {isOldValue && isEditing && (
                             <>
-                              <Icon
-                                name={IconName.TICK_ICON}
-                                id={`${index}-check-btn`}
-                                height="1.25rem"
-                                width="1.25rem"
-                                fill={theme.palette.grey[700]}
-                                onClick={() =>
-                                  !error &&
-                                  handleTickIconBtnClick(
-                                    index,
-                                    values,
-                                    previousJobTitleData,
-                                    allJobFamilies,
-                                    setFieldValue,
-                                    setJobFamilyModalType,
-                                    setEditingInputField
-                                  )
-                                }
-                              />
-                              <Icon
-                                name={IconName.ROUNDED_CLOSE_ICON}
-                                id={`${index}-close-btn`}
-                                height="1.25rem"
-                                width="1.25rem"
-                                fill={theme.palette.grey[700]}
-                                onClick={() =>
-                                  handleCloseIconBtnClick(
-                                    index,
-                                    previousJobTitleData,
-                                    setFieldValue,
-                                    setPreviousJobTitleData,
-                                    setEditingInputField
-                                  )
-                                }
-                              />
+                              <Box
+                                tabIndex={0}
+                                role="button"
+                                onKeyDown={(e) => {
+                                  if (shouldActivateButton(e.key)) {
+                                    !error &&
+                                      handleTickIconBtnClick(
+                                        index,
+                                        values,
+                                        previousJobTitleData,
+                                        allJobFamilies,
+                                        setFieldValue,
+                                        setJobFamilyModalType,
+                                        setEditingInputField
+                                      );
+                                  }
+                                }}
+                              >
+                                <Icon
+                                  name={IconName.TICK_ICON}
+                                  id={`${index}-check-btn`}
+                                  height="1.25rem"
+                                  width="1.25rem"
+                                  fill={theme.palette.grey[700]}
+                                  onClick={() =>
+                                    !error &&
+                                    handleTickIconBtnClick(
+                                      index,
+                                      values,
+                                      previousJobTitleData,
+                                      allJobFamilies,
+                                      setFieldValue,
+                                      setJobFamilyModalType,
+                                      setEditingInputField
+                                    )
+                                  }
+                                />
+                              </Box>
+                              <Box
+                                tabIndex={0}
+                                role="button"
+                                onKeyDown={(e) => {
+                                  if (shouldActivateButton(e.key)) {
+                                    handleCloseIconBtnClick(
+                                      index,
+                                      previousJobTitleData,
+                                      setFieldValue,
+                                      setPreviousJobTitleData,
+                                      setEditingInputField
+                                    );
+                                  }
+                                }}
+                              >
+                                <Icon
+                                  name={IconName.ROUNDED_CLOSE_ICON}
+                                  id={`${index}-close-btn`}
+                                  height="1.25rem"
+                                  width="1.25rem"
+                                  fill={theme.palette.grey[700]}
+                                  onClick={() =>
+                                    handleCloseIconBtnClick(
+                                      index,
+                                      previousJobTitleData,
+                                      setFieldValue,
+                                      setPreviousJobTitleData,
+                                      setEditingInputField
+                                    )
+                                  }
+                                />
+                              </Box>
                             </>
                           )}
                         </InputAdornment>

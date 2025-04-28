@@ -8,88 +8,11 @@ import { EmployeeType, VisaDetailsType } from "../types/AddNewResourceTypes";
 import {
   EducationalDetailsResponseType,
   EmergencyContactDetailsResponseType,
-  EmployeeDataResponse,
   EmployeeDataType,
   EmployeeDetails,
-  EmployeeManagerType,
-  EmployeeTableDataResponseType,
-  FamilyMemberResponseType,
-  TeamResultsType
+  FamilyMemberResponseType
 } from "../types/EmployeeTypes";
 import { JobFamilies, JobFamiliesType } from "../types/JobRolesTypes";
-
-export function EmployeeTablePreProcessor(
-  employeeList: EmployeeTableDataResponseType
-): EmployeeDataResponse {
-  const preProcessedData = employeeList?.results?.[0]?.items?.map(
-    (request: EmployeeDetails) => {
-      return EmployeeDataPreProcessor(request);
-    }
-  );
-
-  return {
-    ...employeeList.results[0],
-    items: preProcessedData
-  } as unknown as EmployeeDataResponse;
-}
-
-export function EmployeeDataPreProcessor(
-  employee: EmployeeDetails
-): EmployeeDataType {
-  const employeeId = employee?.employeeId as number;
-  const employeeName = `${employee?.firstName} ${employee?.lastName}`;
-  const firstName = employee?.firstName ?? "";
-  const lastName = employee?.lastName ?? "";
-  const avatarUrl = employee?.authPic ?? "";
-  const jobRole =
-    employee?.jobFamily === null ? undefined : employee.jobFamily?.name;
-  const jobLevel =
-    employee?.jobTitle === null ? undefined : employee.jobTitle?.name;
-  const teams =
-    employee?.teams?.length !== 0 && employee?.teams?.length !== undefined
-      ? [...employee.teams]
-      : [];
-  let permission = employee?.permission;
-  const email = employee?.email;
-  const isActive = employee?.isActive;
-  const managers = employee?.managers?.map(
-    ({ manager, isPrimaryManager, managerType }: EmployeeManagerType) => ({
-      manager,
-      isPrimaryManager,
-      managerType
-    })
-  );
-  const contractState = employee?.contractState ?? undefined;
-  const accountStatus = employee?.accountStatus ?? undefined;
-  const employmentStatus = employee?.employmentStatus ?? undefined;
-
-  const preProcessedData = {
-    employeeId,
-    employeeName,
-    firstName,
-    lastName,
-    avatarUrl,
-    jobRole,
-    jobLevel,
-    teams: teams as [] | TeamResultsType[] | number[],
-    permission,
-    email,
-    isActive,
-    identificationNo: employee?.identificationNo ?? undefined,
-    gender: employee?.gender ?? undefined,
-    phone: employee?.phone ?? undefined,
-    personalEmail: employee?.personalEmail ?? undefined,
-    employeeType: employee?.contractType ?? undefined,
-    managers,
-    designation: employee?.designation ?? undefined,
-    contractState,
-    employmentStatus,
-    accountSignIn: employee?.accountSignIn ?? undefined,
-    accountStatus
-  };
-
-  return preProcessedData as EmployeeDataType;
-}
 
 export const employeeCreatePreProcessor = (
   employee: EmployeeType

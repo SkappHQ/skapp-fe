@@ -96,7 +96,11 @@ const ROUTES = {
     CREATE_DOCUMENT: "/sign/create",
     SIGN: "/sign/sign",
     DOCUMENT_ACCESS: "/sign/document/access",
-    COMPLETE: "/sign/complete"
+    COMPLETE: "/sign/complete",
+    SENT_INFO: {
+      BASE: "/sign/sent/envelope",
+      ID: (id: number) => `/sign/sent/envelope/${id}`
+    }
   },
   REMOVE_PEOPLE: "/remove-people",
   CHANGE_SUPERVISORS: "/change-supervisors",

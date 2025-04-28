@@ -605,3 +605,16 @@ export const getAllMonthsAsString = (
   }
   return months;
 };
+
+export const formatTimestampWithTime = (timestamp: string): string => {
+  const dateTime = DateTime.fromISO(timestamp);
+  if (!dateTime.isValid) return "Invalid date";
+
+  const day = dateTime.day;
+  let ordinalSuffix = "th";
+  if (day % 10 === 1 && day !== 11) ordinalSuffix = "st";
+  else if (day % 10 === 2 && day !== 12) ordinalSuffix = "nd";
+  else if (day % 10 === 3 && day !== 13) ordinalSuffix = "rd";
+
+  return `${day}${ordinalSuffix} ${dateTime.toFormat("MMM yyyy HH:mm a")}`;
+};
