@@ -124,6 +124,7 @@ import VisaCardIcon from "~enterprise/settings/assets/Icons/VisaCardIcon";
 interface Props extends IconProps {
   name: IconName;
   dataTestId?: string;
+  ariaLabel?: string;
 }
 
 export const IconMapping: Partial<
@@ -259,6 +260,7 @@ const Icon = ({
   id,
   svgProps,
   dataTestId,
+  ariaLabel,
   onClick
 }: Props): JSX.Element => {
   const SelectedIcon = IconMapping[name];
@@ -273,6 +275,7 @@ const Icon = ({
       data-testid={dataTestId}
       svgProps={svgProps}
       onClick={onClick}
+      aria-label={ariaLabel}
     />
   );
 };
