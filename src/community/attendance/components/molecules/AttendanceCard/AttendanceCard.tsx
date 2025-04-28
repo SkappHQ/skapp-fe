@@ -10,6 +10,7 @@ import { useAttendanceStore } from "~community/attendance/store/attendanceStore"
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ROUTES from "~community/common/constants/routes";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 interface Props {
   title?: string;
@@ -70,6 +71,17 @@ const AttendanceCard: FC<Props> = ({
                     });
 
                 router.replace(ROUTES.DASHBOARD.ATTENDANCE.CLOCK_IN_SUMMARY);
+              }}
+              onKeyDown={(e) => {
+                if (shouldActivateButton(e.key)) {
+                  type === ClockInOutGraphTypes.CLOCK_IN
+                    ? setClockInType({})
+                    : setClockInType({
+                        "Clock-ins": [ClockInSummaryTypes.LATE_CLOCK_INS]
+                      });
+
+                  router.replace(ROUTES.DASHBOARD.ATTENDANCE.CLOCK_IN_SUMMARY);
+                }
               }}
             >
               <Icon name={IconName.NEW_WINDOW_ICON} />

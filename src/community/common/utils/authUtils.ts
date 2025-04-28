@@ -1,9 +1,6 @@
 import ROUTES from "~community/common/constants/routes";
 import { config } from "~middleware";
 
-//Dynamic routes like /sign/sent/:id
-export const drawerHiddenDynamicProtectedRoutes = [ROUTES.SIGN.SENT_DETAIL];
-
 export const drawerHiddenProtectedRoutes = [
   ROUTES.ORGANIZATION.SETUP,
   ROUTES.AUTH.RESET_PASSWORD,
@@ -17,31 +14,15 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.SUBSCRIPTION,
   ROUTES.SIGN.SIGN,
   ROUTES.SIGN.CREATE_DOCUMENT,
-  ...drawerHiddenDynamicProtectedRoutes
+  ROUTES.SIGN.SENT_INFO.BASE
 ];
 
-const getDrawerHiddenStatus = (asPath: string): boolean => {
-  return drawerHiddenProtectedRoutes.some((route) => {
-    if (typeof route === "string") {
-      return route === asPath;
-    } else if (typeof route === "function") {
-      try {
-        const samplePath = route(123);
-        const basePathPattern = samplePath.substring(
-          0,
-          samplePath.lastIndexOf("/") + 1
-        );
-        return asPath.startsWith(basePathPattern);
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  });
-};
-
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const isADrawerHiddenProtectedRoute = getDrawerHiddenStatus(asPath);
+  const isADrawerHiddenProtectedRoute = drawerHiddenProtectedRoutes.some(
+    (prefix) => {
+      return asPath.startsWith(prefix);
+    }
+  );
 
   if (!isADrawerHiddenProtectedRoute) {
     const formattedProtectedPaths = config.matcher.map((path) =>

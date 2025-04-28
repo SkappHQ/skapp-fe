@@ -95,7 +95,7 @@ input[type="number"] {
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1441px) {
   .signup-layout-content-section {
     max-width: 800px;
     padding: 80px;

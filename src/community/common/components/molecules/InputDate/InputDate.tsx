@@ -345,6 +345,8 @@ const InputDate: FC<Props> = ({
             if (shouldExpandDropdown(e.key)) {
               !(disabled || readOnly) && handleClick(e);
             }
+            if (shouldCollapseDropdown(e.key))
+              !(disabled || readOnly) && handleClose();
           }}
         >
           <Icon
@@ -370,9 +372,6 @@ const InputDate: FC<Props> = ({
         disablePortal
         sx={mergeSx([classes.popper, popperStyles])}
         tabIndex={0}
-        onKeyDown={(e) => {
-          if (shouldCollapseDropdown(e.key)) handleClose();
-        }}
       >
         <ClickAwayListener onClickAway={handleClose}>
           <Paper>
