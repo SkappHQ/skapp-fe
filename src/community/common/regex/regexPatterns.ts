@@ -200,7 +200,15 @@ export function areCommasPresentInString(input: string): boolean {
 }
 
 export function isValidCityStateString(): RegExp {
-  return /^[a-zA-Z0-9\-'.]+$/;
+  /**
+   * The pattern accepts:
+   * - Latin alphabet characters (A-Z, a-z)
+   * - Accented characters (À-Ö, Ø-ö, ø-ÿ, Ā-ž)
+   * - Specific Eastern European characters (Č, č, Ć, ć, Š, š, Ž, ž, Ń, ń)
+   * - Numbers (0-9)
+   * - Hyphens, spaces, and various diacritical marks (`´^~çÇ¨˚Øøł¯)
+   *  */
+  return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'0-9\-\s`´^~çÇ¨˚Øøł¯]+$/;
 }
 
 export function matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod(): RegExp {
