@@ -781,6 +781,7 @@ export const useEditEmployee = (employeeId: string) => {
         .catch(rejects);
     },
     onError: () => {
+      setIsReinviteConfirmationModalOpen(false);
       setToastMessage({
         open: true,
         toastType: ToastType.ERROR,

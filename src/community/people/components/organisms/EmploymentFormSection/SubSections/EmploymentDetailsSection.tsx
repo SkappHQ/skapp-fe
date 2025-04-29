@@ -105,7 +105,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       () =>
         employee?.employment?.employmentDetails ||
         ({} as L3EmploymentDetailsType),
-      [employee]
+      []
     );
 
     const context: EmployeeEmploymentContextType = {
@@ -126,7 +126,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       onSubmit,
       validateOnChange: false,
       validateOnBlur: true,
-      enableReinitialize: true
+      enableReinitialize: false,
     });
 
     const {
