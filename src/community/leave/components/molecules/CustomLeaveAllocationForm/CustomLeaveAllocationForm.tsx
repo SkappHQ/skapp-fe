@@ -195,18 +195,28 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
 
     if (
       matchesNumberWithAtMostOneDecimalPlace().test(value) &&
+      0.5 <= numericValue &&
       numericValue <= 360
     ) {
       setFieldValue("numberOfDaysOff", value);
       setFieldError("numberOfDaysOff", "");
+      return;
     } else {
-      e.preventDefault();
-      setFieldError(
-        "numberOfDaysOff",
-        numericValue > 360
-          ? translateText(["validNoOfDaysUpperRangeError"])
-          : translateText(["validNoOfDaysLowerRangeError"])
-      );
+      if (numericValue < 0.5) {
+        setFieldValue("numberOfDaysOff", value);
+        setFieldError(
+          "numberOfDaysOff",
+          translateText(["validNoOfDaysLowerRangeError"])
+        );
+        return;
+      } else if (360 < numericValue) {
+        setFieldValue("numberOfDaysOff", value);
+        setFieldError(
+          "numberOfDaysOff",
+          translateText(["validNoOfDaysUpperRangeError"])
+        );
+        return;
+      }
     }
   };
 
