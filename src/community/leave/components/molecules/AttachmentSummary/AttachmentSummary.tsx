@@ -16,24 +16,21 @@ const AttachmentSummary = ({ attachments, onDeleteBtnClick }: Props) => {
   const classes = styles(theme);
 
   const handleAttachmentClick = (attachment: FileUploadType) => {
+    if (!attachment.file) {
+      return;
+    }
+
     const link = document.createElement("a");
     link.download = attachment.name;
 
-    if (attachment.file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        link.href = reader.result as string;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      };
-      reader.readAsDataURL(attachment.file);
-    } else if (attachment.url) {
-      link.href = attachment.url;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      link.href = reader.result as string;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    }
+    };
+    reader.readAsDataURL(attachment.file);
   };
 
   return (
