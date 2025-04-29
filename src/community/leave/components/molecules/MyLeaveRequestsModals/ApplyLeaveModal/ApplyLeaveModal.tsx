@@ -71,6 +71,8 @@ const ApplyLeaveModal = () => {
     "applyLeaveModal"
   );
 
+  const translateAria = useTranslator("leaveAria", "applyLeave");
+
   const {
     comment,
     attachments,
@@ -399,6 +401,10 @@ const ApplyLeaveModal = () => {
           />
           <TextArea
             label={translateText(["comment"])}
+            ariaLabel={{
+              textArea: translateAria(["comment.textArea"]),
+              icon: translateAria(["comment.icon"])
+            }}
             placeholder={translateText(["addComment"])}
             isRequired={
               selectedLeaveAllocationData.leaveType.isCommentMandatory

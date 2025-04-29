@@ -23,10 +23,13 @@ const LeaveEntitlementBalanceCard = ({ leaveEntitlementBalance }: Props) => {
     "leaveEntitlementBalanceCard"
   );
 
+  const translateAria = useTranslator("leaveAria", "applyLeave", "calendar");
+
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
   return (
     <Tooltip
+      ariaLabel={translateAria(["icon"])}
       open={isTooltipOpen}
       id="leave-entitlement-balance-tooltip"
       dataTestId="leave-entitlement-balance-tooltip"
