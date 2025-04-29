@@ -1,12 +1,13 @@
-import { MouseEvent } from "react";
+import { KeyboardEvent } from "react";
 
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 
 export const handleMainContentFocus = (
-  e: MouseEvent<HTMLAnchorElement>,
+  event: KeyboardEvent<HTMLAnchorElement>,
   id: string
 ): void => {
-  e.preventDefault();
+  event.preventDefault();
+
   const mainContent = document.getElementById(id);
 
   if (mainContent) {

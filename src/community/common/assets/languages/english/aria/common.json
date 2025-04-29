@@ -1,5 +1,11 @@
 {
-  "skipToMainContent": "Skip to main content",
+  "skipToContent": {
+    "label": "Open skip to content menu",
+    "skipTo": "Skip to:",
+    "mainContent": "Main content",
+    "topBar": "Top bar",
+    "sideBar": "Side bar"
+  },
   "components": {
     "backButton": "Click me to go to previous page",
     "filterBtn": "Click me to open filter menu",
