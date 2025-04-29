@@ -199,18 +199,6 @@ export function areCommasPresentInString(input: string): boolean {
   return regex.test(input);
 }
 
-export function isValidCityStateString(): RegExp {
-  /**
-   * The pattern accepts:
-   * - Latin alphabet characters (A-Z, a-z)
-   * - Accented characters (À-Ö, Ø-ö, ø-ÿ, Ā-ž)
-   * - Specific Eastern European characters (Č, č, Ć, ć, Š, š, Ž, ž, Ń, ń)
-   * - Numbers (0-9)
-   * - Hyphens, spaces, and various diacritical marks (`´^~çÇ¨˚Øøł¯)
-   *  */
-  return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'0-9\-\s`´^~çÇ¨˚Øøł¯]+$/;
-}
-
 export function matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod(): RegExp {
   // Matches "YYYY-MM-DD", "YYYY/MM/DD", or "YYYY.MM.DD" with leading zeros
   // Example: "2023-09-15", "2023/09/15", "2023.09.15"
