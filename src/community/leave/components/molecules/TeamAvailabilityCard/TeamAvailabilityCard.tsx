@@ -36,6 +36,12 @@ const TeamAvailabilityCard = ({ teams, resourceAvailability }: Props) => {
     "teamAvailabilityCard"
   );
 
+  const translateAria = useTranslator(
+    "leaveAria",
+    "applyLeave",
+    "teamAvailabilityCard"
+  );
+
   const {
     selectedDates,
     selectedTeam,
@@ -94,6 +100,7 @@ const TeamAvailabilityCard = ({ teams, resourceAvailability }: Props) => {
           position="bottom-end"
           wrapperStyles={classes.wrapperStyles as StyleProps}
           dropdownBtnStyles={classes.dropdownBtnStyles as StyleProps}
+          ariaLabel={translateAria(["dropdown"])}
         />
       </Stack>
       <Stack sx={classes.rowTwo}>

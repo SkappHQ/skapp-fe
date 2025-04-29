@@ -23,6 +23,10 @@ interface Props<T> {
   maxLength: number;
   iconName?: IconName;
   onIconClick?: () => void;
+  ariaLabel?: {
+    icon?: string;
+    textArea?: string;
+  };
 }
 
 const TextArea = <T,>({
@@ -36,6 +40,7 @@ const TextArea = <T,>({
   maxLength,
   isAttachmentRequired = false,
   iconName,
+  ariaLabel,
   onIconClick
 }: Props<T>) => {
   const theme: Theme = useTheme();
@@ -56,6 +61,7 @@ const TextArea = <T,>({
           <StyledTextArea
             maxLength={maxLength}
             name={name}
+            aria-label={ariaLabel?.textArea ?? label}
             placeholder={placeholder}
             value={value}
             onChange={onChange}
@@ -75,6 +81,7 @@ const TextArea = <T,>({
                 width: "min-content",
                 cursor: "pointer"
               }}
+              aria-label={ariaLabel?.icon ?? ""}
             >
               <Icon
                 name={iconName}
