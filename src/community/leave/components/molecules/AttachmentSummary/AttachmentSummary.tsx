@@ -15,6 +15,27 @@ const AttachmentSummary = ({ attachments, onDeleteBtnClick }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
+  const handleAttachmentClick = (attachment: FileUploadType) => {
+    const link = document.createElement("a");
+    link.download = attachment.name;
+
+    if (attachment.file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        link.href = reader.result as string;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+      reader.readAsDataURL(attachment.file);
+    } else if (attachment.url) {
+      link.href = attachment.url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   return (
     <Stack sx={classes.wrapper}>
       {attachments.map((attachment, index) => (
@@ -24,6 +45,7 @@ const AttachmentSummary = ({ attachments, onDeleteBtnClick }: Props) => {
           }
           key={index}
           label={attachment.name}
+          onClick={() => handleAttachmentClick(attachment)}
           onDelete={() => onDeleteBtnClick(attachment)}
           sx={classes.chip}
           deleteIcon={
