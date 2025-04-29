@@ -108,3 +108,10 @@ const ROUTES = {
 };
 
 export default ROUTES;
+
+export const employeeRestrictedRoutes = [
+  "/people/directory/edit/",
+  "/people/directory/add"
+];
+
+export const managerRestrictedRoutes = ["/people/directory/add"];

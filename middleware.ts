@@ -1,7 +1,10 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
-import ROUTES from "~community/common/constants/routes";
+import ROUTES, {
+  employeeRestrictedRoutes,
+  managerRestrictedRoutes
+} from "~community/common/constants/routes";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -201,6 +204,28 @@ export default withAuth(
       if (
         request.nextUrl.pathname.startsWith(ROUTES.SETTINGS.INTEGRATIONS) &&
         token?.tier !== "PRO"
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
+
+      if (
+        managerRestrictedRoutes.some((url) =>
+          request.nextUrl.pathname.startsWith(url)
+        ) &&
+        !roles.includes(AdminTypes.PEOPLE_ADMIN)
+      ) {
+        return NextResponse.redirect(
+          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+        );
+      }
+
+      if (
+        employeeRestrictedRoutes.some((url) =>
+          request.nextUrl.pathname.startsWith(url)
+        ) &&
+        !roles.includes(ManagerTypes.PEOPLE_MANAGER)
       ) {
         return NextResponse.redirect(
           new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)

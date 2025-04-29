@@ -309,8 +309,8 @@ const nextConfig = {
         destination: "/community/people/directory/add"
       },
       {
-        source: "/people/:id",
-        destination: "/community/people/:id"
+        source: "/people/individual/:id",
+        destination: "/community/people/individual/:id"
       },
       {
         source: "/user-account",

@@ -92,7 +92,7 @@ const LeaveRequests: NextPage = () => {
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.BASE}/${employee.id}?tab=leave`;
+      const url = `${ROUTES.PEOPLE.INDIVIDUAL}/${employee.id}?tab=leave`;
       await router.push(url);
     }
   };
