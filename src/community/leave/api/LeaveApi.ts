@@ -35,17 +35,29 @@ import { LeaveRequest } from "../types/PendingLeaves";
 import { leaveRequestDataPreProcessor } from "../utils/LeavePreprocessors";
 
 const createCustomLeave = async (
-  newEntitlementData: CustomLeaveAllocationType
+  newEntitlementData: CustomLeaveAllocationType,
+  selectedYear: string
 ): Promise<void> => {
-  const { end: endOfYearDate } = getYearStartAndEndDates(
-    new Date().getFullYear()
-  );
+  let startDateOfYear: string | undefined;
+  let endDateOfYear: string | undefined;
+
+  if (selectedYear) {
+    const { start, end } = getYearStartAndEndDates(Number(selectedYear));
+    startDateOfYear = start ?? "";
+    endDateOfYear = end ?? "";
+  } else {
+    const { end: endOfYearDate } = getYearStartAndEndDates(
+      new Date().getFullYear()
+    );
+    endDateOfYear = endOfYearDate ?? "";
+    startDateOfYear = formatDateToISOString(new Date());
+  }
 
   if (!newEntitlementData.validFromDate) {
-    newEntitlementData.validFromDate = formatDateToISOString(new Date());
+    newEntitlementData.validFromDate = startDateOfYear ?? undefined;
   }
   if (!newEntitlementData.validToDate) {
-    newEntitlementData.validToDate = endOfYearDate ?? undefined;
+    newEntitlementData.validToDate = endDateOfYear ?? undefined;
   }
 
   const { name, ...EntitlementData } = newEntitlementData;
@@ -79,6 +91,7 @@ export const useDeleteLeaveAllocation = (): UseMutationResult<
   unknown
 > => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: deleteCustomLeave,
     onSuccess: () => {
@@ -118,8 +131,11 @@ export const useCreateLeaveAllocation = (
   onError: () => void
 ) => {
   const queryClient = useQueryClient();
+  const { selectedYear } = useLeaveStore((state) => state);
+
   return useMutation({
-    mutationFn: createCustomLeave,
+    mutationFn: (newEntitlementData: CustomLeaveAllocationType) =>
+      createCustomLeave(newEntitlementData, selectedYear),
     onSuccess: () => {
       onSuccess();
       queryClient
