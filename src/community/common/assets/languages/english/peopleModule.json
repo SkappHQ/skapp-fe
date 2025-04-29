@@ -523,7 +523,7 @@
       "contactNo": "Contact no",
       "requireFirstNameError": "Please enter the first name",
       "requireLastNameError": "Please enter the last name",
-      "maxCharacterLimitError": "Please enter a value within the character limit of 30",
+      "maxCharacterLimitError": "Please enter a value within the character limit of 50",
       "validNameError": "Only Letters are Allowed",
       "requireGenderError": "Please select the gender",
       "requireBirthDateError": "Please select the date of birth",
