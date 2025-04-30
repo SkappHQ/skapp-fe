@@ -28,7 +28,7 @@ const Error = () => {
         label={translateText(["buttonText"])}
         onClick={async () => {
           await router.replace(ROUTES.DASHBOARD.BASE);
-          window.location.reload();
+          router.reload();
         }}
         ariaLabel={translateText(["buttonText"])}
       />
