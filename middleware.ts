@@ -62,7 +62,6 @@ const adminRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -87,7 +86,6 @@ const managerRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -107,7 +105,6 @@ const employeeRoutes = {
   [EmployeeTypes.ESIGN_EMPLOYEE]: [
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
     ROUTES.SIGN.COMPLETE,
     ...commonRoutes
   ]
@@ -126,6 +123,12 @@ const allowedRoutes: Record<
 
 export default withAuth(
   async function middleware(request: NextRequestWithAuth) {
+    if (
+      request.nextUrl.pathname === ROUTES.SIGN.DOCUMENT_ACCESS ||
+      request.nextUrl.pathname.startsWith(ROUTES.SIGN.SIGN)
+    ) {
+      return NextResponse.next();
+    }
     const { token } = request.nextauth;
 
     const roles: (
@@ -270,10 +273,17 @@ export const config = {
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/sign/:path*",
     "/remove-people",
     "/integrations",
     "/subscription",
-    "/user-account"
+    "/user-account",
+    // Sign routes
+    "/sign",
+    "/sign/contacts/:path*",
+    "/sign/create/:path*",
+    "/sign/folders/:path*",
+    "/sign/inbox/:path*",
+    "/sign/sent/:path*",
+    "/sign/complete/:path*"
   ]
 };

@@ -95,11 +95,15 @@ const ROUTES = {
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create",
     SIGN: "/sign/sign",
-    REDIRECT: "/sign/redirect",
+    DOCUMENT_ACCESS: "/sign/document/access",
     COMPLETE: "/sign/complete",
     SENT_INFO: {
       BASE: "/sign/sent/envelope",
       ID: (id: number) => `/sign/sent/envelope/${id}`
+    },
+    INBOX_INFO: {
+      BASE: "/sign/inbox/envelope",
+      ID: (id: number) => `/sign/inbox/envelope/${id}`
     }
   },
   REMOVE_PEOPLE: "/remove-people",
