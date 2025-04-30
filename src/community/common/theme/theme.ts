@@ -203,6 +203,7 @@ declare module "@mui/material/styles" {
   }
   interface TypographyVariants {
     onboardingHeader: React.CSSProperties;
+    greetingHeader?: React.CSSProperties;
     tableHeader: React.CSSProperties;
     label: React.CSSProperties;
     placeholder: React.CSSProperties;
@@ -212,6 +213,7 @@ declare module "@mui/material/styles" {
   }
   interface TypographyVariantsOptions {
     onboardingHeader?: React.CSSProperties;
+    greetingHeader?: React.CSSProperties;
     tableHeader?: React.CSSProperties;
     label?: React.CSSProperties;
     placeholder?: React.CSSProperties;
@@ -244,6 +246,7 @@ declare module "@mui/material/styles/createPalette" {
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
     onboardingHeader: true;
+    greetingHeader: true;
     tableHeader: true;
     smallTitle: true;
     label: true;
@@ -485,6 +488,10 @@ export const theme = createTheme({
     onboardingHeader: {
       fontWeight: 700,
       fontSize: "2.25rem"
+    },
+    greetingHeader: {
+      fontWeight: 600,
+      fontSize: "2rem" // 32px
     },
     // Table heading
     tableHeader: {
