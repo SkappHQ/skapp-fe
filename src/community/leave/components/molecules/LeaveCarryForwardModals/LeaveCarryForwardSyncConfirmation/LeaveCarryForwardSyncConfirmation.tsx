@@ -10,9 +10,11 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useLeaveCarryForward } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 import styles from "./styles";
 
@@ -35,6 +37,8 @@ const LeaveCarryForwardSyncConfirmation = ({
       setLeaveCarryForwardSyncBtnStatus: state.setLeaveCarryForwardSyncBtnStatus
     }));
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onSuccess = () => {
     setToastMessage({
       open: true,
@@ -45,6 +49,7 @@ const LeaveCarryForwardSyncConfirmation = ({
     });
     setLeaveCarryForwardSyncBtnStatus("isLoading", false);
     setLeaveCarryForwardSyncBtnStatus("isDisabled", true);
+    sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_CARRIED_FORWARD);
     handleClose();
   };
 

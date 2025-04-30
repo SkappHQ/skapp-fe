@@ -7,6 +7,7 @@ import SearchBox from "~community/common/components/molecules/SearchBox/SearchBo
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveApi";
 import { useGetLeaveEntitlements } from "~community/leave/api/LeaveEntitlementApi";
@@ -15,6 +16,7 @@ import CustomLeaveAllocationContent from "~community/leave/components/organisms/
 import LeaveEntitlementModalController from "~community/leave/components/organisms/LeaveEntitlementModalController/LeaveEntitlementModalController";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 const LeaveEntitlements: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
@@ -47,6 +49,11 @@ const LeaveEntitlements: NextPage = () => {
       page,
       searchTerm
     );
+
+  useGoogleAnalyticsEvent({
+    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_ENTITLEMENT_PAGE_VISITED,
+    triggerOnMount: true
+  });
 
   return (
     <>

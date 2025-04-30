@@ -13,6 +13,7 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useCreateLeaveAllocation } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -21,6 +22,7 @@ import {
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 import CustomLeaveAllocationForm from "../../CustomLeaveAllocationForm/CustomLeaveAllocationForm";
 
@@ -46,6 +48,8 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
 
   const { setToastMessage } = useToast();
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onAddSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
     setCustomLeaveAllocationModalType(
@@ -58,6 +62,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
       description: translateText(["customLeaveAllocationSuccessDes"]),
       isIcon: true
     });
+    sendEvent(GoogleAnalyticsTypes.GA4_CUSTOM_ALLOCATION_ADDED);
   }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
 
   const onAddError = useCallback(() => {

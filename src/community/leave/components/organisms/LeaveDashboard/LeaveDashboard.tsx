@@ -12,6 +12,7 @@ import ROUTES from "~community/common/constants/routes";
 import { DATE_FORMAT } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes } from "~community/common/types/AuthTypes";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import {
   useGetAbsenceRate,
   useGetAvailability,
@@ -24,6 +25,7 @@ import AwayChip from "~community/leave/components/molecules/LeaveDashboardChips/
 import HolidayChip from "~community/leave/components/molecules/LeaveDashboardChips/HolidayChip";
 import LeaveTypeBreakdownChart from "~community/leave/components/molecules/LeaveUtilizationGraph/LeaveTypeBreakdownChart";
 import { useLeaveStore } from "~community/leave/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 import styles from "./styles";
 
@@ -55,6 +57,11 @@ const LeaveDashboard = (): JSX.Element => {
     error,
     data: datasets
   } = useGetLeaveTypeBreakdownChartData(teamId);
+
+  useGoogleAnalyticsEvent({
+    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_DASHBOARD_VIEWED,
+    triggerOnMount: true
+  });
 
   const newPendingRequests =
     pendingLeaves?.[0]?.items?.length - viewedPendingLeaveCount;

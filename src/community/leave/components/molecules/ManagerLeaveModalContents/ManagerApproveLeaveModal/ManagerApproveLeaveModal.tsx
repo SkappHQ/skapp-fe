@@ -14,6 +14,7 @@ import { FileTypes } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { useHandelLeaves } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
@@ -21,6 +22,7 @@ import {
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
 
 import LeaveStatusPopupColumn from "../LeaveStatusPopupColumn/LeaveStatusPopupColumn";
@@ -67,6 +69,8 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
     false
   );
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   useEffect(() => {
     if (leaveError) {
       setToastMessage({
@@ -84,6 +88,7 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
         description: translateText(["approveLeaveSuccessDesc"]),
         isIcon: true
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_APPROVED);
     }
   }, [leaveRequestData?.empName, leaveError, isSuccess]);
 

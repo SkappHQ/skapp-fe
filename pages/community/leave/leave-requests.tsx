@@ -15,12 +15,14 @@ import {
   EmployeeSearchResultType,
   TeamSearchResultType
 } from "~community/common/types/CommonTypes";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { useGetManagerAssignedLeaveRequests } from "~community/leave/api/LeaveApi";
 import ManagerLeaveRequest from "~community/leave/components/molecules/ManagerLeaveRequests/ManagerLeaveRequest";
 import LeaveManagerModalController from "~community/leave/components/organisms/LeaveManagerModalController/LeaveManagerModalController";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEmployeesAndTeamsForAnalytics } from "~community/people/api/PeopleApi";
 import { usePeopleStore } from "~community/people/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 const LeaveRequests: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveRequests");
@@ -45,6 +47,11 @@ const LeaveRequests: NextPage = () => {
     useGetManagerAssignedLeaveRequests();
 
   const { setLeaveRequestParams } = useLeaveStore((state) => state);
+
+  useGoogleAnalyticsEvent({
+    initialEventType: GoogleAnalyticsTypes.GA4_ALL_LEAVE_REQUEST_PAGE_VIEWED,
+    triggerOnMount: true
+  });
 
   const onSearchChange = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>

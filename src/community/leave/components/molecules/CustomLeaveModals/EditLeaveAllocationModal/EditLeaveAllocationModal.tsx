@@ -8,6 +8,7 @@ import { LEAVE_ERROR_NUMBER_OF_DAYS_CANNOT_BE_LESS_THAN_USED_DAYS } from "~commu
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useUpdateLeaveAllocation } from "~community/leave/api/LeaveApi";
 import CustomLeaveAllocationForm from "~community/leave/components/molecules/CustomLeaveAllocationForm/CustomLeaveAllocationForm";
@@ -17,6 +18,7 @@ import {
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 interface Props {
   setCurrentLeaveAllocationFormData: Dispatch<
@@ -45,6 +47,8 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     currentEditingLeaveAllocation: state.currentEditingLeaveAllocation
   }));
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onUpdateSuccess = () => {
     setIsLeaveAllocationModalOpen(false);
     setCustomLeaveAllocationModalType(
@@ -57,6 +61,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
       description: translateText(["updateSuccessDescription"]),
       isIcon: true
     });
+    sendEvent(GoogleAnalyticsTypes.GA4_CUSTOM_ALLOCATION_UPDATED);
   };
 
   const onUpdateError = (error: string) => {

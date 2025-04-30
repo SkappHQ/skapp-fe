@@ -14,6 +14,7 @@ import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { LeaveStates } from "~community/common/types/CommonTypes";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   convertToYYYYMMDDFromDateTime,
@@ -51,6 +52,7 @@ import { useGetAllHolidays } from "~community/people/api/HolidayApi";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
 import { useIsGoogleCalendarConnected } from "~enterprise/common/api/CalendarApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
@@ -141,6 +143,8 @@ const ApplyLeaveModal = () => {
 
   const isEnterprise = useGetEnvironment() === appModes.ENTERPRISE;
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onSuccess = (data: LeaveRequestItemsType) => {
     handleApplyLeaveApiResponse({
       type: ApplyLeaveToastEnums.APPLY_LEAVE_SUCCESS,
@@ -153,6 +157,7 @@ const ApplyLeaveModal = () => {
     } else {
       setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
     }
+    sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_APPLIED);
   };
 
   const onError = (error: string) => {

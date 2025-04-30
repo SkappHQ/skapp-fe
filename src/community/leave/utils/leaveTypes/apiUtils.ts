@@ -3,6 +3,7 @@ import * as React from "react";
 
 import ROUTES from "~community/common/constants/routes";
 import { ToastType } from "~community/common/enums/ComponentEnums";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import { LeaveTypeToastEnums } from "~community/leave/enums/LeaveTypeEnums";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
@@ -16,7 +17,8 @@ export const handleLeaveTypeApiResponse =
     redirect,
     stopAllOngoingQuickSetup,
     setQuickSetupModalType,
-    isOngoingSetupLeave
+    isOngoingSetupLeave,
+    sendEvent
   }: {
     type: LeaveTypeToastEnums;
     setToastMessage: (value: React.SetStateAction<ToastProps>) => void;
@@ -26,6 +28,7 @@ export const handleLeaveTypeApiResponse =
     stopAllOngoingQuickSetup?: () => void;
     setQuickSetupModalType?: (value: QuickSetupModalTypeEnums) => void;
     isOngoingSetupLeave?: boolean;
+    sendEvent?: (eventType: GoogleAnalyticsTypes) => void;
   }) =>
   async () => {
     switch (type) {
@@ -44,6 +47,7 @@ export const handleLeaveTypeApiResponse =
           );
           stopAllOngoingQuickSetup?.();
         }
+        sendEvent?.(GoogleAnalyticsTypes.GA4_LEAVE_TYPE_CREATED);
         break;
       case LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR:
         setToastMessage({
@@ -62,6 +66,7 @@ export const handleLeaveTypeApiResponse =
         });
         setFormDirty?.(false);
         redirect?.(ROUTES.LEAVE.LEAVE_TYPES);
+        sendEvent?.(GoogleAnalyticsTypes.GA4_LEAVE_TYPE_UPDATED);
         break;
       case LeaveTypeToastEnums.EDIT_LEAVE_TYPE_ERROR:
         setToastMessage({

@@ -4,8 +4,10 @@ import { useRouter } from "next/router";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import LeaveTypesTable from "~community/leave/components/molecules/LeaveTypesTable/LeaveTypesTable";
 import { LeaveTypeFormTypes } from "~community/leave/enums/LeaveTypeEnums";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
@@ -19,6 +21,11 @@ const LeaveTypes: NextPage = () => {
   }));
 
   const { destroyDriverObj } = useProductTour();
+
+  useGoogleAnalyticsEvent({
+    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_TYPE_PAGE_VISITED,
+    triggerOnMount: true
+  });
 
   return (
     <>
