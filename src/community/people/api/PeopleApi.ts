@@ -742,9 +742,11 @@ export const useEditEmployee = (employeeId: string) => {
   );
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
-  const { setProfilePic, setIsReinviteConfirmationModalOpen } = usePeopleStore(
-    (state) => state
-  );
+  const {
+    setProfilePic,
+    setIsReinviteConfirmationModalOpen,
+    isReinviteConfirmationModalOpen
+  } = usePeopleStore((state) => state);
 
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
@@ -755,14 +757,27 @@ export const useEditEmployee = (employeeId: string) => {
       return response.data;
     },
     onSuccess: () => {
-      setIsReinviteConfirmationModalOpen(false);
       setProfilePic(null);
-      setToastMessage({
-        open: true,
-        toastType: ToastType.SUCCESS,
-        title: translateText(["editToastTitle"]),
-        description: translateText(["editToastDescription"])
-      });
+      if (isReinviteConfirmationModalOpen) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.SUCCESS,
+          title: translateText([
+            "reInvitationForOneEmployeeSuccessfulToastTitle"
+          ]),
+          description: translateText([
+            "reInvitationForOneEmployeeSuccessfulToastDescription"
+          ])
+        });
+        setIsReinviteConfirmationModalOpen(false);
+      } else {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.SUCCESS,
+          title: translateText(["editToastTitle"]),
+          description: translateText(["editToastDescription"])
+        });
+      }
 
       queryClient
         .invalidateQueries({
