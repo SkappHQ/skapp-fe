@@ -265,8 +265,8 @@ const nextConfig = {
         destination: "/enterprise/sign/sign"
       },
       {
-        source: "/sign/redirect",
-        destination: "/enterprise/sign/redirect"
+        source: "/sign/document/access",
+        destination: "/enterprise/sign/document/access"
       },
       {
         source: "/sign/complete",
