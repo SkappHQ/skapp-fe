@@ -2,5 +2,17 @@
   "dashboard": {
     "resourceAvailabilityTrendMonthlyNext": "next month",
     "resourceAvailabilityTrendMonthlyPrevious": "previous month"
+  },
+  "applyLeave": {
+    "comment": {
+      "textArea": "Comment",
+      "icon": "Attach a file"
+    },
+    "calendar": {
+      "icon": "View leave entitlement balance"
+    },
+    "teamAvailabilityCard": {
+      "dropdown": "Select team to check team availability"
+    }
   }
 }
