@@ -8,6 +8,7 @@ import { useMarkNotificationAsRead } from "~community/common/api/notificationsAp
 import ROUTES from "~community/common/constants/routes";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -43,6 +44,8 @@ const NotificationsPopup = ({
 
   const { mutate } = useMarkNotificationAsRead();
   const { data: session } = useSession();
+
+  const { isLeaveEmployee, isAttendanceEmployee } = useSessionData();
 
   const handelMenuRow = (
     id: number,
@@ -125,7 +128,17 @@ const NotificationsPopup = ({
                 }}
                 tabIndex={0}
               >
-                <NotificationContent item={item} />
+                <NotificationContent
+                  isLeaveModuleDisabled={
+                    item?.notificationType ===
+                      NotificationItemsTypes.LEAVE_REQUEST && !isLeaveEmployee
+                  }
+                  isAttendanceModuleDisabled={
+                    item?.notificationType ===
+                      NotificationItemsTypes.TIME_ENTRY && !isAttendanceEmployee
+                  }
+                  item={item}
+                />
               </MenuItem>
             )
           )}

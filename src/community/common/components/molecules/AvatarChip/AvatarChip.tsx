@@ -94,6 +94,7 @@ const AvatarChip: FC<Props> = ({
       title={`${firstName} ${lastName}`}
       placement={TooltipPlacement.TOP}
       open={isTooltipOpen}
+      ariaLabel={`${firstName} ${lastName}`}
     >
       <Chip
         onMouseEnter={handleTooltipOpen}

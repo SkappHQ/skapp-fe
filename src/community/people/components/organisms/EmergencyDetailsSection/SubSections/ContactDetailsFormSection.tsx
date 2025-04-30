@@ -69,7 +69,7 @@ const ContactDetailsFormSection = ({
               label={translateText(["name"])}
               inputType="text"
               value={values?.name ?? ""}
-              placeHolder={translateText(["enterName"])}
+              placeHolder={isReadOnly ? "" : translateText(["enterName"])}
               onInput={handleInput}
               inputName="name"
               error={errors.name ?? ""}
@@ -88,7 +88,9 @@ const ContactDetailsFormSection = ({
               inputName="relationship"
               label={translateText(["relationship"])}
               value={values?.relationship ?? ""}
-              placeholder={translateText(["selectRelationship"])}
+              placeholder={
+                isReadOnly ? "" : translateText(["selectRelationship"])
+              }
               onChange={(e) => {
                 if ("target" in e && "value" in e.target) {
                   handleChange(e as SelectChangeEvent);
@@ -117,7 +119,7 @@ const ContactDetailsFormSection = ({
               label={translateText(["contactNo"])}
               value={values?.contactNo ?? ""}
               countryCodeValue={values.countryCode as string}
-              placeHolder={translateText(["enterContactNo"])}
+              placeHolder={isReadOnly ? "" : translateText(["enterContactNo"])}
               onChangeCountry={async (value) => await onChangeCountry(value)}
               onChange={async (e) => await handlePhoneNumber(e)}
               error={errors.contactNo ?? ""}

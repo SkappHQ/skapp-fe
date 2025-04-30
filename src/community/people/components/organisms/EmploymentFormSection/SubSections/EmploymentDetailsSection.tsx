@@ -277,7 +277,11 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 inputName="employmentAllocation"
                 label={translateText(["employmentAllocation"])}
                 value={values.employmentAllocation ?? ""}
-                placeholder={translateText(["selectEmploymentAllocation"])}
+                placeholder={
+                  isReadOnly
+                    ? ""
+                    : translateText(["selectEmploymentAllocation"])
+                }
                 onChange={handleChange}
                 error={errors.employmentAllocation ?? ""}
                 componentStyle={{
@@ -479,7 +483,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 <InputDate
                   label={translateText(["joinedDate"])}
                   placeholder={translateText(["selectJoinedDate"])}
-                  value={DateTime.fromISO(values.joinedDate ?? "")}
                   onchange={async (newValue: string) =>
                     await dateOnChange(
                       "joinedDate",
@@ -515,7 +518,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                       ? translateText(["selectProbationStartDate"])
                       : ""
                   }
-                  value={DateTime.fromISO(values.probationStartDate ?? "")}
                   onchange={async (newValue: string) =>
                     await dateOnChange(
                       "probationStartDate",
@@ -550,7 +552,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                       ? translateText(["selectProbationEndDate"])
                       : ""
                   }
-                  value={DateTime.fromISO(values.probationEndDate ?? "")}
                   onchange={async (newValue: string) =>
                     await dateOnChange(
                       "probationEndDate",
@@ -594,7 +595,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                       }
                     : undefined
                 }
-                placeholder={translateText(["selectWorkTimeZone"])}
+                placeholder={
+                  isReadOnly ? "" : translateText(["selectWorkTimeZone"])
+                }
                 onChange={handleWorkTimeZoneChange}
                 error={errors.workTimeZone ?? ""}
                 isDisableOptionFilter={true}
