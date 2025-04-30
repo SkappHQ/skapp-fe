@@ -94,8 +94,8 @@ const Tooltip: FC<Props> = ({
         style={{
           pointerEvents: isDisabled ? "none" : "auto", // Prevent interaction when disabled
           cursor: isDisabled ? "not-allowed" : "pointer", // Change cursor when disabled,
-          height: "1.25rem",
-          width: "1.25rem",
+          height: "min-content",
+          width: "min-content",
           borderRadius: "50%",
           ...spanStyles
         }}
