@@ -59,7 +59,7 @@ const LeaveDashboard = (): JSX.Element => {
   } = useGetLeaveTypeBreakdownChartData(teamId);
 
   useGoogleAnalyticsEvent({
-    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_DASHBOARD_VIEWED,
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_DASHBOARD_VIEWED,
     triggerOnMount: true
   });
 

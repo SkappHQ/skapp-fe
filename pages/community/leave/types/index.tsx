@@ -23,7 +23,7 @@ const LeaveTypes: NextPage = () => {
   const { destroyDriverObj } = useProductTour();
 
   useGoogleAnalyticsEvent({
-    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_TYPE_PAGE_VISITED,
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_TYPE_PAGE_VISITED,
     triggerOnMount: true
   });
 

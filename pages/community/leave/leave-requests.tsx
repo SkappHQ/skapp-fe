@@ -49,7 +49,7 @@ const LeaveRequests: NextPage = () => {
   const { setLeaveRequestParams } = useLeaveStore((state) => state);
 
   useGoogleAnalyticsEvent({
-    initialEventType: GoogleAnalyticsTypes.GA4_ALL_LEAVE_REQUEST_PAGE_VIEWED,
+    onMountEventType: GoogleAnalyticsTypes.GA4_ALL_LEAVE_REQUEST_PAGE_VIEWED,
     triggerOnMount: true
   });
 

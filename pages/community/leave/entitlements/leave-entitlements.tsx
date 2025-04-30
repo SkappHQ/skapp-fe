@@ -51,7 +51,7 @@ const LeaveEntitlements: NextPage = () => {
     );
 
   useGoogleAnalyticsEvent({
-    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_ENTITLEMENT_PAGE_VISITED,
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_ENTITLEMENT_PAGE_VISITED,
     triggerOnMount: true
   });
 

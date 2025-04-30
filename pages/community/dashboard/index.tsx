@@ -151,7 +151,7 @@ const Dashboard: NextPage = () => {
   const visibleTabs = getVisibleTabs(userRoles);
 
   useGoogleAnalyticsEvent({
-    initialEventType:
+    onMountEventType:
       data?.user && visibleTabs.length === 0
         ? GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_DASHBOARD_VIEWED
         : GoogleAnalyticsTypes.GA4_DASHBOARD_VIEWED,

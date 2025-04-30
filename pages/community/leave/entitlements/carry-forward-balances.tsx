@@ -79,7 +79,7 @@ const CarryForwardBalances: NextPage = () => {
   };
 
   useGoogleAnalyticsEvent({
-    initialEventType:
+    onMountEventType:
       GoogleAnalyticsTypes.GA4_LEAVE_CARRY_FORWARD_BALANCE_VIEWED,
     triggerOnMount: true
   });

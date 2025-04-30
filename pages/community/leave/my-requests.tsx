@@ -25,7 +25,7 @@ const MyRequests: NextPage = () => {
   );
 
   useGoogleAnalyticsEvent({
-    initialEventType: GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_PAGE_VIEWED,
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_PAGE_VIEWED,
     triggerOnMount: true
   });
 
