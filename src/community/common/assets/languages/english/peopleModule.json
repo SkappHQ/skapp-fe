@@ -102,7 +102,7 @@
     "uploadCsvText": "Upload csv",
     "uploadCsvDesc": "Upload the CSV template with updated employee leave information.",
     "csvTemplateError": "Invalid File. Please use the provided template. ",
-    "emptyFileError": "No records have been found.Please try again.",
+    "emptyFileError": "No records have been found. Please try again.",
     "deleteSelectedTitle": "Delete Selected",
     "deleteAllTitle": "Delete All",
     "deleteHoliday": "Delete holiday",

@@ -237,6 +237,10 @@ const nextConfig = {
         destination: "/enterprise/sign/inbox"
       },
       {
+        source: "/sign/inbox/envelope/:id",
+        destination: "/enterprise/sign/inbox/envelope/:id"
+      },
+      {
         source: "/sign/sent",
         destination: "/enterprise/sign/sent"
       },
@@ -261,8 +265,8 @@ const nextConfig = {
         destination: "/enterprise/sign/sign"
       },
       {
-        source: "/sign/redirect",
-        destination: "/enterprise/sign/redirect"
+        source: "/sign/document/access",
+        destination: "/enterprise/sign/document/access"
       },
       {
         source: "/sign/complete",
