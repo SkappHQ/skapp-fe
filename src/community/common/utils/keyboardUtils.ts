@@ -1,26 +1,4 @@
-import { KeyboardEvent } from "react";
-
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
-
-export const handleMainContentFocus = (
-  event: KeyboardEvent<HTMLAnchorElement>,
-  id: string
-): void => {
-  event.preventDefault();
-
-  const mainContent = document.getElementById(id);
-
-  if (mainContent) {
-    mainContent.setAttribute("tabindex", "-1");
-    mainContent.focus({ preventScroll: true });
-
-    mainContent.addEventListener(
-      "blur",
-      () => mainContent.removeAttribute("tabindex"),
-      { once: true }
-    );
-  }
-};
 
 // Navigation
 export const shouldNavigateForward = (key: string) => key === KeyboardKeys.TAB;

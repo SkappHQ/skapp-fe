@@ -21,17 +21,7 @@ const ContentWithoutDrawer = ({ children }: Props) => {
   return (
     <>
       <Stack sx={classes.unProtectedWrapper}>
-        <main
-          id="content-without-drawer-main-content"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            height: "100%"
-          }}
-        >
-          {children}
-        </main>
+        {children}
         <ToastMessage
           key={toastMessage.key}
           open={toastMessage.open}
