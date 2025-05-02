@@ -73,7 +73,7 @@ const RestrictedUserRolesModal = ({ initialData }: Props) => {
     updateUserRoleRestrictions(payload);
   };
 
-  const { values, setFieldValue } = useFormik({
+  const { values, dirty, setFieldValue } = useFormik({
     initialValues: {
       isAdmin: initialData !== undefined ? initialData?.isAdmin : false,
       isManager: initialData !== undefined ? initialData?.isManager : false
@@ -118,6 +118,7 @@ const RestrictedUserRolesModal = ({ initialData }: Props) => {
           buttonStyle={ButtonStyle.PRIMARY}
           endIcon={IconName.RIGHT_ARROW_ICON}
           onClick={handleSubmit}
+          disabled={!dirty}
         />
         <Button
           label={translateText(["cancelBtnText"])}
