@@ -225,7 +225,8 @@ const PeopleTable: FC<Props> = ({
       ?.filter(
         (employee: AllEmployeeDataType) =>
           !isRemovePeople ||
-          employee?.employeeId !== currentEmployeeDetails?.employeeId
+          String(employee?.employeeId) !==
+            String(currentEmployeeDetails?.employeeId)
       )
       .map((employee: AllEmployeeDataType) => ({
         id: employee?.employeeId,
@@ -582,23 +583,27 @@ const PeopleTable: FC<Props> = ({
             emptyState: {
               noData: {
                 title:
-                  !employeeData?.length && onSearch
+                  (!employeeData?.length && onSearch) ||
+                  (onSearch && isRemovePeople && employeeData?.length === 1)
                     ? translateText(["emptySearchResult", "title"])
                     : !employeeData?.length && filter
                       ? isPendingInvitationListOpen
                         ? translateText(["emptyPendingList", "title"])
                         : translateText(["emptyFilterResult", "title"])
-                      : !employeeData?.length
+                      : !employeeData?.length ||
+                          (isRemovePeople && employeeData?.length === 1)
                         ? translateText(["emptyEmployeeData", "title"])
                         : undefined,
                 description:
-                  !employeeData?.length && onSearch
+                  (!employeeData?.length && onSearch) ||
+                  (onSearch && isRemovePeople && employeeData?.length === 1)
                     ? translateText(["emptySearchResult", "description"])
                     : !employeeData?.length && filter
                       ? isPendingInvitationListOpen
                         ? translateText(["emptyPendingList", "description"])
                         : translateText(["emptyFilterResult", "description"])
-                      : !employeeData?.length
+                      : !employeeData?.length ||
+                          (isRemovePeople && employeeData?.length === 1)
                         ? translateText(["emptyEmployeeData", "description"])
                         : undefined
               }
