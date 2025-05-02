@@ -189,7 +189,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
               label={leaveAllocation.leaveType?.name}
               isTruncated={false}
             />
-          )
+          ),
+          actionData: leaveAllocation
         };
       }) || []
     );
@@ -337,8 +338,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
             isEnabled: true,
             actionBtns: {
               left: {
-                onClick: (leaveAllocation) =>
-                  handleEdit({
+                onClick: (leaveAllocation) => {
+                  return handleEdit({
                     ...leaveAllocation,
                     employee: {
                       ...leaveAllocation.employee,
@@ -346,7 +347,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
                     },
                     validTo: leaveAllocation.validTo || "",
                     validFrom: leaveAllocation.validFrom || ""
-                  })
+                  });
+                }
               }
             }
           }
