@@ -13,7 +13,7 @@ import {
   SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
-import { checkRestrictedRoutesAndRedirect } from "~enterprise/common/utils/commonUtil";
+import { checkRestrictedRoutesAndRedirect } from "~community/common/utils/commonUtil";
 
 // Define common routes shared by all roles
 const commonRoutes = [
