@@ -52,6 +52,7 @@ import styles from "./styles";
 interface Props {
   pageHead: string;
   title: string;
+  titleAddon?: JSX.Element | null;
   containerStyles?: SxProps;
   dividerStyles?: SxProps;
   children: JSX.Element;
@@ -85,6 +86,7 @@ interface Props {
 const ContentLayout = ({
   pageHead,
   title,
+  titleAddon,
   containerStyles,
   children,
   primaryButtonText,
@@ -264,8 +266,12 @@ const ContentLayout = ({
                 <Icon name={backIcon} />
               </IconButton>
             )}
-            {!isTitleHidden && <Typography variant="h1">{title}</Typography>}
-
+            {!isTitleHidden && (
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Typography variant="h1">{title}</Typography>
+                {titleAddon}
+              </Stack>
+            )}
             {subtitleNextToTitle && (
               <Typography
                 variant="body2"

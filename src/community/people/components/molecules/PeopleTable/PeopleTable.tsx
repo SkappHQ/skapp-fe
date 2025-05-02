@@ -45,11 +45,11 @@ import {
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import PeopleTableFilterBy from "~community/people/components/molecules/PeopleTable/PeopleTableFilterBy";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  EmployeeDataType,
-  TeamResultsType
-} from "~community/people/types/EmployeeTypes";
 import { EditPeopleFormTypes } from "~community/people/types/PeopleEditTypes";
+import {
+  AllEmployeeDataType,
+  EmployeeDataTeamType
+} from "~community/people/types/PeopleTypes";
 import { TeamNamesType } from "~community/people/types/TeamTypes";
 import {
   GetFamilyFilterPreProcessor,
@@ -61,7 +61,7 @@ import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
 import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";
 
 interface Props {
-  employeeData: EmployeeDataType[];
+  employeeData: AllEmployeeDataType[];
   fetchNextPage: () => void;
   isFetching?: boolean;
   isFetchingNextPage?: boolean;
@@ -223,18 +223,18 @@ const PeopleTable: FC<Props> = ({
   const transformToTableRows = useCallback(() => {
     const tableRowData = employeeData
       ?.filter(
-        (employee: EmployeeDataType) =>
+        (employee: AllEmployeeDataType) =>
           !isRemovePeople ||
           employee?.employeeId !== currentEmployeeDetails?.employeeId
       )
-      .map((employee: EmployeeDataType) => ({
+      .map((employee: AllEmployeeDataType) => ({
         id: employee?.employeeId,
         name: (
           <Stack flexDirection={"row"} gap={1} alignItems={"center"}>
             <AvatarChip
               firstName={employee?.firstName ?? ""}
               lastName={employee?.lastName ?? ""}
-              avatarUrl={employee?.avatarUrl}
+              avatarUrl={employee?.authPic}
               isResponsiveLayout={true}
               chipStyles={{
                 color: employee?.isActive
@@ -270,7 +270,7 @@ const PeopleTable: FC<Props> = ({
         ),
         jobTitle: (
           <Typography sx={{ wordBreak: "break-all" }} variant="body2">
-            {employee?.jobLevel}
+            {employee?.jobTitle}
           </Typography>
         ),
         email: <Typography variant="body2">{employee?.email}</Typography>,
@@ -285,13 +285,14 @@ const PeopleTable: FC<Props> = ({
                 width: "100%"
               }}
             >
-              {refactorTeamListData(employee?.teams as TeamResultsType[])
+              {refactorTeamListData(employee?.teams as EmployeeDataTeamType[])
                 ?.firstTeamName && (
                 <Box width="100%">
                   <BasicChip
                     label={
-                      refactorTeamListData(employee?.teams as TeamResultsType[])
-                        .firstTeamName
+                      refactorTeamListData(
+                        employee?.teams as EmployeeDataTeamType[]
+                      ).firstTeamName
                     }
                     isResponsive={true}
                     chipStyles={{
@@ -302,7 +303,7 @@ const PeopleTable: FC<Props> = ({
                 </Box>
               )}
 
-              {refactorTeamListData(employee?.teams as TeamResultsType[])
+              {refactorTeamListData(employee?.teams as EmployeeDataTeamType[])
                 .otherTeamCount >= 1 && (
                 <Box width="100%">
                   <BasicChip
@@ -312,7 +313,7 @@ const PeopleTable: FC<Props> = ({
                     label={
                       (`+ ` +
                         refactorTeamListData(
-                          employee?.teams as TeamResultsType[]
+                          employee?.teams as EmployeeDataTeamType[]
                         ).otherTeamCount) as unknown as string
                     }
                     isResponsive={true}
@@ -345,16 +346,16 @@ const PeopleTable: FC<Props> = ({
                           return -1;
                         if (!a?.isPrimaryManager && b?.isPrimaryManager)
                           return 1;
-                        return (a?.manager?.firstName ?? "").localeCompare(
-                          b?.manager?.firstName ?? ""
+                        return (a?.firstName ?? "").localeCompare(
+                          b?.firstName ?? ""
                         );
                       })
                       .map(
                         (supervisor) =>
                           ({
-                            firstName: supervisor?.manager.firstName,
-                            lastName: supervisor?.manager.lastName,
-                            image: supervisor?.manager.authPic
+                            firstName: supervisor?.firstName,
+                            lastName: supervisor?.lastName,
+                            image: supervisor?.authPic
                           }) as AvatarPropTypes
                       )
                   : []

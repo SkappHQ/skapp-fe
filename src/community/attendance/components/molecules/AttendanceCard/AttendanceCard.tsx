@@ -72,7 +72,6 @@ const AttendanceCard: FC<Props> = ({
 
                 router.replace(ROUTES.DASHBOARD.ATTENDANCE.CLOCK_IN_SUMMARY);
               }}
-              tabIndex={0}
               onKeyDown={(e) => {
                 if (shouldActivateButton(e.key)) {
                   type === ClockInOutGraphTypes.CLOCK_IN

@@ -142,7 +142,9 @@
       "halfDayMorning": "Half Day - Morning",
       "halfDayEvening": "Half Day - Evening",
       "revokedLeaveStatus": "Leave request revoked",
-      "deniedLeaveStatus": "Leave request denied"
+      "deniedLeaveStatus": "Leave request denied",
+      "attachments": "Attachments : ",
+      "uploadedAttachment": "Uploaded Attachment"
     }
   },
   "leaveTypes": {

@@ -1,3 +1,5 @@
+import { ManagerTypes } from "~community/common/types/CommonTypes";
+
 import {
   AccountStatusTypes,
   BloodGroupTypes,
@@ -11,6 +13,7 @@ import {
   RelationshipTypes,
   Role
 } from "../enums/PeopleEnums";
+import { EmploymentStatusTypes } from "./EmployeeTypes";
 
 //L1 Type
 export interface L1EmployeeType {
@@ -197,4 +200,41 @@ export interface EntitlementDetailType {
   numDays: string;
   effectiveFrom: string;
   expirationDate: string;
+}
+
+export interface EmployeeDataManagerType {
+  employeeId?: number;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  authPic?: string;
+  isPrimaryManager?: boolean;
+  managerType?: ManagerTypes;
+}
+
+export interface EmployeeDataTeamType {
+  teamId: number;
+  teamName: string;
+}
+
+export interface AllEmployeeDataType {
+  employeeId: number;
+  firstName: string;
+  lastName: string;
+  authPic?: string;
+  email?: string;
+  jobFamily?: string;
+  jobTitle?: string;
+  isActive?: boolean;
+  accountStatus?: EmploymentStatusTypes;
+  managers?: EmployeeDataManagerType[];
+  teams?: EmployeeDataTeamType[];
+}
+
+export interface AllEmployeeDataResponse {
+  items: AllEmployeeDataType[];
+  totalPages?: number;
+  currentPage?: number;
+  totalItems?: number;
+  pages?: any;
 }
