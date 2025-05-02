@@ -59,4 +59,10 @@ describe("isLeaveApplicable", () => {
       true
     );
   });
+
+  test("returns false if timeConfigData is not provided", () => {
+    expect(isLeaveApplicable("Half Day - Morning", 9, undefined as any)).toBe(
+      false
+    );
+  });
 });
