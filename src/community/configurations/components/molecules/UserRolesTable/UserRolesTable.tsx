@@ -7,6 +7,7 @@ import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicC
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
 import { Modules } from "~community/common/enums/CommonEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { useGetAllUserRoles } from "~community/configurations/api/userRolesApi";
@@ -15,7 +16,6 @@ import {
   AllUserRolesType,
   UserRoleTableType
 } from "~community/configurations/types/UserRolesTypes";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 
