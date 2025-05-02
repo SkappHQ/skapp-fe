@@ -13,6 +13,8 @@ import {
   CustomLeaveAllocationModalTypes,
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import UnsavedLeaveAllocationModal from "../UnsavedLeaveAllocationModal/UnsavedLeaveAllocationModal";
 
@@ -113,6 +115,8 @@ const CustomLeaveModalController: FC = () => {
     setIsLeaveAllocationModalOpen(true);
   }, []);
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const handleDeleteConfirm = useCallback(() => {
     if (currentEditingLeaveAllocation?.entitlementId) {
       deleteLeaveAllocation(currentEditingLeaveAllocation.entitlementId, {
@@ -129,6 +133,7 @@ const CustomLeaveModalController: FC = () => {
             isIcon: true
           });
           setCurrentPage(0);
+          sendEvent(GoogleAnalyticsTypes.GA4_CUSTOM_ALLOCATION_DELETED);
         },
         onError: () => {
           setToastMessage({

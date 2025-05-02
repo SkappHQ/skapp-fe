@@ -1,4 +1,3 @@
-import { sendGTMEvent } from "@next/third-parties/google";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -23,14 +22,14 @@ import {
   ManagerTypes
 } from "~community/common/types/AuthTypes";
 import { ModuleTypes } from "~community/common/types/CommonTypes";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
-import { GoogleAnalyticsValues } from "~community/common/types/GoogleAnalyticsValues";
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
 import LogoColorLoader from "~enterprise/common/components/molecules/LogoColorLoader/LogoColorLoader";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 type RoleTypes = AdminTypes | ManagerTypes | EmployeeTypes;
 
@@ -86,16 +85,6 @@ const Dashboard: NextPage = () => {
       });
     }
   }, [query]);
-
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_MODE === "enterprise") {
-      sendGTMEvent({
-        event: GoogleAnalyticsTypes.DASHBOARD_VIEWED,
-        value: GoogleAnalyticsValues.DASHBOARD_VIEWED,
-        timestamp: new Date().toISOString()
-      });
-    }
-  }, []);
 
   const translateText = useTranslator("dashboard");
   const { data } = useSession();
@@ -160,6 +149,14 @@ const Dashboard: NextPage = () => {
 
   const userRoles: RoleTypes[] = (data?.user?.roles || []) as RoleTypes[];
   const visibleTabs = getVisibleTabs(userRoles);
+
+  useGoogleAnalyticsEvent({
+    onMountEventType:
+      data?.user && visibleTabs.length === 0
+        ? GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_DASHBOARD_VIEWED
+        : GoogleAnalyticsTypes.GA4_DASHBOARD_VIEWED,
+    triggerOnMount: true
+  });
 
   if (showLoader && query.status === SUCCESS) {
     return <LogoColorLoader />;

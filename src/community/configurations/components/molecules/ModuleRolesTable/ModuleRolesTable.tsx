@@ -4,12 +4,12 @@ import { JSX } from "react";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Table from "~community/common/components/molecules/Table/Table";
 import { Modules } from "~community/common/enums/CommonEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import attendanceModuleRolesTableData from "~community/configurations/data/attendanceModuleRolesTableData.json";
 import leaveModuleRolesTableData from "~community/configurations/data/leaveModuleRolesTableData.json";
 import peopleModuleRolesTableData from "~community/configurations/data/peopleModuleRolesTableData.json";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import styles from "./styles";
 

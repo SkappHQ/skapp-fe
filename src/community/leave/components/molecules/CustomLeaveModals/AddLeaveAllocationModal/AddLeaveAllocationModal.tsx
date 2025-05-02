@@ -21,6 +21,8 @@ import {
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import CustomLeaveAllocationForm from "../../CustomLeaveAllocationForm/CustomLeaveAllocationForm";
 
@@ -46,6 +48,8 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
 
   const { setToastMessage } = useToast();
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onAddSuccess = useCallback(() => {
     setIsLeaveAllocationModalOpen(false);
     setCustomLeaveAllocationModalType(
@@ -58,6 +62,7 @@ const AddLeaveAllocationModal: React.FC<Props> = ({
       description: translateText(["customLeaveAllocationSuccessDes"]),
       isIcon: true
     });
+    sendEvent(GoogleAnalyticsTypes.GA4_CUSTOM_ALLOCATION_ADDED);
   }, [setIsLeaveAllocationModalOpen, setCustomLeaveAllocationModalType]);
 
   const onAddError = useCallback(() => {

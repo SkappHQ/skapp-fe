@@ -1,6 +1,7 @@
 import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { JSX, useEffect } from "react";
 import { type MouseEventHandler, useCallback, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -63,7 +64,12 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const { data } = useSession();
 
+  const { asPath } = useRouter();
+
+  const employeeId = asPath.split("/").pop();
+
   const {
+    initialEmployee,
     employee,
     setProfilePic,
     setThumbnail,
@@ -93,8 +99,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const { setToastMessage } = useToast();
 
-  const { data: supervisoryData } = useGetSubscriptionCancelImpact([
-    Number(employee?.common?.employeeId)
+  const { data: supervisoryData, refetch } = useGetSubscriptionCancelImpact([
+    Number(employeeId)
   ]);
 
   const { data: storageAvailableData } = useStorageAvailability();
@@ -106,7 +112,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     null
   );
 
-  const handleTermination = () => {
+  const handleTermination = async () => {
+    await refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
@@ -116,6 +123,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
         teams: supervisoryData?.teamSupervisors?.length || 0
       };
       const caseKey = `${condition.managers}-${condition.teams}`;
+
       switch (caseKey) {
         case "1-0":
           setAlertMessage(
@@ -128,6 +136,13 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
           setAlertMessage(
             translateTerminationText([
               "terminateWarningModalDescriptionSingleTeam"
+            ])
+          );
+          break;
+        case "1-1":
+          setAlertMessage(
+            translateTerminationText([
+              "terminateWarningModalDescriptionSingleEmployee"
             ])
           );
           break;
@@ -152,7 +167,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     setTerminationConfirmationModalOpen(true);
   };
 
-  const handleDeletion = () => {
+  const handleDeletion = async () => {
+    await refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
@@ -206,25 +222,26 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const cardData = useMemo(() => {
     return {
       employeeId:
-        employee?.employment?.employmentDetails?.employeeNumber || "1",
-      authPic: employee?.common?.authPic || "",
-      firstName: employee?.personal?.general?.firstName,
-      lastName: employee?.personal?.general?.lastName,
+        initialEmployee?.employment?.employmentDetails?.employeeNumber || "1",
+      authPic: initialEmployee?.common?.authPic || "",
+      firstName: initialEmployee?.personal?.general?.firstName,
+      lastName: initialEmployee?.personal?.general?.lastName,
       fullName:
-        employee?.personal?.general?.firstName?.concat(
+        initialEmployee?.personal?.general?.firstName?.concat(
           " ",
-          employee?.personal?.general?.lastName as string
+          initialEmployee?.personal?.general?.lastName as string
         ) || "",
-      email: employee?.employment?.employmentDetails?.email || "",
-      phone: employee?.personal?.contact?.contactNo || "",
-      countryCode: employee?.personal?.contact?.countryCode || "",
+      email: initialEmployee?.employment?.employmentDetails?.email || "",
+      phone: initialEmployee?.personal?.contact?.contactNo || "",
+      countryCode: initialEmployee?.personal?.contact?.countryCode || "",
       jobFamily: "",
-      jobTitle: employee?.common?.jobTitle || "",
+      jobTitle: initialEmployee?.common?.jobTitle || "",
       teams: teams || [],
-      joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
-      accountStatus: employee?.common?.accountStatus || ""
+      joinedDate:
+        initialEmployee?.employment?.employmentDetails?.joinedDate || "",
+      accountStatus: initialEmployee?.common?.accountStatus || ""
     };
-  }, [employee, teams]);
+  }, [initialEmployee, teams]);
 
   const employmentStatus = cardData?.accountStatus as AccountStatusEnums;
 

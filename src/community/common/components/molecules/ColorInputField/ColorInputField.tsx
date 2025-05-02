@@ -62,7 +62,16 @@ const ColorInputField: FC<Props> = ({
         <Typography component="label" lineHeight={1.5} sx={{}}>
           {label}
         </Typography>
-        {tooltip && <Tooltip title={tooltip} />}
+        {tooltip && (
+          <Tooltip
+            title={tooltip}
+            spanStyles={{
+              width: "1.25rem",
+              height: "1.25rem",
+              borderRadius: "50%"
+            }}
+          />
+        )}
       </Stack>
       <Box sx={mergeSx([classes.colorContainer, inputStyle])}>
         {AvailableThemeColors?.map((color) => (

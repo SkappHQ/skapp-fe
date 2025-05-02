@@ -10,6 +10,8 @@ import LeaveAllocation from "~community/leave/components/molecules/LeaveAllocati
 import LeaveRequests from "~community/leave/components/molecules/LeaveRequests/LeaveRequests";
 import EmployeeLeaveStatusPopupController from "~community/leave/components/organisms/EmployeeLeaveStatusPopupController/EmployeeLeaveStatusPopupController";
 import { useLeaveStore } from "~community/leave/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const MyRequests: NextPage = () => {
   const translateText = useTranslator("leaveModule", "myRequests");
@@ -21,6 +23,11 @@ const MyRequests: NextPage = () => {
   const { data: isEntitlementAvailableNextYear } = useGetLeaveAllocation(
     nextYear.toString()
   );
+
+  useGoogleAnalyticsEvent({
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_PAGE_VIEWED,
+    triggerOnMount: true
+  });
 
   return (
     <ContentLayout

@@ -113,6 +113,7 @@ const EmployeeDataFIlterMenuItems = ({
             buttonStyle={PrimaryButtonTypes.TERTIARY}
             size={isSmallScreen ? ButtonSizes.SMALL : ButtonSizes.MEDIUM}
             onClick={() => {
+              handleClose();
               resetEmployeeDataParams();
               setSelected(PeopleFilterHeadings.DEMOGRAPICS);
             }}

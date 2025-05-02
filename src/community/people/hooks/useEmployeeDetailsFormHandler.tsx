@@ -290,6 +290,19 @@ const useEmployeeDetailsFormHandler = ({
       );
     }
 
+    if (
+      employee?.employment?.employmentDetails?.primarySupervisor?.employeeId
+    ) {
+      newManagerList = newManagerList?.filter(
+        (manager) =>
+          String(manager?.employeeId) !==
+          String(
+            employee?.employment?.employmentDetails?.primarySupervisor
+              ?.employeeId
+          )
+      );
+    }
+
     return newManagerList;
   };
 

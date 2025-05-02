@@ -7,12 +7,12 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import Table from "~community/common/components/molecules/Table/Table";
 import Modal from "~community/common/components/organisms/Modal/Modal";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { LeaveRequestStates } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { LeaveRequest } from "~community/leave/types/ResourceAvailabilityTypes";
 import { getLeaveRequestState } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 interface OnLeaveModalProps {
   isOpen: boolean;

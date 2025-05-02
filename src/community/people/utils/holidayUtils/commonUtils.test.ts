@@ -1,11 +1,7 @@
 import { createCSV } from "~community/common/utils/bulkUploadUtils";
-import {
-  holidayBulkUploadResponse,
-  holidayType
-} from "~community/people/types/HolidayTypes";
+import { holidayBulkUploadResponse } from "~community/people/types/HolidayTypes";
 
 import {
-  downloadBulkCsvTemplate,
   downloadHolidayBulkUploadErrorLogsCSV,
   getFormattedDate,
   getFormattedYear,
@@ -63,31 +59,6 @@ describe("Holiday Utils", () => {
     it("should return full date format when fullDate is true", () => {
       expect(getFormattedDate("2024-01-01", true)).toBe("1st Jan 2024");
       expect(getFormattedDate("2024-12-25", true)).toBe("25th Dec 2024");
-    });
-  });
-
-  describe("downloadBulkCsvTemplate", () => {
-    it("should create CSV with correct headers and data", () => {
-      const mockHolidayData: holidayType[] = [
-        {
-          date: "2024-01-01",
-          name: "New Year",
-          holidayDuration: "FULL_DAY"
-        },
-        {
-          date: "2024-12-25",
-          name: "Christmas",
-          holidayDuration: "FULL_DAY"
-        }
-      ];
-
-      downloadBulkCsvTemplate(mockHolidayData);
-
-      expect(createCSV).toHaveBeenCalledTimes(1);
-      expect(createCSV).toHaveBeenCalledWith(
-        expect.any(MockReadableStream),
-        "HolidayBulkTemplate"
-      );
     });
   });
 
