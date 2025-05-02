@@ -26,6 +26,7 @@ import {
   ButtonStyle,
   ToastType
 } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
@@ -55,7 +56,6 @@ import {
   GetTeamPreProcessor,
   refactorTeamListData
 } from "~community/people/utils/PeopleDirectoryUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
 import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";

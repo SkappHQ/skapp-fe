@@ -9,6 +9,7 @@ import AvatarChip from "~community/common/components/molecules/AvatarChip/Avatar
 import AvatarGroup from "~community/common/components/molecules/AvatarGroup/AvatarGroup";
 import Table from "~community/common/components/molecules/Table/Table";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { AvatarPropTypes } from "~community/common/types/MoleculeTypes";
@@ -16,7 +17,6 @@ import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
 import { TeamModelTypes, TeamType } from "~community/people/types/TeamTypes";
-import { TableNames } from "~enterprise/common/enums/Table";
 import useProductTour from "~enterprise/common/hooks/useProductTour";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
