@@ -3,6 +3,7 @@ import { Chip, Stack, Theme, useTheme } from "@mui/material";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { FileUploadType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { downloadAttachmentToUserDevice } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
 
@@ -15,30 +16,6 @@ const AttachmentSummary = ({ attachments, onDeleteBtnClick }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const handleAttachmentClick = (attachment: FileUploadType) => {
-    if (!attachment.file) {
-      return;
-    }
-
-    const link = document.createElement("a");
-    link.download = attachment.name;
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      link.href = reader.result as string;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-
-    reader.onerror = () => {
-      console.error("There was an error reading the file!");
-    };
-
-    reader.readAsDataURL(attachment.file);
-  };
-
   return (
     <Stack sx={classes.wrapper}>
       {attachments.map((attachment, index) => (
@@ -48,7 +25,7 @@ const AttachmentSummary = ({ attachments, onDeleteBtnClick }: Props) => {
           }
           key={index}
           label={attachment.name}
-          onClick={() => handleAttachmentClick(attachment)}
+          onClick={() => downloadAttachmentToUserDevice(attachment)}
           onDelete={() => onDeleteBtnClick(attachment)}
           sx={classes.chip}
           deleteIcon={
