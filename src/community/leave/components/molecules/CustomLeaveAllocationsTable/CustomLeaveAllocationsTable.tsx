@@ -321,12 +321,15 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
                 !!selectedLeaveTypes.length
                   ? translateText(["emptySearchResult", "description"])
                   : translateText(["emptyCustomLeaveScreen", "description"]),
-              button: showEmptyTableButton
-                ? {
-                    label: translateText(["CustomLeaveAllocationsSectionBtn"]),
-                    onClick: handleAddLeaveAllocation
-                  }
-                : undefined
+              button:
+                showEmptyTableButton && searchTerm === ""
+                  ? {
+                      label: translateText([
+                        "CustomLeaveAllocationsSectionBtn"
+                      ]),
+                      onClick: handleAddLeaveAllocation
+                    }
+                  : undefined
             }
           },
           loadingState: {
