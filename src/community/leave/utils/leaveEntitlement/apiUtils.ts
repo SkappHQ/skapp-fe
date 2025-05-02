@@ -1,9 +1,9 @@
 import { SetStateAction } from "react";
 
 import { ToastType } from "~community/common/enums/ComponentEnums";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import { LeaveEntitlementToastEnums } from "~community/leave/enums/LeaveEntitlementEnums";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 interface HandleLeaveEntitlementApiResponseProps {
   type: LeaveEntitlementToastEnums;

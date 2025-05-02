@@ -8,7 +8,6 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getAsDaysString } from "~community/common/utils/dateTimeUtils";
 import { useHandelLeaves } from "~community/leave/api/LeaveApi";
@@ -18,6 +17,7 @@ import {
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import LeaveStatusPopupRow from "../LeaveStatusPopupRow/LeaveStatusPopupRow";
 

@@ -22,7 +22,6 @@ import {
   ManagerTypes
 } from "~community/common/types/AuthTypes";
 import { ModuleTypes } from "~community/common/types/CommonTypes";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import LeaveAllocationSummary from "~community/leave/components/organisms/LeaveDashboard/LeaveAllocationSummary";
 import LeaveDashboard from "~community/leave/components/organisms/LeaveDashboard/LeaveDashboard";
 import PeopleDashboard from "~community/people/components/organisms/PeopleDashboard/PeopleDashboard";
@@ -30,6 +29,7 @@ import LogoColorLoader from "~enterprise/common/components/molecules/LogoColorLo
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 type RoleTypes = AdminTypes | ManagerTypes | EmployeeTypes;
 

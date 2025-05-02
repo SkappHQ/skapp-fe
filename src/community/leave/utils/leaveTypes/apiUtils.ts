@@ -3,10 +3,10 @@ import * as React from "react";
 
 import ROUTES from "~community/common/constants/routes";
 import { ToastType } from "~community/common/enums/ComponentEnums";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { ToastProps } from "~community/common/types/ToastTypes";
 import { LeaveTypeToastEnums } from "~community/leave/enums/LeaveTypeEnums";
 import { QuickSetupModalTypeEnums } from "~enterprise/common/enums/Common";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 export const handleLeaveTypeApiResponse =
   ({

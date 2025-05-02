@@ -10,11 +10,11 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useLeaveCarryForward } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import styles from "./styles";
 

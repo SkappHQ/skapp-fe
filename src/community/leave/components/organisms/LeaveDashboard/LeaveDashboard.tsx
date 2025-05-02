@@ -12,7 +12,6 @@ import ROUTES from "~community/common/constants/routes";
 import { DATE_FORMAT } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes } from "~community/common/types/AuthTypes";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import {
   useGetAbsenceRate,
   useGetAvailability,
@@ -26,6 +25,7 @@ import HolidayChip from "~community/leave/components/molecules/LeaveDashboardChi
 import LeaveTypeBreakdownChart from "~community/leave/components/molecules/LeaveUtilizationGraph/LeaveTypeBreakdownChart";
 import { useLeaveStore } from "~community/leave/store/store";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import styles from "./styles";
 

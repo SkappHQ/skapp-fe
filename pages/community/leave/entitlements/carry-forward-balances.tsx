@@ -8,7 +8,6 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetUseCarryForwardLeaveEntitlements } from "~community/leave/api/LeaveApi";
 import CarryForwardTable from "~community/leave/components/molecules/CarryForwardTable/CarryForwardTable";
@@ -16,6 +15,7 @@ import LeaveCarryForwardModalController from "~community/leave/components/organi
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const CarryForwardBalances: NextPage = () => {
   const router = useRouter();

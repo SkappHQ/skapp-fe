@@ -7,7 +7,6 @@ import SearchBox from "~community/common/components/molecules/SearchBox/SearchBo
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveApi";
 import { useGetLeaveEntitlements } from "~community/leave/api/LeaveEntitlementApi";
@@ -17,6 +16,7 @@ import LeaveEntitlementModalController from "~community/leave/components/organis
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const LeaveEntitlements: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveEntitlements");

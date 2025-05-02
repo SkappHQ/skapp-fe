@@ -4,7 +4,6 @@ import ModalController from "~community/common/components/organisms/ModalControl
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { useDeleteLeaveAllocation } from "~community/leave/api/LeaveApi";
 import AddLeaveAllocationModal from "~community/leave/components/molecules/CustomLeaveModals/AddLeaveAllocationModal/AddLeaveAllocationModal";
 import DeleteConfirmationModal from "~community/leave/components/molecules/CustomLeaveModals/DeleteConfirmModal/DeleteConfirmModal";
@@ -15,6 +14,7 @@ import {
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import UnsavedLeaveAllocationModal from "../UnsavedLeaveAllocationModal/UnsavedLeaveAllocationModal";
 

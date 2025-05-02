@@ -6,12 +6,12 @@ import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle, ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useCancelLeaveRequest } from "~community/leave/api/MyRequestApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import { EmployeeLeaveStatusPopupTypes } from "~community/leave/types/EmployeeLeaveRequestTypes";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 interface Props {
   setPopupType: (type: EmployeeLeaveStatusPopupTypes) => void;

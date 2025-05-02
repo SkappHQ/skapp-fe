@@ -4,7 +4,6 @@ import { type NextPage } from "next";
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { getCurrentAndNextYear } from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveAllocation } from "~community/leave/api/MyRequestApi";
 import LeaveAllocation from "~community/leave/components/molecules/LeaveAllocation/LeaveAllocation";
@@ -12,6 +11,7 @@ import LeaveRequests from "~community/leave/components/molecules/LeaveRequests/L
 import EmployeeLeaveStatusPopupController from "~community/leave/components/organisms/EmployeeLeaveStatusPopupController/EmployeeLeaveStatusPopupController";
 import { useLeaveStore } from "~community/leave/store/store";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const MyRequests: NextPage = () => {
   const translateText = useTranslator("leaveModule", "myRequests");

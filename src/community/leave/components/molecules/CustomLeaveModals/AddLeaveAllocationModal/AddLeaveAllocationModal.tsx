@@ -13,7 +13,6 @@ import Icon from "~community/common/components/atoms/Icon/Icon";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { useCreateLeaveAllocation } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -23,6 +22,7 @@ import {
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import CustomLeaveAllocationForm from "../../CustomLeaveAllocationForm/CustomLeaveAllocationForm";
 

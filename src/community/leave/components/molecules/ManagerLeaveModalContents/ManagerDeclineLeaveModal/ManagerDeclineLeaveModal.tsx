@@ -6,7 +6,6 @@ import Button from "~community/common/components/atoms/Button/Button";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
-import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
 import { useHandelLeaves } from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
@@ -15,6 +14,7 @@ import {
 } from "~community/leave/types/LeaveRequestTypes";
 import { validateDescription } from "~community/leave/utils/LeavePreprocessors";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import LeaveStatusPopupColumn from "../LeaveStatusPopupColumn/LeaveStatusPopupColumn";
 
