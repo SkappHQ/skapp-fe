@@ -69,6 +69,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const employeeId = asPath.split("/").pop();
 
   const {
+    initialEmployee,
     employee,
     setProfilePic,
     setThumbnail,
@@ -221,25 +222,26 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
   const cardData = useMemo(() => {
     return {
       employeeId:
-        employee?.employment?.employmentDetails?.employeeNumber || "1",
-      authPic: employee?.common?.authPic || "",
-      firstName: employee?.personal?.general?.firstName,
-      lastName: employee?.personal?.general?.lastName,
+        initialEmployee?.employment?.employmentDetails?.employeeNumber || "1",
+      authPic: initialEmployee?.common?.authPic || "",
+      firstName: initialEmployee?.personal?.general?.firstName,
+      lastName: initialEmployee?.personal?.general?.lastName,
       fullName:
-        employee?.personal?.general?.firstName?.concat(
+        initialEmployee?.personal?.general?.firstName?.concat(
           " ",
-          employee?.personal?.general?.lastName as string
+          initialEmployee?.personal?.general?.lastName as string
         ) || "",
-      email: employee?.employment?.employmentDetails?.email || "",
-      phone: employee?.personal?.contact?.contactNo || "",
-      countryCode: employee?.personal?.contact?.countryCode || "",
+      email: initialEmployee?.employment?.employmentDetails?.email || "",
+      phone: initialEmployee?.personal?.contact?.contactNo || "",
+      countryCode: initialEmployee?.personal?.contact?.countryCode || "",
       jobFamily: "",
-      jobTitle: employee?.common?.jobTitle || "",
+      jobTitle: initialEmployee?.common?.jobTitle || "",
       teams: teams || [],
-      joinedDate: employee?.employment?.employmentDetails?.joinedDate || "",
-      accountStatus: employee?.common?.accountStatus || ""
+      joinedDate:
+        initialEmployee?.employment?.employmentDetails?.joinedDate || "",
+      accountStatus: initialEmployee?.common?.accountStatus || ""
     };
-  }, [employee, teams]);
+  }, [initialEmployee, teams]);
 
   const employmentStatus = cardData?.accountStatus as AccountStatusEnums;
 
