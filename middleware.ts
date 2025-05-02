@@ -13,6 +13,7 @@ import {
   SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { checkRestrictedRoutesAndRedirect } from "~enterprise/common/utils/commonUtil";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -213,27 +214,23 @@ export default withAuth(
         );
       }
 
-      if (
-        managerRestrictedRoutes.some((url) =>
-          request.nextUrl.pathname.startsWith(url)
-        ) &&
-        !roles.includes(AdminTypes.PEOPLE_ADMIN)
-      ) {
-        return NextResponse.redirect(
-          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
-        );
-      }
+      // Check manager restricted routes
+      const managerRedirect = checkRestrictedRoutesAndRedirect(
+        request,
+        managerRestrictedRoutes,
+        AdminTypes.PEOPLE_ADMIN,
+        roles
+      );
+      if (managerRedirect) return managerRedirect;
 
-      if (
-        employeeRestrictedRoutes.some((url) =>
-          request.nextUrl.pathname.startsWith(url)
-        ) &&
-        !roles.includes(ManagerTypes.PEOPLE_MANAGER)
-      ) {
-        return NextResponse.redirect(
-          new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
-        );
-      }
+      // Check employee restricted routes
+      const employeeRedirect = checkRestrictedRoutesAndRedirect(
+        request,
+        employeeRestrictedRoutes,
+        ManagerTypes.PEOPLE_MANAGER,
+        roles
+      );
+      if (employeeRedirect) return employeeRedirect;
 
       return NextResponse.next();
     }

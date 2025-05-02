@@ -113,9 +113,15 @@ const ROUTES = {
 
 export default ROUTES;
 
+const RESCRITED_DYNAMIC_ROUTES = {
+  PEOPLE: {
+    EDIT: "/people/directory/edit/"
+  }
+};
+
 export const employeeRestrictedRoutes = [
-  "/people/directory/edit/",
-  "/people/directory/add"
+  RESCRITED_DYNAMIC_ROUTES.PEOPLE.EDIT,
+  ROUTES.PEOPLE.ADD
 ];
 
-export const managerRestrictedRoutes = ["/people/directory/add"];
+export const managerRestrictedRoutes = [ROUTES.PEOPLE.ADD];
