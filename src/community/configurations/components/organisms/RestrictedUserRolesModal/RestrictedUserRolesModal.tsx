@@ -61,6 +61,7 @@ const RestrictedUserRolesModal = ({ initialData }: Props) => {
   const handleCancelBtnClick = () => {
     setIsUserRoleModalOpen(false);
     setModuleType(Modules.NONE);
+    resetForm();
   };
 
   const handleSubmit = () => {
@@ -73,7 +74,7 @@ const RestrictedUserRolesModal = ({ initialData }: Props) => {
     updateUserRoleRestrictions(payload);
   };
 
-  const { values, dirty, setFieldValue } = useFormik({
+  const { values, dirty, setFieldValue, resetForm } = useFormik({
     initialValues: {
       isAdmin: initialData !== undefined ? initialData?.isAdmin : false,
       isManager: initialData !== undefined ? initialData?.isManager : false
