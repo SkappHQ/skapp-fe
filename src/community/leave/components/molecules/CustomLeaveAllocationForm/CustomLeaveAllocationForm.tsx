@@ -17,6 +17,10 @@ import {
   nextYear
 } from "~community/common/utils/dateTimeUtils";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
+import {
+  MAX_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED,
+  MIN_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED
+} from "~community/leave/constants/stringConstants";
 import { LeaveDurationTypes } from "~community/leave/enums/LeaveTypeEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import {
@@ -185,7 +189,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
       }
     }
 
-    if (numericValue % 0.5 !== 0) {
+    if (numericValue % MIN_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED !== 0) {
       setFieldError(
         "numberOfDaysOff",
         translateText(["validNoOfDaysIncrementError"])
@@ -195,21 +199,21 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
 
     if (
       matchesNumberWithAtMostOneDecimalPlace().test(value) &&
-      0.5 <= numericValue &&
-      numericValue <= 360
+      MIN_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED <= numericValue &&
+      numericValue <= MAX_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED
     ) {
       setFieldValue("numberOfDaysOff", value);
       setFieldError("numberOfDaysOff", "");
       return;
     } else {
-      if (numericValue < 0.5) {
+      if (numericValue < MIN_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED) {
         setFieldValue("numberOfDaysOff", value);
         setFieldError(
           "numberOfDaysOff",
           translateText(["validNoOfDaysLowerRangeError"])
         );
         return;
-      } else if (360 < numericValue) {
+      } else if (MAX_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED < numericValue) {
         setFieldValue("numberOfDaysOff", value);
         setFieldError(
           "numberOfDaysOff",
@@ -349,9 +353,9 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
           inputName="numberOfDaysOff"
           inputType="text"
           inputProps={{
-            min: 0.5,
-            max: 360,
-            step: 0.5
+            min: MIN_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED,
+            max: MAX_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED,
+            step: MIN_CUSTOM_LEAVE_ALLOCATION_DAYS_ALLOWED
           }}
           label={translateText(["leaveAllocationNumberOfDaysInputLabel"])}
           placeHolder={translateText(["noOfDaysPlaceholder"])}
