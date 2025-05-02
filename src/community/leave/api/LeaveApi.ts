@@ -15,10 +15,6 @@ import {
   SortOrderTypes
 } from "~community/common/types/CommonTypes";
 import authFetch from "~community/common/utils/axiosInterceptor";
-import {
-  formatDateToISOString,
-  getYearStartAndEndDates
-} from "~community/common/utils/dateTimeUtils";
 import { leaveEndPoints } from "~community/leave/api/utils/ApiEndpoints";
 import {
   leaveQueryKeys,
@@ -33,34 +29,16 @@ import { leaveRequestRowDataTypes } from "../types/LeaveRequestTypes";
 import { LeaveCycleStartEndDatesType } from "../types/LeaveTypes";
 import { LeaveRequest } from "../types/PendingLeaves";
 import { leaveRequestDataPreProcessor } from "../utils/LeavePreprocessors";
+import { handleCustomLeaveEntitlementPayload } from "../utils/leaveEntitlement/apiUtils";
 
 const createCustomLeave = async (
   newEntitlementData: CustomLeaveAllocationType,
   selectedYear: string
 ): Promise<void> => {
-  let startDateOfYear: string | undefined;
-  let endDateOfYear: string | undefined;
-
-  if (selectedYear) {
-    const { start, end } = getYearStartAndEndDates(Number(selectedYear));
-    startDateOfYear = start ?? "";
-    endDateOfYear = end ?? "";
-  } else {
-    const { end: endOfYearDate } = getYearStartAndEndDates(
-      new Date().getFullYear()
-    );
-    endDateOfYear = endOfYearDate ?? "";
-    startDateOfYear = formatDateToISOString(new Date());
-  }
-
-  if (!newEntitlementData.validFromDate) {
-    newEntitlementData.validFromDate = startDateOfYear ?? undefined;
-  }
-  if (!newEntitlementData.validToDate) {
-    newEntitlementData.validToDate = endDateOfYear ?? undefined;
-  }
-
-  const { name, ...EntitlementData } = newEntitlementData;
+  const EntitlementData = handleCustomLeaveEntitlementPayload({
+    newEntitlementData,
+    selectedYear
+  });
 
   return await authFetch.post(
     leaveEndPoints.GET_CUSTOM_LEAVES,

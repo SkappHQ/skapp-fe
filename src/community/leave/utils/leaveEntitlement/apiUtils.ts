@@ -2,7 +2,12 @@ import { SetStateAction } from "react";
 
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { ToastProps } from "~community/common/types/ToastTypes";
+import {
+  formatDateToISOString,
+  getYearStartAndEndDates
+} from "~community/common/utils/dateTimeUtils";
 import { LeaveEntitlementToastEnums } from "~community/leave/enums/LeaveEntitlementEnums";
+import { CustomLeaveAllocationType } from "~community/leave/types/CustomLeaveAllocationTypes";
 
 interface HandleLeaveEntitlementApiResponseProps {
   type: LeaveEntitlementToastEnums;
@@ -56,4 +61,38 @@ export const handleLeaveEntitlementApiResponse = ({
     default:
       break;
   }
+};
+
+export const handleCustomLeaveEntitlementPayload = ({
+  newEntitlementData,
+  selectedYear
+}: {
+  newEntitlementData: CustomLeaveAllocationType;
+  selectedYear: string;
+}) => {
+  let startDateOfYear: string | undefined;
+  let endDateOfYear: string | undefined;
+
+  if (selectedYear) {
+    const { start, end } = getYearStartAndEndDates(Number(selectedYear));
+    startDateOfYear = start ?? "";
+    endDateOfYear = end ?? "";
+  } else {
+    const { end: endOfYearDate } = getYearStartAndEndDates(
+      new Date().getFullYear()
+    );
+    endDateOfYear = endOfYearDate ?? "";
+    startDateOfYear = formatDateToISOString(new Date());
+  }
+
+  if (!newEntitlementData.validFromDate) {
+    newEntitlementData.validFromDate = startDateOfYear ?? undefined;
+  }
+  if (!newEntitlementData.validToDate) {
+    newEntitlementData.validToDate = endDateOfYear ?? undefined;
+  }
+
+  const { name, ...EntitlementData } = newEntitlementData;
+
+  return EntitlementData;
 };
