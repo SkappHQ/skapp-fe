@@ -14,6 +14,8 @@ import CarryForwardTable from "~community/leave/components/molecules/CarryForwar
 import LeaveCarryForwardModalController from "~community/leave/components/organisms/LeaveCarryForwardModalController/LeaveCarryForwardModalController";
 import { useLeaveStore } from "~community/leave/store/store";
 import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const CarryForwardBalances: NextPage = () => {
   const router = useRouter();
@@ -75,6 +77,12 @@ const CarryForwardBalances: NextPage = () => {
       LeaveCarryForwardModalTypes.CARRY_FORWARD_CONFIRM_SYNCHRONIZATION
     );
   };
+
+  useGoogleAnalyticsEvent({
+    onMountEventType:
+      GoogleAnalyticsTypes.GA4_LEAVE_CARRY_FORWARD_BALANCE_VIEWED,
+    triggerOnMount: true
+  });
 
   return (
     <>

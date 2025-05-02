@@ -491,7 +491,9 @@
       "employeeAddSuccessToastDescription": "User has been added and an invitation has been sent successfully.",
       "employeeAddErrorToastTitle": "Oops! Something went wrong",
       "employeeAddErrorToastDescription": "Failed to add the resource. Please try again.",
-      "areYouSureModalTitle": "Are you sure?"
+      "areYouSureModalTitle": "Are you sure?",
+      "reInvitationForOneEmployeeSuccessfulToastTitle": "Reinvitated Successfully",
+      "reInvitationForOneEmployeeSuccessfulToastDescription": "Reinvitation sent for the employee successfully"
     },
     "commonValidations": {
       "lettersAllowed": "Only letters are allowed",

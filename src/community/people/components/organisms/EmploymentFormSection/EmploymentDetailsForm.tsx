@@ -100,6 +100,7 @@ const EmploymentDetailsForm = ({
       }
       setEmployee(employee);
     } else {
+      setIsReinviteConfirmationModalOpen(false);
       setNextStep(currentStep);
       setIsUnsavedChangesModalOpen(false);
       scrollToFirstError(theme);

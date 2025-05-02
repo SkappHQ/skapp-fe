@@ -9,7 +9,10 @@ import { useToast } from "~community/common/providers/ToastProvider";
 import { BulkUploadResponse } from "~community/common/types/BulkUploadTypes";
 import { FileUploadType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
-import { useLeaveEntitlementBulkUpload } from "~community/leave/api/LeaveEntitlementApi";
+import {
+  useGetLeaveEntitlements,
+  useLeaveEntitlementBulkUpload
+} from "~community/leave/api/LeaveEntitlementApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import {
   LeaveEntitlementModelTypes,
@@ -20,6 +23,7 @@ import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import { LeaveEntitlementBulkUploadType } from "~community/leave/types/LeaveEntitlementTypes";
 import { handleLeaveEntitlementApiResponse } from "~community/leave/utils/leaveEntitlement/apiUtils";
 import { setAttachment } from "~community/leave/utils/leaveEntitlement/uploadCsvUtils";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 import styles from "./styles";
 
@@ -38,12 +42,15 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
 
   const { data: leaveTypesData } = useGetLeaveTypes();
 
-  const { leaveEntitlementTableSelectedYear, setLeaveEntitlementModalType } =
-    useLeaveStore((state) => ({
-      leaveEntitlementTableSelectedYear:
-        state.leaveEntitlementTableSelectedYear,
-      setLeaveEntitlementModalType: state.setLeaveEntitlementModalType
-    }));
+  const {
+    leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementModalType,
+    page
+  } = useLeaveStore((state) => ({
+    leaveEntitlementTableSelectedYear: state.leaveEntitlementTableSelectedYear,
+    setLeaveEntitlementModalType: state.setLeaveEntitlementModalType,
+    page: state.page
+  }));
 
   const [customError, setCustomError] = useState<string>("");
   const [isValid, setValid] = useState<boolean>(false);
@@ -62,6 +69,17 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
     setLeaveTypes(activeLeaveTypes ?? []);
   }, [activeLeaveTypes]);
 
+  const { data: leaveEntitlementData } = useGetLeaveEntitlements(
+    leaveEntitlementTableSelectedYear,
+    page,
+    ""
+  );
+
+  const isReupload =
+    leaveEntitlementData?.items && leaveEntitlementData.items.length > 0;
+
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onSuccess = (errorLogs: BulkUploadResponse) => {
     const toastType =
       errorLogs?.bulkStatusSummary?.failedCount === 0
@@ -75,7 +93,9 @@ const UploadCsv = ({ leaveTypes, setLeaveTypes, setErrorLog }: Props) => {
         setToastMessage,
         translateText,
         selectedYear: leaveEntitlementTableSelectedYear,
-        noOfRecords: errorLogs?.bulkStatusSummary?.successCount
+        noOfRecords: errorLogs?.bulkStatusSummary?.successCount,
+        isReupload,
+        sendEvent
       });
     }
     setErrorLog(errorLogs);

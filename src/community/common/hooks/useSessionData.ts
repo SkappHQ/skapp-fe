@@ -81,6 +81,11 @@ const useSessionData = () => {
     [sessionData?.user?.roles]
   );
 
+  const tenantID = useMemo(
+    () => sessionData?.user?.tenantId,
+    [sessionData?.user?.tenantId]
+  );
+
   return {
     isFreeTier,
     isProTier,
@@ -95,7 +100,8 @@ const useSessionData = () => {
     isPeopleManager,
     userId,
     isLeaveEmployee,
-    isAttendanceEmployee
+    isAttendanceEmployee,
+    tenantID
   };
 };
 

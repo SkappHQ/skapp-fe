@@ -1,9 +1,7 @@
 import { FormikProps } from "formik";
 import { ChangeEvent, SyntheticEvent } from "react";
 
-import {
-  isValidAlphaNumericString,
-} from "~community/common/regex/regexPatterns";
+import { isValidAlphaNumericString } from "~community/common/regex/regexPatterns";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import {
   isValidAlphaNumericNamePattern,

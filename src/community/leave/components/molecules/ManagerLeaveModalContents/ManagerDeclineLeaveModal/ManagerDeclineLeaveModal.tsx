@@ -13,6 +13,8 @@ import {
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
 import { validateDescription } from "~community/leave/utils/LeavePreprocessors";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import LeaveStatusPopupColumn from "../LeaveStatusPopupColumn/LeaveStatusPopupColumn";
 
@@ -37,6 +39,8 @@ const ManagerDeclineLeaveModal = ({
   const [error, setError] = useState<boolean>(false);
 
   const { mutate, isSuccess, error: leaveCancelError } = useHandelLeaves();
+
+  const { sendEvent } = useGoogleAnalyticsEvent();
 
   const handelDecline = (): void => {
     if (validateDescription(reason)) setError(true);
@@ -68,6 +72,7 @@ const ManagerDeclineLeaveModal = ({
         description: translateText(["declineLeaveSuccessDesc"]),
         isIcon: true
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_DECLINED);
       setPopupType(LeaveExtraPopupTypes.DECLINE_STATUS);
     }
   }, [leaveRequestData?.empName, leaveCancelError, isSuccess]);
