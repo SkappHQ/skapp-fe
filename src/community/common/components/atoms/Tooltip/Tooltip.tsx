@@ -22,6 +22,7 @@ interface Props {
   iconColor?: string;
   spanStyles?: CSSProperties;
   ariaLabel?: string;
+  tabIndex?: number;
 }
 
 const Tooltip: FC<Props> = ({
@@ -93,6 +94,8 @@ const Tooltip: FC<Props> = ({
         style={{
           pointerEvents: isDisabled ? "none" : "auto", // Prevent interaction when disabled
           cursor: isDisabled ? "not-allowed" : "pointer", // Change cursor when disabled,
+          height: "min-content",
+          width: "min-content",
           ...spanStyles
         }}
       >

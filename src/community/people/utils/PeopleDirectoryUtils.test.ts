@@ -62,7 +62,7 @@ describe("refactorSupervisorAvatars", () => {
       image: "pic.jpg",
       firstName: "John",
       lastName: "Doe",
-      primaryManager: true,
+      primaryManager: undefined,
       managerType: ManagerTypes.PRIMARY
     });
   });

@@ -14,6 +14,7 @@ import {
   ButtonStyle,
   ButtonTypes
 } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { GoogleAnalyticsTypes } from "~community/common/types/GoogleAnalyticsTypes";
@@ -28,7 +29,6 @@ import {
   LeaveRequest,
   PendingLeaveEnum
 } from "~community/leave/types/PendingLeaves";
-import { TableNames } from "~enterprise/common/enums/Table";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 
 import {

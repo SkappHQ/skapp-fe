@@ -1,6 +1,7 @@
 import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { JSX, useEffect } from "react";
 import { type MouseEventHandler, useCallback, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -63,6 +64,10 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const { data } = useSession();
 
+  const { asPath } = useRouter();
+
+  const employeeId = asPath.split("/").pop();
+
   const {
     employee,
     setProfilePic,
@@ -93,8 +98,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const { setToastMessage } = useToast();
 
-  const { data: supervisoryData } = useGetSubscriptionCancelImpact([
-    Number(employee?.common?.employeeId)
+  const { data: supervisoryData, refetch } = useGetSubscriptionCancelImpact([
+    Number(employeeId)
   ]);
 
   const { data: storageAvailableData } = useStorageAvailability();
@@ -106,7 +111,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     null
   );
 
-  const handleTermination = () => {
+  const handleTermination = async () => {
+    await refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length
@@ -116,6 +122,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
         teams: supervisoryData?.teamSupervisors?.length || 0
       };
       const caseKey = `${condition.managers}-${condition.teams}`;
+
       switch (caseKey) {
         case "1-0":
           setAlertMessage(
@@ -128,6 +135,13 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
           setAlertMessage(
             translateTerminationText([
               "terminateWarningModalDescriptionSingleTeam"
+            ])
+          );
+          break;
+        case "1-1":
+          setAlertMessage(
+            translateTerminationText([
+              "terminateWarningModalDescriptionSingleEmployee"
             ])
           );
           break;
@@ -152,7 +166,8 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
     setTerminationConfirmationModalOpen(true);
   };
 
-  const handleDeletion = () => {
+  const handleDeletion = async () => {
+    await refetch();
     if (
       supervisoryData?.primaryManagers?.length ||
       supervisoryData?.teamSupervisors?.length

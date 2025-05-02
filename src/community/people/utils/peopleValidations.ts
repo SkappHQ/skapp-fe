@@ -7,7 +7,6 @@ import {
   allowsOnlyNumbersAndOptionalDecimal,
   datePatternReverse,
   isValidAlphaNumericString,
-  isValidNameWithAccentsAndApostrophes,
   isValidUrlPattern
 } from "~community/common/regex/regexPatterns";
 import {
@@ -508,14 +507,14 @@ export const quickAddEmployeeValidations = (
       .required(translator(["requireFirstNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
       .matches(
-        isValidNameWithAccentsAndApostrophes(),
+        allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
     lastName: Yup.string()
       .required(translator(["requireLastNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
       .matches(
-        isValidNameWithAccentsAndApostrophes(),
+        allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
     email: Yup.string()
