@@ -26,7 +26,10 @@ const Error = () => {
         dataTestId="back-to-home-btn"
         isFullWidth={false}
         label={translateText(["buttonText"])}
-        onClick={() => router.push(ROUTES.DASHBOARD.BASE)}
+        onClick={async () => {
+          await router.replace(ROUTES.DASHBOARD.BASE);
+          router.reload();
+        }}
         ariaLabel={translateText(["buttonText"])}
       />
     </Stack>

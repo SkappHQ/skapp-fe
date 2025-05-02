@@ -11,11 +11,11 @@ import FilterButton from "~community/common/components/molecules/AdvancedFilterB
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
 import Table from "~community/common/components/molecules/Table/Table";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { useGetAllTeams } from "~community/people/api/TeamApi";
 import { usePeopleStore } from "~community/people/store/store";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import EmojiChip from "../../atoms/EmojiChip/EmojiChip";
 
