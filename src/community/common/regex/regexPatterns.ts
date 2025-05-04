@@ -199,10 +199,6 @@ export function areCommasPresentInString(input: string): boolean {
   return regex.test(input);
 }
 
-export function isValidCityStateString(): RegExp {
-  return /^[a-zA-Z0-9\-'.]+$/;
-}
-
 export function matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod(): RegExp {
   // Matches "YYYY-MM-DD", "YYYY/MM/DD", or "YYYY.MM.DD" with leading zeros
   // Example: "2023-09-15", "2023/09/15", "2023.09.15"

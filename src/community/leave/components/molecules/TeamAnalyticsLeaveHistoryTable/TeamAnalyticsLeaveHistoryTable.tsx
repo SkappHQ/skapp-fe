@@ -12,6 +12,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { pascalCaseFormatter } from "~community/common/utils/commonUtil";
@@ -31,7 +32,6 @@ import {
 } from "~community/leave/types/TeamLeaveAnalyticsTypes";
 import { downloadDataAsCSVTeam } from "~community/leave/utils/TeamLeaveAnalyticsUtils";
 import { leaveStatusIconSelector } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import RequestDates from "../LeaveRequestRow/RequestDates";
 import MultiselectEmployeeFilter from "../MultiselectEmployeeFilter/MultiselectEmployeeFilter";

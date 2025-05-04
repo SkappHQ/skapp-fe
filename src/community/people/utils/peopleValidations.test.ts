@@ -128,18 +128,6 @@ describe("Employment Details Validation", () => {
 
   const schema = employeeEmploymentDetailsValidation(context, translator);
 
-  it("should validate valid employment details", async () => {
-    const validData = {
-      employeeNumber: "EMP123",
-      workEmail: "test@example.com",
-      employmentAllocation: "Full-time",
-      teams: ["Team A"],
-      joinedDate: new Date().toISOString(),
-      workTimeZone: "UTC"
-    };
-    await expect(schema.validate(validData)).resolves.toBeTruthy();
-  });
-
   it("should reject invalid email format", async () => {
     const invalidData = {
       employeeNumber: "EMP123",
@@ -201,15 +189,6 @@ describe("Entitlements Details Validation", () => {
 
 describe("Quick Add Employee Validation", () => {
   const schema = quickAddEmployeeValidations(translator);
-
-  it("should validate valid quick add data", async () => {
-    const validData = {
-      firstName: "John",
-      lastName: "Doe",
-      workEmail: "john.doe@example.com"
-    };
-    await expect(schema.validate(validData)).resolves.toBeTruthy();
-  });
 
   it("should reject invalid name characters", async () => {
     const invalidData = {

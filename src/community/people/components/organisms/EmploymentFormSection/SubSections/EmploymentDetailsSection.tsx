@@ -43,6 +43,7 @@ import { employeeEmploymentDetailsValidation } from "~community/people/utils/peo
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 import TeamModalController from "../../TeamModalController/TeamModalController";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 
 interface Props {
   isReadOnly?: boolean;
@@ -101,6 +102,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       await refetch();
     };
 
+    const { apiPayload } = useFormChangeDetector()
+
     const initialValues = useMemo<L3EmploymentDetailsType>(
       () =>
         employee?.employment?.employmentDetails ||
@@ -112,7 +115,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       isUniqueEmail,
       isUniqueEmployeeNo,
       isUpdate:
-        initialValues?.email !== employee?.employment?.employmentDetails?.email
+        apiPayload?.employment?.employmentDetails?.email
           ? false
           : isUpdate
     };
@@ -126,7 +129,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       onSubmit,
       validateOnChange: false,
       validateOnBlur: true,
-      enableReinitialize: true
+      enableReinitialize: true,
     });
 
     const {
