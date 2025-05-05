@@ -17,12 +17,16 @@ import {
   lateArrivalsGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
 import { useLateArrivalsGraphOptions } from "~community/attendance/utils/echartOptions/lateArrivalsGraphOptions";
-import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
+import {
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
@@ -84,6 +88,7 @@ const LateArrivalsGraph = ({
       startIndex,
       endIndex
     });
+    setLateArrivalHighlightedIndex(startIndex);
   }, [chartData?.labels, dataCategory]);
 
   const lateArrivalsGraphOptions = useLateArrivalsGraphOptions(
@@ -208,6 +213,12 @@ const LateArrivalsGraph = ({
                       chartRef: lateArrivalChartRef
                     })
                   }
+                  onFocus={() =>
+                    showTooltipAtIndex(
+                      lateArrivalChartRef,
+                      lateArrivalHighlightedIndex
+                    )
+                  }
                 >
                   <ReactECharts
                     option={lateArrivalsGraphOptions}
@@ -234,6 +245,12 @@ const LateArrivalsGraph = ({
                   cursor: "pointer",
                   visibility: handleChevronVisibility(GRAPH_LEFT)
                 }}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    event.preventDefault();
+                    handleClick(GRAPH_LEFT);
+                  }
+                }}
               >
                 <Icon name={IconName.CHEVRON_LEFT_ICON} />
               </Box>
@@ -255,6 +272,12 @@ const LateArrivalsGraph = ({
                   right: "2.5%",
                   cursor: "pointer",
                   visibility: handleChevronVisibility(GRAPH_RIGHT)
+                }}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    event.preventDefault();
+                    handleClick(GRAPH_RIGHT);
+                  }
                 }}
               >
                 <Icon name={IconName.CHEVRON_RIGHT_ICON} />

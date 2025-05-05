@@ -2,6 +2,7 @@ import ReactECharts from "echarts-for-react";
 import React from "react";
 
 import {
+  shouldCloseDialog,
   shouldMoveLeft,
   shouldMoveRight
 } from "~community/common/utils/keyboardUtils";
@@ -27,7 +28,8 @@ export const handleGraphKeyboardNavigation = ({
   handleClick,
   chartRef
 }: HandleKeyPressParams): void => {
-  let newIndex = highlightedIndex;
+  if (!chartDataLabels.length) return;
+  let newIndex = highlightedIndex ?? 0;
 
   if (shouldMoveRight(event.key)) {
     newIndex = Math.min(highlightedIndex + 1, chartDataLabels.length - 1);
@@ -47,10 +49,17 @@ export const handleGraphKeyboardNavigation = ({
       showTooltipAtIndex(chartRef, newIndex);
     }
     event.preventDefault();
+  } else if (shouldCloseDialog(event.key)) {
+    const chartInstance = chartRef.current?.getEchartsInstance?.();
+    if (chartInstance) {
+      chartInstance.dispatchAction({
+        type: "hideTip"
+      });
+    }
   }
 };
 
-const showTooltipAtIndex = (
+export const showTooltipAtIndex = (
   chartRef: React.RefObject<ReactECharts>,
   index: number
 ): void => {

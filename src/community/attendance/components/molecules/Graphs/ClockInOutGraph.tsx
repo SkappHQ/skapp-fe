@@ -17,7 +17,10 @@ import {
   GRAPH_RIGHT,
   clockInOutGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
-import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
+import {
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
@@ -29,6 +32,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { addHours } from "~community/common/utils/dateTimeUtils";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
@@ -87,7 +91,7 @@ const ClockInOutGraph = ({
   });
 
   const [clockInOutHighlightedIndex, setClockInOutHighlightedIndex] =
-    useState<number>(xIndexDay.startIndex);
+    useState<number>(0);
 
   // set start and end index around the standard clock in and clock out time
   useEffect(() => {
@@ -229,6 +233,12 @@ const ClockInOutGraph = ({
                       chartRef: clockInOutChartRef
                     })
                   }
+                  onFocus={() =>
+                    showTooltipAtIndex(
+                      clockInOutChartRef,
+                      clockInOutHighlightedIndex
+                    )
+                  }
                 >
                   <ReactECharts
                     option={clockInOutGraphOptions}
@@ -251,6 +261,12 @@ const ClockInOutGraph = ({
                   cursor: "pointer",
                   visibility: handleChevronVisibility(GRAPH_LEFT)
                 }}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    event.preventDefault();
+                    handleClick(GRAPH_LEFT);
+                  }
+                }}
               >
                 <Icon name={IconName.CHEVRON_LEFT_ICON} />
               </Box>
@@ -267,6 +283,12 @@ const ClockInOutGraph = ({
                   right: "2.5%",
                   cursor: "pointer",
                   visibility: handleChevronVisibility(GRAPH_RIGHT)
+                }}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    event.preventDefault();
+                    handleClick(GRAPH_RIGHT);
+                  }
                 }}
               >
                 <Icon name={IconName.CHEVRON_RIGHT_ICON} />

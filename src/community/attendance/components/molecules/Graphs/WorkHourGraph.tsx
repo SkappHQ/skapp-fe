@@ -1,7 +1,14 @@
 import { Box, Stack, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
 import { DateTime } from "luxon";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import {
   GRAPH_LEFT,
@@ -9,6 +16,10 @@ import {
   WORK_HOUR_TREND_SHIFT_DAYS
 } from "~community/attendance/utils/echartOptions/constants";
 import { useWorkHourTrendChartOptions } from "~community/attendance/utils/echartOptions/workHourTrendChartOptions";
+import {
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import { FilledArrow } from "~community/common/components/atoms/FilledArrow/FilledArrow";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -16,6 +27,7 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getMonthName } from "~community/common/utils/dateTimeUtils";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
@@ -51,6 +63,10 @@ const WorkHourGraph = ({
     endIndex: WORK_HOUR_TREND_SHIFT_DAYS
   });
 
+  const chartRef = useRef<ReactECharts | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+  const nextHighlightedIndexRef = useRef<number | null>(null);
+
   useEffect(() => {
     const startIndex = DateTime.local().day <= 15 ? 0 : 15;
     const endIndex = startIndex + WORK_HOUR_TREND_SHIFT_DAYS;
@@ -69,22 +85,42 @@ const WorkHourGraph = ({
 
   const theme = useTheme();
 
-  const handleClick = (direction: string): void => {
+  const handleClick = (direction: string, nextIndex?: number): void => {
+    if (nextIndex !== undefined) {
+      nextHighlightedIndexRef.current = nextIndex;
+    }
+
     setXIndexDay((prev) => {
       const shift =
         direction === GRAPH_LEFT
           ? -WORK_HOUR_TREND_SHIFT_DAYS
           : WORK_HOUR_TREND_SHIFT_DAYS;
 
+      const maxStart = Math.max(labels.length - WORK_HOUR_TREND_SHIFT_DAYS, 0);
+      const newStartIndex = Math.max(
+        Math.min(prev.startIndex + shift, maxStart),
+        0
+      );
+      const newEndIndex = Math.min(
+        newStartIndex + WORK_HOUR_TREND_SHIFT_DAYS,
+        labels.length
+      );
+
       return {
-        startIndex: Math.max(prev.startIndex + shift, 0),
-        endIndex: Math.min(
-          prev.endIndex + shift,
-          labels.length > 0 ? labels.length - 1 : 0
-        )
+        startIndex: newStartIndex,
+        endIndex: newEndIndex
       };
     });
   };
+
+  useEffect(() => {
+    const index = nextHighlightedIndexRef.current;
+    if (index !== null) {
+      setFocusedIndex(index);
+      showTooltipAtIndex(chartRef, index);
+      nextHighlightedIndexRef.current = null;
+    }
+  }, [xIndexDay]);
 
   const handleChevronVisibility = (direction: "left" | "right"): string => {
     switch (direction) {
@@ -189,8 +225,25 @@ const WorkHourGraph = ({
                 width: "100%",
                 height: "100%"
               }}
+              tabIndex={0}
+              onKeyDown={(event) =>
+                handleGraphKeyboardNavigation({
+                  event,
+                  highlightedIndex: focusedIndex,
+                  setHighlightedIndex: setFocusedIndex,
+                  chartDataLabels: labels,
+                  xIndexDay,
+                  handleClick,
+                  chartRef: chartRef
+                })
+              }
+              onFocus={() => showTooltipAtIndex(chartRef, focusedIndex)}
             >
-              <ReactECharts option={chartOptions} style={{ height: "10rem" }} />
+              <ReactECharts
+                option={chartOptions}
+                style={{ height: "10rem" }}
+                ref={chartRef}
+              />
             </Box>
             {data.preProcessedData.length !== 0 && (
               <Box
@@ -206,6 +259,12 @@ const WorkHourGraph = ({
                   left: "5%",
                   cursor: "pointer",
                   visibility: handleChevronVisibility(GRAPH_LEFT)
+                }}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    event.preventDefault();
+                    handleClick(GRAPH_LEFT);
+                  }
                 }}
               >
                 <Icon name={IconName.CHEVRON_LEFT_ICON} />
@@ -223,6 +282,12 @@ const WorkHourGraph = ({
                   right: "0.5%",
                   cursor: "pointer",
                   visibility: handleChevronVisibility(GRAPH_RIGHT)
+                }}
+                onKeyDown={(event) => {
+                  if (shouldActivateButton(event.key)) {
+                    event.preventDefault();
+                    handleClick(GRAPH_RIGHT);
+                  }
                 }}
               >
                 <Icon name={IconName.CHEVRON_RIGHT_ICON} />
