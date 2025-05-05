@@ -324,7 +324,7 @@ const InputDate: FC<Props> = ({
               ? "text.secondary"
               : selectedDate
                 ? theme.palette.common.black
-                : theme.palette.grey[600],
+                : theme.palette.text.secondary,
             opacity: 1
           }}
         >
