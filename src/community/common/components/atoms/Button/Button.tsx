@@ -145,6 +145,7 @@ const Button = ({
       width={isFullWidth ? "100%" : "max-content"}
       shouldblink={shouldBlink}
       isDisabled={disabled}
+      tabIndex={disabled ? -1 : 0}
       startIcon={
         startIcon && typeof startIcon === "object" && "type" in startIcon ? (
           startIcon

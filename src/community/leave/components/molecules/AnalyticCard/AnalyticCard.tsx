@@ -3,6 +3,7 @@ import ReactECharts from "echarts-for-react";
 import { JSX } from "react";
 
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
+import useSessionData from "~community/common/hooks/useSessionData";
 import {
   PieChartPosition,
   PieChartSeriesData
@@ -38,6 +39,8 @@ const AnalyticCard = ({
   titleStyles,
   isIndividualCard = false
 }: Props): JSX.Element => {
+  const { isFreeTier } = useSessionData();
+
   const generatePieChartSeries = (pieChartSeriesData: PieChartSeriesData[]) => {
     const total = pieChartSeriesData?.reduce(
       (acc, seriesData) => acc + seriesData?.value,
@@ -88,6 +91,7 @@ const AnalyticCard = ({
                 },
                 background: "none"
               }}
+              tabIndex={isFreeTier ? -1 : 0}
             />
             <Typography variant="body2" marginTop={0.5} sx={{ ...titleStyles }}>
               {cardTitle}

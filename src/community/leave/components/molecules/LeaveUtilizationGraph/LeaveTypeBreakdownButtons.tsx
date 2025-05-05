@@ -11,6 +11,7 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
 import { SelectedFiltersTypes } from "~community/leave/types/LeaveUtilizationTypes";
@@ -41,6 +42,8 @@ const LeaveTypeBreakdownButtons = ({
   styles,
   isGraph = false
 }: Props): JSX.Element => {
+  const { isFreeTier } = useSessionData();
+
   const theme: Theme = useTheme();
 
   const translateText = useTranslator("commonComponents", "multiTeamSelector");
@@ -76,6 +79,7 @@ const LeaveTypeBreakdownButtons = ({
       return Object.keys(filterTypesArray).map((filterType) => {
         return (
           <Button
+            disabled={isFreeTier}
             key={filterType}
             isFullWidth={false}
             startIcon={!isGraph ? null : colorIndicator(colors[filterType])}
@@ -96,7 +100,7 @@ const LeaveTypeBreakdownButtons = ({
         );
       });
     },
-    [colors, onClick, theme.palette.grey, toggle, isGraph]
+    [colors, onClick, theme.palette.grey, toggle, isGraph, isFreeTier]
   );
 
   const renderTypes = useCallback(() => {
@@ -114,6 +118,7 @@ const LeaveTypeBreakdownButtons = ({
             {Object.keys(toggle).length > maxLeaveTypeToShow && (
               <>
                 <IconButton
+                  tabIndex={isFreeTier ? -1 : 0}
                   text={`+ ${count - maxLeaveTypeToShow} ${translateText(["selected"])}`}
                   icon={<DropDownArrow />}
                   buttonStyles={{

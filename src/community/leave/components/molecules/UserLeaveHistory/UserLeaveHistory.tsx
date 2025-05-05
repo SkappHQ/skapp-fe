@@ -59,7 +59,7 @@ const UserLeaveHistory: FC<Props> = ({
 }) => {
   const theme: Theme = useTheme();
 
-  const { isProTier } = useSessionData();
+  const { isFreeTier, isProTier } = useSessionData();
 
   const translateText = useTranslator(
     "peopleModule",
@@ -391,6 +391,7 @@ const UserLeaveHistory: FC<Props> = ({
           Date:
         </Typography>
         <DateRangePicker
+          tabIndex={isFreeTier ? -1 : 0}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
           chipStyles={{
@@ -416,6 +417,7 @@ const UserLeaveHistory: FC<Props> = ({
           />
           <IconButton
             icon={<FilterIcon />}
+            tabIndex={isFreeTier ? -1 : 0}
             onClick={handleFilterClick}
             buttonStyles={{
               border: "0.0625rem solid",
@@ -511,12 +513,14 @@ const UserLeaveHistory: FC<Props> = ({
         tableFoot={{
           pagination: {
             isEnabled: true,
+            disabled: isFreeTier,
             totalPages: employeeLeaveHistoryData.totalPages,
             currentPage: employeeLeaveHistoryData.currentPage,
             onChange: (_event: ChangeEvent<unknown>, value: number) =>
               setCurrentPage(value - 1)
           },
           exportBtn: {
+            disabled: isFreeTier,
             label: translateText(["tableHeaders.exportReport"]),
             onClick: async () => {
               downloadDataAsCSV(
@@ -535,6 +539,13 @@ const UserLeaveHistory: FC<Props> = ({
           }
         }}
         isLoading={isLoading}
+        tabIndex={{
+          wrapper: isFreeTier ? -1 : 0,
+          container: isFreeTier ? -1 : 0,
+          tableBody: {
+            row: isFreeTier ? -1 : 0
+          }
+        }}
       />
     </Box>
   );
