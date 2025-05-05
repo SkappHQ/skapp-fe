@@ -114,6 +114,12 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                       ? theme.palette.primary.main
                       : theme.palette.secondary.main
                   },
+                  "& .MuiClock-clock": {
+                    "&:focus-within": {
+                      outline: `0.125rem solid ${theme.palette.primary.main}`,
+                      outlineOffset: "0.125rem"
+                    }
+                  },
                   "& .MuiPickersToolbarText-root": {
                     fontSize: "3rem",
                     fontWeight: "400"
