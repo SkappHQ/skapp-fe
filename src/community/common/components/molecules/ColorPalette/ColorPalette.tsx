@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
@@ -33,34 +33,22 @@ const ColorPalette: FC<Props> = ({
   const classes = styles(theme);
 
   const anchorEl = useRef<HTMLDivElement | null>(null);
-
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
 
-  const splitColors = useMemo(() => {
+  const colorRows = useMemo(() => {
     const mid = Math.ceil(colors.length / 2);
-    return [colors.slice(0, mid), colors.slice(mid)];
-  }, [colors]);
+    const topRow = colors.slice(0, mid);
+    const bottomRow = colors.slice(mid);
 
-  const [colorRows, setColorRows] = useState<string[][]>(splitColors);
-
-  useEffect(() => {
-    if (!selectedColor) return;
-    const [topRow, bottomRow] = colorRows;
-
-    if (bottomRow.includes(selectedColor)) {
-      setColorRows([bottomRow, topRow]);
+    if (selectedColor && bottomRow.includes(selectedColor)) {
+      return [bottomRow, topRow];
     }
-  }, [selectedColor, colorRows]);
+
+    return [topRow, bottomRow];
+  }, [colors, selectedColor]);
 
   const handleColorClick = (color: string): void => {
     setIsPopperOpen(false);
-
-    const [topRow, bottomRow] = colorRows;
-
-    if (bottomRow.includes(color)) {
-      setColorRows([bottomRow, topRow]);
-    }
-
     onClick(color);
   };
 
@@ -108,7 +96,7 @@ const ColorPalette: FC<Props> = ({
               {displayColors.map((color: string, index: number) => {
                 return (
                   <Stack
-                    key={index}
+                    key={color}
                     data-testid={`input-color-${index}`}
                     tabIndex={0}
                     onClick={() => handleColorClick(color)}
