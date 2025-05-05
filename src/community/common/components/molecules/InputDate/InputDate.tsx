@@ -317,6 +317,7 @@ const InputDate: FC<Props> = ({
             ? `${theme.palette.error.contrastText} 0.0625rem solid`
             : "none"
         }}
+        aria-label={label}
       >
         <Typography
           sx={{
