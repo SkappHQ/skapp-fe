@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import { JSX, useEffect, useState } from "react";
 
 import PlayButton from "~community/attendance/components/molecules/PlayButton/PlayButton";
@@ -12,11 +12,12 @@ import {
 
 import styles from "./styles";
 
-const Timer = (): JSX.Element => {
+const Timer = ({ disabled }: { disabled: boolean }): JSX.Element => {
   const { attendanceParams, isAttendanceModalOpen } = useAttendanceStore(
     (state) => state
   );
-  const classes = styles();
+  const theme = useTheme();
+  const classes = styles(theme);
   const status = attendanceParams.slotType;
   const [timer, setTimer] = useState(calculateWorkedDuration(attendanceParams));
 
@@ -64,7 +65,7 @@ const Timer = (): JSX.Element => {
         <Typography
           variant="h3"
           component="p"
-          sx={classes.textStyle}
+          sx={classes.textStyle(disabled)}
           minWidth={68}
         >
           {timer
