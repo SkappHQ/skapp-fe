@@ -145,6 +145,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       selectedItem={selectedYear}
       title={selectedYear}
       items={getAdjacentYearsWithCurrent()}
+      ariaRole="menu"
     />
   );
 
