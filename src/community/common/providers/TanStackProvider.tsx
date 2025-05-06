@@ -14,6 +14,7 @@ import ROUTES from "../constants/routes";
 
 const TanStackProvider = ({ children }: { children: ReactNode }) => {
   const { update, data: session } = useSession();
+  const [isRefreshTokenUpdated, setIsRefreshTokenUpdated] = useState(false);
 
   const [queryClient] = useState(() => {
     return new QueryClient({
@@ -50,16 +51,19 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
           error?.response?.data?.results?.[0]?.messageKey ===
             COMMON_ERROR_SYSTEM_VERSION_MISMATCH ||
           error?.response?.data?.results?.[0]?.messageKey ===
-            COMMON_ERROR_USER_VERSION_MISMATCH
+            COMMON_ERROR_USER_VERSION_MISMATCH ||
+          error?.response?.data?.results?.[0]?.messageKey ===
+            COMMON_ERROR_TOKEN_EXPIRED
         ) {
-          await handleTokenRefresh();
+          if (!isRefreshTokenUpdated) {
+            setIsRefreshTokenUpdated(true);
+            await handleTokenRefresh();
+          }
         }
 
         if (
           error?.response?.data?.results?.[0]?.messageKey ===
-            COMMON_ERROR_TOKEN_EXPIRED ||
-          error?.response?.data?.results?.[0]?.messageKey ===
-            COMMON_ERROR_INVALID_TOKEN
+          COMMON_ERROR_INVALID_TOKEN
         ) {
           await signOut();
         }

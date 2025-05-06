@@ -73,7 +73,7 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
         organizationTimeZone:
           organizationDetails.results[0].organizationTimeZone || "",
         companyDomain: tenantID as string,
-        organizationGlobalLogin: globalLogin
+        organizationGlobalLogin: globalLogin as string
       });
       setIsInitialLoadComplete(true);
     }
