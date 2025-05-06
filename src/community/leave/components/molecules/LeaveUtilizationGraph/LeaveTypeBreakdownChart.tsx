@@ -14,6 +14,7 @@ import {
   shouldMoveLeft,
   shouldMoveRight
 } from "~community/common/utils/keyboardUtils";
+import { useChartResize } from "~community/leave/hooks/useChartResize";
 import { LeaveTypeBreakDownReturnTypes } from "~community/leave/types/LeaveUtilizationTypes";
 import { useLeaveUtilizationChartOptions } from "~community/leave/utils/eChartOptions/leaveUtilizationChartOptions";
 
@@ -37,6 +38,8 @@ const LeaveTypeBreakdownChart = ({
   const classes = styles(theme);
 
   const translateTexts = useTranslator("leaveModule", "dashboard");
+
+  const { resizeChart } = useChartResize(chartRef);
 
   const [buttonColors, setButtonColors] = useState<string[]>([]);
   const [toggle, setToggle] = useState<Record<string, boolean> | undefined>(
@@ -136,7 +139,9 @@ const LeaveTypeBreakdownChart = ({
                     toggle &&
                     !Object.values(toggle).every((value: Object) => !value)
                       ? "block"
-                      : "none"
+                      : "none",
+                  width: "100%",
+                  height: "18.75rem"
                 }}
                 tabIndex={0}
                 onKeyDown={handleKeyPress}
@@ -151,7 +156,15 @@ const LeaveTypeBreakdownChart = ({
                   }
                 }}
               >
-                <ReactECharts option={chartData} ref={chartRef} />
+                <ReactECharts
+                  option={chartData}
+                  ref={chartRef}
+                  style={{ width: "100%" }}
+                  opts={{ renderer: "canvas" }}
+                  onEvents={{
+                    rendered: resizeChart
+                  }}
+                />
               </Box>
             )}
           </Stack>
