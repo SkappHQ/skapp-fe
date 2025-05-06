@@ -30,6 +30,7 @@ import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import SupervisorSelector from "~community/people/components/molecules/SupervisorSelector/SupervisorSelector";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useEmployeeDetailsFormHandler from "~community/people/hooks/useEmployeeDetailsFormHandler";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
@@ -43,7 +44,6 @@ import { employeeEmploymentDetailsValidation } from "~community/people/utils/peo
 
 import PeopleFormSectionWrapper from "../../PeopleFormSectionWrapper/PeopleFormSectionWrapper";
 import TeamModalController from "../../TeamModalController/TeamModalController";
-import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 
 interface Props {
   isReadOnly?: boolean;
@@ -102,7 +102,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       await refetch();
     };
 
-    const { apiPayload } = useFormChangeDetector()
+    const { apiPayload } = useFormChangeDetector();
 
     const initialValues = useMemo<L3EmploymentDetailsType>(
       () =>
@@ -114,10 +114,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     const context: EmployeeEmploymentContextType = {
       isUniqueEmail,
       isUniqueEmployeeNo,
-      isUpdate:
-        apiPayload?.employment?.employmentDetails?.email
-          ? false
-          : isUpdate
+      isUpdate: apiPayload?.employment?.employmentDetails?.email
+        ? false
+        : isUpdate
     };
 
     const formik = useFormik<L3EmploymentDetailsType>({
@@ -129,7 +128,7 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       onSubmit,
       validateOnChange: false,
       validateOnBlur: true,
-      enableReinitialize: true,
+      enableReinitialize: true
     });
 
     const {
