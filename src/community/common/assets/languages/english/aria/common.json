@@ -4,6 +4,7 @@
     "backButton": "Click me to go to previous page",
     "filterBtn": "Click me to open filter menu",
     "inputDate": {
+      "select": "Select",
       "tooltip": "tooltip"
     },
     "appBar": {

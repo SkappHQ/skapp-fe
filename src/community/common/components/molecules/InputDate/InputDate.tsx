@@ -317,7 +317,6 @@ const InputDate: FC<Props> = ({
             ? `${theme.palette.error.contrastText} 0.0625rem solid`
             : "none"
         }}
-        aria-label={label}
       >
         <Typography
           sx={{
@@ -350,6 +349,7 @@ const InputDate: FC<Props> = ({
             if (shouldCollapseDropdown(e.key))
               !(disabled || readOnly) && handleClose();
           }}
+          aria-label={`${translateAria(["select"])} ${label}`}
         >
           <Icon
             name={IconName.CALENDAR_ICON}

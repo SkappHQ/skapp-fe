@@ -73,7 +73,6 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                 <TextField
                   {...params}
                   helperText={null}
-                  aria-readonly={true}
                   style={{
                     backgroundColor: error
                       ? theme.palette.error.light
