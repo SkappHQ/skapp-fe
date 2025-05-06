@@ -110,6 +110,7 @@ export const leaveAnalyticsQueryKeys = {
 
 export const leaveTypeQueryKeys = {
   ALL: ["all-leave-types"],
+
   LEAVE_TYPES: function ({
     filterByInUse,
     isCarryForward
@@ -121,7 +122,7 @@ export const leaveTypeQueryKeys = {
   },
   leaveCycle: ["leaveCycle"],
 
-  CARRY_FORWARD_LEAVE_TYPES: function (
+  CARRY_FORWARD_LEAVE_ENTITLEMENT: function (
     leaveTypes: number[],
     page?: number,
     size?: number,
@@ -129,7 +130,7 @@ export const leaveTypeQueryKeys = {
   ) {
     return [
       ...(this?.ALL || []),
-      "carry-Forward-LeaveTypes",
+      "carry-forward-leave-entitlement",
       leaveTypes,
       page,
       size,

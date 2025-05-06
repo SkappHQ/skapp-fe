@@ -224,58 +224,29 @@ export const useGetLeaveTypes = (
   });
 };
 
-export const useGetCarryForwardLeaveTypes = (
-  leaveTypes: number[],
-  page?: number,
-  size?: number,
-  year?: number
+export const useGetUseCarryForwardLeaveEntitlements = (
+  leaveTypeIds: number[]
 ) => {
+  const {
+    carryForwardPagination: { page, size, year }
+  } = useLeaveStore((state) => ({
+    carryForwardPagination: state.carryForwardPagination
+  }));
+
   return useQuery({
-    queryKey: leaveTypeQueryKeys.CARRY_FORWARD_LEAVE_TYPES(
-      leaveTypes,
+    queryKey: leaveTypeQueryKeys.CARRY_FORWARD_LEAVE_ENTITLEMENT(
+      leaveTypeIds,
       page,
       size,
       year
     ),
     queryFn: async () => {
-      const url = leaveEndPoints.CARRY_FORWARD_LEAVE_TYPES;
-      const result = await authFetch.get(url, {
-        params: {
-          page,
-          size,
-          sortOrder: SortOrderTypes.ASC,
-          year,
-          leaveTypes: leaveTypes.join(",")
-        }
-      });
-      return result.data.results[0].items ?? [];
-    }
-  });
-};
-
-export const useGetUseCarryForwardLeaveEntitlements = (
-  selectedleaveTypes: number[]
-) => {
-  const carryForwardPaginationParams = useLeaveStore(
-    (state) => state.carryForwardPagination
-  );
-  const { page, year, size } = carryForwardPaginationParams;
-
-  return useQuery({
-    enabled: false,
-    queryKey: leaveTypeQueryKeys.CARRY_FORWARD_LEAVE_TYPES({
-      leaveTypes: selectedleaveTypes,
-      page,
-      size,
-      year
-    }),
-    queryFn: async () => {
-      const url = leaveEndPoints.CARRY_FORWARD_LEAVE_TYPES;
+      const url = leaveEndPoints.CARRY_FORWARD_LEAVE_ENTITLEMENTS;
       const leaveData = await authFetch.get(url, {
         params: {
           page: page,
           size: size,
-          leaveTypes: selectedleaveTypes.join(","),
+          leaveTypes: leaveTypeIds.join(","),
           year: new Date().getFullYear(),
           sortOrder: SortOrderTypes.ASC,
           sortKey: SortKeyTypes.NAME
@@ -292,10 +263,13 @@ export const useLeaveCarryForward = (
 ) => {
   return useMutation({
     mutationFn: async (leaveTypes: number[]) => {
-      const result = authFetch.post(leaveEndPoints.CARRY_FORWARD_LEAVE_TYPES, {
-        leaveTypes: leaveTypes,
-        cycleStartYear: new Date().getFullYear() + 1
-      });
+      const result = authFetch.post(
+        leaveEndPoints.CARRY_FORWARD_LEAVE_ENTITLEMENTS,
+        {
+          leaveTypes: leaveTypes,
+          cycleStartYear: new Date().getFullYear() + 1
+        }
+      );
       return result;
     },
     onSuccess,

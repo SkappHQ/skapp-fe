@@ -44,7 +44,10 @@ const ROUTES = {
     TYPES: "/leave/types",
     LEAVE_ENTITLEMENTS: "/leave/entitlements/leave-entitlements",
     LEAVE_PENDING: "/leave/pending-leave",
-    CARRY_FORWARD_BALANCES: "/leave/entitlements/carry-forward-balances",
+    CARRY_FORWARD_BALANCE: {
+      BASE: "/leave/carry-forward-balance",
+      ID: (id: string) => `/leave/carry-forward-balance/${id}`
+    },
     ADD_EDIT_TYPES: "/leave/types/add-edit",
     LEAVE_TYPES: "/leave/types",
     ADD_EDIT_LEAVE_TYPES: (slug: string) => `/leave/types/${slug}`,

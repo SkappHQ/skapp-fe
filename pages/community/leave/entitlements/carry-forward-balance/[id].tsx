@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -17,66 +17,50 @@ import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryFo
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
-const CarryForwardBalances: NextPage = () => {
+const CarryForwardBalance: NextPage = () => {
   const router = useRouter();
 
   const translateText = useTranslator("leaveModule", "leaveCarryForward");
 
   const {
     leaveCarryForwardSyncBtnStatus,
-    carryForwardLeaveTypes,
-    leaveCarryForwardId,
     setIsLeaveCarryForwardModalOpen,
     setLeaveCarryForwardModalType
   } = useLeaveStore((state) => ({
     leaveCarryForwardSyncBtnStatus: state.leaveCarryForwardSyncBtnStatus,
-    carryForwardLeaveTypes: state.carryForwardLeaveTypes,
-    leaveCarryForwardId: state.leaveCarryForwardId,
     setIsLeaveCarryForwardModalOpen: state.setIsLeaveCarryForwardModalOpen,
     setLeaveCarryForwardModalType: state.setLeaveCarryForwardModalType
   }));
 
-  const [checkedList] = useState<number[]>(leaveCarryForwardId);
-  const [rows, setRows] = useState<any[]>([]);
+  const checkedList = useMemo(() => {
+    const { id } = router.query;
+    return id ? (id as string).split(",").map(Number) : [];
+  }, [router.query]);
 
-  const { data: carryForwardEntitlement } =
+  const { data: carryForwardLeaveEntitlementData } =
     useGetUseCarryForwardLeaveEntitlements(checkedList);
 
-  const getLeaveTypeNames = (carryForwardLeaveTypes: any) => {
-    return carryForwardLeaveTypes?.map((leaveType: any) => leaveType.name);
-  };
-
-  useEffect(() => {
-    const row = carryForwardEntitlement?.items.map((item: any) => {
-      const employeeName = `${item?.employee?.firstName} ${item?.employee?.lastName}`;
-      const employeeData = {
-        id: item?.employee?.employeeId,
-        name: employeeName,
-        email: item?.employee?.email
-      };
-      const entitlements = getLeaveTypeNames(carryForwardLeaveTypes).map(
-        (header: string) => {
-          const entitlement = item.entitlements.find(
-            (ent: any) => ent.name.toUpperCase() === header.toUpperCase()
-          );
-          return entitlement && entitlement.carryForwardAmount !== 0
-            ? entitlement.carryForwardAmount
-            : "-";
-        }
-      );
-
-      return { name: employeeName, entitlements, employeeData };
-    });
-
-    setRows(row);
-  }, [carryForwardEntitlement, checkedList]);
-
-  const handleSync = () => {
-    setIsLeaveCarryForwardModalOpen(true);
-    setLeaveCarryForwardModalType(
-      LeaveCarryForwardModalTypes.CARRY_FORWARD_CONFIRM_SYNCHRONIZATION
+  const leaveHeaders = useMemo(() => {
+    return (
+      carryForwardLeaveEntitlementData?.items[0]?.entitlements.map(
+        (entitlement: any) => entitlement.name
+      ) ?? []
     );
-  };
+  }, [carryForwardLeaveEntitlementData]);
+
+  console.log(
+    "carryForwardLeaveEntitlementData: ",
+    carryForwardLeaveEntitlementData
+  );
+
+  const recordData = useMemo(() => {}, [carryForwardLeaveEntitlementData]);
+
+  // const handleSync = () => {
+  //   setIsLeaveCarryForwardModalOpen(true);
+  //   setLeaveCarryForwardModalType(
+  //     LeaveCarryForwardModalTypes.CARRY_FORWARD_CONFIRM_SYNCHRONIZATION
+  //   );
+  // };
 
   useGoogleAnalyticsEvent({
     onMountEventType:
@@ -94,9 +78,9 @@ const CarryForwardBalances: NextPage = () => {
         onBackClick={() => router.push(ROUTES.LEAVE.LEAVE_ENTITLEMENTS)}
       >
         <>
-          <CarryForwardTable
-            leaveHeaders={getLeaveTypeNames(carryForwardLeaveTypes)}
-            recordData={rows}
+          {/* <CarryForwardTable
+            leaveHeaders={leaveHeaders}
+            recordData={recordData}
             totalPage={carryForwardEntitlement?.totalPages}
           />
           <Box
@@ -125,11 +109,11 @@ const CarryForwardBalances: NextPage = () => {
               onClick={handleSync}
             />
           </Box>
-          <LeaveCarryForwardModalController />
+          <LeaveCarryForwardModalController /> */}
         </>
       </ContentLayout>
     </>
   );
 };
 
-export default CarryForwardBalances;
+export default CarryForwardBalance;

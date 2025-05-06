@@ -169,8 +169,8 @@ const nextConfig = {
         destination: "/community/timesheet/analytics/:id"
       },
       {
-        source: "/leave/carry-forward-balances",
-        destination: "/community/leave/entitlements/carry-forward-balances"
+        source: "/leave/carry-forward-balance/:id",
+        destination: "/community/leave/entitlements/carry-forward-balance/:id"
       },
       {
         source: "/leave/analytics/reports",

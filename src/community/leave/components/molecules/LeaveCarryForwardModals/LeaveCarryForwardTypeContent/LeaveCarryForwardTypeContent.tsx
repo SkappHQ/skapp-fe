@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useRouter } from "next/router";
-import { JSX, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { JSX, useState } from "react";
 
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
 import Button from "~community/common/components/atoms/Button/Button";
@@ -15,46 +15,23 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
-import {
-  useGetLeaveTypes,
-  useGetUseCarryForwardLeaveEntitlements
-} from "~community/leave/api/LeaveApi";
 import { useLeaveStore } from "~community/leave/store/store";
-import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
-import { LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
 import { getTruncatedLabel } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 
 interface Props {
-  handleClose?: () => void;
+  handleClose: () => void;
 }
 
 const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
-  const [checkedList, setCheckedList] = useState<number[]>([]);
-  const [leaveTypess, setLeaveTypess] = useState<LeaveTypeType[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
-  const {
-    leaveTypes,
-    setLeaveCarryForwardModalType,
-    setLeaveCarryForwardId,
-    setCarryForwardLeaveTypes
-  } = useLeaveStore((state) => state);
-
-  const { data: carryForwardLeaveTypes, isLoading } = useGetLeaveTypes(
-    false,
-    true
-  );
-
-  const translateTexts = useTranslator("leaveModule", "leaveCarryForward");
   const router = useRouter();
 
-  const {
-    data: carryForwardEntitlement,
-    isLoading: carryForwardLeaveEntitlementLoading,
-    isRefetching,
-    refetch
-  } = useGetUseCarryForwardLeaveEntitlements(checkedList);
+  const translateTexts = useTranslator("leaveModule", "leaveCarryForward");
+
+  const { leaveTypes } = useLeaveStore((state) => ({
+    leaveTypes: state.leaveTypes
+  }));
+
+  const [checkedList, setCheckedList] = useState<number[]>([]);
 
   const handleCheck = (id: number) => {
     setCheckedList((prevCheckedList) =>
@@ -65,17 +42,16 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
   };
 
   const handleCheckAll = () => {
-    const allSelected = checkedList.length === leaveTypess.length;
-    setCheckedList(allSelected ? [] : leaveTypess.map((leave) => leave.typeId));
+    const allSelected = checkedList.length === leaveTypes.length;
+    setCheckedList(allSelected ? [] : leaveTypes.map((leave) => leave.typeId));
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setIsSubmitted(true);
-    await refetch();
+  const onSubmit = async () => {
+    handleClose?.();
+    router.push(ROUTES.LEAVE.CARRY_FORWARD_BALANCE.ID(checkedList.join(",")));
   };
 
-  const formik = useFormik({
+  const { handleSubmit } = useFormik({
     initialValues: {
       leaveTypes: leaveTypes?.reduce(
         (acc, leaveType) => {
@@ -85,55 +61,8 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
         {} as { [key: number]: boolean }
       )
     },
-    onSubmit: handleSubmit
+    onSubmit: onSubmit
   });
-
-  useEffect(() => {
-    if (carryForwardLeaveTypes && !isLoading) {
-      setLeaveTypess(carryForwardLeaveTypes);
-    }
-  }, [carryForwardLeaveTypes, isLoading]);
-
-  useEffect(() => {
-    const handleCarryForwardEntitlments = async () => {
-      if (checkedList.length > 0 && carryForwardEntitlement?.items) {
-        setLoading(false);
-        if (carryForwardEntitlement.items.length > 0) {
-          setLeaveCarryForwardId(checkedList);
-          const carryForwardTypesByCheckList = leaveTypess.filter((leaveType) =>
-            checkedList.includes(leaveType.typeId)
-          );
-
-          setCarryForwardLeaveTypes(carryForwardTypesByCheckList);
-
-          await router.push(ROUTES.LEAVE.CARRY_FORWARD);
-          handleClose && handleClose();
-        } else if (carryForwardEntitlement.items.length === 0) {
-          setLeaveCarryForwardModalType(
-            LeaveCarryForwardModalTypes.CARRY_FORWARD_INELIGIBLE
-          );
-        }
-      }
-    };
-
-    if (
-      isSubmitted &&
-      !carryForwardLeaveEntitlementLoading &&
-      !isRefetching &&
-      carryForwardEntitlement?.items
-    ) {
-      void handleCarryForwardEntitlments();
-      setIsSubmitted(false);
-    }
-  }, [
-    carryForwardEntitlement,
-    isRefetching,
-    carryForwardLeaveEntitlementLoading,
-    checkedList,
-    leaveTypess,
-    loading,
-    isSubmitted
-  ]);
 
   return (
     <Stack
@@ -164,7 +93,7 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
           marginTop: "0.5rem"
         }}
       >
-        {leaveTypess?.length >= 2 && (
+        {leaveTypes?.length >= 2 && (
           <Box
             sx={{
               display: "flex",
@@ -177,12 +106,12 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
             <Checkbox
               label={translateTexts(["selectAllText"])}
               name={translateTexts(["selectAllText"])}
-              checked={checkedList?.length === leaveTypess?.length}
+              checked={checkedList?.length === leaveTypes?.length}
               onChange={handleCheckAll}
             />
           </Box>
         )}
-        {leaveTypess?.map((leaveType) => (
+        {leaveTypes?.map((leaveType) => (
           <Box
             key={leaveType.typeId}
             sx={{
@@ -210,8 +139,7 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
           label={translateTexts(["leaveCarryForwardModalConfirmBtn"])}
           endIcon={<Icon name={IconName.RIGHT_ARROW_ICON} />}
           type={ButtonTypes.SUBMIT}
-          onClick={() => formik.handleSubmit()}
-          isLoading={loading}
+          onClick={() => handleSubmit()}
           disabled={checkedList.length === 0}
         />
         <Button
@@ -219,15 +147,8 @@ const LeaveCarryForwardTypeContent = ({ handleClose }: Props): JSX.Element => {
           endIcon={<CloseIcon />}
           buttonStyle={ButtonStyle.TERTIARY}
           styles={{ mt: "1rem" }}
-          disabled={loading}
           type={ButtonTypes.BUTTON}
-          onClick={() => {
-            setCheckedList([]);
-            setCarryForwardLeaveTypes([]);
-            setLeaveCarryForwardId([]);
-            setLeaveCarryForwardModalType(LeaveCarryForwardModalTypes.NONE);
-            handleClose && handleClose();
-          }}
+          onClick={handleClose}
         />
       </Box>
     </Stack>

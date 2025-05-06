@@ -39,6 +39,7 @@ const CarryForwardTable: React.FC<Props> = ({
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
   }));
+
   const { leaveTypes, setCarryForwardPagination, carryForwardPagination } =
     useLeaveStore((state) => state);
 

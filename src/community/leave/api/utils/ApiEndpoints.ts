@@ -3,7 +3,7 @@ import { moduleAPIPath } from "~community/common/constants/configs";
 export const leaveEndPoints = {
   GET_CUSTOM_LEAVES: `${moduleAPIPath.LEAVE}/entitlement/custom`,
   GET_LEAVE_TYPES: `${moduleAPIPath.LEAVE}/types`,
-  CARRY_FORWARD_LEAVE_TYPES: `${moduleAPIPath.LEAVE}/entitlement/carry-forward`,
+  CARRY_FORWARD_LEAVE_ENTITLEMENTS: `${moduleAPIPath.LEAVE}/entitlement/carry-forward`,
   UPDATE_CARRY_FORWARD_LEAVE_TYPE: (
     leaveTypes: number[],
     cycleStartYear: number
