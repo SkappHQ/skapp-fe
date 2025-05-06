@@ -7,7 +7,6 @@ import Modal from "~community/common/components/organisms/Modal/Modal";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
-
 interface Props {
   isOpen: boolean;
   onDiscard: () => void;

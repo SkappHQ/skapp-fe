@@ -2,10 +2,10 @@ import { useEffect } from "react";
 
 import { useGetEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useNavigationGuard from "~community/people/hooks/useNavigationGuard";
 import { usePeopleStore } from "~community/people/store/store";
 
 import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppers";
-import RouteChangeAreYouSureModal from "../../molecules/RouteChangeAreYouSureModal/RouteChangeAreYouSureModal";
 import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import UserDetailsCentered from "../../molecules/UserDetailsCentered/UserDetailsCentered";
 import PeopleAccountSection from "../PeopleAccountSection/PeopleAccountSection";
@@ -35,6 +35,12 @@ const AccountSectionWrapper = ({ employeeId }: Props) => {
   }, [employeeData, setEmployee]);
 
   const { hasChanged } = useFormChangeDetector();
+
+  const { proceedWithRouteChange } = useNavigationGuard({
+    hasChanged,
+    isUnsavedChangesModalOpen,
+    setIsUnsavedChangesModalOpen
+  });
 
   useEffect(() => {
     if (hasChanged && currentStep !== nextStep) {
@@ -68,14 +74,15 @@ const AccountSectionWrapper = ({ employeeId }: Props) => {
       <PeopleAccountSection />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
-        onDiscard={() => {
+        onDiscard={async () => {
           setIsUnsavedModalDiscardButtonClicked(true);
+          await proceedWithRouteChange();
         }}
-        onSave={() => {
+        onSave={async () => {
           setIsUnsavedModalSaveButtonClicked(true);
+          await proceedWithRouteChange();
         }}
       />
-      <RouteChangeAreYouSureModal />
     </>
   );
 };
