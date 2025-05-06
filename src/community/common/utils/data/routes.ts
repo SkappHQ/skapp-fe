@@ -272,17 +272,6 @@ const routes = [
         ]
       },
       {
-        id: "5C",
-        name: "Folders",
-        url: ROUTES.SIGN.FOLDERS,
-        hasSubTree: false,
-        requiredAuthLevel: [
-          AdminTypes.SUPER_ADMIN,
-          SenderTypes.ESIGN_SENDER,
-          AdminTypes.ESIGN_ADMIN
-        ]
-      },
-      {
         id: "5D",
         name: "Contacts",
         url: ROUTES.SIGN.CONTACTS,
