@@ -22,13 +22,11 @@ import {
 } from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import { FilledArrow } from "~community/common/components/atoms/FilledArrow/FilledArrow";
-import Icon from "~community/common/components/atoms/Icon/Icon";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
 import { getMonthName } from "~community/common/utils/dateTimeUtils";
-import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
+import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
 interface Props {
@@ -245,54 +243,31 @@ const WorkHourGraph = ({
                 ref={chartRef}
               />
             </Box>
-            {data.preProcessedData.length !== 0 && (
-              <Box
-                tabIndex={0}
-                role="button"
-                onClick={() => handleClick(GRAPH_LEFT)}
-                aria-label={translateTextAria([
-                  "averageHoursWorkedPreviousDates"
-                ])}
-                sx={{
-                  position: "absolute",
-                  bottom: "0.5rem",
-                  left: "5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_LEFT)
-                }}
-                onKeyDown={(event) => {
-                  if (shouldActivateButton(event.key)) {
-                    event.preventDefault();
-                    handleClick(GRAPH_LEFT);
-                  }
-                }}
-              >
-                <Icon name={IconName.CHEVRON_LEFT_ICON} />
-              </Box>
-            )}
-            {data.preProcessedData.length !== 0 && (
-              <Box
-                tabIndex={0}
-                role="button"
-                aria-label={translateTextAria(["averageHoursWorkedNextDates"])}
-                onClick={() => handleClick(GRAPH_RIGHT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "0.5rem",
-                  right: "0.5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_RIGHT)
-                }}
-                onKeyDown={(event) => {
-                  if (shouldActivateButton(event.key)) {
-                    event.preventDefault();
-                    handleClick(GRAPH_RIGHT);
-                  }
-                }}
-              >
-                <Icon name={IconName.CHEVRON_RIGHT_ICON} />
-              </Box>
-            )}
+            <ChartNavigationArrows
+              hasData={data.preProcessedData.length !== 0}
+              handleClick={handleClick}
+              handleChevronVisibility={handleChevronVisibility}
+              leftAriaLabel={translateTextAria([
+                "averageHoursWorkedPreviousDates"
+              ])}
+              leftStyles={{
+                position: "absolute",
+                bottom: "0.5rem",
+                left: "5%",
+                cursor: "pointer",
+                visibility: handleChevronVisibility(GRAPH_LEFT)
+              }}
+              rightAriaLabel={translateTextAria([
+                "averageHoursWorkedNextDates"
+              ])}
+              rightStyles={{
+                position: "absolute",
+                bottom: "0.5rem",
+                right: "0.5%",
+                cursor: "pointer",
+                visibility: handleChevronVisibility(GRAPH_RIGHT)
+              }}
+            />
           </>
         )}
       </Box>

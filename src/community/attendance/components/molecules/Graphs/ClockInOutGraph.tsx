@@ -21,7 +21,6 @@ import {
   handleGraphKeyboardNavigation,
   showTooltipAtIndex
 } from "~community/attendance/utils/graphKeyboardNavigationUtils";
-import Icon from "~community/common/components/atoms/Icon/Icon";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
 import {
@@ -30,11 +29,10 @@ import {
 } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
 import { addHours } from "~community/common/utils/dateTimeUtils";
-import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
+import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
 interface Props {
@@ -91,7 +89,7 @@ const ClockInOutGraph = ({
   });
 
   const [clockInOutHighlightedIndex, setClockInOutHighlightedIndex] =
-    useState<number>(0);
+    useState<number>(xIndexDay.startIndex);
 
   // set start and end index around the standard clock in and clock out time
   useEffect(() => {
@@ -107,6 +105,7 @@ const ClockInOutGraph = ({
       startIndex,
       endIndex
     });
+    setClockInOutHighlightedIndex(startIndex);
   }, [
     chartData?.labels,
     dataCategory,
@@ -248,52 +247,13 @@ const ClockInOutGraph = ({
                 </Box>
               )}
             </Box>
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                tabIndex={0}
-                role="button"
-                aria-label={translateTextAria(["previousTimeSlots"])}
-                onClick={() => handleClick(GRAPH_LEFT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  left: "6%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_LEFT)
-                }}
-                onKeyDown={(event) => {
-                  if (shouldActivateButton(event.key)) {
-                    event.preventDefault();
-                    handleClick(GRAPH_LEFT);
-                  }
-                }}
-              >
-                <Icon name={IconName.CHEVRON_LEFT_ICON} />
-              </Box>
-            )}
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                tabIndex={0}
-                role="button"
-                aria-label={translateTextAria(["nextTimeSlots"])}
-                onClick={() => handleClick(GRAPH_RIGHT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  right: "2.5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_RIGHT)
-                }}
-                onKeyDown={(event) => {
-                  if (shouldActivateButton(event.key)) {
-                    event.preventDefault();
-                    handleClick(GRAPH_RIGHT);
-                  }
-                }}
-              >
-                <Icon name={IconName.CHEVRON_RIGHT_ICON} />
-              </Box>
-            )}
+            <ChartNavigationArrows
+              hasData={chartData?.preProcessedData?.length !== 0}
+              handleClick={handleClick}
+              handleChevronVisibility={handleChevronVisibility}
+              leftAriaLabel={translateTextAria(["previousTimeSlots"])}
+              rightAriaLabel={translateTextAria(["nextTimeSlots"])}
+            />
           </>
         )}
       </Box>
