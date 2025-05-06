@@ -3,6 +3,7 @@ import { useEffect } from "react";
 
 import { useGetEmployee } from "~community/people/api/PeopleApi";
 import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
+import useNavigationGuard from "~community/people/hooks/useNavigationGuard";
 import { usePeopleStore } from "~community/people/store/store";
 
 import CancelChangesModal from "../../molecules/CancelChangesModal/CancelChangesModal";
@@ -10,7 +11,6 @@ import DirectorySteppers from "../../molecules/DirectorySteppers/DirectorySteppe
 import EditAllInfoSkeleton from "../../molecules/EditAllInfoSkeleton/EditAllInfoSkeleton";
 import EditInfoCard from "../../molecules/EditInfoCard/EditInfoCard";
 import EditInfoCardSkeleton from "../../molecules/EditInfoCard/EditInfoCardSkeleton";
-import RouteChangeAreYouSureModal from "../../molecules/RouteChangeAreYouSureModal/RouteChangeAreYouSureModal";
 import TerminationModalController from "../../molecules/TerminationModalController/TerminationModalController";
 import UnsavedChangesModal from "../../molecules/UnsavedChangesModal/UnsavedChangesModal";
 import UserDeletionModalController from "../../molecules/UserDeletionModalController/UserDeletionModalController";
@@ -45,6 +45,12 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
 
   const { hasChanged } = useFormChangeDetector();
 
+  const { proceedWithRouteChange } = useNavigationGuard({
+    hasChanged,
+    isUnsavedChangesModalOpen,
+    setIsUnsavedChangesModalOpen
+  });
+
   useEffect(() => {
     if (hasChanged && currentStep !== nextStep) {
       setIsUnsavedChangesModalOpen(true);
@@ -76,11 +82,13 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
       <UserDeletionModalController />
       <UnsavedChangesModal
         isOpen={isUnsavedChangesModalOpen}
-        onDiscard={() => {
+        onDiscard={async () => {
           setIsUnsavedModalDiscardButtonClicked(true);
+          await proceedWithRouteChange();
         }}
-        onSave={() => {
+        onSave={async () => {
           setIsUnsavedModalSaveButtonClicked(true);
+          await proceedWithRouteChange();
         }}
       />
       <CancelChangesModal
@@ -92,7 +100,6 @@ const DirectoryEditSectionWrapper = ({ employeeId }: Props) => {
           setIsCancelModalConfirmButtonClicked(true);
         }}
       />
-      <RouteChangeAreYouSureModal />
     </>
   );
 };
