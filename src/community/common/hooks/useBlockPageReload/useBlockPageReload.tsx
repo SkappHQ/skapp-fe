@@ -1,35 +1,50 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const useBlockPageReload = () => {
   const router = useRouter();
+  const [previousPath, setPreviousPath] = useState<string | null>(null);
 
   useEffect(() => {
-    // This function handles browser events when user tries to close/refresh the page
+    if (!previousPath && typeof window !== "undefined") {
+      setPreviousPath(document.referrer || "/");
+    }
+
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault(); // Prevents the default browser behavior
+      e.preventDefault();
+      e.returnValue = ""; // Required for Chrome
+      return ""; // For other browsers
     };
 
-    // This function handles when user navigates to another page within the app
     const handleRouteChange = () => {
-      // Removes the warning when navigating within the app
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
 
-    // Attaches the warning handler to the window's beforeunload event
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    const handleUnload = () => {
+      if (previousPath) {
+        sessionStorage.setItem("redirectAfterReload", "true");
+      }
+    };
 
-    // Listens for route changes within the Next.js app
+    // Only go back if we navigated here after a page reload
+    if (typeof window !== "undefined") {
+      const shouldRedirect = sessionStorage.getItem("redirectAfterReload");
+      if (shouldRedirect) {
+        sessionStorage.removeItem("redirectAfterReload");
+        router.back();
+      }
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
     router.events.on("routeChangeStart", handleRouteChange);
 
-    // Cleanup function that runs when component unmounts
     return () => {
-      // Removes the beforeunload event listener
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      // Removes the Next.js route change listener
+      window.removeEventListener("unload", handleUnload);
       router.events.off("routeChangeStart", handleRouteChange);
     };
-  }, [router.events]);
+  }, [router, previousPath]);
 };
 
 export default useBlockPageReload;
