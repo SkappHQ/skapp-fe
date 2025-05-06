@@ -323,6 +323,14 @@ export const useQuickAddEmployeeMutation = (onSuccess?: () => void) => {
         onSuccess();
       }
     },
+    onError: () => {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["quickAddErrorTitle"]),
+        description: translateText(["quickAddErrorDescription"])
+      });
+    },
     onSettled: async () => {
       await queryClient.invalidateQueries();
     }

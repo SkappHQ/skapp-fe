@@ -409,6 +409,19 @@ const AddNewResourceModal = () => {
   const handleRoleChange =
     env === "enterprise" ? handleRoleChangeEnterprise : handleRoleChangeDefault;
 
+  const handleRefetch = () => {
+    if (!navigator.onLine) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["quickAddErrorTitle"]),
+        description: translateText(["quickAddErrorDescription"])
+      });
+      return;
+    }
+    refetch();
+  };
+
   return (
     <Stack>
       <Stack
@@ -648,7 +661,7 @@ const AddNewResourceModal = () => {
         styles={{
           marginTop: 2
         }}
-        onClick={() => refetch()}
+        onClick={handleRefetch}
         disabled={
           values.email === "" ||
           values.firstName === "" ||
