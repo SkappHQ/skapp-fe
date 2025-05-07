@@ -42,12 +42,6 @@ const requestInterceptorConfigError = async (error: any) => {
   return await Promise.reject(error);
 };
 
-//  request interceptor
-authFetch.interceptors.request.use(
-  requestInterceptorConfig,
-  requestInterceptorConfigError
-);
-
 authFetchV2.interceptors.request.use(
   requestInterceptorConfig,
   requestInterceptorConfigError
