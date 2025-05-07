@@ -59,7 +59,7 @@ const AvatarGroupAvatar: FC<Props> = ({
     if (!image) return;
 
     if (image || !s3FileUrls[image]) {
-      downloadS3File({ filePath: image });
+      downloadS3File({ filePath: image, isProfilePic: true });
     }
   }, [image]);
 
