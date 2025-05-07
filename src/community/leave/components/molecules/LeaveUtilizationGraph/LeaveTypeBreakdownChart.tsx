@@ -11,6 +11,7 @@ import {
   updateToggleState
 } from "~community/common/utils/commonUtil";
 import {
+  getTabIndex,
   shouldCloseDialog,
   shouldMoveLeft,
   shouldMoveRight
@@ -141,7 +142,7 @@ const LeaveTypeBreakdownChart = ({
                       ? "block"
                       : "none"
                 }}
-                tabIndex={isFreeTier ? -1 : 0}
+                tabIndex={getTabIndex(isFreeTier, -1)}
                 onKeyDown={handleKeyPress}
                 onFocus={() => {
                   const chartInstance = chartRef.current?.getEchartsInstance();

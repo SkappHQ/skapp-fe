@@ -23,6 +23,7 @@ import {
   formatDateWithOrdinalIndicator,
   getDateForPeriod
 } from "~community/common/utils/dateTimeUtils";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import { useGetEmployeeLeaveHistory } from "~community/leave/api/LeaveAnalyticsApi";
 import LeaveRequestMenu from "~community/leave/components/molecules/LeaveRequestMenu/LeaveRequestMenu";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -417,7 +418,7 @@ const UserLeaveHistory: FC<Props> = ({
           />
           <IconButton
             icon={<FilterIcon />}
-            tabIndex={isFreeTier ? -1 : 0}
+            tabIndex={getTabIndex(isFreeTier, -1)}
             onClick={handleFilterClick}
             buttonStyles={{
               border: "0.0625rem solid",
@@ -540,10 +541,10 @@ const UserLeaveHistory: FC<Props> = ({
         }}
         isLoading={isLoading}
         tabIndex={{
-          wrapper: isFreeTier ? -1 : 0,
-          container: isFreeTier ? -1 : 0,
+          wrapper: getTabIndex(isFreeTier, -1),
+          container: getTabIndex(isFreeTier, -1),
           tableBody: {
-            row: isFreeTier ? -1 : 0
+            row: getTabIndex(isFreeTier, -1)
           }
         }}
       />
