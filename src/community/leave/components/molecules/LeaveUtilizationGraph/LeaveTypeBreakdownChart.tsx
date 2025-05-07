@@ -140,8 +140,7 @@ const LeaveTypeBreakdownChart = ({
                     !Object.values(toggle).every((value: Object) => !value)
                       ? "block"
                       : "none",
-                  width: "100%",
-                  height: "18.75rem"
+                  ...classes.chartContainer
                 }}
                 tabIndex={0}
                 onKeyDown={handleKeyPress}
