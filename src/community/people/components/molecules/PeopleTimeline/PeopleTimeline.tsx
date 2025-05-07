@@ -176,7 +176,9 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
                                 </Stack>
                                 <Stack sx={classes.eventDataStack}>
                                   {isExtraLargeScreen && (
-                                    <Stack>
+                                    <Stack
+                                      sx={classes.eventTitleTypographyWrapper}
+                                    >
                                       <Typography
                                         sx={classes.eventTitleTypography}
                                       >

@@ -190,7 +190,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
               label={leaveAllocation.leaveType?.name}
               isTruncated={false}
             />
-          )
+          ),
+          actionData: leaveAllocation
         };
       }) || []
     );
@@ -321,12 +322,15 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
                 !!selectedLeaveTypes.length
                   ? translateText(["emptySearchResult", "description"])
                   : translateText(["emptyCustomLeaveScreen", "description"]),
-              button: showEmptyTableButton
-                ? {
-                    label: translateText(["CustomLeaveAllocationsSectionBtn"]),
-                    onClick: handleAddLeaveAllocation
-                  }
-                : undefined
+              button:
+                showEmptyTableButton && searchTerm === ""
+                  ? {
+                      label: translateText([
+                        "CustomLeaveAllocationsSectionBtn"
+                      ]),
+                      onClick: handleAddLeaveAllocation
+                    }
+                  : undefined
             }
           },
           loadingState: {
@@ -338,8 +342,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
             isEnabled: true,
             actionBtns: {
               left: {
-                onClick: (leaveAllocation) =>
-                  handleEdit({
+                onClick: (leaveAllocation) => {
+                  return handleEdit({
                     ...leaveAllocation,
                     employee: {
                       ...leaveAllocation.employee,
@@ -347,7 +351,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
                     },
                     validTo: leaveAllocation.validTo || "",
                     validFrom: leaveAllocation.validFrom || ""
-                  })
+                  });
+                }
               }
             }
           }

@@ -280,11 +280,11 @@ export const theme = createTheme({
     },
     primary: {
       main: "#93C5FD", //* primary-color
-      dark: "#2A61A0" //* primary-color-text
+      dark: "#408CE4" //* primary-color-text
     },
     secondary: {
       main: "#DBEAFE", //* primary-color-background
-      dark: "#408CE4" //* primary-color-accent
+      dark: "#2A61A0" //* primary-color-accent
     },
     grey: {
       50: "#FAFAFA",
