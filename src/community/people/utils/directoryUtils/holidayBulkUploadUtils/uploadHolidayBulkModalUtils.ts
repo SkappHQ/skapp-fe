@@ -1,7 +1,10 @@
 import { parse } from "papaparse";
 import { Dispatch, SetStateAction } from "react";
 
-import { matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod } from "~community/common/regex/regexPatterns";
+import {
+  matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod,
+  matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod
+} from "~community/common/regex/regexPatterns";
 import { type FileUploadType } from "~community/common/types/CommonTypes";
 import { toCamelCase } from "~community/common/utils/commonUtil";
 import { HolidayType } from "~community/people/types/HolidayTypes";
@@ -53,13 +56,30 @@ export const normalizeHolidayDates = (
 };
 
 const formatToStrictYMD = (inputDate: string): string => {
-  const match = inputDate.match(
+  const startsWithYearMatch = inputDate.match(
     matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod()
   );
 
-  if (!match) return inputDate;
+  const endsWithYearMatch = inputDate.match(
+    matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod()
+  );
 
-  const [_, year, month, day] = match;
+  if (startsWithYearMatch === null && endsWithYearMatch === null) {
+    return inputDate;
+  }
+
+  let year: string;
+  let month: string;
+  let day: string;
+
+  if (startsWithYearMatch) {
+    [, year, month, day] = startsWithYearMatch;
+  } else {
+    [, month, day, year] = endsWithYearMatch!;
+  }
+
+  month = month.padStart(2, "0");
+  day = day.padStart(2, "0");
 
   const reconstructedDate = new Date(`${year}-${month}-${day}`);
 
