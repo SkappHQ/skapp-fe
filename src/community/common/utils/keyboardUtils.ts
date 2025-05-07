@@ -129,3 +129,24 @@ export const shouldScrollHorizontally = (key: string) =>
 
 export const shouldScrollByPage = (key: string, shiftKey: boolean) =>
   key === KeyboardKeys.SPACE && shiftKey;
+
+export const getPopperAccessibilityProps = ({
+  ariaLabel,
+  ariaRole = "dialog",
+  ariaLabelledBy
+}: {
+  ariaLabel?: string;
+  ariaRole?: string;
+  ariaLabelledBy?: string;
+}) => {
+  // Determine if aria-modal should be true
+  const isModal = ariaRole === "dialog" || ariaRole === "alertdialog";
+
+  return {
+    "aria-label": ariaLabel ?? undefined,
+    "aria-modal": isModal ? true : undefined,
+    "aria-labelledby": ariaLabelledBy,
+    role: ariaRole,
+    tabIndex: 0
+  };
+};
