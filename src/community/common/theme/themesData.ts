@@ -3,22 +3,22 @@ import { type PaletteOptions } from "@mui/material";
 export const YELLOW_THEME: Partial<PaletteOptions> = {
   primary: {
     main: "#FBBF24", // primary-color
-    dark: "#B45309" // primary-color-text
+    dark: "#D97706" // primary-color-text
   },
   secondary: {
     main: "#FEF3C7", // primary-color-background
-    dark: "#D97706" // primary-color-accent
+    dark: "#B45309" // primary-color-accent
   }
 };
 
 export const BLUE_THEME: Partial<PaletteOptions> = {
   primary: {
     main: "#93C5FD",
-    dark: "#2A61A0"
+    dark: "#408CE4"
   },
   secondary: {
     main: "#DBEAFE",
-    dark: "#408CE4"
+    dark: "#2A61A0"
   }
 };
 
@@ -28,37 +28,37 @@ export const GREEN_THEME: Partial<PaletteOptions> = {
     dark: "#65A30D"
   },
   secondary: {
-    main: "#ECFCCB",
-    dark: "#65A30D"
+    main: "#ECFFC5",
+    dark: "#4D7C0F"
   }
 };
 
 export const ORANGE_THEME: Partial<PaletteOptions> = {
   primary: {
     main: "#FDBA74",
-    dark: "#FD6F0C"
+    dark: "#FF8937"
   },
   secondary: {
     main: "#FFEDD5",
-    dark: "#FF8937"
+    dark: "#C2410C"
   }
 };
 
 export const PURPLE_THEME: Partial<PaletteOptions> = {
   primary: {
     main: "#D8B4FE",
-    dark: "#9333EA"
+    dark: "#A855F7"
   },
   secondary: {
     main: "#F3E8FF",
-    dark: "#A855F7"
+    dark: "#9333EA"
   }
 };
 
 export const ROSE_THEME: Partial<PaletteOptions> = {
   primary: {
     main: "#FDA4AF",
-    dark: "#F43F5E"
+    dark: "#CA2441"
   },
   secondary: {
     main: "#FFE4E6",

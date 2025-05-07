@@ -4,6 +4,7 @@ import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
@@ -31,6 +32,12 @@ const ColorPalette: FC<Props> = ({
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
+
+  const translateAria = useTranslator(
+    "commonAria",
+    "components",
+    "colorPalette"
+  );
 
   const anchorEl = useRef<HTMLDivElement | null>(null);
 
@@ -138,6 +145,7 @@ const ColorPalette: FC<Props> = ({
               icon={<Icon name={IconName.DROPDOWN_ARROW_ICON} />}
               buttonStyles={classes.dropDownButton}
               onClick={() => setIsPopperOpen(!isPopperOpen)}
+              aria-label={translateAria(["icon"])}
             />
           </>
         </Stack>
