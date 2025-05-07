@@ -425,6 +425,30 @@ export function formatEnumString(input: string): string {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+export const downloadAttachmentToUserDevice = (attachment: FileUploadType) => {
+  if (!attachment.file) {
+    return;
+  }
+
+  const link = document.createElement("a");
+  link.download = attachment.name;
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    link.href = reader.result as string;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  reader.onerror = () => {
+    console.error("There was an error reading the file!");
+  };
+
+  reader.readAsDataURL(attachment.file);
+};
+
 export const checkRestrictedRoutesAndRedirect = (
   request: NextRequestWithAuth,
   restrictedRoutes: string[],
