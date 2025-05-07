@@ -338,6 +338,9 @@ const InputDate: FC<Props> = ({
         <Box
           role="button"
           tabIndex={0}
+          aria-label={translateAria(["calendarIcon"], {
+            name: label.toLowerCase()
+          })}
           onClick={(e: MouseEvent<HTMLElement>) =>
             !(disabled || readOnly) && handleClick(e)
           }
