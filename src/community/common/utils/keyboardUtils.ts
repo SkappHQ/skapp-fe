@@ -139,7 +139,6 @@ export const getPopperAccessibilityProps = ({
   ariaRole?: string;
   ariaLabelledBy?: string;
 }) => {
-  // Determine if aria-modal should be true
   const isModal = ariaRole === "dialog" || ariaRole === "alertdialog";
 
   return {
