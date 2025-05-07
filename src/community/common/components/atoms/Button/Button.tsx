@@ -17,6 +17,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 
 import StyledButton from "./StyledButton";
 
@@ -145,7 +146,7 @@ const Button = ({
       width={isFullWidth ? "100%" : "max-content"}
       shouldblink={shouldBlink}
       isDisabled={disabled}
-      tabIndex={disabled ? -1 : 0}
+      tabIndex={getTabIndex(disabled, -1)}
       startIcon={
         startIcon && typeof startIcon === "object" && "type" in startIcon ? (
           startIcon

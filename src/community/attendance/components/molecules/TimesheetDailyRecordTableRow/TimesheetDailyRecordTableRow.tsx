@@ -33,6 +33,7 @@ import { LeaveStates } from "~community/common/types/CommonTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import {
+  getTabIndex,
   shouldActivateButton,
   shouldMoveDownward,
   shouldMoveUpward
@@ -202,7 +203,7 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       alignItems="center"
       sx={classes.stackContainerStyle}
       onClick={() => mutate()}
-      tabIndex={isFreeTier ? -1 : 0}
+      tabIndex={getTabIndex(isFreeTier, -1)}
       onKeyDown={(e) => {
         if (shouldActivateButton(e.key)) {
           mutate();

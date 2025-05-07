@@ -4,6 +4,7 @@ import { JSX } from "react";
 
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import useSessionData from "~community/common/hooks/useSessionData";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import {
   PieChartPosition,
   PieChartSeriesData
@@ -91,7 +92,7 @@ const AnalyticCard = ({
                 },
                 background: "none"
               }}
-              tabIndex={isFreeTier ? -1 : 0}
+              tabIndex={getTabIndex(isFreeTier, -1)}
             />
             <Typography variant="body2" marginTop={0.5} sx={{ ...titleStyles }}>
               {cardTitle}

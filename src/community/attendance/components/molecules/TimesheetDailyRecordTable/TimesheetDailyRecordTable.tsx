@@ -17,6 +17,7 @@ import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
 import TimesheetDailyRecordSkeleton from "../AttendanceSkeletons/TimesheetDailyRecordSkeleton";
@@ -111,7 +112,7 @@ const TimesheetDailyRecordTable = ({
           <Stack
             ref={stackRef}
             sx={classes.stackContainer}
-            tabIndex={isFreeTier ? -1 : 0}
+            tabIndex={getTabIndex(isFreeTier, -1)}
           >
             {!isDrawerToggled ? (
               <TimesheetDailyRecordTableHeader headerLabels={tableHeaders} />

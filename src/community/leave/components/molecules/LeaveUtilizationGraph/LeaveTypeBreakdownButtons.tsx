@@ -14,6 +14,7 @@ import {
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import { SelectedFiltersTypes } from "~community/leave/types/LeaveUtilizationTypes";
 
 const buttonStyles = {
@@ -118,7 +119,7 @@ const LeaveTypeBreakdownButtons = ({
             {Object.keys(toggle).length > maxLeaveTypeToShow && (
               <>
                 <IconButton
-                  tabIndex={isFreeTier ? -1 : 0}
+                  tabIndex={getTabIndex(isFreeTier, -1)}
                   text={`+ ${count - maxLeaveTypeToShow} ${translateText(["selected"])}`}
                   icon={<DropDownArrow />}
                   buttonStyles={{
