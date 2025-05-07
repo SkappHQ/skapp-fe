@@ -8,6 +8,7 @@ import {
 } from "~community/common/utils/dateTimeUtils";
 import { LeaveEntitlementToastEnums } from "~community/leave/enums/LeaveEntitlementEnums";
 import { CustomLeaveAllocationType } from "~community/leave/types/CustomLeaveAllocationTypes";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 interface HandleLeaveEntitlementApiResponseProps {
   type: LeaveEntitlementToastEnums;
@@ -15,6 +16,8 @@ interface HandleLeaveEntitlementApiResponseProps {
   translateText: (key: string[], data?: Record<string, unknown>) => string;
   selectedYear?: string;
   noOfRecords?: number;
+  isReupload?: boolean;
+  sendEvent?: (event: GoogleAnalyticsTypes) => void;
 }
 
 export const handleLeaveEntitlementApiResponse = ({
@@ -22,7 +25,9 @@ export const handleLeaveEntitlementApiResponse = ({
   setToastMessage,
   translateText,
   selectedYear,
-  noOfRecords
+  noOfRecords,
+  isReupload,
+  sendEvent
 }: HandleLeaveEntitlementApiResponseProps) => {
   switch (type) {
     case LeaveEntitlementToastEnums.BULK_UPLOAD_PARTIAL_SUCCESS:
@@ -39,6 +44,11 @@ export const handleLeaveEntitlementApiResponse = ({
           }
         )
       });
+      if (isReupload) {
+        sendEvent?.(GoogleAnalyticsTypes.GA4_LEAVE_BULK_RE_UPLOADED);
+      } else {
+        sendEvent?.(GoogleAnalyticsTypes.GA4_LEAVE_BULK_UPLOADED);
+      }
       break;
     case LeaveEntitlementToastEnums.BULK_UPLOAD_COMPLETE_SUCCESS:
       setToastMessage({
@@ -49,6 +59,11 @@ export const handleLeaveEntitlementApiResponse = ({
           "toastMessages.bulkUploadCompleteSuccessDescription"
         ])
       });
+      if (isReupload) {
+        sendEvent?.(GoogleAnalyticsTypes.GA4_LEAVE_BULK_RE_UPLOADED);
+      } else {
+        sendEvent?.(GoogleAnalyticsTypes.GA4_LEAVE_BULK_UPLOADED);
+      }
       break;
     case LeaveEntitlementToastEnums.BULK_UPLOAD_ERROR:
       setToastMessage({

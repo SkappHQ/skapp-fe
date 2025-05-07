@@ -15,6 +15,8 @@ import CustomLeaveAllocationContent from "~community/leave/components/organisms/
 import LeaveEntitlementModalController from "~community/leave/components/organisms/LeaveEntitlementModalController/LeaveEntitlementModalController";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const LeaveEntitlements: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
@@ -47,6 +49,11 @@ const LeaveEntitlements: NextPage = () => {
       page,
       searchTerm
     );
+
+  useGoogleAnalyticsEvent({
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_ENTITLEMENT_PAGE_VISITED,
+    triggerOnMount: true
+  });
 
   return (
     <>

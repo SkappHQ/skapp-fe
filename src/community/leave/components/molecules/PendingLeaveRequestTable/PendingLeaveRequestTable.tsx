@@ -14,6 +14,7 @@ import {
   ButtonStyle,
   ButtonTypes
 } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { IconName } from "~community/common/types/IconTypes";
@@ -27,7 +28,8 @@ import {
   LeaveRequest,
   PendingLeaveEnum
 } from "~community/leave/types/PendingLeaves";
-import { TableNames } from "~enterprise/common/enums/Table";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import {
   stackStyles,
@@ -67,6 +69,8 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
 
   const updateLeaveRequest = useUpdateLeaveRequest;
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const handleLeaveRequestApproval = async (leaveRequestId: number) => {
     try {
       await updateLeaveRequest({
@@ -80,6 +84,7 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
         description: translateText(["RequestApproveDescription"]),
         isIcon: true
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_QUICK_APPROVED);
       await refetch();
     } catch (error) {
       setToastMessage({
@@ -105,6 +110,7 @@ const PendingLeaveRequestTable: React.FC<Props> = ({ searchTerm }) => {
         description: translateText(["RequestDeclineDescription"]),
         isIcon: true
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_QUICK_DECLINED);
       await refetch();
     } catch (error) {
       setToastMessage({
