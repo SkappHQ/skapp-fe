@@ -392,7 +392,7 @@ const UserLeaveHistory: FC<Props> = ({
           Date:
         </Typography>
         <DateRangePicker
-          tabIndex={isFreeTier ? -1 : 0}
+          tabIndex={getTabIndex(isFreeTier, -1)}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
           chipStyles={{
