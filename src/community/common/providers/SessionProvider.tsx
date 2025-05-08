@@ -1,8 +1,9 @@
-// lib/SessionContext.js
-import { createContext, useContext, ReactNode } from "react";
 import { useSession } from "next-auth/react";
+import { ReactNode, createContext, useContext } from "react";
 
-const SessionContext = createContext<ReturnType<typeof useSession>>(null as any);
+const SessionContext = createContext<ReturnType<typeof useSession>>(
+  null as any
+);
 
 export function SessionContextProvider({ children }: { children: ReactNode }) {
   const sessionData = useSession();
