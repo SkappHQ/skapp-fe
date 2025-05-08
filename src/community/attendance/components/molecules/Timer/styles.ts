@@ -1,8 +1,10 @@
+import { Theme } from "@mui/material";
+
 import { AttendanceSlotType } from "~community/attendance/types/attendanceTypes";
 import { pulse } from "~community/attendance/utils/TimerPulseAnimation";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 
-const styles = () => ({
+const styles = (theme: Theme) => ({
   container: (status: AttendanceSlotType) => ({
     border: "1px solid #D4D4D8",
     borderRadius: "2.1875rem",
@@ -36,11 +38,14 @@ const styles = () => ({
         ? `${pulse} 1s infinite`
         : "none"
   }),
-  textStyle: {
+  textStyle: (disabled: boolean) => ({
     fontSize: "1rem",
     fontWeight: 400,
-    lineHeight: 2
-  }
+    lineHeight: 2,
+    color: disabled
+      ? theme.palette.text.textBurntGrey
+      : theme.palette.common.black
+  })
 });
 
 export default styles;
