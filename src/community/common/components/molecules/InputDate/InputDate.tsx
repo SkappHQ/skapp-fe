@@ -112,6 +112,8 @@ const InputDate: FC<Props> = ({
 
   const translateAria = useTranslator("commonAria", "components", "inputDate");
 
+  const lowerCaseLabel = label.toLowerCase();
+
   const [alreadyAppliedHolidays, setAlreadyAppliedHolidays] = useState<
     HolidayType[]
   >([]);
@@ -296,7 +298,7 @@ const InputDate: FC<Props> = ({
             id="emoji-field"
             title={tooltip}
             isDisabled={disabled}
-            aria-label={`${label.toLowerCase()} ${translateAria(["ariaLabel"])}`}
+            aria-label={`${lowerCaseLabel} ${translateAria(["ariaLabel"])}`}
           />
         )}
       </Stack>
@@ -338,6 +340,9 @@ const InputDate: FC<Props> = ({
         <Box
           role="button"
           tabIndex={0}
+          aria-label={translateAria(["calendarIcon"], {
+            name: lowerCaseLabel
+          })}
           onClick={(e: MouseEvent<HTMLElement>) =>
             !(disabled || readOnly) && handleClick(e)
           }
