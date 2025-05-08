@@ -72,3 +72,30 @@ export const showTooltipAtIndex = (
     });
   }
 };
+
+interface Params {
+  currentIndices: { startIndex: number; endIndex: number };
+  direction: string;
+  shiftAmount: number;
+  totalLabels: number;
+}
+
+export const calculateChartIndices = ({
+  currentIndices,
+  direction,
+  shiftAmount,
+  totalLabels
+}: Params): { startIndex: number; endIndex: number } => {
+  const shift = direction === GRAPH_LEFT ? -shiftAmount : shiftAmount;
+  const maxStart = Math.max(totalLabels - shiftAmount, 0);
+  const newStartIndex = Math.max(
+    Math.min(currentIndices.startIndex + shift, maxStart),
+    0
+  );
+  const newEndIndex = Math.min(newStartIndex + shiftAmount, totalLabels);
+
+  return {
+    startIndex: newStartIndex,
+    endIndex: newEndIndex
+  };
+};

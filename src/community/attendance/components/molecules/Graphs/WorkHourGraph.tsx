@@ -17,6 +17,7 @@ import {
 } from "~community/attendance/utils/echartOptions/constants";
 import { useWorkHourTrendChartOptions } from "~community/attendance/utils/echartOptions/workHourTrendChartOptions";
 import {
+  calculateChartIndices,
   handleGraphKeyboardNavigation,
   showTooltipAtIndex
 } from "~community/attendance/utils/graphKeyboardNavigationUtils";
@@ -83,27 +84,14 @@ const WorkHourGraph = ({
   const theme = useTheme();
 
   const handleClick = (direction: string): void => {
-    setXIndexDay((prev) => {
-      const shift =
-        direction === GRAPH_LEFT
-          ? -WORK_HOUR_TREND_SHIFT_DAYS
-          : WORK_HOUR_TREND_SHIFT_DAYS;
-
-      const maxStart = Math.max(labels.length - WORK_HOUR_TREND_SHIFT_DAYS, 0);
-      const newStartIndex = Math.max(
-        Math.min(prev.startIndex + shift, maxStart),
-        0
-      );
-      const newEndIndex = Math.min(
-        newStartIndex + WORK_HOUR_TREND_SHIFT_DAYS,
-        labels.length
-      );
-
-      return {
-        startIndex: newStartIndex,
-        endIndex: newEndIndex
-      };
-    });
+    setXIndexDay((prev) =>
+      calculateChartIndices({
+        currentIndices: prev,
+        direction,
+        shiftAmount: WORK_HOUR_TREND_SHIFT_DAYS,
+        totalLabels: labels.length
+      })
+    );
   };
 
   const handleChevronVisibility = (direction: "left" | "right"): string => {
