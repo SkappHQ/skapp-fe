@@ -29,13 +29,11 @@ const UserLeaveUtilization: FC<Props> = ({ employeeId, leaveTypesList }) => {
   }, [isProTier, datasetData]);
 
   return (
-    <div>
-      <LeaveTypeBreakdownChart
-        datasets={datasets}
-        isLoading={isLoading}
-        error={error}
-      />
-    </div>
+    <LeaveTypeBreakdownChart
+      datasets={datasets}
+      isLoading={isLoading}
+      error={error}
+    />
   );
 };
 
