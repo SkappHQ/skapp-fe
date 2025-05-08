@@ -265,7 +265,6 @@ export const config = {
     "/unauthorized",
     "/verify/email",
     "/verify/success",
-    "/verify/account-reset-password",
     // Module routes
     "/leave/:path*",
     "/people/:path*",
