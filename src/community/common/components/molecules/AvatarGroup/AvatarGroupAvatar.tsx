@@ -58,8 +58,8 @@ const AvatarGroupAvatar: FC<Props> = ({
   useEffect(() => {
     if (!image) return;
 
-    if (image || !s3FileUrls[image]) {
-      downloadS3File({ filePath: image });
+    if (!s3FileUrls[image]) {
+      downloadS3File({ filePath: image, isProfilePic: true });
     }
   }, [image]);
 
