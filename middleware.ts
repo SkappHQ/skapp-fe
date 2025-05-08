@@ -1,7 +1,10 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
-import ROUTES from "~community/common/constants/routes";
+import ROUTES, {
+  employeeRestrictedRoutes,
+  managerRestrictedRoutes
+} from "~community/common/constants/routes";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -10,6 +13,7 @@ import {
   SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { checkRestrictedRoutesAndRedirect } from "~community/common/utils/commonUtil";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -210,6 +214,24 @@ export default withAuth(
         );
       }
 
+      // Check manager restricted routes
+      const managerRedirect = checkRestrictedRoutesAndRedirect(
+        request,
+        managerRestrictedRoutes,
+        AdminTypes.PEOPLE_ADMIN,
+        roles
+      );
+      if (managerRedirect) return managerRedirect;
+
+      // Check employee restricted routes
+      const employeeRedirect = checkRestrictedRoutesAndRedirect(
+        request,
+        employeeRestrictedRoutes,
+        ManagerTypes.PEOPLE_MANAGER,
+        roles
+      );
+      if (employeeRedirect) return employeeRedirect;
+
       return NextResponse.next();
     }
     // Redirect to /unauthorized if no access
@@ -243,7 +265,6 @@ export const config = {
     "/unauthorized",
     "/verify/email",
     "/verify/success",
-    "/verify/account-reset-password",
     // Module routes
     "/leave/:path*",
     "/people/:path*",

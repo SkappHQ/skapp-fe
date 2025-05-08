@@ -89,7 +89,7 @@ const EmployeeList: FC<Props> = ({
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(id);
-      const route = `${ROUTES.PEOPLE.BASE}/${id}`;
+      const route = `${ROUTES.PEOPLE.INDIVIDUAL}/${id}`;
       router.push(route);
     }
   };

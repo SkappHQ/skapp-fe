@@ -204,3 +204,9 @@ export function matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod(): RegExp {
   // Example: "2023-09-15", "2023/09/15", "2023.09.15"
   return /^(\d{4})[-/.](\d{2})[-/.](\d{2})$/;
 }
+
+export function matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod(): RegExp {
+  // Matches "MM-DD-YYYY", "MM/DD/YYYY", or "MM.DD.YYYY"
+  // Example: "9-15-2023", "9/15/2023", "9.15.2023"
+  return /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/;
+}

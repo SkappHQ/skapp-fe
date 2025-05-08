@@ -140,7 +140,7 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     outlineOffset: shouldblink ? "-0.1875rem" : "-0.0625rem",
     borderRadius: "3.125rem",
     ".MuiTypography-root": {
-      color: isDisabled ? theme.palette.grey[800] : textcolor
+      color: isDisabled ? theme.palette.text.textBurntGrey : textcolor
     },
     ".MuiButton-startIcon, .MuiButton-endIcon": {
       margin: "0rem",

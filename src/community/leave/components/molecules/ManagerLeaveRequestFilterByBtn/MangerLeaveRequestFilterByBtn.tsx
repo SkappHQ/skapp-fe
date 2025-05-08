@@ -56,6 +56,7 @@ const ManagerLeaveRequestFilterByBtn = ({
           onDeleteIcon={removeFilters}
         />
         <IconButton
+          id="filter-icon-btn"
           icon={<FilterIcon />}
           onClick={handleFilterClick}
           ariaLabel={translateAria(["filterBtn"])}
