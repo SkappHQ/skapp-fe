@@ -63,7 +63,6 @@ const WorkHourGraph = ({
 
   const chartRef = useRef<ReactECharts | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
-  const nextHighlightedIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const startIndex = DateTime.local().day <= 15 ? 0 : 15;
