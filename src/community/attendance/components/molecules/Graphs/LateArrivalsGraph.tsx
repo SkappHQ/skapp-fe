@@ -231,12 +231,12 @@ const LateArrivalsGraph = ({
               handleClick={handleClick}
               handleChevronVisibility={handleChevronVisibility}
               leftAriaLabel={
-                dataCategory === "WEEKLY"
+                dataCategory === lateArrivalsGraphTypes.WEEKLY.value
                   ? translateTextAria(["lateArrivalTrendWeeklyPrevious"])
                   : translateTextAria(["lateArrivalTrendMonthlyPrevious"])
               }
               rightAriaLabel={
-                dataCategory === "WEEKLY"
+                dataCategory === lateArrivalsGraphTypes.WEEKLY.value
                   ? translateTextAria(["lateArrivalTrendWeeklyNext"])
                   : translateTextAria(["lateArrivalTrendMonthlyNext"])
               }
