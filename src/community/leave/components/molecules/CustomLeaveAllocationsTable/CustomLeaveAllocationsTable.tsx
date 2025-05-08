@@ -290,8 +290,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
   };
 
   const showEmptyTableButton =
-    selectedYear === currentYear.toString() ||
-    selectedYear === nextYear.toString();
+    (selectedYear === currentYear.toString() ||
+      selectedYear === nextYear.toString()) &&
+    !searchTerm &&
+    selectedLeaveTypes.length === 0;
 
   return (
     <Box>
@@ -310,26 +312,19 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           emptyState: {
             noData: {
               title:
-                !!customLeaveData?.items?.length ||
-                !!searchTerm ||
-                !!selectedLeaveTypes.length
+                !!searchTerm || selectedLeaveTypes.length > 0
                   ? translateText(["emptySearchResult", "title"])
                   : translateText(["emptyCustomLeaveScreen", "title"]),
               description:
-                !!customLeaveData?.items?.length ||
-                !!searchTerm ||
-                !!selectedLeaveTypes.length
+                !!searchTerm || selectedLeaveTypes.length > 0
                   ? translateText(["emptySearchResult", "description"])
                   : translateText(["emptyCustomLeaveScreen", "description"]),
-              button:
-                showEmptyTableButton && searchTerm === ""
-                  ? {
-                      label: translateText([
-                        "CustomLeaveAllocationsSectionBtn"
-                      ]),
-                      onClick: handleAddLeaveAllocation
-                    }
-                  : undefined
+              button: showEmptyTableButton
+                ? {
+                    label: translateText(["CustomLeaveAllocationsSectionBtn"]),
+                    onClick: handleAddLeaveAllocation
+                  }
+                : undefined
             }
           },
           loadingState: {
