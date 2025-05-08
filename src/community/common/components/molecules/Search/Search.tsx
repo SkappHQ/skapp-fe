@@ -232,6 +232,8 @@ const Search: FC<Props> = ({
       )}
       {label && (
         <Typography
+          id="search-label"
+          component="label"
           variant="h5"
           gutterBottom
           sx={{
@@ -316,6 +318,7 @@ const Search: FC<Props> = ({
       </Box>
       {(ref.current || parentRef) && (
         <Popper
+          ariaLabelledBy="search-label"
           open={isPopperOpen}
           anchorEl={parentRef ? parentRef.current : ref.current}
           position={"bottom-start"}
