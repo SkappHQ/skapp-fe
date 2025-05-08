@@ -23,7 +23,7 @@ export const styles = (theme: Theme): StyleProps => ({
         WebkitTextFillColor: theme.palette.grey[700]
       }
     },
-    color: theme.palette.grey[700],
+    color: theme.palette.text.secondary,
     fontSize: "1rem",
     fontWeight: 400
   },

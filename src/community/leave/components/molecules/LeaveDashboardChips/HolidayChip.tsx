@@ -23,8 +23,10 @@ const HolidayChip: FC<Props> = ({ text }) => {
         width: "fit-content"
       }}
     >
-      <Typography sx={{ color: theme.palette.grey[700] }} variant="caption">
-        {" "}
+      <Typography
+        sx={{ color: theme.palette.text.secondary }}
+        variant="caption"
+      >
         {text}
       </Typography>
     </Box>
