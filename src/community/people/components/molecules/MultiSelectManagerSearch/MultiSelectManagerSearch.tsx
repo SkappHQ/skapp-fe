@@ -151,26 +151,35 @@ const MultiSelectManagerSearch = ({
                   }
                 }}
               />
-              <AvatarChip
-                key={employee.employeeId}
-                firstName={employee.firstName ?? ""}
-                lastName={employee.lastName ?? ""}
-                avatarUrl={employee.authPic}
-                isResponsiveLayout={true}
-                chipStyles={{
-                  color: "common.black",
-                  height: "3rem",
-                  border: isSelected
-                    ? `.0625rem solid ${theme.palette.secondary.dark}`
-                    : "common.white",
-                  my: ".75rem",
-                  py: "0.75rem",
-                  "&:hover": {
-                    backgroundColor: "common.white"
-                  }
+              <Box
+                sx={{
+                  width: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
                 }}
-                onClickChip={() => toggleManagerSelection(employee)}
-              />
+              >
+                <AvatarChip
+                  key={employee.employeeId}
+                  firstName={employee.firstName ?? ""}
+                  lastName={employee.lastName ?? ""}
+                  avatarUrl={employee.authPic}
+                  isResponsiveLayout={true}
+                  chipStyles={{
+                    color: "common.black",
+                    height: "3rem",
+                    border: isSelected
+                      ? `.0625rem solid ${theme.palette.secondary.dark}`
+                      : "common.white",
+                    my: ".75rem",
+                    py: "0.75rem",
+                    "&:hover": {
+                      backgroundColor: "common.white"
+                    },
+                    width: "fit-content"
+                  }}
+                  onClickChip={() => toggleManagerSelection(employee)}
+                />
+              </Box>
             </Stack>
           );
         })}
