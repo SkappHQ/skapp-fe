@@ -1,9 +1,9 @@
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { useGetAllHolidaysInfinite } from "~community/people/api/HolidayApi";
 import HolidayDataTable from "~community/people/components/molecules/HolidayTable/HolidayTable";
@@ -22,7 +22,7 @@ const Holidays: NextPage = () => {
   const [isConcatenationDone, setIsConcatenationDone] =
     useState<boolean>(false);
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 

@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   useTheme
 } from "@mui/material";
-import { useSession } from "next-auth/react";
 import { FC } from "react";
 
 import { useGetEmailServerConfig } from "~community/common/api/settingsApi";
@@ -16,6 +15,7 @@ import { appModes } from "~community/common/constants/configs";
 import { GlobalLoginMethod } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import {
   ManagerTypes,
@@ -37,7 +37,7 @@ const SettingsSection: FC = () => {
 
   const isLargeScreen: boolean = useMediaQuery(theme.breakpoints.down("lg"));
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const { setModalType, setModalOpen } = useCommonStore((state) => state);
 

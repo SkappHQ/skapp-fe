@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { JSX, useState } from "react";
 
 import {
@@ -11,13 +10,14 @@ import TimesheetDailyLog from "~community/attendance/components/molecules/Timesh
 import TimesheetDailyLogFilter from "~community/attendance/components/molecules/TimesheetDailyLogFilter/TimesheetDailyLogFilter";
 import EmployeeTimesheetPopupController from "~community/attendance/components/organisms/EmployeeTimesheetPopupController/EmployeeTimesheetPopupController";
 import { downloadEmployeeDailyLogCsv } from "~community/attendance/utils/TimesheetCsvUtil";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { dateValidation } from "~community/common/utils/validation";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
 const EmployeeTimesheet = (): JSX.Element => {
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const { data: workSummaryData } = useGetEmployeeWorkSummary(
     startTime,

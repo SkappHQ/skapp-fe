@@ -3,7 +3,6 @@ import { Box, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
@@ -27,6 +26,7 @@ import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxSte
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { AnalyticsTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -48,7 +48,7 @@ const TeamTimeSheetAnalytics: NextPage = () => {
 
   const [activeStep, setActiveStep] = useState("leaveAnalytics");
 
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   const isLeaveManager = data?.user.roles?.includes(
     ManagerTypes.LEAVE_MANAGER || AdminTypes.LEAVE_ADMIN

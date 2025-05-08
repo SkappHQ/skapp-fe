@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { useSession } from "next-auth/react";
 import { JSX, MouseEvent, useEffect, useState } from "react";
 
 import DropDownArrow from "~community/common/assets/Icons/DropdownArrow";
@@ -13,6 +12,7 @@ import {
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { ManagerTeamType } from "~community/common/types/CommonTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
@@ -42,7 +42,7 @@ const TeamSelector = ({
 
   const { data: allTeamsData } = useGetAllTeams();
   const { data: managerAllTeamsData } = useGetAllManagerTeams();
-  const { data } = useSession();
+  const { data } = useAppSession();
   const [teamsData, setTeamsData] = useState<
     TeamType[] | undefined | ManagerTeamType[]
   >([]);

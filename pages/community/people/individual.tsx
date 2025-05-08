@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
@@ -8,6 +7,7 @@ import IndividualEmployeeTimeReportSection from "~community/attendance/component
 import BoxStepper from "~community/common/components/molecules/BoxStepper/BoxStepper";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -30,7 +30,7 @@ const Individual: NextPage = () => {
   const router = useRouter();
   const translateText = useTranslator("peopleModule");
 
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   const { tab, viewEmployeeId } = router.query;
 

@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
   FC,
@@ -28,6 +27,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import {
@@ -80,7 +80,7 @@ const PeopleTable: FC<Props> = ({
   isRemovePeople = false
 }) => {
   const theme: Theme = useTheme();
-  const { data } = useSession();
+  const { data } = useAppSession();
   const router = useRouter();
   const { setToastMessage } = useToast();
   const translateText = useTranslator("peopleModule", "peoples");

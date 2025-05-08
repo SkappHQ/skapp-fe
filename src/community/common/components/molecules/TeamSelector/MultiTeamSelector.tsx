@@ -1,6 +1,5 @@
 import { Box, Chip } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { useSession } from "next-auth/react";
 import { JSX, MouseEvent, useEffect, useState } from "react";
 
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
@@ -11,6 +10,7 @@ import Popper from "~community/common/components/molecules/Popper/Popper";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { ManagerTeamType } from "~community/common/types/CommonTypes";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
@@ -43,7 +43,7 @@ const MultiTeamSelector = ({
 
   const { data: allTeamsData } = useGetAllTeams();
   const { data: managerAllTeamsData } = useGetAllManagerTeams();
-  const { data } = useSession();
+  const { data } = useAppSession();
   const [teamsData, setTeamsData] = useState<
     TeamType[] | undefined | ManagerTeamType[]
   >([]);

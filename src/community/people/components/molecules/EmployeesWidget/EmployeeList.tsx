@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useRef } from "react";
 
@@ -9,6 +8,7 @@ import Avatar from "~community/common/components/molecules/Avatar/Avatar";
 import NoDataScreen from "~community/common/components/molecules/NoDataScreen/NoDataScreen";
 import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
@@ -35,7 +35,7 @@ const EmployeeList: FC<Props> = ({
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
-  const { data } = useSession();
+  const { data } = useAppSession();
   const router = useRouter();
   const translateText = useTranslator("peopleModule", "peoples");
 

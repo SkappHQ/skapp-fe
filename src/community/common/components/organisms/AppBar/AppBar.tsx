@@ -7,7 +7,6 @@ import {
   Typography
 } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
 import ClockWidget from "~community/attendance/components/molecules/ClockWidget/ClockWidget";
@@ -26,6 +25,7 @@ import { IconName } from "~community/common/types/IconTypes";
 import { useGetUserPersonalDetails } from "~community/people/api/PeopleApi";
 
 import styles from "./styles";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 const AppBar = () => {
   const translateAria = useTranslator("commonAria", "components", "appBar");
@@ -38,7 +38,7 @@ const AppBar = () => {
 
   const { handleDrawer } = useDrawer();
 
-  const { data: session, status } = useSession();
+  const { data: session, status } = useAppSession();
 
   const userInfoRef = useRef<HTMLDivElement | null>(null);
   const { notifyData, setNotifyData } = useCommonStore((state) => state);

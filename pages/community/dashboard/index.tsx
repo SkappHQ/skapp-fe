@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -15,6 +14,7 @@ import {
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import {
   AdminTypes,
@@ -87,7 +87,7 @@ const Dashboard: NextPage = () => {
   }, [query]);
 
   const translateText = useTranslator("dashboard");
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   // Permissions map for modules
   const modulePermissions: Record<string, RoleTypes[]> = {

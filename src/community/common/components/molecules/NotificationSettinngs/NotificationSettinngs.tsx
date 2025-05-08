@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
-import { useSession } from "next-auth/react";
 import { JSX } from "react";
 
 import {
@@ -14,6 +13,7 @@ import { EmployeeTypes } from "~community/common/types/AuthTypes";
 
 import SwitchRow from "../../atoms/SwitchRow/SwitchRow";
 import ToastMessage from "../ToastMessage/ToastMessage";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 const NotificationSettings = (): JSX.Element => {
   const translateText = useTranslator("settings");
@@ -21,7 +21,7 @@ const NotificationSettings = (): JSX.Element => {
 
   const { data: settings } = useGetNotificationSettings();
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const updateMutation = useUpdateNotificationSettings(() => {
     setToastMessage({

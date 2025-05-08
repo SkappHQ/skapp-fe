@@ -7,7 +7,7 @@ import {
   useTheme
 } from "@mui/material";
 import { type SxProps } from "@mui/system";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { JSX, memo, useEffect, useMemo } from "react";
@@ -29,6 +29,7 @@ import {
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { AdminTypes } from "~community/common/types/AuthTypes";
@@ -119,7 +120,7 @@ const ContentLayout = ({
 
   const router = useRouter();
 
-  const { data } = useSession();
+  const { data } = useAppSession();
   const { asPath } = useRouter();
 
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(

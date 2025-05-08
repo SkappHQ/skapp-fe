@@ -1,6 +1,5 @@
 import { Box, MenuItem } from "@mui/material";
 import { rejects } from "assert";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { JSX, Key } from "react";
 
@@ -22,6 +21,7 @@ import Button from "../../atoms/Button/Button";
 import Icon from "../../atoms/Icon/Icon";
 import NotificationContent from "../NotificationContent/NotificationContent";
 import TableEmptyScreen from "../TableEmptyScreen/TableEmptyScreen";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 interface Props {
   handleCloseMenu: () => void;
@@ -43,7 +43,7 @@ const NotificationsPopup = ({
   };
 
   const { mutate } = useMarkNotificationAsRead();
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const { isLeaveEmployee, isAttendanceEmployee } = useSessionData();
 

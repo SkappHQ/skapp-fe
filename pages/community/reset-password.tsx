@@ -1,12 +1,13 @@
 import { Box } from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
 import { NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 import { useResetPassword } from "~community/common/api/ResetPasswordApi";
 import ResetPasswordForm from "~community/common/components/organisms/Forms/ResetPassword/ResetPasswordForm";
 import OnboardingLayout from "~community/common/components/templates/OnboardingLayout/OnboardingLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { passwordValidationSchema } from "~community/common/utils/validation";
 
@@ -20,7 +21,7 @@ const ResetPassword: NextPage = () => {
 
   const { setToastMessage } = useToast();
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const initialValues: FormValues = {
     password: "",

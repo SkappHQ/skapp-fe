@@ -12,7 +12,6 @@ import {
   Theme,
   useTheme
 } from "@mui/material";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { JSX, useEffect, useMemo, useState } from "react";
 
@@ -46,6 +45,7 @@ import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { StyledDrawer } from "./StyledDrawer";
 import { getSelectedDrawerItemColor, styles } from "./styles";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 const Drawer = (): JSX.Element => {
   const theme: Theme = useTheme();
@@ -56,7 +56,7 @@ const Drawer = (): JSX.Element => {
 
   const router = useRouter();
 
-  const { data: sessionData } = useSession();
+  const { data: sessionData } = useAppSession();
 
   const queryMatches = useMediaQuery();
   const isBelow1024 = queryMatches(MediaQueries.BELOW_1024);

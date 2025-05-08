@@ -1,13 +1,13 @@
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import ROUTES from "../constants/routes";
+import { useAppSession } from "../providers/SessionProvider";
 import { OrgSetupStatusType } from "../types/OrganizationCreateTypes";
 
 const useOrgSetupRedirect = () => {
   const router = useRouter();
 
-  const { status } = useSession();
+  const { status } = useAppSession();
 
   let isSignInSessionAvailable = false;
 

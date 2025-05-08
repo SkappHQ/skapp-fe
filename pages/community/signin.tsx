@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { FormikHelpers, useFormik } from "formik";
 import { NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import OnboardingLayout from "~community/common/components/templates/OnboardingL
 import ROUTES from "~community/common/constants/routes";
 import { AppVersionNotificationType } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { useWebSocket } from "~community/common/providers/WebSocketProvider";
 import { base64Pattern } from "~community/common/regex/regexPatterns";
@@ -36,7 +37,7 @@ interface SignInValues {
 const SignIn: NextPage = () => {
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const { setToastMessage } = useToast();
 

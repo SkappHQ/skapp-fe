@@ -1,6 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -18,6 +17,7 @@ import {
   ToastType
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { allowsLettersAndSpecialCharactersForNames } from "~community/common/regex/regexPatterns";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
@@ -47,7 +47,7 @@ const AddNewResourceModal = () => {
 
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const translateText = useTranslator(
     "peopleModule",

@@ -1,6 +1,5 @@
 import { useTheme } from "@mui/material";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 
@@ -9,6 +8,7 @@ import Search from "~community/common/components/molecules/Search/Search";
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import {
   EmployeeSearchResultType,
@@ -21,7 +21,7 @@ const AllTimesheetsPage: NextPage = () => {
   const translateText = useTranslator("attendanceModule", "timesheet");
   const theme = useTheme();
   const router = useRouter();
-  const { data } = useSession();
+  const { data } = useAppSession();
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchErrors] = useState<string | undefined>(undefined);

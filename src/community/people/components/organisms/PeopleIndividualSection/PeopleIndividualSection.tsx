@@ -1,6 +1,5 @@
-import { useSession } from "next-auth/react";
-
 import IndividualEmployeeTimeReportSection from "~community/attendance/components/molecules/IndividualEmployeeTimeReportBody/IndividualEmployeeTimeReportBody";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -22,7 +21,7 @@ interface Props {
 const PeopleIndividualSection = ({ employeeId }: Props) => {
   const { currentStep, employee } = usePeopleStore((state) => state);
 
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   const isLeaveManager = data?.user.roles?.includes(
     ManagerTypes.LEAVE_MANAGER || AdminTypes.LEAVE_ADMIN

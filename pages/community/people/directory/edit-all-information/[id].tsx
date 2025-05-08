@@ -1,5 +1,4 @@
 import { Modal, Stack } from "@mui/material";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { type NextPage } from "next/types";
 import { useCallback, useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import ContentLayout from "~community/common/components/templates/ContentLayout/
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { ToastType } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import {
   AdminTypes,
@@ -66,7 +66,7 @@ const EditAllInformation: NextPage = () => {
 
   const { setToastMessage, toastMessage } = useToast();
 
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   const environment = useGetEnvironment();
 

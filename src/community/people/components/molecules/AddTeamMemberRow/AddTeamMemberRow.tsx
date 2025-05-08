@@ -1,5 +1,4 @@
 import { Box, Stack, Theme, Typography, useTheme } from "@mui/material";
-import { useSession } from "next-auth/react";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
 
@@ -20,6 +19,7 @@ import { EmployeeDataType } from "~community/people/types/EmployeeTypes";
 import { TeamMemberTypes } from "~community/people/types/TeamTypes";
 
 import styles from "./styles";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 interface Props {
   id: string;
@@ -44,7 +44,7 @@ const AddTeamMemberRow: FC<Props> = ({
 
   const { setToastMessage } = useToast();
 
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
 
   const isAdmin = session?.user?.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 

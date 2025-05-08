@@ -1,6 +1,5 @@
 import { Box, Theme, Typography, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useSession } from "next-auth/react";
 import { JSX, useEffect, useState } from "react";
 
 import {
@@ -28,6 +27,7 @@ import {
 import AttendanceCard from "../../molecules/AttendanceCard/AttendanceCard";
 import LateArrivalsGraph from "../../molecules/Graphs/LateArrivalsGraph";
 import WorkHourGraph from "../../molecules/Graphs/WorkHourGraph";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 const AttendanceDashboard = (): JSX.Element => {
   const translateText = useTranslator("attendanceModule", "dashboards");
@@ -47,7 +47,7 @@ const AttendanceDashboard = (): JSX.Element => {
   );
   const [isFetchingEnabled, setIsFetchingEnabled] = useState<boolean>(false);
 
-  const { data } = useSession();
+  const { data } = useAppSession();
   const theme: Theme = useTheme();
 
   useEffect(() => {

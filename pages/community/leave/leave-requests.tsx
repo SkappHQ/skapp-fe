@@ -1,6 +1,5 @@
 import { useTheme } from "@mui/material";
 import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -9,6 +8,7 @@ import ToastMessage from "~community/common/components/molecules/ToastMessage/To
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import ROUTES from "~community/common/constants/routes";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import {
@@ -28,7 +28,7 @@ const LeaveRequests: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveRequests");
   const theme = useTheme();
   const router = useRouter();
-  const { data } = useSession();
+  const { data } = useAppSession();
   const { toastMessage, setToastMessage } = useToast();
 
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);

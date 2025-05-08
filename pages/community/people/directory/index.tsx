@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 import ContentLayout from "~community/common/components/templates/ContentLayout/ContentLayout";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import DirectoryPopupController from "~community/people/components/organisms/DirectoryPopupController/DirectoryPopupController";
@@ -14,7 +14,7 @@ import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 
 const Directory: NextPage = () => {
   const translateText = useTranslator("peopleModule", "peoples");
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   const isAdmin = data?.user.roles?.includes(AdminTypes.PEOPLE_ADMIN);
 

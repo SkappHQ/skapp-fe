@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { JSX } from "react";
 
@@ -17,6 +17,7 @@ import { usePeopleStore } from "~community/people/store/store";
 import Button from "../../atoms/Button/Button";
 import Icon from "../../atoms/Icon/Icon";
 import Avatar from "../Avatar/Avatar";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 
 interface Props {
   handleCloseMenu: any;
@@ -25,7 +26,7 @@ interface Props {
 const ProfileMenu = ({ handleCloseMenu }: Props): JSX.Element => {
   const router = useRouter();
   const translateText = useTranslator("appBar");
-  const { data: session } = useSession();
+  const { data: session } = useAppSession();
   const { data: employee } = useGetUserPersonalDetails();
   const isPeopleManagerOrSuperAdmin = session?.user.roles?.includes(
     ManagerTypes.PEOPLE_MANAGER || AdminTypes.SUPER_ADMIN

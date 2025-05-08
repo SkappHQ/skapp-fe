@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { ReactNode, useEffect, useRef } from "react";
 
 import {
@@ -12,6 +12,7 @@ import authFetch, { tenantID } from "~community/common/utils/axiosInterceptor";
 
 import { unitConversion } from "../constants/configs";
 import ROUTES from "../constants/routes";
+import { useAppSession } from "./SessionProvider";
 
 // Global refresh token state (outside component to be accessible across renders)
 let globalRefreshPromise: Promise<boolean> | null = null;
@@ -19,7 +20,7 @@ let lastRefreshTime = 0;
 const MIN_REFRESH_INTERVAL = 1000; // Minimum 1 second between refresh attempts
 
 const TanStackProvider = ({ children }: { children: ReactNode }) => {
-  const { update } = useSession();
+  const { update } = useAppSession();
   // Use a query client ref to persist across renders and access in async functions
   const queryClientRef = useRef<QueryClient>();
 
@@ -96,6 +97,8 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
     return globalRefreshPromise;
   };
 
+  const { data: session } = useAppSession();
+
   useEffect(() => {
     // Request interceptor
     const requestInterceptor = authFetch.interceptors.request.use(
@@ -109,9 +112,6 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
           // Don't add auth headers to auth routes
           return config;
         }
-
-        // Get current session
-        const session = await getSession();
 
         // Check if token is expired
         const tokenExpiration = session?.user?.tokenDuration as number;
@@ -202,10 +202,9 @@ const TanStackProvider = ({ children }: { children: ReactNode }) => {
 
             if (refreshSuccessful) {
               // Get fresh session with new token
-              const freshSession = await getSession();
-              if (freshSession?.user?.accessToken) {
+              if (session?.user?.accessToken) {
                 // Update the original request with new token
-                originalRequest.headers.Authorization = `Bearer ${freshSession.user.accessToken}`;
+                originalRequest.headers.Authorization = `Bearer ${session.user.accessToken}`;
                 // Retry the original request
                 return authFetch(originalRequest);
               }

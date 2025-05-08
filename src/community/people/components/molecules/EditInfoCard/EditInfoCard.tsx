@@ -1,6 +1,5 @@
 import { Box, Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { JSX, useEffect } from "react";
 import { type MouseEventHandler, useCallback, useMemo, useState } from "react";
@@ -18,6 +17,7 @@ import KebabMenu from "~community/common/components/molecules/KebabMenu/KebabMen
 import { appModes } from "~community/common/constants/configs";
 import { useScreenSizeRange } from "~community/common/hooks/useScreenSizeRange";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useAppSession } from "~community/common/providers/SessionProvider";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
@@ -62,7 +62,7 @@ const EditInfoCard = ({ onClick, styles }: Props): JSX.Element => {
 
   const AVAILABLE_FIELD_COUNT = 2;
 
-  const { data } = useSession();
+  const { data } = useAppSession();
 
   const { asPath } = useRouter();
 
