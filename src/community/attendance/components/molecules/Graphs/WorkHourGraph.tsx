@@ -83,11 +83,7 @@ const WorkHourGraph = ({
 
   const theme = useTheme();
 
-  const handleClick = (direction: string, nextIndex?: number): void => {
-    if (nextIndex !== undefined) {
-      nextHighlightedIndexRef.current = nextIndex;
-    }
-
+  const handleClick = (direction: string): void => {
     setXIndexDay((prev) => {
       const shift =
         direction === GRAPH_LEFT
@@ -110,15 +106,6 @@ const WorkHourGraph = ({
       };
     });
   };
-
-  useEffect(() => {
-    const index = nextHighlightedIndexRef.current;
-    if (index !== null) {
-      setFocusedIndex(index);
-      showTooltipAtIndex(chartRef, index);
-      nextHighlightedIndexRef.current = null;
-    }
-  }, [xIndexDay]);
 
   const handleChevronVisibility = (direction: "left" | "right"): string => {
     switch (direction) {
