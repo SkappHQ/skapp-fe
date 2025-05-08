@@ -401,7 +401,7 @@ const PeopleTable: FC<Props> = ({
       setViewEmployeeId(employee.id);
       setCurrentStep(EditPeopleFormTypes.personal);
       setNextStep(EditPeopleFormTypes.personal);
-      const route = `${ROUTES.PEOPLE.BASE}/${employee.id}`;
+      const route = `${ROUTES.PEOPLE.INDIVIDUAL}/${employee.id}`;
       router.push(route);
     }
   };
