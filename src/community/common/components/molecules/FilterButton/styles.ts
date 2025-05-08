@@ -19,14 +19,6 @@ const styles = (theme: Theme): StyleProps => ({
     alignItems: "center",
     gap: "0.625rem"
   },
-  filterBtn: {
-    border: "0.0625rem solid",
-    borderColor: theme.palette.grey[500],
-    alignItems: "center",
-    fontWeight: "400",
-    fontSize: "0.875rem",
-    color: theme.palette.common.black
-  },
   popperContainer: {
     display: "flex",
     flexDirection: "column",
