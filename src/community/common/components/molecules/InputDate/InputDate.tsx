@@ -354,7 +354,6 @@ const InputDate: FC<Props> = ({
             if (shouldCollapseDropdown(e.key))
               !(disabled || readOnly) && handleClose();
           }}
-          aria-label={`${translateAria(["select"])} ${label}`}
         >
           <Icon
             name={IconName.CALENDAR_ICON}
