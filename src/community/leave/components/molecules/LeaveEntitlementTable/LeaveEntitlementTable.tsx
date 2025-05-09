@@ -104,6 +104,7 @@ const LeaveEntitlementTable = ({
             selectedItem={leaveEntitlementTableSelectedYear}
             title={leaveEntitlementTableSelectedYear}
             items={getAdjacentYearsWithCurrent()}
+            ariaRole="menu"
           />
         </Box>
       </Stack>

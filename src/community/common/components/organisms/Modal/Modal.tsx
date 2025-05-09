@@ -61,7 +61,11 @@ const Modal: FC<Props> = ({
       onClose={onCloseModal}
       sx={mergeSx([classes.modalWrapper, modalWrapperStyles])}
     >
-      <Stack sx={mergeSx([classes.modelContentWrapper, modalContentStyles])}>
+      <Stack
+        sx={mergeSx([classes.modelContentWrapper, modalContentStyles])}
+        role="dialog"
+        aria-label={`${title} ${translateAria(["modal"])}`}
+      >
         <Stack sx={mergeSx([classes.modalHeader, modalHeaderStyles])}>
           <Stack sx={classes.modalHeaderIconContainer}>
             {isIconVisible && <Box sx={classes.titleIcon}>{icon}</Box>}

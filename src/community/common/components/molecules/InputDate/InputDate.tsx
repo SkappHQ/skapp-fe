@@ -348,6 +348,7 @@ const InputDate: FC<Props> = ({
           }
           onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
             if (shouldExpandDropdown(e.key)) {
+              e.preventDefault();
               !(disabled || readOnly) && handleClick(e);
             }
             if (shouldCollapseDropdown(e.key))

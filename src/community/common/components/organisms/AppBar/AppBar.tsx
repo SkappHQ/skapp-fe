@@ -81,7 +81,11 @@ const AppBar = () => {
 
   return (
     <>
-      <Stack sx={classes.wrapper}>
+      <Stack
+        sx={classes.wrapper}
+        component="header"
+        aria-label={translateAria(["appBar"])}
+      >
         <Stack
           sx={{
             ...classes.container,
