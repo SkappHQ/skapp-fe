@@ -230,7 +230,6 @@ const FilterButton = ({
                 {Object.keys(filterTypes).map((filterType, index) => (
                   <Box
                     ref={(el: HTMLDivElement | null) => {
-                      firstColumnItems.current[index] = null;
                       firstColumnItems.current[index] = el;
                     }}
                     tabIndex={0}
@@ -280,9 +279,6 @@ const FilterButton = ({
                       <IconChip
                         ref={(el: HTMLDivElement | null) => {
                           if (el) {
-                            secondColumnItems.current[
-                              selectedFilterType + index
-                            ] = null;
                             secondColumnItems.current[
                               selectedFilterType + index
                             ] = el;
