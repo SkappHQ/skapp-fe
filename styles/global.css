@@ -50,8 +50,8 @@ input[type="number"] {
 }
 
 .react-tel-input .selected-flag:focus-visible {
-  outline: 0.125rem solid #000000 ;
-  outline-offset: 0.0625rem ;
+  outline: 0.125rem solid #000000;
+  outline-offset: 0.0625rem;
   box-shadow: none;
 }
 
