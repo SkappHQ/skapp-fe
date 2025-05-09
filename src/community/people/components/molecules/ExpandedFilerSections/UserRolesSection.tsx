@@ -44,6 +44,12 @@ const UserRolesSection = () => {
     { label: translateText(["employee"]), value: Role.LEAVE_EMPLOYEE }
   ];
 
+  const esignRoles = [
+    { label: translateText(["admin"]), value: Role.ESIGN_ADMIN },
+    { label: translateText(["sender"]), value: Role.ESIGN_SENDER },
+    { label: translateText(["employee"]), value: Role.ESIGN_EMPLOYEE }
+  ];
+
   const filterData = [
     ...(sessionData?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [
@@ -67,6 +73,11 @@ const UserRolesSection = () => {
       title: translateText(["peopleModule"]),
       filterKey: "permission",
       roles: peopleRoles
+    },
+    {
+      title: translateText(["esignModule"]),
+      filterKey: "permission",
+      roles: esignRoles
     }
   ];
 
