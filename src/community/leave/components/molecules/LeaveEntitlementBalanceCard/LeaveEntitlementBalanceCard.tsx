@@ -33,6 +33,7 @@ const LeaveEntitlementBalanceCard = ({ leaveEntitlementBalance }: Props) => {
       open={isTooltipOpen}
       id="leave-entitlement-balance-tooltip"
       dataTestId="leave-entitlement-balance-tooltip"
+      spanStyles={{ width: "1.25rem", height: "1.25rem", borderRadius: "50%" }}
       title={
         <Stack sx={classes.wrapper}>
           <Stack sx={classes.row}>

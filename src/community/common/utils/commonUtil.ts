@@ -1,4 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
+import { NextRequestWithAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
 import { HOURS_PER_DAY } from "~community/common/constants/timeConstants";
 import {
@@ -15,6 +17,8 @@ import {
 } from "~community/configurations/types/TimeConfigurationsTypes";
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { getShortDayName } from "~community/people/utils/holidayUtils/commonUtils";
+
+import ROUTES from "../constants/routes";
 
 export const getLabelByValue = (
   objectArray: DropdownListType[],
@@ -443,4 +447,21 @@ export const downloadAttachmentToUserDevice = (attachment: FileUploadType) => {
   };
 
   reader.readAsDataURL(attachment.file);
+};
+
+export const checkRestrictedRoutesAndRedirect = (
+  request: NextRequestWithAuth,
+  restrictedRoutes: string[],
+  requiredRole: string,
+  roles: string[]
+): NextResponse | null => {
+  if (
+    restrictedRoutes.some((url) => request.nextUrl.pathname.startsWith(url)) &&
+    !roles.includes(requiredRole)
+  ) {
+    return NextResponse.redirect(
+      new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+    );
+  }
+  return null;
 };

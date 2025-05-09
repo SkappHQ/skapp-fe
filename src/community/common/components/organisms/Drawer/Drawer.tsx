@@ -197,7 +197,7 @@ const Drawer = (): JSX.Element => {
             />
           )}
         </Box>
-        <List sx={classes.list}>
+        <List sx={classes.list} role="list">
           {drawerRoutes &&
             drawerRoutes.map((route) => {
               const isExpanded = route?.id === expandedDrawerListItem;
@@ -208,6 +208,7 @@ const Drawer = (): JSX.Element => {
                 <ListItem
                   disablePadding
                   key={routeId}
+                  role="listitem"
                   sx={classes.listItem}
                   data-testid={appDrawerTestId.mainRoutes + routeId}
                 >
@@ -292,11 +293,12 @@ const Drawer = (): JSX.Element => {
                       <List
                         sx={classes.subList}
                         id={`sub-list-${routeId}`}
-                        role="group"
+                        role="list"
                       >
                         {route?.subTree?.map((subTreeRoute) => (
                           <ListItem
                             key={subTreeRoute.id}
+                            role="listitem"
                             sx={classes.subListItem}
                             onClick={() =>
                               handleListItemButtonClick(

@@ -11,7 +11,8 @@
     "filterBtn": "Click me to open filter menu",
     "inputDate": {
       "select": "Select",
-      "tooltip": "tooltip"
+      "tooltip": "tooltip",
+      "calendarIcon": "Click me to open {{name}} calendar"
     },
     "appBar": {
       "appBar": "App bar",
