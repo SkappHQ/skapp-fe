@@ -73,8 +73,10 @@ const FilterButton = ({
   const theme = useTheme();
   const classes = styles(theme);
 
-  const parentRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const childRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const firstColumnItems = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const secondColumnItems = useRef<{ [key: string]: HTMLDivElement | null }>(
+    {}
+  );
 
   const translateText = useTranslator("commonComponents", "advanceFilter");
 
@@ -140,8 +142,8 @@ const FilterButton = ({
 
       requestAnimationFrame(() => {
         const firstChildKey = `${filterType}0`;
-        if (childRefs.current[firstChildKey]) {
-          childRefs.current[firstChildKey]?.focus();
+        if (secondColumnItems.current[firstChildKey]) {
+          secondColumnItems.current[firstChildKey]?.focus();
         }
       });
     }
@@ -211,14 +213,7 @@ const FilterButton = ({
         handleClose={() => setIsPopperOpen(false)}
         containerStyles={classes.popperContainer2}
       >
-        <Box
-          tabIndex={0}
-          sx={{
-            background: theme.palette.text.whiteText,
-            p: 2,
-            borderRadius: "1rem"
-          }}
-        >
+        <Box tabIndex={0} sx={classes.firstColumn}>
           <Box display="flex" gap={2} p={2}>
             {/* Column 1: Filter Types */}
             <Box
@@ -231,18 +226,12 @@ const FilterButton = ({
               <Typography variant="h4">
                 {translateText(["placeholder"])}
               </Typography>
-              <List
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem"
-                }}
-              >
+              <List sx={classes.firstColumnList}>
                 {Object.keys(filterTypes).map((filterType, index) => (
                   <Box
                     ref={(el: HTMLDivElement | null) => {
-                      parentRefs.current[index] = null;
-                      parentRefs.current[index] = el;
+                      firstColumnItems.current[index] = null;
+                      firstColumnItems.current[index] = el;
                     }}
                     tabIndex={0}
                     key={filterType}
@@ -291,9 +280,12 @@ const FilterButton = ({
                       <IconChip
                         ref={(el: HTMLDivElement | null) => {
                           if (el) {
-                            childRefs.current[selectedFilterType + index] =
-                              null;
-                            childRefs.current[selectedFilterType + index] = el;
+                            secondColumnItems.current[
+                              selectedFilterType + index
+                            ] = null;
+                            secondColumnItems.current[
+                              selectedFilterType + index
+                            ] = el;
                           }
                         }}
                         tabIndex={0}

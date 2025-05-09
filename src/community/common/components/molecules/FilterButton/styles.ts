@@ -19,6 +19,16 @@ const styles = (theme: Theme): StyleProps => ({
     alignItems: "center",
     gap: "0.625rem"
   },
+  firstColumn: {
+    background: theme.palette.text.whiteText,
+    p: 2,
+    borderRadius: "1rem"
+  },
+  firstColumnList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem"
+  },
   popperContainer: {
     display: "flex",
     flexDirection: "column",
