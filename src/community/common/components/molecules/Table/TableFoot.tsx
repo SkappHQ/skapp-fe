@@ -17,6 +17,7 @@ import styles from "./styles";
 export interface TableFootProps {
   pagination?: {
     isEnabled?: boolean;
+    disabled?: boolean;
     totalPages?: number;
     currentPage?: number;
     onChange?: (event: ChangeEvent<unknown>, value: number) => void;
@@ -24,6 +25,7 @@ export interface TableFootProps {
   exportBtn?: {
     label?: string;
     onClick?: () => void;
+    disabled?: boolean;
     toolTip?: {
       text?: string;
     };
@@ -44,6 +46,7 @@ export interface TableFootProps {
 const TableFoot: FC<TableTypes & TableFootProps> = ({
   tableName,
   pagination = {
+    disabled: false,
     isEnabled: true,
     totalPages: 1,
     currentPage: 0,
@@ -51,6 +54,7 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
   },
   exportBtn = {
     label: "",
+    disabled: false,
     onClick: () => {},
     toolTip: {
       text: ""
@@ -79,6 +83,7 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
           onChange={pagination?.onChange || (() => {})}
           paginationStyles={classes?.tableFoot?.pagination}
           aria-label={`${tableName}-table-foot-pagination`}
+          isDisabled={pagination?.disabled}
         />
       )}
       <Stack
@@ -93,6 +98,7 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
             size={ButtonSizes.MEDIUM}
             label={exportBtn.label}
             isFullWidth={false}
+            disabled={exportBtn.disabled}
             styles={exportBtn.styles?.button}
             endIcon={IconName.DOWNLOAD_ICON}
             onClick={exportBtn.onClick}

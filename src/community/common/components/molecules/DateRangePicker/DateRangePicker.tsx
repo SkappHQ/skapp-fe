@@ -44,6 +44,7 @@ interface Props {
   minDate?: Date;
   isRangePicker?: boolean; // Add this prop to toggle between single and range
   chipStyles?: SxProps;
+  tabIndex?: number;
   hasBorder?: boolean;
 }
 
@@ -57,6 +58,7 @@ const DateRangePicker: FC<Props> = ({
   minDate,
   isRangePicker = true, // Default to range picker
   chipStyles,
+  tabIndex = 0,
   hasBorder = false
 }) => {
   const theme: Theme = useTheme();
@@ -99,7 +101,7 @@ const DateRangePicker: FC<Props> = ({
               ? `Selected date ${DateTime.fromJSDate(selectedDates[0]).toFormat("dd MMMM yyyy")}. Press enter to change selected date`
               : "Press enter to select date"
           }
-          tabIndex={0}
+          tabIndex={tabIndex}
           onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
             if (shouldCollapseDropdown(e.key)) setAnchorEl(null);
           }}

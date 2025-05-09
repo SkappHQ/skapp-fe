@@ -3,6 +3,7 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 
 import { TimeUtilizationTrendTypes } from "~community/attendance/types/timeSheetTypes";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 
@@ -45,6 +46,7 @@ const TimeUtilizationCard: FC<Props> = ({
         </Stack>
         <Stack direction="row" justifyContent="center" sx={{ mt: "1.5rem" }}>
           <Chip
+            clickable={false}
             icon={
               trend === TimeUtilizationTrendTypes.TREND_UP ? (
                 <TrendingUp style={{ color: theme.palette.greens.midDark }} />
