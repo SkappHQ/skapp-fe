@@ -1,4 +1,5 @@
 import { Stack, Typography, useTheme } from "@mui/material";
+import { RefObject } from "react";
 
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -6,13 +7,19 @@ import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
 import { IconName } from "~community/common/types/IconTypes";
 
 const EmployeeFilterSection = ({
+  selected,
+  basicChipRef,
   title,
+  accessibilityKey,
   data,
   filterKey,
   currentFilter,
   handleFilterChange
 }: {
+  selected: string;
+  basicChipRef: RefObject<{ [key: string]: HTMLDivElement | null }>;
   title: string;
+  accessibilityKey?: string;
   data: { label: string; value: string }[];
   filterKey: string;
   currentFilter: string[];
@@ -26,6 +33,7 @@ const EmployeeFilterSection = ({
 
   const queryMatches = useMediaQuery();
   const isSmallScreen = queryMatches(`(max-width: 1150px)`);
+
   return (
     <Stack sx={{ marginBottom: 2 }}>
       <Typography
@@ -41,6 +49,12 @@ const EmployeeFilterSection = ({
         {data.map((item, index) => (
           <Stack key={index}>
             <IconChip
+              ref={(el: HTMLDivElement | null) => {
+                if (el && basicChipRef.current) {
+                  basicChipRef.current[selected + accessibilityKey + index] =
+                    el;
+                }
+              }}
               label={item.label}
               onClick={() =>
                 handleFilterChange(item.value, filterKey, currentFilter)

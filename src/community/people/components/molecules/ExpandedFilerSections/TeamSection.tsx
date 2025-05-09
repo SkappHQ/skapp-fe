@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from "@mui/material";
-import { useState } from "react";
+import { RefObject, useState } from "react";
 
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -14,9 +14,13 @@ import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
 
 const TeamSection = ({
-  teams
+  teams,
+  selected,
+  basicChipRef
 }: {
   teams?: FilterButtonTypes[] | undefined;
+  selected: string;
+  basicChipRef: RefObject<{ [key: string]: HTMLDivElement | null }>;
 }) => {
   const theme = useTheme();
   const queryMatches = useMediaQuery();
@@ -100,6 +104,11 @@ const TeamSection = ({
                 {employeeDataFilter?.team?.map((chip, index) => (
                   <Stack key={index}>
                     <IconChip
+                      ref={(el: HTMLDivElement | null) => {
+                        if (el && basicChipRef.current) {
+                          basicChipRef.current[selected + index] = el;
+                        }
+                      }}
                       label={chip.text}
                       icon={
                         <Icon
@@ -136,6 +145,11 @@ const TeamSection = ({
               {teams?.map((team, index) => (
                 <Stack key={index}>
                   <IconChip
+                    ref={(el: HTMLDivElement | null) => {
+                      if (el && basicChipRef.current) {
+                        basicChipRef.current[selected + index] = el;
+                      }
+                    }}
                     label={team.text}
                     onClick={() => handleTeamSelect(team as FilterButtonTypes)}
                     icon={

@@ -40,6 +40,7 @@ const EmployeeDataMenu = ({
 }: Props): JSX.Element => {
   const queryMatches = useMediaQuery();
   const isSmallScreen = queryMatches(`(max-width: 1150px)`);
+
   return (
     <Popper
       anchorEl={anchorEl}
