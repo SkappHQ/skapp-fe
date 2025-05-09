@@ -10,9 +10,11 @@ import {
 import {
   Dispatch,
   JSX,
+  KeyboardEvent,
   MouseEvent,
   SetStateAction,
   useEffect,
+  useRef,
   useState
 } from "react";
 
@@ -32,6 +34,7 @@ import {
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { PopperAndTooltipPositionTypes } from "~community/common/types/MoleculeTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import BasicChip from "../../atoms/Chips/BasicChip/BasicChip";
 import IconChip from "../../atoms/Chips/IconChip.tsx/IconChip";
@@ -70,6 +73,11 @@ const FilterButton = ({
   const theme = useTheme();
   const classes = styles(theme);
 
+  const firstColumnItems = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const secondColumnItems = useRef<{ [key: string]: HTMLDivElement | null }>(
+    {}
+  );
+
   const translateText = useTranslator("commonComponents", "advanceFilter");
 
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
@@ -77,9 +85,11 @@ const FilterButton = ({
   const [selectedFilterType, setSelectedFilterType] = useState<string | null>(
     ClockInSummaryFilterTypes.CLOCK_INS
   );
+
   const [appliedFilters, setAppliedFilters] = useState<{
     [key: string]: (string | number)[];
   }>(selectedFilters);
+
   const visibleFilterCount = 2;
   const handleFilterTypeClick = (filterType: string) => {
     setSelectedFilterType(filterType);
@@ -121,6 +131,22 @@ const FilterButton = ({
   const handleFilterBtnClick = (event: MouseEvent<HTMLElement>): void => {
     setAnchorElement(event.currentTarget);
     setIsPopperOpen((prevState) => !prevState);
+  };
+
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLDivElement>,
+    filterType: string
+  ) => {
+    if (shouldActivateButton(e.key)) {
+      handleFilterTypeClick(filterType);
+
+      requestAnimationFrame(() => {
+        const firstChildKey = `${filterType}0`;
+        if (secondColumnItems.current[firstChildKey]) {
+          secondColumnItems.current[firstChildKey]?.focus();
+        }
+      });
+    }
   };
 
   return (
@@ -169,10 +195,10 @@ const FilterButton = ({
           />
         )}
         <Button
-          buttonStyle={ButtonStyle.TERTIARY}
+          buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
           label={translateText(["placeholder"])}
           endIcon={<FilterIcon />}
-          styles={classes.filterBtn}
+          size={ButtonSizes.MEDIUM}
           onClick={(event: MouseEvent<HTMLElement>) =>
             handleFilterBtnClick(event)
           }
@@ -187,7 +213,7 @@ const FilterButton = ({
         handleClose={() => setIsPopperOpen(false)}
         containerStyles={classes.popperContainer2}
       >
-        <Box sx={{ background: theme.palette.text.whiteText, p: 2 }}>
+        <Box tabIndex={0} sx={classes.firstColumn}>
           <Box display="flex" gap={2} p={2}>
             {/* Column 1: Filter Types */}
             <Box
@@ -200,18 +226,24 @@ const FilterButton = ({
               <Typography variant="h4">
                 {translateText(["placeholder"])}
               </Typography>
-              <List>
-                {Object.keys(filterTypes).map((filterType) => (
+              <List sx={classes.firstColumnList}>
+                {Object.keys(filterTypes).map((filterType, index) => (
                   <Box
+                    ref={(el: HTMLDivElement | null) => {
+                      firstColumnItems.current[index] = el;
+                    }}
+                    tabIndex={0}
                     key={filterType}
                     onClick={() => handleFilterTypeClick(filterType)}
+                    onKeyDown={(e: KeyboardEvent<HTMLDivElement>) =>
+                      handleKeyDown(e, filterType)
+                    }
                     sx={{
                       backgroundColor:
                         filterType === selectedFilterType
                           ? theme.palette.secondary.main
                           : "transparent",
                       borderRadius: "12px",
-                      mb: 1,
                       p: 1.5,
                       color:
                         filterType === selectedFilterType
@@ -242,36 +274,50 @@ const FilterButton = ({
                 sx={{ p: ".5rem 0rem" }}
               >
                 {selectedFilterType &&
-                  filterTypes[selectedFilterType]?.map(({ label, value }) => (
-                    <IconChip
-                      key={value}
-                      label={label}
-                      icon={
-                        appliedFilters[selectedFilterType]?.includes(value) ? (
-                          <Icon
-                            name={IconName.SELECTED_ICON}
-                            fill={theme.palette.primary.dark}
-                          />
-                        ) : undefined
-                      }
-                      chipStyles={{
-                        backgroundColor: appliedFilters[
-                          selectedFilterType
-                        ]?.includes(value)
-                          ? theme.palette.secondary.main
-                          : "default",
-                        padding: "8px 12px",
-                        color: appliedFilters[selectedFilterType]?.includes(
-                          value
-                        )
-                          ? theme.palette.primary.dark
-                          : "default",
-                        border: `1px solid ${appliedFilters[selectedFilterType]?.includes(value) ? theme.palette.secondary.dark : "transparent"}`
-                      }}
-                      onClick={() => handleChipClick(selectedFilterType, value)}
-                      isTruncated={false}
-                    />
-                  ))}
+                  filterTypes[selectedFilterType]?.map(
+                    ({ label, value }, index) => (
+                      <IconChip
+                        ref={(el: HTMLDivElement | null) => {
+                          if (el) {
+                            secondColumnItems.current[
+                              selectedFilterType + index
+                            ] = el;
+                          }
+                        }}
+                        tabIndex={0}
+                        key={value}
+                        label={label}
+                        icon={
+                          appliedFilters[selectedFilterType]?.includes(
+                            value
+                          ) ? (
+                            <Icon
+                              name={IconName.SELECTED_ICON}
+                              fill={theme.palette.primary.dark}
+                            />
+                          ) : undefined
+                        }
+                        chipStyles={{
+                          backgroundColor: appliedFilters[
+                            selectedFilterType
+                          ]?.includes(value)
+                            ? theme.palette.secondary.main
+                            : "default",
+                          padding: "8px 12px",
+                          color: appliedFilters[selectedFilterType]?.includes(
+                            value
+                          )
+                            ? theme.palette.primary.dark
+                            : "default",
+                          border: `1px solid ${appliedFilters[selectedFilterType]?.includes(value) ? theme.palette.secondary.dark : "transparent"}`
+                        }}
+                        onClick={() =>
+                          handleChipClick(selectedFilterType, value)
+                        }
+                        isTruncated={false}
+                      />
+                    )
+                  )}
               </Box>
             </Box>
 
@@ -322,6 +368,7 @@ const FilterButton = ({
                               color: theme.palette.primary.dark,
                               border: `1px solid ${theme.palette.secondary.dark}`
                             }}
+                            tabIndex={-1}
                             isTruncated={false}
                           />
                         );

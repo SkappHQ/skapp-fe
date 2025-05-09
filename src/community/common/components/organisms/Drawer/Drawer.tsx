@@ -161,6 +161,8 @@ const Drawer = (): JSX.Element => {
       open={isDrawerExpanded}
       onClose={handleDrawer}
       hideBackdrop={false}
+      component="nav"
+      aria-label={translateAria(["drawer"])}
     >
       <IconButton
         sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
