@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/material";
-import { JSX, useState } from "react";
+import { JSX, useRef, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import {
@@ -29,6 +29,11 @@ const EmployeeDataFIlterMenuItems = ({
   teams,
   jobFamilies
 }: Props): JSX.Element => {
+  const firstColumnItems = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const secondColumnItems = useRef<{ [key: string]: HTMLDivElement | null }>(
+    {}
+  );
+
   const [selected, setSelected] = useState<PeopleFilterHeadings>(
     PeopleFilterHeadings.DEMOGRAPICS
   );
@@ -44,6 +49,7 @@ const EmployeeDataFIlterMenuItems = ({
     handleApplyFilterPrams(setEmployeeDataParams, employeeDataFilter);
     handleClose();
   };
+
   return (
     <Box>
       <Box
@@ -63,7 +69,12 @@ const EmployeeDataFIlterMenuItems = ({
             borderRightColor: "#D4D4D8"
           }}
         >
-          <FIlterTypeSection selected={selected} setSelected={setSelected} />
+          <FIlterTypeSection
+            firstColumnItems={firstColumnItems}
+            secondColumnItems={secondColumnItems}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </Stack>
         <Stack
           sx={{
@@ -73,6 +84,7 @@ const EmployeeDataFIlterMenuItems = ({
           }}
         >
           <FilterTypeDetailedSection
+            basicChipRef={secondColumnItems}
             selected={selected}
             teams={teams}
             jobFamilies={jobFamilies}
