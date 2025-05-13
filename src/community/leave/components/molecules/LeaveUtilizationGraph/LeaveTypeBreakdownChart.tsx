@@ -2,9 +2,10 @@ import { Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import ReactECharts from "echarts-for-react";
-import React, { JSX, useEffect, useRef, useState } from "react";
+import React, { JSX, useCallback, useEffect, useRef, useState } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useCommonStore } from "~community/common/stores/commonStore";
 import {
   formatChartButtonList,
   updateToggleState
@@ -14,7 +15,6 @@ import {
   shouldMoveLeft,
   shouldMoveRight
 } from "~community/common/utils/keyboardUtils";
-import { useChartResize } from "~community/leave/hooks/useChartResize";
 import { LeaveTypeBreakDownReturnTypes } from "~community/leave/types/LeaveUtilizationTypes";
 import { useLeaveUtilizationChartOptions } from "~community/leave/utils/eChartOptions/leaveUtilizationChartOptions";
 
@@ -39,7 +39,9 @@ const LeaveTypeBreakdownChart = ({
 
   const translateTexts = useTranslator("leaveModule", "dashboard");
 
-  const { resizeChart } = useChartResize(chartRef);
+  const { isDrawerExpanded } = useCommonStore((state) => ({
+    isDrawerExpanded: state.isDrawerExpanded
+  }));
 
   const [buttonColors, setButtonColors] = useState<string[]>([]);
   const [toggle, setToggle] = useState<Record<string, boolean> | undefined>(
@@ -62,6 +64,13 @@ const LeaveTypeBreakdownChart = ({
       setButtonColors(datasets?.data.map((data) => data.color));
     }
   }, [datasets?.data]);
+
+  const resizeChart = useCallback(() => {
+    const chartInstance = chartRef.current?.getEchartsInstance();
+    if (chartInstance) {
+      chartInstance.resize();
+    }
+  }, [chartRef, isDrawerExpanded]);
 
   const toggleData = (leaveType: string): void => {
     setToggle(
