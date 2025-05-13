@@ -1,7 +1,14 @@
 import { Box, Stack, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
 import { DateTime } from "luxon";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import {
   GRAPH_LEFT,
@@ -9,16 +16,20 @@ import {
   WORK_HOUR_TREND_SHIFT_DAYS
 } from "~community/attendance/utils/echartOptions/constants";
 import { useWorkHourTrendChartOptions } from "~community/attendance/utils/echartOptions/workHourTrendChartOptions";
+import {
+  calculateChartIndices,
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import ReadOnlyChip from "~community/common/components/atoms/Chips/BasicChip/ReadOnlyChip";
 import { FilledArrow } from "~community/common/components/atoms/FilledArrow/FilledArrow";
-import Icon from "~community/common/components/atoms/Icon/Icon";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
 import { getMonthName } from "~community/common/utils/dateTimeUtils";
 import { getTabIndex } from "~community/common/utils/keyboardUtils";
 
+import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
 interface Props {
@@ -55,6 +66,9 @@ const WorkHourGraph = ({
     endIndex: WORK_HOUR_TREND_SHIFT_DAYS
   });
 
+  const chartRef = useRef<ReactECharts | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+
   useEffect(() => {
     const startIndex = DateTime.local().day <= 15 ? 0 : 15;
     const endIndex = startIndex + WORK_HOUR_TREND_SHIFT_DAYS;
@@ -74,20 +88,14 @@ const WorkHourGraph = ({
   const theme = useTheme();
 
   const handleClick = (direction: string): void => {
-    setXIndexDay((prev) => {
-      const shift =
-        direction === GRAPH_LEFT
-          ? -WORK_HOUR_TREND_SHIFT_DAYS
-          : WORK_HOUR_TREND_SHIFT_DAYS;
-
-      return {
-        startIndex: Math.max(prev.startIndex + shift, 0),
-        endIndex: Math.min(
-          prev.endIndex + shift,
-          labels.length > 0 ? labels.length - 1 : 0
-        )
-      };
-    });
+    setXIndexDay((prev) =>
+      calculateChartIndices({
+        currentIndices: prev,
+        direction,
+        shiftAmount: WORK_HOUR_TREND_SHIFT_DAYS,
+        totalLabels: labels.length
+      })
+    );
   };
 
   const handleChevronVisibility = (direction: "left" | "right"): string => {
@@ -193,45 +201,52 @@ const WorkHourGraph = ({
                 width: "100%",
                 height: "100%"
               }}
+              tabIndex={0}
+              onKeyDown={(event) =>
+                handleGraphKeyboardNavigation({
+                  event,
+                  highlightedIndex: focusedIndex,
+                  setHighlightedIndex: setFocusedIndex,
+                  chartDataLabels: labels,
+                  xIndexDay,
+                  handleClick,
+                  chartRef: chartRef
+                })
+              }
+              onFocus={() => showTooltipAtIndex(chartRef, focusedIndex)}
             >
-              <ReactECharts option={chartOptions} style={{ height: "10rem" }} />
+              <ReactECharts
+                option={chartOptions}
+                style={{ height: "10rem" }}
+                ref={chartRef}
+              />
             </Box>
-            {data.preProcessedData.length !== 0 && (
-              <Box
-                tabIndex={getTabIndex(isFreeTier)}
-                role="button"
-                onClick={() => handleClick(GRAPH_LEFT)}
-                aria-label={translateTextAria([
-                  "averageHoursWorkedPreviousDates"
-                ])}
-                sx={{
-                  position: "absolute",
-                  bottom: "0.5rem",
-                  left: "5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_LEFT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_LEFT_ICON} />
-              </Box>
-            )}
-            {data.preProcessedData.length !== 0 && (
-              <Box
-                tabIndex={getTabIndex(isFreeTier)}
-                role="button"
-                aria-label={translateTextAria(["averageHoursWorkedNextDates"])}
-                onClick={() => handleClick(GRAPH_RIGHT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "0.5rem",
-                  right: "0.5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_RIGHT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_RIGHT_ICON} />
-              </Box>
-            )}
+            <ChartNavigationArrows
+              tabIndex={getTabIndex(isFreeTier)}
+              hasData={data.preProcessedData.length !== 0}
+              handleClick={handleClick}
+              handleChevronVisibility={handleChevronVisibility}
+              leftAriaLabel={translateTextAria([
+                "averageHoursWorkedPreviousDates"
+              ])}
+              leftStyles={{
+                position: "absolute",
+                bottom: "0.5rem",
+                left: "5%",
+                cursor: "pointer",
+                visibility: handleChevronVisibility(GRAPH_LEFT)
+              }}
+              rightAriaLabel={translateTextAria([
+                "averageHoursWorkedNextDates"
+              ])}
+              rightStyles={{
+                position: "absolute",
+                bottom: "0.5rem",
+                right: "0.5%",
+                cursor: "pointer",
+                visibility: handleChevronVisibility(GRAPH_RIGHT)
+              }}
+            />
           </>
         )}
       </Box>

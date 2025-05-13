@@ -109,10 +109,6 @@ const nextConfig = {
         destination: "/community/people/holidays"
       },
       {
-        source: "/people/individual",
-        destination: "/community/people/individual"
-      },
-      {
         source: "/people/directory/add-new-resource",
         destination: "/community/people/directory/add-new-resource"
       },
@@ -313,8 +309,8 @@ const nextConfig = {
         destination: "/community/people/directory/add"
       },
       {
-        source: "/people/:id",
-        destination: "/community/people/:id"
+        source: "/people/individual/:id",
+        destination: "/community/people/individual/:id"
       },
       {
         source: "/user-account",

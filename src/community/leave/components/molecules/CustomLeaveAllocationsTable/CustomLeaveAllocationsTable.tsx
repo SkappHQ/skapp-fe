@@ -145,6 +145,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       selectedItem={selectedYear}
       title={selectedYear}
       items={getAdjacentYearsWithCurrent()}
+      ariaRole="menu"
     />
   );
 
@@ -189,7 +190,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
               label={leaveAllocation.leaveType?.name}
               isTruncated={false}
             />
-          )
+          ),
+          actionData: leaveAllocation
         };
       }) || []
     );
@@ -289,8 +291,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
   };
 
   const showEmptyTableButton =
-    selectedYear === currentYear.toString() ||
-    selectedYear === nextYear.toString();
+    (selectedYear === currentYear.toString() ||
+      selectedYear === nextYear.toString()) &&
+    !searchTerm &&
+    selectedLeaveTypes.length === 0;
 
   return (
     <Box>
@@ -309,15 +313,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           emptyState: {
             noData: {
               title:
-                !!customLeaveData?.items?.length ||
-                !!searchTerm ||
-                !!selectedLeaveTypes.length
+                !!searchTerm || selectedLeaveTypes.length > 0
                   ? translateText(["emptySearchResult", "title"])
                   : translateText(["emptyCustomLeaveScreen", "title"]),
               description:
-                !!customLeaveData?.items?.length ||
-                !!searchTerm ||
-                !!selectedLeaveTypes.length
+                !!searchTerm || selectedLeaveTypes.length > 0
                   ? translateText(["emptySearchResult", "description"])
                   : translateText(["emptyCustomLeaveScreen", "description"]),
               button: showEmptyTableButton
@@ -337,8 +337,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
             isEnabled: true,
             actionBtns: {
               left: {
-                onClick: (leaveAllocation) =>
-                  handleEdit({
+                onClick: (leaveAllocation) => {
+                  return handleEdit({
                     ...leaveAllocation,
                     employee: {
                       ...leaveAllocation.employee,
@@ -346,7 +346,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
                     },
                     validTo: leaveAllocation.validTo || "",
                     validFrom: leaveAllocation.validFrom || ""
-                  })
+                  });
+                }
               }
             }
           }

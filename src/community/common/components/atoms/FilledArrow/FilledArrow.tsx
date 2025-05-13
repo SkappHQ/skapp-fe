@@ -4,7 +4,7 @@ import { FC, KeyboardEvent, MouseEvent } from "react";
 import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { shouldExpandDropdown } from "~community/common/utils/keyboardUtils";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 interface Props {
   onClick: (
@@ -43,7 +43,8 @@ export const FilledArrow: FC<Props> = ({
       }}
       aria-disabled={disabled}
       onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
-        if (!disabled && shouldExpandDropdown(e.key)) {
+        if (!disabled && shouldActivateButton(e.key)) {
+          e.preventDefault();
           onClick(e);
         }
       }}
