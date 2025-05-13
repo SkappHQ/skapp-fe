@@ -14,6 +14,7 @@ import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 import styles from "./styles";
 
 interface Props {
+  tabIndex?: number;
   hasData: boolean;
   handleClick: (direction: string) => void;
   handleChevronVisibility: (direction: "left" | "right") => string;
@@ -24,6 +25,7 @@ interface Props {
 }
 
 const ChartNavigationArrows = ({
+  tabIndex,
   hasData,
   handleClick,
   handleChevronVisibility,
@@ -51,7 +53,7 @@ const ChartNavigationArrows = ({
   return (
     <>
       <Box
-        tabIndex={0}
+        tabIndex={tabIndex}
         role="button"
         aria-label={leftAriaLabel}
         onClick={() => handleClick(GRAPH_LEFT)}
@@ -67,7 +69,7 @@ const ChartNavigationArrows = ({
       </Box>
 
       <Box
-        tabIndex={0}
+        tabIndex={tabIndex}
         role="button"
         aria-label={rightAriaLabel}
         onClick={() => handleClick(GRAPH_RIGHT)}
