@@ -73,7 +73,7 @@ const BaseLayout = ({ children }: Props) => {
         if (isProtectedRouteWithDrawer) {
           return (
             <>
-              <SkipToContentPopup id="content-with-drawer-main-content" />
+              <SkipToContentPopup />
               <ContentWithDrawer>{children}</ContentWithDrawer>
             </>
           );
@@ -81,7 +81,7 @@ const BaseLayout = ({ children }: Props) => {
 
         return (
           <>
-            <SkipToContentPopup id="content-without-drawer-main-content" />
+            <SkipToContentPopup signedInUser={false} />
             <ContentWithoutDrawer>{children}</ContentWithoutDrawer>
           </>
         );
@@ -89,7 +89,7 @@ const BaseLayout = ({ children }: Props) => {
       case "unauthenticated":
         return (
           <>
-            <SkipToContentPopup id="content-without-drawer-main-content" />
+            <SkipToContentPopup signedInUser={false} />
             <ContentWithoutDrawer>{children}</ContentWithoutDrawer>
           </>
         );

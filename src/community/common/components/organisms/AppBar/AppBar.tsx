@@ -81,7 +81,7 @@ const AppBar = () => {
 
   return (
     <>
-      <Stack sx={classes.wrapper}>
+      <Stack sx={classes.wrapper} id="top-bar" role="menubar" tabIndex={0}>
         <Stack
           sx={{
             ...classes.container,

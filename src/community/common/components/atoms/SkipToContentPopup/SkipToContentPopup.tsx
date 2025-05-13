@@ -4,21 +4,32 @@ import {
   KeyboardEvent,
   MouseEvent,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
 
 import Popper from "~community/common/components/molecules/Popper/Popper";
+import {
+  signedInUserSkipToContentList,
+  unsignedInUserSkipToContentList
+} from "~community/common/constants/commonConstants";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   shouldActivateButton,
-  shouldCollapseDropdown
+  shouldCloseDialog,
+  shouldCollapseDropdown,
+  shouldNavigateBackward
 } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
-const SkipToContentPopup = ({ id }: { id: string }) => {
+const SkipToContentPopup = ({
+  signedInUser = true
+}: {
+  signedInUser?: boolean;
+}) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -28,10 +39,10 @@ const SkipToContentPopup = ({ id }: { id: string }) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
-  const [pendingFocus, setPendingFocus] = useState<string | null>(null);
+  const [focusedItem, setFocusedItem] = useState<string | null>(null);
 
-  const handleOpenPopper = (target: HTMLElement) => {
-    setAnchorEl(target);
+  const handleOpenPopper = () => {
+    setAnchorEl(buttonRef.current);
     setIsPopperOpen(true);
   };
 
@@ -41,22 +52,54 @@ const SkipToContentPopup = ({ id }: { id: string }) => {
   };
 
   useEffect(() => {
-    if (!isPopperOpen && pendingFocus) {
-      const mainContent = document.querySelector(pendingFocus);
-      if (mainContent) {
-        mainContent.setAttribute("tabindex", "-1");
-        mainContent.focus({ preventScroll: true });
+    if (!isPopperOpen && focusedItem) {
+      const focusedElement = document.querySelector(focusedItem);
 
-        mainContent.addEventListener(
+      if (focusedElement) {
+        focusedElement.setAttribute("tabindex", "0");
+        focusedElement.focus({ preventScroll: true });
+
+        focusedElement.addEventListener(
           "blur",
-          () => mainContent.removeAttribute("tabindex"),
+          () => focusedElement.removeAttribute("tabindex"),
           { once: true }
         );
       }
 
-      setPendingFocus(null);
+      setFocusedItem(null);
     }
-  }, [isPopperOpen, pendingFocus]);
+  }, [isPopperOpen, focusedItem]);
+
+  const listItems = useMemo(() => {
+    if (signedInUser) {
+      return signedInUserSkipToContentList;
+    } else {
+      return unsignedInUserSkipToContentList;
+    }
+  }, [signedInUser]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (shouldCloseDialog(event.key)) {
+        handleClosePopper();
+      }
+
+      const sectionIds = listItems.map((item) => item.id.split("#")[1]);
+
+      if (
+        sectionIds.includes(document.activeElement?.id ?? "") &&
+        shouldNavigateBackward(event.key, event.shiftKey)
+      ) {
+        handleOpenPopper();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [listItems]);
 
   const handleOnButtonBlur = (event: FocusEvent<HTMLButtonElement>) => {
     if (
@@ -76,53 +119,45 @@ const SkipToContentPopup = ({ id }: { id: string }) => {
 
   const handleLinkClick = (
     event: MouseEvent<HTMLAnchorElement>,
-    href: string
+    id: string
   ) => {
     event.preventDefault();
-
-    if (href) {
-      setPendingFocus(href);
-    }
+    setFocusedItem(id);
     handleClosePopper();
   };
 
   const handleOnLinkKeyDown = (
     event: KeyboardEvent<HTMLAnchorElement>,
-    href: string
+    id: string
   ) => {
     if (shouldActivateButton(event.key)) {
-      event.preventDefault();
-      if (href) {
-        setPendingFocus(href);
-      }
       handleClosePopper();
+      setFocusedItem(id);
     }
   };
-
-  const listItems = [{ label: translateAria(["mainContent"]), href: `#${id}` }];
 
   return (
     <>
       <button
+        id="skip-to-content-button"
         ref={buttonRef}
-        role="button"
         aria-label={translateAria(["label"])}
         aria-haspopup="dialog"
         aria-expanded={isPopperOpen}
         aria-controls={isPopperOpen ? "skip-to-content-popup" : undefined}
-        onFocus={(event: FocusEvent<HTMLButtonElement>) =>
-          handleOpenPopper(event.currentTarget)
-        }
+        onFocus={() => handleOpenPopper()}
         onBlur={(event: FocusEvent<HTMLButtonElement>) =>
           handleOnButtonBlur(event)
         }
-        onKeyDown={handleOnButtonKeyDown}
+        onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) =>
+          handleOnButtonKeyDown(e)
+        }
         style={{
           position: "absolute",
-          left: "0px",
-          top: "0px",
-          width: "1px",
-          height: "1px",
+          left: "0rem",
+          top: "0rem",
+          width: "0.0625rem",
+          height: "0.0625rem",
           overflow: "hidden",
           zIndex: ZIndexEnums.MAX,
           border: "none"
@@ -146,19 +181,18 @@ const SkipToContentPopup = ({ id }: { id: string }) => {
             <Typography
               key={item.label}
               tabIndex={0}
-              role="link"
               component="a"
               variant="body2"
-              href={item.href || undefined}
+              sx={classes.linkText}
+              href={item.id || undefined}
               onClick={(event: MouseEvent<HTMLAnchorElement>) =>
-                handleLinkClick(event, item.href)
+                handleLinkClick(event, item.id)
               }
               onKeyDown={(event: KeyboardEvent<HTMLAnchorElement>) =>
-                handleOnLinkKeyDown(event, item.href)
+                handleOnLinkKeyDown(event, item.id)
               }
-              sx={classes.linkText}
             >
-              {item.label}
+              {translateAria([item.label])}
             </Typography>
           ))}
         </Stack>

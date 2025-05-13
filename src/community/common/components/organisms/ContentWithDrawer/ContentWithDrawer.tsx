@@ -30,7 +30,6 @@ const ContentWithDrawer = ({ children }: Props) => {
         <Stack sx={classes.contentWrapper}>
           <AppBar />
           <main
-            id="content-with-drawer-main-content"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -38,7 +37,18 @@ const ContentWithDrawer = ({ children }: Props) => {
               height: "100%"
             }}
           >
-            {children}
+            <Stack
+              id="content-with-drawer-main-content"
+              tabIndex={0}
+              role="section"
+              style={{
+                flexDirection: "column",
+                width: "100%",
+                height: "100%"
+              }}
+            >
+              {children}
+            </Stack>
           </main>
         </Stack>
       </Stack>
