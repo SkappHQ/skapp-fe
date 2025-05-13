@@ -92,7 +92,7 @@ const AnalyticCard = ({
                 },
                 background: "none"
               }}
-              tabIndex={getTabIndex(isFreeTier, -1)}
+              tabIndex={getTabIndex(isFreeTier)}
             />
             <Typography variant="body2" marginTop={0.5} sx={{ ...titleStyles }}>
               {cardTitle}

@@ -392,7 +392,7 @@ const UserLeaveHistory: FC<Props> = ({
           Date:
         </Typography>
         <DateRangePicker
-          tabIndex={getTabIndex(isFreeTier, -1)}
+          tabIndex={getTabIndex(isFreeTier)}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
           chipStyles={{
@@ -418,7 +418,7 @@ const UserLeaveHistory: FC<Props> = ({
           />
           <IconButton
             icon={<FilterIcon />}
-            tabIndex={getTabIndex(isFreeTier, -1)}
+            tabIndex={getTabIndex(isFreeTier)}
             onClick={handleFilterClick}
             buttonStyles={{
               border: "0.0625rem solid",
@@ -541,10 +541,10 @@ const UserLeaveHistory: FC<Props> = ({
         }}
         isLoading={isLoading}
         tabIndex={{
-          wrapper: getTabIndex(isFreeTier, -1),
-          container: getTabIndex(isFreeTier, -1),
+          wrapper: getTabIndex(isFreeTier),
+          container: getTabIndex(isFreeTier),
           tableBody: {
-            row: getTabIndex(isFreeTier, -1)
+            row: getTabIndex(isFreeTier)
           }
         }}
       />

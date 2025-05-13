@@ -203,7 +203,7 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       alignItems="center"
       sx={classes.stackContainerStyle}
       onClick={() => mutate()}
-      tabIndex={getTabIndex(isFreeTier, -1)}
+      tabIndex={getTabIndex(isFreeTier)}
       onKeyDown={(e) => {
         if (shouldActivateButton(e.key)) {
           mutate();

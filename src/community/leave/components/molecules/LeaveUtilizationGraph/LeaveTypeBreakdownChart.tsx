@@ -142,7 +142,7 @@ const LeaveTypeBreakdownChart = ({
                       ? "block"
                       : "none"
                 }}
-                tabIndex={getTabIndex(isFreeTier, -1)}
+                tabIndex={getTabIndex(isFreeTier)}
                 onKeyDown={handleKeyPress}
                 onFocus={() => {
                   const chartInstance = chartRef.current?.getEchartsInstance();

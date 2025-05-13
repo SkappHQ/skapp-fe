@@ -119,7 +119,7 @@ const LeaveTypeBreakdownButtons = ({
             {Object.keys(toggle).length > maxLeaveTypeToShow && (
               <>
                 <IconButton
-                  tabIndex={getTabIndex(isFreeTier, -1)}
+                  tabIndex={getTabIndex(isFreeTier)}
                   text={`+ ${count - maxLeaveTypeToShow} ${translateText(["selected"])}`}
                   icon={<DropDownArrow />}
                   buttonStyles={{

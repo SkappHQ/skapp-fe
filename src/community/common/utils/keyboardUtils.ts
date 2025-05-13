@@ -2,8 +2,11 @@ import { MouseEvent } from "react";
 
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 
-export const getTabIndex = (variable: boolean, index: number): number => {
-  return variable ? index : 0;
+export const getTabIndex = (isAccessible: boolean, index?: number): number => {
+  if (index !== undefined) {
+    return index;
+  }
+  return isAccessible ? 0 : -1;
 };
 
 export const handleMainContentFocus = (
