@@ -198,7 +198,7 @@ const WorkHourGraph = ({
             </Box>
             {data.preProcessedData.length !== 0 && (
               <Box
-                tabIndex={getTabIndex(isFreeTier, -1)}
+                tabIndex={getTabIndex(isFreeTier)}
                 role="button"
                 onClick={() => handleClick(GRAPH_LEFT)}
                 aria-label={translateTextAria([
@@ -217,7 +217,7 @@ const WorkHourGraph = ({
             )}
             {data.preProcessedData.length !== 0 && (
               <Box
-                tabIndex={getTabIndex(isFreeTier, -1)}
+                tabIndex={getTabIndex(isFreeTier)}
                 role="button"
                 aria-label={translateTextAria(["averageHoursWorkedNextDates"])}
                 onClick={() => handleClick(GRAPH_RIGHT)}
