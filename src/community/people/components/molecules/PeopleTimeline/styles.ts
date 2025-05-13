@@ -56,6 +56,9 @@ const styles = (theme: Theme): StyleProps => ({
     alignItems: "center",
     marginBottom: ".5rem"
   },
+  eventTitleTypographyWrapper: {
+    width: "25rem"
+  },
   displayDateStack: {
     flexDirection: "row",
     alignItems: "center",

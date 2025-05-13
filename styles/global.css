@@ -49,6 +49,16 @@ input[type="number"] {
   box-shadow: none !important;
 }
 
+.react-tel-input .selected-flag:focus-visible {
+  outline: 0.125rem solid #000000;
+  outline-offset: 0.0625rem;
+  box-shadow: none;
+}
+
+.react-tel-input .selected-flag:focus-visible .arrow {
+  border-top: 0.3125rem solid #000000 !important;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

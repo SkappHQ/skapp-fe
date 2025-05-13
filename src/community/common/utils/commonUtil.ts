@@ -1,4 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
+import { NextRequestWithAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
 import { HOURS_PER_DAY } from "~community/common/constants/timeConstants";
 import {
@@ -15,6 +17,8 @@ import {
 } from "~community/configurations/types/TimeConfigurationsTypes";
 import { JobFamilies } from "~community/people/types/JobRolesTypes";
 import { getShortDayName } from "~community/people/utils/holidayUtils/commonUtils";
+
+import ROUTES from "../constants/routes";
 
 export const getLabelByValue = (
   objectArray: DropdownListType[],
@@ -420,3 +424,44 @@ export function formatEnumString(input: string): string {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+export const downloadAttachmentToUserDevice = (attachment: FileUploadType) => {
+  if (!attachment.file) {
+    return;
+  }
+
+  const link = document.createElement("a");
+  link.download = attachment.name;
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    link.href = reader.result as string;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  reader.onerror = () => {
+    console.error("There was an error reading the file!");
+  };
+
+  reader.readAsDataURL(attachment.file);
+};
+
+export const checkRestrictedRoutesAndRedirect = (
+  request: NextRequestWithAuth,
+  restrictedRoutes: string[],
+  requiredRole: string,
+  roles: string[]
+): NextResponse | null => {
+  if (
+    restrictedRoutes.some((url) => request.nextUrl.pathname.startsWith(url)) &&
+    !roles.includes(requiredRole)
+  ) {
+    return NextResponse.redirect(
+      new URL(ROUTES.AUTH.UNAUTHORIZED, request.url)
+    );
+  }
+  return null;
+};

@@ -19,7 +19,10 @@ import {
   MenuTypes,
   PopperAndTooltipPositionTypes
 } from "~community/common/types/MoleculeTypes";
-import { shouldCollapseDropdown } from "~community/common/utils/keyboardUtils";
+import {
+  getPopperAccessibilityProps,
+  shouldCollapseDropdown
+} from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
@@ -41,6 +44,7 @@ type Props = {
   timeout?: number;
   ariaLabel?: string;
   ariaRole?: string;
+  ariaLabelledBy?: string;
 };
 
 const Popper = ({
@@ -59,7 +63,8 @@ const Popper = ({
   isFlip = false,
   timeout = 0,
   ariaLabel,
-  ariaRole = "dialog"
+  ariaRole = "dialog",
+  ariaLabelledBy
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles();
@@ -158,10 +163,11 @@ const Popper = ({
       }}
       slotProps={{
         root: {
-          "aria-label": ariaLabel,
-          "aria-modal": ariaRole === "dialog" ? true : undefined,
-          role: ariaRole,
-          tabIndex: 0
+          ...getPopperAccessibilityProps({
+            ariaLabel: ariaLabel,
+            ariaRole: ariaRole,
+            ariaLabelledBy: ariaLabelledBy
+          })
         }
       }}
       onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {

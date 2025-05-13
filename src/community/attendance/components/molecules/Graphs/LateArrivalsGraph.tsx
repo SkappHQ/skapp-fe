@@ -17,13 +17,15 @@ import {
   lateArrivalsGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
 import { useLateArrivalsGraphOptions } from "~community/attendance/utils/echartOptions/lateArrivalsGraphOptions";
-import { handleGraphKeyboardNavigation } from "~community/attendance/utils/graphKeyboardNavigationUtils";
-import Icon from "~community/common/components/atoms/Icon/Icon";
+import {
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
 
+import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
 interface Props {
@@ -84,6 +86,7 @@ const LateArrivalsGraph = ({
       startIndex,
       endIndex
     });
+    setLateArrivalHighlightedIndex(startIndex);
   }, [chartData?.labels, dataCategory]);
 
   const lateArrivalsGraphOptions = useLateArrivalsGraphOptions(
@@ -208,6 +211,12 @@ const LateArrivalsGraph = ({
                       chartRef: lateArrivalChartRef
                     })
                   }
+                  onFocus={() =>
+                    showTooltipAtIndex(
+                      lateArrivalChartRef,
+                      lateArrivalHighlightedIndex
+                    )
+                  }
                 >
                   <ReactECharts
                     option={lateArrivalsGraphOptions}
@@ -217,49 +226,21 @@ const LateArrivalsGraph = ({
                 </Box>
               )}
             </Box>
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                aria-label={
-                  dataCategory === "WEEKLY"
-                    ? translateTextAria(["lateArrivalTrendWeeklyPrevious"])
-                    : translateTextAria(["lateArrivalTrendMonthlyPrevious"])
-                }
-                tabIndex={0}
-                role="button"
-                onClick={() => handleClick(GRAPH_LEFT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  left: "6%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_LEFT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_LEFT_ICON} />
-              </Box>
-            )}
-
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                aria-label={
-                  dataCategory === "WEEKLY"
-                    ? translateTextAria(["lateArrivalTrendWeeklyNext"])
-                    : translateTextAria(["lateArrivalTrendMonthlyNext"])
-                }
-                tabIndex={0}
-                role="button"
-                onClick={() => handleClick(GRAPH_RIGHT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  right: "2.5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_RIGHT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_RIGHT_ICON} />
-              </Box>
-            )}
+            <ChartNavigationArrows
+              hasData={chartData?.preProcessedData?.length !== 0}
+              handleClick={handleClick}
+              handleChevronVisibility={handleChevronVisibility}
+              leftAriaLabel={
+                dataCategory === lateArrivalsGraphTypes.WEEKLY.value
+                  ? translateTextAria(["lateArrivalTrendWeeklyPrevious"])
+                  : translateTextAria(["lateArrivalTrendMonthlyPrevious"])
+              }
+              rightAriaLabel={
+                dataCategory === lateArrivalsGraphTypes.WEEKLY.value
+                  ? translateTextAria(["lateArrivalTrendWeeklyNext"])
+                  : translateTextAria(["lateArrivalTrendMonthlyNext"])
+              }
+            />
           </>
         )}
       </Box>

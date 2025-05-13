@@ -253,17 +253,6 @@ export const employeeEmploymentDetailsValidation = (
       .nullable(),
     probationEndDate: Yup.date()
       .test(
-        "is-valid",
-        translator(["requireProbationEndDateError"]),
-        function (value) {
-          const startDate = this.parent.probationStartDate;
-          if (startDate && !value) {
-            return false;
-          }
-          return true;
-        }
-      )
-      .test(
         "is-not-same",
         translator(["probationEndDateSameAsStartDateError"]),
         function (value) {

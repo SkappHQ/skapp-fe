@@ -29,12 +29,12 @@ const ToggleSwitch = (props: ToggleSwitchProps): JSX.Element => {
     textStyles
   } = props;
 
-  const currentIndex = options.findIndex((opt) => opt === categoryOption);
+  const currentIndex = options.findIndex((opt) => opt.value === categoryOption);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
     if (shouldToggleSubmenu(e.key)) {
       const nextIndex = currentIndex === 0 ? 1 : 0;
-      setCategoryOption(options[nextIndex]);
+      setCategoryOption(options[nextIndex].value);
       e.preventDefault();
     }
   };

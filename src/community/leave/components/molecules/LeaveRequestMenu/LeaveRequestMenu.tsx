@@ -34,6 +34,7 @@ const LeaveRequestMenu = ({
 }: Props): JSX.Element => {
   return (
     <Popper
+      ariaLabelledBy="filter-icon-btn"
       anchorEl={anchorEl}
       open={open}
       position={position}

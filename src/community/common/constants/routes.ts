@@ -11,7 +11,7 @@ const ROUTES = {
     VERIFY: "/verify/email",
     VERIFY_SUCCESS: "/verify/success",
     VERIFY_RESET_PASSWORD: "/verify/reset-password",
-    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/account-reset-password",
+    VERIFY_FORGOT_OTP: "/verify/reset-password",
     FORGET_PASSWORD: "/forget-password",
     SYSTEM_UPDATE: "/system-update"
   },
@@ -112,3 +112,16 @@ const ROUTES = {
 };
 
 export default ROUTES;
+
+const RESCRITED_DYNAMIC_ROUTES = {
+  PEOPLE: {
+    EDIT: "/people/directory/edit/"
+  }
+};
+
+export const employeeRestrictedRoutes = [
+  RESCRITED_DYNAMIC_ROUTES.PEOPLE.EDIT,
+  ROUTES.PEOPLE.ADD
+];
+
+export const managerRestrictedRoutes = [ROUTES.PEOPLE.ADD];

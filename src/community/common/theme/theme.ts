@@ -235,6 +235,7 @@ declare module "@mui/material/styles/createPalette" {
     darkerText?: string;
     textLighter: string;
     textDarkGrey: string;
+    textBurntGrey: string;
     textGrey: string;
     whiteText?: string;
     blackText?: string;
@@ -280,11 +281,11 @@ export const theme = createTheme({
     },
     primary: {
       main: "#93C5FD", //* primary-color
-      dark: "#2A61A0" //* primary-color-text
+      dark: "#408CE4" //* primary-color-text
     },
     secondary: {
       main: "#DBEAFE", //* primary-color-background
-      dark: "#408CE4" //* primary-color-accent
+      dark: "#2A61A0" //* primary-color-accent
     },
     grey: {
       50: "#FAFAFA",
@@ -318,6 +319,7 @@ export const theme = createTheme({
       textLighter: "#0000000f",
       textDarkGrey: "#27272A",
       textGrey: "#64748B",
+      textBurntGrey: "#65656E",
       whiteText: "#ffffff",
       blackText: "#000000"
     },

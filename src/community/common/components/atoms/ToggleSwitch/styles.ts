@@ -21,7 +21,7 @@ const styles = (theme: Theme) => ({
     padding: "0.25rem 0.75rem",
     fontWeight: 400,
     fontSize: "0.875rem",
-    color: selected ? "common.black" : theme.palette.grey[700],
+    color: selected ? "common.black" : theme.palette.text.textBurntGrey,
     gap: "0.5rem",
     userSelect: "none",
     mozUserSelect: "none",
