@@ -52,23 +52,31 @@ const SkipToContentPopup = ({
   };
 
   useEffect(() => {
+    // Only execute when popup is closed and there's a focused item to handle
     if (!isPopperOpen && focusedItem) {
+      // Find the DOM element referenced by the focusedItem selector
       const focusedElement = document.querySelector(focusedItem);
 
       if (focusedElement) {
+        // Make the element keyboard focusable by adding tabindex
         focusedElement.setAttribute("tabindex", "0");
+
+        // Focus the element without scrolling the page
         focusedElement.focus({ preventScroll: true });
 
+        // Set up a one-time event listener to clean up when focus moves away
+        // This removes the tabindex attribute when the element loses focus
         focusedElement.addEventListener(
           "blur",
           () => focusedElement.removeAttribute("tabindex"),
-          { once: true }
+          { once: true } // Ensures the listener runs only once
         );
       }
 
+      // Reset the focused item state after handling
       setFocusedItem(null);
     }
-  }, [isPopperOpen, focusedItem]);
+  }, [isPopperOpen, focusedItem]); // Re-run when popup state or focused item changes
 
   const listItems = useMemo(() => {
     if (signedInUser) {
@@ -159,7 +167,7 @@ const SkipToContentPopup = ({
           width: "0.0625rem",
           height: "0.0625rem",
           overflow: "hidden",
-          zIndex: ZIndexEnums.MAX,
+          zIndex: ZIndexEnums.SKIP_TO_CONTENT,
           border: "none"
         }}
       >
