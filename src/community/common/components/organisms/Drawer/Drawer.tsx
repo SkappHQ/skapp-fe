@@ -141,6 +141,8 @@ const Drawer = (): JSX.Element => {
     url: string | null
   ) => {
     if (!hasSubTree) {
+      document.body.setAttribute("tabindex", "-1");
+      document.body.focus();
       router.push(url ?? "");
       isBelow1024 && handleDrawer();
     } else {
@@ -164,26 +166,12 @@ const Drawer = (): JSX.Element => {
       component="nav"
       aria-label={translateAria(["drawer"])}
     >
-      <IconButton
-        sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
-        onClick={handleDrawer}
-        data-testid={appDrawerTestId.buttons.drawerToggleBtn}
-        aria-label={
-          isDrawerExpanded
-            ? translateAria(["collapse"])
-            : translateAria(["expand"])
-        }
-      >
-        <Icon
-          name={IconName.CHEVRON_RIGHT_ICON}
-          fill={theme.palette.common.black}
-        />
-      </IconButton>
       <Stack
         sx={{
           ...classes.drawerContainer(isDrawerExpanded),
           visibility: "visible"
         }}
+        id="side-bar"
       >
         <Box sx={classes.imageWrapper}>
           {!isLoading && (
@@ -198,7 +186,7 @@ const Drawer = (): JSX.Element => {
           )}
         </Box>
         <List sx={classes.list} role="list">
-          {drawerRoutes &&
+          {drawerRoutes ? (
             drawerRoutes.map((route) => {
               const isExpanded = route?.id === expandedDrawerListItem;
               const hasSubTree = route?.hasSubTree ?? false;
@@ -307,6 +295,16 @@ const Drawer = (): JSX.Element => {
                                 subTreeRoute.url
                               )
                             }
+                            onKeyDown={(e) => {
+                              if (shouldActivateLink(e.key)) {
+                                e.preventDefault();
+                                handleListItemButtonClick(
+                                  subTreeRoute.id,
+                                  subTreeRoute.hasSubTree,
+                                  subTreeRoute.url
+                                );
+                              }
+                            }}
                             onMouseEnter={() =>
                               setHoveredDrawerItemUrl(subTreeRoute.url)
                             }
@@ -339,7 +337,10 @@ const Drawer = (): JSX.Element => {
                   )}
                 </ListItem>
               );
-            })}
+            })
+          ) : (
+            <></>
+          )}
         </List>
 
         {isDrawerExpanded && (
@@ -375,6 +376,21 @@ const Drawer = (): JSX.Element => {
           </Stack>
         )}
       </Stack>
+      <IconButton
+        sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
+        onClick={handleDrawer}
+        data-testid={appDrawerTestId.buttons.drawerToggleBtn}
+        aria-label={
+          isDrawerExpanded
+            ? translateAria(["collapse"])
+            : translateAria(["expand"])
+        }
+      >
+        <Icon
+          name={IconName.CHEVRON_RIGHT_ICON}
+          fill={theme.palette.common.black}
+        />
+      </IconButton>
     </StyledDrawer>
   );
 };
