@@ -95,7 +95,7 @@ const DragAndDropField: FC<Props> = ({
   useEffect(() => {
     setValidationError(!!fileUploadErrorsList?.length);
     setAttachmentErrors?.(fileUploadErrorsList);
-  }, [fileUploadErrorsList, setAttachmentErrors]);
+  }, [fileUploadErrorsList]);
 
   useEffect(() => {
     const chipLabel = uploadableFiles[1]
@@ -215,6 +215,33 @@ const DragAndDropField: FC<Props> = ({
     ]
   );
 
+  const getInlineErrorMessage = useMemo(() => {
+    if (!validationError) {
+      return "";
+    }
+
+    if (customError) {
+      return customError;
+    }
+
+    if (
+      fileUploadErrorsList?.length &&
+      fileUploadErrorsList[0]?.errors?.[0]?.message
+    ) {
+      return getUploadError(
+        fileUploadErrorsList[0].errors[0].message as string
+      );
+    }
+
+    return translateText(["validAttachment"]);
+  }, [
+    validationError,
+    customError,
+    fileUploadErrorsList,
+    getUploadError,
+    translateText
+  ]);
+
   return (
     <>
       {label ? <Typography sx={classes.labelText}>{label}</Typography> : <> </>}
@@ -308,15 +335,10 @@ const DragAndDropField: FC<Props> = ({
           </Stack>
         </>
       </div>
-      {validationError || customError ? (
-        <Typography variant="body2" sx={classes.errorText}>
-          {fileUploadErrorsList?.length
-            ? (getUploadError(
-                fileUploadErrorsList?.[0].errors?.[0]?.message as string
-              ) ?? "")
-            : customError || translateText(["validAttachment"])}
-        </Typography>
-      ) : null}
+
+      <Typography variant="body2" sx={classes.errorText}>
+        {getInlineErrorMessage}
+      </Typography>
     </>
   );
 };
