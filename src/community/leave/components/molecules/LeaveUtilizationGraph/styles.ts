@@ -34,6 +34,10 @@ const styles = (theme: Theme): StyleProps => ({
     alignItems: "center",
     height: "100%",
     width: "100%"
+  },
+  chartContainer: {
+    width: "100%",
+    height: "18.75rem"
   }
 });
 
