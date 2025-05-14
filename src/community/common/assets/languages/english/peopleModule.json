@@ -382,9 +382,11 @@
         "employee": "Employee",
         "manager": "Manager",
         "admin": "Admin",
+        "sender": "Sender",
         "attendanceModule": "Attendance Module",
         "leaveModule": "Leave Module",
-        "peopleModule": "People Module"
+        "peopleModule": "People Module",
+        "esignModule": "E-Signature Module"
       },
       "selectedFiltersFilterItems": {
         "male": "Male",
@@ -407,7 +409,10 @@
         "attendance_admin": "Attendance Admin",
         "attendance_manager": "Attendance Manager",
         "attendance_employee": "Attendance Employee",
-        "super_admin": "Super Admin"
+        "super_admin": "Super Admin",
+        "esign_admin": "E-Sign Admin",
+        "esign_sender": "E-Sign Sender",
+        "esign_employee": "E-Sign Employee"
       }
     },
     "reInvitationSuccessTitle": "Reinvited Successfully",

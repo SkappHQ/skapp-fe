@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 
+import SkipToContentPopup from "~community/common/components/atoms/SkipToContentPopup/SkipToContentPopup";
 import FullScreenLoader from "~community/common/components/molecules/FullScreenLoader/FullScreenLoader";
 import ContentWithDrawer from "~community/common/components/organisms/ContentWithDrawer/ContentWithDrawer";
 import ContentWithoutDrawer from "~community/common/components/organisms/ContentWithoutDrawer/ContentWithoutDrawer";
@@ -70,13 +71,28 @@ const BaseLayout = ({ children }: Props) => {
         }
 
         if (isProtectedRouteWithDrawer) {
-          return <ContentWithDrawer>{children}</ContentWithDrawer>;
+          return (
+            <>
+              <SkipToContentPopup />
+              <ContentWithDrawer>{children}</ContentWithDrawer>
+            </>
+          );
         }
 
-        return <ContentWithoutDrawer>{children}</ContentWithoutDrawer>;
+        return (
+          <>
+            <SkipToContentPopup signedInUser={false} />
+            <ContentWithoutDrawer>{children}</ContentWithoutDrawer>
+          </>
+        );
       }
       case "unauthenticated":
-        return <ContentWithoutDrawer>{children}</ContentWithoutDrawer>;
+        return (
+          <>
+            <SkipToContentPopup signedInUser={false} />
+            <ContentWithoutDrawer>{children}</ContentWithoutDrawer>
+          </>
+        );
       default:
         return <></>;
     }

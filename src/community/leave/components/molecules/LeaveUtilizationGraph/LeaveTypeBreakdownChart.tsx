@@ -2,10 +2,11 @@ import { Stack, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import ReactECharts from "echarts-for-react";
-import React, { JSX, useEffect, useRef, useState } from "react";
+import React, { JSX, useCallback, useEffect, useRef, useState } from "react";
 
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { useCommonStore } from "~community/common/stores/commonStore";
 import {
   formatChartButtonList,
   updateToggleState
@@ -42,6 +43,10 @@ const LeaveTypeBreakdownChart = ({
 
   const translateTexts = useTranslator("leaveModule", "dashboard");
 
+  const { isDrawerExpanded } = useCommonStore((state) => ({
+    isDrawerExpanded: state.isDrawerExpanded
+  }));
+
   const [buttonColors, setButtonColors] = useState<string[]>([]);
   const [toggle, setToggle] = useState<Record<string, boolean> | undefined>(
     datasets?.toggle
@@ -63,6 +68,13 @@ const LeaveTypeBreakdownChart = ({
       setButtonColors(datasets?.data.map((data) => data.color));
     }
   }, [datasets?.data]);
+
+  const resizeChart = useCallback(() => {
+    const chartInstance = chartRef.current?.getEchartsInstance();
+    if (chartInstance) {
+      chartInstance.resize();
+    }
+  }, [chartRef, isDrawerExpanded]);
 
   const toggleData = (leaveType: string): void => {
     setToggle(
@@ -140,7 +152,8 @@ const LeaveTypeBreakdownChart = ({
                     toggle &&
                     !Object.values(toggle).every((value: Object) => !value)
                       ? "block"
-                      : "none"
+                      : "none",
+                  ...classes.chartContainer
                 }}
                 tabIndex={getTabIndex(isFreeTier)}
                 onKeyDown={handleKeyPress}
@@ -155,7 +168,15 @@ const LeaveTypeBreakdownChart = ({
                   }
                 }}
               >
-                <ReactECharts option={chartData} ref={chartRef} />
+                <ReactECharts
+                  option={chartData}
+                  ref={chartRef}
+                  style={{ width: "100%" }}
+                  opts={{ renderer: "canvas" }}
+                  onEvents={{
+                    rendered: resizeChart
+                  }}
+                />
               </Box>
             )}
           </Stack>
