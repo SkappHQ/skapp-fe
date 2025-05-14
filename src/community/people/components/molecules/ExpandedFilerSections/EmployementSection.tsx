@@ -11,7 +11,7 @@ import {
 
 import EmployeeFilterSection from "../EmployeeFilterSection/EmployeeFilterSection";
 
-const EmployementSection = ({
+const EmploymentSection = ({
   selected,
   basicChipRef
 }: {
@@ -110,4 +110,4 @@ const EmployementSection = ({
   );
 };
 
-export default EmployementSection;
+export default EmploymentSection;

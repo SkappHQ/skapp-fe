@@ -14,7 +14,7 @@ import { GenderTypes } from "~community/people/types/AddNewResourceTypes";
 
 import { NationalityList } from "../../../utils/data/employeeSetupStaticData";
 
-const DemograpicsSection = ({
+const DemographicsSection = ({
   selected,
   basicChipRef
 }: {
@@ -183,4 +183,4 @@ const DemograpicsSection = ({
   );
 };
 
-export default DemograpicsSection;
+export default DemographicsSection;

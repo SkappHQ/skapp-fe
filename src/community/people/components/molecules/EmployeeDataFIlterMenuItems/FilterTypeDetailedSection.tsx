@@ -5,8 +5,8 @@ import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
 import { FilterButtonTypes } from "~community/common/types/filterTypes";
 import { PeopleFilterHeadings } from "~community/people/types/CommonTypes";
 
-import DemograpicsSection from "../ExpandedFilerSections/DemograpicsSection";
-import EmployementSection from "../ExpandedFilerSections/EmployementSection";
+import DemographicsSection from "../ExpandedFilerSections/DemograpicsSection";
+import EmploymentSection from "../ExpandedFilerSections/EmployementSection";
 import JobFamiliesSection from "../ExpandedFilerSections/JobFamiliesSection";
 import TeamSection from "../ExpandedFilerSections/TeamSection";
 import UserRolesSection from "../ExpandedFilerSections/UserRolesSection";
@@ -28,11 +28,14 @@ const FilterTypeDetailedSection = ({
     switch (selected) {
       case PeopleFilterHeadings.DEMOGRAPICS:
         return (
-          <DemograpicsSection basicChipRef={basicChipRef} selected={selected} />
+          <DemographicsSection
+            basicChipRef={basicChipRef}
+            selected={selected}
+          />
         );
       case PeopleFilterHeadings.EMPLOYMENTS:
         return (
-          <EmployementSection basicChipRef={basicChipRef} selected={selected} />
+          <EmploymentSection basicChipRef={basicChipRef} selected={selected} />
         );
       case PeopleFilterHeadings.JOB_FAMILIES:
         return (
