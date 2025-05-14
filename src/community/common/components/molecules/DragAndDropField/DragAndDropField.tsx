@@ -216,24 +216,22 @@ const DragAndDropField: FC<Props> = ({
   );
 
   const getInlineErrorMessage = useMemo(() => {
-    if (!validationError) {
-      return "";
-    }
+    if (validationError) {
+      if (customError) {
+        return customError;
+      }
 
-    if (customError) {
-      return customError;
-    }
+      if (
+        fileUploadErrorsList?.length &&
+        fileUploadErrorsList[0]?.errors?.[0]?.message
+      ) {
+        return getUploadError(
+          fileUploadErrorsList[0].errors[0].message as string
+        );
+      }
 
-    if (
-      fileUploadErrorsList?.length &&
-      fileUploadErrorsList[0]?.errors?.[0]?.message
-    ) {
-      return getUploadError(
-        fileUploadErrorsList[0].errors[0].message as string
-      );
+      return translateText(["validAttachment"]);
     }
-
-    return translateText(["validAttachment"]);
   }, [
     validationError,
     customError,
