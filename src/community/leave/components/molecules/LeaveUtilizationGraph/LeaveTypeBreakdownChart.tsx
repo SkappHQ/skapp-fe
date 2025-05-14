@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import ReactECharts from "echarts-for-react";
 import React, { JSX, useCallback, useEffect, useRef, useState } from "react";
 
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import {
@@ -11,6 +12,7 @@ import {
   updateToggleState
 } from "~community/common/utils/commonUtil";
 import {
+  getTabIndex,
   shouldCloseDialog,
   shouldMoveLeft,
   shouldMoveRight
@@ -32,6 +34,8 @@ const LeaveTypeBreakdownChart = ({
   error,
   datasets
 }: Props): JSX.Element => {
+  const { isFreeTier } = useSessionData();
+
   const chartRef = useRef<ReactECharts>(null);
 
   const theme: Theme = useTheme();
@@ -151,7 +155,7 @@ const LeaveTypeBreakdownChart = ({
                       : "none",
                   ...classes.chartContainer
                 }}
-                tabIndex={0}
+                tabIndex={getTabIndex(isFreeTier)}
                 onKeyDown={handleKeyPress}
                 onFocus={() => {
                   const chartInstance = chartRef.current?.getEchartsInstance();

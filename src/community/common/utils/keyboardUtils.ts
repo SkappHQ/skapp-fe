@@ -1,5 +1,12 @@
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 
+export const getTabIndex = (isAccessible: boolean, index?: number): number => {
+  if (index !== undefined) {
+    return index;
+  }
+  return isAccessible ? 0 : -1;
+};
+
 // Navigation
 export const shouldNavigateForward = (key: string) => key === KeyboardKeys.TAB;
 export const shouldNavigateBackward = (key: string, shiftKey: boolean) =>

@@ -68,7 +68,8 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   customStyles,
   isRowDisabled = () => false,
   onRowClick,
-  tableName
+  tableName,
+  tabIndex
 }) => {
   const translateText = useTranslator(
     "commonAria",
@@ -114,7 +115,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
           <TableRow
             key={row.id}
             role="row"
-            tabIndex={0}
+            tabIndex={tabIndex?.tableBody?.row ?? 0}
             onClick={() => handleTableRowClick(row)}
             sx={mergeSx([
               classes.tableBody.row.default,

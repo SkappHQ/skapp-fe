@@ -26,12 +26,14 @@ import {
 import { formatDuration, isToday } from "~community/attendance/utils/TimeUtils";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import {
+  getTabIndex,
   shouldActivateButton,
   shouldMoveDownward,
   shouldMoveUpward
@@ -46,6 +48,8 @@ interface Props {
 }
 
 const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
+  const { isFreeTier } = useSessionData();
+
   const theme: Theme = useTheme();
   const translateText = useTranslator("attendanceModule", "timesheet");
   const translateAria = useTranslator(
@@ -199,7 +203,7 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       alignItems="center"
       sx={classes.stackContainerStyle}
       onClick={() => mutate()}
-      tabIndex={0}
+      tabIndex={getTabIndex(isFreeTier)}
       onKeyDown={(e) => {
         if (shouldActivateButton(e.key)) {
           mutate();

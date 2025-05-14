@@ -21,11 +21,13 @@ import {
   handleGraphKeyboardNavigation,
   showTooltipAtIndex
 } from "~community/attendance/utils/graphKeyboardNavigationUtils";
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
+import ReadOnlyChip from "~community/common/components/atoms/Chips/BasicChip/ReadOnlyChip";
 import { FilledArrow } from "~community/common/components/atoms/FilledArrow/FilledArrow";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
 import { getMonthName } from "~community/common/utils/dateTimeUtils";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 
 import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
@@ -50,6 +52,8 @@ const WorkHourGraph = ({
   month,
   setMonth
 }: Props): JSX.Element => {
+  const { isFreeTier } = useSessionData();
+
   const translations = useTranslator("attendanceModule", "dashboards");
   const translateTextAria = useTranslator("attendanceAria", "dashboards");
 
@@ -152,11 +156,11 @@ const WorkHourGraph = ({
               onClick={() => handleArrowClick(GRAPH_LEFT)}
               isRightArrow={false}
               backgroundColor="grey.100"
-              disabled={month === FIRST_MONTH}
+              disabled={month === FIRST_MONTH || isFreeTier}
               ariaLabel={translateTextAria(["lateArrivalTrendMonthlyPrevious"])}
             />
           )}
-          <BasicChip
+          <ReadOnlyChip
             label={getMonthName(month)}
             chipStyles={{ backgroundColor: "grey.100", width: "7.5rem" }}
           />
@@ -166,7 +170,7 @@ const WorkHourGraph = ({
               onClick={() => handleArrowClick(GRAPH_RIGHT)}
               isRightArrow
               backgroundColor="grey.100"
-              disabled={month === LAST_MONTH}
+              disabled={month === LAST_MONTH || isFreeTier}
               ariaLabel={translateTextAria(["lateArrivalTrendMonthlyNext"])}
             />
           )}
@@ -218,6 +222,7 @@ const WorkHourGraph = ({
               />
             </Box>
             <ChartNavigationArrows
+              tabIndex={getTabIndex(isFreeTier)}
               hasData={data.preProcessedData.length !== 0}
               handleClick={handleClick}
               handleChevronVisibility={handleChevronVisibility}

@@ -23,6 +23,7 @@ import {
   formatDateWithOrdinalIndicator,
   getDateForPeriod
 } from "~community/common/utils/dateTimeUtils";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import { useGetEmployeeLeaveHistory } from "~community/leave/api/LeaveAnalyticsApi";
 import LeaveRequestMenu from "~community/leave/components/molecules/LeaveRequestMenu/LeaveRequestMenu";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -59,7 +60,7 @@ const UserLeaveHistory: FC<Props> = ({
 }) => {
   const theme: Theme = useTheme();
 
-  const { isProTier } = useSessionData();
+  const { isFreeTier, isProTier } = useSessionData();
 
   const translateText = useTranslator(
     "peopleModule",
@@ -391,6 +392,7 @@ const UserLeaveHistory: FC<Props> = ({
           Date:
         </Typography>
         <DateRangePicker
+          tabIndex={getTabIndex(isFreeTier)}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
           chipStyles={{
@@ -416,6 +418,7 @@ const UserLeaveHistory: FC<Props> = ({
           />
           <IconButton
             icon={<FilterIcon />}
+            tabIndex={getTabIndex(isFreeTier)}
             onClick={handleFilterClick}
             buttonStyles={{
               border: "0.0625rem solid",
@@ -511,12 +514,14 @@ const UserLeaveHistory: FC<Props> = ({
         tableFoot={{
           pagination: {
             isEnabled: true,
+            disabled: isFreeTier,
             totalPages: employeeLeaveHistoryData.totalPages,
             currentPage: employeeLeaveHistoryData.currentPage,
             onChange: (_event: ChangeEvent<unknown>, value: number) =>
               setCurrentPage(value - 1)
           },
           exportBtn: {
+            disabled: isFreeTier,
             label: translateText(["tableHeaders.exportReport"]),
             onClick: async () => {
               downloadDataAsCSV(
@@ -535,6 +540,13 @@ const UserLeaveHistory: FC<Props> = ({
           }
         }}
         isLoading={isLoading}
+        tabIndex={{
+          wrapper: getTabIndex(isFreeTier),
+          container: getTabIndex(isFreeTier),
+          tableBody: {
+            row: getTabIndex(isFreeTier)
+          }
+        }}
       />
     </Box>
   );

@@ -13,9 +13,11 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { IconName } from "~community/common/types/IconTypes";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
 import TimesheetDailyRecordSkeleton from "../AttendanceSkeletons/TimesheetDailyRecordSkeleton";
@@ -34,6 +36,8 @@ const TimesheetDailyRecordTable = ({
   downloadEmployeeDailyLogCsv,
   isDailyLogLoading
 }: Props): JSX.Element => {
+  const { isFreeTier } = useSessionData();
+
   const theme: Theme = useTheme();
   const translateText = useTranslator("attendanceModule", "timesheet");
   const { data: timeConfigData } = useDefaultCapacity();
@@ -105,7 +109,11 @@ const TimesheetDailyRecordTable = ({
         <TimesheetDailyRecordSkeleton />
       ) : (
         <>
-          <Stack ref={stackRef} sx={classes.stackContainer} tabIndex={0}>
+          <Stack
+            ref={stackRef}
+            sx={classes.stackContainer}
+            tabIndex={getTabIndex(isFreeTier)}
+          >
             {!isDrawerToggled ? (
               <TimesheetDailyRecordTableHeader headerLabels={tableHeaders} />
             ) : (
@@ -145,6 +153,7 @@ const TimesheetDailyRecordTable = ({
                 endIcon={IconName.DOWNLOAD_ICON}
                 isFullWidth={false}
                 styles={classes.buttonStyle}
+                disabled={isFreeTier}
                 onClick={downloadEmployeeDailyLogCsv}
               />
             </Stack>

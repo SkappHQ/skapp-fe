@@ -35,6 +35,14 @@ interface Props {
   };
 }
 
+interface TableIndexProps {
+  wrapper?: number;
+  container?: number;
+  tableBody?: {
+    row?: number;
+  };
+}
+
 export interface CommonTableProps {
   isLoading?: boolean;
   headers: TableHeaderTypes[];
@@ -51,6 +59,7 @@ export interface CommonTableProps {
     handleSelectAllClick?: () => void;
     customStyles?: { cell?: SxProps<Theme>; checkbox?: SxProps<Theme> };
   };
+  tabIndex?: TableIndexProps;
 }
 
 const Table: FC<Props & CommonTableProps & TableTypes> = ({
@@ -65,7 +74,8 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   tableHead,
   tableBody,
   tableFoot,
-  customStyles
+  customStyles,
+  tabIndex
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -75,7 +85,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
       role="group"
       aria-label={`${tableName}-table-wrapper`}
-      tabIndex={0}
+      tabIndex={tabIndex?.wrapper ?? 0}
     >
       <TableHeadActionToolbar
         firstRow={actionToolbar?.firstRow}
@@ -87,7 +97,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       <TableContainer
         sx={mergeSx([classes.container, customStyles?.container])}
         role="region"
-        tabIndex={0}
+        tabIndex={tabIndex?.container ?? 0}
         aria-label={`${tableName}-table-container`}
       >
         <MuiTable
@@ -121,6 +131,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             loadingState={tableBody?.loadingState}
             customStyles={tableBody?.customStyles}
             onRowClick={tableBody?.onRowClick}
+            tabIndex={tabIndex}
           />
         </MuiTable>
       </TableContainer>

@@ -465,3 +465,21 @@ export const checkRestrictedRoutesAndRedirect = (
   }
   return null;
 };
+
+export const getLabelForReadOnlyChip = (
+  isBelow1024?: boolean,
+  isResponsive?: boolean,
+  label?: string
+) => {
+  if (label === undefined) {
+    return "";
+  } else if (isBelow1024 && isResponsive) {
+    return label
+      ?.split(" ")
+      .slice(0, 2)
+      .filter((word) => word !== undefined)
+      .join(" ");
+  }
+
+  return label;
+};
