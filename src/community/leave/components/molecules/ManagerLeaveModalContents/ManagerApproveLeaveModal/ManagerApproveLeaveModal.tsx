@@ -21,7 +21,9 @@ import {
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import useS3Download from "~enterprise/common/hooks/useS3Download";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import LeaveStatusPopupColumn from "../LeaveStatusPopupColumn/LeaveStatusPopupColumn";
 
@@ -67,6 +69,8 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
     false
   );
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   useEffect(() => {
     if (leaveError) {
       setToastMessage({
@@ -84,6 +88,7 @@ const ManagerApproveLeaveModal = ({ setPopupType }: Props): JSX.Element => {
         description: translateText(["approveLeaveSuccessDesc"]),
         isIcon: true
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_APPROVED);
     }
   }, [leaveRequestData?.empName, leaveError, isSuccess]);
 

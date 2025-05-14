@@ -30,6 +30,7 @@ import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
 import SupervisorSelector from "~community/people/components/molecules/SupervisorSelector/SupervisorSelector";
 import { AccountStatusTypes } from "~community/people/enums/PeopleEnums";
 import useEmployeeDetailsFormHandler from "~community/people/hooks/useEmployeeDetailsFormHandler";
+import useFormChangeDetector from "~community/people/hooks/useFormChangeDetector";
 import { usePeopleStore } from "~community/people/store/store";
 import { EmployeeEmploymentContextType } from "~community/people/types/EmployeeTypes";
 import { FormMethods } from "~community/people/types/PeopleEditTypes";
@@ -101,6 +102,8 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
       await refetch();
     };
 
+    const { apiPayload } = useFormChangeDetector();
+
     const initialValues = useMemo<L3EmploymentDetailsType>(
       () =>
         employee?.employment?.employmentDetails ||
@@ -111,10 +114,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
     const context: EmployeeEmploymentContextType = {
       isUniqueEmail,
       isUniqueEmployeeNo,
-      isUpdate:
-        initialValues?.email !== employee?.employment?.employmentDetails?.email
-          ? false
-          : isUpdate
+      isUpdate: apiPayload?.employment?.employmentDetails?.email
+        ? false
+        : isUpdate
     };
 
     const formik = useFormik<L3EmploymentDetailsType>({
@@ -277,7 +279,11 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 inputName="employmentAllocation"
                 label={translateText(["employmentAllocation"])}
                 value={values.employmentAllocation ?? ""}
-                placeholder={translateText(["selectEmploymentAllocation"])}
+                placeholder={
+                  isReadOnly
+                    ? ""
+                    : translateText(["selectEmploymentAllocation"])
+                }
                 onChange={handleChange}
                 error={errors.employmentAllocation ?? ""}
                 componentStyle={{
@@ -479,7 +485,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                 <InputDate
                   label={translateText(["joinedDate"])}
                   placeholder={translateText(["selectJoinedDate"])}
-                  value={DateTime.fromISO(values.joinedDate ?? "")}
                   onchange={async (newValue: string) =>
                     await dateOnChange(
                       "joinedDate",
@@ -515,7 +520,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                       ? translateText(["selectProbationStartDate"])
                       : ""
                   }
-                  value={DateTime.fromISO(values.probationStartDate ?? "")}
                   onchange={async (newValue: string) =>
                     await dateOnChange(
                       "probationStartDate",
@@ -550,7 +554,6 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                       ? translateText(["selectProbationEndDate"])
                       : ""
                   }
-                  value={DateTime.fromISO(values.probationEndDate ?? "")}
                   onchange={async (newValue: string) =>
                     await dateOnChange(
                       "probationEndDate",
@@ -594,7 +597,9 @@ const EmploymentDetailsSection = forwardRef<FormMethods, Props>(
                       }
                     : undefined
                 }
-                placeholder={translateText(["selectWorkTimeZone"])}
+                placeholder={
+                  isReadOnly ? "" : translateText(["selectWorkTimeZone"])
+                }
                 onChange={handleWorkTimeZoneChange}
                 error={errors.workTimeZone ?? ""}
                 isDisableOptionFilter={true}

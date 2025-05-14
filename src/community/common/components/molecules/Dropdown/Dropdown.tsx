@@ -25,6 +25,8 @@ type Props<T> = {
   wrapperStyles?: StyleProps;
   position?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
   buttonSize?: ButtonSizes;
+  ariaLabel?: string;
+  ariaRole?: string;
 };
 
 const Dropdown = <T extends string | { [key: string]: any }>({
@@ -37,7 +39,9 @@ const Dropdown = <T extends string | { [key: string]: any }>({
   dropdownBtnStyles,
   wrapperStyles,
   position = "bottom-start",
-  buttonSize = ButtonSizes.MEDIUM
+  buttonSize = ButtonSizes.MEDIUM,
+  ariaLabel = "dropdown-button",
+  ariaRole
 }: Props<T>) => {
   const [popperOpen, setPopperOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -74,7 +78,7 @@ const Dropdown = <T extends string | { [key: string]: any }>({
         }
         onClick={handleOpenClick}
         disabled={disabled}
-        aria-describedby="dropdown-popper"
+        ariaLabel={ariaLabel}
       />
       <Popper
         anchorEl={anchorEl}
@@ -82,6 +86,7 @@ const Dropdown = <T extends string | { [key: string]: any }>({
         position={position}
         menuType={MenuTypes.SORT}
         id="dropdown-popper"
+        ariaRole={ariaRole}
       >
         <Box sx={{ backgroundColor: "common.white" }}>
           {items.map((item, key) => (

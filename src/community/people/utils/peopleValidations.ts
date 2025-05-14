@@ -7,7 +7,6 @@ import {
   allowsOnlyNumbersAndOptionalDecimal,
   datePatternReverse,
   isValidAlphaNumericString,
-  isValidNameWithAccentsAndApostrophes,
   isValidUrlPattern
 } from "~community/common/regex/regexPatterns";
 import {
@@ -254,17 +253,6 @@ export const employeeEmploymentDetailsValidation = (
       .nullable(),
     probationEndDate: Yup.date()
       .test(
-        "is-valid",
-        translator(["requireProbationEndDateError"]),
-        function (value) {
-          const startDate = this.parent.probationStartDate;
-          if (startDate && !value) {
-            return false;
-          }
-          return true;
-        }
-      )
-      .test(
         "is-not-same",
         translator(["probationEndDateSameAsStartDateError"]),
         function (value) {
@@ -508,14 +496,14 @@ export const quickAddEmployeeValidations = (
       .required(translator(["requireFirstNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
       .matches(
-        isValidNameWithAccentsAndApostrophes(),
+        allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
     lastName: Yup.string()
       .required(translator(["requireLastNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
       .matches(
-        isValidNameWithAccentsAndApostrophes(),
+        allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
     email: Yup.string()

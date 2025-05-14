@@ -10,6 +10,7 @@ import SwitchRow from "~community/common/components/atoms/SwitchRow/SwitchRow";
 import DropdownList from "~community/common/components/molecules/DropdownList/DropdownList";
 import InputField from "~community/common/components/molecules/InputField/InputField";
 import ROUTES from "~community/common/constants/routes";
+import { characterLengths } from "~community/common/constants/stringConstants";
 import { peopleDirectoryTestId } from "~community/common/constants/testIds";
 import {
   ButtonSizes,
@@ -18,6 +19,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
+import { allowsLettersAndSpecialCharactersForNames } from "~community/common/regex/regexPatterns";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { tenantID } from "~community/common/utils/axiosInterceptor";
@@ -219,8 +221,17 @@ const AddNewResourceModal = () => {
   }, [env]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFieldValue(e.target.name, e.target.value);
-    setFieldError(e.target.name, "");
+    const { name, value } = e.target;
+    if (name === "firstName" || name === "lastName") {
+      if (
+        value.length > characterLengths.NAME_LENGTH ||
+        !allowsLettersAndSpecialCharactersForNames().test(value)
+      ) {
+        return;
+      }
+    }
+    setFieldValue(name, value);
+    setFieldError(name, "");
   };
 
   const handleSuperAdminChangeEnterprise = (isChecked: boolean) => {
@@ -398,6 +409,19 @@ const AddNewResourceModal = () => {
   const handleRoleChange =
     env === "enterprise" ? handleRoleChangeEnterprise : handleRoleChangeDefault;
 
+  const handleRefetch = () => {
+    if (!navigator.onLine) {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["quickAddErrorTitle"]),
+        description: translateText(["quickAddErrorDescription"])
+      });
+      return;
+    }
+    refetch();
+  };
+
   return (
     <Stack>
       <Stack
@@ -414,6 +438,7 @@ const AddNewResourceModal = () => {
           label="First Name"
           required
           onChange={handleChange}
+          maxLength={characterLengths.NAME_LENGTH}
           placeHolder={translateText(["enterFirstName"])}
         />
         <InputField
@@ -424,6 +449,7 @@ const AddNewResourceModal = () => {
           required
           placeHolder={translateText(["enterLastName"])}
           onChange={handleChange}
+          maxLength={characterLengths.NAME_LENGTH}
         />
       </Stack>
       <InputField
@@ -635,7 +661,7 @@ const AddNewResourceModal = () => {
         styles={{
           marginTop: 2
         }}
-        onClick={() => refetch()}
+        onClick={handleRefetch}
         disabled={
           values.email === "" ||
           values.firstName === "" ||

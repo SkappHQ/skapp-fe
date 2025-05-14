@@ -353,7 +353,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 inputName="gender"
                 label={translateText(["gender"])}
                 value={values.gender ?? ""}
-                placeholder={translateText(["selectGender"])}
+                placeholder={isReadOnly ? "" : translateText(["selectGender"])}
                 onChange={handleChange}
                 error={errors.gender ?? ""}
                 componentStyle={{
@@ -379,7 +379,9 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 <InputDate
                   label={translateText(["birthDate"])}
                   onchange={handleDateChange}
-                  placeholder={translateText(["selectBirthDate"])}
+                  placeholder={
+                    isReadOnly ? "" : translateText(["selectBirthDate"])
+                  }
                   error={errors?.dateOfBirth ?? ""}
                   maxDate={DateTime.fromISO(
                     new Date()?.toISOString()?.split("T")[0]
@@ -420,7 +422,9 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   label: values.nationality ?? "",
                   value: values.nationality ?? ""
                 }}
-                placeholder={translateText(["selectNationality"])}
+                placeholder={
+                  isReadOnly ? "" : translateText(["selectNationality"])
+                }
                 onChange={handleNationalitySelect}
                 error={errors.nationality ?? ""}
                 componentStyle={{
@@ -507,7 +511,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                       }
                     : undefined
                 }
-                placeholder={translateText(["selectCountry"])}
+                placeholder={isReadOnly ? "" : translateText(["selectCountry"])}
                 componentStyle={{
                   mt: "0rem"
                 }}

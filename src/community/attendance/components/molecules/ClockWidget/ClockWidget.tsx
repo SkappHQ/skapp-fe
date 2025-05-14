@@ -99,7 +99,7 @@ const ClockWidget = (): JSX.Element => {
           component="div"
           sx={classes.timerContainer(isDisabled)}
         >
-          <Timer />
+          <Timer disabled={isDisabled} />
           <ClockInButton disabled={isDisabled} />
         </Stack>
       </Stack>

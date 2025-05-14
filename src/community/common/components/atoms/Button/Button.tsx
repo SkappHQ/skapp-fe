@@ -42,6 +42,7 @@ export interface StyledButtonProps {
   isStrokeAvailable?: boolean;
   shouldBlink?: boolean;
   title?: string;
+  ariaDisabled?: boolean;
 }
 
 const Button = ({
@@ -65,7 +66,8 @@ const Button = ({
   onMouseLeave,
   isDefaultIconColor = false,
   isStrokeAvailable = false,
-  shouldBlink = false
+  shouldBlink = false,
+  ariaDisabled = false
 }: StyledButtonProps): JSX.Element => {
   const theme = useTheme();
 
@@ -130,7 +132,7 @@ const Button = ({
       role="button"
       data-testid={dataTestId}
       aria-label={ariaLabel}
-      aria-disabled={true}
+      aria-disabled={ariaDisabled}
       title={title}
       disableElevation
       type={type}

@@ -17,6 +17,8 @@ import {
   CustomLeaveAllocationType
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 import { customLeaveAllocationValidation } from "~community/leave/utils/validations";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 interface Props {
   setCurrentLeaveAllocationFormData: Dispatch<
@@ -45,6 +47,8 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
     currentEditingLeaveAllocation: state.currentEditingLeaveAllocation
   }));
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onUpdateSuccess = () => {
     setIsLeaveAllocationModalOpen(false);
     setCustomLeaveAllocationModalType(
@@ -57,6 +61,7 @@ const EditLeaveAllocationModal: React.FC<Props> = ({
       description: translateText(["updateSuccessDescription"]),
       isIcon: true
     });
+    sendEvent(GoogleAnalyticsTypes.GA4_CUSTOM_ALLOCATION_UPDATED);
   };
 
   const onUpdateError = (error: string) => {

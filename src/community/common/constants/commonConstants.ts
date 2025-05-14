@@ -21,3 +21,11 @@ export const unsignedInUserSkipToContentList = [
     id: "#content-without-drawer-main-content"
   }
 ];
+
+export const EVENTS_TO_IDENTIFY_IDLE_USER = [
+  "mousedown",
+  "mousemove",
+  "keypress",
+  "scroll",
+  "touchstart"
+];

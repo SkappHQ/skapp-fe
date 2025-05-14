@@ -11,7 +11,7 @@ const ROUTES = {
     VERIFY: "/verify/email",
     VERIFY_SUCCESS: "/verify/success",
     VERIFY_RESET_PASSWORD: "/verify/reset-password",
-    VERIFY_ACCOUNT_RESET_PASSWORD: "/verify/account-reset-password",
+    VERIFY_FORGOT_OTP: "/verify/reset-password",
     FORGET_PASSWORD: "/forget-password",
     SYSTEM_UPDATE: "/system-update"
   },
@@ -95,11 +95,15 @@ const ROUTES = {
     CONTACTS: "/sign/contacts",
     CREATE_DOCUMENT: "/sign/create",
     SIGN: "/sign/sign",
-    REDIRECT: "/sign/redirect",
+    DOCUMENT_ACCESS: "/sign/document/access",
     COMPLETE: "/sign/complete",
     SENT_INFO: {
       BASE: "/sign/sent/envelope",
       ID: (id: number) => `/sign/sent/envelope/${id}`
+    },
+    INBOX_INFO: {
+      BASE: "/sign/inbox/envelope",
+      ID: (id: number) => `/sign/inbox/envelope/${id}`
     }
   },
   REMOVE_PEOPLE: "/remove-people",
@@ -108,3 +112,16 @@ const ROUTES = {
 };
 
 export default ROUTES;
+
+const RESCRITED_DYNAMIC_ROUTES = {
+  PEOPLE: {
+    EDIT: "/people/directory/edit/"
+  }
+};
+
+export const employeeRestrictedRoutes = [
+  RESCRITED_DYNAMIC_ROUTES.PEOPLE.EDIT,
+  ROUTES.PEOPLE.ADD
+];
+
+export const managerRestrictedRoutes = [ROUTES.PEOPLE.ADD];

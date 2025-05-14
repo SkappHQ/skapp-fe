@@ -43,7 +43,7 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
   const isExtraLargeScreen: boolean = useMediaQuery(theme.breakpoints.up("xl"));
   const isXXLScreen: boolean = useMediaQuery(theme.breakpoints.up("2xl"));
 
-  const { data: timelineData } = useGetEmployeeTimeline(
+  const { data: timelineData, isLoading } = useGetEmployeeTimeline(
     employeeId ?? 0,
     isProTier
   );
@@ -63,7 +63,7 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
   return (
     <UpgradeOverlay>
       <>
-        {false && (
+        {isLoading && (
           <MultipleSkeletons
             numOfSkeletons={5}
             height={"5rem"}
@@ -176,7 +176,9 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
                                 </Stack>
                                 <Stack sx={classes.eventDataStack}>
                                   {isExtraLargeScreen && (
-                                    <Stack>
+                                    <Stack
+                                      sx={classes.eventTitleTypographyWrapper}
+                                    >
                                       <Typography
                                         sx={classes.eventTitleTypography}
                                       >

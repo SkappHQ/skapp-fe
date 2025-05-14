@@ -54,6 +54,7 @@ import {
 } from "~community/leave/utils/leaveTypes/LeaveTypeUtils";
 import { handleLeaveTypeApiResponse } from "~community/leave/utils/leaveTypes/apiUtils";
 import { addLeaveTypeValidationSchema } from "~community/leave/utils/validations";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
 
 import { styles } from "./styles";
@@ -100,6 +101,8 @@ const LeaveTypeForm = () => {
 
   const { data: leaveCycle } = useGetLeaveCycle();
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const { mutate: addLeaveType, isPending: isAddingLeaveTypePending } =
     useAddLeaveType(
       handleLeaveTypeApiResponse({
@@ -110,7 +113,8 @@ const LeaveTypeForm = () => {
         redirect: router.push,
         stopAllOngoingQuickSetup,
         setQuickSetupModalType,
-        isOngoingSetupLeave
+        isOngoingSetupLeave,
+        sendEvent
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.ADD_LEAVE_TYPE_ERROR,
@@ -126,7 +130,8 @@ const LeaveTypeForm = () => {
         setToastMessage: setToastMessage,
         translateText: translateText,
         setFormDirty: setLeaveTypeFormDirty,
-        redirect: router.push
+        redirect: router.push,
+        sendEvent
       }),
       handleLeaveTypeApiResponse({
         type: LeaveTypeToastEnums.EDIT_LEAVE_TYPE_ERROR,

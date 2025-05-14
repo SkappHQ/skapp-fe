@@ -73,7 +73,6 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                 <TextField
                   {...params}
                   helperText={null}
-                  aria-readonly={true}
                   style={{
                     backgroundColor: error
                       ? theme.palette.error.light
@@ -113,6 +112,12 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                     backgroundColor: isTimePm(time)
                       ? theme.palette.primary.main
                       : theme.palette.secondary.main
+                  },
+                  "& .MuiClock-clock": {
+                    "&:focus-within": {
+                      outline: `0.125rem solid ${theme.palette.primary.main}`,
+                      outlineOffset: "0.125rem"
+                    }
                   },
                   "& .MuiPickersToolbarText-root": {
                     fontSize: "3rem",

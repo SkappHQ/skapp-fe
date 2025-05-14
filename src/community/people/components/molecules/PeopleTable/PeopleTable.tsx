@@ -26,6 +26,7 @@ import {
   ButtonStyle,
   ToastType
 } from "~community/common/enums/ComponentEnums";
+import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useToast } from "~community/common/providers/ToastProvider";
 import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
@@ -55,7 +56,6 @@ import {
   GetTeamPreProcessor,
   refactorTeamListData
 } from "~community/people/utils/PeopleDirectoryUtils";
-import { TableNames } from "~enterprise/common/enums/Table";
 
 import PeopleTableSortBy from "../PeopleTableHeaders/PeopleTableSortBy";
 import ReinviteConfirmationModal from "../ReinviteConfirmationModal/ReinviteConfirmationModal";
@@ -225,7 +225,8 @@ const PeopleTable: FC<Props> = ({
       ?.filter(
         (employee: AllEmployeeDataType) =>
           !isRemovePeople ||
-          employee?.employeeId !== currentEmployeeDetails?.employeeId
+          String(employee?.employeeId) !==
+            String(currentEmployeeDetails?.employeeId)
       )
       .map((employee: AllEmployeeDataType) => ({
         id: employee?.employeeId,
@@ -401,7 +402,7 @@ const PeopleTable: FC<Props> = ({
       setViewEmployeeId(employee.id);
       setCurrentStep(EditPeopleFormTypes.personal);
       setNextStep(EditPeopleFormTypes.personal);
-      const route = `${ROUTES.PEOPLE.BASE}/${employee.id}`;
+      const route = `${ROUTES.PEOPLE.INDIVIDUAL}/${employee.id}`;
       router.push(route);
     }
   };
@@ -582,23 +583,27 @@ const PeopleTable: FC<Props> = ({
             emptyState: {
               noData: {
                 title:
-                  !employeeData?.length && onSearch
+                  (!employeeData?.length && onSearch) ||
+                  (onSearch && isRemovePeople && employeeData?.length === 1)
                     ? translateText(["emptySearchResult", "title"])
                     : !employeeData?.length && filter
                       ? isPendingInvitationListOpen
                         ? translateText(["emptyPendingList", "title"])
                         : translateText(["emptyFilterResult", "title"])
-                      : !employeeData?.length
+                      : !employeeData?.length ||
+                          (isRemovePeople && employeeData?.length === 1)
                         ? translateText(["emptyEmployeeData", "title"])
                         : undefined,
                 description:
-                  !employeeData?.length && onSearch
+                  (!employeeData?.length && onSearch) ||
+                  (onSearch && isRemovePeople && employeeData?.length === 1)
                     ? translateText(["emptySearchResult", "description"])
                     : !employeeData?.length && filter
                       ? isPendingInvitationListOpen
                         ? translateText(["emptyPendingList", "description"])
                         : translateText(["emptyFilterResult", "description"])
-                      : !employeeData?.length
+                      : !employeeData?.length ||
+                          (isRemovePeople && employeeData?.length === 1)
                         ? translateText(["emptyEmployeeData", "description"])
                         : undefined
               }

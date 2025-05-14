@@ -140,6 +140,16 @@ const LeaveTypeBreakdownChart = ({
                 }}
                 tabIndex={0}
                 onKeyDown={handleKeyPress}
+                onFocus={() => {
+                  const chartInstance = chartRef.current?.getEchartsInstance();
+                  if (chartInstance && datasets?.months?.length) {
+                    chartInstance.dispatchAction({
+                      type: "showTip",
+                      seriesIndex: 0,
+                      dataIndex: highlightedIndex
+                    });
+                  }
+                }}
               >
                 <ReactECharts option={chartData} ref={chartRef} />
               </Box>

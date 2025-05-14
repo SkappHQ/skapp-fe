@@ -104,6 +104,7 @@ const LeaveEntitlementTable = ({
             selectedItem={leaveEntitlementTableSelectedYear}
             title={leaveEntitlementTableSelectedYear}
             items={getAdjacentYearsWithCurrent()}
+            ariaRole="menu"
           />
         </Box>
       </Stack>
@@ -116,27 +117,41 @@ const LeaveEntitlementTable = ({
           </Box>
         )}
         <TableHeaderFill />
-        {searchTerm === "" && tableData?.items?.length === 0 ? (
-          <Box sx={classes.emptyScreenContainer}>
-            <TableEmptyScreen
-              title={translateText(["emptyScreen", "title"], {
-                selectedYear: leaveEntitlementTableSelectedYear
-              })}
-              description={translateText(["emptyScreen", "description"])}
-              button={{
-                label: showEmptyTableButton
-                  ? translateText(["emptyScreen", "buttonText"])
-                  : "",
-                onClick: () => {
-                  setLeaveEntitlementModalType(
-                    tableData?.items?.length === 0
-                      ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
-                      : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
-                  );
-                }
-              }}
-            />
-          </Box>
+        {tableData?.items?.length === 0 ? (
+          searchTerm === "" ? (
+            <Box sx={classes.emptyScreenContainer}>
+              <TableEmptyScreen
+                title={translateText(["emptyScreen", "title"], {
+                  selectedYear: leaveEntitlementTableSelectedYear
+                })}
+                description={translateText(["emptyScreen", "description"])}
+                button={{
+                  label: showEmptyTableButton
+                    ? translateText(["emptyScreen", "buttonText"])
+                    : "",
+                  onClick: () => {
+                    setLeaveEntitlementModalType(
+                      tableData?.items?.length === 0
+                        ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
+                        : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
+                    );
+                  }
+                }}
+              />
+            </Box>
+          ) : (
+            <Box sx={classes.emptyScreenContainer}>
+              <TableEmptyScreen
+                title={translateText(["emptySearchResult", "title"], {
+                  selectedYear: leaveEntitlementTableSelectedYear
+                })}
+                description={translateText([
+                  "emptySearchResult",
+                  "description"
+                ])}
+              />
+            </Box>
+          )
         ) : (
           <>
             {tableData?.items?.map(

@@ -16,6 +16,8 @@ import {
   LeaveExtraPopupTypes,
   LeaveStatusTypes
 } from "~community/leave/types/LeaveRequestTypes";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import LeaveStatusPopupRow from "../LeaveStatusPopupRow/LeaveStatusPopupRow";
 
@@ -39,6 +41,8 @@ const LeaveManagerSuccessModal = ({
   const data = useLeaveStore((state) => state.leaveRequestData);
   const { setToastMessage } = useToast();
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const handelUndo = (): void => {
     const requestData = {
       leaveRequestId: data.leaveId as number,
@@ -58,6 +62,7 @@ const LeaveManagerSuccessModal = ({
         description: translateText(["revokeLeaveSuccessDesc"]),
         isIcon: true
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_REVOKED);
       closeModel();
     } else if (leaveError) {
       setToastMessage({
