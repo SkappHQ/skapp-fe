@@ -172,7 +172,7 @@ const Button = ({
       sx={mergeSx([
         styles,
         {
-          pointerEvents: isLoading ? "none" : "auto",
+          pointerEvents: isLoading || disabled ? "none" : "auto",
           minWidth: label ? "4rem" : "1rem"
         }
       ])}
