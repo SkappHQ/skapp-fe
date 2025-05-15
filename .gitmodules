@@ -1,9 +1,0 @@
-[submodule "src/enterprise"]
-	path = src/enterprise
-	url = https://github.com/rootcodelabs/skapp-ep-fe-src.git
-[submodule "pages/enterprise"]
-	path = pages/enterprise
-	url = https://github.com/rootcodelabs/skapp-ep-fe-pages.git
-[submodule "pages/api/enterprise"]
-	path = pages/api/enterprise
-	url = https://github.com/rootcodelabs/skapp-ep-fe-routes
