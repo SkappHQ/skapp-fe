@@ -1,3 +1,5 @@
+################# frontend
+
 
 # dependencies
 frontend/node_modules
@@ -16,10 +18,46 @@ frontend/build
 frontend/.env
 
 # webstorm
-/.idea/
+**/.idea/
 
 # vscode
-/.vscode/
+**/.vscode/
 
 # typescript
-next-env.d.ts
+frontend/next-env.d.ts
+
+
+
+##################### backend
+backend/HELP.md
+backend/target/
+!backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+backend/.apt_generated
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings
+backend/.springBeans
+backend/.sts4-cache
+backend/.env
+backend/.env.local
+
+### IntelliJ IDEA ###
+backend/.idea
+backend/*.iws
+backend/*.iml
+backend/*.ipr
+
+### NetBeans ###
+backend/nbproject/private/
+backend/nbbuild/
+backend/dist/
+backend/nbdist/
+backend/.nb-gradle/
+backend/build/
+!**/src/main/**/build/
+!**/src/test/**/build/

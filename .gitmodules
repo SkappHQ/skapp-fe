@@ -1,3 +1,4 @@
+;   frontend
 [submodule "frontend/src/enterprise"]
 	path = frontend/src/enterprise
 	url = https://github.com/rootcodelabs/skapp-ep-fe-src.git
@@ -7,3 +8,16 @@
 [submodule "frontend/pages/api/enterprise"]
 	path = frontend/pages/api/enterprise
 	url = https://github.com/rootcodelabs/skapp-ep-fe-routes
+; 	backend
+[submodule "backend/src/main/java/com/skapp/enterprise"]
+	path = backend/src/main/java/com/skapp/enterprise
+	url = https://github.com/rootcodelabs/skapp-ep-be-src.git
+[submodule "backend/src/main/resources/enterprise"]
+	path = backend/src/main/resources/enterprise
+	url = https://github.com/rootcodelabs/skapp-ep-be-resources.git
+[submodule "backend/src/test/java/com/skapp/enterprise"]
+	path = backend/src/test/java/com/skapp/enterprise
+	url = https://github.com/rootcodelabs/skapp-ep-be-tests.git
+[submodule "backend/src/main/resources/config"]
+	path = backend/src/main/resources/config
+	url = https://github.com/rootcodelabs/skapp-ep-be-resources-config.git
