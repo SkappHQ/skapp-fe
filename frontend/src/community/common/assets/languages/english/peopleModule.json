@@ -152,7 +152,7 @@
     "noLeaveFoundDesc": "Before downloading the template, please make sure that there are active leave types configured in the system.",
     "noLeaveFound": "No Active Leave Types",
     "proceed": "Okay",
-    "invalidTemplateError": "Invalid template. Please use the provided template to add leave entitlements",
+    "invalidTemplateError": "Invalid file. Please use the provided template",
     "leaveRequestCollisionText": "Holiday cannot be deleted, due to involvement of existing leave requests",
     "oneEntryOneFailSummary": "The entry was not successfully uploaded. It encountered an error.",
     "manyEntriesAllFailSummary": "All {{totalEntries}} entries encountered errors.",
@@ -178,7 +178,9 @@
     "uploadFailedDes": "Please review the error log and upload again",
     "FULLDAY": "FULLDAY",
     "HALFDAY_EVENING": "HALFDAY_EVENING",
-    "HALFDAY_MORNING": "HALFDAY_MORNING"
+    "HALFDAY_MORNING": "HALFDAY_MORNING",
+    "noRecordCSVTitle": "No Records Found",
+    "noRecordCSVDes": "No records have been found. Please try again."
   },
 
   "editAllInfo": {
