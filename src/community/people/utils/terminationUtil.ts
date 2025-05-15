@@ -6,7 +6,7 @@ export function getStatusStyle(status: AccountStatusEnums) {
   const statusStyles = {
     [AccountStatusEnums.ACTIVE.toUpperCase()]: {
       backgroundColor: theme.palette.greens.lighter,
-      color: theme.palette.greens.deep_shadows
+      color: theme.palette.greens.deepShadows
     },
     [AccountStatusEnums.PENDING.toUpperCase()]: {
       backgroundColor: theme.palette.amber.mid,

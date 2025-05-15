@@ -1,7 +1,14 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
 import { DateTime } from "luxon";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import {
   GRAPH_LEFT,
@@ -10,12 +17,15 @@ import {
   lateArrivalsGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
 import { useLateArrivalsGraphOptions } from "~community/attendance/utils/echartOptions/lateArrivalsGraphOptions";
-import Icon from "~community/common/components/atoms/Icon/Icon";
+import {
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
 
+import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
 interface Props {
@@ -40,8 +50,12 @@ const LateArrivalsGraph = ({
   isDataLoading
 }: Props): JSX.Element => {
   const translations = useTranslator("attendanceModule", "dashboards");
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
+
   const theme: Theme = useTheme();
   const currentMonth = DateTime.local().toFormat("MMM");
+
+  const lateArrivalChartRef = useRef<ReactECharts>(null);
 
   const findTimeIndex = (labels: string[], standardTime: string) => {
     return (
@@ -53,6 +67,9 @@ const LateArrivalsGraph = ({
     startIndex: 0,
     endIndex: 0
   });
+
+  const [lateArrivalHighlightedIndex, setLateArrivalHighlightedIndex] =
+    useState<number>(xIndexDay.startIndex);
 
   const MaxNumberOfWeeks = 51;
   const MaxNumberOfMonths = 12;
@@ -69,6 +86,7 @@ const LateArrivalsGraph = ({
       startIndex,
       endIndex
     });
+    setLateArrivalHighlightedIndex(startIndex);
   }, [chartData?.labels, dataCategory]);
 
   const lateArrivalsGraphOptions = useLateArrivalsGraphOptions(
@@ -152,11 +170,16 @@ const LateArrivalsGraph = ({
                 >
                   {translations(["attendanceDashboard.lateArrivals"])}
                 </Typography>
-
                 <ToggleSwitch
                   options={[
-                    lateArrivalsGraphTypes.WEEKLY.label,
-                    lateArrivalsGraphTypes.MONTHLY.label
+                    {
+                      ariaLabel: translateTextAria(["lateArrivalTrendWeekly"]),
+                      value: lateArrivalsGraphTypes.WEEKLY.label
+                    },
+                    {
+                      ariaLabel: translateTextAria(["lateArrivalTrendMonthly"]),
+                      value: lateArrivalsGraphTypes.MONTHLY.label
+                    }
                   ]}
                   setCategoryOption={(option: string) => {
                     setDataCategory(
@@ -175,42 +198,49 @@ const LateArrivalsGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box>
+                <Box
+                  tabIndex={0}
+                  onKeyDown={(event) =>
+                    handleGraphKeyboardNavigation({
+                      event,
+                      highlightedIndex: lateArrivalHighlightedIndex,
+                      setHighlightedIndex: setLateArrivalHighlightedIndex,
+                      chartDataLabels: chartData.labels,
+                      xIndexDay,
+                      handleClick,
+                      chartRef: lateArrivalChartRef
+                    })
+                  }
+                  onFocus={() =>
+                    showTooltipAtIndex(
+                      lateArrivalChartRef,
+                      lateArrivalHighlightedIndex
+                    )
+                  }
+                >
                   <ReactECharts
                     option={lateArrivalsGraphOptions}
                     style={{ height: "16.25rem" }}
+                    ref={lateArrivalChartRef}
                   />
                 </Box>
               )}
             </Box>
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                onClick={() => handleClick(GRAPH_LEFT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  left: "6%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_LEFT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_LEFT_ICON} />
-              </Box>
-            )}
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                onClick={() => handleClick(GRAPH_RIGHT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  right: "2.5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_RIGHT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_RIGHT_ICON} />
-              </Box>
-            )}
+            <ChartNavigationArrows
+              hasData={chartData?.preProcessedData?.length !== 0}
+              handleClick={handleClick}
+              handleChevronVisibility={handleChevronVisibility}
+              leftAriaLabel={
+                dataCategory === lateArrivalsGraphTypes.WEEKLY.value
+                  ? translateTextAria(["lateArrivalTrendWeeklyPrevious"])
+                  : translateTextAria(["lateArrivalTrendMonthlyPrevious"])
+              }
+              rightAriaLabel={
+                dataCategory === lateArrivalsGraphTypes.WEEKLY.value
+                  ? translateTextAria(["lateArrivalTrendWeeklyNext"])
+                  : translateTextAria(["lateArrivalTrendMonthlyNext"])
+              }
+            />
           </>
         )}
       </Box>

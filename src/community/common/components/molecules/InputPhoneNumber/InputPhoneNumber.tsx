@@ -1,12 +1,19 @@
 import { Stack, type SxProps, Typography } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { type ChangeEvent, FC } from "react";
+import { type ChangeEvent, FC, KeyboardEvent, useRef } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
+import { characterLengths } from "~community/common/constants/stringConstants";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
-import { numberPattern } from "~community/common/regex/regexPatterns";
+import { useTranslator } from "~community/common/hooks/useTranslator";
+import { phoneNumberPattern } from "~community/common/regex/regexPatterns";
+import {
+  shouldActivateButton,
+  shouldCloseDialog,
+  shouldNavigateForward
+} from "~community/common/utils/keyboardUtils";
 
 import InputField from "../InputField/InputField";
 
@@ -44,7 +51,30 @@ const InputPhoneNumber: FC<Props> = ({
   inputStyle,
   readOnly
 }) => {
+  const translateText = useTranslator(
+    "commonAria",
+    "components",
+    "inputPhoneNumber"
+  );
   const theme: Theme = useTheme();
+  const phoneInputRef = useRef<any>(null);
+
+  const handleCountryKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (shouldActivateButton(e.key)) {
+      e.preventDefault();
+      if (phoneInputRef.current) {
+        phoneInputRef.current.setOpen(true);
+      }
+    }
+    if (shouldCloseDialog(e.key) && phoneInputRef.current?.state.open) {
+      e.preventDefault();
+      phoneInputRef.current.setOpen(false);
+    }
+    if (shouldNavigateForward(e.key) && phoneInputRef.current?.state.open) {
+      e.preventDefault();
+      phoneInputRef.current.setOpen(false);
+    }
+  };
 
   return (
     // TODO: move styles to styles.ts
@@ -78,7 +108,10 @@ const InputPhoneNumber: FC<Props> = ({
         <PhoneInput
           value={countryCodeValue}
           onChange={onChangeCountry}
-          inputProps={{ readOnly: true }}
+          inputProps={{
+            readOnly: true,
+            "aria-label": `${label} ${translateText(["countryCode"])}`
+          }}
           disableDropdown={isDisabled}
           inputStyle={{
             backgroundColor: isDisabled
@@ -135,6 +168,7 @@ const InputPhoneNumber: FC<Props> = ({
             zIndex: ZIndexEnums.DEFAULT,
             position: "absolute"
           }}
+          onKeyDown={handleCountryKeyDown}
         />
         <InputField
           inputName={inputName}
@@ -153,13 +187,15 @@ const InputPhoneNumber: FC<Props> = ({
           }}
           inputType="text"
           error={error}
-          maxLength={14}
+          maxLength={characterLengths.PHONE_NUMBER_LENGTH_MAX}
           inputMode="numeric"
           onKeyDown={(e) => {
             // TODO: move this to a separate file and write unit test cases
             if (
-              !numberPattern().test(e.key) &&
-              e.key !== "Backspace" &&
+              !phoneNumberPattern().test(e.key) &&
+              !["Backspace", "Tab", "ArrowLeft", "ArrowRight"].includes(
+                e.key
+              ) &&
               !(e.ctrlKey && ["a", "c", "v", "x"].includes(e.key))
             ) {
               e.preventDefault();
@@ -167,7 +203,7 @@ const InputPhoneNumber: FC<Props> = ({
           }}
           onPaste={(e) => {
             // TODO: move this to a separate file and write unit test cases
-            if (!numberPattern().test(e.clipboardData.getData("Text"))) {
+            if (!phoneNumberPattern().test(e.clipboardData.getData("Text"))) {
               e.preventDefault();
             }
           }}

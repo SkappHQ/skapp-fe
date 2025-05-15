@@ -1,14 +1,17 @@
 import { Collapse, type SxProps, Theme, Typography } from "@mui/material";
-import { JSX, MouseEvent, useState } from "react";
+import { JSX, KeyboardEvent, MouseEvent, useState } from "react";
 
 import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { CSIconButton } from "./CSIconButton";
 import styles from "./styles";
 
 interface Props {
   icon: JSX.Element;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (
+    event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>
+  ) => void;
   buttonStyles?: SxProps<Theme>;
   disabled?: boolean;
   hoverEffect?: boolean;
@@ -18,6 +21,8 @@ interface Props {
   isTextPermenent?: boolean;
   id?: string;
   ariaLabel?: string;
+  tabIndex?: number;
+  title?: string;
 }
 
 const IconButton = ({
@@ -31,7 +36,9 @@ const IconButton = ({
   dataProps,
   isTextPermenent = false,
   id,
-  ariaLabel
+  ariaLabel,
+  tabIndex = 0,
+  title
 }: Props): JSX.Element => {
   const queryMatches = useMediaQuery();
   const isBelow1420 = queryMatches(1420);
@@ -45,6 +52,7 @@ const IconButton = ({
       sx={{
         ...buttonStyles
       }}
+      tabIndex={tabIndex}
       onClick={onClick}
       disabled={disabled}
       disableRipple={disableRipple}
@@ -53,6 +61,12 @@ const IconButton = ({
       {...dataProps}
       data-testid={id || ""}
       aria-label={ariaLabel}
+      title={title || ""}
+      onKeyDown={(e) => {
+        if (shouldActivateButton(e.key)) {
+          onClick(e);
+        }
+      }}
     >
       {hoverEffect && !isBelow1420 && (
         <Collapse orientation="horizontal" in={showText}>

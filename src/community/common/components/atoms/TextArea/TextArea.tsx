@@ -1,8 +1,9 @@
-import { Stack, Theme, Typography, useTheme } from "@mui/material";
-import { ChangeEvent } from "react";
+import { Box, Stack, Theme, Typography, useTheme } from "@mui/material";
+import { ChangeEvent, KeyboardEvent } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import StyledTextArea from "./StyledTextArea";
 import styles from "./styles";
@@ -22,6 +23,10 @@ interface Props<T> {
   maxLength: number;
   iconName?: IconName;
   onIconClick?: () => void;
+  ariaLabel?: {
+    icon?: string;
+    textArea?: string;
+  };
 }
 
 const TextArea = <T,>({
@@ -35,6 +40,7 @@ const TextArea = <T,>({
   maxLength,
   isAttachmentRequired = false,
   iconName,
+  ariaLabel,
   onIconClick
 }: Props<T>) => {
   const theme: Theme = useTheme();
@@ -55,22 +61,37 @@ const TextArea = <T,>({
           <StyledTextArea
             maxLength={maxLength}
             name={name}
+            aria-label={ariaLabel?.textArea ?? label}
             placeholder={placeholder}
             value={value}
             onChange={onChange}
           />
-          {iconName ? (
-            <Icon
-              name={iconName}
+          {iconName && (
+            <Box
+              tabIndex={0}
+              role="button"
               onClick={onIconClick}
-              fill={
-                isAttachmentRequired && error?.attachment
-                  ? theme.palette.error.contrastText
-                  : theme.palette.common.black
-              }
-            />
-          ) : (
-            <></>
+              onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+                if (shouldActivateButton(e.key)) {
+                  onIconClick?.();
+                }
+              }}
+              sx={{
+                height: "min-content",
+                width: "min-content",
+                cursor: "pointer"
+              }}
+              aria-label={ariaLabel?.icon ?? ""}
+            >
+              <Icon
+                name={iconName}
+                fill={
+                  isAttachmentRequired && error?.attachment
+                    ? theme.palette.error.contrastText
+                    : theme.palette.common.black
+                }
+              />
+            </Box>
           )}
         </Stack>
       </Stack>

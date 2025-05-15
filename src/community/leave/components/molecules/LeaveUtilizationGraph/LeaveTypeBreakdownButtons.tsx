@@ -11,8 +11,10 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { MenuTypes } from "~community/common/types/MoleculeTypes";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 import { SelectedFiltersTypes } from "~community/leave/types/LeaveUtilizationTypes";
 
 const buttonStyles = {
@@ -41,6 +43,8 @@ const LeaveTypeBreakdownButtons = ({
   styles,
   isGraph = false
 }: Props): JSX.Element => {
+  const { isFreeTier } = useSessionData();
+
   const theme: Theme = useTheme();
 
   const translateText = useTranslator("commonComponents", "multiTeamSelector");
@@ -76,6 +80,7 @@ const LeaveTypeBreakdownButtons = ({
       return Object.keys(filterTypesArray).map((filterType) => {
         return (
           <Button
+            disabled={isFreeTier}
             key={filterType}
             isFullWidth={false}
             startIcon={!isGraph ? null : colorIndicator(colors[filterType])}
@@ -96,7 +101,7 @@ const LeaveTypeBreakdownButtons = ({
         );
       });
     },
-    [colors, onClick, theme.palette.grey, toggle, isGraph]
+    [colors, onClick, theme.palette.grey, toggle, isGraph, isFreeTier]
   );
 
   const renderTypes = useCallback(() => {
@@ -114,6 +119,7 @@ const LeaveTypeBreakdownButtons = ({
             {Object.keys(toggle).length > maxLeaveTypeToShow && (
               <>
                 <IconButton
+                  tabIndex={getTabIndex(isFreeTier)}
                   text={`+ ${count - maxLeaveTypeToShow} ${translateText(["selected"])}`}
                   icon={<DropDownArrow />}
                   buttonStyles={{
@@ -126,7 +132,10 @@ const LeaveTypeBreakdownButtons = ({
                     border:
                       count > maxLeaveTypeToShow
                         ? `1px solid ${theme.palette.secondary.dark}`
-                        : null
+                        : null,
+                    "&:focus": {
+                      border: `2px solid ${theme.palette.secondary.dark}`
+                    }
                   }}
                   isTextPermenent={count > maxLeaveTypeToShow}
                   onClick={(e: MouseEvent<HTMLElement>) => handleClick(e)}

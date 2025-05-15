@@ -19,11 +19,14 @@ import CheckIcon from "~community/common/assets/Icons/CheckIcon";
 import CheckWrapperIcon from "~community/common/assets/Icons/CheckWrapperIcon";
 import ChevronLeftIcon from "~community/common/assets/Icons/ChevronLeftIcon";
 import ChevronRightIcon from "~community/common/assets/Icons/ChevronRightIcon";
+import ClockDenyIcon from "~community/common/assets/Icons/ClockDenyIcon";
 import ClockIcon from "~community/common/assets/Icons/ClockIcon";
 import CloseIcon from "~community/common/assets/Icons/CloseIcon";
 import CloseStatusPopupIcon from "~community/common/assets/Icons/CloseStatusPopupIcon";
 import ConfigurationsIcon from "~community/common/assets/Icons/ConfigurationsIcon";
 import CopyIcon from "~community/common/assets/Icons/CopyIcon";
+import CreateDocumentIcon from "~community/common/assets/Icons/CreateDocumentIcon";
+import CrossedCircleIcon from "~community/common/assets/Icons/CrossedCircleIcon";
 import CurvedTickIcon from "~community/common/assets/Icons/CurvedTickIcon";
 import DancingWomenIcon from "~community/common/assets/Icons/DancingWomenIcon";
 import DashIcon from "~community/common/assets/Icons/DashIcon";
@@ -33,6 +36,7 @@ import DeleteButtonIcon from "~community/common/assets/Icons/DeleteButtonIcon";
 import DeniedIcon from "~community/common/assets/Icons/DeniedIcon";
 import DeniedStatusIcon from "~community/common/assets/Icons/DeniedStatusIcon";
 import DocumentsIcon from "~community/common/assets/Icons/DocumentsIcon";
+import DottedClockIcon from "~community/common/assets/Icons/DottedClockIcon";
 import DownloadIcon from "~community/common/assets/Icons/DownloadIcon";
 import DragIcon from "~community/common/assets/Icons/DragIcon";
 import DropDownArrowIcon from "~community/common/assets/Icons/DropDownArrowIcon";
@@ -42,6 +46,7 @@ import EmailIcon from "~community/common/assets/Icons/EmailIcon";
 import EmojiIcon from "~community/common/assets/Icons/EmojiIcon";
 import EsignatureModuleIcon from "~community/common/assets/Icons/EsignatureModuleIcon";
 import ExpandIcon from "~community/common/assets/Icons/ExpandIcon";
+import EyeIcon from "~community/common/assets/Icons/EyeIcon";
 import FileIcon from "~community/common/assets/Icons/FileIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
@@ -66,6 +71,7 @@ import NudgeBellIcon from "~community/common/assets/Icons/NudgeBellIcon";
 import ObjectivesIcon from "~community/common/assets/Icons/ObjectivesIcon";
 import PaintTrayIcon from "~community/common/assets/Icons/PaintTrayIcon";
 import PauseIcon from "~community/common/assets/Icons/PauseIcon";
+import PdfIcon from "~community/common/assets/Icons/PdfIcon";
 import PenIcon from "~community/common/assets/Icons/PenIcon";
 import PendingStatusIcon from "~community/common/assets/Icons/PendingStatusIcon";
 import PeopleIcon from "~community/common/assets/Icons/PeopleIcon";
@@ -73,6 +79,7 @@ import PeopleModuleIcon from "~community/common/assets/Icons/PeopleModuleIcon";
 import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
+import PopOutIcon from "~community/common/assets/Icons/PopOutIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
 import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
 import RestoreIcon from "~community/common/assets/Icons/RestoreIcon";
@@ -81,11 +88,13 @@ import RevokedStatusIcon from "~community/common/assets/Icons/RevokedStatusIcon"
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
 import RightColoredIcon from "~community/common/assets/Icons/RightColoredIcon";
 import RightMark from "~community/common/assets/Icons/RightMark";
+import RingBellIcon from "~community/common/assets/Icons/RingBellIcon";
 import RotateLeftIcon from "~community/common/assets/Icons/RotateLeftIcon";
 import RoundedCloseIcon from "~community/common/assets/Icons/RoundedCloseIcon";
 import SaveIcon from "~community/common/assets/Icons/SaveIcon";
 import SearchIcon from "~community/common/assets/Icons/SearchIcon";
 import SelectedIcon from "~community/common/assets/Icons/SelectedIcon";
+import SendIcon from "~community/common/assets/Icons/SendIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
 import SignatureIcon from "~community/common/assets/Icons/SignIcon";
@@ -120,6 +129,7 @@ import VisaCardIcon from "~enterprise/settings/assets/Icons/VisaCardIcon";
 interface Props extends IconProps {
   name: IconName;
   dataTestId?: string;
+  ariaLabel?: string;
 }
 
 export const IconMapping: Partial<
@@ -239,7 +249,17 @@ export const IconMapping: Partial<
   [IconName.MINUS_ICON]: MinusIcon,
   [IconName.USER_ICON]: UserIcon,
   [IconName.EMAIL_ICON]: EmailIcon,
-  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon
+  [IconName.WAITING_STATUS_ICON]: WaitingStatusIcon,
+  [IconName.PDF_ICON]: PdfIcon,
+  [IconName.POP_OUT_ICON]: PopOutIcon,
+  [IconName.RING_BELL_ICON]: RingBellIcon,
+  [IconName.DOTTED_CLOCK_ICON]: DottedClockIcon,
+  [IconName.CREATE_DOCUMENT_ICON]: CreateDocumentIcon,
+  [IconName.CLOCK_DENY_ICON]: ClockDenyIcon,
+  [IconName.EYE_ICON]: EyeIcon,
+  [IconName.SEND_ICON]: SendIcon,
+  [IconName.SUCCESS_TICK_ICON]: SuccessIcon,
+  [IconName.CROSSED_CIRCLE_ICON]: CrossedCircleIcon
   // Add more icons here as needed
 };
 
@@ -251,6 +271,7 @@ const Icon = ({
   id,
   svgProps,
   dataTestId,
+  ariaLabel,
   onClick
 }: Props): JSX.Element => {
   const SelectedIcon = IconMapping[name];
@@ -265,6 +286,7 @@ const Icon = ({
       data-testid={dataTestId}
       svgProps={svgProps}
       onClick={onClick}
+      aria-label={ariaLabel}
     />
   );
 };

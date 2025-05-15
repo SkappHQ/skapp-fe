@@ -64,6 +64,11 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
       "addResource",
       "generalDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "generalDetails"
+    );
 
     const translateStorageText = useTranslator("StorageToastMessage");
 
@@ -223,7 +228,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   id="avatar"
                   alt={`${values.firstName} ${values.lastName}`}
                   src={getAvatarThumbnailUrl()}
-                  sx={{
+                  avatarStyles={{
                     width: "6.125rem",
                     height: "6.125rem",
                     backgroundColor: theme.palette.grey[200]
@@ -348,7 +353,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 inputName="gender"
                 label={translateText(["gender"])}
                 value={values.gender ?? ""}
-                placeholder={translateText(["selectGender"])}
+                placeholder={isReadOnly ? "" : translateText(["selectGender"])}
                 onChange={handleChange}
                 error={errors.gender ?? ""}
                 componentStyle={{
@@ -359,6 +364,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 checkSelected
                 readOnly={isReadOnly}
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectGender"])}
               />
             </Grid>
 
@@ -372,9 +378,10 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
               >
                 <InputDate
                   label={translateText(["birthDate"])}
-                  value={DateTime.fromISO(values?.dateOfBirth ?? "")}
                   onchange={handleDateChange}
-                  placeholder={translateText(["selectBirthDate"])}
+                  placeholder={
+                    isReadOnly ? "" : translateText(["selectBirthDate"])
+                  }
                   error={errors?.dateOfBirth ?? ""}
                   maxDate={DateTime.fromISO(
                     new Date()?.toISOString()?.split("T")[0]
@@ -415,7 +422,9 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                   label: values.nationality ?? "",
                   value: values.nationality ?? ""
                 }}
-                placeholder={translateText(["selectNationality"])}
+                placeholder={
+                  isReadOnly ? "" : translateText(["selectNationality"])
+                }
                 onChange={handleNationalitySelect}
                 error={errors.nationality ?? ""}
                 componentStyle={{
@@ -483,6 +492,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                 itemList={MaritalStatusList}
                 checkSelected
                 isDisabled={isInputsDisabled}
+                ariaLabel={translateAria(["selectMaritalStatus"])}
               />
             </Grid>
             <Grid
@@ -501,7 +511,7 @@ const GeneralDetailsSection = forwardRef<FormMethods, Props>(
                       }
                     : undefined
                 }
-                placeholder={translateText(["selectCountry"])}
+                placeholder={isReadOnly ? "" : translateText(["selectCountry"])}
                 componentStyle={{
                   mt: "0rem"
                 }}

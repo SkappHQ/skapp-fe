@@ -37,6 +37,7 @@ import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { CommonStoreTypes } from "~community/common/types/zustand/StoreTypes";
 import getDrawerRoutes from "~community/common/utils/getDrawerRoutes";
+import { shouldActivateLink } from "~community/common/utils/keyboardUtils";
 import { MyRequestModalEnums } from "~community/leave/enums/MyRequestEnums";
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
@@ -140,6 +141,8 @@ const Drawer = (): JSX.Element => {
     url: string | null
   ) => {
     if (!hasSubTree) {
+      document.body.setAttribute("tabindex", "-1");
+      document.body.focus();
       router.push(url ?? "");
       isBelow1024 && handleDrawer();
     } else {
@@ -160,27 +163,15 @@ const Drawer = (): JSX.Element => {
       open={isDrawerExpanded}
       onClose={handleDrawer}
       hideBackdrop={false}
+      component="nav"
+      aria-label={translateAria(["drawer"])}
     >
-      <IconButton
-        sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
-        onClick={handleDrawer}
-        data-testid={appDrawerTestId.buttons.drawerToggleBtn}
-        aria-label={
-          isDrawerExpanded
-            ? translateAria(["collapse"])
-            : translateAria(["expand"])
-        }
-      >
-        <Icon
-          name={IconName.CHEVRON_RIGHT_ICON}
-          fill={theme.palette.common.black}
-        />
-      </IconButton>
       <Stack
         sx={{
           ...classes.drawerContainer(isDrawerExpanded),
           visibility: "visible"
         }}
+        id="side-bar"
       >
         <Box sx={classes.imageWrapper}>
           {!isLoading && (
@@ -194,117 +185,164 @@ const Drawer = (): JSX.Element => {
             />
           )}
         </Box>
-        <List sx={classes.list}>
-          {drawerRoutes &&
-            drawerRoutes?.map((route) => (
-              <ListItem
-                disablePadding
-                key={route?.id}
-                sx={classes.listItem}
-                data-testid={appDrawerTestId.mainRoutes + route?.id}
-              >
-                <ListItemButton
-                  disableRipple
-                  sx={classes.listItemButton}
-                  onClick={() =>
-                    handleListItemButtonClick(
-                      route?.id ?? "",
-                      route?.hasSubTree ?? false,
-                      route?.url ?? null
-                    )
-                  }
-                  onMouseEnter={() => setHoveredDrawerItemUrl(route?.url ?? "")}
-                  onMouseLeave={() => setHoveredDrawerItemUrl("")}
+        <List sx={classes.list} role="list">
+          {drawerRoutes ? (
+            drawerRoutes.map((route) => {
+              const isExpanded = route?.id === expandedDrawerListItem;
+              const hasSubTree = route?.hasSubTree ?? false;
+              const routeId = route?.id ?? "";
+
+              return (
+                <ListItem
+                  disablePadding
+                  key={routeId}
+                  role="listitem"
+                  sx={classes.listItem}
+                  data-testid={appDrawerTestId.mainRoutes + routeId}
                 >
-                  <ListItemIcon sx={classes.listItemIcon}>
-                    {route?.icon && (
+                  <ListItemButton
+                    disableRipple
+                    sx={classes.listItemButton}
+                    onClick={() =>
+                      handleListItemButtonClick(
+                        routeId,
+                        hasSubTree,
+                        route?.url ?? null
+                      )
+                    }
+                    onMouseEnter={() =>
+                      setHoveredDrawerItemUrl(route?.url ?? "")
+                    }
+                    onMouseLeave={() => setHoveredDrawerItemUrl("")}
+                    onKeyDown={(e) => {
+                      if (shouldActivateLink(e.key)) {
+                        e.preventDefault();
+                        handleListItemButtonClick(
+                          routeId,
+                          hasSubTree,
+                          route?.url ?? null
+                        );
+                      }
+                    }}
+                    aria-expanded={isExpanded}
+                    aria-controls={`sub-list-${routeId}`}
+                  >
+                    <ListItemIcon sx={classes.listItemIcon}>
+                      {route?.icon && (
+                        <Icon
+                          name={route.icon}
+                          fill={getSelectedDrawerItemColor(
+                            theme,
+                            router.pathname,
+                            hoveredDrawerItemUrl,
+                            route.url
+                          )}
+                        />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={route?.name}
+                      sx={classes.listItemText(
+                        getSelectedDrawerItemColor(
+                          theme,
+                          router.pathname,
+                          hoveredDrawerItemUrl,
+                          route?.url ?? null
+                        )
+                      )}
+                    />
+                    <ListItemIcon
+                      sx={classes.chevronIcons(
+                        expandedDrawerListItem,
+                        routeId,
+                        hasSubTree
+                      )}
+                    >
                       <Icon
-                        name={route?.icon}
+                        name={IconName.EXPAND_ICON}
+                        width="0.625rem"
+                        height="0.3125rem"
                         fill={getSelectedDrawerItemColor(
                           theme,
                           router.pathname,
                           hoveredDrawerItemUrl,
-                          route?.url
+                          route?.url ?? ""
                         )}
                       />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={route?.name}
-                    sx={classes.listItemText(
-                      getSelectedDrawerItemColor(
-                        theme,
-                        router.pathname,
-                        hoveredDrawerItemUrl,
-                        route?.url ?? null
-                      )
-                    )}
-                  />
-                  <ListItemIcon
-                    sx={classes.chevronIcons(
-                      expandedDrawerListItem,
-                      route?.id ?? "",
-                      route?.hasSubTree ?? false
-                    )}
-                  >
-                    <Icon
-                      name={IconName.EXPAND_ICON}
-                      width="0.625rem"
-                      height="0.3125rem"
-                      fill={getSelectedDrawerItemColor(
-                        theme,
-                        router.pathname,
-                        hoveredDrawerItemUrl,
-                        route?.url ?? ""
-                      )}
-                    />
-                  </ListItemIcon>
-                </ListItemButton>
-                <Collapse
-                  in={route?.id === expandedDrawerListItem}
-                  collapsedSize="0rem"
-                  sx={classes.subList}
-                >
-                  <List sx={classes.subListItem}>
-                    {route?.hasSubTree &&
-                      route?.subTree?.map((subTreeRoute) => (
-                        <ListItemButton
-                          disableRipple
-                          key={subTreeRoute.id}
-                          sx={classes.subListItemButton}
-                          onClick={() =>
-                            handleListItemButtonClick(
-                              subTreeRoute.id,
-                              subTreeRoute.hasSubTree,
-                              subTreeRoute.url
-                            )
-                          }
-                          onMouseEnter={() =>
-                            setHoveredDrawerItemUrl(subTreeRoute.url)
-                          }
-                          onMouseLeave={() => setHoveredDrawerItemUrl("")}
-                          data-testid={
-                            appDrawerTestId.subRoutes + subTreeRoute.id
-                          }
-                        >
-                          <ListItemText
-                            primary={subTreeRoute.name}
-                            sx={classes.subListItemText(
-                              getSelectedDrawerItemColor(
-                                theme,
-                                router.pathname,
-                                hoveredDrawerItemUrl,
+                    </ListItemIcon>
+                  </ListItemButton>
+
+                  {isExpanded && hasSubTree && (
+                    <Collapse
+                      in={isExpanded}
+                      collapsedSize="0rem"
+                      sx={classes.collapse}
+                    >
+                      <List
+                        sx={classes.subList}
+                        id={`sub-list-${routeId}`}
+                        role="list"
+                      >
+                        {route?.subTree?.map((subTreeRoute) => (
+                          <ListItem
+                            key={subTreeRoute.id}
+                            role="listitem"
+                            sx={classes.subListItem}
+                            onClick={() =>
+                              handleListItemButtonClick(
+                                subTreeRoute.id,
+                                subTreeRoute.hasSubTree,
                                 subTreeRoute.url
                               )
-                            )}
-                          />
-                        </ListItemButton>
-                      ))}
-                  </List>
-                </Collapse>
-              </ListItem>
-            ))}
+                            }
+                            onKeyDown={(e) => {
+                              if (shouldActivateLink(e.key)) {
+                                e.preventDefault();
+                                handleListItemButtonClick(
+                                  subTreeRoute.id,
+                                  subTreeRoute.hasSubTree,
+                                  subTreeRoute.url
+                                );
+                              }
+                            }}
+                            onMouseEnter={() =>
+                              setHoveredDrawerItemUrl(subTreeRoute.url)
+                            }
+                            onMouseLeave={() => setHoveredDrawerItemUrl("")}
+                            data-testid={
+                              appDrawerTestId.subRoutes + subTreeRoute.id
+                            }
+                          >
+                            <ListItemButton
+                              disableRipple
+                              sx={classes.subListItemButton}
+                              tabIndex={0}
+                            >
+                              <ListItemText
+                                primary={subTreeRoute.name}
+                                sx={classes.subListItemText(
+                                  getSelectedDrawerItemColor(
+                                    theme,
+                                    router.pathname,
+                                    hoveredDrawerItemUrl,
+                                    subTreeRoute.url
+                                  )
+                                )}
+                              />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                  )}
+                </ListItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
         </List>
+
         {isDrawerExpanded && (
           <Stack sx={classes.footer}>
             {sessionData?.user.roles?.includes(
@@ -338,6 +376,21 @@ const Drawer = (): JSX.Element => {
           </Stack>
         )}
       </Stack>
+      <IconButton
+        sx={{ ...classes.iconBtn(isDrawerExpanded), visibility: "visible" }} // TO DO: Need to verify why this style affects other places which use this icon
+        onClick={handleDrawer}
+        data-testid={appDrawerTestId.buttons.drawerToggleBtn}
+        aria-label={
+          isDrawerExpanded
+            ? translateAria(["collapse"])
+            : translateAria(["expand"])
+        }
+      >
+        <Icon
+          name={IconName.CHEVRON_RIGHT_ICON}
+          fill={theme.palette.common.black}
+        />
+      </IconButton>
     </StyledDrawer>
   );
 };

@@ -12,7 +12,7 @@ import { type FileUploadType } from "~community/common/types/CommonTypes";
 import { useAddBulkHolidays } from "~community/people/api/HolidayApi";
 import { usePeopleStore } from "~community/people/store/store";
 import {
-  HolidayDataType,
+  HolidayType,
   holidayBulkUploadResponse,
   holidayModalTypes
 } from "~community/people/types/HolidayTypes";
@@ -69,7 +69,7 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
     stopAllOngoingQuickSetup: state.stopAllOngoingQuickSetup
   }));
 
-  const [holidayBulkList, setHolidayBulkList] = useState<HolidayDataType[]>([]);
+  const [holidayBulkList, setHolidayBulkList] = useState<HolidayType[]>([]);
 
   const onSuccess = (response: holidayBulkUploadResponse): void => {
     setBulkUploadData(response);

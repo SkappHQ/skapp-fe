@@ -28,6 +28,7 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useVersionUpgradeStore } from "~community/common/stores/versionUpgradeStore";
 import { themeSelector } from "~community/common/theme/themeSelector";
 import { AdminTypes } from "~community/common/types/AuthTypes";
@@ -51,6 +52,7 @@ import styles from "./styles";
 interface Props {
   pageHead: string;
   title: string;
+  titleAddon?: JSX.Element | null;
   containerStyles?: SxProps;
   dividerStyles?: SxProps;
   children: JSX.Element;
@@ -84,6 +86,7 @@ interface Props {
 const ContentLayout = ({
   pageHead,
   title,
+  titleAddon,
   containerStyles,
   children,
   primaryButtonText,
@@ -112,10 +115,11 @@ const ContentLayout = ({
 
   const classes = styles(theme);
 
+  const translateAria = useTranslator("commonAria", "components");
+
   const router = useRouter();
 
   const { data } = useSession();
-
   const { asPath } = useRouter();
 
   const { showInfoBanner, isDailyNotifyDisplayed } = useVersionUpgradeStore(
@@ -255,12 +259,19 @@ const ContentLayout = ({
                   })
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
+                aria-label={translateAria(["backButton"])}
+                title={translateAria(["backButton"])}
+                tabIndex={0}
               >
                 <Icon name={backIcon} />
               </IconButton>
             )}
-            {!isTitleHidden && <Typography variant="h1">{title}</Typography>}
-
+            {!isTitleHidden && (
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Typography variant="h1">{title}</Typography>
+                {titleAddon}
+              </Stack>
+            )}
             {subtitleNextToTitle && (
               <Typography
                 variant="body2"

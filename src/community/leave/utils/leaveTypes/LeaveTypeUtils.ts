@@ -20,7 +20,7 @@ export const carryForwardKeyDownRestriction = (
 ) => {
   if (
     !hasNumber().test(e.key) &&
-    e.key !== "Backspace" &&
+    !["Backspace", "Tab", "ArrowLeft", "ArrowRight"].includes(e.key) &&
     !(e.ctrlKey && ["a", "c", "v", "x"].includes(e.key))
   ) {
     e.preventDefault();
@@ -117,8 +117,7 @@ export const handleColorClick = ({
   setFieldValue: (field: string, value: any) => void;
   setFieldError: (field: string, value: string) => void;
 }): void => {
-  const updatedColors = [color, ...colors.filter((c) => c !== color)];
-  setColors(updatedColors);
+  setColors(colors);
   setFieldValue("colorCode", color);
   setFieldError("colorCode", "");
 };

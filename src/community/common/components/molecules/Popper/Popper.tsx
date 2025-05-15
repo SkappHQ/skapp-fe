@@ -5,19 +5,31 @@ import {
   Popper as MuiPopper
 } from "@mui/material";
 import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { CSSProperties, JSX, ReactNode, useMemo } from "react";
+import {
+  CSSProperties,
+  JSX,
+  KeyboardEvent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef
+} from "react";
 
 import {
   MenuTypes,
   PopperAndTooltipPositionTypes
 } from "~community/common/types/MoleculeTypes";
+import {
+  getPopperAccessibilityProps,
+  shouldCollapseDropdown
+} from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
 type Props = {
   anchorEl: null | HTMLElement;
   anchorElWidth?: number;
-  handleClose?: (e: MouseEvent | TouchEvent) => void;
+  handleClose?: (e: MouseEvent | TouchEvent | KeyboardEvent) => void;
   position: PopperAndTooltipPositionTypes;
   menuType?: MenuTypes;
   isManager?: boolean;
@@ -32,6 +44,7 @@ type Props = {
   timeout?: number;
   ariaLabel?: string;
   ariaRole?: string;
+  ariaLabelledBy?: string;
 };
 
 const Popper = ({
@@ -50,10 +63,38 @@ const Popper = ({
   isFlip = false,
   timeout = 0,
   ariaLabel,
-  ariaRole = "dialog"
+  ariaRole = "dialog",
+  ariaLabelledBy
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles();
+
+  const popperRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<Element | null>(null);
+
+  /**
+   * This useEffect hook in your React component manages focus when the Popper component opens and closes.
+   * When open is true, it stores the currently focused element, then attempts to focus the first focusable
+   * element within the Popper. When open is false (Popper is closed), it restores focus to the element that
+   * was focused before the Popper opened. requestAnimationFrame ensures the focus logic runs after the component
+   * has been updated in the DOM. The logic previousActiveElement.current as HTMLElement | null)?.focus() uses the
+   * optional chaining operator ?. to avoid errors if previousActiveElement.current is null.
+   */
+  useEffect(() => {
+    if (open) {
+      previousActiveElement.current = document.activeElement;
+
+      requestAnimationFrame(() => {
+        const focusableElement = popperRef.current?.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+
+        focusableElement?.focus();
+      });
+    } else {
+      (previousActiveElement.current as HTMLElement | null)?.focus();
+    }
+  }, [open]);
 
   const wrapperWidth = useMemo(() => {
     if (menuType === MenuTypes.SEARCH) {
@@ -120,15 +161,26 @@ const Popper = ({
         ...classes.wrapper,
         ...wrapperStyles
       }}
-      role={ariaRole}
-      {...(ariaRole === "dialog" ? { "aria-modal": true } : {})}
-      tabIndex={0}
-      aria-label={ariaLabel}
+      slotProps={{
+        root: {
+          ...getPopperAccessibilityProps({
+            ariaLabel: ariaLabel,
+            ariaRole: ariaRole,
+            ariaLabelledBy: ariaLabelledBy
+          })
+        }
+      }}
+      onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+        if (shouldCollapseDropdown(e.key)) {
+          handleClose(e);
+        }
+      }}
     >
       {({ TransitionProps }) => (
         <ClickAwayListener onClickAway={handleClose}>
           <Fade {...TransitionProps} timeout={timeout}>
             <Box
+              ref={popperRef}
               sx={{
                 ...classes.container,
                 marginY: marginY,

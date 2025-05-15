@@ -51,6 +51,8 @@ import { useGetAllHolidays } from "~community/people/api/HolidayApi";
 import { useGetMyTeams } from "~community/people/api/TeamApi";
 import { useIsGoogleCalendarConnected } from "~enterprise/common/api/CalendarApi";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 import { FileCategories } from "~enterprise/common/types/s3Types";
 import { uploadFileToS3ByUrl } from "~enterprise/common/utils/awsS3ServiceFunctions";
 
@@ -70,6 +72,8 @@ const ApplyLeaveModal = () => {
     "myRequests",
     "applyLeaveModal"
   );
+
+  const translateAria = useTranslator("leaveAria", "applyLeave");
 
   const {
     comment,
@@ -139,6 +143,8 @@ const ApplyLeaveModal = () => {
 
   const isEnterprise = useGetEnvironment() === appModes.ENTERPRISE;
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   const onSuccess = (data: LeaveRequestItemsType) => {
     handleApplyLeaveApiResponse({
       type: ApplyLeaveToastEnums.APPLY_LEAVE_SUCCESS,
@@ -151,6 +157,7 @@ const ApplyLeaveModal = () => {
     } else {
       setMyLeaveRequestModalType(MyRequestModalEnums.NONE);
     }
+    sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_APPLIED);
   };
 
   const onError = (error: string) => {
@@ -399,6 +406,10 @@ const ApplyLeaveModal = () => {
           />
           <TextArea
             label={translateText(["comment"])}
+            ariaLabel={{
+              textArea: translateAria(["comment.textArea"]),
+              icon: translateAria(["comment.icon"])
+            }}
             placeholder={translateText(["addComment"])}
             isRequired={
               selectedLeaveAllocationData.leaveType.isCommentMandatory

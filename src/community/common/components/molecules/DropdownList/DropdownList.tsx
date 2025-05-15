@@ -9,7 +9,7 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 import { Theme, useTheme } from "@mui/material/styles";
 import { Box, SxProps } from "@mui/system";
-import { FC, JSX, SyntheticEvent } from "react";
+import { FC, JSX, KeyboardEvent, SyntheticEvent } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
@@ -18,6 +18,10 @@ import { useTranslator } from "~community/common/hooks/useTranslator";
 import { DropdownListType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
+import {
+  shouldCollapseDropdown,
+  shouldExpandDropdown
+} from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -27,8 +31,16 @@ interface Props {
   inputName: string;
   inputStyle?: SxProps;
   value?: string | number;
-  onChange?: (event: SelectChangeEvent) => void;
-  onInput?: (event: SelectChangeEvent) => void;
+  onChange?: (
+    event:
+      | SelectChangeEvent
+      | KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onInput?: (
+    event:
+      | SelectChangeEvent
+      | KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onClose?: (event: SyntheticEvent) => void;
   error?: string;
   componentStyle?: SxProps;
@@ -82,12 +94,16 @@ const DropdownList: FC<Props> = ({
   checkSelected,
   ariaLabel
 }: Props) => {
-  const translateAria = useTranslator("commonAria", "components", "dropdown");
+  const translateAria = useTranslator("commonAria", "components", "dropDown");
 
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const handleChange = (event: SelectChangeEvent): void => {
+  const handleChange = (
+    event:
+      | KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent
+  ): void => {
     onChange?.(event);
     onInput?.(event);
   };
@@ -134,11 +150,23 @@ const DropdownList: FC<Props> = ({
       >
         {itemList?.length > 0 ? (
           <Select
+            tabIndex={0}
             id={id}
             value={value?.toString() ?? ""}
             readOnly={readOnly}
             label={placeholder}
             onChange={handleChange}
+            onKeyDown={(
+              event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => {
+              if (shouldExpandDropdown(event.key)) {
+                handleChange(event);
+              }
+
+              if (shouldCollapseDropdown(event.key)) {
+                onClose?.(event);
+              }
+            }}
             onClose={onClose}
             name={inputName}
             disabled={isDisabled}
@@ -157,24 +185,12 @@ const DropdownList: FC<Props> = ({
                 : translateAria(["dropDown"]),
               "aria-labelledby": ariaLabel
                 ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
+                : translateAria(["label"]),
+              title: ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
             }}
             displayEmpty={!!placeholder?.length}
-            title={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-label={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-labelledby={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
-            }
             renderValue={
               value !== ""
                 ? () => (
@@ -261,6 +277,17 @@ const DropdownList: FC<Props> = ({
             value={value?.toString()}
             onChange={handleChange}
             onClose={onClose}
+            onKeyDown={(
+              event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => {
+              if (shouldExpandDropdown(event.key)) {
+                handleChange(event);
+              }
+
+              if (shouldCollapseDropdown(event.key)) {
+                onClose?.(event);
+              }
+            }}
             name={inputName}
             disabled={isDisabled}
             multiple={isMultiValue}
@@ -278,23 +305,11 @@ const DropdownList: FC<Props> = ({
                 : translateAria(["dropDown"]),
               "aria-labelledby": ariaLabel
                 ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
+                : translateAria(["label"]),
+              title: ariaLabel
+                ? `${ariaLabel} ${translateAria(["dropDown"])}`
+                : translateAria(["dropDown"])
             }}
-            title={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-label={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["dropDown"])}`
-                : translateAria(["dropDown"])
-            }
-            aria-labelledby={
-              ariaLabel
-                ? `${ariaLabel} ${translateAria(["label"])}`
-                : translateAria(["label"])
-            }
           >
             <Box display={"flex"} justifyContent={"center"}>
               <CircularProgress size={20} style={{ color: "black" }} />

@@ -12,7 +12,9 @@ import { useGetPeriodAvailabilityMutation } from "~community/attendance/api/Atte
 import {
   DAY_END_TIME,
   DAY_START_TIME,
-  WEEKDAY_DAY_MONTH_YEAR_FORMAT
+  WEEKDAY_DAY_MONTH_YEAR_FORMAT,
+  durationSelector,
+  holidayDurationSelector
 } from "~community/attendance/constants/constants";
 import { EmployeeTimesheetModalTypes } from "~community/attendance/enums/timesheetEnums";
 import { useAttendanceStore } from "~community/attendance/store/attendanceStore";
@@ -24,11 +26,18 @@ import {
 import { formatDuration, isToday } from "~community/attendance/utils/TimeUtils";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
+import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useCommonStore } from "~community/common/stores/commonStore";
 import { LeaveStates } from "~community/common/types/CommonTypes";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import { convertDateToFormat } from "~community/common/utils/dateTimeUtils";
+import {
+  getTabIndex,
+  shouldActivateButton,
+  shouldMoveDownward,
+  shouldMoveUpward
+} from "~community/common/utils/keyboardUtils";
 
 import TimesheetTimelineBar from "../TimesheetTimelineBar/TimesheetTimelineBar";
 import styles from "./styles";
@@ -39,8 +48,15 @@ interface Props {
 }
 
 const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
+  const { isFreeTier } = useSessionData();
+
   const theme: Theme = useTheme();
   const translateText = useTranslator("attendanceModule", "timesheet");
+  const translateAria = useTranslator(
+    "attendanceAria",
+    "timesheet",
+    "dailyLogTable"
+  );
   const classes = styles(theme);
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
@@ -133,6 +149,11 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
                 ? 50
                 : 100
             }
+            aria-label={
+              isHoliday
+                ? `${holidayDurationSelector[leaveType]} ${translateAria(["holiday"])}`
+                : `${durationSelector[leaveType]} ${translateAria(["leave"])}`
+            }
           />
           <Typography fontSize={10}>{getEmoji(emoji)}</Typography>
         </Box>
@@ -182,6 +203,25 @@ const TimesheetDailyRecordTableRow: FC<Props> = ({ record, headerLength }) => {
       alignItems="center"
       sx={classes.stackContainerStyle}
       onClick={() => mutate()}
+      tabIndex={getTabIndex(isFreeTier)}
+      onKeyDown={(e) => {
+        if (shouldActivateButton(e.key)) {
+          mutate();
+        }
+        if (shouldMoveUpward(e.key)) {
+          const previousRow = e.currentTarget
+            .previousElementSibling as HTMLElement;
+          if (previousRow) {
+            previousRow.focus();
+          }
+        }
+        if (shouldMoveDownward(e.key)) {
+          const nextRow = e.currentTarget.nextElementSibling as HTMLElement;
+          if (nextRow) {
+            nextRow.focus();
+          }
+        }
+      }}
     >
       <Box sx={classes.boxContainerStyle(isDrawerToggled)}>
         <Typography variant="body2" sx={classes.dateFontStyle}>

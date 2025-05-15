@@ -81,7 +81,14 @@ const AppBar = () => {
 
   return (
     <>
-      <Stack sx={classes.wrapper}>
+      <Stack
+        sx={classes.wrapper}
+        id="top-bar"
+        role="menubar"
+        tabIndex={0}
+        component="header"
+        aria-label={translateAria(["appBar"])}
+      >
         <Stack
           sx={{
             ...classes.container,
@@ -108,7 +115,12 @@ const AppBar = () => {
                 aria-label="Notifications"
               >
                 <Badge
-                  color="notifyBadge"
+                  sx={{
+                    ".MuiBadge-badge": {
+                      backgroundColor: "error.contrastText",
+                      color: "common.white"
+                    }
+                  }}
                   badgeContent={notifyData.unreadCount}
                   invisible={false}
                   max={100}

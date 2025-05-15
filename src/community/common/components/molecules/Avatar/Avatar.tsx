@@ -36,6 +36,7 @@ interface AvatarProps extends MuiAvatarProps {
   enableEdit?: boolean;
   imageUploaded?: boolean;
   "data-testid"?: string;
+  isOriginalImage?: boolean;
 }
 
 const Avatar: FC<AvatarProps> = ({
@@ -44,6 +45,7 @@ const Avatar: FC<AvatarProps> = ({
   src,
   avatarStyles,
   children,
+  isOriginalImage = false,
   getInputProps,
   handleUnSelectPhoto,
   open,
@@ -83,9 +85,13 @@ const Avatar: FC<AvatarProps> = ({
 
   useEffect(() => {
     if (src || !s3FileUrls[src]) {
-      downloadS3File({ filePath: src, isProfilePic: true });
+      downloadS3File({
+        filePath: src,
+        isProfilePic: true,
+        isOriginalImage: isOriginalImage
+      });
     }
-  }, [src]);
+  }, [src, isOriginalImage]);
 
   const renderAvatar = () => {
     if (image) {
@@ -128,7 +134,15 @@ const Avatar: FC<AvatarProps> = ({
 
     return (
       <Box>
-        <input id="imageInput" {...(getInputProps ? getInputProps() : {})} />
+        <input
+          id="imageInput"
+          {...(getInputProps ? getInputProps() : {})}
+          aria-label={
+            imageUploaded
+              ? translateAria(["removeProfilePicture"])
+              : translateAria(["uploadProfilePicture"])
+          }
+        />
         <Box
           sx={classes.iconWrapper}
           onClick={imageUploaded ? handleUnselect : open}

@@ -15,6 +15,7 @@ import { ChangeEventHandler, JSX, useRef, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 
 import { styles } from "./styles";
@@ -48,6 +49,12 @@ const EmojiPicker = ({
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
+
+  const translateAria = useTranslator(
+    "commonAria",
+    "components",
+    "emojiPicker"
+  );
 
   const anchorEl = useRef<HTMLDivElement | null>(null);
 
@@ -112,11 +119,15 @@ const EmojiPicker = ({
           value={value}
           placeholder={placeholder}
           onChange={onChange}
-          inputProps={{ readOnly: true }}
+          inputProps={{ readOnly: true, tabIndex: -1 }}
           endAdornment={
             <IconButton
               sx={classes.button}
               onClick={() => setIsPickerOpen((previousOpen) => !previousOpen)}
+              tabIndex={0}
+              aria-label={translateAria(["icon"])}
+              aria-haspopup="true"
+              aria-expanded={isPickerOpen ? "true" : undefined}
             >
               <Icon name={IconName.EMOJI_ICON} />
             </IconButton>

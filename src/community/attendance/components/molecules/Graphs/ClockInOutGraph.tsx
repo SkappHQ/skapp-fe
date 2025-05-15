@@ -1,6 +1,13 @@
 import { Box, type Theme, Typography, useTheme } from "@mui/material";
 import ReactECharts from "echarts-for-react";
-import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  JSX,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import { useClockInOutGraphOptions } from "~community/attendance/utils/echartOptions/clockInOutGraphOptions";
 import {
@@ -10,7 +17,10 @@ import {
   GRAPH_RIGHT,
   clockInOutGraphTypes
 } from "~community/attendance/utils/echartOptions/constants";
-import Icon from "~community/common/components/atoms/Icon/Icon";
+import {
+  handleGraphKeyboardNavigation,
+  showTooltipAtIndex
+} from "~community/attendance/utils/graphKeyboardNavigationUtils";
 import ToggleSwitch from "~community/common/components/atoms/ToggleSwitch/ToggleSwitch";
 import DateRangePicker from "~community/common/components/molecules/DateRangePicker/DateRangePicker";
 import {
@@ -19,10 +29,10 @@ import {
 } from "~community/common/constants/timeConstants";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { XIndexTypes } from "~community/common/types/CommonTypes";
-import { IconName } from "~community/common/types/IconTypes";
 import { addHours } from "~community/common/utils/dateTimeUtils";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 
+import ChartNavigationArrows from "../../atoms/ChartNavigationArrows/ChartNavigationArrows";
 import TimesheetClockInOutSkeleton from "../Skeletons/TimesheetClockInOutSkeleton";
 
 interface Props {
@@ -51,8 +61,12 @@ const ClockInOutGraph = ({
     "attendanceModule",
     "teamTimesheetAnalytics"
   );
+  const translateTextAria = useTranslator("attendanceAria", "dashboards");
+
   const theme: Theme = useTheme();
   const { data: timeConfigData } = useDefaultCapacity();
+
+  const clockInOutChartRef = useRef<ReactECharts>(null);
 
   const standardClockInTime =
     timeConfigData?.[0]?.startTime?.substring(0, 5) ?? DEFAULT_START_TIME;
@@ -74,6 +88,9 @@ const ClockInOutGraph = ({
       CLOCK_IN_OUT_CHART_SHIFT_DAYS
   });
 
+  const [clockInOutHighlightedIndex, setClockInOutHighlightedIndex] =
+    useState<number>(xIndexDay.startIndex);
+
   // set start and end index around the standard clock in and clock out time
   useEffect(() => {
     const standardTime =
@@ -88,6 +105,7 @@ const ClockInOutGraph = ({
       startIndex,
       endIndex
     });
+    setClockInOutHighlightedIndex(startIndex);
   }, [
     chartData?.labels,
     dataCategory,
@@ -169,8 +187,14 @@ const ClockInOutGraph = ({
               >
                 <ToggleSwitch
                   options={[
-                    clockInOutGraphTypes.CLOCKIN.label,
-                    clockInOutGraphTypes.CLOCKOUT.label
+                    {
+                      value: clockInOutGraphTypes.CLOCKIN.label,
+                      ariaLabel: translateTextAria(["clockInTrend"])
+                    },
+                    {
+                      value: clockInOutGraphTypes.CLOCKOUT.label,
+                      ariaLabel: translateTextAria(["clockOutTrend"])
+                    }
                   ]}
                   setCategoryOption={(option: string) => {
                     setDataCategory(
@@ -195,42 +219,41 @@ const ClockInOutGraph = ({
               {isDataLoading ? (
                 <TimesheetClockInOutSkeleton />
               ) : (
-                <Box>
+                <Box
+                  tabIndex={0}
+                  onKeyDown={(event) =>
+                    handleGraphKeyboardNavigation({
+                      event,
+                      highlightedIndex: clockInOutHighlightedIndex,
+                      setHighlightedIndex: setClockInOutHighlightedIndex,
+                      chartDataLabels: chartData.labels,
+                      xIndexDay,
+                      handleClick,
+                      chartRef: clockInOutChartRef
+                    })
+                  }
+                  onFocus={() =>
+                    showTooltipAtIndex(
+                      clockInOutChartRef,
+                      clockInOutHighlightedIndex
+                    )
+                  }
+                >
                   <ReactECharts
                     option={clockInOutGraphOptions}
                     style={{ height: "16.25rem" }}
+                    ref={clockInOutChartRef}
                   />
                 </Box>
               )}
             </Box>
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                onClick={() => handleClick(GRAPH_LEFT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  left: "6%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_LEFT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_LEFT_ICON} />
-              </Box>
-            )}
-            {chartData?.preProcessedData?.length !== 0 && (
-              <Box
-                onClick={() => handleClick(GRAPH_RIGHT)}
-                sx={{
-                  position: "absolute",
-                  bottom: "1.8rem",
-                  right: "2.5%",
-                  cursor: "pointer",
-                  visibility: handleChevronVisibility(GRAPH_RIGHT)
-                }}
-              >
-                <Icon name={IconName.CHEVRON_RIGHT_ICON} />
-              </Box>
-            )}
+            <ChartNavigationArrows
+              hasData={chartData?.preProcessedData?.length !== 0}
+              handleClick={handleClick}
+              handleChevronVisibility={handleChevronVisibility}
+              leftAriaLabel={translateTextAria(["previousTimeSlots"])}
+              rightAriaLabel={translateTextAria(["nextTimeSlots"])}
+            />
           </>
         )}
       </Box>

@@ -119,6 +119,7 @@ const LeaveRequests: FC = () => {
       type: (
         <Box width="100%">
           <IconChip
+            aria-label={employeeLeaveRequest.leaveType.name}
             label={employeeLeaveRequest.leaveType.name}
             icon={employeeLeaveRequest.leaveType.emojiCode}
             isTruncated={false}

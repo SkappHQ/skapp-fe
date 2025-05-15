@@ -11,6 +11,10 @@ export function numberPattern(): RegExp {
   return /\d/;
 }
 
+export function phoneNumberPattern(): RegExp {
+  return /[\d\s-]/;
+}
+
 export function isValidNameWithAccentsAndApostrophes(): RegExp {
   return /^[a-zA-Z\u00C0-\u00ff']+([ a-zA-Z\u00C0-\u00ff']+)*$/;
 }
@@ -195,6 +199,14 @@ export function areCommasPresentInString(input: string): boolean {
   return regex.test(input);
 }
 
-export function isValidCityStateString(): RegExp {
-  return /^[a-zA-Z0-9\-'.]+$/;
+export function matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod(): RegExp {
+  // Matches "YYYY-MM-DD", "YYYY/MM/DD", or "YYYY.MM.DD" with leading zeros
+  // Example: "2023-09-15", "2023/09/15", "2023.09.15"
+  return /^(\d{4})[-/.](\d{2})[-/.](\d{2})$/;
+}
+
+export function matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod(): RegExp {
+  // Matches "MM-DD-YYYY", "MM/DD/YYYY", or "MM.DD.YYYY"
+  // Example: "9-15-2023", "9/15/2023", "9.15.2023"
+  return /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/;
 }

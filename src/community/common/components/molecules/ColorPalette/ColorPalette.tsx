@@ -1,11 +1,13 @@
 import { Stack, Typography } from "@mui/material";
 import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -31,21 +33,33 @@ const ColorPalette: FC<Props> = ({
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
-  const anchorEl = useRef<HTMLDivElement | null>(null);
+  const translateAria = useTranslator(
+    "commonAria",
+    "components",
+    "colorPalette"
+  );
 
+  const anchorEl = useRef<HTMLDivElement | null>(null);
   const [isPopperOpen, setIsPopperOpen] = useState<boolean>(false);
+
+  const colorRows = useMemo(() => {
+    const mid = Math.ceil(colors.length / 2);
+    const topRow = colors.slice(0, mid);
+    const bottomRow = colors.slice(mid);
+
+    if (selectedColor && bottomRow.includes(selectedColor)) {
+      return [bottomRow, topRow];
+    }
+
+    return [topRow, bottomRow];
+  }, [colors, selectedColor]);
 
   const handleColorClick = (color: string): void => {
     setIsPopperOpen(false);
     onClick(color);
   };
 
-  const reorderedColors = selectedColor
-    ? [
-        selectedColor,
-        ...(colors ? colors.filter((color) => color !== selectedColor) : [])
-      ]
-    : colors || [];
+  const displayColors = colorRows.flat();
 
   return (
     <Stack sx={mergeSx([classes.wrapper, componentStyle])}>
@@ -86,16 +100,22 @@ const ColorPalette: FC<Props> = ({
                 ...classes.colorWidgetWrapper
               }}
             >
-              {reorderedColors.map((color: string, index: number) => {
+              {displayColors.map((color: string, index: number) => {
                 return (
                   <Stack
+                    key={color}
+                    data-testid={`input-color-${index}`}
+                    tabIndex={0}
                     onClick={() => handleColorClick(color)}
-                    key={index}
+                    onKeyDown={(e) => {
+                      if (shouldActivateButton(e.key)) {
+                        handleColorClick(color);
+                      }
+                    }}
                     sx={{
                       ...classes.colorWidget,
                       backgroundColor: color
                     }}
-                    data-testid={`input-color-${index}`}
                   >
                     {selectedColor === color && (
                       <Icon
@@ -109,9 +129,11 @@ const ColorPalette: FC<Props> = ({
             </Stack>
             <IconButton
               id="drop-down-icon-btn"
+              tabIndex={-1}
               icon={<Icon name={IconName.DROPDOWN_ARROW_ICON} />}
               buttonStyles={classes.dropDownButton}
               onClick={() => setIsPopperOpen(!isPopperOpen)}
+              aria-label={translateAria(["icon"])}
             />
           </>
         </Stack>

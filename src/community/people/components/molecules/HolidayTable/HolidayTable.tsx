@@ -24,7 +24,7 @@ import {
 } from "~community/people/utils/holidayUtils/holidayTableComponentUtils";
 import {
   getSelectAllCheckboxCheckedStatus,
-  getSelectAllCheckboxEnableStatus,
+  getSelectAllCheckboxVisibility,
   handleAddHolidayButtonClick,
   handleBulkDeleteClick,
   handleIndividualDelete,
@@ -159,8 +159,8 @@ const HolidayTable: FC<Props> = ({
     [holidayData]
   );
 
-  const isSelectAllCheckboxEnabled = useMemo(
-    () => getSelectAllCheckboxEnableStatus(isPeopleAdmin, holidayData),
+  const isSelectAllCheckboxVisible = useMemo(
+    () => getSelectAllCheckboxVisibility(isPeopleAdmin, holidayData),
     [holidayData, isPeopleAdmin]
   );
 
@@ -181,7 +181,8 @@ const HolidayTable: FC<Props> = ({
           selectedRows={selectedHolidays}
           checkboxSelection={{
             isEnabled: true,
-            isSelectAllEnabled: isSelectAllCheckboxEnabled,
+            isSelectAllEnabled: true,
+            isSelectAllVisible: isSelectAllCheckboxVisible,
             isSelectAllChecked: isSelectAllCheckboxChecked,
             handleIndividualSelectClick: (id: number) =>
               handleIndividualSelectClick(id, setSelectedHolidays),

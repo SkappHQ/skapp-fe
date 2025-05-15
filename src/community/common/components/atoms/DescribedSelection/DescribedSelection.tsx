@@ -5,12 +5,13 @@ import {
   TypographyProps
 } from "@mui/material";
 import { type Theme, useTheme } from "@mui/material/styles";
-import { JSX, type MouseEventHandler, useMemo } from "react";
+import { JSX, KeyboardEvent, MouseEvent, useMemo } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { getRgbForBlink } from "~community/common/utils/describedSelectionUtils";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import { styles } from "./styles";
 
@@ -21,7 +22,9 @@ interface Props {
   cardWrapperStyles?: SxProps;
   selected: boolean;
   isError?: boolean;
-  onClick: MouseEventHandler<HTMLDivElement>;
+  onClick: (
+    event: KeyboardEvent<HTMLDivElement> | MouseEvent<HTMLDivElement>
+  ) => void;
   typographyStyles: {
     variant: {
       title: TypographyProps["variant"];
@@ -69,6 +72,14 @@ const DescribedSelection = ({
 
   return (
     <Stack
+      tabIndex={0}
+      role="button"
+      onClick={(e: MouseEvent<HTMLDivElement>) => onClick(e)}
+      onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+        if (shouldActivateButton(e.key)) {
+          onClick?.(e);
+        }
+      }}
       sx={mergeSx([
         classes.wrapper,
         cardWrapperStyles,
@@ -91,7 +102,6 @@ const DescribedSelection = ({
             }
           : {}
       ])}
-      onClick={onClick}
     >
       <Stack sx={mergeSx([classes.container, cardStyles])}>
         <Stack sx={classes.iconWrapper}>{icon}</Stack>

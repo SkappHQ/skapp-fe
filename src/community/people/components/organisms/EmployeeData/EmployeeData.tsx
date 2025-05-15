@@ -23,9 +23,9 @@ import PeopleTable from "~community/people/components/molecules/PeopleTable/Peop
 import { usePeopleStore } from "~community/people/store/store";
 import {
   DataFilterEnums,
-  EmployeeDataType,
   EmploymentStatusTypes
 } from "~community/people/types/EmployeeTypes";
+import { AllEmployeeDataType } from "~community/people/types/PeopleTypes";
 import RemovePeopleCountBanner from "~enterprise/settings/components/molecules/RemovePeopleCountBanner/RemovePeopleCountBanner";
 
 interface EmployeeDataProps {
@@ -42,7 +42,7 @@ const EmployeeData = ({ isRemovePeople = false }: EmployeeDataProps) => {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [employeeDataItems, setEmployeeDataItems] = useState<
-    EmployeeDataType[]
+    AllEmployeeDataType[]
   >([]);
   const [isConcatenationDone, setIsConcatenationDone] =
     useState<boolean>(false);

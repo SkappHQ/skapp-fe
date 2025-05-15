@@ -15,10 +15,6 @@ import {
   SortOrderTypes
 } from "~community/common/types/CommonTypes";
 import authFetch from "~community/common/utils/axiosInterceptor";
-import {
-  formatDateToISOString,
-  getYearStartAndEndDates
-} from "~community/common/utils/dateTimeUtils";
 import { leaveEndPoints } from "~community/leave/api/utils/ApiEndpoints";
 import {
   leaveQueryKeys,
@@ -33,22 +29,16 @@ import { leaveRequestRowDataTypes } from "../types/LeaveRequestTypes";
 import { LeaveCycleStartEndDatesType } from "../types/LeaveTypes";
 import { LeaveRequest } from "../types/PendingLeaves";
 import { leaveRequestDataPreProcessor } from "../utils/LeavePreprocessors";
+import { handleCustomLeaveEntitlementPayload } from "../utils/leaveEntitlement/apiUtils";
 
 const createCustomLeave = async (
-  newEntitlementData: CustomLeaveAllocationType
+  newEntitlementData: CustomLeaveAllocationType,
+  selectedYear: string
 ): Promise<void> => {
-  const { end: endOfYearDate } = getYearStartAndEndDates(
-    new Date().getFullYear()
-  );
-
-  if (!newEntitlementData.validFromDate) {
-    newEntitlementData.validFromDate = formatDateToISOString(new Date());
-  }
-  if (!newEntitlementData.validToDate) {
-    newEntitlementData.validToDate = endOfYearDate ?? undefined;
-  }
-
-  const { name, ...EntitlementData } = newEntitlementData;
+  const EntitlementData = handleCustomLeaveEntitlementPayload({
+    newEntitlementData,
+    selectedYear
+  });
 
   return await authFetch.post(
     leaveEndPoints.GET_CUSTOM_LEAVES,
@@ -79,6 +69,7 @@ export const useDeleteLeaveAllocation = (): UseMutationResult<
   unknown
 > => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: deleteCustomLeave,
     onSuccess: () => {
@@ -118,8 +109,11 @@ export const useCreateLeaveAllocation = (
   onError: () => void
 ) => {
   const queryClient = useQueryClient();
+  const { selectedYear } = useLeaveStore((state) => state);
+
   return useMutation({
-    mutationFn: createCustomLeave,
+    mutationFn: (newEntitlementData: CustomLeaveAllocationType) =>
+      createCustomLeave(newEntitlementData, selectedYear),
     onSuccess: () => {
       onSuccess();
       queryClient

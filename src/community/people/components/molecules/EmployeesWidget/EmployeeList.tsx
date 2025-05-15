@@ -13,15 +13,13 @@ import { AdminTypes, ManagerTypes } from "~community/common/types/AuthTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { testPassiveEventSupport } from "~community/common/utils/commonUtil";
 import { usePeopleStore } from "~community/people/store/store";
-import {
-  EmployeeDataType,
-  EmploymentStatusTypes
-} from "~community/people/types/EmployeeTypes";
+import { EmploymentStatusTypes } from "~community/people/types/EmployeeTypes";
+import { AllEmployeeDataType } from "~community/people/types/PeopleTypes";
 
 import styles from "./styles";
 
 interface Props {
-  employeeData: EmployeeDataType[];
+  employeeData: AllEmployeeDataType[];
   fetchNextPage: () => void;
   isFetching?: boolean;
   isFetchingNextPage?: boolean;
@@ -87,36 +85,38 @@ const EmployeeList: FC<Props> = ({
       )
     ) {
       setSelectedEmployeeId(id);
-      await router.push(ROUTES.PEOPLE.EDIT_ALL_INFORMATION(id));
+      await router.push(ROUTES.PEOPLE.EDIT(id));
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(id);
-      await router.push(ROUTES.PEOPLE.INDIVIDUAL);
+      const route = `${ROUTES.PEOPLE.INDIVIDUAL}/${id}`;
+      router.push(route);
     }
   };
 
   return (
-    <Box sx={classes.widgetBody}>
+    <Box sx={classes.widgetBody} tabIndex={0}>
       <Box ref={listInnerRef}>
         {employeeData.length === 0 && <NoDataScreen />}
         {employeeData?.map((employee) => {
           return (
             <Box
               sx={classes.listItemRow}
-              key={employee.identificationNo}
+              key={employee.employeeId}
               onClick={() => handleRowClick(employee.employeeId)}
+              tabIndex={0}
             >
               <Box sx={classes.listItem}>
                 <Box sx={{ margin: "auto" }}>
                   <Avatar
                     firstName={employee.firstName}
                     lastName={employee.lastName}
-                    src={employee.avatarUrl ?? ""}
+                    src={employee.authPic ?? ""}
                   />
                 </Box>
                 <Box sx={{ display: "block" }}>
                   <Typography sx={classes.name}>
-                    {employee.employeeName}
+                    {employee.firstName} {employee.lastName}
                   </Typography>
                   <Typography sx={classes.email}>{employee.email}</Typography>
                 </Box>

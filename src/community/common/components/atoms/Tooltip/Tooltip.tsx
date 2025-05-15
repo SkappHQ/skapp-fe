@@ -1,6 +1,6 @@
 import { Theme, useTheme } from "@mui/material";
 import Fade from "@mui/material/Fade";
-import React, { FC, JSX, useState } from "react";
+import React, { CSSProperties, FC, JSX, useState } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
@@ -20,6 +20,9 @@ interface Props {
   error?: boolean;
   maxWidth?: string;
   iconColor?: string;
+  spanStyles?: CSSProperties;
+  ariaLabel?: string;
+  tabIndex?: number;
 }
 
 const Tooltip: FC<Props> = ({
@@ -33,7 +36,9 @@ const Tooltip: FC<Props> = ({
   id,
   isDisabled = false,
   error,
-  iconColor
+  iconColor,
+  spanStyles,
+  ariaLabel
 }) => {
   const theme: Theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -69,6 +74,7 @@ const Tooltip: FC<Props> = ({
       title={title}
       TransitionComponent={Fade}
       PopperProps={PopperProps}
+      aria-label={ariaLabel ?? ""}
       customstyles={{
         tooltip: {
           maxWidth: maxWidth,
@@ -87,7 +93,10 @@ const Tooltip: FC<Props> = ({
         onBlur={handleBlur}
         style={{
           pointerEvents: isDisabled ? "none" : "auto", // Prevent interaction when disabled
-          cursor: isDisabled ? "not-allowed" : "pointer" // Change cursor when disabled
+          cursor: isDisabled ? "not-allowed" : "pointer", // Change cursor when disabled,
+          height: "min-content",
+          width: "min-content",
+          ...spanStyles
         }}
       >
         {children ?? (

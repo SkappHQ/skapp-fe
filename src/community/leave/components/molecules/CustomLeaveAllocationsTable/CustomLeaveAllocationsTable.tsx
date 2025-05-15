@@ -3,15 +3,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
-import Icon from "~community/common/components/atoms/Icon/Icon";
-import IconButton from "~community/common/components/atoms/IconButton/IconButton";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
 import FilterButton from "~community/common/components/molecules/FilterButton/FilterButton";
 import Table from "~community/common/components/molecules/Table/Table";
 import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
-import { IconName } from "~community/common/types/IconTypes";
 import {
   currentYear,
   getAdjacentYearsWithCurrent,
@@ -27,7 +24,6 @@ import {
 } from "~community/leave/types/CustomLeaveAllocationTypes";
 
 import {
-  iconButtonStyles,
   tableContainerStyles,
   tableHeaderCellStyles,
   tableHeaderRowStyles,
@@ -149,6 +145,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       selectedItem={selectedYear}
       title={selectedYear}
       items={getAdjacentYearsWithCurrent()}
+      ariaRole="menu"
     />
   );
 
@@ -194,28 +191,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
               isTruncated={false}
             />
           ),
-          actions: (
-            <IconButton
-              icon={<Icon name={IconName.EDIT_ICON} />}
-              id={`${leaveAllocation.entitlementId}-edit-btn`}
-              buttonStyles={iconButtonStyles(theme)}
-              onClick={() =>
-                handleEdit({
-                  ...leaveAllocation,
-                  employee: {
-                    ...leaveAllocation.employee,
-                    employeeId: Number(leaveAllocation.employee.employeeId)
-                  },
-                  validTo: leaveAllocation.validTo || "",
-                  validFrom: leaveAllocation.validFrom || ""
-                })
-              }
-            />
-          )
+          actionData: leaveAllocation
         };
       }) || []
     );
-  }, [customLeaveData?.items, theme, translateText, handleEdit]);
+  }, [customLeaveData?.items, translateText]);
 
   const handleApplyFilters = () => {
     setSelectedLeaveTypes(tempSelectedLeaveTypes);
@@ -271,6 +251,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
         {leaveTypeOptions.map((leaveType) => (
           <Chip
             key={leaveType.id}
+            tabIndex={0}
+            role="button"
             label={leaveType.name}
             onClick={() =>
               handleLeaveTypeFilter({
@@ -309,8 +291,10 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
   };
 
   const showEmptyTableButton =
-    selectedYear === currentYear.toString() ||
-    selectedYear === nextYear.toString();
+    (selectedYear === currentYear.toString() ||
+      selectedYear === nextYear.toString()) &&
+    !searchTerm &&
+    selectedLeaveTypes.length === 0;
 
   return (
     <Box>
@@ -329,15 +313,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           emptyState: {
             noData: {
               title:
-                !!customLeaveData?.items?.length ||
-                !!searchTerm ||
-                !!selectedLeaveTypes.length
+                !!searchTerm || selectedLeaveTypes.length > 0
                   ? translateText(["emptySearchResult", "title"])
                   : translateText(["emptyCustomLeaveScreen", "title"]),
               description:
-                !!customLeaveData?.items?.length ||
-                !!searchTerm ||
-                !!selectedLeaveTypes.length
+                !!searchTerm || selectedLeaveTypes.length > 0
                   ? translateText(["emptySearchResult", "description"])
                   : translateText(["emptyCustomLeaveScreen", "description"]),
               button: showEmptyTableButton
@@ -351,6 +331,24 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
           loadingState: {
             skeleton: {
               rows: 5
+            }
+          },
+          actionColumn: {
+            isEnabled: true,
+            actionBtns: {
+              left: {
+                onClick: (leaveAllocation) => {
+                  return handleEdit({
+                    ...leaveAllocation,
+                    employee: {
+                      ...leaveAllocation.employee,
+                      employeeId: Number(leaveAllocation.employee.employeeId)
+                    },
+                    validTo: leaveAllocation.validTo || "",
+                    validFrom: leaveAllocation.validFrom || ""
+                  });
+                }
+              }
             }
           }
         }}

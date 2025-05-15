@@ -19,11 +19,12 @@ import {
   ErrorResponse,
   ManagerTypes
 } from "~community/common/types/CommonTypes";
-import authFetch from "~community/common/utils/axiosInterceptor";
+import authFetch, {
+  authFetchV2
+} from "~community/common/utils/axiosInterceptor";
 import { removeSpecialCharacters } from "~community/common/utils/commonUtil";
 import { leaveBulkUploadResponse } from "~community/leave/types/LeaveTypes";
 import {
-  EmployeeTablePreProcessor,
   GetRolePreProcessor,
   employeeCreatePreProcessor,
   employeeUpdatePreProcessor,
@@ -41,7 +42,6 @@ import {
   BulkEmployeeDetails,
   EmployeeDataExists,
   EmployeeDataParamsTypes,
-  EmployeeDataResponse,
   EmployeeDataType,
   EmployeeDetails,
   EmployeeManagerType,
@@ -54,7 +54,7 @@ import { DirectoryModalTypes } from "~community/people/types/ModalTypes";
 import { useGetEnvironment } from "~enterprise/common/hooks/useGetEnvironment";
 import { EmployeeTimelineType } from "~enterprise/people/types/PeopleTypes";
 
-import { L1EmployeeType } from "../types/PeopleTypes";
+import { AllEmployeeDataResponse, L1EmployeeType } from "../types/PeopleTypes";
 
 const getBannerData = async (): Promise<number> => {
   const url = peoplesEndpoints.GET_PENDING_EMPLOYEE_COUNT;
@@ -93,7 +93,7 @@ export const useGetAllEmployeeData = (): UseQueryResult<EmployeeDataType> => {
 };
 
 export const useGetEmployeeData =
-  (): UseInfiniteQueryResult<EmployeeDataResponse> => {
+  (): UseInfiniteQueryResult<AllEmployeeDataResponse> => {
     const params: EmployeeDataParamsTypes = usePeopleStore(
       (state) => state.employeeDataParams
     );
@@ -103,16 +103,14 @@ export const useGetEmployeeData =
       queryKey: peopleQueryKeys.EMPLOYEE_DATA_TABLE(params),
       queryFn: async ({ pageParam = 0 }) => {
         const url = peoplesEndpoints.GET_EMPLOYEES;
-        const employeeData = await authFetch.get(url, {
+        const employeeData = await authFetchV2.get(url, {
           params: {
             page: pageParam,
             ...params
           }
         });
 
-        const preProcessedData = EmployeeTablePreProcessor(employeeData?.data);
-
-        return preProcessedData;
+        return employeeData?.data?.results?.[0];
       },
       getPreviousPageParam: (firstPage) => {
         if (firstPage?.currentPage && firstPage?.currentPage > 0) {
@@ -324,6 +322,14 @@ export const useQuickAddEmployeeMutation = (onSuccess?: () => void) => {
       if (onSuccess) {
         onSuccess();
       }
+    },
+    onError: () => {
+      setToastMessage({
+        open: true,
+        toastType: ToastType.ERROR,
+        title: translateText(["quickAddErrorTitle"]),
+        description: translateText(["quickAddErrorDescription"])
+      });
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
@@ -744,9 +750,11 @@ export const useEditEmployee = (employeeId: string) => {
   );
   const queryClient = useQueryClient();
   const params = usePeopleStore((state) => state.employeeDataParams);
-  const { setProfilePic, setIsReinviteConfirmationModalOpen } = usePeopleStore(
-    (state) => state
-  );
+  const {
+    setProfilePic,
+    setIsReinviteConfirmationModalOpen,
+    isReinviteConfirmationModalOpen
+  } = usePeopleStore((state) => state);
 
   return useMutation({
     mutationFn: async (employee: L1EmployeeType) => {
@@ -757,14 +765,27 @@ export const useEditEmployee = (employeeId: string) => {
       return response.data;
     },
     onSuccess: () => {
-      setIsReinviteConfirmationModalOpen(false);
       setProfilePic(null);
-      setToastMessage({
-        open: true,
-        toastType: ToastType.SUCCESS,
-        title: translateText(["editToastTitle"]),
-        description: translateText(["editToastDescription"])
-      });
+      if (isReinviteConfirmationModalOpen) {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.SUCCESS,
+          title: translateText([
+            "reInvitationForOneEmployeeSuccessfulToastTitle"
+          ]),
+          description: translateText([
+            "reInvitationForOneEmployeeSuccessfulToastDescription"
+          ])
+        });
+        setIsReinviteConfirmationModalOpen(false);
+      } else {
+        setToastMessage({
+          open: true,
+          toastType: ToastType.SUCCESS,
+          title: translateText(["editToastTitle"]),
+          description: translateText(["editToastDescription"])
+        });
+      }
 
       queryClient
         .invalidateQueries({
@@ -783,6 +804,7 @@ export const useEditEmployee = (employeeId: string) => {
         .catch(rejects);
     },
     onError: () => {
+      setIsReinviteConfirmationModalOpen(false);
       setToastMessage({
         open: true,
         toastType: ToastType.ERROR,

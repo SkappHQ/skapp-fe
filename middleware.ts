@@ -1,7 +1,10 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
-import ROUTES from "~community/common/constants/routes";
+import ROUTES, {
+  employeeRestrictedRoutes,
+  managerRestrictedRoutes
+} from "~community/common/constants/routes";
 import {
   AdminTypes,
   EmployeeTypes,
@@ -10,6 +13,7 @@ import {
   SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
+import { checkRestrictedRoutesAndRedirect } from "~community/common/utils/commonUtil";
 
 // Define common routes shared by all roles
 const commonRoutes = [
@@ -59,7 +63,6 @@ const adminRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -84,7 +87,6 @@ const managerRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -104,7 +106,6 @@ const employeeRoutes = {
   [EmployeeTypes.ESIGN_EMPLOYEE]: [
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.REDIRECT,
     ROUTES.SIGN.COMPLETE,
     ...commonRoutes
   ]
@@ -123,6 +124,12 @@ const allowedRoutes: Record<
 
 export default withAuth(
   async function middleware(request: NextRequestWithAuth) {
+    if (
+      request.nextUrl.pathname === ROUTES.SIGN.DOCUMENT_ACCESS ||
+      request.nextUrl.pathname.startsWith(ROUTES.SIGN.SIGN)
+    ) {
+      return NextResponse.next();
+    }
     const { token } = request.nextauth;
 
     const roles: (
@@ -207,6 +214,24 @@ export default withAuth(
         );
       }
 
+      // Check manager restricted routes
+      const managerRedirect = checkRestrictedRoutesAndRedirect(
+        request,
+        managerRestrictedRoutes,
+        AdminTypes.PEOPLE_ADMIN,
+        roles
+      );
+      if (managerRedirect) return managerRedirect;
+
+      // Check employee restricted routes
+      const employeeRedirect = checkRestrictedRoutesAndRedirect(
+        request,
+        employeeRestrictedRoutes,
+        ManagerTypes.PEOPLE_MANAGER,
+        roles
+      );
+      if (employeeRedirect) return employeeRedirect;
+
       return NextResponse.next();
     }
     // Redirect to /unauthorized if no access
@@ -240,15 +265,21 @@ export const config = {
     "/unauthorized",
     "/verify/email",
     "/verify/success",
-    "/verify/account-reset-password",
     // Module routes
     "/leave/:path*",
     "/people/:path*",
     "/timesheet/:path*",
-    "/sign/:path*",
     "/remove-people",
     "/integrations",
     "/subscription",
-    "/user-account"
+    "/user-account",
+    // Sign routes
+    "/sign",
+    "/sign/contacts/:path*",
+    "/sign/create/:path*",
+    "/sign/folders/:path*",
+    "/sign/inbox/:path*",
+    "/sign/sent/:path*",
+    "/sign/complete/:path*"
   ]
 };

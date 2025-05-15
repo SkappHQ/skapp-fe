@@ -3,6 +3,7 @@ import { Chip, Stack, Theme, useTheme } from "@mui/material";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { FileUploadType } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
+import { downloadAttachmentToUserDevice } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
 
@@ -24,6 +25,7 @@ const AttachmentSummary = ({ attachments, onDeleteBtnClick }: Props) => {
           }
           key={index}
           label={attachment.name}
+          onClick={() => downloadAttachmentToUserDevice(attachment)}
           onDelete={() => onDeleteBtnClick(attachment)}
           sx={classes.chip}
           deleteIcon={

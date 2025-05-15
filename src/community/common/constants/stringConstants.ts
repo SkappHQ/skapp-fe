@@ -9,8 +9,8 @@ export enum characterLengths {
   LEAVE_TYPE_LENGTH = 20,
   NIN_LENGTH = 15,
   STATE_LENGTH = 50,
-  PHONE_NUMBER_LENGTH_MAX = 14,
-  PHONE_NUMBER_LENGTH_MIN = 4
+  PHONE_NUMBER_LENGTH_MAX = 15,
+  PHONE_NUMBER_LENGTH_MIN = 7
 }
 
 export const MAX_PASSWORD_STRENGTH = 5;
@@ -49,6 +49,8 @@ export enum AuthStatus {
 }
 
 export const PASSWORD_STRENGTH_MULTIPLIER = 20;
+
+export const VOID_MESSAGE_LENGTH = 200;
 
 export enum EmailProvider {
   GMAIL = "Gmail",

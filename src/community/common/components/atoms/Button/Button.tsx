@@ -17,6 +17,7 @@ import {
 } from "~community/common/enums/ComponentEnums";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
+import { getTabIndex } from "~community/common/utils/keyboardUtils";
 
 import StyledButton from "./StyledButton";
 
@@ -41,12 +42,15 @@ export interface StyledButtonProps {
   isDefaultIconColor?: boolean;
   isStrokeAvailable?: boolean;
   shouldBlink?: boolean;
+  title?: string;
+  ariaDisabled?: boolean;
 }
 
 const Button = ({
   id,
   dataTestId,
   ariaLabel,
+  title,
   dataAttr,
   isLoading = false,
   buttonStyle = ButtonStyle.PRIMARY,
@@ -63,7 +67,8 @@ const Button = ({
   onMouseLeave,
   isDefaultIconColor = false,
   isStrokeAvailable = false,
-  shouldBlink = false
+  shouldBlink = false,
+  ariaDisabled = false
 }: StyledButtonProps): JSX.Element => {
   const theme = useTheme();
 
@@ -116,7 +121,7 @@ const Button = ({
   const handleClick = (
     event: ReactMouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (!isLoading) {
+    if (!isLoading && !disabled) {
       onClick?.(event);
     }
   };
@@ -125,12 +130,14 @@ const Button = ({
     <StyledButton
       {...dataAttr}
       id={id}
+      role="button"
       data-testid={dataTestId}
       aria-label={ariaLabel}
+      aria-disabled={ariaDisabled}
+      title={title}
       disableElevation
       type={type}
       textcolor={color ?? theme.palette.common.black}
-      disabled={disabled}
       variant="contained"
       buttonstyle={buttonStyle}
       buttonsize={size}
@@ -138,6 +145,8 @@ const Button = ({
       isstrokeavailable={isStrokeAvailable.toString()}
       width={isFullWidth ? "100%" : "max-content"}
       shouldblink={shouldBlink}
+      isDisabled={disabled}
+      tabIndex={getTabIndex(disabled)}
       startIcon={
         startIcon && typeof startIcon === "object" && "type" in startIcon ? (
           startIcon

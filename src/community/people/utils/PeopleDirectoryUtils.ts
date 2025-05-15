@@ -6,10 +6,11 @@ import {
   EmployeeDetails,
   EmployeeManagerType,
   Role,
-  TeamResultsType,
   TeamType
 } from "~community/people/types/EmployeeTypes";
 import { AllJobFamilyType } from "~community/people/types/JobFamilyTypes";
+
+import { EmployeeDataTeamType } from "../types/PeopleTypes";
 
 export const sortSupervisorAvatars = (
   avatars: Array<AvatarPropTypes>
@@ -37,13 +38,14 @@ export const refactorSupervisorAvatars = (
   }));
 
 export const refactorTeamListData = (
-  team: TeamResultsType[]
+  team: EmployeeDataTeamType[]
 ): {
   firstTeamName: string;
   otherTeamCount: number;
 } => {
+  const sortedTeams = team?.sort((a, b) => a.teamId - b.teamId);
   return {
-    firstTeamName: team?.[0]?.team?.teamName,
+    firstTeamName: sortedTeams?.[0]?.teamName,
     otherTeamCount: team?.length - 1
   };
 };

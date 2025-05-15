@@ -24,6 +24,8 @@ import AwayChip from "~community/leave/components/molecules/LeaveDashboardChips/
 import HolidayChip from "~community/leave/components/molecules/LeaveDashboardChips/HolidayChip";
 import LeaveTypeBreakdownChart from "~community/leave/components/molecules/LeaveUtilizationGraph/LeaveTypeBreakdownChart";
 import { useLeaveStore } from "~community/leave/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 import styles from "./styles";
 
@@ -55,6 +57,11 @@ const LeaveDashboard = (): JSX.Element => {
     error,
     data: datasets
   } = useGetLeaveTypeBreakdownChartData(teamId);
+
+  useGoogleAnalyticsEvent({
+    onMountEventType: GoogleAnalyticsTypes.GA4_LEAVE_DASHBOARD_VIEWED,
+    triggerOnMount: true
+  });
 
   const newPendingRequests =
     pendingLeaves?.[0]?.items?.length - viewedPendingLeaveCount;
@@ -144,6 +151,10 @@ const LeaveDashboard = (): JSX.Element => {
                 setViewedPendingLeaveCount(pendingLeaves?.[0]?.items?.length),
                 router.replace(ROUTES.LEAVE.LEAVE_PENDING);
             }}
+            accessibility={{
+              tabIndex: 0,
+              role: "button"
+            }}
           >
             {pendingLeaves?.[0]?.items?.length > 0 ? (
               <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
@@ -190,7 +201,7 @@ const LeaveDashboard = (): JSX.Element => {
                       style={{
                         color:
                           absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                            ? theme.palette.greens.midDark
+                            ? theme.palette.greens.deepShadows
                             : theme.palette.error.contrastText
                       }}
                     />
@@ -201,11 +212,11 @@ const LeaveDashboard = (): JSX.Element => {
                   sx={{
                     color:
                       absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                        ? theme.palette.greens.midDark
+                        ? theme.palette.greens.deepShadows
                         : theme.palette.error.contrastText,
                     backgroundColor:
                       absenceRate[0]?.monthBeforeAbsenceRate >= 0
-                        ? theme.palette.greens.lightBackground
+                        ? theme.palette.greens.lighter
                         : theme.palette.error.light,
                     [theme.breakpoints.down("md")]: {
                       fontSize: "0.625rem",

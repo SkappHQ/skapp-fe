@@ -16,6 +16,9 @@ export const CSIconButton = styled(IconButton)<IconButtonProps>(
       "svg path": {
         fill: theme.palette.grey[800]
       }
+    },
+    "&:focus-visible": {
+      outline: `0.125rem solid ${theme.palette.common.black}`
     }
   })
 );

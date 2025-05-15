@@ -59,6 +59,11 @@ const styles = (theme: Theme): StyleProps => ({
     "&& input::-ms-reveal": {
       display: "none"
     },
+    "& input:focus-visible": {
+      outline: `0.125rem solid ${theme.palette.common.black}`,
+      outlineOffset: "-0.125rem",
+      borderRadius: "0.5rem"
+    },
     "&& .MuiInputBase-input::placeholder": {
       color: theme.palette.grey[600],
       opacity: 1

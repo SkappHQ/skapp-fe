@@ -7,7 +7,6 @@ import {
   allowsOnlyNumbersAndOptionalDecimal,
   datePatternReverse,
   isValidAlphaNumericString,
-  isValidNameWithAccentsAndApostrophes,
   isValidUrlPattern
 } from "~community/common/regex/regexPatterns";
 import {
@@ -36,7 +35,7 @@ export const employeePrimaryEmergencyContactDetailsValidation = (
       translator(["validNameError"])
     ),
     relationship: Yup.string(),
-    phone: Yup.string()
+    contactNo: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
         translator(["validPhoneError"])
@@ -56,7 +55,7 @@ export const employeeSecondaryEmergencyContactDetailsValidation = (
       translator(["validNameError"])
     ),
     relationship: Yup.string().nullable(),
-    phone: Yup.string()
+    contactNo: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
         translator(["validPhoneError"])
@@ -253,17 +252,6 @@ export const employeeEmploymentDetailsValidation = (
       )
       .nullable(),
     probationEndDate: Yup.date()
-      .test(
-        "is-valid",
-        translator(["requireProbationEndDateError"]),
-        function (value) {
-          const startDate = this.parent.probationStartDate;
-          if (startDate && !value) {
-            return false;
-          }
-          return true;
-        }
-      )
       .test(
         "is-not-same",
         translator(["probationEndDateSameAsStartDateError"]),
@@ -468,7 +456,7 @@ export const employeeContactDetailsValidation = (
       .trim()
       .email(translator(["validEmailError"]))
       .nullable(),
-    phone: Yup.string()
+    contactNo: Yup.string()
       .max(
         characterLengths.PHONE_NUMBER_LENGTH_MAX,
         translator(["validContactNumberError"])
@@ -508,14 +496,14 @@ export const quickAddEmployeeValidations = (
       .required(translator(["requireFirstNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
       .matches(
-        isValidNameWithAccentsAndApostrophes(),
+        allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
     lastName: Yup.string()
       .required(translator(["requireLastNameError"]))
       .max(characterLengths.NAME_LENGTH, translator(["maxCharacterLimitError"]))
       .matches(
-        isValidNameWithAccentsAndApostrophes(),
+        allowsLettersAndSpecialCharactersForNames(),
         translator(["validNameError"])
       ),
     email: Yup.string()

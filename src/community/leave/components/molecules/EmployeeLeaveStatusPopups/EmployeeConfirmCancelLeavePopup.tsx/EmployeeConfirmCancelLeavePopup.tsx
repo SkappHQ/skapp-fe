@@ -10,6 +10,8 @@ import { IconName } from "~community/common/types/IconTypes";
 import { useCancelLeaveRequest } from "~community/leave/api/MyRequestApi";
 import { useLeaveStore } from "~community/leave/store/store";
 import { EmployeeLeaveStatusPopupTypes } from "~community/leave/types/EmployeeLeaveRequestTypes";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 interface Props {
   setPopupType: (type: EmployeeLeaveStatusPopupTypes) => void;
@@ -29,6 +31,8 @@ const EmployeeConfirmCancelLeavePopup: FC<Props> = ({ setPopupType }) => {
     isPending: isCancellationPending
   } = useCancelLeaveRequest(selectedYear);
 
+  const { sendEvent } = useGoogleAnalyticsEvent();
+
   useEffect(() => {
     if (isCancellationSuccess) {
       setPopupType(EmployeeLeaveStatusPopupTypes.CANCELLED_SUMMARY);
@@ -41,6 +45,7 @@ const EmployeeConfirmCancelLeavePopup: FC<Props> = ({ setPopupType }) => {
         ]),
         toastType: ToastType.SUCCESS
       });
+      sendEvent(GoogleAnalyticsTypes.GA4_LEAVE_REQUEST_CANCELLED);
     }
     if (isCancellationError) {
       setToastMessage({

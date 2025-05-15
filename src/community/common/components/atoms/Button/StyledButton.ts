@@ -17,11 +17,12 @@ interface StyledButtonProps {
   isdefaulticoncolor: string;
   isstrokeavailable: string;
   shouldblink?: boolean;
+  isDisabled?: boolean;
 }
 
 const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
   theme,
-  disabled,
+  isDisabled,
   buttonsize,
   buttonstyle,
   width,
@@ -135,22 +136,22 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     width: width,
     backgroundColor: backgroundColor(),
     border: "0.125rem solid transparent",
-    outline: outline(),
+    outline: isDisabled ? "none" : outline(),
     outlineOffset: shouldblink ? "-0.1875rem" : "-0.0625rem",
     borderRadius: "3.125rem",
     ".MuiTypography-root": {
-      color: disabled ? theme.palette.grey[800] : textcolor
+      color: isDisabled ? theme.palette.text.textBurntGrey : textcolor
     },
     ".MuiButton-startIcon, .MuiButton-endIcon": {
       margin: "0rem",
       "svg path": {
         fill:
-          disabled && isstrokeavailable === "false"
+          isDisabled && isstrokeavailable === "false"
             ? theme.palette.grey[800]
             : isdefaulticoncolor === "false" && isstrokeavailable === "false"
               ? textcolor
               : "",
-        stroke: isstrokeavailable === "false" || disabled ? "" : textcolor
+        stroke: isstrokeavailable === "false" || isDisabled ? "" : textcolor
       }
     },
     ".MuiCircularProgress-root": {
@@ -158,15 +159,17 @@ const StyledButton = styled(Button)<ButtonProps & StyledButtonProps>(({
     },
     "&:hover": {
       outline: "none",
-      border: borderOnHover(),
-      boxShadow: `inset 0 0 0 0.125rem ${disabled ? theme.palette.text.secondary : boxShadowColorOnHover}`
+      boxShadow: `inset 0 0 0 0.125rem ${boxShadowColorOnHover}`,
+      border: isDisabled
+        ? `0.125rem solid ${theme.palette.grey[300]}`
+        : borderOnHover()
     },
-    "&.Mui-disabled": {
+    ...(isDisabled && {
       outline: "none",
       backgroundColor: theme.palette.grey[100],
       boxShadow: `inset 0 0 0 0.063rem ${theme.palette.grey[300]}`,
       border: `0.125rem solid ${theme.palette.grey[300]}`
-    },
+    }),
     ...(shouldblink && {
       animation: "blink 3s ease-in-out infinite",
       "@keyframes blink": {

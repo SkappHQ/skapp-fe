@@ -2,7 +2,7 @@ import { Box, Divider, Stack, Typography, useMediaQuery } from "@mui/material";
 import { FC, useMemo } from "react";
 
 import RightArrowIcon from "~community/common/assets/Icons/RightArrowIcon";
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
+import ReadOnlyChip from "~community/common/components/atoms/Chips/BasicChip/ReadOnlyChip";
 import MultipleSkeletons from "~community/common/components/molecules/Skeletons/MultipleSkeletons";
 import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -43,7 +43,7 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
   const isExtraLargeScreen: boolean = useMediaQuery(theme.breakpoints.up("xl"));
   const isXXLScreen: boolean = useMediaQuery(theme.breakpoints.up("2xl"));
 
-  const { data: timelineData } = useGetEmployeeTimeline(
+  const { data: timelineData, isLoading } = useGetEmployeeTimeline(
     employeeId ?? 0,
     isProTier
   );
@@ -63,7 +63,7 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
   return (
     <UpgradeOverlay>
       <>
-        {false && (
+        {isLoading && (
           <MultipleSkeletons
             numOfSkeletons={5}
             height={"5rem"}
@@ -176,7 +176,9 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
                                 </Stack>
                                 <Stack sx={classes.eventDataStack}>
                                   {isExtraLargeScreen && (
-                                    <Stack>
+                                    <Stack
+                                      sx={classes.eventTitleTypographyWrapper}
+                                    >
                                       <Typography
                                         sx={classes.eventTitleTypography}
                                       >
@@ -186,7 +188,7 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
                                   )}
                                   <Stack sx={classes.eventNameStack}>
                                     {event?.previousValue && (
-                                      <BasicChip
+                                      <ReadOnlyChip
                                         label={getTimelineValues(
                                           event?.previousValue,
                                           translateTimelineText
@@ -201,7 +203,7 @@ const PeopleTimeline: FC<Props> = ({ employeeId }) => {
                                             <RightArrowIcon />
                                           </Box>
                                         )}
-                                        <BasicChip
+                                        <ReadOnlyChip
                                           label={getTimelineValues(
                                             event?.newValue,
                                             translateTimelineText

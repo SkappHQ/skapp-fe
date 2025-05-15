@@ -109,10 +109,6 @@ const nextConfig = {
         destination: "/community/people/holidays"
       },
       {
-        source: "/people/individual",
-        destination: "/community/people/individual"
-      },
-      {
         source: "/people/directory/add-new-resource",
         destination: "/community/people/directory/add-new-resource"
       },
@@ -237,8 +233,16 @@ const nextConfig = {
         destination: "/enterprise/sign/inbox"
       },
       {
+        source: "/sign/inbox/envelope/:id",
+        destination: "/enterprise/sign/inbox/envelope/:id"
+      },
+      {
         source: "/sign/sent",
         destination: "/enterprise/sign/sent"
+      },
+      {
+        source: "/sign/sent/envelope/:id",
+        destination: "/enterprise/sign/sent/envelope/:id"
       },
       {
         source: "/sign/contacts",
@@ -257,8 +261,8 @@ const nextConfig = {
         destination: "/enterprise/sign/sign"
       },
       {
-        source: "/sign/redirect",
-        destination: "/enterprise/sign/redirect"
+        source: "/sign/document/access",
+        destination: "/enterprise/sign/document/access"
       },
       {
         source: "/sign/complete",
@@ -305,8 +309,8 @@ const nextConfig = {
         destination: "/community/people/directory/add"
       },
       {
-        source: "/people/:id",
-        destination: "/community/people/:id"
+        source: "/people/individual/:id",
+        destination: "/community/people/individual/:id"
       },
       {
         source: "/user-account",

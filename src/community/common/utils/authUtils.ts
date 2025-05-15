@@ -7,18 +7,23 @@ export const drawerHiddenProtectedRoutes = [
   ROUTES.AUTH.VERIFY,
   ROUTES.AUTH.VERIFY_SUCCESS,
   ROUTES.AUTH.VERIFY_RESET_PASSWORD,
-  ROUTES.AUTH.VERIFY_ACCOUNT_RESET_PASSWORD,
   ROUTES.SETTINGS.PAYMENT,
   ROUTES.REMOVE_PEOPLE,
   ROUTES.CHANGE_SUPERVISORS,
   ROUTES.SUBSCRIPTION,
   ROUTES.SIGN.SIGN,
-  ROUTES.SIGN.CREATE_DOCUMENT
+  ROUTES.SIGN.CREATE_DOCUMENT,
+  ROUTES.SIGN.SENT_INFO.BASE,
+  ROUTES.SIGN.INBOX_INFO.BASE,
+  ROUTES.SIGN.DOCUMENT_ACCESS
 ];
 
 export const IsAProtectedUrlWithDrawer = (asPath: string): boolean => {
-  const isADrawerHiddenProtectedRoute =
-    drawerHiddenProtectedRoutes.includes(asPath);
+  const isADrawerHiddenProtectedRoute = drawerHiddenProtectedRoutes.some(
+    (prefix) => {
+      return asPath.startsWith(prefix);
+    }
+  );
 
   if (!isADrawerHiddenProtectedRoute) {
     const formattedProtectedPaths = config.matcher.map((path) =>

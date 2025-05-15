@@ -29,6 +29,11 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
       "addResource",
       "divesityDetails"
     );
+    const translateAria = useTranslator(
+      "peopleAria",
+      "addResource",
+      "diversityDetails"
+    );
 
     const { employee, setEmploymentDetails } = usePeopleStore((state) => state);
 
@@ -136,6 +141,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
                 checkSelected
                 isDisabled={isInputsDisabled}
                 readOnly={isReadOnly}
+                ariaLabel={translateAria(["selectEthnicity"])}
               />
             </Grid>
 
@@ -157,6 +163,7 @@ const IdentificationDetailsSection = forwardRef<FormMethods, Props>(
                 tooltip={translateText(["eeoTooltip"])}
                 isDisabled={isInputsDisabled}
                 readOnly={isReadOnly}
+                ariaLabel={translateAria(["selectEEOJobCategory"])}
               />
             </Grid>
           </Grid>

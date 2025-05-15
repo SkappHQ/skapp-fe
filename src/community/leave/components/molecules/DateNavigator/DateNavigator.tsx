@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 import { DateTime } from "luxon";
 
 import { FilledArrow } from "~community/common/components/atoms/FilledArrow/FilledArrow";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 
 const navigateDate = (
   currentStartDate: string,
@@ -39,6 +40,8 @@ const DateNavigator = ({
   navigateWeeks: number;
   dateFormat: string;
 }) => {
+  const translateAria = useTranslator("leaveAria", "dashboard");
+
   const handleNavigate = (direction: "forward" | "backward") => {
     const weeks = direction === "forward" ? navigateWeeks : -navigateWeeks;
     navigateDate(
@@ -54,16 +57,16 @@ const DateNavigator = ({
   return (
     <Stack direction="row" gap={"0.25rem"} mt={1} justifyContent={"end"}>
       <FilledArrow
-        enableKeyboardNavigation={false}
         onClick={() => handleNavigate("backward")}
         isRightArrow={false}
         backgroundColor={"grey.100"}
+        ariaLabel={translateAria(["resourceAvailabilityTrendMonthlyPrevious"])}
       />
       <FilledArrow
-        enableKeyboardNavigation={false}
         onClick={() => handleNavigate("forward")}
         isRightArrow={true}
         backgroundColor={"grey.100"}
+        ariaLabel={translateAria(["resourceAvailabilityTrendMonthlyNext"])}
       />
     </Stack>
   );

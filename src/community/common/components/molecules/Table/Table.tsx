@@ -35,6 +35,14 @@ interface Props {
   };
 }
 
+interface TableIndexProps {
+  wrapper?: number;
+  container?: number;
+  tableBody?: {
+    row?: number;
+  };
+}
+
 export interface CommonTableProps {
   isLoading?: boolean;
   headers: TableHeaderTypes[];
@@ -45,11 +53,13 @@ export interface CommonTableProps {
     //NOTE: If you want to disable individual checkbox, you have to use isRowDisabled prop and disable the entire row
     isEnabled?: boolean;
     isSelectAllEnabled?: boolean;
+    isSelectAllVisible?: boolean;
     isSelectAllChecked?: boolean;
     handleIndividualSelectClick?: (id: number) => () => void;
     handleSelectAllClick?: () => void;
     customStyles?: { cell?: SxProps<Theme>; checkbox?: SxProps<Theme> };
   };
+  tabIndex?: TableIndexProps;
 }
 
 const Table: FC<Props & CommonTableProps & TableTypes> = ({
@@ -64,7 +74,8 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   tableHead,
   tableBody,
   tableFoot,
-  customStyles
+  customStyles,
+  tabIndex
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -72,8 +83,9 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   return (
     <Stack
       sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
-      role="region"
+      role="group"
       aria-label={`${tableName}-table-wrapper`}
+      tabIndex={tabIndex?.wrapper ?? 0}
     >
       <TableHeadActionToolbar
         firstRow={actionToolbar?.firstRow}
@@ -85,6 +97,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       <TableContainer
         sx={mergeSx([classes.container, customStyles?.container])}
         role="region"
+        tabIndex={tabIndex?.container ?? 0}
         aria-label={`${tableName}-table-container`}
       >
         <MuiTable
@@ -118,6 +131,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             loadingState={tableBody?.loadingState}
             customStyles={tableBody?.customStyles}
             onRowClick={tableBody?.onRowClick}
+            tabIndex={tabIndex}
           />
         </MuiTable>
       </TableContainer>

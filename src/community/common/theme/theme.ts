@@ -27,7 +27,7 @@ declare module "@mui/material/styles" {
       dark: string;
       midDark: string;
       darker: string;
-      deep_shadows: string;
+      deepShadows: string;
       darkBoarder: string;
       lightBackground: string;
       lightTertiary: string;
@@ -82,6 +82,7 @@ declare module "@mui/material/styles" {
     customGrey: {
       customGreyWithAlpha: string;
       lightShadowGrey: string;
+      midGrey: string;
       midDarkGrey: string;
       darkGrey: string;
     };
@@ -120,7 +121,7 @@ declare module "@mui/material/styles" {
       dark: string;
       midDark: string;
       darker: string;
-      deep_shadows: string;
+      deepShadows: string;
       darkBoarder: string;
       lightBackground: string;
       lightTertiary: string;
@@ -175,6 +176,7 @@ declare module "@mui/material/styles" {
     customGrey: {
       customGreyWithAlpha: string;
       lightShadowGrey: string;
+      midGrey: string;
       midDarkGrey: string;
       darkGrey: string;
     };
@@ -233,6 +235,7 @@ declare module "@mui/material/styles/createPalette" {
     darkerText?: string;
     textLighter: string;
     textDarkGrey: string;
+    textBurntGrey: string;
     textGrey: string;
     whiteText?: string;
     blackText?: string;
@@ -278,11 +281,11 @@ export const theme = createTheme({
     },
     primary: {
       main: "#93C5FD", //* primary-color
-      dark: "#2A61A0" //* primary-color-text
+      dark: "#408CE4" //* primary-color-text
     },
     secondary: {
       main: "#DBEAFE", //* primary-color-background
-      dark: "#408CE4" //* primary-color-accent
+      dark: "#2A61A0" //* primary-color-accent
     },
     grey: {
       50: "#FAFAFA",
@@ -316,6 +319,7 @@ export const theme = createTheme({
       textLighter: "#0000000f",
       textDarkGrey: "#27272A",
       textGrey: "#64748B",
+      textBurntGrey: "#65656E",
       whiteText: "#ffffff",
       blackText: "#000000"
     },
@@ -331,7 +335,7 @@ export const theme = createTheme({
       midDark: "#16A34A",
       dark: "#65A30D",
       darker: "#166534",
-      deep_shadows: "#3F6212",
+      deepShadows: "#3F6212",
       darkBoarder: "#4D7C0F",
       lightBackground: "#DCFCE7",
       lightTertiary: "#F7FEE7"
@@ -349,7 +353,7 @@ export const theme = createTheme({
       200: "#FBBF24",
       300: "#FFC107",
       400: "#EAB308",
-      500: "#CA8A04",
+      500: "#8F6B10",
       600: "#854D0E"
     },
     trendChart: {
@@ -386,6 +390,7 @@ export const theme = createTheme({
     customGrey: {
       customGreyWithAlpha: "rgba(0,0,0,0.01)",
       lightShadowGrey: "#0900410D",
+      midGrey: "#c3c3c4",
       midDarkGrey: "#3D3D3D",
       darkGrey: "#18212C"
     },

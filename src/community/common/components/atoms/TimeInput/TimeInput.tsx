@@ -9,6 +9,7 @@ import { isTimePm } from "~community/attendance/utils/TimeUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { IconName } from "~community/common/types/IconTypes";
+import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 interface Props {
   time: Date;
@@ -45,7 +46,18 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
           bgcolor: error ? theme.palette.error.light : theme.palette.grey[100],
           borderRadius: "0.625rem",
           cursor: "pointer",
-          border: error && `${theme.palette.error.contrastText} 0.0625rem solid`
+          border:
+            error && `${theme.palette.error.contrastText} 0.0625rem solid`,
+          "&:focus-visible": {
+            border: `0.125rem solid ${theme.palette.common.black}`,
+            outline: "none"
+          }
+        }}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (shouldActivateButton(e.key)) {
+            handleIconClick();
+          }
         }}
       >
         <LocalizationProvider dateAdapter={AdapterLuxon}>
@@ -61,7 +73,6 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                 <TextField
                   {...params}
                   helperText={null}
-                  aria-readonly={true}
                   style={{
                     backgroundColor: error
                       ? theme.palette.error.light
@@ -79,10 +90,16 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                     },
                     borderRadius: "0.5rem"
                   }}
+                  onClick={handleIconClick}
                 />
               )
             }}
             slotProps={{
+              textField: {
+                inputProps: {
+                  tabIndex: -1
+                }
+              },
               dialog: {
                 sx: {
                   "& .MuiPickersToolbar-penIconButton": { display: "none" },
@@ -95,6 +112,12 @@ const TimeInput = ({ time, setTime, label, error }: Props) => {
                     backgroundColor: isTimePm(time)
                       ? theme.palette.primary.main
                       : theme.palette.secondary.main
+                  },
+                  "& .MuiClock-clock": {
+                    "&:focus-within": {
+                      outline: `0.125rem solid ${theme.palette.primary.main}`,
+                      outlineOffset: "0.125rem"
+                    }
                   },
                   "& .MuiPickersToolbarText-root": {
                     fontSize: "3rem",

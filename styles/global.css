@@ -49,6 +49,16 @@ input[type="number"] {
   box-shadow: none !important;
 }
 
+.react-tel-input .selected-flag:focus-visible {
+  outline: 0.125rem solid #000000;
+  outline-offset: 0.0625rem;
+  box-shadow: none;
+}
+
+.react-tel-input .selected-flag:focus-visible .arrow {
+  border-top: 0.3125rem solid #000000 !important;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -95,9 +105,23 @@ input[type="number"] {
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1441px) {
   .signup-layout-content-section {
     max-width: 800px;
     padding: 80px;
   }
+}
+
+.driver-popover .driver-popover-title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 140%;
+  font-family: "Poppins", sans-serif;
+}
+
+.driver-popover .driver-popover-description {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  font-family: "Poppins", sans-serif;
 }

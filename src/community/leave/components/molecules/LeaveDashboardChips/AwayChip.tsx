@@ -23,7 +23,7 @@ const AwayChip: FC<Props> = ({ text }) => {
       }}
     >
       <Typography
-        sx={{ color: theme.palette.error.contrastText }}
+        sx={{ color: theme.palette.text.darkerText }}
         variant="caption"
       >
         {" "}

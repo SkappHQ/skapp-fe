@@ -1,12 +1,13 @@
 import { parse } from "papaparse";
 import { Dispatch, SetStateAction } from "react";
 
+import {
+  matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod,
+  matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod
+} from "~community/common/regex/regexPatterns";
 import { type FileUploadType } from "~community/common/types/CommonTypes";
 import { toCamelCase } from "~community/common/utils/commonUtil";
-import {
-  HolidayDataType,
-  HolidayType
-} from "~community/people/types/HolidayTypes";
+import { HolidayType } from "~community/people/types/HolidayTypes";
 
 const validateHeaders = async (file: File): Promise<boolean> => {
   const readCSVHeaders = (file: File): Promise<string[]> => {
@@ -42,6 +43,55 @@ const transformCSVHeaders = (header: string) => {
   return toCamelCase(header);
 };
 
+export const normalizeHolidayDates = (
+  holidays: HolidayType[]
+): HolidayType[] => {
+  return holidays.map((holiday) => {
+    const formattedDate = formatToStrictYMD(holiday.date);
+    return {
+      ...holiday,
+      date: formattedDate ?? holiday.date
+    };
+  });
+};
+
+const formatToStrictYMD = (inputDate: string): string => {
+  const startsWithYearMatch = inputDate.match(
+    matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod()
+  );
+
+  const endsWithYearMatch = inputDate.match(
+    matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod()
+  );
+
+  if (startsWithYearMatch === null && endsWithYearMatch === null) {
+    return inputDate;
+  }
+
+  let year: string;
+  let month: string;
+  let day: string;
+
+  if (startsWithYearMatch) {
+    [, year, month, day] = startsWithYearMatch;
+  } else {
+    [, month, day, year] = endsWithYearMatch!;
+  }
+
+  month = month.padStart(2, "0");
+  day = day.padStart(2, "0");
+
+  const reconstructedDate = new Date(`${year}-${month}-${day}`);
+
+  const isValid =
+    !isNaN(reconstructedDate.getTime()) &&
+    reconstructedDate.getFullYear() === Number(year) &&
+    reconstructedDate.getMonth() === Number(month) - 1 &&
+    reconstructedDate.getDate() === Number(day);
+
+  return isValid ? `${year}-${month}-${day}` : inputDate;
+};
+
 export const setAttachment = async ({
   acceptedFiles,
   translateText,
@@ -54,7 +104,7 @@ export const setAttachment = async ({
   setCalendarErrors: (value: string) => void;
   setIsNewCalendarDetailsValid: (value: boolean) => void;
   translateText: (keys: string[]) => string;
-  setHolidayBulkList: Dispatch<SetStateAction<HolidayDataType[]>>;
+  setHolidayBulkList: Dispatch<SetStateAction<HolidayType[]>>;
   setNewCalendarDetails: (value: FileUploadType[]) => void;
 }): Promise<void> => {
   setIsNewCalendarDetailsValid(false);
@@ -76,7 +126,7 @@ export const setAttachment = async ({
             setCalendarErrors(translateText(["emptyFileError"]));
           } else {
             setIsNewCalendarDetailsValid(true);
-            setHolidayBulkList(recordDetails.data);
+            setHolidayBulkList(normalizeHolidayDates(recordDetails.data));
           }
         }
       });

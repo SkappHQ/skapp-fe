@@ -6,9 +6,60 @@
   "teams": {
     "table": {
       "actionColumn": {
-        "editButton": "Select teams table {{teamName}} team edit button",
-        "deleteButton": "Select teams table {{teamName}} team delete button"
+        "editButton": "Edit team {{teamName}} button",
+        "deleteButton": "Delete team {{teamName}} button"
       }
+    },
+    "modal": {
+      "teamMemberRoleDropdown": "Select team member role dropdown"
+    }
+  },
+  "addResource": {
+    "generalDetails": {
+      "selectGender": "Select gender",
+      "selectMaritalStatus": "Select marital status"
+    },
+    "familyDetails": {
+      "selectGender": "Select gender",
+      "selectRelationship": "Select relationship"
+    },
+    "healthAndOtherDetails": {
+      "selectBloodGroup": " Select blood group"
+    },
+    "emergencyDetails": {
+      "selectRelationship": "Select relationship"
+    },
+    "employmentDetails": {
+      "selectEmploymentAllocation": "Select employment allocation",
+      "selectMultipleTeams": "Select multiple teams dropdown"
+    },
+    "careerProgression": {
+      "selectEmploymentType": "Select employment type",
+      "selectJobFamily": "Select job family",
+      "selectJobTitle": "Select job title",
+      "selectCurrentEmploymentChecked": "Select current employment checkbox is checked",
+      "selectCurrentEmploymentUnChecked": "Select current employment checkbox is unchecked"
+    },
+    "diversityDetails": {
+      "selectEthnicity": "Select ethnicity",
+      "selectEEOJobCategory": "Select EEO job category"
+    }
+  },
+  "individualLeaveAnalytics": {
+    "leaveHistoryFilterButton": "Pressing enter on this button opens a menu where you can choose to filter by leave status and leave type"
+  },
+  "peopleFormTable": {
+    "actionColumn": {
+      "editButton": "Select edit button",
+      "deleteButton": "Select delete button"
+    }
+  },
+  "holiday": {
+    "sortByDropdown": {
+      "sort": "Sort : ",
+      "chronologically": "Chronologically : ",
+      "janToDec": "January to December",
+      "decToJan": "December to January"
     }
   }
 }

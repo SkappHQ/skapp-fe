@@ -21,6 +21,8 @@ import LeaveManagerModalController from "~community/leave/components/organisms/L
 import { useLeaveStore } from "~community/leave/store/store";
 import { useGetEmployeesAndTeamsForAnalytics } from "~community/people/api/PeopleApi";
 import { usePeopleStore } from "~community/people/store/store";
+import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
+import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
 const LeaveRequests: NextPage = () => {
   const translateText = useTranslator("leaveModule", "leaveRequests");
@@ -45,6 +47,11 @@ const LeaveRequests: NextPage = () => {
     useGetManagerAssignedLeaveRequests();
 
   const { setLeaveRequestParams } = useLeaveStore((state) => state);
+
+  useGoogleAnalyticsEvent({
+    onMountEventType: GoogleAnalyticsTypes.GA4_ALL_LEAVE_REQUEST_PAGE_VIEWED,
+    triggerOnMount: true
+  });
 
   const onSearchChange = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -92,7 +99,7 @@ const LeaveRequests: NextPage = () => {
     } else {
       setIsFromPeopleDirectory(true);
       setViewEmployeeId(employee.id);
-      const url = `${ROUTES.PEOPLE.BASE}/${employee.id}?tab=leave`;
+      const url = `${ROUTES.PEOPLE.INDIVIDUAL}/${employee.id}?tab=leave`;
       await router.push(url);
     }
   };
@@ -106,7 +113,6 @@ const LeaveRequests: NextPage = () => {
       pageHead={translateText(["pageHead"])}
       title={translateText(["title"])}
       isDividerVisible={true}
-      isBackButtonVisible
     >
       <>
         <Search

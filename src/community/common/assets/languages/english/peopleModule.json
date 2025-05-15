@@ -102,7 +102,7 @@
     "uploadCsvText": "Upload csv",
     "uploadCsvDesc": "Upload the CSV template with updated employee leave information.",
     "csvTemplateError": "Invalid File. Please use the provided template. ",
-    "emptyFileError": "No records have been found.Please try again.",
+    "emptyFileError": "No records have been found. Please try again.",
     "deleteSelectedTitle": "Delete Selected",
     "deleteAllTitle": "Delete All",
     "deleteHoliday": "Delete holiday",
@@ -382,9 +382,11 @@
         "employee": "Employee",
         "manager": "Manager",
         "admin": "Admin",
+        "sender": "Sender",
         "attendanceModule": "Attendance Module",
         "leaveModule": "Leave Module",
-        "peopleModule": "People Module"
+        "peopleModule": "People Module",
+        "esignModule": "E-Signature Module"
       },
       "selectedFiltersFilterItems": {
         "male": "Male",
@@ -407,7 +409,10 @@
         "attendance_admin": "Attendance Admin",
         "attendance_manager": "Attendance Manager",
         "attendance_employee": "Attendance Employee",
-        "super_admin": "Super Admin"
+        "super_admin": "Super Admin",
+        "esign_admin": "E-Sign Admin",
+        "esign_sender": "E-Sign Sender",
+        "esign_employee": "E-Sign Employee"
       }
     },
     "reInvitationSuccessTitle": "Reinvited Successfully",
@@ -491,7 +496,9 @@
       "employeeAddSuccessToastDescription": "User has been added and an invitation has been sent successfully.",
       "employeeAddErrorToastTitle": "Oops! Something went wrong",
       "employeeAddErrorToastDescription": "Failed to add the resource. Please try again.",
-      "areYouSureModalTitle": "Are you sure?"
+      "areYouSureModalTitle": "Are you sure?",
+      "reInvitationForOneEmployeeSuccessfulToastTitle": "Reinvitated Successfully",
+      "reInvitationForOneEmployeeSuccessfulToastDescription": "Reinvitation sent for the employee successfully"
     },
     "commonValidations": {
       "lettersAllowed": "Only letters are allowed",
@@ -523,7 +530,7 @@
       "contactNo": "Contact no",
       "requireFirstNameError": "Please enter the first name",
       "requireLastNameError": "Please enter the last name",
-      "maxCharacterLimitError": "Please enter a value within the character limit of 30",
+      "maxCharacterLimitError": "Please enter a value within the character limit of 50",
       "validNameError": "Only Letters are Allowed",
       "requireGenderError": "Please select the gender",
       "requireBirthDateError": "Please select the date of birth",
@@ -539,6 +546,8 @@
       "head": "Directory | Skapp",
       "quickAddSuccessTitle": "User Added",
       "quickAddSuccessDescription": "User has been added and an invitation has been sent successfully.",
+      "quickAddErrorTitle": "Oops! Something went wrong",
+      "quickAddErrorDescription": "Failed to add the resource. Please try again.",
       "workEmailGoogle": "Work email must be a Google account.",
       "country": "Country",
       "selectCountry": "Select country"
