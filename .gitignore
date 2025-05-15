@@ -30,7 +30,7 @@ frontend/next-env.d.ts
 
 ##################### backend
 backend/HELP.md
-backend/target/
+**/target/
 !backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
