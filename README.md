@@ -2,7 +2,7 @@
 
 The official [Skapp](https://skapp.com/) community project.
 
-### Code Setup 
+### Code Setup
 
 - To setup the code and try it out, visit the [Code Setup - Skapp Docs](https://docs.skapp.com/docs/code-setup/intro).
 

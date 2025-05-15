@@ -35,8 +35,7 @@ file:
       - organization-logos
       - user-image
       - leave-attachments
-    base:
-      storage
+    base: storage
     encryption-key: FileStorageKey12
 
 logging:

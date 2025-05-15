@@ -37,8 +37,7 @@ file:
       - organization-logos
       - user-image
       - leave-attachments
-    base:
-      storage
+    base: storage
     encryption-key: ${FILE_ENCRYPT_KEY}
 
 logging:
