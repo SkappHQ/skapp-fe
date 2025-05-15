@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from "@mui/material";
-import { SyntheticEvent } from "react";
+import { RefObject, SyntheticEvent } from "react";
 
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
@@ -14,7 +14,13 @@ import { GenderTypes } from "~community/people/types/AddNewResourceTypes";
 
 import { NationalityList } from "../../../utils/data/employeeSetupStaticData";
 
-const DemograpicsSection = () => {
+const DemographicsSection = ({
+  selected,
+  basicChipRef
+}: {
+  selected: string;
+  basicChipRef: RefObject<{ [key: string]: HTMLDivElement | null }>;
+}) => {
   const theme = useTheme();
 
   const queryMatches = useMediaQuery();
@@ -54,6 +60,7 @@ const DemograpicsSection = () => {
       ]);
     }
   };
+
   return (
     <Stack
       sx={{
@@ -78,6 +85,11 @@ const DemograpicsSection = () => {
         >
           {genderFilters.map((genderItem, index) => (
             <BasicChip
+              ref={(el: HTMLDivElement | null) => {
+                if (el && basicChipRef.current) {
+                  basicChipRef.current[selected + index] = el;
+                }
+              }}
               key={index}
               label={genderItem.label}
               onClick={() => {
@@ -171,4 +183,4 @@ const DemograpicsSection = () => {
   );
 };
 
-export default DemograpicsSection;
+export default DemographicsSection;

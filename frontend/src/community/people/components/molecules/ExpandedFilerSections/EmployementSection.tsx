@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { RefObject } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { usePeopleStore } from "~community/people/store/store";
@@ -10,7 +11,13 @@ import {
 
 import EmployeeFilterSection from "../EmployeeFilterSection/EmployeeFilterSection";
 
-const EmployementSection = () => {
+const EmploymentSection = ({
+  selected,
+  basicChipRef
+}: {
+  selected: string;
+  basicChipRef: RefObject<{ [key: string]: HTMLDivElement | null }>;
+}) => {
   const translateText = useTranslator(
     "peopleModule",
     "peoples.filters.employementFilters"
@@ -85,18 +92,22 @@ const EmployementSection = () => {
         maxHeight: "20rem"
       }}
     >
-      {filterData.map((filter) => (
-        <EmployeeFilterSection
-          key={filter.title}
-          title={filter.title}
-          data={filter.data}
-          filterKey={filter.filterKey}
-          handleFilterChange={handleFilterChange}
-          currentFilter={employeeDataFilter[filter.filterKey]}
-        />
-      ))}
+      {filterData.map((filter) => {
+        return (
+          <EmployeeFilterSection
+            basicChipRef={basicChipRef}
+            selected={selected}
+            key={filter.title}
+            title={filter.title}
+            data={filter.data}
+            filterKey={filter.filterKey}
+            handleFilterChange={handleFilterChange}
+            currentFilter={employeeDataFilter[filter.filterKey]}
+          />
+        );
+      })}
     </Stack>
   );
 };
 
-export default EmployementSection;
+export default EmploymentSection;
