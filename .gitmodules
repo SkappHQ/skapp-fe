@@ -1,0 +1,9 @@
+[submodule "src"]
+	path = frontend/src/enterprise
+	url = https://github.com/rootcodelabs/skapp-ep-fe-src.git
+[submodule "pages"]
+	path = frontend/pages/enterprise
+	url = https://github.com/rootcodelabs/skapp-ep-fe-pages.git
+[submodule "api"]
+	path = frontend/pages/api/enterprise
+	url = https://github.com/rootcodelabs/skapp-ep-fe-routes
