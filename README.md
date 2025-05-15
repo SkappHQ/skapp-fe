@@ -1,32 +1,18 @@
 # Skapp
 
-The official [Skapp](https://skapp.com/) frontend community project.
+The official [Skapp](https://skapp.com/) community project.
 
-### Getting Started
+### Code Setup 
 
-To get started with Skapp, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/SkappHQ/skapp-fe.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd skapp-fe
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+- To setup the code and try it out, visit the [Code Setup - Skapp Docs](https://docs.skapp.com/docs/code-setup/intro).
 
 ### Documentation
 
-- For the installation guide and full documentation, visit the [Skapp Docs](https://docs.skapp.com/).
-- To learn how to contribute, check out the [CONTRIBUTING.md](https://github.com/SkappHQ/skapp-fe/blob/main/CONTRIBUTING.md) file.
+- For the full documentation, start from [Introduction - Skapp Docs](https://docs.skapp.com/introduction).
+
+### Contributions
+
+- To learn how to contribute, check out the [CONTRIBUTING.md](https://github.com/SkappHQ/skapp/blob/main/CONTRIBUTING.md) file.
 
 ### License
 
