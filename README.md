@@ -8,7 +8,7 @@ The official [Skapp](https://skapp.com/) community project.
 
 ### Documentation
 
-- For the full documentation, start from [Introduction - Skapp Docs](https://docs.skapp.com/introduction).
+- For the full documentation, start from [Introduction - Skapp Docs](https://docs.skapp.com/docs/introduction).
 
 ### Contributions
 
