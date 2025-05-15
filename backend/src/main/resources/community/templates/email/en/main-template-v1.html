@@ -1,72 +1,136 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>{{subject}}</title>
-</head>
-<body style="background-color: #93C5FD; padding: 20px;">
-<div style="max-width: 460px; margin: auto; background-color: #ffffff; border-radius: 16px; padding: 60px 48px; box-sizing: border-box;">
-    <div style="text-align: left;">
-        <img alt="Skapp Logo" src="http://images.skapp.com/logo-with-name-1.png"
-             style="width: 120px; height: auto;">
-    </div>
+  </head>
+  <body style="background-color: #93c5fd; padding: 20px">
+    <div
+      style="
+        max-width: 460px;
+        margin: auto;
+        background-color: #ffffff;
+        border-radius: 16px;
+        padding: 60px 48px;
+        box-sizing: border-box;
+      "
+    >
+      <div style="text-align: left">
+        <img
+          alt="Skapp Logo"
+          src="http://images.skapp.com/logo-with-name-1.png"
+          style="width: 120px; height: auto"
+        />
+      </div>
 
-    <p style="font-size: 16px; color: #52525B;">Hi {{employeeOrManagerName}},</p>
+      <p style="font-size: 16px; color: #52525b">
+        Hi {{employeeOrManagerName}},
+      </p>
 
-    <h1 style="font-size: 34px; font-weight: bold; color: #27272A; line-height: 1.3; margin-bottom: 25px;">
-        {{subject}}</h1>
+      <h1
+        style="
+          font-size: 34px;
+          font-weight: bold;
+          color: #27272a;
+          line-height: 1.3;
+          margin-bottom: 25px;
+        "
+      >
+        {{subject}}
+      </h1>
 
-    <div style="font-size: 15px; color: #52525B; line-height: 1.5;">
+      <div style="font-size: 15px; color: #52525b; line-height: 1.5">
         {{body}}
-        <p style="font-size: 14px; color: #52525B; margin-bottom: 20px; margin-top: 20px;">Thank you!</p>
-    </div>
+        <p
+          style="
+            font-size: 14px;
+            color: #52525b;
+            margin-bottom: 20px;
+            margin-top: 20px;
+          "
+        >
+          Thank you!
+        </p>
+      </div>
 
-    <div style="text-align: center;">
-        <a href="{{appUrl}}"
-           style="background-color: #93C5FD;
-                  color: #000;
-                  padding: 16px 40px;
+      <div style="text-align: center">
+        <a
+          href="{{appUrl}}"
+          style="
+            background-color: #93c5fd;
+            color: #000;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            max-width: 370px;
+            box-sizing: border-box;
+          "
+        >
+          <table style="margin: 0 auto">
+            <tr>
+              <td
+                style="
+                  padding: 0px;
+                  background-color: #93c5fd;
                   border-radius: 50px;
-                  text-decoration: none;
-                  font-size: 16px;
-                  display: inline-block;
-                  text-align: center;
-                  width: 100%;
-                  max-width: 370px;
-                  box-sizing: border-box;">
-            <table style="margin: 0 auto;">
-                <tr>
-                    <td style="padding: 0px; background-color: #93C5FD; border-radius: 50px;">
-                        <table border="0" cellpadding="1" cellspacing="0" role="presentation"
-                               style="display: inline-table;">
-                            <tr>
-                                <td>
-                                    <a href="{{appUrl}}"
-                                       style="color: #000; text-decoration: none; font-size: 16px; font-family: Arial, sans-serif;">
-                                        <span style="font-size: 16px; line-height: 24px;">{{buttonText}}</span>
-                                    </a>
-                                </td>
-                                <td style="padding-left: 8px;">
-                                    <img
-                                            alt="arrow"
-                                            height="20"
-                                            src="http://cdn.mcauto-images-production.sendgrid.net/e859d1ba72944b61/8f5bc4ec-79f7-4407-97a5-df2e03c25453/80x81.png"
-                                            style="display: block;"
-                                            width="20"
-                                    />
-                                </td>
-                            </tr>
-                        </table>
+                "
+              >
+                <table
+                  border="0"
+                  cellpadding="1"
+                  cellspacing="0"
+                  role="presentation"
+                  style="display: inline-table"
+                >
+                  <tr>
+                    <td>
+                      <a
+                        href="{{appUrl}}"
+                        style="
+                          color: #000;
+                          text-decoration: none;
+                          font-size: 16px;
+                          font-family: Arial, sans-serif;
+                        "
+                      >
+                        <span style="font-size: 16px; line-height: 24px"
+                          >{{buttonText}}</span
+                        >
+                      </a>
                     </td>
-                </tr>
-            </table>
+                    <td style="padding-left: 8px">
+                      <img
+                        alt="arrow"
+                        height="20"
+                        src="http://cdn.mcauto-images-production.sendgrid.net/e859d1ba72944b61/8f5bc4ec-79f7-4407-97a5-df2e03c25453/80x81.png"
+                        style="display: block"
+                        width="20"
+                      />
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
         </a>
-    </div>
+      </div>
 
-    <p style="font-size: 15px; color: #52525B; text-align: center; font-style: italic; margin: 6px 0 0 0;">
+      <p
+        style="
+          font-size: 15px;
+          color: #52525b;
+          text-align: center;
+          font-style: italic;
+          margin: 6px 0 0 0;
+        "
+      >
         This is an automatic email.
-    </p>
-</div>
-</body>
+      </p>
+    </div>
+  </body>
 </html>

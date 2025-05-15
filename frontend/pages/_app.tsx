@@ -27,8 +27,8 @@ import {
 import { database } from "~enterprise/common/utils/firebase";
 import { initializeHotjar } from "~enterprise/common/utils/monitoring";
 import i18n from "~i18n";
-import "../styles/global.css";
 
+import "../styles/global.css";
 import Error from "./_error";
 
 function MyApp({
