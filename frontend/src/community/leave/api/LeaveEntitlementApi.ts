@@ -11,7 +11,7 @@ import {
   SortOrderTypes
 } from "~community/common/types/CommonTypes";
 import authFetch from "~community/common/utils/axiosInterceptor";
-import { leaveEntitlementEndPoints } from "~community/leave//api/utils/ApiEndpoints";
+import { leaveEntitlementEndPoints } from "~community/leave/api/utils/ApiEndpoints";
 import { leaveEntitlementQueryKeys } from "~community/leave/api/utils/QueryKeys";
 import {
   LeaveEntitlementBulkPayloadType,

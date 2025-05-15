@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { Dispatch, SetStateAction } from "react";
 
-import { TIME_FORMAT_AM_PM } from "~community/attendance//constants/constants";
+import { TIME_FORMAT_AM_PM } from "~community/attendance/constants/constants";
 import {
   useAddManualTimeEntry,
   useEditClockInOut

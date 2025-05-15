@@ -118,4 +118,4 @@ Must be one of the following:
 
 - Please use proper types and generics throughout your code.
 - Follow the [Atomic design](https://atomicdesign.bradfrost.com/)
-- Avoid using hardcoded English strings to display text on the screen, rather, update the JSON files in the [`english`](./src/community/common/assets/languages/english) directory and read the value using the `useTranslator` hook.
+- Avoid using hardcoded English strings to display text on the screen, rather, update the JSON files in the [`english`](frontend/src/community/common/assets/languages/english) directory and read the value using the `useTranslator` hook.

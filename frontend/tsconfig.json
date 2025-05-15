@@ -37,7 +37,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".storybook/**/*",
-    "pages/api/health.js"
+    "frontend/pages/api/health.js"
   ],
   "exclude": [
     "node_modules",
