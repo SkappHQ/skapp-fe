@@ -1,4 +1,4 @@
-import { DefaultSession, DefaultUser } from "~community/common/types/next-auth";
+import { DefaultSession, DefaultUser } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
 
 import {
@@ -10,7 +10,7 @@ import {
 } from "~community/common/types/AuthTypes";
 import { TenantStatusEnums, TierEnum } from "~enterprise/common/enums/Common";
 
-declare module "~community/common/types/next-auth" {
+declare module "next-auth" {
   interface Session {
     user: {
       id: string;
