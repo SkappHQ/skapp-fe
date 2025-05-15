@@ -31,7 +31,11 @@ const StepperComponent = ({
           <Step key={index}>
             <StepLabel
               StepIconComponent={(props) => (
-                <CustomIcon {...props} stepNumber={`${index + 1}`} />
+                <CustomIcon
+                  {...props}
+                  stepNumber={`${index + 1}`}
+                  isActive={index === activeStep}
+                />
               )}
             >
               {label}
