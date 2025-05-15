@@ -5,8 +5,8 @@ import { useMediaQuery } from "~community/common/hooks/useMediaQuery";
 import { FilterButtonTypes } from "~community/common/types/filterTypes";
 import { PeopleFilterHeadings } from "~community/people/types/CommonTypes";
 
-import DemographicsSection from "../ExpandedFilerSections/DemograpicsSection";
-import EmploymentSection from "../ExpandedFilerSections/EmployementSection";
+import DemographicsSection from "../ExpandedFilerSections/DemographicsSection";
+import EmploymentSection from "../ExpandedFilerSections/EmploymentSection";
 import JobFamiliesSection from "../ExpandedFilerSections/JobFamiliesSection";
 import TeamSection from "../ExpandedFilerSections/TeamSection";
 import UserRolesSection from "../ExpandedFilerSections/UserRolesSection";
