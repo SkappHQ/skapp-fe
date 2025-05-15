@@ -1,5 +1,5 @@
 ;   frontend
-[submodule "fe src"]
+[submodule "frontend-src"]
 	path = frontend/src/enterprise
 	url = https://github.com/rootcodelabs/skapp-ep-fe-src.git
 [submodule "frontend/pages/enterprise"]
