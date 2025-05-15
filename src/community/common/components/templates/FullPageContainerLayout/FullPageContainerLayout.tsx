@@ -89,9 +89,7 @@ const FullPageContainerLayout = ({
               </Typography>
             </Stack>
           </Stack>
-          <Stack sx={mergeSx([classes.body, customStyles?.body])}>
-            {children}
-          </Stack>
+          <Stack sx={mergeSx([customStyles?.body])}>{children}</Stack>
         </Stack>
       </Stack>
     </>
