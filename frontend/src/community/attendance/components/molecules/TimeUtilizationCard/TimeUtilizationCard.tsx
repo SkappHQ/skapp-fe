@@ -3,7 +3,6 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 
 import { TimeUtilizationTrendTypes } from "~community/attendance/types/timeSheetTypes";
-import useSessionData from "~community/common/hooks/useSessionData";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { theme } from "~community/common/theme/theme";
 
