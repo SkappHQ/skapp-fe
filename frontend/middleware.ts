@@ -129,7 +129,8 @@ export default withAuth(
   async function middleware(request: NextRequestWithAuth) {
     if (
       request.nextUrl.pathname === ROUTES.SIGN.DOCUMENT_ACCESS ||
-      request.nextUrl.pathname.startsWith(ROUTES.SIGN.SIGN)
+      request.nextUrl.pathname.startsWith(ROUTES.SIGN.SIGN) ||
+      request.nextUrl.pathname.startsWith(ROUTES.SIGN.INFO)
     ) {
       return NextResponse.next();
     }
