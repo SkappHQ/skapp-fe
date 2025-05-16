@@ -176,7 +176,8 @@ const UploadHolidayBulk: FC<Props> = ({ setBulkUploadData }) => {
             setIsNewCalendarDetailsValid,
             setCalendarErrors,
             setHolidayBulkList,
-            setNewCalendarDetails
+            setNewCalendarDetails,
+            setToastMessage
           })
         }
         accept={{

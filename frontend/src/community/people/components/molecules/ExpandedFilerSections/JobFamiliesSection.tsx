@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from "@mui/material";
-import { useState } from "react";
+import { RefObject, useState } from "react";
 
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -12,10 +12,15 @@ import {
 } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { usePeopleStore } from "~community/people/store/store";
+import { PeopleFilterHeadings } from "~community/people/types/CommonTypes";
 
 const JobFamiliesSection = ({
-  jobFamilies
+  jobFamilies,
+  basicChipRef,
+  selected
 }: {
+  basicChipRef: RefObject<{ [key: string]: HTMLDivElement | null }>;
+  selected: PeopleFilterHeadings;
   jobFamilies?: FilterButtonTypes[] | undefined;
 }) => {
   const theme = useTheme();
@@ -100,6 +105,11 @@ const JobFamiliesSection = ({
                 {employeeDataFilter?.role?.map((chip, index) => (
                   <Stack key={index}>
                     <IconChip
+                      ref={(el: HTMLDivElement | null) => {
+                        if (el && basicChipRef.current) {
+                          basicChipRef.current[selected + index] = el;
+                        }
+                      }}
                       label={chip.text}
                       icon={
                         <Icon
@@ -136,6 +146,11 @@ const JobFamiliesSection = ({
               {jobFamilies?.map((jobFamily, index) => (
                 <Stack key={index}>
                   <IconChip
+                    ref={(el: HTMLDivElement | null) => {
+                      if (el && basicChipRef.current) {
+                        basicChipRef.current[selected + index] = el;
+                      }
+                    }}
                     label={jobFamily.text}
                     onClick={() => handleJobFamilySelect(jobFamily)}
                     icon={

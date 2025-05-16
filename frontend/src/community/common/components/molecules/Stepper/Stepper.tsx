@@ -28,11 +28,17 @@ const StepperComponent = ({
     >
       {steps.map((label, index) => {
         return (
-          <Step key={index}>
+          <Step key={`${index}-${label}`}>
             <StepLabel
-              StepIconComponent={(props) => (
-                <CustomIcon {...props} stepNumber={`${index + 1}`} />
-              )}
+              slots={{
+                stepIcon: (props) => (
+                  <CustomIcon
+                    {...props}
+                    stepNumber={`${index + 1}`}
+                    isActive={index === activeStep}
+                  />
+                )
+              }}
             >
               {label}
             </StepLabel>
