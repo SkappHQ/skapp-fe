@@ -33,12 +33,15 @@ const styles = (): StyleProps => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: "1rem"
+    gap: "1rem",
+    maxWidth: "calc(100% - 3.5rem)",
   },
   modalHeaderTitle: {
     fontWeight: "700",
     fontSize: "1.5rem",
-    color: "common.black"
+    color: "common.black",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   titleIcon: { marginBottom: "0.1875rem" },
   closeIconBtn: {
