@@ -28,7 +28,7 @@ const StepperComponent = ({
     >
       {steps.map((label, index) => {
         return (
-          <Step key={label}>
+          <Step key={`${index}-${label}`}>
             <StepLabel
               slots={{
                 stepIcon: (props) => (

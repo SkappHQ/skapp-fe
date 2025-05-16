@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-import { JSX } from "react";
+import { JSX, ReactNode } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
@@ -35,7 +35,7 @@ interface Props {
     stepText?: SxProps;
     body?: SxProps;
   };
-  children?: JSX.Element;
+  children?: ReactNode;
 }
 
 const FullPageContainerLayout = ({
