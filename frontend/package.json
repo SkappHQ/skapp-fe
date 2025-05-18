@@ -53,7 +53,7 @@
     "react-error-boundary": "^4.1.2",
     "react-google-recaptcha": "^3.1.0",
     "react-hotjar": "^6.3.1",
-    "react-i18next": "^15.0.1",
+    "react-i18next": "^15.5.1",
     "react-pdf": "^9.2.1",
     "react-phone-input-2": "^2.15.1",
     "react-select": "^5.8.0",
