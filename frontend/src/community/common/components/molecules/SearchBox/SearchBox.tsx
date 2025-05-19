@@ -49,18 +49,30 @@ const SearchBox: FC<Props> = ({
 
   useEffect(() => {
     if (value) {
-      setSearchValue(removeSpecialCharacters(value));
+      const allowEmailCharacters = name === "contactSearch";
+      setSearchValue(removeSpecialCharacters(value, "", allowEmailCharacters));
     }
-  }, [value]);
+  }, [value, name]);
 
   const searchHandler = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    const trimmedValue = removeSpecialCharacters(e.target.value?.trimStart());
+    const allowEmailCharacters = name === "contactSearch";
+    const trimmedValue = removeSpecialCharacters(
+      e.target.value?.trimStart(),
+      "",
+      allowEmailCharacters
+    );
     setSearchValue(trimmedValue);
 
     if (setSearchTerm) {
-      setSearchTerm(removeSpecialCharacters(e.target.value?.trim()));
+      setSearchTerm(
+        removeSpecialCharacters(
+          e.target.value?.trim(),
+          "",
+          allowEmailCharacters
+        )
+      );
     }
   };
 
