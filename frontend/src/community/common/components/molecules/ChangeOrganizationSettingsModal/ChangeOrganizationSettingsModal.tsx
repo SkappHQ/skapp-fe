@@ -92,7 +92,7 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
     onClose();
   };
 
-  const { mutate: updateOrganizationDetails } =
+  const { mutate: updateOrganizationDetails, isPending: isUpdateOrganizationDetailsPending } =
     useUpdateOrganizationDetails(onSuccess);
 
   const countryList = useGetCountryList();
@@ -235,6 +235,7 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
           <Button
             label={translateText(["saveChangesBtnText"])}
             styles={{ mt: "1rem" }}
+            isLoading={isUpdateOrganizationDetailsPending}
             buttonStyle={ButtonStyle.PRIMARY}
             endIcon={IconName.RIGHT_ARROW_ICON}
             disabled={!isInitialLoadComplete || !OrganisationForm.dirty}
