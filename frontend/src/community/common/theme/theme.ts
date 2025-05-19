@@ -397,7 +397,7 @@ export const theme = createTheme({
     graphColors: {
       green: "#27A197",
       yellow: "#DF7D4E",
-      pink: "#FF6384",
+      pink: "#F6587A",
       blue: "#7BB9FF"
     },
     contactUserChip: {
@@ -417,7 +417,7 @@ export const theme = createTheme({
       },
       {
         background: "#FFDFE6B2",
-        border: "#FF6384"
+        border: "#F6587A"
       },
       {
         background: "#FFE3C7B2",

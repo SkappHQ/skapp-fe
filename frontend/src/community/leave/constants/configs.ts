@@ -1,6 +1,6 @@
 export const leaveTypeColors = [
   "#9A66FF",
-  "#FF6384",
+  "#F6587A",
   "#EA5DA3",
   "#DF7D4E",
   "#27A197",
