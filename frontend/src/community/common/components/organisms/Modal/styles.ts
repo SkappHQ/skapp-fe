@@ -1,3 +1,4 @@
+import { MODAL_HEADER_ICON_GAP } from "~community/common/constants/commonConstants";
 import { StyleProps } from "~community/common/types/CommonTypes";
 
 const styles = (): StyleProps => ({
@@ -34,14 +35,14 @@ const styles = (): StyleProps => ({
     flexDirection: "row",
     alignItems: "center",
     gap: "1rem",
-    maxWidth: "calc(100% - 3.5rem)",
+    maxWidth: `calc(100% - ${MODAL_HEADER_ICON_GAP})`
   },
   modalHeaderTitle: {
     fontWeight: "700",
     fontSize: "1.5rem",
     color: "common.black",
     overflow: "hidden",
-    textOverflow: "ellipsis",
+    textOverflow: "ellipsis"
   },
   titleIcon: { marginBottom: "0.1875rem" },
   closeIconBtn: {
