@@ -43,7 +43,6 @@ public class Validation {
 
 	public static final String PHONE_NUMBER_PATTERN = "^[0-9]{7,15}$";
 
-
 	public static final String VALID_IDENTIFICATION_NUMBER_REGEXP = "^[a-zA-Z0-9\\-_]*$";
 
 	public static final String VALID_NIN_NUMBER_REGEXP = "^[a-zA-Z0-9]*$";
