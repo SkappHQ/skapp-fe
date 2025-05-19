@@ -46,18 +46,17 @@ const SearchBox: FC<Props> = ({
 
   const classes = styles(theme);
   const [searchValue, setSearchValue] = useState<string | null>(value);
+  const allowEmailCharacters = name === "contactSearch";
 
   useEffect(() => {
     if (value) {
-      const allowEmailCharacters = name === "contactSearch";
       setSearchValue(removeSpecialCharacters(value, "", allowEmailCharacters));
     }
-  }, [value, name]);
+  }, [value, name, allowEmailCharacters]);
 
   const searchHandler = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    const allowEmailCharacters = name === "contactSearch";
     const trimmedValue = removeSpecialCharacters(
       e.target.value?.trimStart(),
       "",
