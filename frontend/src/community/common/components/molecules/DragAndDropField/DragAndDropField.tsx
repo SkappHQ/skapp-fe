@@ -127,7 +127,14 @@ const DragAndDropField: FC<Props> = ({
         ]);
       } else if (maxFileSize !== 1 && uploadableFiles?.length >= maxFileSize) {
         setFileUploadErrorsList([
-          { errors: [{ code: "", message: errors.tooManyFilesError }] }
+          {
+            errors: [
+              {
+                code: FileUploadErrorTypes.TOO_MANY_FILES_ERROR,
+                message: errors.tooManyFilesError
+              }
+            ]
+          }
         ]);
       } else {
         setFileUploadErrorsList([]);
