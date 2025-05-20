@@ -248,7 +248,7 @@ const getDrawerRoutes = ({
         if (!isEsignEmployeeWithoutManagerOrAdminRole) {
           return {
             id: route?.id,
-            name: route?.name,
+            name: "Inbox",
             url: ROUTES.SIGN.INBOX,
             icon: route?.icon,
             hasSubTree: false
