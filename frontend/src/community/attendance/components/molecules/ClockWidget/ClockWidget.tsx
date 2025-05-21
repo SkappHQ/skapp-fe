@@ -88,20 +88,11 @@ const ClockWidget = (): JSX.Element => {
         justifyContent="space-between"
         spacing={2}
         component="div"
-        sx={classes.container}
+        sx={classes.timerContainer(isDisabled)}
         aria-label={translateAria(["widget"])}
       >
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          spacing={2}
-          component="div"
-          sx={classes.timerContainer(isDisabled)}
-        >
-          <Timer disabled={isDisabled} />
-          <ClockInButton disabled={isDisabled} />
-        </Stack>
+        <Timer disabled={isDisabled} />
+        <ClockInButton disabled={isDisabled} />
       </Stack>
     </Tooltip>
   );

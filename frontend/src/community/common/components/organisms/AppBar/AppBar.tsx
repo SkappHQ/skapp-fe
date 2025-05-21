@@ -95,11 +95,7 @@ const AppBar = () => {
             justifyContent: showClockWidget ? "space-between" : "flex-end"
           }}
         >
-          {showClockWidget && (
-            <Stack sx={classes.clockInWrapper}>
-              <ClockWidget />
-            </Stack>
-          )}
+          {showClockWidget && <ClockWidget />}
           {employee ? (
             <Stack sx={classes.userInfoPanelWrapper} ref={userInfoRef}>
               <Box

@@ -25,11 +25,6 @@ const styles = () => ({
     width: { xs: "calc(100% - 4.5rem)", lg: "100%" },
     justifyContent: "space-between"
   },
-  clockInWrapper: {
-    flexDirection: "row",
-    height: "4.5rem",
-    borderRadius: "3.3125rem"
-  },
   userInfoPanelWrapper: {
     flexDirection: "row",
     alignItems: "center",
