@@ -1,11 +1,13 @@
 import { parse } from "papaparse";
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
+import { ToastType } from "~community/common/enums/ComponentEnums";
 import {
   matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod,
   matchesYYYYMMDDSeparatedByHyphenOrSlashOrPeriod
 } from "~community/common/regex/regexPatterns";
 import { type FileUploadType } from "~community/common/types/CommonTypes";
+import { ToastProps } from "~community/common/types/ToastTypes";
 import { toCamelCase } from "~community/common/utils/commonUtil";
 import { HolidayType } from "~community/people/types/HolidayTypes";
 
@@ -98,7 +100,8 @@ export const setAttachment = async ({
   setIsNewCalendarDetailsValid,
   setCalendarErrors,
   setHolidayBulkList,
-  setNewCalendarDetails
+  setNewCalendarDetails,
+  setToastMessage
 }: {
   acceptedFiles: FileUploadType[];
   setCalendarErrors: (value: string) => void;
@@ -106,12 +109,27 @@ export const setAttachment = async ({
   translateText: (keys: string[]) => string;
   setHolidayBulkList: Dispatch<SetStateAction<HolidayType[]>>;
   setNewCalendarDetails: (value: FileUploadType[]) => void;
+  setToastMessage: (value: React.SetStateAction<ToastProps>) => void;
 }): Promise<void> => {
   setIsNewCalendarDetailsValid(false);
   setNewCalendarDetails(acceptedFiles);
   setCalendarErrors("");
 
   if (acceptedFiles?.length > 0) {
+    const file = acceptedFiles[0].file ?? new File([], "");
+
+    const fileContent = await file.text();
+    if (!fileContent.trim()) {
+      setToastMessage({
+        title: translateText(["noRecordCSVTitle"]),
+        description: translateText(["noRecordCSVDes"]),
+        isIcon: true,
+        toastType: ToastType.ERROR,
+        open: true
+      });
+      return;
+    }
+
     const areHeadersValid = await validateHeaders(
       acceptedFiles[0].file ?? new File([], "")
     );
@@ -123,7 +141,13 @@ export const setAttachment = async ({
         transformHeader: transformCSVHeaders,
         complete: function (recordDetails: { data: HolidayType[] }) {
           if (recordDetails?.data?.length === 0) {
-            setCalendarErrors(translateText(["emptyFileError"]));
+            setToastMessage({
+              title: translateText(["noRecordCSVTitle"]),
+              description: translateText(["noRecordCSVDes"]),
+              isIcon: true,
+              toastType: ToastType.ERROR,
+              open: true
+            });
           } else {
             setIsNewCalendarDetailsValid(true);
             setHolidayBulkList(normalizeHolidayDates(recordDetails.data));

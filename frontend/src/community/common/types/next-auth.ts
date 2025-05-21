@@ -6,6 +6,7 @@ import {
   AuthEmployeeType,
   EmployeeTypes,
   ManagerTypes,
+  SenderTypes,
   SuperAdminType
 } from "~community/common/types/AuthTypes";
 import { TenantStatusEnums, TierEnum } from "~enterprise/common/enums/Common";
@@ -15,7 +16,13 @@ declare module "next-auth" {
     user: {
       id: string;
       name: string;
-      roles?: (AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType)[];
+      roles?: (
+        | AdminTypes
+        | ManagerTypes
+        | EmployeeTypes
+        | SuperAdminType
+        | SenderTypes
+      )[];
       accessToken?: string;
       refreshToken?: string;
       tokenDuration?: number;
@@ -37,7 +44,13 @@ declare module "next-auth" {
     name: string;
     username: string;
     password: string;
-    roles?: (AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType)[];
+    roles?: (
+      | AdminTypes
+      | ManagerTypes
+      | EmployeeTypes
+      | SuperAdminType
+      | SenderTypes
+    )[];
     accessToken?: string;
     refreshToken?: string;
     tokenDuration?: number;
@@ -56,7 +69,13 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
-    roles?: (AdminTypes | ManagerTypes | EmployeeTypes | SuperAdminType)[];
+    roles?: (
+      | AdminTypes
+      | ManagerTypes
+      | EmployeeTypes
+      | SuperAdminType
+      | SenderTypes
+    )[];
     accessToken?: string;
     refreshToken?: string;
     tokenDuration?: number;

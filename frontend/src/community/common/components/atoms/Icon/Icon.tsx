@@ -17,6 +17,7 @@ import CalendarIcon from "~community/common/assets/Icons/CalendarIcon";
 import CancelledStatusIcon from "~community/common/assets/Icons/CancelledStatusIcon";
 import ChangeIcon from "~community/common/assets/Icons/ChangeIcon";
 import CheckCircleIcon from "~community/common/assets/Icons/CheckCircleIcon";
+import CheckCircleOutlineIcon from "~community/common/assets/Icons/CheckCircleOutlineIcon";
 import CheckIcon from "~community/common/assets/Icons/CheckIcon";
 import CheckWrapperIcon from "~community/common/assets/Icons/CheckWrapperIcon";
 import ChevronLeftIcon from "~community/common/assets/Icons/ChevronLeftIcon";
@@ -103,6 +104,7 @@ import SendIcon from "~community/common/assets/Icons/SendIcon";
 import SettingsIcon from "~community/common/assets/Icons/SettingsIcon";
 import ShareIcon from "~community/common/assets/Icons/ShareIcon";
 import SignatureIcon from "~community/common/assets/Icons/SignIcon";
+import SignaturePenIcon from "~community/common/assets/Icons/SignaturePenIcon";
 import SignerIcon from "~community/common/assets/Icons/SignerIcon";
 import SignoutIcon from "~community/common/assets/Icons/SignoutIcon";
 import SkappIcon from "~community/common/assets/Icons/SkappIcon";
@@ -265,6 +267,8 @@ export const IconMapping: Partial<
   [IconName.SEND_ICON]: SendIcon,
   [IconName.SUCCESS_TICK_ICON]: SuccessIcon,
   [IconName.CROSSED_CIRCLE_ICON]: CrossedCircleIcon,
+  [IconName.SIGNATURE_PEN_ICON]: SignaturePenIcon,
+  [IconName.CHECK_CIRCLE_OUTLINE_ICON]: CheckCircleOutlineIcon,
   [IconName.FINANCE_MODULE_ICON]: FinanceModuleIcon,
   [IconName.ASSET_MODULE_ICON]: AssetModuleIcon,
   [IconName.CRM_MODULE_ICON]: CRMModuleIcon,
