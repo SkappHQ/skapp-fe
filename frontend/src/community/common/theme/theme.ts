@@ -19,6 +19,9 @@ declare module "@mui/material/styles" {
       main: string;
       contrastText: string;
     };
+    textNeutral: {
+      main: string;
+    };
     greens: {
       main: string;
       lighter: string;
@@ -112,6 +115,9 @@ declare module "@mui/material/styles" {
     notifyBadge: {
       main: string;
       contrastText: string;
+    };
+    textNeutral: {
+      main: string;
     };
     greens: {
       main: string;
@@ -435,7 +441,10 @@ export const theme = createTheme({
         background: "#7AA3BF",
         border: "#37A2EB"
       }
-    ]
+    ],
+    textNeutral: {
+      main: "#6B7280"
+    }
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
