@@ -231,6 +231,7 @@ const DragAndDropField: FC<Props> = ({
 
       return translateText(["validAttachment"]);
     }
+    return "";
   }, [
     validationError,
     customError,
