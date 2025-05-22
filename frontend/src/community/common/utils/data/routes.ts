@@ -199,44 +199,6 @@ const routes = [
   },
   {
     id: "4",
-    name: "Configurations",
-    url: ROUTES.CONFIGURATIONS.BASE,
-    icon: IconName.CONFIGURATIONS_ICON,
-    hasSubTree: true,
-    requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ATTENDANCE_ADMIN],
-    subTree: [
-      {
-        id: "4A",
-        name: "Time",
-        url: ROUTES.CONFIGURATIONS.TIME,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
-      },
-      {
-        id: "4B",
-        name: "Attendance",
-        url: ROUTES.CONFIGURATIONS.ATTENDANCE,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ATTENDANCE_ADMIN]
-      },
-      {
-        id: "4C",
-        name: "Sign",
-        url: ROUTES.CONFIGURATIONS.SIGN,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ESIGN_ADMIN]
-      },
-      {
-        id: "4D",
-        name: "User Roles",
-        url: ROUTES.CONFIGURATIONS.USER_ROLES,
-        hasSubTree: false,
-        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
-      }
-    ]
-  },
-  {
-    id: "5",
     name: "Sign",
     url: ROUTES.SIGN.BASE,
     icon: IconName.DOCUMENTS_ICON,
@@ -249,7 +211,7 @@ const routes = [
     ],
     subTree: [
       {
-        id: "5A",
+        id: "4A",
         name: "Inbox",
         url: ROUTES.SIGN.INBOX,
         hasSubTree: false,
@@ -261,7 +223,7 @@ const routes = [
         ]
       },
       {
-        id: "5B",
+        id: "4B",
         name: "Sent",
         url: ROUTES.SIGN.SENT,
         hasSubTree: false,
@@ -272,7 +234,7 @@ const routes = [
         ]
       },
       {
-        id: "5D",
+        id: "4C",
         name: "Contacts",
         url: ROUTES.SIGN.CONTACTS,
         hasSubTree: false,
@@ -281,6 +243,44 @@ const routes = [
           SenderTypes.ESIGN_SENDER,
           AdminTypes.ESIGN_ADMIN
         ]
+      }
+    ]
+  },
+  {
+    id: "5",
+    name: "Configurations",
+    url: ROUTES.CONFIGURATIONS.BASE,
+    icon: IconName.CONFIGURATIONS_ICON,
+    hasSubTree: true,
+    requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ATTENDANCE_ADMIN],
+    subTree: [
+      {
+        id: "5A",
+        name: "Time",
+        url: ROUTES.CONFIGURATIONS.TIME,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
+      },
+      {
+        id: "5B",
+        name: "Attendance",
+        url: ROUTES.CONFIGURATIONS.ATTENDANCE,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ATTENDANCE_ADMIN]
+      },
+      {
+        id: "5C",
+        name: "Sign",
+        url: ROUTES.CONFIGURATIONS.SIGN,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN, AdminTypes.ESIGN_ADMIN]
+      },
+      {
+        id: "5D",
+        name: "User Roles",
+        url: ROUTES.CONFIGURATIONS.USER_ROLES,
+        hasSubTree: false,
+        requiredAuthLevel: [AdminTypes.SUPER_ADMIN]
       }
     ]
   },

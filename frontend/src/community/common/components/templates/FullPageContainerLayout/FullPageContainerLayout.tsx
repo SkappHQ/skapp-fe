@@ -8,9 +8,12 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-import { JSX, ReactNode } from "react";
+import { JSX, ReactNode, useMemo } from "react";
 
+import { useGetOrganization } from "~community/common/api/OrganizationCreateApi";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { themeSelector } from "~community/common/theme/themeSelector";
+import { ThemeTypes } from "~community/common/types/AvailableThemeColors";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -49,9 +52,20 @@ const FullPageContainerLayout = ({
   const router = useRouter();
 
   const theme: Theme = useTheme();
-  const classes = styles(theme);
 
   const translateAria = useTranslator("commonAria", "components");
+
+  const { data: organizationDetails } = useGetOrganization();
+
+  const updatedTheme = useMemo(() => {
+    return themeSelector(
+      organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
+    );
+  }, [organizationDetails]);
+
+  theme.palette = updatedTheme.palette;
+
+  const classes = styles(theme);
 
   const onIconClick = () => {
     if (icon?.onClick) {

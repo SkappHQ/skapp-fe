@@ -95,7 +95,7 @@ const DragAndDropField: FC<Props> = ({
   >([]);
 
   const theme: Theme = useTheme();
-  const classes = styles(theme, isDisableColor, validationError, customError);
+  const classes = styles(theme, isDisableColor, validationError);
 
   useEffect(() => {
     setValidationError(!!fileUploadErrorsList?.length);
@@ -220,11 +220,10 @@ const DragAndDropField: FC<Props> = ({
   );
 
   const getInlineErrorMessage = useMemo(() => {
+    if (customError) {
+      return customError;
+    }
     if (validationError) {
-      if (customError) {
-        return customError;
-      }
-
       if (
         fileUploadErrorsList?.length &&
         fileUploadErrorsList[0]?.errors?.[0]?.message
@@ -234,6 +233,7 @@ const DragAndDropField: FC<Props> = ({
 
       return translateText(["validAttachment"]);
     }
+    return "";
   }, [
     validationError,
     customError,
