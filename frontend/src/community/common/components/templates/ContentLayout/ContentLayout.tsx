@@ -81,6 +81,9 @@ interface Props {
     primaryBtn?: boolean;
     secondaryBtn?: boolean;
   };
+  customStyles?: {
+    header?: SxProps;
+  };
 }
 
 const ContentLayout = ({
@@ -107,7 +110,8 @@ const ContentLayout = ({
   backIcon = IconName.LEFT_ARROW_ICON,
   isPrimaryBtnDisabled = false,
   id,
-  shouldBlink
+  shouldBlink,
+  customStyles
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -247,7 +251,7 @@ const ContentLayout = ({
             <UserLimitBanner />
           )}
 
-        <Stack sx={classes.header}>
+        <Stack sx={mergeSx([classes.header, customStyles?.header])}>
           <Stack sx={classes.leftContent}>
             {isBackButtonVisible && (
               <IconButton
