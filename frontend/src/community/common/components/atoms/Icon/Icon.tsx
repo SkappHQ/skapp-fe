@@ -6,11 +6,13 @@ import ApprovedStatusIcon from "~community/common/assets/Icons/ApprovedStatusIco
 import ArrowFilledLeft from "~community/common/assets/Icons/ArrowFilledLeft";
 import ArrowFilledRight from "~community/common/assets/Icons/ArrowFilledRight";
 import AssetIcon from "~community/common/assets/Icons/AssetIcon";
+import AssetModuleIcon from "~community/common/assets/Icons/AssetModuleIcon";
 import AttachmentIcon from "~community/common/assets/Icons/AttachmentIcon";
 import AttendanceModuleIcon from "~community/common/assets/Icons/AttendanceModuleIcon";
 import BackIcon from "~community/common/assets/Icons/BackIcon";
 import BellIcon from "~community/common/assets/Icons/BellIcon";
 import BinIcon from "~community/common/assets/Icons/BinIcon";
+import CRMModuleIcon from "~community/common/assets/Icons/CRMModuleIcon";
 import CalendarIcon from "~community/common/assets/Icons/CalendarIcon";
 import CancelledStatusIcon from "~community/common/assets/Icons/CancelledStatusIcon";
 import ChangeIcon from "~community/common/assets/Icons/ChangeIcon";
@@ -51,9 +53,11 @@ import EyeIcon from "~community/common/assets/Icons/EyeIcon";
 import FileIcon from "~community/common/assets/Icons/FileIcon";
 import FileUploadIcon from "~community/common/assets/Icons/FileUploadIcon";
 import FilterIcon from "~community/common/assets/Icons/FilterIcon";
+import FinanceModuleIcon from "~community/common/assets/Icons/FinanceModuleIcon";
 import ForwardArrow from "~community/common/assets/Icons/ForwardArrow";
 import GoogleCalendarIcon from "~community/common/assets/Icons/GoogleCalendarIcon";
 import GoogleIcon from "~community/common/assets/Icons/GoogleIcon";
+import HelpDeskModuleIcon from "~community/common/assets/Icons/HelpDeskModuleIcon";
 import InfoIcon from "~community/common/assets/Icons/InfoIcon";
 import InformationIcon from "~community/common/assets/Icons/InformationIcon";
 import InitialsIcon from "~community/common/assets/Icons/InitialsIcon";
@@ -81,6 +85,7 @@ import PeopleRemoveIcon from "~community/common/assets/Icons/PeopleRemoveIcon";
 import PlayIcon from "~community/common/assets/Icons/PlayIcon";
 import PlusIcon from "~community/common/assets/Icons/PlusIcon";
 import PopOutIcon from "~community/common/assets/Icons/PopOutIcon";
+import ProjectManagementModuleIcon from "~community/common/assets/Icons/ProjectManagementModuleIcon";
 import RemoveCircleIcon from "~community/common/assets/Icons/RemoveCircleIcon";
 import RequestCancelCrossIcon from "~community/common/assets/Icons/RequestCancelCrossIcon";
 import RestoreIcon from "~community/common/assets/Icons/RestoreIcon";
@@ -263,7 +268,12 @@ export const IconMapping: Partial<
   [IconName.SUCCESS_TICK_ICON]: SuccessIcon,
   [IconName.CROSSED_CIRCLE_ICON]: CrossedCircleIcon,
   [IconName.SIGNATURE_PEN_ICON]: SignaturePenIcon,
-  [IconName.CHECK_CIRCLE_OUTLINE_ICON]: CheckCircleOutlineIcon
+  [IconName.CHECK_CIRCLE_OUTLINE_ICON]: CheckCircleOutlineIcon,
+  [IconName.FINANCE_MODULE_ICON]: FinanceModuleIcon,
+  [IconName.ASSET_MODULE_ICON]: AssetModuleIcon,
+  [IconName.CRM_MODULE_ICON]: CRMModuleIcon,
+  [IconName.HELP_DESK_MODULE_ICON]: HelpDeskModuleIcon,
+  [IconName.PROJECT_MANAGEMENT_MODULE_ICON]: ProjectManagementModuleIcon
   // Add more icons here as needed
 };
 
