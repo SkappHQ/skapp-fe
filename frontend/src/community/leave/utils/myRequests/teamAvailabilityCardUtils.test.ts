@@ -201,7 +201,7 @@ describe("getTeamAvailabilityData", () => {
             typeId: 4,
             name: "Paternity",
             emojiCode: "1f468-200d-1f37c",
-            colorCode: "#37A2EB"
+            colorCode: "#658AFC"
           },
           employee: {
             employeeId: 2,
