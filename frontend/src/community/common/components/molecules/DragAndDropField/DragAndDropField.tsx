@@ -90,7 +90,7 @@ const DragAndDropField: FC<Props> = ({
   >([]);
 
   const theme: Theme = useTheme();
-  const classes = styles(theme, isDisableColor, validationError, customError);
+  const classes = styles(theme, isDisableColor, validationError);
 
   useEffect(() => {
     setValidationError(!!fileUploadErrorsList?.length);
