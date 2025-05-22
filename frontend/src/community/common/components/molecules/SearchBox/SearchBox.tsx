@@ -7,6 +7,7 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   mergeSx,
+  removeInvalidEmailSearchCharacters,
   removeSpecialCharacters
 } from "~community/common/utils/commonUtil";
 
@@ -50,27 +51,27 @@ const SearchBox: FC<Props> = ({
 
   useEffect(() => {
     if (value) {
-      setSearchValue(removeSpecialCharacters(value, "", allowEmailCharacters));
+      if (allowEmailCharacters) {
+        setSearchValue(removeInvalidEmailSearchCharacters(value, ""));
+      } else {
+        setSearchValue(removeSpecialCharacters(value, ""));
+      }
     }
   }, [value, name, allowEmailCharacters]);
 
   const searchHandler = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    const trimmedValue = removeSpecialCharacters(
-      e.target.value?.trimStart(),
-      "",
-      allowEmailCharacters
-    );
+    const trimmedValue = allowEmailCharacters
+      ? removeInvalidEmailSearchCharacters(e.target.value?.trimStart(), "")
+      : removeSpecialCharacters(e.target.value?.trimStart(), "");
     setSearchValue(trimmedValue);
 
     if (setSearchTerm) {
       setSearchTerm(
-        removeSpecialCharacters(
-          e.target.value?.trim(),
-          "",
-          allowEmailCharacters
-        )
+        allowEmailCharacters
+          ? removeInvalidEmailSearchCharacters(e.target.value?.trim(), "")
+          : removeSpecialCharacters(e.target.value?.trim(), "")
       );
     }
   };
