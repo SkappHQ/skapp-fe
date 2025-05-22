@@ -486,7 +486,7 @@ export const theme = createTheme({
     overline: undefined,
     onboardingHeader: {
       fontWeight: 700,
-      fontSize: "2.25rem"
+      fontSize: "2.25rem" //36px
     },
     // Table heading
     tableHeader: {
