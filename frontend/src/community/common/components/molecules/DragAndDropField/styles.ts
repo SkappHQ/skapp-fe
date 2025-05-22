@@ -5,8 +5,7 @@ import { StyleProps } from "~community/common/types/CommonTypes";
 export const styles = (
   theme: Theme,
   isDisableColor: boolean,
-  validationError: boolean,
-  customError: string | undefined
+  validationError: boolean
 ): StyleProps => ({
   labelText: {
     marginTop: "1.25rem",
@@ -17,7 +16,7 @@ export const styles = (
   dragDropContainer: {
     border: isDisableColor
       ? `0.0625rem dashed ${theme.palette.grey.A100}`
-      : validationError || customError
+      : validationError
         ? `0.0625rem dashed ${theme.palette.error.contrastText}`
         : `0.0625rem dashed ${theme.palette.grey.A100}`,
     borderRadius: "0.5rem",
@@ -27,10 +26,9 @@ export const styles = (
     paddingBottom: "2.25rem",
     width: "100%",
     background: "transparent",
-    color:
-      validationError || customError
-        ? theme.palette.error.contrastText
-        : theme.palette.common.black,
+    color: validationError
+      ? theme.palette.error.contrastText
+      : theme.palette.common.black,
     maxHeight: "13.375rem",
     overflowY: "auto" as "auto" | "hidden" | "scroll"
   },
@@ -38,10 +36,9 @@ export const styles = (
     color: theme.palette.grey[700]
   },
   browseText: {
-    color:
-      validationError || customError
-        ? theme.palette.error.contrastText
-        : theme.palette.primary.dark,
+    color: validationError
+      ? theme.palette.error.contrastText
+      : theme.palette.primary.dark,
     textDecoration: "underline",
     cursor: "pointer"
   },
