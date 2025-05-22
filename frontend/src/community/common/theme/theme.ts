@@ -383,8 +383,8 @@ export const theme = createTheme({
       other: "#F87171"
     },
     teamTimeUtilizationChart: {
-      line: "#4CC0C0",
-      bar: "#4CC0C0"
+      line: "#27A197",
+      bar: "#27A197"
     },
     lateArrivalsChart: {
       line: "#F94144",
@@ -398,9 +398,9 @@ export const theme = createTheme({
       darkGrey: "#18212C"
     },
     graphColors: {
-      green: "#4CC0C0",
-      yellow: "#FFCD56",
-      pink: "#FF6384",
+      green: "#27A197",
+      yellow: "#DF7D4E",
+      pink: "#F6587A",
       blue: "#7BB9FF"
     },
     contactUserChip: {
@@ -420,23 +420,23 @@ export const theme = createTheme({
       },
       {
         background: "#FFDFE6B2",
-        border: "#FF6384"
+        border: "#F6587A"
       },
       {
         background: "#FFE3C7B2",
-        border: "#FF9F40"
+        border: "#EA5DA3"
       },
       {
         background: "#FFF5DEB2",
-        border: "#FFCD56"
+        border: "#DF7D4E"
       },
       {
         background: "#9FD6D6B2",
-        border: "#4CC0C0"
+        border: "#27A197"
       },
       {
         background: "#7AA3BF",
-        border: "#37A2EB"
+        border: "#658AFC"
       }
     ]
   },
