@@ -113,6 +113,7 @@ declare module "@mui/material/styles" {
       main: string;
       contrastText: string;
     };
+
     greens: {
       main: string;
       lighter: string;
@@ -239,6 +240,7 @@ declare module "@mui/material/styles/createPalette" {
     textGrey: string;
     whiteText?: string;
     blackText?: string;
+    neutral?: string;
   }
 }
 
@@ -321,7 +323,8 @@ export const theme = createTheme({
       textGrey: "#64748B",
       textBurntGrey: "#65656E",
       whiteText: "#ffffff",
-      blackText: "#000000"
+      blackText: "#000000",
+      neutral: "#6B7280"
     },
     notifyBadge: {
       main: "#EF4444",
