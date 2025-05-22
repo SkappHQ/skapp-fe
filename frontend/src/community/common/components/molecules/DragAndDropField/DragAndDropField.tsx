@@ -22,7 +22,7 @@ import {
 } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx, removeDuplicates } from "~community/common/utils/commonUtil";
-import { formatBytesToReadableSize } from "~enterprise/sign/utils/dragAndDropUtils";
+import { formatBytesToReadableSize } from "~community/common/utils/dragAndDropUtils";
 
 import IconChip from "../../atoms/Chips/IconChip.tsx/IconChip";
 import Icon from "../../atoms/Icon/Icon";
