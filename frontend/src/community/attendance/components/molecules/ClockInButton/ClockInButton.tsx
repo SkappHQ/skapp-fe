@@ -71,6 +71,9 @@ const ClockInButton = ({ disabled }: Props): JSX.Element => {
       endIcon={IconName.TIMER_ICON}
       isFullWidth={false}
       onClick={onClick}
+      ariaLabel={
+        isClockedIn ? translateText(["clockIn"]) : translateText(["clockOut"])
+      }
       isLoading={isPending}
       disabled={disabled}
       ariaDisabled={disabled}
