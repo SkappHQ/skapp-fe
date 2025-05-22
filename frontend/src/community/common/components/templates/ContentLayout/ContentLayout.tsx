@@ -82,7 +82,7 @@ interface Props {
     secondaryBtn?: boolean;
   };
   customStyles?: {
-    header?: SxProps;
+    header?: SxProps<Theme>;
   };
 }
 
@@ -251,7 +251,7 @@ const ContentLayout = ({
             <UserLimitBanner />
           )}
 
-        <Stack sx={mergeSx([classes.header, customStyles?.header])}>
+        <Stack sx={mergeSx([classes.header, customStyles?.header ?? {}])}>
           <Stack sx={classes.leftContent}>
             {isBackButtonVisible && (
               <IconButton
