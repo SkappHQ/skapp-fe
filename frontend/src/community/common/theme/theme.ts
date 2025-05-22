@@ -19,9 +19,6 @@ declare module "@mui/material/styles" {
       main: string;
       contrastText: string;
     };
-    textNeutral: {
-      main: string;
-    };
     greens: {
       main: string;
       lighter: string;
@@ -116,9 +113,7 @@ declare module "@mui/material/styles" {
       main: string;
       contrastText: string;
     };
-    textNeutral: {
-      main: string;
-    };
+
     greens: {
       main: string;
       lighter: string;
@@ -245,6 +240,7 @@ declare module "@mui/material/styles/createPalette" {
     textGrey: string;
     whiteText?: string;
     blackText?: string;
+    neutral?: string;
   }
 }
 
@@ -327,7 +323,8 @@ export const theme = createTheme({
       textGrey: "#64748B",
       textBurntGrey: "#65656E",
       whiteText: "#ffffff",
-      blackText: "#000000"
+      blackText: "#000000",
+      neutral: "#6B7280"
     },
     notifyBadge: {
       main: "#EF4444",
@@ -441,10 +438,7 @@ export const theme = createTheme({
         background: "#7AA3BF",
         border: "#37A2EB"
       }
-    ],
-    textNeutral: {
-      main: "#6B7280"
-    }
+    ]
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
