@@ -11,8 +11,6 @@ import ClockInButton from "~community/attendance/components/molecules/ClockInBut
 import Timer from "~community/attendance/components/molecules/Timer/Timer";
 import { useAttendanceStore } from "~community/attendance/store/attendanceStore";
 import { AttendanceSlotType } from "~community/attendance/types/attendanceTypes";
-import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
-import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { useDefaultCapacity } from "~community/configurations/api/timeConfigurationApi";
 import { DefaultDayCapacityType } from "~community/configurations/types/TimeConfigurationsTypes";
@@ -38,7 +36,10 @@ const ClockWidget = (): JSX.Element => {
     isLoading: isAvailabilityLoading
   } = useGetTodaysTimeRequestAvailability();
 
-  const translateText = useTranslator("attendanceModule", "timeWidget");
+  // NOTE: The Tooltip component is commented out because to address the accessibility issue,
+  // "Ensure interactive controls are not nested"
+  // This component will be redesigned in the future.
+  // const translateText = useTranslator("attendanceModule", "timeWidget");
 
   const isDisabled = useMemo(
     () =>
@@ -51,22 +52,24 @@ const ClockWidget = (): JSX.Element => {
     [status, isTimeRequestAvailableToday, isAvailabilityLoading]
   );
 
-  const title = useMemo(() => {
-    if (!isDisabled) return "";
-
-    switch (status) {
-      case AttendanceSlotType.END:
-        return translateText(["youHaveAlreadyLoggedTime"]);
-      case AttendanceSlotType.HOLIDAY:
-        return translateText(["notAllowedToClockInOnHolidaysTooltip"]);
-      case AttendanceSlotType.NON_WORKING_DAY:
-        return translateText(["notAllowedToClockInOnNonWorkingDaysTooltip"]);
-      case AttendanceSlotType.LEAVE_DAY:
-        return translateText(["notAllowedToClockInOnLeaveDaysTooltip"]);
-      default:
-        return "";
-    }
-  }, [isDisabled, status, translateText]);
+  // NOTE: The Tooltip component is commented out because to address the accessibility issue,
+  // "Ensure interactive controls are not nested"
+  // This component will be redesigned in the future.
+  // const title = useMemo(() => {
+  //   if (!isDisabled) return "";
+  //   switch (status) {
+  //     case AttendanceSlotType.END:
+  //       return translateText(["youHaveAlreadyLoggedTime"]);
+  //     case AttendanceSlotType.HOLIDAY:
+  //       return translateText(["notAllowedToClockInOnHolidaysTooltip"]);
+  //     case AttendanceSlotType.NON_WORKING_DAY:
+  //       return translateText(["notAllowedToClockInOnNonWorkingDaysTooltip"]);
+  //     case AttendanceSlotType.LEAVE_DAY:
+  //       return translateText(["notAllowedToClockInOnLeaveDaysTooltip"]);
+  //     default:
+  //       return "";
+  //   }
+  // }, [isDisabled, status, translateText]);
 
   useEffect(() => {
     void getEmployeeStatusRefetch();
@@ -74,36 +77,30 @@ const ClockWidget = (): JSX.Element => {
   }, [router, getEmployeeStatusRefetch, refetchLeaveStatusData]);
 
   return (
-    <Tooltip
-      id="play-button"
-      title={title}
-      placement={TooltipPlacement.BOTTOM}
-      spanStyles={{
-        borderRadius: "3.3125rem"
-      }}
+    // NOTE: The Tooltip component is commented out because to address the accessibility issue,
+    // "Ensure interactive controls are not nested"
+    // This component will be redesigned in the future.
+    // <Tooltip
+    //   id="play-button"
+    //   title={title}
+    //   placement={TooltipPlacement.BOTTOM}
+    //   spanStyles={{
+    //     borderRadius: "3.3125rem"
+    //   }}
+    // >
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      spacing={2}
+      component="div"
+      sx={classes.timerContainer(isDisabled)}
+      aria-label={translateAria(["widget"])}
     >
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        spacing={2}
-        component="div"
-        sx={classes.container}
-        aria-label={translateAria(["widget"])}
-      >
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          spacing={2}
-          component="div"
-          sx={classes.timerContainer(isDisabled)}
-        >
-          <Timer disabled={isDisabled} />
-          <ClockInButton disabled={isDisabled} />
-        </Stack>
-      </Stack>
-    </Tooltip>
+      <Timer disabled={isDisabled} />
+      <ClockInButton disabled={isDisabled} />
+    </Stack>
+    // </Tooltip>
   );
 };
 

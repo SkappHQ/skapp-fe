@@ -42,6 +42,7 @@ declare module "@mui/material/styles" {
       chipDark: string;
       text: string;
       100: string;
+      150: string;
       200: string;
       300: string;
       400: string;
@@ -137,6 +138,7 @@ declare module "@mui/material/styles" {
       chipDark: string;
       text: string;
       100: string;
+      150: string;
       200: string;
       300: string;
       400: string;
@@ -353,6 +355,7 @@ export const theme = createTheme({
       chipDark: "#FCD34D",
       text: "#92400E",
       100: "#FEF9C3",
+      150: "#FDE047",
       200: "#FBBF24",
       300: "#FFC107",
       400: "#EAB308",

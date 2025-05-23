@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton, useTheme } from "@mui/material";
 import { JSX } from "react";
 
 import { useUpdateEmployeeStatus } from "~community/attendance/api/AttendanceApi";
@@ -10,14 +10,19 @@ import Tooltip from "~community/common/components/atoms/Tooltip/Tooltip";
 import { TooltipPlacement } from "~community/common/enums/ComponentEnums";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
+import { mergeSx } from "~community/common/utils/commonUtil";
 import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 import styles from "./styles";
 
 const PlayButton = (): JSX.Element => {
-  const { attendanceParams } = useAttendanceStore((state) => state);
+  const theme = useTheme();
   const classes = styles();
+
+  const { attendanceParams } = useAttendanceStore((state) => state);
+
   const status = attendanceParams.slotType;
+
   const translateText = useTranslator("attendanceModule", "timeWidget");
   const translateAria = useTranslator("attendanceAria", "timeWidget");
 
@@ -29,36 +34,110 @@ const PlayButton = (): JSX.Element => {
   } = useGetTodaysTimeRequestAvailability();
 
   const onClick = () => {
-    if (
-      status === AttendanceSlotType.RESUME ||
-      status === AttendanceSlotType.START
-    ) {
-      mutate(AttendanceSlotType.PAUSE);
-    } else {
-      mutate(AttendanceSlotType.RESUME);
+    switch (status) {
+      case AttendanceSlotType.RESUME:
+      case AttendanceSlotType.START:
+        mutate(AttendanceSlotType.PAUSE);
+        break;
+      default:
+        mutate(AttendanceSlotType.RESUME);
+        break;
     }
   };
 
   const getTooltipText = () => {
-    if (
-      status === AttendanceSlotType.RESUME ||
-      status === AttendanceSlotType.START
-    ) {
-      return translateText(["takeABreak"]);
-    } else if (
-      status === AttendanceSlotType.READY ||
-      status === AttendanceSlotType.END ||
-      status === AttendanceSlotType.LEAVE_DAY ||
-      status === AttendanceSlotType.HOLIDAY ||
-      status === AttendanceSlotType.NON_WORKING_DAY
-    ) {
-      return "";
-    } else {
-      return translateText(["resumeWork"]);
+    switch (status) {
+      case AttendanceSlotType.RESUME:
+      case AttendanceSlotType.START:
+        return translateText(["takeABreak"]);
+      case AttendanceSlotType.READY:
+      case AttendanceSlotType.END:
+      case AttendanceSlotType.LEAVE_DAY:
+      case AttendanceSlotType.HOLIDAY:
+      case AttendanceSlotType.NON_WORKING_DAY:
+        return "";
+      default:
+        return translateText(["resumeWork"]);
     }
   };
 
-  return (
+  const getDisableStatus = () => {
+    return (
+      isPending ||
+      status === AttendanceSlotType.READY ||
+      status === AttendanceSlotType.END ||
+      isTimeRequestAvailableToday ||
+      isAvailabilityLoading ||
+      status === AttendanceSlotType.HOLIDAY ||
+      status === AttendanceSlotType.NON_WORKING_DAY ||
+      status === AttendanceSlotType.LEAVE_DAY
+    );
+  };
+
+  const getAriaLabel = () => {
+    switch (status) {
+      case AttendanceSlotType.RESUME:
+      case AttendanceSlotType.START:
+      case AttendanceSlotType.END:
+        return translateAria(["pauseTimer"]);
+      default:
+        return translateAria(["startTimer"]);
+    }
+  };
+
+  const getIcon = () => {
+    if (isPending) {
+      return <CircularProgress size={"1rem"} />;
+    }
+
+    switch (status) {
+      case AttendanceSlotType.RESUME:
+      case AttendanceSlotType.START:
+        return <Icon name={IconName.PAUSE_ICON} />;
+      default:
+        return <Icon name={IconName.PLAY_ICON} />;
+    }
+  };
+
+  const getBackgroundColor = () => {
+    switch (status) {
+      case AttendanceSlotType.RESUME:
+      case AttendanceSlotType.START:
+        return theme.palette.amber[150];
+      default:
+        return theme.palette.greens.lightSecondary;
+    }
+  };
+
+  const getComponent = () => {
+    return (
+      <IconButton
+        sx={mergeSx([
+          {
+            background: getBackgroundColor(),
+            "&:disabled": {
+              backgroundColor: getBackgroundColor()
+            }
+          },
+          classes.buttonComponent
+        ])}
+        onClick={onClick}
+        onKeyDown={(e) => {
+          if (shouldActivateButton(e.key)) {
+            onClick();
+          }
+        }}
+        disabled={getDisableStatus()}
+        aria-label={getAriaLabel()}
+      >
+        {getIcon()}
+      </IconButton>
+    );
+  };
+
+  return getDisableStatus() ? (
+    getComponent()
+  ) : (
     <Tooltip
       id="play-button"
       title={getTooltipText()}
@@ -67,45 +146,7 @@ const PlayButton = (): JSX.Element => {
         borderRadius: "50%"
       }}
     >
-      <Box
-        tabIndex={0}
-        role="button"
-        component="button"
-        sx={status && classes.buttonComponent(status)}
-        onClick={onClick}
-        onKeyDown={(e) => {
-          if (shouldActivateButton(e.key)) {
-            onClick();
-          }
-        }}
-        disabled={
-          isPending ||
-          status === AttendanceSlotType.READY ||
-          status === AttendanceSlotType.END ||
-          isTimeRequestAvailableToday ||
-          isAvailabilityLoading ||
-          status === AttendanceSlotType.HOLIDAY ||
-          status === AttendanceSlotType.NON_WORKING_DAY ||
-          status === AttendanceSlotType.LEAVE_DAY
-        }
-        aria-label={
-          status === AttendanceSlotType.RESUME ||
-          status === AttendanceSlotType.START ||
-          status === AttendanceSlotType.END
-            ? translateAria(["pauseTimer"])
-            : translateAria(["startTimer"])
-        }
-      >
-        {isPending ? (
-          <CircularProgress size={"1rem"} />
-        ) : status === AttendanceSlotType.RESUME ||
-          status === AttendanceSlotType.START ||
-          status === AttendanceSlotType.END ? (
-          <Icon name={IconName.PAUSE_ICON} />
-        ) : (
-          <Icon name={IconName.PLAY_ICON} />
-        )}
-      </Box>
+      {getComponent()}
     </Tooltip>
   );
 };
