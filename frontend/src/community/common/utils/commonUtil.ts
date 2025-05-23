@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { HOURS_PER_DAY } from "~community/common/constants/timeConstants";
 import {
   containsUnicode,
+  matchInvalidEmailCharactersSearchPattern,
   removeNonAlphaNumericCharactersPattern
 } from "~community/common/regex/regexPatterns";
 import {
@@ -90,6 +91,16 @@ export const removeSpecialCharacters = (
   replaceTerm: string = ""
 ): string =>
   string?.replace(removeNonAlphaNumericCharactersPattern(), replaceTerm);
+
+export const removeInvalidEmailSearchCharacters = (
+  string: string,
+  replaceTerm: string = ""
+): string => {
+  return (
+    string?.replace(matchInvalidEmailCharactersSearchPattern(), replaceTerm) ||
+    ""
+  );
+};
 
 export const pascalCaseFormatter = (wordString: string | null | undefined) => {
   if (!wordString) {
