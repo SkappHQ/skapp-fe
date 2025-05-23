@@ -183,9 +183,13 @@ const ContentLayout = ({
 
   const { data: organizationDetails } = useGetOrganization();
 
-  const updatedTheme = themeSelector(
-    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
-  );
+  const useDefaultTheme = asPath.split("?")[0] === ROUTES.SIGN.SIGN;
+
+  const themeColor = useDefaultTheme
+    ? ThemeTypes.BLUE_THEME
+    : organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME;
+
+  const updatedTheme = themeSelector(themeColor);
 
   theme.palette = updatedTheme.palette;
 
