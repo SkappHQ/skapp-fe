@@ -47,7 +47,8 @@ const SearchBox: FC<Props> = ({
 
   const classes = styles(theme);
   const [searchValue, setSearchValue] = useState<string | null>(value);
-  const allowEmailCharacters = name === "contactSearch";
+  const emailAllowedSearchNames = ["contactSearch", "envelopeSearch"];
+  const allowEmailCharacters = emailAllowedSearchNames.includes(name);
 
   useEffect(() => {
     if (value) {
