@@ -183,9 +183,9 @@ const ContentLayout = ({
 
   const { data: organizationDetails } = useGetOrganization();
 
-  const useDefaultTheme = asPath.split("?")[0] === ROUTES.SIGN.SIGN;
+  const shouldUseDefaultTheme = asPath.split("?")[0] === ROUTES.SIGN.SIGN;
 
-  const themeColor = useDefaultTheme
+  const themeColor = shouldUseDefaultTheme
     ? ThemeTypes.BLUE_THEME
     : organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME;
 
