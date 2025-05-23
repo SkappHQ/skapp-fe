@@ -12,6 +12,7 @@ import AttendanceModuleIcon from "~community/common/assets/Icons/AttendanceModul
 import BackIcon from "~community/common/assets/Icons/BackIcon";
 import BellIcon from "~community/common/assets/Icons/BellIcon";
 import BinIcon from "~community/common/assets/Icons/BinIcon";
+import BlockedIcon from "~community/common/assets/Icons/BlockedIcon";
 import CRMModuleIcon from "~community/common/assets/Icons/CRMModuleIcon";
 import CalendarIcon from "~community/common/assets/Icons/CalendarIcon";
 import CancelledStatusIcon from "~community/common/assets/Icons/CancelledStatusIcon";
@@ -273,7 +274,8 @@ export const IconMapping: Partial<
   [IconName.ASSET_MODULE_ICON]: AssetModuleIcon,
   [IconName.CRM_MODULE_ICON]: CRMModuleIcon,
   [IconName.HELP_DESK_MODULE_ICON]: HelpDeskModuleIcon,
-  [IconName.PROJECT_MANAGEMENT_MODULE_ICON]: ProjectManagementModuleIcon
+  [IconName.PROJECT_MANAGEMENT_MODULE_ICON]: ProjectManagementModuleIcon,
+  [IconName.BLOCKED_ICON]: BlockedIcon
   // Add more icons here as needed
 };
 
