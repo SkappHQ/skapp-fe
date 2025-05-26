@@ -43,6 +43,7 @@ import {
   TenantStatusEnums
 } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { shouldUseDefaultTheme } from "~enterprise/common/utils/commonUtil";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
@@ -183,9 +184,7 @@ const ContentLayout = ({
 
   const { data: organizationDetails } = useGetOrganization();
 
-  const shouldUseDefaultTheme = asPath.split("?")[0] === ROUTES.SIGN.SIGN;
-
-  const themeColor = shouldUseDefaultTheme
+  const themeColor = shouldUseDefaultTheme(asPath)
     ? ThemeTypes.BLUE_THEME
     : organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME;
 
