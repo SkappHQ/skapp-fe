@@ -20,7 +20,7 @@ interface Props<T> {
     attachment?: string | undefined;
   };
   isAttachmentRequired?: boolean;
-  maxLength: number;
+  maxLength?: number;
   iconName?: IconName;
   onIconClick?: () => void;
   ariaLabel?: {
