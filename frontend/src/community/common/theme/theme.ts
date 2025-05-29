@@ -418,28 +418,28 @@ export const theme = createTheme({
     },
     recipientsColors: [
       {
-        background: "#E7DBFFCC",
+        background: "#D7D5E5B3",
         border: "#9A66FF"
       },
       {
-        background: "#FFDFE6CC",
+        background: "#E7D7D4B3",
         border: "#F6587A"
       },
       {
-        background: "#FFE3C7CC",
+        background: "#E3C5D4B3",
         border: "#EA5DA3"
       },
       {
-        background: "#FFF5DECC",
+        background: "#F4D6C7B3",
         border: "#DF7D4E"
       },
       {
-        background: "#9FD6D6CC",
+        background: "#A4D1C9B3",
         border: "#27A197"
       },
       {
-        background: "#7AA3BFCC",
-        border: "#658AFC"
+        background: "#9DCDEEB3",
+        border: "#567EF7"
       }
     ]
   },
