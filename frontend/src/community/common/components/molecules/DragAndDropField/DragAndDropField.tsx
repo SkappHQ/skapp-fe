@@ -22,7 +22,6 @@ import {
 } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx, removeDuplicates } from "~community/common/utils/commonUtil";
-import { formatBytesToReadableSize } from "~community/common/utils/dragAndDropUtils";
 
 import IconChip from "../../atoms/Chips/IconChip.tsx/IconChip";
 import Icon from "../../atoms/Icon/Icon";
@@ -43,7 +42,10 @@ interface Props {
   label?: string;
   descriptionStyles?: SxProps;
   browseTextStyles?: SxProps;
-  maxSizeOfFile?: number;
+  maxSizeOfFile?: {
+    inBytes: number;
+    inReadableSize: string;
+  };
 }
 
 const MAX_FILE_SIZE_OF_FILE = 5000000;
@@ -63,7 +65,10 @@ const DragAndDropField: FC<Props> = ({
   label,
   descriptionStyles,
   browseTextStyles,
-  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE
+  maxSizeOfFile = {
+    inBytes: MAX_FILE_SIZE_OF_FILE,
+    inReadableSize: "5MB"
+  }
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
   const translateAria = useTranslator(
@@ -78,7 +83,7 @@ const DragAndDropField: FC<Props> = ({
       maxFileSize: maxFileSize.toString()
     }),
     fileTooLarge: translateText(["attachmentSizeError"], {
-      fileSize: formatBytesToReadableSize(maxSizeOfFile)
+      fileSize: maxSizeOfFile.inReadableSize
     }),
     invalidFileType: translateText(["attachmentTypeError"], { supportedFiles }),
 
@@ -185,7 +190,7 @@ const DragAndDropField: FC<Props> = ({
     accept,
     maxFiles: maxFileSize - uploadableFiles?.length,
     minSize: minFileSize,
-    maxSize: maxSizeOfFile
+    maxSize: maxSizeOfFile.inBytes
   });
 
   const handleUnselectItem = (filePath: string): void => {
