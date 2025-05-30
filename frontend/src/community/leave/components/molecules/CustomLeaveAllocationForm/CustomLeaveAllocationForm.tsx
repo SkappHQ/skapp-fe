@@ -7,6 +7,7 @@ import DropdownList from "~community/common/components/molecules/DropdownList/Dr
 import Form from "~community/common/components/molecules/Form/Form";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
+import PeopleAutocompleteSearch from "~community/common/components/molecules/PeopleAutocompleteSearch/PeopleAutocompleteSearch";
 import PeopleSearch from "~community/common/components/molecules/PeopleSearch/PeopleSearch";
 import { matchesNumberWithAtMostOneDecimalPlace } from "~community/common/regex/regexPatterns";
 import { getEmoji } from "~community/common/utils/commonUtil";
@@ -299,7 +300,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
 
   return (
     <Form onSubmit={onSubmit}>
-      <PeopleSearch
+      {/* <PeopleSearch
         id="search-team-member-input"
         label={translateText(["leaveAllocationNameInputLabel"])}
         placeHolder={translateText(["searchEmployeePlaceholder"])}
@@ -322,6 +323,24 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
             (user) => user.employeeId === values.employeeId
           ) as EmployeeType[]) || ([] as EmployeeType[])
         }
+        isDisabled={
+          customLeaveAllocationModalType ===
+          CustomLeaveAllocationModalTypes.EDIT_LEAVE_ALLOCATION
+        }
+        /> */}
+      <PeopleAutocompleteSearch
+        name="leave-allocation-employee-name"
+        required={true}
+        id={{
+          textField: "leave-allocation-employee-name-text-field",
+          autocomplete: "leave-allocation-name-autocomplete"
+        }}
+        label={translateText(["leaveAllocationNameInputLabel"])}
+        placeholder={translateText(["searchEmployeePlaceholder"])}
+        options={(suggestions ?? []) as EmployeeType[]}
+        value={values.employeeId}
+        onChange={(e, user) => onSelectUser(user as EmployeeType)}
+        error={errors.employeeId}
         isDisabled={
           customLeaveAllocationModalType ===
           CustomLeaveAllocationModalTypes.EDIT_LEAVE_ALLOCATION
