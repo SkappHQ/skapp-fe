@@ -1,5 +1,7 @@
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 
+import { DEFAULT_SCROLL_AMOUNT } from "../constants/commonConstants";
+
 export const getTabIndex = (isAccessible: boolean, index?: number): number => {
   if (index !== undefined) {
     return index;
@@ -116,6 +118,54 @@ export const shouldScrollHorizontally = (key: string) =>
 export const shouldScrollByPage = (key: string, shiftKey: boolean) =>
   key === KeyboardKeys.SPACE && shiftKey;
 
+// Scroll Handler Function
+export const handleScrollKeyboard = (
+  event: React.KeyboardEvent,
+  scrollContainer: HTMLElement
+) => {
+  switch (event.key) {
+    case KeyboardKeys.ARROW_DOWN:
+      scrollContainer.scrollBy({
+        top: DEFAULT_SCROLL_AMOUNT,
+        behavior: "smooth"
+      });
+      event.preventDefault();
+      break;
+    case KeyboardKeys.ARROW_UP:
+      scrollContainer.scrollBy({
+        top: -DEFAULT_SCROLL_AMOUNT,
+        behavior: "smooth"
+      });
+      event.preventDefault();
+      break;
+    case KeyboardKeys.PAGE_DOWN:
+      scrollContainer.scrollBy({
+        top: scrollContainer.clientHeight,
+        behavior: "smooth"
+      });
+      event.preventDefault();
+      break;
+    case KeyboardKeys.PAGE_UP:
+      scrollContainer.scrollBy({
+        top: -scrollContainer.clientHeight,
+        behavior: "smooth"
+      });
+      event.preventDefault();
+      break;
+    case KeyboardKeys.HOME:
+      scrollContainer.scrollTo({ top: 0, behavior: "smooth" });
+      event.preventDefault();
+      break;
+    case KeyboardKeys.END:
+      scrollContainer.scrollTo({
+        top: scrollContainer.scrollHeight,
+        behavior: "smooth"
+      });
+      event.preventDefault();
+      break;
+  }
+};
+
 export const getPopperAccessibilityProps = ({
   ariaLabel,
   ariaRole = "dialog",
@@ -134,4 +184,45 @@ export const getPopperAccessibilityProps = ({
     role: ariaRole,
     tabIndex: 0
   };
+};
+
+// List Navigation Handler Function
+export const handleListNavigation = (
+  event: React.KeyboardEvent,
+  containerRef: React.RefObject<HTMLElement>,
+  selector: string = '[role="button"]'
+) => {
+  const activeElement = document.activeElement as HTMLElement;
+  const focusableElements = Array.from(
+    containerRef.current?.querySelectorAll(selector) || []
+  ) as HTMLElement[];
+
+  const currentIndex = focusableElements.indexOf(activeElement);
+
+  switch (event.key) {
+    case KeyboardKeys.ARROW_UP:
+      event.preventDefault();
+      if (currentIndex > 0) {
+        focusableElements[currentIndex - 1].focus();
+      }
+      break;
+    case KeyboardKeys.ARROW_DOWN:
+      event.preventDefault();
+      if (currentIndex < focusableElements.length - 1) {
+        focusableElements[currentIndex + 1].focus();
+      }
+      break;
+    case KeyboardKeys.HOME:
+      event.preventDefault();
+      if (focusableElements.length > 0) {
+        focusableElements[0].focus();
+      }
+      break;
+    case KeyboardKeys.END:
+      event.preventDefault();
+      if (focusableElements.length > 0) {
+        focusableElements[focusableElements.length - 1].focus();
+      }
+      break;
+  }
 };
