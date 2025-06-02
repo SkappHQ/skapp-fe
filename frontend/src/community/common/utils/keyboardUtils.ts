@@ -1,6 +1,6 @@
 import { KeyboardKeys } from "~community/common/enums/KeyboardEnums";
 
-import { DEFAULT_SCROLL_AMOUNT } from "../constants/commonConstants";
+import { DEFAULT_SCROLL_AMOUNT_PX } from "../constants/commonConstants";
 
 export const getTabIndex = (isAccessible: boolean, index?: number): number => {
   if (index !== undefined) {
@@ -126,14 +126,14 @@ export const handleScrollKeyboard = (
   switch (event.key) {
     case KeyboardKeys.ARROW_DOWN:
       scrollContainer.scrollBy({
-        top: DEFAULT_SCROLL_AMOUNT,
+        top: DEFAULT_SCROLL_AMOUNT_PX,
         behavior: "smooth"
       });
       event.preventDefault();
       break;
     case KeyboardKeys.ARROW_UP:
       scrollContainer.scrollBy({
-        top: -DEFAULT_SCROLL_AMOUNT,
+        top: -DEFAULT_SCROLL_AMOUNT_PX,
         behavior: "smooth"
       });
       event.preventDefault();
