@@ -57,7 +57,14 @@ const TextArea = <T,>({
             </Typography>
           )}
         </Typography>
-        <Stack sx={classes.field}>
+        <Stack
+          sx={{
+            ...classes.field,
+            border: error?.comment
+              ? `${theme.palette.error.contrastText} 0.0625rem solid`
+              : "none"
+          }}
+        >
           <StyledTextArea
             maxLength={maxLength}
             name={name}
