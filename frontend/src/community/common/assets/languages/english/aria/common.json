@@ -9,13 +9,13 @@
   "components": {
     "emojiPicker": {
       "icon": "Click me to open the emoji picker"
-    },
-    "colorPalette": {
+    },    "colorPalette": {
       "open": "Click me to open the color palette",
       "close": "Click me to close the color palette",
       "pickColor": "Select color {{color}}"
     },
     "backButton": "Click me to go to previous page",
+    "mainContent": "Main content area",
     "filterBtn": "Click me to open filter menu",
     "inputDate": {
       "tooltip": "tooltip",
