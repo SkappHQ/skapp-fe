@@ -81,14 +81,12 @@ const FullPageContainerLayout = ({
       </Head>
       <Stack
         component="div"
-        role="application"
         sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
       >
         <Stack
           component="div"
           sx={mergeSx([classes.container, customStyles?.container])}
         >
-          {" "}
           <Stack
             component="div"
             sx={mergeSx([classes.header, customStyles?.header])}
