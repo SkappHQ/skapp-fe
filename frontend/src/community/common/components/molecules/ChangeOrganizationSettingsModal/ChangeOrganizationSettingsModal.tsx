@@ -92,8 +92,10 @@ const ChangeOrganizationSettingsModal: React.FC<Props> = ({
     onClose();
   };
 
-  const { mutate: updateOrganizationDetails, isPending: isUpdateOrganizationDetailsPending } =
-    useUpdateOrganizationDetails(onSuccess);
+  const {
+    mutate: updateOrganizationDetails,
+    isPending: isUpdateOrganizationDetailsPending
+  } = useUpdateOrganizationDetails(onSuccess);
 
   const countryList = useGetCountryList();
   const onSubmit = async (values: typeof initialValues) => {
