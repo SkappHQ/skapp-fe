@@ -14,6 +14,18 @@ const styles = (theme: Theme): StyleProps => ({
   asterisk: {
     color: theme.palette.error.contrastText
   },
+  inputBase: {
+    backgroundColor: theme.palette.grey[100],
+    padding: "0.75rem 1rem",
+    borderRadius: "0.5rem",
+    "& .MuiInputBase-input": {
+      padding: "0rem"
+    }
+  },
+  optionWrapper: {
+    padding: "0rem",
+    backgroundColor: theme.palette.grey[100]
+  },
   chip: {
     cursor: "pointer",
     maxWidth: "fit-content"

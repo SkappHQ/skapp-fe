@@ -1,13 +1,22 @@
-import { Stack, SxProps, Theme, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  InputBase,
+  Stack,
+  SxProps,
+  Theme,
+  Typography,
+  useTheme
+} from "@mui/material";
 import Autocomplete, {
   AutocompleteRenderInputParams
 } from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import { HTMLAttributes, SyntheticEvent, useMemo } from "react";
+import { useMemo } from "react";
 
+import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import { EmployeeType } from "~community/people/types/EmployeeTypes";
 
+import Icon from "../../atoms/Icon/Icon";
 import AvatarChip from "../AvatarChip/AvatarChip";
 import styles from "./styles";
 
@@ -18,15 +27,17 @@ interface Props {
   };
   name: string;
   options: EmployeeType[];
-  value?: number;
-  onChange?: (event: SyntheticEvent, value: EmployeeType | null) => void;
-  placeholder?: string;
+  value?: EmployeeType;
+  inputValue: string;
+  onInputChange: (value: string, reason: string) => void;
+  onChange: (value: EmployeeType) => void;
+  placeholder: string;
   error?: string;
-  isDisabled?: boolean;
-  required?: boolean;
-  label?: string;
+  isDisabled: boolean;
+  required: boolean;
+  label: string;
   customStyles?: {
-    label: SxProps<Theme>;
+    label?: SxProps<Theme>;
   };
 }
 
@@ -35,6 +46,8 @@ const PeopleAutocompleteSearch = ({
   options,
   name,
   value,
+  inputValue,
+  onInputChange,
   onChange,
   placeholder = "Search people",
   error,
@@ -55,40 +68,49 @@ const PeopleAutocompleteSearch = ({
     return theme.palette.common.black;
   };
 
-  const employeeTypeValue = useMemo(() => {
-    return options.find((option) => option.employeeId === value) || null;
-  }, [options, value]);
+  const formattedOptions = useMemo(() => {
+    return options.map((option) => ({
+      ...option,
+      label: `${option.firstName} ${option.lastName}`,
+      id: option.employeeId
+    }));
+  }, [options]);
+
+  const computedInputValue = useMemo(() => {
+    if (value) {
+      return `${value.firstName} ${value.lastName}`;
+    }
+
+    return inputValue;
+  }, [value, inputValue]);
 
   return (
     <Autocomplete
       id={id.autocomplete}
-      options={options}
-      autoHighlight
-      getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-      value={employeeTypeValue}
-      onChange={onChange}
+      options={formattedOptions}
+      inputValue={computedInputValue}
+      onInputChange={(_event, value, reason) => onInputChange(value, reason)}
+      onChange={(_event, value) => {
+        const { label, id, ...selectedOption } = value;
+        onChange(selectedOption);
+      }}
+      getOptionLabel={(option) => option.label}
       disabled={isDisabled}
-      renderOption={(
-        props: HTMLAttributes<HTMLLIElement> & {
-          key: any;
-        },
-        option: EmployeeType
-      ) => {
-        const { key, ...optionProps } = props;
+      renderOption={(props, option) => {
         return (
-          <AvatarChip
-            {...optionProps}
-            key={key}
-            firstName={option?.firstName}
-            lastName={option?.lastName}
-            avatarUrl={option?.avatarUrl}
-            chipStyles={classes.chip}
-          />
+          <Box component="li" {...props} sx={classes.optionWrapper}>
+            <AvatarChip
+              firstName={option?.firstName}
+              lastName={option?.lastName}
+              avatarUrl={option?.avatarUrl}
+              chipStyles={classes.chip}
+            />
+          </Box>
         );
       }}
       renderInput={(params: AutocompleteRenderInputParams) => {
         return (
-          <Stack sx={classes.wrapper}>
+          <Stack sx={classes.wrapper} ref={params.InputProps.ref}>
             {label && (
               <Typography
                 variant="h5"
@@ -104,13 +126,14 @@ const PeopleAutocompleteSearch = ({
                 )}
               </Typography>
             )}
-            <TextField
+            <InputBase
               {...params}
               id={id.textField}
-              label={label}
               placeholder={placeholder}
               error={!!error}
               name={name}
+              sx={classes.inputBase}
+              endAdornment={<Icon name={IconName.SEARCH_ICON} />}
             />
             {!!error && (
               <Typography variant="body2" sx={classes.error}>
