@@ -74,15 +74,24 @@ const FullPageContainerLayout = ({
       router.back();
     }
   };
-
   return (
     <>
       <Head>
         <title>{pageHead}</title>
       </Head>
-      <Stack sx={mergeSx([classes.wrapper, customStyles?.wrapper])}>
-        <Stack sx={mergeSx([classes.container, customStyles?.container])}>
-          <Stack sx={mergeSx([classes.header, customStyles?.header])}>
+      <Stack
+        component="div"
+        sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
+      >
+        <Stack
+          component="div"
+          sx={mergeSx([classes.container, customStyles?.container])}
+        >
+          <Stack
+            component="div"
+            sx={mergeSx([classes.header, customStyles?.header])}
+            role="banner"
+          >
             <IconButton
               tabIndex={0}
               data-testid={icon?.dataTestId}
@@ -93,7 +102,10 @@ const FullPageContainerLayout = ({
             >
               <Icon name={icon?.name ?? IconName.CLOSE_ICON} />
             </IconButton>
-            <Stack sx={mergeSx([classes.title, customStyles?.title])}>
+            <Stack
+              component="div"
+              sx={mergeSx([classes.title, customStyles?.title])}
+            >
               <Typography variant="h1">{title}</Typography>
               <Typography
                 variant="body2"
@@ -103,7 +115,13 @@ const FullPageContainerLayout = ({
               </Typography>
             </Stack>
           </Stack>
-          <Stack sx={mergeSx([customStyles?.body])}>{children}</Stack>
+          <Stack
+            component="main"
+            aria-label={translateAria(["mainContent"])}
+            sx={mergeSx([customStyles?.body])}
+          >
+            {children}
+          </Stack>
         </Stack>
       </Stack>
     </>
