@@ -357,8 +357,6 @@ const InputDate: FC<Props> = ({
         >
           <Icon
             name={IconName.CALENDAR_ICON}
-            width="6.25rem"
-            height="6.25rem"
             fill={
               readOnly
                 ? theme.palette.grey[700]
