@@ -27,7 +27,7 @@ interface Props<T> {
     icon?: string;
     textArea?: string;
   };
-  isErrorTopic?: boolean;
+  isErrorTopicColor?: boolean;
 }
 
 const TextArea = <T,>({
@@ -43,7 +43,7 @@ const TextArea = <T,>({
   iconName,
   ariaLabel,
   onIconClick,
-  isErrorTopic = true
+  isErrorTopicColor = true
 }: Props<T>) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -53,7 +53,7 @@ const TextArea = <T,>({
       <Stack sx={classes.container}>
         <Typography
           variant="body1"
-          sx={error?.comment && isErrorTopic ? classes.error : {}}
+          sx={error?.comment && isErrorTopicColor ? classes.error : {}}
         >
           {label} &nbsp;
           {isRequired && (
