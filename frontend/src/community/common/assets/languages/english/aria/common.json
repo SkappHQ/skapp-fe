@@ -31,7 +31,7 @@
       "uploadProfilePicture": "Upload profile picture"
     },
     "dragAndDrop": {
-      "ariaLabel": "Drag and Drop your file here"
+      "ariaLabel": "{{componentName}} File Upload"
     },
     "drawer": {
       "drawer": "Drawer",
