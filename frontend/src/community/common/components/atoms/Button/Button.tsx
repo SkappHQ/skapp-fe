@@ -24,6 +24,7 @@ import StyledButton from "./StyledButton";
 export interface StyledButtonProps {
   id?: string;
   ariaLabel?: string;
+  ariaDescription?: string;
   dataTestId?: string;
   dataAttr?: Record<string, unknown>;
   isLoading?: boolean;
@@ -50,6 +51,7 @@ const Button = ({
   id,
   dataTestId,
   ariaLabel,
+  ariaDescription,
   title,
   dataAttr,
   isLoading = false,
@@ -133,6 +135,7 @@ const Button = ({
       role="button"
       data-testid={dataTestId}
       aria-label={ariaLabel}
+      aria-description={ariaDescription}
       aria-disabled={ariaDisabled}
       title={title}
       disableElevation

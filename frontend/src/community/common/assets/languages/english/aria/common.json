@@ -44,8 +44,8 @@
       "left": "Previous"
     },
     "modal": {
-      "modal": "modal",
-      "closeIconBtn": "Close modal"
+      "modal": "{{title}} modal",
+      "closeIconBtn": "Close {{title}} modal"
     },
     "switch": {
       "ariaLabel": "Switch on"
