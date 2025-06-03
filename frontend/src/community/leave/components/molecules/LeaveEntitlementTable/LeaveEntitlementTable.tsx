@@ -18,6 +18,7 @@ import {
   getAdjacentYearsWithCurrent,
   nextYear
 } from "~community/common/utils/dateTimeUtils";
+import { useGetAllLeaveEntitlements } from "~community/leave/api/LeaveEntitlementApi";
 import { useGetLeaveTypes } from "~community/leave/api/LeaveTypesApi";
 import { LeaveEntitlementModelTypes } from "~community/leave/enums/LeaveEntitlementEnums";
 import { useLeaveStore } from "~community/leave/store/store";
@@ -69,6 +70,11 @@ const LeaveEntitlementTable = ({
   const [headerLabels, setHeaderLabels] = useState<string[]>([]);
 
   const { data: leaveTypes } = useGetLeaveTypes();
+
+  const {
+    data: allLeaveEntitlements,
+    isPending: isAllLeaveEntitlementsPending
+  } = useGetAllLeaveEntitlements(leaveEntitlementTableSelectedYear);
 
   useMemo(() => {
     if (leaveTypes) {
@@ -217,6 +223,7 @@ const LeaveEntitlementTable = ({
 
           <Button
             buttonStyle={ButtonStyle.TERTIARY_OUTLINED}
+            isLoading={isAllLeaveEntitlementsPending}
             label={translateText(["exportBtnTxt"])}
             endIcon={
               <Icon
@@ -233,7 +240,7 @@ const LeaveEntitlementTable = ({
             disabled={tableData?.items?.length === 0}
             onClick={() =>
               exportLeaveBulkList(
-                tableData?.items ?? [],
+                allLeaveEntitlements ?? [],
                 leaveEntitlementTableSelectedYear
               )
             }
