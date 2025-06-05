@@ -22,7 +22,7 @@
   },
   "entitlement": {
     "leaveEntitlementTable": {
-      "dropdown": "Leave Entitlements by Year, Currently Selected {{year}}"
+      "select": "Leave entitlements by year"
     }
   }
 }

@@ -113,6 +113,9 @@ const LeaveEntitlementTable = ({
             onChange={(event) =>
               setLeaveEntitlementTableSelectedYear(event?.target.value)
             }
+            accessibility={{
+              label: translateAria(["select"])
+            }}
           />
         </Box>
       </Stack>
