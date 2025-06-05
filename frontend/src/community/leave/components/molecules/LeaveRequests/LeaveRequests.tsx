@@ -68,6 +68,7 @@ const LeaveRequests: FC = () => {
   } = useGetEmployeeLeaveRequestData(newLeaveId as number);
 
   const translateText = useTranslator("leaveModule", "myRequests");
+  const translateAria = useTranslator("leaveAria", "myRequests");
 
   useEffect(() => {
     if (isSuccess && leaveData) {
@@ -381,7 +382,15 @@ const LeaveRequests: FC = () => {
                 value={selectedItem?.value ?? ""}
                 options={dropdownItems}
                 renderValue={(selectedValue: string) => (
-                  <Typography> Sort by : {selectedValue}</Typography>
+                  <Typography
+                    aria-label={translateAria(["myLeaveRequests", "sortBy"], {
+                      sortBy: selectedValue
+                    })}
+                  >
+                    {translateText(["myLeaveRequests", "sortBy"], {
+                      sortBy: selectedValue
+                    })}
+                  </Typography>
                 )}
               />
             ),

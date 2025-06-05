@@ -2,6 +2,7 @@ import {
   MenuItem,
   Select as MuiSelect,
   SelectChangeEvent,
+  Typography,
   useTheme
 } from "@mui/material";
 import { ReactNode } from "react";
@@ -24,6 +25,10 @@ interface Props {
   disabled?: boolean;
   name?: string;
   renderValue?: (value: string) => ReactNode;
+  accessibility?: {
+    label?: string;
+    description?: string;
+  };
 }
 
 const Select = ({
@@ -33,7 +38,8 @@ const Select = ({
   onChange,
   renderValue,
   disabled = false,
-  name
+  name,
+  accessibility
 }: Props) => {
   const theme = useTheme();
 
@@ -49,7 +55,11 @@ const Select = ({
         const label = selectedOption ? selectedOption?.label : "";
 
         if (renderValue === undefined) {
-          return label;
+          return (
+            <Typography aria-label={`${accessibility?.label ?? ""} ${label}`}>
+              {label}
+            </Typography>
+          );
         }
 
         return renderValue?.(label);

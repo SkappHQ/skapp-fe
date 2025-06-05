@@ -3,6 +3,11 @@
     "resourceAvailabilityTrendMonthlyNext": "next month",
     "resourceAvailabilityTrendMonthlyPrevious": "previous month"
   },
+  "myRequests": {
+    "myLeaveRequests": {
+      "sortBy": "Sort by {{sortBy}}"
+    }
+  },
   "applyLeave": {
     "comment": {
       "textArea": "Comment",
