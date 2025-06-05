@@ -47,6 +47,11 @@ const LeaveEntitlementTable = ({
   const classes = styles(theme);
 
   const translateText = useTranslator("leaveModule", "leaveEntitlements");
+  const translateAria = useTranslator(
+    "leaveAria",
+    "entitlement",
+    "leaveEntitlementTable"
+  );
 
   const { isDrawerToggled } = useCommonStore((state) => ({
     isDrawerToggled: state.isDrawerExpanded
@@ -111,6 +116,9 @@ const LeaveEntitlementTable = ({
             title={leaveEntitlementTableSelectedYear}
             items={getAdjacentYearsWithCurrent()}
             ariaRole="menu"
+            ariaLabel={translateAria(["dropdown"], {
+              year: leaveEntitlementTableSelectedYear
+            })}
           />
         </Box>
       </Stack>

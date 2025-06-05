@@ -14,5 +14,10 @@
     "teamAvailabilityCard": {
       "dropdown": "Select team to check team availability"
     }
+  },
+  "entitlement": {
+    "leaveEntitlementTable": {
+      "dropdown": "Leave Entitlements by Year, Currently Selected {{year}}"
+    }
   }
 }

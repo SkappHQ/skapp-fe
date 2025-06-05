@@ -56,49 +56,50 @@ const LeaveEntitlements: NextPage = () => {
   });
 
   return (
-    <>
-      <ContentLayout
-        title={translateText(["title"])}
-        pageHead={translateText(["pageHead"])}
-        isDividerVisible
-        primaryButtonType={ButtonStyle.SECONDARY}
-        primaryButtonText={
-          leaveEntitlementTableData &&
-          leaveEntitlementTableData?.items.length > 0 &&
-          translateText(["bulkUploadBtnTxt"])
-        }
-        primaryBtnIconName={IconName.UP_ARROW_ICON}
-        onPrimaryButtonClick={() =>
-          setLeaveEntitlementModalType(
-            leaveEntitlementTableData?.items?.length === 0
-              ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
-              : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
-          )
-        }
-      >
-        <>
-          {(searchTerm !== "" ||
-            (leaveEntitlementTableData &&
-              leaveEntitlementTableData?.items.length !== 0)) && (
-            <SearchBox
-              placeHolder={translateText(["searchBoxPlaceholder"])}
-              value={searchTerm}
-              setSearchTerm={setSearchTerm}
-            />
-          )}
-          <LeaveEntitlementTable
-            tableData={leaveEntitlementTableData}
-            isFetching={isFetching}
-            searchTerm={searchTerm}
+    <ContentLayout
+      title={translateText(["title"])}
+      pageHead={translateText(["pageHead"])}
+      isDividerVisible
+      primaryButtonType={ButtonStyle.SECONDARY}
+      primaryButtonText={
+        leaveEntitlementTableData &&
+        leaveEntitlementTableData?.items.length > 0 &&
+        translateText(["bulkUploadBtnTxt"])
+      }
+      primaryBtnIconName={IconName.UP_ARROW_ICON}
+      onPrimaryButtonClick={() =>
+        setLeaveEntitlementModalType(
+          leaveEntitlementTableData?.items?.length === 0
+            ? LeaveEntitlementModelTypes.DOWNLOAD_CSV
+            : LeaveEntitlementModelTypes.OVERRIDE_CONFIRMATION
+        )
+      }
+    >
+      <>
+        {(searchTerm !== "" ||
+          (leaveEntitlementTableData &&
+            leaveEntitlementTableData?.items.length !== 0)) && (
+          <SearchBox
+            accessibility={{
+              ariaHidden: true
+            }}
+            placeHolder={translateText(["searchBoxPlaceholder"])}
+            value={searchTerm}
+            setSearchTerm={setSearchTerm}
           />
-          <Divider sx={{ my: "1.5rem" }} />
-          <LeaveCarryForward />
-          <Divider sx={{ my: "1.5rem" }} />
-          <CustomLeaveAllocationContent />
-          <LeaveEntitlementModalController />
-        </>
-      </ContentLayout>
-    </>
+        )}
+        <LeaveEntitlementTable
+          tableData={leaveEntitlementTableData}
+          isFetching={isFetching}
+          searchTerm={searchTerm}
+        />
+        <Divider sx={{ my: "1.5rem" }} />
+        <LeaveCarryForward />
+        <Divider sx={{ my: "1.5rem" }} />
+        <CustomLeaveAllocationContent />
+        <LeaveEntitlementModalController />
+      </>
+    </ContentLayout>
   );
 };
 
