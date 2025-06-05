@@ -407,7 +407,7 @@ const ApplyLeaveModal = () => {
           <TextArea
             label={translateText(["comment"])}
             ariaLabel={{
-              textArea: translateAria(["comment.textArea"]),
+              textArea: "",
               icon: translateAria(["comment.icon"])
             }}
             placeholder={translateText(["addComment"])}
@@ -470,6 +470,7 @@ const ApplyLeaveModal = () => {
           onClick={onSubmit}
           isLoading={isLeaveApplyPending}
           disabled={isApplyLeaveModalBtnDisabled}
+          ariaLabel={translateAria(["confirmApplyLeave"])}
         />
         <Button
           label={translateText(["cancelBtn"])}
