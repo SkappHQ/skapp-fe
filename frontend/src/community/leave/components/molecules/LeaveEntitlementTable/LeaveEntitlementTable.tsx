@@ -6,7 +6,7 @@ import TImesheetTableRowFill from "~community/attendance/components/molecules/Ti
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import Pagination from "~community/common/components/atoms/Pagination/Pagination";
-import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
+import Select from "~community/common/components/molecules/Select/Select";
 import TableSkeleton from "~community/common/components/molecules/Table/TableSkeleton";
 import TableEmptyScreen from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
 import { ButtonStyle } from "~community/common/enums/ComponentEnums";
@@ -106,19 +106,13 @@ const LeaveEntitlementTable = ({
     <>
       <Stack sx={classes.headerStack}>
         <Box>
-          <Dropdown
-            onItemClick={(event) =>
-              setLeaveEntitlementTableSelectedYear(
-                event?.currentTarget?.innerText
-              )
+          <Select
+            id="leave-entitlement-table-year-dropdown"
+            value={leaveEntitlementTableSelectedYear}
+            options={getAdjacentYearsWithCurrent()}
+            onChange={(event) =>
+              setLeaveEntitlementTableSelectedYear(event?.target.value)
             }
-            selectedItem={leaveEntitlementTableSelectedYear}
-            title={leaveEntitlementTableSelectedYear}
-            items={getAdjacentYearsWithCurrent()}
-            ariaRole="menu"
-            ariaLabel={translateAria(["dropdown"], {
-              year: leaveEntitlementTableSelectedYear
-            })}
           />
         </Box>
       </Stack>
