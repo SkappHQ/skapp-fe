@@ -34,6 +34,9 @@ export function allowsLettersAndSpecialCharactersForNames(): RegExp {
 export function alphaNumericNamePatternWithSpecialCharacters(): RegExp {
   return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯0-9/,]*$/;
 }
+export const alphaNumericNamePatternWithSpecialCharactersAndDot = () => {
+  return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯0-9/,\\.]*$/;
+};
 
 export const emailPattern = (): RegExp => {
   // Pattern allows:
