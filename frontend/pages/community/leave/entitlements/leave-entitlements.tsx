@@ -1,4 +1,4 @@
-import { Divider } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
@@ -76,23 +76,25 @@ const LeaveEntitlements: NextPage = () => {
       }
     >
       <>
-        {(searchTerm !== "" ||
-          (leaveEntitlementTableData &&
-            leaveEntitlementTableData?.items.length !== 0)) && (
-          <SearchBox
-            accessibility={{
-              ariaHidden: true
-            }}
-            placeHolder={translateText(["searchBoxPlaceholder"])}
-            value={searchTerm}
-            setSearchTerm={setSearchTerm}
+        <Stack gap="1rem">
+          {(searchTerm !== "" ||
+            (leaveEntitlementTableData &&
+              leaveEntitlementTableData?.items.length !== 0)) && (
+            <SearchBox
+              accessibility={{
+                ariaHidden: true
+              }}
+              placeHolder={translateText(["searchBoxPlaceholder"])}
+              value={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          )}
+          <LeaveEntitlementTable
+            tableData={leaveEntitlementTableData}
+            isFetching={isFetching}
+            searchTerm={searchTerm}
           />
-        )}
-        <LeaveEntitlementTable
-          tableData={leaveEntitlementTableData}
-          isFetching={isFetching}
-          searchTerm={searchTerm}
-        />
+        </Stack>
         <Divider sx={{ my: "1.5rem" }} />
         <LeaveCarryForward />
         <Divider sx={{ my: "1.5rem" }} />

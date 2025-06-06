@@ -14,6 +14,7 @@ export enum TableNames {
   MODULE_ROLES = "Module roles",
 
   // Community Leave Module
+  LEAVE_ENTITLEMENTS = "Leave entitlements",
   LEAVE_REQUESTS_REPORT = "Leave requests report",
   LEAVE_TYPES = "Leave types",
   MANAGER_LEAVE_REQUESTS = "Manager leave requests",

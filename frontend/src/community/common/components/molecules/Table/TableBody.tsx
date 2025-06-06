@@ -31,8 +31,9 @@ import styles from "./styles";
 
 export interface TableBodyProps {
   emptyState?: {
+    isSearching?: boolean;
     noData?: TableEmptyScreenProps;
-    customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
+    noSearchResults?: TableEmptyScreenProps;
   };
   loadingState?: {
     skeleton?: {

@@ -16,7 +16,9 @@ export interface TableBodyEmptyStateProps {
     element?: JSX.Element;
   }[];
   emptyState?: {
+    isSearching?: boolean;
     noData?: TableEmptyScreenProps;
+    noSearchResults?: TableEmptyScreenProps;
     customStyles?: { row?: SxProps<Theme>; cell?: SxProps<Theme> };
   };
 }
@@ -47,12 +49,21 @@ const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
         role="cell"
         aria-label={`${tableName}-table-body-empty-state-cell`}
       >
-        <TableEmptyScreen
-          title={emptyState?.noData?.title}
-          description={emptyState?.noData?.description}
-          button={emptyState?.noData?.button}
-          customStyles={emptyState?.noData?.customStyles}
-        />
+        {emptyState?.isSearching ? (
+          <TableEmptyScreen
+            title={emptyState?.noSearchResults?.title}
+            description={emptyState?.noSearchResults?.description}
+            button={emptyState?.noSearchResults?.button}
+            customStyles={emptyState?.noSearchResults?.customStyles}
+          />
+        ) : (
+          <TableEmptyScreen
+            title={emptyState?.noData?.title}
+            description={emptyState?.noData?.description}
+            button={emptyState?.noData?.button}
+            customStyles={emptyState?.noData?.customStyles}
+          />
+        )}
       </TableCell>
     </TableRow>
   );

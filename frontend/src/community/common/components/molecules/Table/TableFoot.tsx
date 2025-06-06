@@ -33,6 +33,7 @@ export interface TableFootProps {
       button?: SxProps;
     };
     isVisible?: boolean;
+    isLoading?: boolean;
   };
   customElements?: {
     left?: JSX.Element;
@@ -98,6 +99,7 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
             size={ButtonSizes.MEDIUM}
             label={exportBtn.label}
             isFullWidth={false}
+            isLoading={exportBtn.isLoading}
             disabled={exportBtn.disabled}
             styles={exportBtn.styles?.button}
             endIcon={IconName.DOWNLOAD_ICON}
