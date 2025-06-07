@@ -6,7 +6,7 @@ import {
   Theme,
   useTheme
 } from "@mui/material";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
 import {
   TableHeaderTypes,
@@ -33,6 +33,7 @@ interface Props {
     container?: SxProps<Theme>;
     table?: SxProps<Theme>;
   };
+  tableContainerRef?: RefObject<HTMLDivElement>;
 }
 
 interface TableIndexProps {
@@ -75,7 +76,8 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   tableBody,
   tableFoot,
   customStyles,
-  tabIndex
+  tabIndex,
+  tableContainerRef
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -95,6 +97,7 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       />
 
       <TableContainer
+        ref={tableContainerRef}
         sx={mergeSx([classes.container, customStyles?.container])}
         role="region"
         tabIndex={tabIndex?.container ?? 0}

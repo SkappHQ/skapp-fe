@@ -7,7 +7,9 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { IconName } from "~community/common/types/IconTypes";
 import {
   mergeSx,
-  removeSpecialCharacters
+  removeInvalidEmailSearchCharacters,
+  removeSpecialCharacters,
+  validateEnvelopeSearch
 } from "~community/common/utils/commonUtil";
 
 import Icon from "../../atoms/Icon/Icon";
@@ -46,21 +48,47 @@ const SearchBox: FC<Props> = ({
 
   const classes = styles(theme);
   const [searchValue, setSearchValue] = useState<string | null>(value);
+  const emailAllowedSearchNames = ["contactSearch"];
+  const isEnvelopeSearch = name === "envelopeSearch";
+  const allowEmailCharacters = emailAllowedSearchNames.includes(name);
 
   useEffect(() => {
     if (value) {
-      setSearchValue(removeSpecialCharacters(value));
+      if (isEnvelopeSearch) {
+        setSearchValue(validateEnvelopeSearch(value));
+      } else if (allowEmailCharacters) {
+        setSearchValue(removeInvalidEmailSearchCharacters(value, ""));
+      } else {
+        setSearchValue(removeSpecialCharacters(value, ""));
+      }
     }
-  }, [value]);
+  }, [value, name, allowEmailCharacters, isEnvelopeSearch]);
 
   const searchHandler = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    const trimmedValue = removeSpecialCharacters(e.target.value?.trimStart());
-    setSearchValue(trimmedValue);
+    const inputValue = e.target.value?.trimStart();
 
-    if (setSearchTerm) {
-      setSearchTerm(removeSpecialCharacters(e.target.value?.trim()));
+    if (isEnvelopeSearch) {
+      const validatedValue = validateEnvelopeSearch(inputValue);
+      setSearchValue(validatedValue);
+      if (setSearchTerm) {
+        setSearchTerm(validatedValue.trim());
+      }
+    } else if (allowEmailCharacters) {
+      const trimmedValue = removeInvalidEmailSearchCharacters(inputValue, "");
+      setSearchValue(trimmedValue);
+      if (setSearchTerm) {
+        setSearchTerm(
+          removeInvalidEmailSearchCharacters(e.target.value?.trim(), "")
+        );
+      }
+    } else {
+      const trimmedValue = removeSpecialCharacters(inputValue, "");
+      setSearchValue(trimmedValue);
+      if (setSearchTerm) {
+        setSearchTerm(removeSpecialCharacters(e.target.value?.trim(), ""));
+      }
     }
   };
 

@@ -63,7 +63,9 @@ const adminRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
-    ROUTES.SIGN.COMPLETE
+    ROUTES.SIGN.INFO,
+    ROUTES.SIGN.COMPLETE,
+    ROUTES.CONFIGURATIONS.SIGN
   ]
 };
 
@@ -87,6 +89,7 @@ const managerRoutes = {
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SENT,
     ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.INFO,
     ROUTES.SIGN.COMPLETE
   ]
 };
@@ -106,6 +109,7 @@ const employeeRoutes = {
   [EmployeeTypes.ESIGN_EMPLOYEE]: [
     ROUTES.SIGN.INBOX,
     ROUTES.SIGN.SIGN,
+    ROUTES.SIGN.INFO,
     ROUTES.SIGN.COMPLETE,
     ...commonRoutes
   ]
@@ -126,7 +130,8 @@ export default withAuth(
   async function middleware(request: NextRequestWithAuth) {
     if (
       request.nextUrl.pathname === ROUTES.SIGN.DOCUMENT_ACCESS ||
-      request.nextUrl.pathname.startsWith(ROUTES.SIGN.SIGN)
+      request.nextUrl.pathname.startsWith(ROUTES.SIGN.SIGN) ||
+      request.nextUrl.pathname.startsWith(ROUTES.SIGN.INFO)
     ) {
       return NextResponse.next();
     }

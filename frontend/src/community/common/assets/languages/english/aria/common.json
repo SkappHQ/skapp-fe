@@ -11,7 +11,9 @@
       "icon": "Click me to open the emoji picker"
     },
     "colorPalette": {
-      "icon": "Click me to open the color palette"
+      "open": "Click me to open the color palette",
+      "close": "Click me to close the color palette",
+      "pickColor": "Select color {{color}}"
     },
     "backButton": "Click me to go to previous page",
     "filterBtn": "Click me to open filter menu",

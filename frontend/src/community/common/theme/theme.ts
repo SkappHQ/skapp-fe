@@ -42,6 +42,7 @@ declare module "@mui/material/styles" {
       chipDark: string;
       text: string;
       100: string;
+      150: string;
       200: string;
       300: string;
       400: string;
@@ -113,6 +114,7 @@ declare module "@mui/material/styles" {
       main: string;
       contrastText: string;
     };
+
     greens: {
       main: string;
       lighter: string;
@@ -136,6 +138,7 @@ declare module "@mui/material/styles" {
       chipDark: string;
       text: string;
       100: string;
+      150: string;
       200: string;
       300: string;
       400: string;
@@ -239,6 +242,7 @@ declare module "@mui/material/styles/createPalette" {
     textGrey: string;
     whiteText?: string;
     blackText?: string;
+    neutral?: string;
   }
 }
 
@@ -281,11 +285,11 @@ export const theme = createTheme({
     },
     primary: {
       main: "#93C5FD", //* primary-color
-      dark: "#408CE4" //* primary-color-text
+      dark: "#2A61A0" //* primary-color-text
     },
     secondary: {
       main: "#DBEAFE", //* primary-color-background
-      dark: "#2A61A0" //* primary-color-accent
+      dark: "#408CE4" //* primary-color-accent
     },
     grey: {
       50: "#FAFAFA",
@@ -321,7 +325,8 @@ export const theme = createTheme({
       textGrey: "#64748B",
       textBurntGrey: "#65656E",
       whiteText: "#ffffff",
-      blackText: "#000000"
+      blackText: "#000000",
+      neutral: "#6B7280"
     },
     notifyBadge: {
       main: "#EF4444",
@@ -350,6 +355,7 @@ export const theme = createTheme({
       chipDark: "#FCD34D",
       text: "#92400E",
       100: "#FEF9C3",
+      150: "#FDE047",
       200: "#FBBF24",
       300: "#FFC107",
       400: "#EAB308",
@@ -380,8 +386,8 @@ export const theme = createTheme({
       other: "#F87171"
     },
     teamTimeUtilizationChart: {
-      line: "#4CC0C0",
-      bar: "#4CC0C0"
+      line: "#27A197",
+      bar: "#27A197"
     },
     lateArrivalsChart: {
       line: "#F94144",
@@ -395,9 +401,9 @@ export const theme = createTheme({
       darkGrey: "#18212C"
     },
     graphColors: {
-      green: "#4CC0C0",
-      yellow: "#FFCD56",
-      pink: "#FF6384",
+      green: "#27A197",
+      yellow: "#DF7D4E",
+      pink: "#F6587A",
       blue: "#7BB9FF"
     },
     contactUserChip: {
@@ -412,28 +418,28 @@ export const theme = createTheme({
     },
     recipientsColors: [
       {
-        background: "#E7DBFFB2",
+        background: "#D7D5E5CC",
         border: "#9A66FF"
       },
       {
-        background: "#FFDFE6B2",
-        border: "#FF6384"
+        background: "#E7D7D4CC",
+        border: "#F6587A"
       },
       {
-        background: "#FFE3C7B2",
-        border: "#FF9F40"
+        background: "#E3C5D4CC",
+        border: "#EA5DA3"
       },
       {
-        background: "#FFF5DEB2",
-        border: "#FFCD56"
+        background: "#F4D6C7CC",
+        border: "#DF7D4E"
       },
       {
-        background: "#9FD6D6B2",
-        border: "#4CC0C0"
+        background: "#A4D1C9CC",
+        border: "#27A197"
       },
       {
-        background: "#7AA3BF",
-        border: "#37A2EB"
+        background: "#9DCDEECC",
+        border: "#567EF7"
       }
     ]
   },
@@ -486,7 +492,7 @@ export const theme = createTheme({
     overline: undefined,
     onboardingHeader: {
       fontWeight: 700,
-      fontSize: "2.25rem"
+      fontSize: "2.25rem" //36px
     },
     // Table heading
     tableHeader: {

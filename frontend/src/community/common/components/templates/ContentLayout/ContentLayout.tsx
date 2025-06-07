@@ -43,6 +43,7 @@ import {
   TenantStatusEnums
 } from "~enterprise/common/enums/Common";
 import { useCommonEnterpriseStore } from "~enterprise/common/store/commonStore";
+import { shouldUseDefaultTheme } from "~enterprise/common/utils/commonUtil";
 import { useCheckUserLimit } from "~enterprise/people/api/CheckUserLimitApi";
 import UserLimitBanner from "~enterprise/people/components/molecules/UserLimitBanner/UserLimitBanner";
 import { useUserLimitStore } from "~enterprise/people/store/userLimitStore";
@@ -72,6 +73,7 @@ interface Props {
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
   isPrimaryBtnDisabled?: boolean;
+  showBackButtonTooltip?: boolean;
   id?: {
     btnWrapper?: string;
     primaryBtn?: string;
@@ -80,6 +82,9 @@ interface Props {
   shouldBlink?: {
     primaryBtn?: boolean;
     secondaryBtn?: boolean;
+  };
+  customStyles?: {
+    header?: SxProps<Theme>;
   };
 }
 
@@ -107,7 +112,9 @@ const ContentLayout = ({
   backIcon = IconName.LEFT_ARROW_ICON,
   isPrimaryBtnDisabled = false,
   id,
-  shouldBlink
+  shouldBlink,
+  customStyles,
+  showBackButtonTooltip = true
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -179,9 +186,11 @@ const ContentLayout = ({
 
   const { data: organizationDetails } = useGetOrganization();
 
-  const updatedTheme = themeSelector(
-    organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME
-  );
+  const themeColor = shouldUseDefaultTheme(asPath)
+    ? ThemeTypes.BLUE_THEME
+    : organizationDetails?.results?.[0]?.themeColor || ThemeTypes.BLUE_THEME;
+
+  const updatedTheme = themeSelector(themeColor);
 
   theme.palette = updatedTheme.palette;
 
@@ -247,7 +256,7 @@ const ContentLayout = ({
             <UserLimitBanner />
           )}
 
-        <Stack sx={classes.header}>
+        <Stack sx={mergeSx([classes.header, customStyles?.header ?? {}])}>
           <Stack sx={classes.leftContent}>
             {isBackButtonVisible && (
               <IconButton
@@ -260,7 +269,9 @@ const ContentLayout = ({
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
                 aria-label={translateAria(["backButton"])}
-                title={translateAria(["backButton"])}
+                {...(showBackButtonTooltip && {
+                  title: translateAria(["backButton"])
+                })}
                 tabIndex={0}
               >
                 <Icon name={backIcon} />

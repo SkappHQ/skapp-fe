@@ -1,5 +1,6 @@
 import { Stack } from "@mui/material";
 import { useSession } from "next-auth/react";
+import { RefObject } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { EmployeeTypes } from "~community/common/types/AuthTypes";
@@ -8,7 +9,13 @@ import { Role } from "~community/people/types/EmployeeTypes";
 
 import EmployeeFilterSection from "../EmployeeFilterSection/EmployeeFilterSection";
 
-const UserRolesSection = () => {
+const UserRolesSection = ({
+  selected,
+  basicChipRef
+}: {
+  selected: string;
+  basicChipRef: RefObject<{ [key: string]: HTMLDivElement | null }>;
+}) => {
   const translateText = useTranslator(
     "peopleModule",
     "peoples.filters.userRolesFilters"
@@ -44,18 +51,13 @@ const UserRolesSection = () => {
     { label: translateText(["employee"]), value: Role.LEAVE_EMPLOYEE }
   ];
 
-  const esignRoles = [
-    { label: translateText(["admin"]), value: Role.ESIGN_ADMIN },
-    { label: translateText(["sender"]), value: Role.ESIGN_SENDER },
-    { label: translateText(["employee"]), value: Role.ESIGN_EMPLOYEE }
-  ];
-
   const filterData = [
     ...(sessionData?.user?.roles?.includes(EmployeeTypes.ATTENDANCE_EMPLOYEE)
       ? [
           {
             title: translateText(["attendanceModule"]),
             filterKey: "permission",
+            accessibilityKey: "attendance",
             roles: attendanceRoles
           }
         ]
@@ -65,19 +67,16 @@ const UserRolesSection = () => {
           {
             title: translateText(["leaveModule"]),
             filterKey: "permission",
+            accessibilityKey: "leave",
             roles: leaveRoles
           }
         ]
       : []),
     {
       title: translateText(["peopleModule"]),
+      accessibilityKey: "people",
       filterKey: "permission",
       roles: peopleRoles
-    },
-    {
-      title: translateText(["esignModule"]),
-      filterKey: "permission",
-      roles: esignRoles
     }
   ];
 
@@ -106,6 +105,9 @@ const UserRolesSection = () => {
     >
       {filterData.map((filter) => (
         <EmployeeFilterSection
+          basicChipRef={basicChipRef}
+          selected={selected}
+          accessibilityKey={filter.accessibilityKey}
           key={filter.title}
           title={filter.title}
           data={filter.roles}

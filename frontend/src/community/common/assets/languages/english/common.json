@@ -13,10 +13,9 @@
       "validAttachment": "Please upload an valid attachment before submitting",
       "emptyAttachmentError": "No files attached",
       "duplicateAttachmentsError": "Duplicate attachments are not allowed",
-      "maxAttachmentsError": "File Limit Exceeded. The maximum file count allowed is {{maxFileSize}}.",
-      "attachmentSizeError": "5MB file size exceeded.",
-      "attachmentTypeError": "Invalid file format.",
-      "attachmentImageTypeError": "Please upload files in one of the following formats: .jpg, .pdf, .png, .jpeg."
+      "maxAttachmentsError": "File limit Exceeded. The maximum file count allowed is {{maxFileSize}}.",
+      "attachmentSizeError": "{{fileSize}} file size exceeded.",
+      "attachmentTypeError": "Please upload files in one of the following formats: {{supportedFiles}}"
     },
     "filterButton": {
       "placeholder": "Filter",

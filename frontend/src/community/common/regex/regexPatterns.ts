@@ -34,12 +34,15 @@ export function allowsLettersAndSpecialCharactersForNames(): RegExp {
 export function alphaNumericNamePatternWithSpecialCharacters(): RegExp {
   return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯0-9/,]*$/;
 }
+export function alphaNumericNamePatternWithSpecialCharactersAndDot(): RegExp {
+  return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯0-9/,\\.]*$/;
+}
 
 export const emailPattern = (): RegExp => {
   // Pattern allows:
-  // - Before @: 0-9, A-Z, a-z, +, -, _, ~, and . (no consecutive periods)
-  // - After @: Standard domain format
-  return /^[a-zA-Z0-9+\-_~.]+@[a-zA-Z0-9]+\.[a-zA-Z]/;
+  // - Before @: a-z, A-Z, 0-9, ., _, %, +, - (no consecutive periods)
+  // - After @: Standard domain format with at least one dot
+  return /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/;
 };
 
 export function isValidAlphaNumericName(): RegExp {
@@ -209,4 +212,8 @@ export function matchesMMDDYYYYSeparatedByHyphenOrSlashOrPeriod(): RegExp {
   // Matches "MM-DD-YYYY", "MM/DD/YYYY", or "MM.DD.YYYY"
   // Example: "9-15-2023", "9/15/2023", "9.15.2023"
   return /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/;
+}
+
+export function matchInvalidEmailCharactersSearchPattern(): RegExp {
+  return /[^a-zA-Z0-9 @._%+-]/g;
 }

@@ -42,7 +42,10 @@ interface Props {
   label?: string;
   descriptionStyles?: SxProps;
   browseTextStyles?: SxProps;
-  maxSizeOfFile?: number;
+  maxSizeOfFile?: {
+    inBytes: number;
+    inReadableSize: string;
+  };
 }
 
 const MAX_FILE_SIZE_OF_FILE = 5000000;
@@ -62,7 +65,10 @@ const DragAndDropField: FC<Props> = ({
   label,
   descriptionStyles,
   browseTextStyles,
-  maxSizeOfFile = MAX_FILE_SIZE_OF_FILE
+  maxSizeOfFile = {
+    inBytes: MAX_FILE_SIZE_OF_FILE,
+    inReadableSize: "5MB"
+  }
 }) => {
   const translateText = useTranslator("commonComponents", "dragAndDrop");
   const translateAria = useTranslator(
@@ -72,14 +78,18 @@ const DragAndDropField: FC<Props> = ({
   );
 
   const errors = {
-    zeroFilesError: translateText(["emptyAttachmentError"]),
-    duplicateFilesError: translateText(["duplicateAttachmentsError"]),
-    maxFileLengthError: translateText(["maxAttachmentsError"], {
+    // React Dropzone error messages
+    tooManyFilesError: translateText(["maxAttachmentsError"], {
       maxFileSize: maxFileSize.toString()
     }),
-    maxFileSizeError: translateText(["attachmentSizeError"]),
-    fileTypeError: translateText(["attachmentTypeError"]),
-    imageTypeError: translateText(["attachmentImageTypeError"])
+    fileTooLarge: translateText(["attachmentSizeError"], {
+      fileSize: maxSizeOfFile.inReadableSize
+    }),
+    invalidFileType: translateText(["attachmentTypeError"], { supportedFiles }),
+
+    // Custom error messages
+    zeroFilesError: translateText(["emptyAttachmentError"]),
+    duplicateFilesError: translateText(["duplicateAttachmentsError"])
   };
 
   const [, setChipLabel] = useState<string | undefined>("");
@@ -90,7 +100,7 @@ const DragAndDropField: FC<Props> = ({
   >([]);
 
   const theme: Theme = useTheme();
-  const classes = styles(theme, isDisableColor, validationError, customError);
+  const classes = styles(theme, isDisableColor, validationError);
 
   useEffect(() => {
     setValidationError(!!fileUploadErrorsList?.length);
@@ -122,7 +132,14 @@ const DragAndDropField: FC<Props> = ({
         ]);
       } else if (maxFileSize !== 1 && uploadableFiles?.length >= maxFileSize) {
         setFileUploadErrorsList([
-          { errors: [{ code: "", message: errors.maxFileLengthError }] }
+          {
+            errors: [
+              {
+                code: FileUploadErrorTypes.TOO_MANY_FILES_ERROR,
+                message: errors.tooManyFilesError
+              }
+            ]
+          }
         ]);
       } else {
         setFileUploadErrorsList([]);
@@ -130,7 +147,7 @@ const DragAndDropField: FC<Props> = ({
     },
     [
       errors.duplicateFilesError,
-      errors.maxFileLengthError,
+      errors.tooManyFilesError,
       errors.zeroFilesError,
       maxFileSize,
       uploadableFiles?.length
@@ -173,7 +190,7 @@ const DragAndDropField: FC<Props> = ({
     accept,
     maxFiles: maxFileSize - uploadableFiles?.length,
     minSize: minFileSize,
-    maxSize: maxSizeOfFile
+    maxSize: maxSizeOfFile.inBytes
   });
 
   const handleUnselectItem = (filePath: string): void => {
@@ -192,46 +209,36 @@ const DragAndDropField: FC<Props> = ({
 
   const getUploadError = useMemo(
     () =>
-      (error: string): string => {
-        switch (error) {
-          case FileUploadErrorTypes.INVALID_TEXT_OR_CSV_FILE_TYPE_ERROR:
-          case FileUploadErrorTypes.INVALID_IMAGE_TYPE_ERROR:
-            return errors.fileTypeError;
+      (error: { code: string; message: string }): string => {
+        switch (error.code) {
+          case FileUploadErrorTypes.INVALID_FILE_TYPE_ERROR:
+            return errors.invalidFileType;
           case FileUploadErrorTypes.TOO_MANY_FILES_ERROR:
-            return errors.maxFileLengthError;
-          case FileUploadErrorTypes.MAX_FILE_SIZE_ERROR:
-            return errors.maxFileSizeError;
-          case FileUploadErrorTypes.INVALID_IMAGE_OR_PDF_FILE_TYPE_ERROR:
-            return errors.imageTypeError;
+            return errors.tooManyFilesError;
+          case FileUploadErrorTypes.FILE_TOO_LARGE_ERROR:
+            return errors.fileTooLarge;
           default:
-            return error;
+            return error.message;
         }
       },
-    [
-      errors.fileTypeError,
-      errors.imageTypeError,
-      errors.maxFileLengthError,
-      errors.maxFileSizeError
-    ]
+    [errors.invalidFileType, errors.tooManyFilesError, errors.fileTooLarge]
   );
 
   const getInlineErrorMessage = useMemo(() => {
+    if (customError) {
+      return customError;
+    }
     if (validationError) {
-      if (customError) {
-        return customError;
-      }
-
       if (
         fileUploadErrorsList?.length &&
         fileUploadErrorsList[0]?.errors?.[0]?.message
       ) {
-        return getUploadError(
-          fileUploadErrorsList[0].errors[0].message as string
-        );
+        return getUploadError(fileUploadErrorsList[0].errors[0]);
       }
 
       return translateText(["validAttachment"]);
     }
+    return "";
   }, [
     validationError,
     customError,

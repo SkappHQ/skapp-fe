@@ -231,6 +231,33 @@ const getDrawerRoutes = ({
             subTree: subRoutes
           };
         }
+
+        const isEsignAdmin = userRoles?.some((role) =>
+          [AdminTypes.ESIGN_ADMIN].includes(role as AdminTypes)
+        );
+
+        if (isEsignAdmin) {
+          const subRoutes = route?.subTree?.filter((subRoute) => {
+            if (
+              subRoute.name === "Sign" &&
+              !userRoles?.includes(EmployeeTypes.ESIGN_EMPLOYEE)
+            ) {
+              return false;
+            }
+            return subRoute.requiredAuthLevel?.some((requiredRole) =>
+              userRoles?.includes(requiredRole as Role)
+            );
+          });
+
+          return {
+            id: route?.id,
+            name: route?.name,
+            url: ROUTES.CONFIGURATIONS.BASE,
+            icon: route?.icon,
+            hasSubTree: route?.hasSubTree,
+            subTree: subRoutes
+          };
+        }
       }
 
       if (route?.name === "Sign") {
@@ -248,7 +275,7 @@ const getDrawerRoutes = ({
         if (!isEsignEmployeeWithoutManagerOrAdminRole) {
           return {
             id: route?.id,
-            name: route?.name,
+            name: "Inbox",
             url: ROUTES.SIGN.INBOX,
             icon: route?.icon,
             hasSubTree: false

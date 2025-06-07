@@ -47,6 +47,17 @@ export const styles = (theme: Theme): StyleProps => ({
       border: `0.125rem solid ${theme.palette.common.black}`
     }
   },
+  dropDownButtonWrapper: {
+    cursor: "pointer",
+    outline: "none",
+    height: "min-content",
+    borderRadius: "100%",
+    "&:focus-visible": {
+      outline: "none",
+      outlineOffset: "-0.25rem",
+      border: `0.125rem solid ${theme.palette.common.black}`
+    }
+  },
   dropDownButton: {
     width: "1.75rem",
     height: "1.75rem",

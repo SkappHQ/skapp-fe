@@ -53,22 +53,30 @@ const ClockInButton = ({ disabled }: Props): JSX.Element => {
     }
   };
 
+  const label = useMemo(() => {
+    if (isBelow600) {
+      return "";
+    }
+
+    return isClockedIn
+      ? translateText(["clockIn"])
+      : translateText(["clockOut"]);
+  }, [isBelow600, isClockedIn, translateText]);
+
   return (
     <Button
       buttonStyle={ButtonStyle.PRIMARY}
       size={isBelow600 ? ButtonSizes.SMALL : ButtonSizes.MEDIUM}
-      label={
-        isBelow600
-          ? ""
-          : isClockedIn
-            ? translateText(["clockIn"])
-            : translateText(["clockOut"])
-      }
+      label={label}
       endIcon={IconName.TIMER_ICON}
       isFullWidth={false}
       onClick={onClick}
+      ariaLabel={
+        isClockedIn ? translateText(["clockIn"]) : translateText(["clockOut"])
+      }
       isLoading={isPending}
       disabled={disabled}
+      ariaDisabled={disabled}
       dataTestId={isClockedIn ? "clock-in-button" : "clock-out-button"}
     />
   );

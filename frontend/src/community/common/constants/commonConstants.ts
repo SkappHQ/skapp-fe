@@ -29,3 +29,6 @@ export const EVENTS_TO_IDENTIFY_IDLE_USER = [
   "scroll",
   "touchstart"
 ];
+
+export const MODAL_HEADER_ICON_GAP = "3.5rem";
+export const DEFAULT_SCROLL_AMOUNT_PX = 100;

@@ -4,7 +4,9 @@ import { NextResponse } from "next/server";
 
 import { HOURS_PER_DAY } from "~community/common/constants/timeConstants";
 import {
+  alphaNumericNamePatternWithSpecialCharacters,
   containsUnicode,
+  matchInvalidEmailCharactersSearchPattern,
   removeNonAlphaNumericCharactersPattern
 } from "~community/common/regex/regexPatterns";
 import {
@@ -90,6 +92,16 @@ export const removeSpecialCharacters = (
   replaceTerm: string = ""
 ): string =>
   string?.replace(removeNonAlphaNumericCharactersPattern(), replaceTerm);
+
+export const removeInvalidEmailSearchCharacters = (
+  string: string,
+  replaceTerm: string = ""
+): string => {
+  return (
+    string?.replace(matchInvalidEmailCharactersSearchPattern(), replaceTerm) ||
+    ""
+  );
+};
 
 export const pascalCaseFormatter = (wordString: string | null | undefined) => {
   if (!wordString) {
@@ -482,4 +494,20 @@ export const getLabelForReadOnlyChip = (
   }
 
   return label;
+};
+
+export const validateEnvelopeSearch = (input: string): string => {
+  if (!input) return "";
+
+  const emailPattern = matchInvalidEmailCharactersSearchPattern();
+  const alphaNumericPattern = alphaNumericNamePatternWithSpecialCharacters();
+
+  return input
+    .split("")
+    .filter((char) => {
+      const isEmailChar = !emailPattern.test(char);
+      const isAlphaNumericSpecialChar = alphaNumericPattern.test(char);
+      return isEmailChar || isAlphaNumericSpecialChar;
+    })
+    .join("");
 };

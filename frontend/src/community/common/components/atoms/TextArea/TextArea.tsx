@@ -20,13 +20,14 @@ interface Props<T> {
     attachment?: string | undefined;
   };
   isAttachmentRequired?: boolean;
-  maxLength: number;
+  maxLength?: number;
   iconName?: IconName;
   onIconClick?: () => void;
   ariaLabel?: {
     icon?: string;
     textArea?: string;
   };
+  isErrorTopicColor?: boolean;
 }
 
 const TextArea = <T,>({
@@ -41,7 +42,8 @@ const TextArea = <T,>({
   isAttachmentRequired = false,
   iconName,
   ariaLabel,
-  onIconClick
+  onIconClick,
+  isErrorTopicColor = true
 }: Props<T>) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -49,7 +51,10 @@ const TextArea = <T,>({
   return (
     <Stack sx={classes.wrapper}>
       <Stack sx={classes.container}>
-        <Typography variant="body1" sx={error?.comment ? classes.error : {}}>
+        <Typography
+          variant="body1"
+          sx={error?.comment && isErrorTopicColor ? classes.error : {}}
+        >
           {label} &nbsp;
           {isRequired && (
             <Typography component="span" sx={classes.asterisk}>
@@ -57,7 +62,14 @@ const TextArea = <T,>({
             </Typography>
           )}
         </Typography>
-        <Stack sx={classes.field}>
+        <Stack
+          sx={{
+            ...classes.field,
+            border: error?.comment
+              ? `${theme.palette.error.contrastText} 0.0625rem solid`
+              : "none"
+          }}
+        >
           <StyledTextArea
             maxLength={maxLength}
             name={name}
