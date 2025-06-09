@@ -1,7 +1,6 @@
 import { SxProps, TableCell, TableRow, Theme, useTheme } from "@mui/material";
 import { FC, JSX } from "react";
 
-import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import TableSkeleton from "./TableSkeleton";
@@ -23,8 +22,7 @@ export interface TableBodyLoadingStateProps {
   isCheckboxSelectionEnabled?: boolean;
 }
 
-const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
-  tableName,
+const TableBodyLoadingState: FC<TableBodyLoadingStateProps> = ({
   headers,
   loadingState,
   isActionColumnEnabled = false,

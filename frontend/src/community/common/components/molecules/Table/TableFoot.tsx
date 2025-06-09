@@ -8,7 +8,6 @@ import {
   ButtonSizes,
   ButtonStyle
 } from "~community/common/enums/ComponentEnums";
-import { TableTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -44,8 +43,7 @@ export interface TableFootProps {
   };
 }
 
-const TableFoot: FC<TableTypes & TableFootProps> = ({
-  tableName,
+const TableFoot: FC<TableFootProps> = ({
   pagination = {
     disabled: false,
     isEnabled: true,
@@ -72,26 +70,17 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
   const classes = styles(theme);
 
   return (
-    <Stack
-      sx={mergeSx([classes?.tableFoot?.wrapper, customStyles?.wrapper])}
-      role="region"
-      aria-label={`${tableName}-table-foot`}
-    >
+    <Stack sx={mergeSx([classes?.tableFoot?.wrapper, customStyles?.wrapper])}>
       {pagination?.isEnabled && (
         <Pagination
           totalPages={pagination?.totalPages}
           currentPage={pagination?.currentPage || 0}
           onChange={pagination?.onChange || (() => {})}
           paginationStyles={classes?.tableFoot?.pagination}
-          aria-label={`${tableName}-table-foot-pagination`}
           isDisabled={pagination?.disabled}
         />
       )}
-      <Stack
-        sx={classes.tableFoot?.exportBtn?.wrapper}
-        role="region"
-        aria-label={`${tableName}-table-foot-export-button-wrapper`}
-      >
+      <Stack sx={classes.tableFoot?.exportBtn?.wrapper}>
         {customElements?.right && customElements.right}
         {exportBtn.isVisible && exportBtn.label && (
           <Button
@@ -104,15 +93,9 @@ const TableFoot: FC<TableTypes & TableFootProps> = ({
             styles={exportBtn.styles?.button}
             endIcon={IconName.DOWNLOAD_ICON}
             onClick={exportBtn.onClick}
-            aria-label={`${tableName}-table-foot-export-button`}
           />
         )}
-        {exportBtn.toolTip?.text && (
-          <Tooltip
-            title={exportBtn.toolTip?.text}
-            aria-label={`${tableName}-table-foot-export-button-tooltip`}
-          />
-        )}
+        {exportBtn.toolTip?.text && <Tooltip title={exportBtn.toolTip?.text} />}
       </Stack>
     </Stack>
   );

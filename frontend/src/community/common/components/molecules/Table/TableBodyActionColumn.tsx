@@ -3,8 +3,6 @@ import { FC } from "react";
 
 import Icon from "~community/common/components/atoms/Icon/Icon";
 import IconButton from "~community/common/components/atoms/IconButton/IconButton";
-import { useTranslator } from "~community/common/hooks/useTranslator";
-import { TableTypes } from "~community/common/types/CommonTypes";
 import { IconName } from "~community/common/types/IconTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
@@ -39,15 +37,8 @@ const DELETE_BUTTON_ICON_WIDTH = "10";
 const DELETE_BUTTON_ICON_HEIGHT = "12";
 
 const TableBodyActionColumn: FC<
-  TableTypes & TableBodyActionColumnProps & TableRowDataProps
-> = ({ row, isEnabled = false, actionBtns, tableName, isRowDisabled }) => {
-  const translateText = useTranslator(
-    "commonAria",
-    "components",
-    "table",
-    "tableBody",
-    "actionColumn"
-  );
+  TableBodyActionColumnProps & TableRowDataProps
+> = ({ row, isEnabled = false, actionBtns, isRowDisabled }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -63,7 +54,6 @@ const TableBodyActionColumn: FC<
                 height={actionBtns?.left?.height}
               />
             }
-            id={`${tableName}-table-body-action-column-icon-btn-left-${row.id}`}
             hoverEffect={false}
             buttonStyles={mergeSx([
               classes.tableBody.actionColumn.icons.left,
@@ -88,7 +78,6 @@ const TableBodyActionColumn: FC<
                 height={actionBtns?.right?.height ?? DELETE_BUTTON_ICON_HEIGHT}
               />
             }
-            id={`${tableName}-table-body-action-column-icon-btn-right-${row.id}`}
             hoverEffect={false}
             buttonStyles={mergeSx([
               classes.tableBody.actionColumn.icons.right,

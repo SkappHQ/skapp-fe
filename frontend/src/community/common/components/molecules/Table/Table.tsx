@@ -89,7 +89,6 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
         firstRow={actionToolbar?.firstRow}
         secondRow={actionToolbar?.secondRow}
         customStyles={actionToolbar?.customStyles}
-        tableName={tableName}
       />
 
       <TableContainer
@@ -100,8 +99,8 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
           stickyHeader
           sx={mergeSx([classes.table, customStyles?.table])}
         >
+          <caption>{tableName}</caption>
           <TableHead
-            tableName={tableName}
             headers={headers}
             rows={rows}
             checkboxSelection={checkboxSelection}
@@ -113,7 +112,6 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             customStyles={tableHead?.customStyles}
           />
           <TableBody
-            tableName={tableName}
             isLoading={isLoading}
             headers={headers}
             rows={rows}
@@ -134,7 +132,6 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
         pagination={tableFoot?.pagination}
         exportBtn={tableFoot?.exportBtn}
         customElements={tableFoot?.customElements}
-        tableName={tableName}
       />
     </Stack>
   );

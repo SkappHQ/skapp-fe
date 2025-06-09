@@ -11,7 +11,6 @@ import {
 import { FC } from "react";
 
 import { TableEmptyScreenProps } from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
-import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 import {
   shouldActivateButton,
@@ -56,7 +55,7 @@ export interface TableBodyProps {
   onRowClick?: (row: any) => void;
 }
 
-const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
+const TableBody: FC<TableBodyProps & CommonTableProps> = ({
   isLoading,
   headers,
   rows,
@@ -67,8 +66,7 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
   checkboxSelection,
   customStyles,
   isRowDisabled = () => false,
-  onRowClick,
-  tableName
+  onRowClick
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -87,7 +85,6 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
     <MuiTableBody sx={mergeSx([classes.tableBody.body, customStyles?.body])}>
       {isLoading ? (
         <TableBodyLoadingState
-          tableName={tableName}
           headers={headers}
           loadingState={loadingState}
           isActionColumnEnabled={actionColumn?.isEnabled}
@@ -201,17 +198,12 @@ const TableBody: FC<TableTypes & TableBodyProps & CommonTableProps> = ({
               row={row}
               isEnabled={actionColumn?.isEnabled}
               actionBtns={actionColumn?.actionBtns}
-              tableName={tableName}
               isRowDisabled={isRowDisabled}
             />
           </TableRow>
         ))
       ) : (
-        <TableBodyEmptyState
-          headers={headers}
-          emptyState={emptyState}
-          tableName={tableName}
-        />
+        <TableBodyEmptyState headers={headers} emptyState={emptyState} />
       )}
     </MuiTableBody>
   );

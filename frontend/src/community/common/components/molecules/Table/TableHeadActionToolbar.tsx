@@ -1,7 +1,6 @@
 import { Box, Stack, SxProps, Theme, useTheme } from "@mui/material";
 import { FC, JSX, useMemo } from "react";
 
-import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
@@ -21,11 +20,10 @@ export interface TableHeadActionRowProps {
   };
 }
 
-const TableHeadActionToolbar: FC<TableTypes & TableHeadActionRowProps> = ({
+const TableHeadActionToolbar: FC<TableHeadActionRowProps> = ({
   firstRow,
   secondRow,
-  customStyles,
-  tableName
+  customStyles
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);

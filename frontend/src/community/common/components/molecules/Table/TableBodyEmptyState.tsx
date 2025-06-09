@@ -4,7 +4,6 @@ import { FC, JSX } from "react";
 import TableEmptyScreen, {
   TableEmptyScreenProps
 } from "~community/common/components/molecules/TableEmptyScreen/TableEmptyScreen";
-import { TableTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import styles from "./styles";
@@ -23,8 +22,7 @@ export interface TableBodyEmptyStateProps {
   };
 }
 
-const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
-  tableName,
+const TableBodyEmptyState: FC<TableBodyEmptyStateProps> = ({
   headers,
   emptyState
 }) => {

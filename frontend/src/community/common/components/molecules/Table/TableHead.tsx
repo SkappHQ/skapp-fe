@@ -10,10 +10,7 @@ import {
 } from "@mui/material";
 import { FC, MutableRefObject } from "react";
 
-import {
-  TableHeaderTypes,
-  TableTypes
-} from "~community/common/types/CommonTypes";
+import { TableHeaderTypes } from "~community/common/types/CommonTypes";
 import { mergeSx } from "~community/common/utils/commonUtil";
 
 import { CommonTableProps } from "./Table";
@@ -40,7 +37,7 @@ export interface TableHeadActionColumnProps {
 }
 
 const TableHead: FC<
-  TableTypes & TableHeadProps & CommonTableProps & TableHeadActionColumnProps
+  TableHeadProps & CommonTableProps & TableHeadActionColumnProps
 > = ({
   rows,
   headers,
