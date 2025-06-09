@@ -73,6 +73,7 @@ interface Props {
   isPrimaryBtnLoading?: boolean;
   backIcon?: IconName;
   isPrimaryBtnDisabled?: boolean;
+  showBackButtonTooltip?: boolean;
   id?: {
     btnWrapper?: string;
     primaryBtn?: string;
@@ -117,7 +118,8 @@ const ContentLayout = ({
   id,
   shouldBlink,
   customStyles,
-  ariaDescribedBy
+  ariaDescribedBy,
+  showBackButtonTooltip = true
 }: Props): JSX.Element => {
   const theme: Theme = useTheme();
   const isEnterpriseMode = process.env.NEXT_PUBLIC_MODE === "enterprise";
@@ -272,7 +274,9 @@ const ContentLayout = ({
                 }
                 data-testid={contentLayoutTestId.buttons.backButton}
                 aria-label={translateAria(["backButton"])}
-                title={translateAria(["backButton"])}
+                {...(showBackButtonTooltip && {
+                  title: translateAria(["backButton"])
+                })}
                 tabIndex={0}
               >
                 <Icon name={backIcon} />
