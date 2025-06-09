@@ -53,11 +53,7 @@ const TableBodyActionColumn: FC<
 
   return (
     isEnabled && (
-      <TableCell
-        sx={mergeSx([classes.tableBody.actionColumn.cell])}
-        role="cell"
-        aria-label={`${tableName}-table-body-action-column-cell-${row.id}`}
-      >
+      <TableCell sx={mergeSx([classes.tableBody.actionColumn.cell])}>
         {actionBtns?.left && (
           <IconButton
             icon={
@@ -75,10 +71,10 @@ const TableBodyActionColumn: FC<
             ])}
             disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.left?.onClick(row.actionData)}
-            ariaLabel={translateText(["editButton"], {
-              tableName: tableName,
-              ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
-            })}
+            // ariaLabel={translateText(["editButton"], {
+            //   tableName: tableName
+            // ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+            // })}
           />
         )}
         {actionBtns?.right && (
@@ -100,10 +96,10 @@ const TableBodyActionColumn: FC<
             ])}
             disabled={isRowDisabled?.(row.id)}
             onClick={() => actionBtns?.right?.onClick(row.actionData)}
-            ariaLabel={translateText(["deleteButton"], {
-              tableName: tableName,
-              ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
-            })}
+            // ariaLabel={translateText(["deleteButton"], {
+            //   tableName: tableName
+            // ariaLabel: row?.ariaLabel?.toLowerCase() ?? ""
+            // })}
           />
         )}
       </TableCell>

@@ -36,14 +36,6 @@ interface Props {
   tableContainerRef?: RefObject<HTMLDivElement>;
 }
 
-interface TableIndexProps {
-  wrapper?: number;
-  container?: number;
-  tableBody?: {
-    row?: number;
-  };
-}
-
 export interface CommonTableProps {
   isLoading?: boolean;
   headers: TableHeaderTypes[];
@@ -60,7 +52,6 @@ export interface CommonTableProps {
     handleSelectAllClick?: () => void;
     customStyles?: { cell?: SxProps<Theme>; checkbox?: SxProps<Theme> };
   };
-  tabIndex?: TableIndexProps;
 }
 
 const Table: FC<Props & CommonTableProps & TableTypes> = ({
@@ -70,25 +61,30 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
   rows,
   isRowDisabled,
   selectedRows,
-  checkboxSelection,
+  checkboxSelection = {
+    isEnabled: false,
+    isSelectAllEnabled: false,
+    isSelectAllVisible: false,
+    isSelectAllChecked: false,
+    handleIndividualSelectClick: () => () => {},
+    handleSelectAllClick: () => {},
+    customStyles: {
+      cell: {},
+      checkbox: {}
+    }
+  },
   actionToolbar,
   tableHead,
   tableBody,
   tableFoot,
   customStyles,
-  tabIndex,
   tableContainerRef
 }) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
   return (
-    <Stack
-      sx={mergeSx([classes.wrapper, customStyles?.wrapper])}
-      role="group"
-      aria-label={`${tableName}-table-wrapper`}
-      tabIndex={tabIndex?.wrapper ?? 0}
-    >
+    <Stack sx={mergeSx([classes.wrapper, customStyles?.wrapper])}>
       <TableHeadActionToolbar
         firstRow={actionToolbar?.firstRow}
         secondRow={actionToolbar?.secondRow}
@@ -99,15 +95,10 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
       <TableContainer
         ref={tableContainerRef}
         sx={mergeSx([classes.container, customStyles?.container])}
-        role="region"
-        tabIndex={tabIndex?.container ?? 0}
-        aria-label={`${tableName}-table-container`}
       >
         <MuiTable
           stickyHeader
           sx={mergeSx([classes.table, customStyles?.table])}
-          role="table"
-          aria-label={tableName}
         >
           <TableHead
             tableName={tableName}
@@ -134,7 +125,6 @@ const Table: FC<Props & CommonTableProps & TableTypes> = ({
             loadingState={tableBody?.loadingState}
             customStyles={tableBody?.customStyles}
             onRowClick={tableBody?.onRowClick}
-            tabIndex={tabIndex}
           />
         </MuiTable>
       </TableContainer>

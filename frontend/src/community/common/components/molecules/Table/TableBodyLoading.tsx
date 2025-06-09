@@ -39,8 +39,6 @@ const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
         classes.tableBody.loadingState.row,
         loadingState?.customStyles?.row
       ])}
-      role="row"
-      aria-label={`${tableName}-table-body-loading-state-row`}
     >
       <TableCell
         colSpan={
@@ -52,10 +50,8 @@ const TableBodyLoadingState: FC<TableTypes & TableBodyLoadingStateProps> = ({
           classes.tableBody.loadingState.cell,
           loadingState?.customStyles?.cell
         ])}
-        role="cell"
-        aria-label={`${tableName}-table-body-loading-state-cell`}
       >
-        <TableSkeleton rows={loadingState?.skeleton?.rows || 4} />
+        <TableSkeleton rows={loadingState?.skeleton?.rows ?? 4} />
       </TableCell>
     </TableRow>
   );

@@ -37,8 +37,6 @@ const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
         classes.tableBody.emptyState.row,
         emptyState?.customStyles?.row
       ])}
-      role="row"
-      aria-label={`${tableName}-table-body-empty-state-row`}
     >
       <TableCell
         colSpan={headers?.length + 2}
@@ -46,8 +44,6 @@ const TableBodyEmptyState: FC<TableTypes & TableBodyEmptyStateProps> = ({
           classes.tableBody.emptyState.cell,
           emptyState?.customStyles?.cell
         ])}
-        role="cell"
-        aria-label={`${tableName}-table-body-empty-state-cell`}
       >
         {emptyState?.isSearching ? (
           <TableEmptyScreen

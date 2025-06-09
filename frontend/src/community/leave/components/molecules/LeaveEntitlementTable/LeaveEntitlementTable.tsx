@@ -1,6 +1,5 @@
-import { ChangeEvent, JSX, useMemo } from "react";
+import { ChangeEvent, useMemo } from "react";
 
-import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import Select from "~community/common/components/molecules/Select/Select";
 import Table from "~community/common/components/molecules/Table/Table";
 import { TableNames } from "~community/common/enums/Table";
@@ -79,24 +78,11 @@ const LeaveEntitlementTable = ({
     return tableData.items.map((entitlement) => {
       const row: {
         id: number;
-        name: JSX.Element;
-        [key: string]: number | JSX.Element;
+        name: string;
+        [key: string]: number | string;
       } = {
         id: entitlement.employeeId,
-        name: (
-          <AvatarChip
-            firstName={entitlement?.firstName}
-            lastName={entitlement?.lastName}
-            avatarUrl={entitlement?.authPic}
-            isResponsiveLayout={true}
-            chipStyles={{
-              maxWidth: "100%",
-              justifyContent: "flex-start"
-            }}
-            mediumScreenWidth={1024}
-            smallScreenWidth={0}
-          />
-        )
+        name: `${entitlement.firstName} ${entitlement.lastName}`
       };
 
       activeLeaveTypes.forEach((leaveType) => {

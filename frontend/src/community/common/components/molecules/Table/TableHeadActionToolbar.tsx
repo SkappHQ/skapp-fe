@@ -44,25 +44,15 @@ const TableHeadActionToolbar: FC<TableTypes & TableHeadActionRowProps> = ({
           },
           customStyles?.wrapper
         ])}
-        role="toolbar"
-        aria-label={`${tableName}-table-head-action-toolbar`}
       >
         {firstRow && (
-          <Stack
-            sx={mergeSx([classes.actionToolbar.row, customStyles?.row])}
-            role="group"
-            aria-label={`${tableName}-table-head-action-toolbar-primary-actions`}
-          >
+          <Stack sx={mergeSx([classes.actionToolbar.row, customStyles?.row])}>
             <Box>{firstRow.leftButton}</Box>
             <Box>{firstRow.rightButton}</Box>
           </Stack>
         )}
         {secondRow && (
-          <Stack
-            sx={mergeSx([classes.actionToolbar.row, customStyles?.row])}
-            role="group"
-            aria-label={`${tableName}-table-head-action-toolbar-secondary-actions`}
-          >
+          <Stack sx={mergeSx([classes.actionToolbar.row, customStyles?.row])}>
             <Box>{secondRow.leftButton}</Box>
             <Box>{secondRow.rightButton}</Box>
           </Stack>
