@@ -23,6 +23,7 @@ export enum TableNames {
   TEAM_ANALYTICS_LEAVE_HISTORY = "Team analytics leave history table",
   LEAVE_REQUESTS = "Leave requests table",
   CUSTOM_LEAVE_ALLOCATIONS = "Custom leave allocations table",
+  CARRY_FORWARD_BALANCES = "Carry forward balances table",
   CUSTOM_ALLOCATIONS_REPORT = "Custom allocations report table",
   ON_LEAVE_MODAL = "On leave modal table"
 }
