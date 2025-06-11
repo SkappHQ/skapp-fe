@@ -104,6 +104,10 @@ const CalendarDateRangePickersDay = ({
     selectedDates.length > 0 && day.hasSame(selectedDates[0], "day");
   const isEnd =
     selectedDates.length > 1 && day.hasSame(selectedDates[1], "day");
+  const isInRange =
+    selectedDates.length > 1 &&
+    day > selectedDates[0] &&
+    day < selectedDates[1];
 
   const dayNum = day.day;
   const ordinalSuffix = getOrdinalIndicator(dayNum);
@@ -116,9 +120,11 @@ const CalendarDateRangePickersDay = ({
     ? `${translateAria(["selectedStartDate"])} ${formattedWithOrdinal}`
     : isEnd
       ? `${translateAria(["selectedEndDate"])} ${formattedWithOrdinal}`
-      : isCurrent
-        ? `${translateAria(["currentSelectedDate"])} ${formattedWithOrdinal}`
-        : `${formattedWithOrdinal}`;
+      : isInRange
+        ? `${formattedWithOrdinal} ${translateAria(["inSelectedRange"])}`
+        : isCurrent
+          ? `${translateAria(["currentSelectedDate"])} ${formattedWithOrdinal}`
+          : `${formattedWithOrdinal}`;
 
   return (
     <MuiPickersDay

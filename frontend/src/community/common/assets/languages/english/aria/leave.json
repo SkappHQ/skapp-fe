@@ -15,6 +15,7 @@
       "next": "Next",
       "selectedStartDate": "Selected Date for Start Date, ",
       "selectedEndDate": "Selected Date for End Date, ",
+      "inSelectedRange": "in the selected range",
       "currentSelectedDate": "Currently Selected Date, "
     },
     "teamAvailabilityCard": {
