@@ -31,7 +31,7 @@
       "uploadProfilePicture": "Upload profile picture"
     },
     "dragAndDrop": {
-      "ariaLabel": "Drag and Drop your file here"
+      "ariaLabel": "{{componentName}} File Upload"
     },
     "drawer": {
       "drawer": "Drawer",
@@ -44,8 +44,8 @@
       "left": "Previous"
     },
     "modal": {
-      "modal": "modal",
-      "closeIconBtn": "Close modal"
+      "modal": "{{title}} modal",
+      "closeIconBtn": "Close {{title}} modal"
     },
     "switch": {
       "ariaLabel": "Switch on"

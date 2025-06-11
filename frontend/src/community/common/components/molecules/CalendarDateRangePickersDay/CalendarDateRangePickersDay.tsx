@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import { useMemo } from "react";
 
 import styles from "~community/common/components/molecules/DateRangePickersDay/styles";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import {
   getHolidayClasses,
   getLeaveRequestClasses
@@ -16,6 +17,7 @@ import {
   getMyLeaveRequestForDay
 } from "~community/common/utils/calendarDateRangePickerUtils";
 import { getSelectionClasses } from "~community/common/utils/dateRangePickerUtils";
+import { getOrdinalIndicator } from "~community/common/utils/dateTimeUtils";
 import { MyLeaveRequestPayloadType } from "~community/leave/types/MyRequests";
 import { Holiday } from "~community/people/types/HolidayTypes";
 
@@ -40,6 +42,8 @@ const CalendarDateRangePickersDay = ({
 }: Props) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
+
+  const translateAria = useTranslator("leaveAria", "applyLeave", "calendar");
 
   const { day, outsideCurrentMonth, ...other } = pickerDaysProps;
 
@@ -96,6 +100,30 @@ const CalendarDateRangePickersDay = ({
     workingDays
   ]);
 
+  const isStart =
+    selectedDates.length > 0 && day.hasSame(selectedDates[0], "day");
+  const isEnd =
+    selectedDates.length > 1 && day.hasSame(selectedDates[1], "day");
+  const isInRange =
+    selectedDates.length > 1 &&
+    day > selectedDates[0] &&
+    day < selectedDates[1];
+
+  const dayNum = day.day;
+  const ordinalSuffix = getOrdinalIndicator(dayNum);
+
+  const formattedWithOrdinal = `${dayNum}${ordinalSuffix} of ${day.toFormat("LLLL yyyy")}`;
+
+  const isCurrent = day.hasSame(DateTime.now(), "day");
+
+  const ariaLabel = isStart
+    ? `${translateAria(["selectedStartDate"])} ${formattedWithOrdinal}`
+    : isEnd
+      ? `${translateAria(["selectedEndDate"])} ${formattedWithOrdinal}`
+      : isCurrent
+        ? `${translateAria(["currentSelectedDate"])} ${formattedWithOrdinal}`
+        : `${formattedWithOrdinal}`;
+
   return (
     <MuiPickersDay
       className={muiClassNames ?? ""}
@@ -103,7 +131,9 @@ const CalendarDateRangePickersDay = ({
       day={day}
       sx={classes.pickersDay}
       onClick={() => onDayClick(day)}
+      aria-label={ariaLabel}
       {...other}
+      aria-selected={isStart || isEnd || isInRange || isCurrent}
     />
   );
 };
