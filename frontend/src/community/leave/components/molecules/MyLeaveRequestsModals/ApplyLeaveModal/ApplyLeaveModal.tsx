@@ -407,7 +407,6 @@ const ApplyLeaveModal = () => {
           <TextArea
             label={translateText(["comment"])}
             ariaLabel={{
-              textArea: "",
               icon: translateAria(["comment.icon"])
             }}
             placeholder={translateText(["addComment"])}
