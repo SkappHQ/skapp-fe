@@ -121,7 +121,7 @@ const LeaveSummary = ({
           <Typography variant="body2" sx={classes.label}>
             {translateText(["recipient"])}
           </Typography>
-          <Box aria-label={supervisorNames}>
+          <Box aria-label={supervisorNames} role="region">
             <Stack sx={classes.chipWrapper} aria-hidden="true">
               <AvatarChip
                 key={primaryManager?.employeeId ?? ""}
