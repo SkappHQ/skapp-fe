@@ -120,11 +120,9 @@ const CalendarDateRangePickersDay = ({
     ? `${translateAria(["selectedStartDate"])} ${formattedWithOrdinal}`
     : isEnd
       ? `${translateAria(["selectedEndDate"])} ${formattedWithOrdinal}`
-      : isInRange
-        ? `${formattedWithOrdinal} ${translateAria(["inSelectedRange"])}`
-        : isCurrent
-          ? `${translateAria(["currentSelectedDate"])} ${formattedWithOrdinal}`
-          : `${formattedWithOrdinal}`;
+      : isCurrent
+        ? `${translateAria(["currentSelectedDate"])} ${formattedWithOrdinal}`
+        : `${formattedWithOrdinal}`;
 
   return (
     <MuiPickersDay
