@@ -3,7 +3,6 @@ import { type Theme, useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import Table from "~community/common/components/molecules/Table/Table";
 import ROUTES from "~community/common/constants/routes";
 import { TableNames } from "~community/common/enums/Table";
@@ -57,7 +56,6 @@ const LeaveTypesTable = () => {
             &nbsp;
             {leaveType?.name}
           </span>,
-
         durations: getLeaveTypeDurationTableContent(
           leaveType?.leaveDuration
         ),
