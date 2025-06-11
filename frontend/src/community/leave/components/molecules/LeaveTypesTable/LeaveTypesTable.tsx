@@ -49,28 +49,22 @@ const LeaveTypesTable = () => {
     return (
       (leaveTypes as LeaveTypeType[])?.map((leaveType: LeaveTypeType) => ({
         id: leaveType?.typeId,
-        leaveTypeName: (
-          <BasicChip
-            label={`${getEmoji(`${leaveType?.emojiCode}`)} ${leaveType?.name}`}
-          />
-        ),
+        leaveTypeName:
+          <span>
+            <span role="img" aria-hidden="true">
+              {getEmoji(leaveType?.emojiCode || "")}
+            </span>
+            &nbsp;
+            {leaveType?.name}
+          </span>,
+
         durations: getLeaveTypeDurationTableContent(
           leaveType?.leaveDuration
-        ).map((duration: string, index: number) => (
-          <BasicChip
-            key={duration}
-            label={duration}
-            chipStyles={{ marginRight: index === 0 ? "2rem" : 0 }}
-          />
-        )),
+        ),
         carriedForward: (
-          <BasicChip
-            label={
-              leaveType?.isCarryForwardEnabled
-                ? translateText(["enabled"])
-                : translateText(["disabled"])
-            }
-          />
+          leaveType?.isCarryForwardEnabled
+            ? translateText(["enabled"])
+            : translateText(["disabled"])
         ),
         actionData: leaveType
       })) || []

@@ -64,15 +64,15 @@ export const getLeaveTypeDurationTableContent = (
 ) => {
   switch (leaveDuration) {
     case LeaveDurationTypes.HALF_DAY:
-      return ["Half Day"];
+      return "Half Day";
     case LeaveDurationTypes.FULL_DAY:
-      return ["Full Day"];
+      return "Full Day";
     case LeaveDurationTypes.HALF_AND_FULL_DAY:
-      return ["Full Day", "Half Day"];
+      return "Full Day & Half Day";
     case LeaveDurationTypes.NONE:
-      return [];
+      return "";
     default:
-      return [];
+      return "";
   }
 };
 
