@@ -135,6 +135,7 @@ const CalendarDateRangePickersDay = ({
       onClick={() => onDayClick(day)}
       aria-label={ariaLabel}
       {...other}
+      aria-selected={isStart || isEnd || isInRange || isCurrent}
     />
   );
 };
