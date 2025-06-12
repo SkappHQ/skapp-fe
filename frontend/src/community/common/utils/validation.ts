@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import { characterLengths } from "~community/common/constants/stringConstants";
 import {
   allowsLettersAndSpecialCharactersForNames,
-  allowsLettersAndSpecialCharactersForNamesWithForwardSlash,
   alphaNumericNamePatternWithSpecialCharacters,
   datePatternReverse,
   emailPattern,
@@ -137,12 +136,6 @@ export const isEmailInputValid = (email: string): boolean => {
 
 export const isValidNamePattern = (value: string): boolean => {
   return allowsLettersAndSpecialCharactersForNames().test(value);
-};
-
-export const isValidNamePatternWithForwardSlash = (value: string): boolean => {
-  return allowsLettersAndSpecialCharactersForNamesWithForwardSlash().test(
-    value
-  );
 };
 
 export const isValidAlphaNumericNamePattern = (value: string): boolean => {

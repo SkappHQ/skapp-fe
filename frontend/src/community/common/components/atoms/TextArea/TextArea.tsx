@@ -27,7 +27,6 @@ interface Props<T> {
     icon?: string;
     textArea?: string;
   };
-  isErrorTopicColor?: boolean;
 }
 
 const TextArea = <T,>({
@@ -42,8 +41,7 @@ const TextArea = <T,>({
   isAttachmentRequired = false,
   iconName,
   ariaLabel,
-  onIconClick,
-  isErrorTopicColor = true
+  onIconClick
 }: Props<T>) => {
   const theme: Theme = useTheme();
   const classes = styles(theme);
@@ -51,10 +49,7 @@ const TextArea = <T,>({
   return (
     <Stack sx={classes.wrapper}>
       <Stack sx={classes.container}>
-        <Typography
-          variant="body1"
-          sx={error?.comment && isErrorTopicColor ? classes.error : {}}
-        >
+        <Typography variant="body1" sx={error?.comment ? classes.error : {}}>
           {label} &nbsp;
           {isRequired && (
             <Typography component="span" sx={classes.asterisk}>
@@ -62,14 +57,7 @@ const TextArea = <T,>({
             </Typography>
           )}
         </Typography>
-        <Stack
-          sx={{
-            ...classes.field,
-            border: error?.comment
-              ? `${theme.palette.error.contrastText} 0.0625rem solid`
-              : "none"
-          }}
-        >
+        <Stack sx={classes.field}>
           <StyledTextArea
             maxLength={maxLength}
             name={name}

@@ -7,7 +7,7 @@ import DropdownList from "~community/common/components/molecules/DropdownList/Dr
 import Form from "~community/common/components/molecules/Form/Form";
 import InputDate from "~community/common/components/molecules/InputDate/InputDate";
 import InputField from "~community/common/components/molecules/InputField/InputField";
-import PeopleAutocompleteSearch from "~community/common/components/molecules/PeopleAutocompleteSearch/PeopleAutocompleteSearch";
+import PeopleSearch from "~community/common/components/molecules/PeopleSearch/PeopleSearch";
 import { matchesNumberWithAtMostOneDecimalPlace } from "~community/common/regex/regexPatterns";
 import { getEmoji } from "~community/common/utils/commonUtil";
 import {
@@ -50,6 +50,7 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
   translateText,
   onSubmit
 }) => {
+  const [isPopperOpen, setIsPopperOpen] = useState(false);
   const [selectedValidFromDate, setSelectedValidFromDate] = useState<
     DateTime | undefined
   >(undefined);
@@ -137,10 +138,10 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
       setFieldValue("employeeId", Number(user.employeeId));
       const fullName = `${user.firstName} ${user.lastName}`.trim();
       setFieldValue("name", fullName);
+      setIsPopperOpen(false);
       setSearchTerm(fullName);
     }
   };
-
   const handleLeaveTypeChange = (e: SelectChangeEvent) => {
     const selectedValue = e.target.value;
 
@@ -298,21 +299,29 @@ const CustomLeaveAllocationForm: React.FC<Props> = ({
 
   return (
     <Form onSubmit={onSubmit}>
-      <PeopleAutocompleteSearch
-        name="leave-allocation-employee-name"
-        required={true}
-        id={{
-          textField: "leave-allocation-employee-name-text-field",
-          autocomplete: "leave-allocation-name-autocomplete"
-        }}
+      <PeopleSearch
+        id="search-team-member-input"
         label={translateText(["leaveAllocationNameInputLabel"])}
-        placeholder={translateText(["searchEmployeePlaceholder"])}
-        options={(suggestions ?? []) as EmployeeType[]}
-        value={values.assignedTo}
-        inputValue={searchTerm}
-        onInputChange={(value) => setSearchTerm(value)}
-        onChange={(value) => onSelectUser(value)}
-        error={errors.employeeId}
+        placeHolder={translateText(["searchEmployeePlaceholder"])}
+        setIsPopperOpen={setIsPopperOpen}
+        isPopperOpen={isPopperOpen}
+        labelStyles={{ mb: "0.25rem" }}
+        componentStyles={{ mb: 2 }}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        value={searchTerm}
+        error={
+          errors.employeeId
+            ? (errors.employeeId as unknown as string)
+            : undefined
+        }
+        required={true}
+        onSelectMember={onSelectUser}
+        suggestions={suggestions as EmployeeType[]}
+        selectedUsers={
+          (suggestions?.filter(
+            (user) => user.employeeId === values.employeeId
+          ) as EmployeeType[]) || ([] as EmployeeType[])
+        }
         isDisabled={
           customLeaveAllocationModalType ===
           CustomLeaveAllocationModalTypes.EDIT_LEAVE_ALLOCATION

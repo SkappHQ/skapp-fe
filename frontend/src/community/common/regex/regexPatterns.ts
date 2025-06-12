@@ -31,15 +31,8 @@ export function allowsLettersAndSpecialCharactersForNames(): RegExp {
   return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯]*$/;
 }
 
-export function allowsLettersAndSpecialCharactersForNamesWithForwardSlash(): RegExp {
-  return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯/]*$/;
-}
-
 export function alphaNumericNamePatternWithSpecialCharacters(): RegExp {
   return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯0-9/,]*$/;
-}
-export function alphaNumericWithExtendedSpecialCharacters(): RegExp {
-  return /^[A-Za-zÀ-ÖØ-öø-ÿĀ-žČčĆćŠšŽžŃń'-\s`´^~çÇ¨˚Øøł¯0-9/,\\.!@#$%&*()+=?"{}[\]<>]*$/;
 }
 
 export const emailPattern = (): RegExp => {

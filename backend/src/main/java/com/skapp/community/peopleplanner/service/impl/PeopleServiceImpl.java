@@ -191,7 +191,7 @@ public class PeopleServiceImpl implements PeopleService {
 
 	private final AsyncEmailServiceImpl asyncEmailServiceImpl;
 
-	protected final ApplicationEventPublisher applicationEventPublisher;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	private final UserVersionService userVersionService;
 

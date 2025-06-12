@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 import { HOURS_PER_DAY } from "~community/common/constants/timeConstants";
 import {
-  alphaNumericNamePatternWithSpecialCharacters,
   containsUnicode,
   matchInvalidEmailCharactersSearchPattern,
   removeNonAlphaNumericCharactersPattern
@@ -494,20 +493,4 @@ export const getLabelForReadOnlyChip = (
   }
 
   return label;
-};
-
-export const validateEnvelopeSearch = (input: string): string => {
-  if (!input) return "";
-
-  const emailPattern = matchInvalidEmailCharactersSearchPattern();
-  const alphaNumericPattern = alphaNumericNamePatternWithSpecialCharacters();
-
-  return input
-    .split("")
-    .filter((char) => {
-      const isEmailChar = !emailPattern.test(char);
-      const isAlphaNumericSpecialChar = alphaNumericPattern.test(char);
-      return isEmailChar || isAlphaNumericSpecialChar;
-    })
-    .join("");
 };
