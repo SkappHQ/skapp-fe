@@ -1,12 +1,13 @@
 import { Box, Chip, Theme, Typography, useTheme } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { getEmoji } from "~community/common/utils/commonUtil";
 
+import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
 import FilterButton from "~community/common/components/molecules/FilterButton/FilterButton";
 import Select from "~community/common/components/molecules/Select/Select";
 import Table from "~community/common/components/molecules/Table/Table";
 import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
+import { getEmoji } from "~community/common/utils/commonUtil";
 import {
   currentYear,
   getAdjacentYearsWithCurrent,
@@ -73,7 +74,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       setHasFilteredData(customLeaveData.items.length > 0);
       setHasEmptyFilterResults(
         customLeaveData.items.length === 0 &&
-        (!!searchTerm || selectedLeaveTypes.length > 0)
+          (!!searchTerm || selectedLeaveTypes.length > 0)
       );
     } else {
       setHasFilteredData(false);
@@ -125,7 +126,6 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       { field: "employee", headerName: translateText(["tableHeaderOne"]) },
       { field: "duration", headerName: translateText(["tableHeaderTwo"]) },
       { field: "type", headerName: translateText(["tableHeaderThree"]) },
-      { field: "actions", headerName: translateText(["tableHeaderFour"]) }
     ],
     [translateText]
   );
@@ -149,23 +149,50 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
       customLeaveData?.items?.map((leaveAllocation) => {
         return {
           id: leaveAllocation.entitlementId,
-          employee: leaveAllocation.employee?.firstName + " " + leaveAllocation.employee?.lastName,
+          employee: (
+            <AvatarChip
+              firstName={leaveAllocation.employee?.firstName}
+              lastName={leaveAllocation.employee?.lastName}
+              avatarUrl={leaveAllocation.employee?.authPic}
+              chipStyles={{
+                display: "flex",
+                justifyContent: "start",
+                maxWidth: "fit-content"
+              }}
+            />
+          ),
           duration: (
-            leaveAllocation.totalDaysAllocated === 0.5
-              ? translateText(["halfDayChip"])
-              : `${leaveAllocation.totalDaysAllocated} ${leaveAllocation.totalDaysAllocated === 1
-                ? translateText(["day"])
-                : translateText(["days"])
-              }`
+            <div
+              style={{
+                backgroundColor: theme.palette.common.white,
+                borderRadius: "150px",
+                padding: "8px 16px"
+              }}
+            >
+              {leaveAllocation.totalDaysAllocated === 0.5
+                ? translateText(["halfDayChip"])
+                : `${leaveAllocation.totalDaysAllocated} ${
+                    leaveAllocation.totalDaysAllocated === 1
+                      ? translateText(["day"])
+                      : translateText(["days"])
+                  }`}
+            </div>
           ),
           type: (
-            <span>
+            <div
+              style={{
+                backgroundColor: theme.palette.common.white,
+                borderRadius: "150px",
+                padding: "8px 16px"
+              }}
+            >
               <span role="img" aria-hidden="true">
                 {getEmoji(leaveAllocation.leaveType?.emojiCode || "")}
               </span>
               &nbsp;
               {leaveAllocation.leaveType?.name}
-            </span>),
+            </div>
+          ),
           actionData: leaveAllocation
         };
       }) || []
@@ -297,9 +324,9 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
                   : translateText(["emptyCustomLeaveScreen", "description"]),
               button: showEmptyTableButton
                 ? {
-                  label: translateText(["CustomLeaveAllocationsSectionBtn"]),
-                  onClick: handleAddLeaveAllocation
-                }
+                    label: translateText(["CustomLeaveAllocationsSectionBtn"]),
+                    onClick: handleAddLeaveAllocation
+                  }
                 : undefined
             }
           },

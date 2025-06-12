@@ -47,22 +47,59 @@ const LeaveTypesTable = () => {
   const transformToTableRows = () => {
     return (
       (leaveTypes as LeaveTypeType[])?.map((leaveType: LeaveTypeType) => ({
-        id: leaveType?.typeId,
-        leaveTypeName:
-          <span>
+        id: (
+          <div
+            style={{
+              backgroundColor: theme.palette.common.white,
+              borderRadius: "150px",
+              padding: "8px 16px"
+            }}
+          >
+            {leaveType?.typeId}
+          </div>
+        ),
+        leaveTypeName: (
+          <div
+            style={{
+              backgroundColor: theme.palette.common.white,
+              borderRadius: "150px",
+              padding: "8px 16px"
+            }}
+          >
             <span role="img" aria-hidden="true">
               {getEmoji(leaveType?.emojiCode || "")}
             </span>
             &nbsp;
             {leaveType?.name}
-          </span>,
+          </div>
+        ),
         durations: getLeaveTypeDurationTableContent(
           leaveType?.leaveDuration
-        ),
+        ).map((duration: string, index: number) => (
+          <div
+            key={index}
+            style={{
+              backgroundColor: theme.palette.common.white,
+              borderRadius: "150px",
+              padding: "8px 16px",
+              marginRight: "8px"
+            }}
+          >
+            {duration}
+          </div>
+        )),
         carriedForward: (
-          leaveType?.isCarryForwardEnabled
-            ? translateText(["enabled"])
-            : translateText(["disabled"])
+          <div
+            style={{
+              backgroundColor: theme.palette.common.white,
+              borderRadius: "150px",
+              padding: "8px 16px"
+            }}
+          >
+            {leaveType?.isCarryForwardEnabled
+              ? translateText(["enabled"])
+              : translateText(["disabled"])}
+          </div>
         ),
         actionData: leaveType
       })) || []
