@@ -51,8 +51,8 @@ const LeaveTypesTable = () => {
           <div
             style={{
               backgroundColor: theme.palette.common.white,
-              borderRadius: "150px",
-              padding: "8px 16px"
+              borderRadius: "9.375rem",
+              padding: "0.5rem 1rem"
             }}
           >
             {leaveType?.typeId}
@@ -62,8 +62,8 @@ const LeaveTypesTable = () => {
           <div
             style={{
               backgroundColor: theme.palette.common.white,
-              borderRadius: "150px",
-              padding: "8px 16px"
+              borderRadius: "9.375rem",
+              padding: "0.5rem 1rem"
             }}
           >
             <span role="img" aria-hidden="true">
@@ -80,9 +80,9 @@ const LeaveTypesTable = () => {
             key={index}
             style={{
               backgroundColor: theme.palette.common.white,
-              borderRadius: "150px",
-              padding: "8px 16px",
-              marginRight: "8px"
+              borderRadius: "9.375rem",
+              padding: "0.5rem 1rem",
+              marginRight: "0.5rem"
             }}
           >
             {duration}
@@ -92,8 +92,8 @@ const LeaveTypesTable = () => {
           <div
             style={{
               backgroundColor: theme.palette.common.white,
-              borderRadius: "150px",
-              padding: "8px 16px"
+              borderRadius: "9.375rem",
+              padding: "0.5rem 1rem"
             }}
           >
             {leaveType?.isCarryForwardEnabled

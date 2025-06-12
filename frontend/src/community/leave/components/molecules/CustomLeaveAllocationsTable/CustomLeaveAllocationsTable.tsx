@@ -165,8 +165,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
             <div
               style={{
                 backgroundColor: theme.palette.common.white,
-                borderRadius: "150px",
-                padding: "8px 16px"
+                borderRadius: "9.375rem",
+                padding: "0.5rem 1rem"
               }}
             >
               {leaveAllocation.totalDaysAllocated === 0.5
@@ -182,8 +182,8 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
             <div
               style={{
                 backgroundColor: theme.palette.common.white,
-                borderRadius: "150px",
-                padding: "8px 16px"
+                borderRadius: "9.375rem",
+                padding: "0.5rem 1rem"
               }}
             >
               <span role="img" aria-hidden="true">
