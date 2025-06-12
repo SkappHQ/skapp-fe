@@ -125,7 +125,7 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
     () => [
       { field: "employee", headerName: translateText(["tableHeaderOne"]) },
       { field: "duration", headerName: translateText(["tableHeaderTwo"]) },
-      { field: "type", headerName: translateText(["tableHeaderThree"]) },
+      { field: "type", headerName: translateText(["tableHeaderThree"]) }
     ],
     [translateText]
   );
