@@ -265,7 +265,6 @@ const InputDate: FC<Props> = ({
     <Box
       sx={{
         width: "100%",
-        mt: "0.75rem",
         display: "flex",
         flexDirection: "column",
         ...componentStyle
