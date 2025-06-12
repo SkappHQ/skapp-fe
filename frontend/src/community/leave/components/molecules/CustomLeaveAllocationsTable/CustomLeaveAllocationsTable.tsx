@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
 import IconChip from "~community/common/components/atoms/Chips/IconChip.tsx/IconChip";
 import AvatarChip from "~community/common/components/molecules/AvatarChip/AvatarChip";
-import Dropdown from "~community/common/components/molecules/Dropdown/Dropdown";
 import FilterButton from "~community/common/components/molecules/FilterButton/FilterButton";
+import Select from "~community/common/components/molecules/Select/Select";
 import Table from "~community/common/components/molecules/Table/Table";
 import { TableNames } from "~community/common/enums/Table";
 import { useTranslator } from "~community/common/hooks/useTranslator";
@@ -138,14 +138,11 @@ const CustomLeaveAllocationsTable: React.FC<Props> = ({
   );
 
   const yearFilter = (
-    <Dropdown
-      onItemClick={(event) => {
-        setSelectedYear(event?.currentTarget?.innerText);
-      }}
-      selectedItem={selectedYear}
-      title={selectedYear}
-      items={getAdjacentYearsWithCurrent()}
-      ariaRole="menu"
+    <Select
+      id="custom-leave-allocations-table-year-filter"
+      onChange={(event) => setSelectedYear(event?.target?.value)}
+      value={selectedYear}
+      options={getAdjacentYearsWithCurrent()}
     />
   );
 
