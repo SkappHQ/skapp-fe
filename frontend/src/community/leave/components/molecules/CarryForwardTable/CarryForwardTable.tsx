@@ -10,7 +10,7 @@ import { downloadCarryForwardDataCSV } from "~community/leave/utils/CarryForward
 interface Props {
   isRecordLoading?: boolean;
   rows: carryForwardTableDataType[];
-  headers: { label: string, id: number }[];
+  headers: { label: string; id: number }[];
   totalPage: number;
 }
 
@@ -31,11 +31,10 @@ const CarryForwardTable: React.FC<Props> = ({
     return [...baseColumns, ...headers];
   }, [headers, translateTexts]);
 
-
   const fromattedRows = useMemo(() => {
     if (rows.length === 0) return [];
 
-    return rows
+    return rows;
   }, [rows]);
 
   return (

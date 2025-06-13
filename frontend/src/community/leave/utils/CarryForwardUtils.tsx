@@ -1,5 +1,4 @@
 import { createCSV } from "~community/common/utils/bulkUploadUtils";
-import { LeaveTypeType } from "~community/leave/types/AddLeaveTypes";
 import {
   LeaveType,
   carryForwardTableDataType
@@ -7,13 +6,11 @@ import {
 
 export const downloadCarryForwardDataCSV = (
   rows: carryForwardTableDataType[],
-  tableHeaders: { label: string, id: number }[]
+  tableHeaders: { label: string; id: number }[]
 ) => {
   const predefinedHeaders = ["Employee ID", "Employee Name"];
 
-  const leaveTypeHeaders = tableHeaders?.map(
-    (header) => header?.label
-  );
+  const leaveTypeHeaders = tableHeaders?.map((header) => header?.label);
 
   const headers = [...predefinedHeaders, ...leaveTypeHeaders];
 
@@ -37,7 +34,6 @@ export const downloadCarryForwardDataCSV = (
   });
 
   createCSV(stream, "CarryForwardingBalances");
-
 };
 
 export const sortLeaveTypesInAlphabeticalOrder = (

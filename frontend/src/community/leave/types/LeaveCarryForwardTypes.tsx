@@ -56,4 +56,4 @@ export type carryForwardTableDataType = {
   employeeId: string;
   name: string;
   [key: string]: string | number;
-}
+};

@@ -73,7 +73,7 @@ const SwitchRow: FC<SwitchComponentProps> = ({
         }}
         slotProps={{
           input: {
-            "aria-labelledby": labelId,
+            "aria-labelledby": labelId
           }
         }}
       />

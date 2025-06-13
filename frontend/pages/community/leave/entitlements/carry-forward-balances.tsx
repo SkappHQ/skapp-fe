@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { type NextPage } from "next";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import Button from "~community/common/components/atoms/Button/Button";
 import Icon from "~community/common/components/atoms/Icon/Icon";
@@ -14,7 +14,11 @@ import { useGetUseCarryForwardLeaveEntitlements } from "~community/leave/api/Lea
 import CarryForwardTable from "~community/leave/components/molecules/CarryForwardTable/CarryForwardTable";
 import LeaveCarryForwardModalController from "~community/leave/components/organisms/LeaveCarryForwardModalController/LeaveCarryForwardModalController";
 import { useLeaveStore } from "~community/leave/store/store";
-import { carryForwardEntitlementType, carryForwardLeaveEntitlementsType, LeaveCarryForwardModalTypes } from "~community/leave/types/LeaveCarryForwardTypes";
+import {
+  LeaveCarryForwardModalTypes,
+  carryForwardEntitlementType,
+  carryForwardLeaveEntitlementsType
+} from "~community/leave/types/LeaveCarryForwardTypes";
 import useGoogleAnalyticsEvent from "~enterprise/common/hooks/useGoogleAnalyticsEvent";
 import { GoogleAnalyticsTypes } from "~enterprise/common/types/GoogleAnalyticsTypes";
 
@@ -46,16 +50,14 @@ const CarryForwardBalances: NextPage = () => {
 
   const headers = useMemo(() => {
     if (carryForwardLeaveTypes.length > 0) {
-
-      return carryForwardLeaveTypes.map(leaveType => ({
+      return carryForwardLeaveTypes.map((leaveType) => ({
         label: leaveType.name,
         id: leaveType.typeId
-      }))
-
+      }));
     }
 
-    return []
-  }, [])
+    return [];
+  }, []);
 
   const rows = useMemo(() => {
     const carryForwardEntitlementItems = carryForwardEntitlement?.items;
@@ -72,14 +74,17 @@ const CarryForwardBalances: NextPage = () => {
             name:
               entitlement.employee.firstName +
               " " +
-              entitlement.employee.lastName,
+              entitlement.employee.lastName
           };
 
           headers.forEach((header) => {
             const leaveType = entitlement.entitlements.find(
-              (entitlement: carryForwardEntitlementType) => entitlement.leaveTypeId === header.id
+              (entitlement: carryForwardEntitlementType) =>
+                entitlement.leaveTypeId === header.id
             );
-            tableRow[header.id] = leaveType ? leaveType.carryForwardAmount : "-";
+            tableRow[header.id] = leaveType
+              ? leaveType.carryForwardAmount
+              : "-";
           });
 
           tableData.push(tableRow);
@@ -91,8 +96,6 @@ const CarryForwardBalances: NextPage = () => {
 
     return [];
   }, [carryForwardEntitlement, headers]);
-
-
 
   const handleSync = () => {
     setIsLeaveCarryForwardModalOpen(true);

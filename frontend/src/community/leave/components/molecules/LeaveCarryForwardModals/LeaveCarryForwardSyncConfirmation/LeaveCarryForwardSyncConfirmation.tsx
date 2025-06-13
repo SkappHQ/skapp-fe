@@ -72,7 +72,11 @@ const LeaveCarryForwardSyncConfirmation = ({
 
   return (
     <Stack sx={classes.wrapper}>
-      <Typography sx={classes.title} variant="body1" id="confirm-synchronization-modal-description">
+      <Typography
+        sx={classes.title}
+        variant="body1"
+        id="confirm-synchronization-modal-description"
+      >
         {translateTexts(["leaveCarryForwardModalDescription"]) ?? ""}
       </Typography>
       <Box>

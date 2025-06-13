@@ -331,9 +331,9 @@ const InputDate: FC<Props> = ({
         >
           {selectedDate
             ? convertDateToFormat(
-              selectedDate.toJSDate(),
-              inputFormat ? inputFormat : REVERSE_DATE_FORMAT
-            )
+                selectedDate.toJSDate(),
+                inputFormat ? inputFormat : REVERSE_DATE_FORMAT
+              )
             : placeholder}
         </Typography>
         <Box

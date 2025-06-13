@@ -1,6 +1,6 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { AdminTypes } from "~community/common/types/AuthTypes";
