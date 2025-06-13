@@ -125,7 +125,7 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
         </Stack>
       )}
       {values.jobTitles && (
-        <Box sx={classes.scrollContainer} tabIndex={0}>
+        <Box sx={classes.scrollContainer}>
           <Box sx={classes.valueContainer}>
             {values.jobTitles?.map((jobTitle: JobTitleType, index: number) => {
               const isOldValue = jobTitle.jobTitleId !== null;
@@ -136,11 +136,7 @@ const JobTitleField = ({ formik }: Props): JSX.Element => {
               const error = getJobTitleNameError(errors, index);
 
               return (
-                <Box
-                  key={index}
-                  tabIndex={0}
-                  onFocus={() => setFocusedInputField(index)}
-                >
+                <Box key={index} onFocus={() => setFocusedInputField(index)}>
                   <InputField
                     focusOnText
                     isDisabled={!isEditing}

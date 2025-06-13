@@ -84,9 +84,6 @@ const Tooltip: FC<Props> = ({
     >
       <span
         tabIndex={isDisabled ? -1 : 0}
-        role="button"
-        aria-haspopup="true"
-        aria-expanded={isOpen}
         aria-disabled={isDisabled}
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}

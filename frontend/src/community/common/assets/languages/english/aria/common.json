@@ -61,8 +61,8 @@
       "tableBody": {
         "checkbox": "Check {{tableName}} table {{ariaLabel}} checkbox",
         "actionColumn": {
-          "editButton": "Edit {{tableName}}",
-          "deleteButton": "Delete {{tableName}}"
+          "editButton": "Edit",
+          "deleteButton": "Delete"
         }
       }
     },
