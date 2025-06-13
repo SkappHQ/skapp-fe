@@ -265,7 +265,6 @@ const InputDate: FC<Props> = ({
     <Box
       sx={{
         width: "100%",
-        mt: "0.75rem",
         display: "flex",
         flexDirection: "column",
         ...componentStyle
@@ -332,14 +331,14 @@ const InputDate: FC<Props> = ({
         >
           {selectedDate
             ? convertDateToFormat(
-                selectedDate.toJSDate(),
-                inputFormat ? inputFormat : REVERSE_DATE_FORMAT
-              )
+              selectedDate.toJSDate(),
+              inputFormat ? inputFormat : REVERSE_DATE_FORMAT
+            )
             : placeholder}
         </Typography>
         <Box
           role="button"
-          tabIndex={0}
+          tabIndex={disabled ? -1 : 0}
           aria-label={translateAria(["calendarIcon"], {
             name: lowerCaseLabel
           })}
