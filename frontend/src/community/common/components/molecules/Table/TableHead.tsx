@@ -51,80 +51,82 @@ const TableHead: FC<
     }
   }
 }) => {
-  const theme = useTheme();
-  const classes = styles(theme);
+    const theme = useTheme();
+    const classes = styles(theme);
 
-  return (
-    <MuiTableHead sx={mergeSx([classes.tableHead.head, customStyles?.head])}>
-      <TableRow sx={mergeSx([classes.tableHead.row, customStyles?.row])}>
-        {rows?.length > 0 &&
-          checkboxSelection?.isSelectAllVisible &&
-          checkboxSelection?.isEnabled && (
+    return (
+      <MuiTableHead sx={mergeSx([classes.tableHead.head, customStyles?.head])}>
+        <TableRow sx={mergeSx([classes.tableHead.row, customStyles?.row])}>
+          {rows?.length > 0 &&
+            checkboxSelection?.isEnabled &&
+            checkboxSelection?.isSelectAllEnabled &&
+            checkboxSelection?.isSelectAllVisible &&
+            (
+              <TableCell
+                scope="col"
+                sx={mergeSx([
+                  classes.checkboxSelection.cell,
+                  classes.tableHead.checkboxSelection.cell,
+                  customStyles?.cell
+                ])}
+              >
+                {checkboxSelection?.isSelectAllEnabled && (
+                  <Checkbox
+                    color="primary"
+                    checked={checkboxSelection?.isSelectAllChecked}
+                    onChange={() => checkboxSelection?.handleSelectAllClick?.()}
+                    sx={mergeSx([
+                      classes.checkboxSelection.checkbox,
+                      checkboxSelection?.customStyles?.checkbox
+                    ])}
+                    slotProps={{
+                      input: {
+                        // "aria-label": translateText(["checkbox"], {
+                        //   tableName: tableName.toLowerCase()
+                        // })
+                      }
+                    }}
+                  />
+                )}
+              </TableCell>
+            )}
+
+          {headers?.map((header) => (
             <TableCell
-              scope="col"
+              key={header?.id}
+              sx={mergeSx([classes.tableHead.cell, customStyles?.cell])}
+            >
+              <Typography
+                sx={mergeSx([
+                  classes.tableHead.typography,
+                  customStyles?.typography
+                ])}
+              >
+                {header?.label}
+              </Typography>
+            </TableCell>
+          ))}
+
+          {actionColumn.isEnabled && (
+            <TableCell
               sx={mergeSx([
-                classes.checkboxSelection.cell,
-                classes.tableHead.checkboxSelection.cell,
+                classes.tableHead.actionColumn?.cell,
                 customStyles?.cell
               ])}
             >
-              {checkboxSelection?.isSelectAllEnabled && (
-                <Checkbox
-                  color="primary"
-                  checked={checkboxSelection?.isSelectAllChecked}
-                  onChange={() => checkboxSelection?.handleSelectAllClick?.()}
-                  sx={mergeSx([
-                    classes.checkboxSelection.checkbox,
-                    checkboxSelection?.customStyles?.checkbox
-                  ])}
-                  slotProps={{
-                    input: {
-                      // "aria-label": translateText(["checkbox"], {
-                      //   tableName: tableName.toLowerCase()
-                      // })
-                    }
-                  }}
-                />
-              )}
+              <Typography
+                sx={mergeSx([
+                  classes.tableHead.typography,
+                  customStyles?.typography
+                ])}
+              >
+                Actions
+              </Typography>
             </TableCell>
           )}
-
-        {headers?.map((header) => (
-          <TableCell
-            key={header?.id}
-            sx={mergeSx([classes.tableHead.cell, customStyles?.cell])}
-          >
-            <Typography
-              sx={mergeSx([
-                classes.tableHead.typography,
-                customStyles?.typography
-              ])}
-            >
-              {header?.label}
-            </Typography>
-          </TableCell>
-        ))}
-
-        {actionColumn.isEnabled && (
-          <TableCell
-            sx={mergeSx([
-              classes.tableHead.actionColumn?.cell,
-              customStyles?.cell
-            ])}
-          >
-            <Typography
-              sx={mergeSx([
-                classes.tableHead.typography,
-                customStyles?.typography
-              ])}
-            >
-              Actions
-            </Typography>
-          </TableCell>
-        )}
-      </TableRow>
-    </MuiTableHead>
-  );
-};
+        </TableRow>
+      </MuiTableHead>
+    );
+  };
 
 export default TableHead;
