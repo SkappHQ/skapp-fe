@@ -44,7 +44,7 @@ const UserPromptModal = ({
       <Typography id="user-prompt-modal-description">{description}</Typography>
       <Button
         accessibility={{
-          ariaDescribedBy: "user-prompt-modal-description",
+          ariaDescribedBy: "user-prompt-modal-description"
         }}
         label={primaryBtn.label}
         styles={{ ...classes.btn, ...primaryBtn.styles } as SxProps}

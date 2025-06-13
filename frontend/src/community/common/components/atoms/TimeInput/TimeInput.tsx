@@ -7,9 +7,7 @@ import { useState } from "react";
 
 import { isTimePm } from "~community/attendance/utils/TimeUtils";
 import Icon from "~community/common/components/atoms/Icon/Icon";
-import { ZIndexEnums } from "~community/common/enums/CommonEnums";
 import { IconName } from "~community/common/types/IconTypes";
-import { shouldActivateButton } from "~community/common/utils/keyboardUtils";
 
 interface Props {
   time: Date;
