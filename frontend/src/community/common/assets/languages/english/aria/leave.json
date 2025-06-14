@@ -4,6 +4,10 @@
     "resourceAvailabilityTrendMonthlyPrevious": "previous month"
   },
   "myRequests": {
+    "myLeaveAllocation": {
+      "myLeaveAllocationSection": "My Leave Allocation for the year {{year}}",
+      "selectYear": "Select Year for My Leave Allocation, current year selected is"
+    },
     "myLeaveRequests": {
       "sortBy": "Sort by {{sortBy}}"
     }
