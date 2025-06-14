@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { type Theme, useTheme } from "@mui/material/styles";
 import { FC, useEffect, useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import {
   MediaQueries,
   useMediaQuery
 } from "~community/common/hooks/useMediaQuery";
+import { useTranslator } from "~community/common/hooks/useTranslator";
 import { IconName } from "~community/common/types/IconTypes";
 import { useGetLeaveAllocation } from "~community/leave/api/MyRequestApi";
 import LeaveTypeCard from "~community/leave/components/molecules/LeaveTypeCard/LeaveTypeCard";
@@ -22,6 +23,11 @@ import LeaveAllocationSkeleton from "./LeaveAllocationSkeleton";
 import styles from "./styles";
 
 const LeaveAllocation: FC = () => {
+  const translateAria = useTranslator(
+    "leaveAria",
+    "myRequests",
+    "myLeaveAllocation"
+  );
   const theme: Theme = useTheme();
   const classes = styles(theme);
 
@@ -58,7 +64,12 @@ const LeaveAllocation: FC = () => {
   }, [entitlement, allocationsPerPage]);
 
   return (
-    <>
+    <Box
+      role="region"
+      aria-label={translateAria(["myLeaveAllocationSection"], {
+        year: selectedYear
+      })}
+    >
       <Grid container spacing={2}>
         {entitlement?.length === 0 ? (
           <LeaveAllocationEmptyScreen />
@@ -115,7 +126,7 @@ const LeaveAllocation: FC = () => {
           />
         </Stack>
       )}
-    </>
+    </Box>
   );
 };
 
