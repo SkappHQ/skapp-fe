@@ -119,7 +119,9 @@ const LeaveRequests: FC = () => {
       type: (
         <Box width="100%">
           <IconChip
-            aria-label={employeeLeaveRequest.leaveType.name}
+            accessibility={{
+              ariaLabel: employeeLeaveRequest.leaveType.name
+            }}
             label={employeeLeaveRequest.leaveType.name}
             icon={employeeLeaveRequest.leaveType.emojiCode}
             isTruncated={false}
@@ -130,11 +132,15 @@ const LeaveRequests: FC = () => {
                 cursor: "default"
               }
             }}
+            tabIndex={-1}
           />
         </Box>
       ),
       status: (
         <IconChip
+          accessibility={{
+            ariaLabel: employeeLeaveRequest.status.toLowerCase()
+          }}
           label={employeeLeaveRequest.status.toLowerCase()}
           icon={leaveStatusIconSelector(employeeLeaveRequest.status)}
           chipStyles={{
@@ -143,6 +149,7 @@ const LeaveRequests: FC = () => {
               cursor: "default"
             }
           }}
+          tabIndex={-1}
         />
       )
     }));
@@ -222,69 +229,102 @@ const LeaveRequests: FC = () => {
       position={"bottom-end"}
       id={"filter-types"}
       isResetBtnDisabled={!filter.type.length && !filter.status.length}
+      accessibility={{
+        ariaLabel: translateAria(["myLeaveRequests", "filterSection"])
+      }}
     >
-      <Typography variant="h5">
-        {translateText(["myLeaveRequests", "filterButtonStatus"])}
-      </Typography>
-      <Stack sx={classes.filterStackStyles}>
-        {leaveStatusArray.map((leaveStatus) => (
-          <Button
-            key={leaveStatus}
-            label={pascalCaseFormatter(leaveStatus)}
-            isFullWidth={false}
-            onClick={() => {
-              setFilter((prev) => ({
-                ...prev,
-                status: prev.status.includes(leaveStatus)
-                  ? prev.status.filter((item) => item !== leaveStatus)
-                  : [...prev.status, leaveStatus]
-              }));
-            }}
-            buttonStyle={
-              filter.status.includes(leaveStatus)
-                ? ButtonStyle.SECONDARY
-                : ButtonStyle.TERTIARY
-            }
-            size={ButtonSizes.MEDIUM}
-            startIcon={
-              filter.status.includes(leaveStatus)
-                ? IconName.CHECK_CIRCLE_ICON
-                : null
-            }
-            styles={classes.filterChipButtonStyles}
-          />
-        ))}
-      </Stack>
-      <Typography variant="h5">
-        {translateText(["myLeaveRequests", "filterButtonType"])}
-      </Typography>
-      <Stack sx={classes.filterStackStyles}>
-        {leaveTypeOptions.map(({ id, name }: { id: string; name: string }) => (
-          <Button
-            key={id}
-            label={name}
-            isFullWidth={false}
-            onClick={() => {
-              setFilter((prev) => ({
-                ...prev,
-                type: prev.type.includes(id)
-                  ? prev.type.filter((item) => item !== id)
-                  : [...prev.type, id]
-              }));
-            }}
-            buttonStyle={
-              filter.type.includes(id)
-                ? ButtonStyle.SECONDARY
-                : ButtonStyle.TERTIARY
-            }
-            size={ButtonSizes.MEDIUM}
-            startIcon={
-              filter.type.includes(id) ? IconName.CHECK_CIRCLE_ICON : null
-            }
-            styles={classes.filterChipButtonStyles}
-          />
-        ))}
-      </Stack>
+      <Box
+        role="region"
+        aria-label={translateAria(["myLeaveRequests", "statusFilterSection"])}
+      >
+        <Typography variant="h5">
+          {translateText(["myLeaveRequests", "filterButtonStatus"])}
+        </Typography>
+        <Stack sx={classes.filterStackStyles}>
+          {leaveStatusArray.map((leaveStatus) => (
+            <Button
+              key={leaveStatus}
+              label={pascalCaseFormatter(leaveStatus)}
+              isFullWidth={false}
+              onClick={() => {
+                setFilter((prev) => ({
+                  ...prev,
+                  status: prev.status.includes(leaveStatus)
+                    ? prev.status.filter((item) => item !== leaveStatus)
+                    : [...prev.status, leaveStatus]
+                }));
+              }}
+              buttonStyle={
+                filter.status.includes(leaveStatus)
+                  ? ButtonStyle.SECONDARY
+                  : ButtonStyle.TERTIARY
+              }
+              size={ButtonSizes.MEDIUM}
+              startIcon={
+                filter.status.includes(leaveStatus)
+                  ? IconName.CHECK_CIRCLE_ICON
+                  : null
+              }
+              styles={classes.filterChipButtonStyles}
+              ariaLabel={
+                filter.status.includes(leaveStatus)
+                  ? translateAria(["myLeaveRequests", "filterSelected"], {
+                      filterName: pascalCaseFormatter(leaveStatus)
+                    })
+                  : translateAria(["myLeaveRequests", "filterOption"], {
+                      filterName: pascalCaseFormatter(leaveStatus)
+                    })
+              }
+            />
+          ))}
+        </Stack>
+      </Box>
+      <Box
+        role="region"
+        aria-label={translateAria(["myLeaveRequests", "typeFilterSection"])}
+      >
+        <Typography variant="h5">
+          {translateText(["myLeaveRequests", "filterButtonType"])}
+        </Typography>
+        <Stack sx={classes.filterStackStyles}>
+          {leaveTypeOptions.map(
+            ({ id, name }: { id: string; name: string }) => (
+              <Button
+                key={id}
+                label={name}
+                isFullWidth={false}
+                onClick={() => {
+                  setFilter((prev) => ({
+                    ...prev,
+                    type: prev.type.includes(id)
+                      ? prev.type.filter((item) => item !== id)
+                      : [...prev.type, id]
+                  }));
+                }}
+                buttonStyle={
+                  filter.type.includes(id)
+                    ? ButtonStyle.SECONDARY
+                    : ButtonStyle.TERTIARY
+                }
+                size={ButtonSizes.MEDIUM}
+                startIcon={
+                  filter.type.includes(id) ? IconName.CHECK_CIRCLE_ICON : null
+                }
+                styles={classes.filterChipButtonStyles}
+                ariaLabel={
+                  filter.type.includes(id)
+                    ? translateAria(["myLeaveRequests", "filterSelected"], {
+                        filterName: pascalCaseFormatter(name)
+                      })
+                    : translateAria(["myLeaveRequests", "filterOption"], {
+                        filterName: pascalCaseFormatter(name)
+                      })
+                }
+              />
+            )
+          )}
+        </Stack>
+      </Box>
     </FilterButton>
   );
 
@@ -324,7 +364,10 @@ const LeaveRequests: FC = () => {
   }, [newLeaveId]);
 
   return (
-    <Box tabIndex={0}>
+    <Box
+      role="region"
+      aria-label={translateAria(["myLeaveRequests", "myLeaveRequestsSection"])}
+    >
       <Typography
         variant="h1"
         sx={{
@@ -376,23 +419,28 @@ const LeaveRequests: FC = () => {
         actionToolbar={{
           firstRow: {
             leftButton: (
-              <Select
-                id="leave-requests-filter"
-                onChange={handleItemClick}
-                value={selectedItem?.value ?? ""}
-                options={dropdownItems}
-                renderValue={(selectedValue: string) => (
-                  <Typography
-                    aria-label={translateAria(["myLeaveRequests", "sortBy"], {
-                      sortBy: selectedValue
-                    })}
-                  >
-                    {translateText(["myLeaveRequests", "sortBy"], {
-                      sortBy: selectedValue
-                    })}
-                  </Typography>
-                )}
-              />
+              <Box
+                role="group"
+                aria-label={translateAria(["myLeaveRequests", "sortGroup"])}
+              >
+                <Select
+                  id="leave-requests-filter"
+                  onChange={handleItemClick}
+                  value={selectedItem?.value ?? ""}
+                  options={dropdownItems}
+                  renderValue={(selectedValue: string) => (
+                    <Typography
+                      aria-label={translateAria(["myLeaveRequests", "sortBy"], {
+                        sortBy: selectedValue
+                      })}
+                    >
+                      {translateText(["myLeaveRequests", "sortBy"], {
+                        sortBy: selectedValue
+                      })}
+                    </Typography>
+                  )}
+                />
+              </Box>
             ),
             rightButton: filterButton
           }
