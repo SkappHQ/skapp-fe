@@ -4,8 +4,19 @@
     "resourceAvailabilityTrendMonthlyPrevious": "previous month"
   },
   "myRequests": {
+    "myLeaveAllocation": {
+      "myLeaveAllocationSection": "My Leave Allocation for the year {{year}}",
+      "selectYear": "Select Year for My Leave Allocation, current year selected is"
+    },
     "myLeaveRequests": {
-      "sortBy": "Sort by {{sortBy}}"
+      "myLeaveRequestsSection": "Accessing My Leave Requests",
+      "sortGroup": "Sort my leave requests dropdown",
+      "sortBy": "Selected Sort Option is {{sortBy}}",
+      "filterSection": "Filter my leave requests",
+      "statusFilterSection": "Leave Status Filters",
+      "typeFilterSection": "Leave Type Filters",
+      "filterOption": "Filter Option, {{filterName}}",
+      "filterSelected": "{{filterName}} selected"
     }
   },
   "applyLeave": {

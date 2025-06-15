@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { FC } from "react";
 
-import BasicChip from "~community/common/components/atoms/Chips/BasicChip/BasicChip";
+import ReadOnlyChip from "~community/common/components/atoms/Chips/BasicChip/ReadOnlyChip";
 import { useTranslator } from "~community/common/hooks/useTranslator";
 import { getAsDaysString } from "~community/common/utils/dateTimeUtils";
 import { getStartEndDate } from "~community/leave/utils/leaveRequest/LeaveRequestUtils";
@@ -37,7 +37,7 @@ const RequestDates: FC<Props> = ({ startDate, endDate, days }) => {
       >
         {getStartEndDate(startDate, endDate)}
       </Typography>
-      <BasicChip
+      <ReadOnlyChip
         label={
           days == "1"
             ? translateText(["myLeaveRequests", "fullDay"])

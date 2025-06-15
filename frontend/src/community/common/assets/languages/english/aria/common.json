@@ -78,6 +78,9 @@
     },
     "iconChip": {
       "label": "icon chip"
+    },
+    "filterButton": {
+      "appliedFilter": "Applied filter {{filterLabel}}"
     }
   },
   "modals": {
